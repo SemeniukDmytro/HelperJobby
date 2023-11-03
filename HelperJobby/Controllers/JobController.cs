@@ -1,4 +1,4 @@
-using ApplicationDAL.Entities;
+using ApplicationCommon.DTOs.Job;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
@@ -13,25 +13,25 @@ namespace HelperJobby.Controllers
         }
 
         [HttpGet("jobs/{id}")]
-        public Task<IEnumerable<Job>> GetJobsByUserId(int id)
+        public Task<IEnumerable<JobDTO>> GetJobsByUserId(int id)
         {
             return null;
         }
         
         [HttpGet("{id}")]
-        public Task<Job> GetJobById(int id)
+        public Task<JobDTO> GetJobById(int id)
         {
             return null;
         }
 
         [HttpPost]
-        public Task<Job> CreateJob([FromBody] Job job)
+        public Task<JobDTO> CreateJob([FromBody] JobDTO job)
         {
             return null;
         }
 
         [HttpPut("{id}")]
-        public Task<Job> PutJob(int id, Job updatedJob)
+        public Task<JobDTO> PutJob(int id, JobDTO updatedJob)
         {
             return null;
         }

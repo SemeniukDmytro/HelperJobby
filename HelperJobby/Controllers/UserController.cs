@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ApplicationDAL.Entities;
-using Microsoft.AspNetCore.Http;
+using ApplicationCommon.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
@@ -18,7 +13,7 @@ namespace HelperJobby.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<User> PutUser(int id, [FromBody] User value)
+        public async Task<UserDTO> PutUser(int id, [FromBody] UserDTO value)
         {
             return null;
         }

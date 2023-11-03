@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ApplicationDAL.Entities;
-using Microsoft.AspNetCore.Http;
+using ApplicationCommon.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
@@ -18,13 +13,13 @@ namespace HelperJobby.Controllers
         }
         
         [HttpPost("sing-up")]
-        public async Task<User> Register([FromBody] User newUser)
+        public async Task<AuthUserDTO> Register([FromBody] RegisterUserDTO newUser)
         {
             return null;
         }
         
         [HttpPost("sign-in")]
-        public async Task<User> Login([FromBody] User loginUser)
+        public async Task<AuthUserDTO> Login([FromBody] LoginUserDTO loginUser)
         {
             return null;
         }

@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ApplicationDAL.Entities;
-using Microsoft.AspNetCore.Http;
+using ApplicationCommon.DTOs.Account;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
@@ -18,13 +13,13 @@ namespace HelperJobby.Controllers
         }
 
         [HttpGet]
-        public Task<EmployerAccount> GetCurrentUserAccount()
+        public Task<EmployerAccountDTO> GetCurrentUserAccount()
         {
             return null;
         }
 
         [HttpPut("{id}")]
-        public Task<EmployerAccount> PutEmployerAccount(int id, [FromBody] EmployerAccount updatedAccount)
+        public Task<EmployerAccountDTO> PutEmployerAccount(int id, [FromBody] EmployerAccountDTO updatedAccount)
         {
             return null;
         }

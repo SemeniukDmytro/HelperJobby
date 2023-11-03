@@ -1,6 +1,6 @@
 namespace ApplicationCommon.DTOs.User;
 
-public class LoginUser
+public class LoginUserDTO
 {
     public string Email { get; set; }
     

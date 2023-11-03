@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ApplicationDAL.Entities;
-using Microsoft.AspNetCore.Http;
+using ApplicationCommon.DTOs.UserJobInteractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
@@ -14,34 +9,34 @@ namespace HelperJobby.Controllers
     {
         // GET: api/JobApply
         [HttpGet("{id}/my-job-applies")]
-        public Task<IEnumerable<JobApply>> GetUserJobApplies(int userId)
+        public Task<IEnumerable<JobApplyDTO>> GetUserJobApplies(int userId)
         {
             return null;
         }
         
         [HttpGet("{id}/offer-job-applies")]
-        public Task<IEnumerable<JobApply>> GetUserJobAppliesForOffer(int jobId)
+        public Task<IEnumerable<JobApplyDTO>> GetUserJobAppliesForOffer(int jobId)
         {
             return null;
         }
 
         // GET: api/JobApply/5
         [HttpGet("{id}", Name = "Get")]
-        public Task<JobApply> Get(int id)
+        public Task<JobApplyDTO> Get(int id)
         {
             return null;
         }
 
         // POST: api/JobApply
         [HttpPost]
-        public Task<JobApply> Post([FromBody] JobApply value)
+        public Task<JobApplyDTO> Post([FromBody] JobApplyDTO value)
         {
             return null;
         }
 
         // PUT: api/JobApply/5
         [HttpPut("{id}")]
-        public Task<JobApply> Put(int id, [FromBody] JobApply value)
+        public Task<JobApplyDTO> Put(int id, [FromBody] JobApplyDTO value)
         {
             return null;
         }

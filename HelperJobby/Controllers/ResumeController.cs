@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ApplicationDAL.Entities;
-using Microsoft.AspNetCore.Http;
+using ApplicationCommon.DTOs.Resume;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
@@ -15,21 +10,21 @@ namespace HelperJobby.Controllers
 
         // GET: api/Resume/5
         [HttpGet("{id}")]
-        public Task<Resume> Get(int id)
+        public Task<ResumeDTO> Get(int id)
         {
             return null;
         }
 
         // POST: api/Resume
         [HttpPost]
-        public Task<Resume> Post([FromBody] Resume value)
+        public Task<ResumeDTO> Post([FromBody] ResumeDTO value)
         {
             return null;
         }
 
         // PUT: api/Resume/5
         [HttpPut("{id}")]
-        public Task<Resume> Put(int id, [FromBody] Resume value)
+        public Task<ResumeDTO> Put(int id, [FromBody] ResumeDTO value)
         {
             return null;
         }
