@@ -52,4 +52,8 @@ public class Job
     
     [Required]
     public EmployerAccount EmployerAccount { get; set; }
+    
+    public List<Interview> Interviews { get; set; }
+    
+    public List<JobApply> JobApplies { get; set; }
 }

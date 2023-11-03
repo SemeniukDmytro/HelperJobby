@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApplicationDAL.Entities;
 
@@ -6,6 +7,7 @@ public class Resume
 {
     public int Id { get; set; }
     
+    [ForeignKey("JobSeekerAccount")]
     public int JobSeekerAccountId { get; set; }
     
     [Required]
@@ -15,5 +17,5 @@ public class Resume
     
     public List<WorkExperience> WorkExperiences { get; set; }
 
-    public List<PersonSkill> PersonSkills { get; set; }
+    public List<Skill> Skills { get; set; }
 }

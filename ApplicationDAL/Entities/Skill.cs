@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApplicationDAL.Entities;
 
-public class PersonSkill
+public class Skill
 {
     public int Id { get; set; }
     
@@ -15,5 +15,5 @@ public class PersonSkill
     
     [Required]
     [MaxLength(30)]
-    public string Skill { get; set; }
+    public string Name { get; set; }
 }

@@ -13,7 +13,5 @@ public class Organization
     [MaxLength(15)]
     public string PhoneNumber { get; set; }
     
-    public int EmployerAccountId { get; set; }
-    
     public EmployerAccount EmployerAccount { get; set; }
 }
