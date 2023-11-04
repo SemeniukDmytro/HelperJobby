@@ -1,10 +1,12 @@
 using ApplicationCommon.DTOs.UserJobInteractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class JobApplyController : ControllerBase
     {
         // GET: api/JobApply
@@ -14,7 +16,7 @@ namespace HelperJobby.Controllers
             return null;
         }
         
-        [HttpGet("{id}/offer-job-applies")]
+        [HttpGet("job/{id}/job-aplies")]
         public Task<IEnumerable<JobApplyDTO>> GetUserJobAppliesForOffer(int jobId)
         {
             return null;

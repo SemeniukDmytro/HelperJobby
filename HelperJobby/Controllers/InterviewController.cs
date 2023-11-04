@@ -1,10 +1,12 @@
 using ApplicationCommon.DTOs.UserJobInteractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class InterviewController : ControllerBase
     {
         // GET: api/Interview

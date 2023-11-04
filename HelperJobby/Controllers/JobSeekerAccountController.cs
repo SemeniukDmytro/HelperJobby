@@ -1,10 +1,12 @@
 using ApplicationCommon.DTOs.Account;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class JobSeekerAccountController : ControllerBase
     {
         public JobSeekerAccountController()
