@@ -6,7 +6,7 @@ namespace ApplicationBLL.AutoMapperProfiles;
 
 public class AddressProfile : Profile
 {
-    AddressProfile()
+    public AddressProfile()
     {
         CreateMap<Address, AddressDTO>().ReverseMap();
     }

@@ -1,3 +1,4 @@
+using ApplicationBLL.Services;
 using ApplicationCommon.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,21 +8,25 @@ namespace HelperJobby.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public AuthController()
+        private UserService _userService;
+        private AuthService _authService;
+
+        public AuthController(UserService userService, AuthService authService)
         {
-            
+            _userService = userService;
+            _authService = authService;
         }
         
-        [HttpPost("sing-up")]
-        public async Task<AuthUserDTO> Register([FromBody] RegisterUserDTO newUser)
+        [HttpPost("sign-up")]
+        public async Task Register([FromBody] RegisterUserDTO newUser)
         {
-            return null;
+            await _userService.CreateUser(newUser);
         }
         
         [HttpPost("sign-in")]
         public async Task<AuthUserDTO> Login([FromBody] LoginUserDTO loginUser)
         {
-            return null;
+            return await _authService.AuthUser(loginUser);
         }
     }
     

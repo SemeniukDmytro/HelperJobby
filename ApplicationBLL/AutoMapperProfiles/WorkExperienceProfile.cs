@@ -6,7 +6,7 @@ namespace ApplicationBLL.AutoMapperProfiles;
 
 public class WorkExperienceProfile : Profile
 {
-    WorkExperienceProfile()
+    public WorkExperienceProfile()
     {
         CreateMap<WorkExperience, WorkExperienceDTO>().AfterMap((src, dest, context) =>
         {

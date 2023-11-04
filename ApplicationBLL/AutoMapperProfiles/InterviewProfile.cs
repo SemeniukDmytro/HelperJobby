@@ -8,7 +8,7 @@ namespace ApplicationBLL.AutoMapperProfiles;
 
 public class InterviewProfile : Profile
 {
-    InterviewProfile()
+    public InterviewProfile()
     {
         CreateMap<Interview, InterviewDTO>().AfterMap((src, dest, context) =>
         {
