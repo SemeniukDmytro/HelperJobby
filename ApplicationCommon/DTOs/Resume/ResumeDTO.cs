@@ -8,7 +8,7 @@ public class ResumeDTO
     
     public int JobSeekerAccountId { get; set; }
     
-    public JobSeekerAccountDTO JobSeekerAccountDTO { get; set; }
+    public JobSeekerAccountDTO JobSeekerAccount { get; set; }
     
     public List<EducationDTO> Educations { get; set; }
     public List<WorkExperienceDTO> WorkExperiences { get; set; }

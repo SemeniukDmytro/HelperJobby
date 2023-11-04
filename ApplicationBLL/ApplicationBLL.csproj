@@ -7,8 +7,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Extensions\" />
-      <Folder Include="Services\" />
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\ApplicationDAL\ApplicationDAL.csproj" />
+    </ItemGroup>
+
+
+
+
+    <ItemGroup>
+      <Folder Include="Logic\" />
     </ItemGroup>
 
 </Project>
