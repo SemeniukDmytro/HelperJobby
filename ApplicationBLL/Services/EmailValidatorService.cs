@@ -16,7 +16,7 @@ public class EmailValidatorService : BaseService
     {
         int atSymbolIndex = email.LastIndexOf('@');
         return atSymbolIndex >= 0 && email.LastIndexOf('.') >= atSymbolIndex && atSymbolIndex == email.IndexOf('@') &&
-               email.Length - atSymbolIndex >= 4;
+               email.Length - atSymbolIndex > 4;
     }
 
     public async Task<bool> IsEmailAvailable(string email)

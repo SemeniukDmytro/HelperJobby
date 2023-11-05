@@ -1,3 +1,4 @@
+using ApplicationBLL.QueryRepositories;
 using ApplicationCommon.DTOs.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +10,23 @@ namespace HelperJobby.Controllers
     [Authorize]
     public class UserController : ControllerBase
     {
-        public UserController()
+        private readonly UserQueryRepository _userQueryRepository;
+        
+        public UserController(UserQueryRepository userQueryRepository)
         {
-            
+            _userQueryRepository = userQueryRepository;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<UserDTO> GetUser(int id)
+        {
+            return await _userQueryRepository.GetUserById(id);
+        }
+        
+        [HttpGet("current-user")]
+        public async Task<UserDTO> GetUser()
+        {
+            return await _userQueryRepository.GetUserById(_userQueryRepository.GetCurrentUserId());
         }
 
         [HttpPut("{id}")]

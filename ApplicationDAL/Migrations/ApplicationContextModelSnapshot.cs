@@ -21,7 +21,7 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDAL.Entities.Address", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CurrentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -45,14 +45,14 @@ namespace ApplicationDAL.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CurrentId");
 
                     b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.Education", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CurrentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -90,7 +90,7 @@ namespace ApplicationDAL.Migrations
                     b.Property<DateOnly>("To")
                         .HasColumnType("date");
 
-                    b.HasKey("Id");
+                    b.HasKey("CurrentId");
 
                     b.HasIndex("ResumeId");
 
@@ -99,7 +99,7 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDAL.Entities.EmployerAccount", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CurrentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -109,7 +109,7 @@ namespace ApplicationDAL.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("CurrentId");
 
                     b.HasIndex("OrganizationId")
                         .IsUnique();
@@ -142,7 +142,7 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDAL.Entities.Job", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CurrentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -196,7 +196,7 @@ namespace ApplicationDAL.Migrations
                     b.Property<int>("Schedule")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("CurrentId");
 
                     b.HasIndex("EmployerAccountId");
 
@@ -225,7 +225,7 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDAL.Entities.JobSeekerAccount", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CurrentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -250,7 +250,7 @@ namespace ApplicationDAL.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("CurrentId");
 
                     b.HasIndex("AddressId");
 
@@ -265,7 +265,7 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDAL.Entities.Organization", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CurrentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -279,7 +279,7 @@ namespace ApplicationDAL.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CurrentId");
 
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
@@ -289,14 +289,14 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDAL.Entities.Resume", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CurrentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("JobSeekerAccountId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("CurrentId");
 
                     b.HasIndex("JobSeekerAccountId")
                         .IsUnique();
@@ -323,7 +323,7 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDAL.Entities.Skill", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CurrentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -335,7 +335,7 @@ namespace ApplicationDAL.Migrations
                     b.Property<int>("ResumeId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("CurrentId");
 
                     b.HasIndex("ResumeId");
 
@@ -344,7 +344,7 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDAL.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CurrentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -363,7 +363,7 @@ namespace ApplicationDAL.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CurrentId");
 
                     b.HasIndex("Email")
                         .IsUnique();

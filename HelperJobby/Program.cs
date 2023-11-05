@@ -1,6 +1,7 @@
 using System.Text;
 using ApplicationBLL.Extensions;
 using ApplicationDAL.Context;
+using HelperJobby.Middlwares;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -50,6 +51,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseCors("Frontend");
 app.UseAuthorization();
+app.UseMiddleware<CurrentUserIdSetterMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

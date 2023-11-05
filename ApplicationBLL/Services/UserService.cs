@@ -1,27 +1,36 @@
+using System.ComponentModel.DataAnnotations;
 using ApplicationBLL.Services.Absract;
 using ApplicationCommon.DTOs.User;
 using ApplicationDAL.Context;
 using ApplicationDAL.Entities;
 using AutoMapper;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using ValidationException = FluentValidation.ValidationException;
+using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace ApplicationBLL.Services;
 
 public class UserService : BaseService
 {
     private EmailValidatorService _emailValidatorService;
+    private IValidator<RegisterUserDTO> _registerUserValidator;
     
-    public UserService(IMapper mapper, ApplicationContext applicationContext, EmailValidatorService emailValidatorService) : base(mapper, applicationContext)
+    public UserService(IMapper mapper, ApplicationContext applicationContext, EmailValidatorService emailValidatorService, IValidator<RegisterUserDTO> registerUserValidator) : base(mapper, applicationContext)
     {
         _emailValidatorService = emailValidatorService;
+        _registerUserValidator = registerUserValidator;
     }
 
 
     public async Task CreateUser(RegisterUserDTO registerUserDTO)
     {
-        if (registerUserDTO == null)
+        ValidationResult validationResult = await _registerUserValidator.ValidateAsync(registerUserDTO);
+
+        if (!validationResult.IsValid)
         {
-            throw new Exception("null user");
+            throw new ValidationException(validationResult.Errors[0].ErrorMessage);
         }
         
         if (!await _emailValidatorService.IsEmailAvailable(registerUserDTO.Email))
@@ -35,7 +44,6 @@ public class UserService : BaseService
 
         _applicationContext.Users.Add(userEntity);
         await _applicationContext.SaveChangesAsync();
-
     }
 
     

@@ -4,6 +4,7 @@ using ApplicationCommon.DTOs.User;
 using ApplicationDAL.Context;
 using AutoMapper;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Principal;
 using System.Text;
 using ApplicationBLL.Exceptions;
 using FluentValidation;
@@ -34,10 +35,16 @@ public class AuthService : BaseService
 
     public string CreateToken(int userId, string userEmail)
     {
+        var identity = new ClaimsIdentity(new GenericIdentity(userEmail, "Token"), new[]
+        {
+            new Claim("id", userId.ToString())
+        });
+        
         List<Claim> claims = new List<Claim>()
         {
-            new Claim(JwtRegisteredClaimNames.Email, userEmail),
-            new Claim(JwtRegisteredClaimNames.Sub, userId.ToString())
+            new (JwtRegisteredClaimNames.Email, userEmail),
+            new (JwtRegisteredClaimNames.Sub, userId.ToString()),
+            identity.FindFirst("id")
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]!));
