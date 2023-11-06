@@ -1,25 +1,23 @@
-using System.ComponentModel.DataAnnotations;
 using ApplicationBLL.Services.Absract;
+using ApplicationBLL.Services.EmailAvailabilityService;
 using ApplicationCommon.DTOs.User;
 using ApplicationDAL.Context;
 using ApplicationDAL.Entities;
 using AutoMapper;
 using FluentValidation;
-using FluentValidation.Results;
-using Microsoft.EntityFrameworkCore;
 using ValidationException = FluentValidation.ValidationException;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
-namespace ApplicationBLL.Services;
+namespace ApplicationBLL.Services.UserService;
 
-public class UserService : BaseService
+public class UserService : BaseService, IUserService
 {
-    private EmailValidatorService _emailValidatorService;
+    private IEmailAvailabilityService _emailAvailabilityService;
     private IValidator<RegisterUserDTO> _registerUserValidator;
     
-    public UserService(IMapper mapper, ApplicationContext applicationContext, EmailValidatorService emailValidatorService, IValidator<RegisterUserDTO> registerUserValidator) : base(mapper, applicationContext)
+    public UserService(IMapper mapper, ApplicationContext applicationContext, IEmailAvailabilityService emailAvailabilityService, IValidator<RegisterUserDTO> registerUserValidator) : base(mapper, applicationContext)
     {
-        _emailValidatorService = emailValidatorService;
+        _emailAvailabilityService = emailAvailabilityService;
         _registerUserValidator = registerUserValidator;
     }
 
@@ -33,7 +31,7 @@ public class UserService : BaseService
             throw new ValidationException(validationResult.Errors[0].ErrorMessage);
         }
         
-        if (!await _emailValidatorService.IsEmailAvailable(registerUserDTO.Email))
+        if (!await _emailAvailabilityService.IsEmailAvailable(registerUserDTO.Email))
         {
             throw new Exception("Email is already in use.");
         }

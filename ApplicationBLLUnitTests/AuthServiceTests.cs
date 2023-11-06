@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using ApplicationBLL.Exceptions;
 using ApplicationBLL.Services;
+using ApplicationBLL.Services.AuthService;
 using ApplicationCommon.DTOs.User;
 using ApplicationDAL.Context;
 using ApplicationDAL.Entities;
@@ -17,7 +18,7 @@ namespace ApplicationBLLUnitTests;
 
 public class AuthServiceTests
 {
-    private AuthService _authService;
+    private IAuthService _authService;
     private Mock<ApplicationContext> _applicationContextMock = new();
     private Mock<IMapper> _mapperMock = new();
     private Mock<IValidator<LoginUserDTO>> _validatorMock = new();

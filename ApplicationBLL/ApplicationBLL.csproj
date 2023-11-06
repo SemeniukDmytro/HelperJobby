@@ -18,7 +18,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ApplicationDAL\ApplicationDAL.csproj" />
+
+
+
+
+
+
     </ItemGroup>
+
+
 
 
 

@@ -1,7 +1,11 @@
 using System.Reflection;
 using ApplicationBLL.Logic;
 using ApplicationBLL.QueryRepositories;
+using ApplicationBLL.QueryRepositories.Abstract.UserQueryRepository;
 using ApplicationBLL.Services;
+using ApplicationBLL.Services.AuthService;
+using ApplicationBLL.Services.EmailAvailabilityService;
+using ApplicationBLL.Services.UserService;
 using ApplicationBLL.Validators;
 using ApplicationCommon.DTOs.User;
 using ApplicationCommon.Interfaces;
@@ -16,10 +20,10 @@ public static class CustomServicesConfigurer
     {
         serviceProvider.AddTransient<IValidator<LoginUserDTO>, LoginUserValidator>();
         serviceProvider.AddTransient<IValidator<RegisterUserDTO>, RegisterUserDTOValidator>();
-        serviceProvider.AddScoped<EmailValidatorService>();
-        serviceProvider.AddScoped<AuthService>();
-        serviceProvider.AddScoped<UserService>();
-        serviceProvider.AddScoped<UserQueryRepository>();
+        serviceProvider.AddScoped<IAuthService, AuthService>();
+        serviceProvider.AddScoped<IUserService, UserService>();
+        serviceProvider.AddScoped<IEmailAvailabilityService, EmailAvailabilityService>();
+        serviceProvider.AddScoped<IUserQueryRepository, UserQueryRepository>();
         
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());

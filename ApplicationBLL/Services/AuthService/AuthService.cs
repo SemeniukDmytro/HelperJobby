@@ -1,21 +1,20 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Principal;
+using System.Text;
+using ApplicationBLL.Exceptions;
 using ApplicationBLL.Services.Absract;
 using ApplicationCommon.DTOs.User;
 using ApplicationDAL.Context;
 using AutoMapper;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Principal;
-using System.Text;
-using ApplicationBLL.Exceptions;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
+namespace ApplicationBLL.Services.AuthService;
 
-namespace ApplicationBLL.Services;
-
-public class AuthService : BaseService
+public class AuthService : BaseService, IAuthService
 {
     private readonly IConfiguration _configuration;
     private readonly IValidator<LoginUserDTO> _validator;
@@ -24,11 +23,6 @@ public class AuthService : BaseService
         IConfiguration configuration, IValidator<LoginUserDTO> validator) : base(mapper, applicationContext)
     {
         _configuration = configuration;
-        _validator = validator;
-    }
-
-    public AuthService(IValidator<LoginUserDTO> validator) : base(null, null)
-    {
         _validator = validator;
     }
 

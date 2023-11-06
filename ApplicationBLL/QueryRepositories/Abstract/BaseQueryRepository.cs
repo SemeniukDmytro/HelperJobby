@@ -8,7 +8,7 @@ public class BaseQueryRepository
     protected readonly ApplicationContext _applicationContext;
     protected readonly IMapper _mapper;
 
-    protected BaseQueryRepository(ApplicationContext applicationContext, IMapper mapper)
+    protected BaseQueryRepository(IMapper mapper, ApplicationContext applicationContext)
     {
         _applicationContext = applicationContext;
         _mapper = mapper;

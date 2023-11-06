@@ -5,9 +5,9 @@ using ApplicationCommon.Interfaces;
 using ApplicationDAL.Context;
 using AutoMapper;
 
-namespace ApplicationBLL.QueryRepositories;
+namespace ApplicationBLL.QueryRepositories.Abstract.UserQueryRepository;
 
-public class UserQueryRepository : BaseService
+public class UserQueryRepository : BaseQueryRepository, IUserQueryRepository
 {
     private IUserIdGetter _userIdGetter;
 

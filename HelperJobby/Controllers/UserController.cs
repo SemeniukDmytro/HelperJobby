@@ -1,4 +1,5 @@
 using ApplicationBLL.QueryRepositories;
+using ApplicationBLL.QueryRepositories.Abstract.UserQueryRepository;
 using ApplicationCommon.DTOs.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,9 @@ namespace HelperJobby.Controllers
     [Authorize]
     public class UserController : ControllerBase
     {
-        private readonly UserQueryRepository _userQueryRepository;
+        private readonly IUserQueryRepository _userQueryRepository;
         
-        public UserController(UserQueryRepository userQueryRepository)
+        public UserController(IUserQueryRepository userQueryRepository)
         {
             _userQueryRepository = userQueryRepository;
         }

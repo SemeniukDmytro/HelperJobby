@@ -1,4 +1,6 @@
 using ApplicationBLL.Services;
+using ApplicationBLL.Services.AuthService;
+using ApplicationBLL.Services.UserService;
 using ApplicationCommon.DTOs.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +12,10 @@ namespace HelperJobby.Controllers
     [AllowAnonymous]
     public class AuthController : ControllerBase
     {
-        private UserService _userService;
-        private AuthService _authService;
+        private IUserService _userService;
+        private IAuthService _authService;
 
-        public AuthController(UserService userService, AuthService authService)
+        public AuthController(IUserService userService, IAuthService authService)
         {
             _userService = userService;
             _authService = authService;
