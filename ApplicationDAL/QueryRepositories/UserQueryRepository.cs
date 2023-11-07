@@ -34,6 +34,12 @@ public class UserQueryRepository :  IUserQueryRepository
 
     public async Task<User> GetUserByEmail(string email)
     {
-        return _applicationContext.Users.FirstOrDefault(u => u.Email == email);
+        var user =  _applicationContext.Users.FirstOrDefault(u => u.Email == email);
+        if (user == null)
+        {
+            throw new UserNotFoundException("User with specified email doesn't exist");
+        }
+
+        return user;
     }
 }
