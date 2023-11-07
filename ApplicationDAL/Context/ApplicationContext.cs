@@ -1,4 +1,4 @@
-using ApplicationDAL.Entities;
+using ApplicationDomain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationDAL.Context;
@@ -62,9 +62,9 @@ public class ApplicationContext : DbContext
             .HasForeignKey<Resume>(r => r.JobSeekerAccountId)
             .IsRequired();
 
-        modelBuilder.Entity<Organization>().HasOne(o => o.EmployerAccount)
-            .WithOne(ea => ea.Organization)
-            .HasForeignKey<EmployerAccount>(ea => ea.OrganizationId)
+        modelBuilder.Entity<EmployerAccount>().HasOne(ea => ea.Organization)
+            .WithOne(o => o.EmployerAccount)
+            .HasForeignKey<Organization>(o => o.EmployerAccountId)
             .IsRequired();
 
         modelBuilder.Entity<Organization>()

@@ -1,48 +1,38 @@
-using ApplicationBLL.Services.Absract;
-using ApplicationBLL.Services.EmailAvailabilityService;
-using ApplicationCommon.DTOs.User;
-using ApplicationDAL.Context;
-using ApplicationDAL.Entities;
-using AutoMapper;
-using FluentValidation;
-using ValidationException = FluentValidation.ValidationException;
-using ValidationResult = FluentValidation.Results.ValidationResult;
+using ApplicationBLL.Interfaces;
+using ApplicationDomain.Absraction.ICommandRepositories;
+using ApplicationDomain.Absraction.IQueryRepositories;
+using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Models;
 
 namespace ApplicationBLL.Services.UserService;
 
-public class UserService : BaseService, IUserService
+public class UserService : IUserService
 {
-    private IEmailAvailabilityService _emailAvailabilityService;
-    private IValidator<RegisterUserDTO> _registerUserValidator;
-    
-    public UserService(IMapper mapper, ApplicationContext applicationContext, IEmailAvailabilityService emailAvailabilityService, IValidator<RegisterUserDTO> registerUserValidator) : base(mapper, applicationContext)
+    private IUserCommandRepository _userCommandRepository;
+    private IUserIdGetter _userIdGetter;
+    private readonly IUserQueryRepository _userQueryRepository;
+
+    public UserService(IUserIdGetter userIdGetter, IUserCommandRepository userCommandRepository, IUserQueryRepository userQueryRepository)
     {
-        _emailAvailabilityService = emailAvailabilityService;
-        _registerUserValidator = registerUserValidator;
+        _userIdGetter = userIdGetter;
+        _userCommandRepository = userCommandRepository;
+        _userQueryRepository = userQueryRepository;
+    }
+    public int GetCurrentUserId()
+    {
+        return _userIdGetter.CurrentId;
     }
 
-
-    public async Task CreateUser(RegisterUserDTO registerUserDTO)
+    public async Task CreateUser(User registerUser)
     {
-        ValidationResult validationResult = await _registerUserValidator.ValidateAsync(registerUserDTO);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors[0].ErrorMessage);
-        }
-        
-        if (!await _emailAvailabilityService.IsEmailAvailable(registerUserDTO.Email))
+        if (!await _userQueryRepository.IsEmailAvailable(registerUser.Email))
         {
             throw new Exception("Email is already in use.");
         }
+        registerUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerUser.PasswordHash);
+        registerUser.EmployerAccount = new EmployerAccount();
+        registerUser.JobSeekerAccount = new JobSeekerAccount();
 
-        var userEntity = _mapper.Map<User>(registerUserDTO);
-
-        userEntity.PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerUserDTO.Password);
-
-        _applicationContext.Users.Add(userEntity);
-        await _applicationContext.SaveChangesAsync();
+        await _userCommandRepository.CreateUser(registerUser);
     }
-
-    
 }

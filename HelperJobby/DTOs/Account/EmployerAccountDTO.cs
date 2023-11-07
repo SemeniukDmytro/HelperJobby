@@ -1,0 +1,15 @@
+using HelperJobby.DTOs.Job;
+using HelperJobby.DTOs.Organization;
+using HelperJobby.DTOs.User;
+
+namespace HelperJobby.DTOs.Account;
+
+public class EmployerAccountDTO
+{
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public UserDTO User { get; set; }
+    public int OrganizationId { get; set; }
+    public OrganizationDTO Organization { get; set; }
+    public List<JobDTO> Jobs { get; set; }
+}

@@ -1,4 +1,4 @@
-﻿using ApplicationCommon.Interfaces;
+﻿using ApplicationBLL.Interfaces;
 
 namespace ApplicationBLL.Logic;
 

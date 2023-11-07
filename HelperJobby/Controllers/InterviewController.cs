@@ -1,6 +1,6 @@
-using ApplicationCommon.DTOs.UserJobInteractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using InterviewDTO = HelperJobby.DTOs.UserJobInteractions.InterviewDTO;
 
 namespace HelperJobby.Controllers
 {

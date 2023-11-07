@@ -1,6 +1,6 @@
-using ApplicationCommon.DTOs.Job;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using JobDTO = HelperJobby.DTOs.Job.JobDTO;
 
 namespace HelperJobby.Controllers
 {

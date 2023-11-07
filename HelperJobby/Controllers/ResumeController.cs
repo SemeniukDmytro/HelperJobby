@@ -1,6 +1,6 @@
-using ApplicationCommon.DTOs.Resume;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ResumeDTO = HelperJobby.DTOs.Resume.ResumeDTO;
 
 namespace HelperJobby.Controllers
 {

@@ -1,14 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
-using ApplicationBLL.Exceptions;
-using ApplicationBLL.Services;
 using ApplicationBLL.Services.AuthService;
-using ApplicationCommon.DTOs.User;
 using ApplicationDAL.Context;
-using ApplicationDAL.Entities;
+using ApplicationDomain.Exceptions;
+using ApplicationDomain.Models;
 using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Moq.EntityFrameworkCore;

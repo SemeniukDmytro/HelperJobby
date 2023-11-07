@@ -21,7 +21,7 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDAL.Entities.Address", b =>
                 {
-                    b.Property<int>("CurrentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -45,14 +45,14 @@ namespace ApplicationDAL.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
-                    b.HasKey("CurrentId");
+                    b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.Education", b =>
                 {
-                    b.Property<int>("CurrentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -90,34 +90,28 @@ namespace ApplicationDAL.Migrations
                     b.Property<DateOnly>("To")
                         .HasColumnType("date");
 
-                    b.HasKey("CurrentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ResumeId");
 
-                    b.ToTable("Educations");
+                    b.ToTable("Educations", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.EmployerAccount", b =>
                 {
-                    b.Property<int>("CurrentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrganizationId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("CurrentId");
-
-                    b.HasIndex("OrganizationId")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("EmployerAccounts");
+                    b.ToTable("EmployerAccounts", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.Interview", b =>
@@ -137,12 +131,12 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("JobSeekerAccountId");
 
-                    b.ToTable("Interviews");
+                    b.ToTable("Interviews", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.Job", b =>
                 {
-                    b.Property<int>("CurrentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -196,11 +190,11 @@ namespace ApplicationDAL.Migrations
                     b.Property<int>("Schedule")
                         .HasColumnType("int");
 
-                    b.HasKey("CurrentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("EmployerAccountId");
 
-                    b.ToTable("Jobs");
+                    b.ToTable("Jobs", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.JobApply", b =>
@@ -220,37 +214,34 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("JobSeekerAccountId");
 
-                    b.ToTable("JobApplies");
+                    b.ToTable("JobApplies", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.JobSeekerAccount", b =>
                 {
-                    b.Property<int>("CurrentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("AddressId")
+                    b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("CurrentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AddressId");
 
@@ -260,13 +251,16 @@ namespace ApplicationDAL.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("JobSeekerAccounts");
+                    b.ToTable("JobSeekerAccounts", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.Organization", b =>
                 {
-                    b.Property<int>("CurrentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmployerAccountId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -275,33 +269,35 @@ namespace ApplicationDAL.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
 
-                    b.HasKey("CurrentId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployerAccountId")
+                        .IsUnique();
 
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
 
-                    b.ToTable("Organizations");
+                    b.ToTable("Organizations", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.Resume", b =>
                 {
-                    b.Property<int>("CurrentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("JobSeekerAccountId")
                         .HasColumnType("int");
 
-                    b.HasKey("CurrentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("JobSeekerAccountId")
                         .IsUnique();
 
-                    b.ToTable("Resumes");
+                    b.ToTable("Resumes", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.SavedJob", b =>
@@ -318,12 +314,12 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("JobSeekerAccountId");
 
-                    b.ToTable("SavedJobs");
+                    b.ToTable("SavedJobs", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.Skill", b =>
                 {
-                    b.Property<int>("CurrentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -335,16 +331,16 @@ namespace ApplicationDAL.Migrations
                     b.Property<int>("ResumeId")
                         .HasColumnType("int");
 
-                    b.HasKey("CurrentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ResumeId");
 
-                    b.ToTable("Skills");
+                    b.ToTable("Skills", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.User", b =>
                 {
-                    b.Property<int>("CurrentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -363,12 +359,12 @@ namespace ApplicationDAL.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
-                    b.HasKey("CurrentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.WorkExperience", b =>
@@ -418,7 +414,7 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("ResumeId");
 
-                    b.ToTable("WorkExperiences");
+                    b.ToTable("WorkExperiences", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.Education", b =>
@@ -434,19 +430,11 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDAL.Entities.EmployerAccount", b =>
                 {
-                    b.HasOne("ApplicationDAL.Entities.Organization", "Organization")
-                        .WithOne("EmployerAccount")
-                        .HasForeignKey("ApplicationDAL.Entities.EmployerAccount", "OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ApplicationDAL.Entities.User", "User")
                         .WithOne("EmployerAccount")
                         .HasForeignKey("ApplicationDAL.Entities.EmployerAccount", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Organization");
 
                     b.Navigation("User");
                 });
@@ -504,9 +492,7 @@ namespace ApplicationDAL.Migrations
                 {
                     b.HasOne("ApplicationDAL.Entities.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressId");
 
                     b.HasOne("ApplicationDAL.Entities.User", "User")
                         .WithOne("JobSeekerAccount")
@@ -517,6 +503,17 @@ namespace ApplicationDAL.Migrations
                     b.Navigation("Address");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ApplicationDAL.Entities.Organization", b =>
+                {
+                    b.HasOne("ApplicationDAL.Entities.EmployerAccount", "EmployerAccount")
+                        .WithOne("Organization")
+                        .HasForeignKey("ApplicationDAL.Entities.Organization", "EmployerAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EmployerAccount");
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.Resume", b =>
@@ -574,6 +571,9 @@ namespace ApplicationDAL.Migrations
             modelBuilder.Entity("ApplicationDAL.Entities.EmployerAccount", b =>
                 {
                     b.Navigation("Jobs");
+
+                    b.Navigation("Organization")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.Job", b =>
@@ -589,16 +589,9 @@ namespace ApplicationDAL.Migrations
 
                     b.Navigation("JobApplies");
 
-                    b.Navigation("Resume")
-                        .IsRequired();
+                    b.Navigation("Resume");
 
                     b.Navigation("SavedJobs");
-                });
-
-            modelBuilder.Entity("ApplicationDAL.Entities.Organization", b =>
-                {
-                    b.Navigation("EmployerAccount")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("ApplicationDAL.Entities.Resume", b =>

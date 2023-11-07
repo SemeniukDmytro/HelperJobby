@@ -1,29 +1,26 @@
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
-using ApplicationBLL.Exceptions;
-using ApplicationBLL.Services.Absract;
-using ApplicationCommon.DTOs.User;
-using ApplicationDAL.Context;
-using AutoMapper;
-using FluentValidation;
-using FluentValidation.Results;
+using ApplicationDomain.Absraction.IQueryRepositories;
+using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Exceptions;
+using ApplicationDomain.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ApplicationBLL.Services.AuthService;
 
-public class AuthService : BaseService, IAuthService
+public class AuthService : IAuthService
 {
     private readonly IConfiguration _configuration;
-    private readonly IValidator<LoginUserDTO> _validator;
+    private readonly IUserQueryRepository _userQueryRepository;
 
-    public AuthService(IMapper mapper, ApplicationContext applicationContext,
-        IConfiguration configuration, IValidator<LoginUserDTO> validator) : base(mapper, applicationContext)
+    public AuthService(IConfiguration configuration, IUserQueryRepository userQueryRepository)
     {
         _configuration = configuration;
-        _validator = validator;
+        _userQueryRepository = userQueryRepository;
     }
 
 
@@ -53,36 +50,21 @@ public class AuthService : BaseService, IAuthService
         return jwt;
     }
 
-    public async Task<AuthUserDTO> AuthUser(LoginUserDTO loginUserDto)
+    public async Task<string> AuthUser(User loginUser)
     {
-        ValidationResult validationResult = await _validator.ValidateAsync(loginUserDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors[0].ErrorMessage);
-        }
-        
-        
-        var userEntity = _applicationContext.Users.FirstOrDefault(u => u.Email == loginUserDto.Email);
+        var userEntity = await _userQueryRepository.GetUserByEmail(loginUser.Email);
         if (userEntity == null)
         {
             throw new UserNotFoundException("User with provided email is not found");
         }
 
-        if (!BCrypt.Net.BCrypt.Verify(loginUserDto.Password, userEntity.PasswordHash))
+        if (!loginUser.PasswordHash.Equals(userEntity.PasswordHash))
         {
             throw new UserNotFoundException("Password provided for specified email is wrong");
         }
         
         var token = CreateToken(userEntity.Id, userEntity.Email);
-
-        var user = _mapper.Map<UserDTO>(userEntity);
-        
-        return new AuthUserDTO()
-        {
-            User = user,
-            Token = token
-        };
+        return token;
     }
     
 }
