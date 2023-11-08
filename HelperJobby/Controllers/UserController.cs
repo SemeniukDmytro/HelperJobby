@@ -1,7 +1,9 @@
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.User;
+using HelperJobby.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,8 +41,10 @@ namespace HelperJobby.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<UserDTO> PutUser(int id, [FromBody] UserDTO value)
+        public async Task<UserDTO> PutUser(int id, [FromBody] CreateUpdateUserDTO updatedUserDTO)
         {
+            CreateUpdateUserDTOValidator.ValidateUser(updatedUserDTO);
+            var updatedUserModel = await _userService.UpdateUser(id,_mapper.Map<User>(updatedUserDTO));
             return null;
         }
     }

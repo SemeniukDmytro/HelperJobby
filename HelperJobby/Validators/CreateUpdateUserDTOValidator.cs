@@ -1,11 +1,12 @@
-﻿using FluentValidation;
+﻿using ApplicationDomain.Exceptions;
+using FluentValidation;
 using HelperJobby.DTOs.User;
 
 namespace HelperJobby.Validators;
 
-public class RegisterUserDTOValidator : AbstractValidator<RegisterUserDTO>
+public class CreateUpdateUserDTOValidator : AbstractValidator<CreateUpdateUserDTO>
 {
-    public RegisterUserDTOValidator()
+    public CreateUpdateUserDTOValidator()
     {
         RuleFor(u => u.Email).Cascade(CascadeMode.Stop)
             .NotEmpty().WithMessage("You can not have an empty email")
@@ -19,6 +20,17 @@ public class RegisterUserDTOValidator : AbstractValidator<RegisterUserDTO>
         RuleFor(u => u.AccountType).Cascade(CascadeMode.Stop)
             .NotEmpty().WithMessage("You can not register without account type specified")
             .Must(HaveValidAccountType).WithMessage("Chosen role is invalid");
+    }
+
+    public static void ValidateUser(CreateUpdateUserDTO user)
+    {
+        var validator = new CreateUpdateUserDTOValidator();
+        var validationResult = validator.Validate(user);
+
+        if (!validationResult.IsValid)
+        {
+            throw new InvalidUserException(validationResult.ToString());
+        }
     }
     
     private bool BeValidEmail(string email)

@@ -18,8 +18,8 @@ public static class CustomServicesConfigurer
 {
     public static void ConfigureCustomServices(this IServiceCollection serviceProvider)
     {
-        serviceProvider.AddTransient<IValidator<LoginUserDTO>, LoginUserValidator>();
-        serviceProvider.AddTransient<IValidator<RegisterUserDTO>, RegisterUserDTOValidator>();
+        serviceProvider.AddTransient<IValidator<LoginUserDTO>, LoginUserDTOValidator>();
+        serviceProvider.AddTransient<IValidator<CreateUpdateUserDTO>, CreateUpdateUserDTOValidator>();
         serviceProvider.AddScoped<IAuthService, AuthService>();
         serviceProvider.AddScoped<IUserService, UserService>();
         serviceProvider.AddScoped<IUserQueryRepository, UserQueryRepository>();
@@ -28,6 +28,7 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());
         serviceProvider.AddScoped<IUserIdGetter>(provider => provider.GetService<CurrentUserIdProvider>());
+        serviceProvider.AddSingleton<IPasswordHandler, PasswordHandler>();
     }
 
     public static void AddAutoMapperProfiles(this IServiceCollection services)

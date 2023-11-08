@@ -1,6 +1,6 @@
 namespace HelperJobby.DTOs.User;
 
-public class RegisterUserDTO
+public class CreateUpdateUserDTO
 {
     public string Email { get; set; }
     

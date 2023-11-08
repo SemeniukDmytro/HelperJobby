@@ -9,15 +9,15 @@ namespace ApplicationBLL.Services.UserService;
 
 public class UserService : IUserService
 {
-    private IUserCommandRepository _userCommandRepository;
     private IUserIdGetter _userIdGetter;
+    private IPasswordHandler _passwordHandler;
     private readonly IUserQueryRepository _userQueryRepository;
 
-    public UserService(IUserIdGetter userIdGetter, IUserCommandRepository userCommandRepository, IUserQueryRepository userQueryRepository)
+    public UserService(IUserIdGetter userIdGetter, IUserQueryRepository userQueryRepository, IPasswordHandler passwordHandler)
     {
         _userIdGetter = userIdGetter;
-        _userCommandRepository = userCommandRepository;
         _userQueryRepository = userQueryRepository;
+        _passwordHandler = passwordHandler;
     }
     public int GetCurrentUserId()
     {
@@ -35,5 +35,29 @@ public class UserService : IUserService
         registerUser.JobSeekerAccount = new JobSeekerAccount();
 
         return registerUser;
+    }
+
+    public async Task<User> UpdateUser(int id, User updatedUser)
+    {
+        var userEntity = await _userQueryRepository.GetUserByIdPlain(id);
+        if (updatedUser.Email != userEntity.Email)
+        {
+            if (!await _userQueryRepository.IsEmailAvailable(updatedUser.Email))
+            {
+                throw new EmailIsNotAvailable();
+            }
+            userEntity.Email = updatedUser.Email;
+        }
+
+        if (!_passwordHandler.Verify(updatedUser.PasswordHash, userEntity.PasswordHash))
+        {
+            userEntity.PasswordHash = _passwordHandler.ChangePassword(updatedUser.PasswordHash);
+        }
+
+        if (userEntity.AccountType != updatedUser.AccountType)
+        {
+            userEntity.AccountType = updatedUser.AccountType;
+        }
+        return userEntity;
     }
 }

@@ -12,7 +12,7 @@ public class UserProfile : Profile
             opt => opt.MapFrom(src => src.PasswordHash));
         CreateMap<UserDTO, User>().ForMember(dest => dest.PasswordHash, opt =>
             opt.MapFrom(src => src.Password));
-        CreateMap<RegisterUserDTO, User>().ForMember(dest => dest.PasswordHash, opt =>
+        CreateMap<CreateUpdateUserDTO, User>().ForMember(dest => dest.PasswordHash, opt =>
             opt.MapFrom(src => src.Password));
     }
 }

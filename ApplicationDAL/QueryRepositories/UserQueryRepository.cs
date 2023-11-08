@@ -17,8 +17,21 @@ public class UserQueryRepository :  IUserQueryRepository
     
     public async Task<User> GetUserById(int id)
     {
-        var userEntity = _applicationContext.Users.FirstOrDefault(u => u.Id == id);
+        var userEntity = await _applicationContext.Users.Include(u => u.EmployerAccount) 
+            .Include(u => u.JobSeekerAccount).FirstOrDefaultAsync(u => u.Id == id);
 
+        if (userEntity == null)
+        {
+            throw new UserNotFoundException("User with specified id doesn't exist");
+        }
+
+        return userEntity;
+    }
+
+    public async Task<User> GetUserByIdPlain(int id)
+    {
+        var userEntity = await _applicationContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+        
         if (userEntity == null)
         {
             throw new UserNotFoundException("User with specified id doesn't exist");
@@ -34,7 +47,7 @@ public class UserQueryRepository :  IUserQueryRepository
 
     public async Task<User> GetUserByEmail(string email)
     {
-        var user =  _applicationContext.Users.FirstOrDefault(u => u.Email == email);
+        var user = await _applicationContext.Users.FirstOrDefaultAsync(u => u.Email == email);
         if (user == null)
         {
             throw new UserNotFoundException("User with specified email doesn't exist");

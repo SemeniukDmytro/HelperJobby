@@ -4,13 +4,12 @@ using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Models;
 using AutoMapper;
 using FluentValidation;
-using FluentValidation.Results;
 using HelperJobby.DTOs.User;
+using HelperJobby.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AuthUserDTO = HelperJobby.DTOs.User.AuthUserDTO;
 using LoginUserDTO = HelperJobby.DTOs.User.LoginUserDTO;
-using RegisterUserDTO = HelperJobby.DTOs.User.RegisterUserDTO;
 
 namespace HelperJobby.Controllers
 {
@@ -23,27 +22,18 @@ namespace HelperJobby.Controllers
         private readonly IAuthService _authService;
         private readonly IUserQueryRepository _userQueryRepository;
         private readonly IUserCommandRepository _userCommandRepository;
-        private readonly IValidator<RegisterUserDTO> _registerUserValidator;
-        private readonly IValidator<LoginUserDTO> _loginUserValidator;
-        public AuthController(IUserService userService, IAuthService authService, IMapper mapper, IValidator<RegisterUserDTO> registerUserValidator, IValidator<LoginUserDTO> loginUserValidator, IUserQueryRepository userQueryRepository, IUserCommandRepository userCommandRepository) : base(mapper)
+        public AuthController(IUserService userService, IAuthService authService, IMapper mapper, IValidator<CreateUpdateUserDTO> registerUserValidator, IValidator<LoginUserDTO> loginUserValidator, IUserQueryRepository userQueryRepository, IUserCommandRepository userCommandRepository) : base(mapper)
         {
             _userService = userService;
             _authService = authService;
-            _registerUserValidator = registerUserValidator;
-            _loginUserValidator = loginUserValidator;
             _userQueryRepository = userQueryRepository;
             _userCommandRepository = userCommandRepository;
         }
         
         [HttpPost("sign-up")]
-        public async Task Register([FromBody] RegisterUserDTO newUser)
+        public async Task Register([FromBody] CreateUpdateUserDTO newUser)
         {
-            ValidationResult validationResult = await _registerUserValidator.ValidateAsync(newUser);
-
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.Errors[0].ErrorMessage);
-            }
+            CreateUpdateUserDTOValidator.ValidateUser(newUser);
 
             var user = _mapper.Map<User>(newUser);
             
@@ -54,12 +44,7 @@ namespace HelperJobby.Controllers
         [HttpPost("sign-in")]
         public async Task<AuthUserDTO> Login([FromBody] LoginUserDTO loginUserDTO)
         {
-            ValidationResult validationResult = await _loginUserValidator.ValidateAsync(loginUserDTO);
-
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.Errors[0].ErrorMessage);
-            }
+            LoginUserDTOValidator.ValidateUser(loginUserDTO);
             
             var userEntity = await _userQueryRepository.GetUserByEmail(loginUserDTO.Email);
 
