@@ -1,3 +1,4 @@
+using ApplicationDomain.Absraction.ICommandRepositories;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Models;
@@ -15,12 +16,14 @@ namespace HelperJobby.Controllers
     public class UserController : ExtendedBaseController
     {
         private readonly IUserQueryRepository _userQueryRepository;
+        private readonly IUserCommandRepository _userCommandRepository;
         private readonly IUserService _userService;
         
-        public UserController(IUserQueryRepository userQueryRepository, IMapper mapper, IUserService userService) : base(mapper)
+        public UserController(IUserQueryRepository userQueryRepository, IMapper mapper, IUserService userService, IUserCommandRepository userCommandRepository) : base(mapper)
         {
             _userQueryRepository = userQueryRepository;
             _userService = userService;
+            _userCommandRepository = userCommandRepository;
         }
 
         [HttpGet("{id}")]
@@ -43,9 +46,10 @@ namespace HelperJobby.Controllers
         [HttpPut("{id}")]
         public async Task<UserDTO> PutUser(int id, [FromBody] CreateUpdateUserDTO updatedUserDTO)
         {
-            CreateUpdateUserDTOValidator.ValidateUser(updatedUserDTO);
+            UpdateUserDTOValidator.ValidateUser(updatedUserDTO);
             var updatedUserModel = await _userService.UpdateUser(id,_mapper.Map<User>(updatedUserDTO));
-            return null;
+            updatedUserModel = await _userCommandRepository.UpdateUser(updatedUserModel);
+            return _mapper.Map<UserDTO>(updatedUserModel);
         }
     }
 }

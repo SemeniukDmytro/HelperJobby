@@ -33,7 +33,7 @@ namespace HelperJobby.Controllers
         [HttpPost("sign-up")]
         public async Task Register([FromBody] CreateUpdateUserDTO newUser)
         {
-            CreateUpdateUserDTOValidator.ValidateUser(newUser);
+            CreateUserDTOValidator.ValidateUser(newUser);
 
             var user = _mapper.Map<User>(newUser);
             

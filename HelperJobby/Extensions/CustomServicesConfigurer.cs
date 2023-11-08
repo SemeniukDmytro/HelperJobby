@@ -19,7 +19,7 @@ public static class CustomServicesConfigurer
     public static void ConfigureCustomServices(this IServiceCollection serviceProvider)
     {
         serviceProvider.AddTransient<IValidator<LoginUserDTO>, LoginUserDTOValidator>();
-        serviceProvider.AddTransient<IValidator<CreateUpdateUserDTO>, CreateUpdateUserDTOValidator>();
+        serviceProvider.AddTransient<IValidator<CreateUpdateUserDTO>, CreateUserDTOValidator>();
         serviceProvider.AddScoped<IAuthService, AuthService>();
         serviceProvider.AddScoped<IUserService, UserService>();
         serviceProvider.AddScoped<IUserQueryRepository, UserQueryRepository>();

@@ -39,22 +39,26 @@ public class UserService : IUserService
 
     public async Task<User> UpdateUser(int id, User updatedUser)
     {
-        var userEntity = await _userQueryRepository.GetUserByIdPlain(id);
-        if (updatedUser.Email != userEntity.Email)
+        if (GetCurrentUserId() != id)
         {
-            if (!await _userQueryRepository.IsEmailAvailable(updatedUser.Email))
+            throw new Exception("Invalid user");
+        }
+        var userEntity = await _userQueryRepository.GetUserByIdPlain(id);
+        if (!string.IsNullOrEmpty(updatedUser.Email) && updatedUser.Email != userEntity.Email)
+        {
+            if ( !await _userQueryRepository.IsEmailAvailable(updatedUser.Email))
             {
                 throw new EmailIsNotAvailable();
             }
             userEntity.Email = updatedUser.Email;
         }
 
-        if (!_passwordHandler.Verify(updatedUser.PasswordHash, userEntity.PasswordHash))
+        if (!string.IsNullOrEmpty(updatedUser.PasswordHash) && !_passwordHandler.Verify(updatedUser.PasswordHash, userEntity.PasswordHash))
         {
             userEntity.PasswordHash = _passwordHandler.ChangePassword(updatedUser.PasswordHash);
         }
 
-        if (userEntity.AccountType != updatedUser.AccountType)
+        if (!string.IsNullOrEmpty(updatedUser.AccountType) && userEntity.AccountType != updatedUser.AccountType)
         {
             userEntity.AccountType = updatedUser.AccountType;
         }
