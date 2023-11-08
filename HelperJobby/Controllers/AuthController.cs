@@ -1,3 +1,4 @@
+using ApplicationDomain.Absraction.ICommandRepositories;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Models;
@@ -21,15 +22,17 @@ namespace HelperJobby.Controllers
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
         private readonly IUserQueryRepository _userQueryRepository;
+        private readonly IUserCommandRepository _userCommandRepository;
         private readonly IValidator<RegisterUserDTO> _registerUserValidator;
         private readonly IValidator<LoginUserDTO> _loginUserValidator;
-        public AuthController(IUserService userService, IAuthService authService, IMapper mapper, IValidator<RegisterUserDTO> registerUserValidator, IValidator<LoginUserDTO> loginUserValidator, IUserQueryRepository userQueryRepository) : base(mapper)
+        public AuthController(IUserService userService, IAuthService authService, IMapper mapper, IValidator<RegisterUserDTO> registerUserValidator, IValidator<LoginUserDTO> loginUserValidator, IUserQueryRepository userQueryRepository, IUserCommandRepository userCommandRepository) : base(mapper)
         {
             _userService = userService;
             _authService = authService;
             _registerUserValidator = registerUserValidator;
             _loginUserValidator = loginUserValidator;
             _userQueryRepository = userQueryRepository;
+            _userCommandRepository = userCommandRepository;
         }
         
         [HttpPost("sign-up")]
@@ -44,7 +47,8 @@ namespace HelperJobby.Controllers
 
             var user = _mapper.Map<User>(newUser);
             
-            await _userService.CreateUser(user);
+            user = await _userService.CreateUser(user);
+            await _userCommandRepository.CreateUser(user);
         }
         
         [HttpPost("sign-in")]

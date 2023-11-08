@@ -2,6 +2,7 @@ using ApplicationBLL.Interfaces;
 using ApplicationDomain.Absraction.ICommandRepositories;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 
 namespace ApplicationBLL.Services.UserService;
@@ -23,16 +24,16 @@ public class UserService : IUserService
         return _userIdGetter.CurrentId;
     }
 
-    public async Task CreateUser(User registerUser)
+    public async Task<User> CreateUser(User registerUser)
     {
         if (!await _userQueryRepository.IsEmailAvailable(registerUser.Email))
         {
-            throw new Exception("Email is already in use.");
+            throw new EmailIsNotAvailable();
         }
         registerUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerUser.PasswordHash);
         registerUser.EmployerAccount = new EmployerAccount();
         registerUser.JobSeekerAccount = new JobSeekerAccount();
 
-        await _userCommandRepository.CreateUser(registerUser);
+        return registerUser;
     }
 }

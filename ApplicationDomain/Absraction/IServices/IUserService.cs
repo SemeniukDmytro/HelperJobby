@@ -6,5 +6,5 @@ public interface IUserService
 {
     public int GetCurrentUserId();
     
-    public Task CreateUser(User registerUser);
+    public Task<User> CreateUser(User registerUser);
 }
