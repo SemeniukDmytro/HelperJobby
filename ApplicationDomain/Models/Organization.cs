@@ -14,8 +14,8 @@ public class Organization
     [MaxLength(15)]
     public string PhoneNumber { get; set; }
     
-    [ForeignKey("EmployerAccount")]
-    public int EmployerAccountId { get; set; }
-    [Required]
-    public EmployerAccount EmployerAccount { get; set; }
+    public int NumberOfEmployees { get; set; }
+    
+    public List<OrganizationEmployeeEmail> EmployeeEmails { get; set; }
+    public List<EmployerAccount> EmployeeAccounts { get; set; }
 }

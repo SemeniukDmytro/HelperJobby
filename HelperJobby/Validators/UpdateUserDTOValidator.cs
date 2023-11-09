@@ -14,7 +14,7 @@ public class UpdateUserDTOValidator : AbstractValidator<CreateUpdateUserDTO>
             .When(u => !string.IsNullOrEmpty(u.Email));
 
         RuleFor(u => u.Password)
-            .Length(8, 25).WithMessage("Length of your Password is invalid")
+            .Length(8, 25).WithMessage("Length of your number is invalid")
             .When(u => !string.IsNullOrEmpty(u.Password));
 
         RuleFor(u => u.AccountType)

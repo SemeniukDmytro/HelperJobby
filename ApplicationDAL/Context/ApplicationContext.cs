@@ -26,6 +26,7 @@ public class ApplicationContext : DbContext
     public virtual DbSet<Resume> Resumes { get; set; }
     public virtual DbSet<SavedJob> SavedJobs { get; set; }
     public virtual DbSet<Skill> Skills { get; set; }
+    public virtual DbSet<OrganizationEmployeeEmail> OrganizationEmployeeEmails { get; set; }
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<WorkExperience> WorkExperiences { get; set; }
 
@@ -63,14 +64,23 @@ public class ApplicationContext : DbContext
             .IsRequired();
 
         modelBuilder.Entity<EmployerAccount>().HasOne(ea => ea.Organization)
-            .WithOne(o => o.EmployerAccount)
-            .HasForeignKey<Organization>(o => o.EmployerAccountId)
+            .WithMany(o => o.EmployeeAccounts)
+            .HasForeignKey(o => o.OrganizationId)
             .IsRequired();
 
         modelBuilder.Entity<Organization>()
             .HasIndex(o => o.PhoneNumber)
             .IsUnique();
 
+        modelBuilder.Entity<Organization>()
+            .HasMany(o => o.EmployeeEmails)
+            .WithOne(ee => ee.Organization)
+            .HasForeignKey(ee => ee.OrganizationId);
+
+        modelBuilder.Entity<OrganizationEmployeeEmail>()
+            .HasIndex(ee => ee.Email)
+            .IsUnique();
+        
         modelBuilder.Entity<Job>()
             .HasOne(j => j.EmployerAccount)
             .WithMany(ea => ea.Jobs)

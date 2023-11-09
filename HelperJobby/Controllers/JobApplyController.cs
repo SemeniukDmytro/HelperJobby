@@ -23,7 +23,7 @@ namespace HelperJobby.Controllers
         }
 
         // GET: api/JobApply/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public Task<JobApplyDTO> Get(int id)
         {
             return null;

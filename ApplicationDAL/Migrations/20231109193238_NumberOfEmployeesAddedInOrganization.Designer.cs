@@ -3,6 +3,7 @@ using System;
 using ApplicationDAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApplicationDAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20231109193238_NumberOfEmployeesAddedInOrganization")]
+    partial class NumberOfEmployeesAddedInOrganization
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,30 +106,25 @@ namespace ApplicationDAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("ContactEmail")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
                     b.Property<string>("ContactNumber")
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("varchar(60)");
 
-                    b.Property<int>("OrganizationId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -280,6 +278,9 @@ namespace ApplicationDAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("EmployerAccountId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -295,34 +296,13 @@ namespace ApplicationDAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployerAccountId")
+                        .IsUnique();
+
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
 
                     b.ToTable("Organizations");
-                });
-
-            modelBuilder.Entity("ApplicationDomain.Models.OrganizationEmployeeEmail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int>("OrganizationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("OrganizationId");
-
-                    b.ToTable("OrganizationEmployeeEmails");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Resume", b =>
@@ -472,19 +452,11 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDomain.Models.EmployerAccount", b =>
                 {
-                    b.HasOne("ApplicationDomain.Models.Organization", "Organization")
-                        .WithMany("EmployeeAccounts")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ApplicationDomain.Models.User", "User")
                         .WithOne("EmployerAccount")
                         .HasForeignKey("ApplicationDomain.Models.EmployerAccount", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Organization");
 
                     b.Navigation("User");
                 });
@@ -555,15 +527,15 @@ namespace ApplicationDAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ApplicationDomain.Models.OrganizationEmployeeEmail", b =>
+            modelBuilder.Entity("ApplicationDomain.Models.Organization", b =>
                 {
-                    b.HasOne("ApplicationDomain.Models.Organization", "Organization")
-                        .WithMany("EmployeeEmails")
-                        .HasForeignKey("OrganizationId")
+                    b.HasOne("ApplicationDomain.Models.EmployerAccount", "EmployerAccount")
+                        .WithOne("Organization")
+                        .HasForeignKey("ApplicationDomain.Models.Organization", "EmployerAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Organization");
+                    b.Navigation("EmployerAccount");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Resume", b =>
@@ -621,6 +593,9 @@ namespace ApplicationDAL.Migrations
             modelBuilder.Entity("ApplicationDomain.Models.EmployerAccount", b =>
                 {
                     b.Navigation("Jobs");
+
+                    b.Navigation("Organization")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Job", b =>
@@ -639,13 +614,6 @@ namespace ApplicationDAL.Migrations
                     b.Navigation("Resume");
 
                     b.Navigation("SavedJobs");
-                });
-
-            modelBuilder.Entity("ApplicationDomain.Models.Organization", b =>
-                {
-                    b.Navigation("EmployeeAccounts");
-
-                    b.Navigation("EmployeeEmails");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Resume", b =>

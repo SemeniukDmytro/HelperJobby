@@ -26,7 +26,9 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IEmployerAccountService, EmployerAccountService>();
         serviceProvider.AddScoped<IEmployerAccountQueryRepository, EmployerAccountQueryRepository>();
         serviceProvider.AddScoped<IEmployerAccountCommandRepository, EmployerAccountCommandRepository>();
-        
+        serviceProvider.AddScoped<IOrganizationService, OrganizationService>();
+        serviceProvider.AddScoped<IOrganizationCommandRepository, OrganizationCommandRepository>();
+        serviceProvider.AddScoped<IOrganizationQueryRepository, OrganizationQueryRepository>();
         
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());

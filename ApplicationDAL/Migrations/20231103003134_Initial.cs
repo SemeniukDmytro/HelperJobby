@@ -73,7 +73,7 @@ namespace ApplicationDAL.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "EmployerAccounts",
+                name: "EmployeeAccounts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -164,7 +164,7 @@ namespace ApplicationDAL.Migrations
                     table.ForeignKey(
                         name: "FK_Jobs_EmployerAccounts_EmployerAccountId",
                         column: x => x.EmployerAccountId,
-                        principalTable: "EmployerAccounts",
+                        principalTable: "EmployeeAccounts",
                         principalColumn: "CurrentId",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -361,13 +361,13 @@ namespace ApplicationDAL.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployerAccounts_OrganizationId",
-                table: "EmployerAccounts",
+                table: "EmployeeAccounts",
                 column: "OrganizationId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployerAccounts_UserId",
-                table: "EmployerAccounts",
+                table: "EmployeeAccounts",
                 column: "UserId",
                 unique: true);
 
@@ -465,7 +465,7 @@ namespace ApplicationDAL.Migrations
                 name: "Resumes");
 
             migrationBuilder.DropTable(
-                name: "EmployerAccounts");
+                name: "EmployeeAccounts");
 
             migrationBuilder.DropTable(
                 name: "JobSeekerAccounts");

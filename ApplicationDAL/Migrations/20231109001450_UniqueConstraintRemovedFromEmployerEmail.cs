@@ -12,7 +12,7 @@ namespace ApplicationDAL.Migrations
         {
             migrationBuilder.DropIndex(
                 name: "IX_EmployerAccounts_ContactEmail",
-                table: "EmployerAccounts");
+                table: "EmployeeAccounts");
         }
 
         /// <inheritdoc />
@@ -20,8 +20,8 @@ namespace ApplicationDAL.Migrations
         {
             migrationBuilder.CreateIndex(
                 name: "IX_EmployerAccounts_ContactEmail",
-                table: "EmployerAccounts",
-                column: "ContactEmail",
+                table: "EmployeeAccounts",
+                column: "Email",
                 unique: true);
         }
     }

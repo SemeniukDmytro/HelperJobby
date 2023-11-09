@@ -10,15 +10,22 @@ public class EmployerAccountService : IEmployerAccountService
 {
     private readonly IUserService _userService;
     private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
-    public EmployerAccountService(IUserService userService, IEmployerAccountQueryRepository employerAccountQueryRepository)
+    private readonly IOrganizationQueryRepository _organizationQueryRepository;
+    public EmployerAccountService(IUserService userService, IEmployerAccountQueryRepository employerAccountQueryRepository, IOrganizationQueryRepository organizationQueryRepository)
     {
         _userService = userService;
         _employerAccountQueryRepository = employerAccountQueryRepository;
+        _organizationQueryRepository = organizationQueryRepository;
     }
 
     public async Task<EmployerAccount> CreateEmployerAccount(EmployerAccount account)
     {
         var currentUserId = _userService.GetCurrentUserId();
+        var organization = await _organizationQueryRepository.GetOrganizationByName(account.Organization.Name);
+        if (organization != null && !organization.EmployeeEmails.Select(ee => ee.Email).Contains(account.Email))
+        {
+            throw new ForbiddenException();
+        }
         account.UserId = currentUserId;
         return account;
     }
@@ -36,9 +43,9 @@ public class EmployerAccountService : IEmployerAccountService
         {
             throw new ForbiddenException();
         }
-        if (!string.IsNullOrEmpty(updatedAccount.ContactEmail) && updatedAccount.ContactEmail != account.ContactEmail)
+        if (!string.IsNullOrEmpty(updatedAccount.Email) && updatedAccount.Email != account.Email)
         {
-            account.ContactEmail = updatedAccount.ContactEmail;
+            account.Email = updatedAccount.Email;
         }
 
         if (!string.IsNullOrEmpty(updatedAccount.ContactNumber) &&

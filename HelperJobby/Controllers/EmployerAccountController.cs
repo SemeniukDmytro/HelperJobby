@@ -28,15 +28,7 @@ namespace HelperJobby.Controllers
             _accountQueryRepository = accountQueryRepository;
             _userService = userService;
         }
-
-        [HttpPost]
-        public async Task<EmployerAccountDTO> Create([FromBody] CreateEmployerAccountDTO createdEmployerAccountDTO)
-        {
-            EmployerAccountDTOValidator.ValidateAccount(createdEmployerAccountDTO);
-            var user = await _employerAccountService.CreateEmployerAccount(_mapper.Map<EmployerAccount>(createdEmployerAccountDTO));
-            var employerAccountDTO = _mapper.Map<EmployerAccountDTO>( await _accountCommandRepository.Create(user));
-            return employerAccountDTO;
-        }
+        
 
         [HttpGet("my-employer-account")]
         public async Task<EmployerAccountDTO> GetCurrentUserAccount()
@@ -52,13 +44,22 @@ namespace HelperJobby.Controllers
             var user = await _accountQueryRepository.GetEmployerAccount(id);
             return _mapper.Map<EmployerAccountDTO>(user);
         }
+        
+        [HttpPost]
+        public async Task<EmployerAccountDTO> Create([FromBody] CreateEmployerAccountDTO createdEmployerAccountDTO)
+        {
+            EmployerAccountDTOValidator.ValidateAccount(createdEmployerAccountDTO);
+            var employerAccount = await _employerAccountService.CreateEmployerAccount(_mapper.Map<EmployerAccount>(createdEmployerAccountDTO));
+            var employerAccountDTO = _mapper.Map<EmployerAccountDTO>( await _accountCommandRepository.Create(employerAccount));
+            return employerAccountDTO;
+        }
 
         [HttpPut("{userId}")]
         public async Task<EmployerAccountDTO> PutEmployerAccount(int userId, [FromBody] UpdateEmployerAccountDTO updatedAccount)
         {
             UpdateEmployerAccountDTOValidator.ValidateUser(updatedAccount);
-            var user = await _employerAccountService.UpdateEmployerAccount(userId, _mapper.Map<EmployerAccount>(updatedAccount));
-            var updatedAccountDTO = _mapper.Map<EmployerAccountDTO>(await _accountCommandRepository.Update(userId, user));
+            var employerAccount = await _employerAccountService.UpdateEmployerAccount(userId, _mapper.Map<EmployerAccount>(updatedAccount));
+            var updatedAccountDTO = _mapper.Map<EmployerAccountDTO>(await _accountCommandRepository.Update(userId, employerAccount));
             return updatedAccountDTO;
         }
     }

@@ -12,15 +12,15 @@ namespace ApplicationDAL.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_EmployerAccounts_Organizations_OrganizationId",
-                table: "EmployerAccounts");
+                table: "EmployeeAccounts");
 
             migrationBuilder.DropIndex(
                 name: "IX_EmployerAccounts_OrganizationId",
-                table: "EmployerAccounts");
+                table: "EmployeeAccounts");
 
             migrationBuilder.DropColumn(
                 name: "OrganizationId",
-                table: "EmployerAccounts");
+                table: "EmployeeAccounts");
 
             migrationBuilder.AddColumn<int>(
                 name: "EmployerAccountId",
@@ -39,7 +39,7 @@ namespace ApplicationDAL.Migrations
                 name: "FK_Organizations_EmployerAccounts_EmployerAccountId",
                 table: "Organizations",
                 column: "EmployerAccountId",
-                principalTable: "EmployerAccounts",
+                principalTable: "EmployeeAccounts",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -61,20 +61,20 @@ namespace ApplicationDAL.Migrations
 
             migrationBuilder.AddColumn<int>(
                 name: "OrganizationId",
-                table: "EmployerAccounts",
+                table: "EmployeeAccounts",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployerAccounts_OrganizationId",
-                table: "EmployerAccounts",
+                table: "EmployeeAccounts",
                 column: "OrganizationId",
                 unique: true);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_EmployerAccounts_Organizations_OrganizationId",
-                table: "EmployerAccounts",
+                table: "EmployeeAccounts",
                 column: "OrganizationId",
                 principalTable: "Organizations",
                 principalColumn: "Id",

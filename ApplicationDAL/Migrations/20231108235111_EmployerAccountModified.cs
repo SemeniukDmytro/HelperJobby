@@ -31,8 +31,8 @@ namespace ApplicationDAL.Migrations
                 .OldAnnotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.AddColumn<string>(
-                name: "ContactEmail",
-                table: "EmployerAccounts",
+                name: "Email",
+                table: "EmployeeAccounts",
                 type: "varchar(50)",
                 maxLength: 50,
                 nullable: false,
@@ -41,7 +41,7 @@ namespace ApplicationDAL.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "FullName",
-                table: "EmployerAccounts",
+                table: "EmployeeAccounts",
                 type: "varchar(60)",
                 maxLength: 60,
                 nullable: false,
@@ -50,8 +50,8 @@ namespace ApplicationDAL.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployerAccounts_ContactEmail",
-                table: "EmployerAccounts",
-                column: "ContactEmail",
+                table: "EmployeeAccounts",
+                column: "Email",
                 unique: true);
         }
 
@@ -60,15 +60,15 @@ namespace ApplicationDAL.Migrations
         {
             migrationBuilder.DropIndex(
                 name: "IX_EmployerAccounts_ContactEmail",
-                table: "EmployerAccounts");
+                table: "EmployeeAccounts");
 
             migrationBuilder.DropColumn(
-                name: "ContactEmail",
-                table: "EmployerAccounts");
+                name: "Email",
+                table: "EmployeeAccounts");
 
             migrationBuilder.DropColumn(
                 name: "FullName",
-                table: "EmployerAccounts");
+                table: "EmployeeAccounts");
 
             migrationBuilder.AlterColumn<string>(
                 name: "PhoneNumber",
