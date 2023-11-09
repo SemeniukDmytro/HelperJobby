@@ -30,7 +30,6 @@ public class UserService : IUserService
             throw new EmailIsNotAvailable();
         }
         registerUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerUser.PasswordHash);
-        registerUser.EmployerAccount = new EmployerAccount();
         registerUser.JobSeekerAccount = new JobSeekerAccount();
 
         return registerUser;

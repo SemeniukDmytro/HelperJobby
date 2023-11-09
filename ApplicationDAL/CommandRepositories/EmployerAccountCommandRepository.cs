@@ -1,13 +1,34 @@
+using ApplicationDAL.Context;
 using ApplicationDomain.Absraction.ICommandRepositories;
+using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationDAL.CommandRepositories;
 
 public class EmployerAccountCommandRepository : IEmployerAccountCommandRepository
 {
-    public Task<EmployerAccount> Create(EmployerAccount account)
+    private readonly ApplicationContext _applicationContext;
+
+    public EmployerAccountCommandRepository(ApplicationContext applicationContext)
     {
-        throw new NotImplementedException();
+        _applicationContext = applicationContext;
+    }
+
+    public async Task<EmployerAccount> Create(EmployerAccount account)
+    {
+        var user = await _applicationContext.Users.AsNoTracking().Include(u => u.EmployerAccount)
+            .FirstOrDefaultAsync(u => u.Id == account.UserId);
+        if (user.EmployerAccount != null)
+        {
+            throw new EmployerAccountAlreadyExistsException();
+        }
+
+        account.User = user;
+        _applicationContext.Attach(account.User);
+        _applicationContext.EmployerAccounts.Add(account);
+        await _applicationContext.SaveChangesAsync();
+        return account;
     }
 
     public Task<EmployerAccount> Update(int accountId, EmployerAccount updatedInfo)

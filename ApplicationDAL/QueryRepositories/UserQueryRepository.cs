@@ -28,6 +28,32 @@ public class UserQueryRepository :  IUserQueryRepository
         return userEntity;
     }
 
+    public async Task<User> GetUserWithEmployerAccount(int userId)
+    {
+        var userEntity = await _applicationContext.Users.Include(u => u.EmployerAccount)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (userEntity == null)
+        {
+            throw new UserNotFoundException("User with specified id doesn't exist");
+        }
+
+        return userEntity;
+    }
+
+    public async Task<User> GetUserWithJobSeekerAccount(int userId)
+    {
+        var userEntity = await _applicationContext.Users.Include(u => u.JobSeekerAccount)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (userEntity == null)
+        {
+            throw new UserNotFoundException("User with specified id doesn't exist");
+        }
+
+        return userEntity;
+    }
+
     public async Task<User> GetUserByIdPlain(int id)
     {
         var userEntity = await _applicationContext.Users.FirstOrDefaultAsync(u => u.Id == id);

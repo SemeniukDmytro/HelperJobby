@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Exceptions;
@@ -26,12 +27,21 @@ public class EmployerAccountService : IEmployerAccountService
     {
         var currentUserId = _userService.GetCurrentUserId();
         var account = await _employerAccountQueryRepository.GetEmployerAccount(accountId);
+        string regexPattern = @"^\+[1-9]{1,3}[0-9]{3,14}$";
         if (account.UserId != currentUserId)
         {
             throw new ForbiddenException();
         }
-        account.ContactEmail = updatedAccount.ContactEmail;
-        account.FullName = updatedAccount.FullName;
+        if (!string.IsNullOrEmpty(updatedAccount.ContactEmail) && updatedAccount.ContactEmail != account.ContactEmail)
+        {
+            account.ContactEmail = updatedAccount.ContactEmail;
+        }
+
+        if (!string.IsNullOrEmpty(updatedAccount.ContactNumber) &&
+            updatedAccount.ContactNumber != account.ContactNumber && Regex.IsMatch(updatedAccount.ContactNumber, regexPattern))
+        {
+            account.ContactNumber = updatedAccount.ContactNumber;
+        }
         return account;
     }
 }

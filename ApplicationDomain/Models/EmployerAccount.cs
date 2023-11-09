@@ -15,6 +15,9 @@ public class EmployerAccount
     [MaxLength(50)]
     public string ContactEmail { get; set; }
     
+    [MaxLength(15)]
+    public string ContactNumber { get; set; }
+    
     [ForeignKey("User")]
     public int UserId { get; set; }
     

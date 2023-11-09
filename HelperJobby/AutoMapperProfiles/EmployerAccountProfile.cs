@@ -1,5 +1,6 @@
 using ApplicationDomain.Models;
 using AutoMapper;
+using HelperJobby.DTOs.Account;
 using EmployerAccountDTO = HelperJobby.DTOs.Account.EmployerAccountDTO;
 using OrganizationDTO = HelperJobby.DTOs.Organization.OrganizationDTO;
 using UserDTO = HelperJobby.DTOs.User.UserDTO;
@@ -20,6 +21,7 @@ public class EmployerAccountProfile : Profile
             dest.User = context.Mapper.Map<UserDTO, User>(src.User);
             dest.Organization = context.Mapper.Map<OrganizationDTO, Organization>(src.Organization);
         });
-        
+        CreateMap<CreateEmployerAccountDTO, EmployerAccount>();
+        CreateMap<UpdateEmployerAccountDTO, EmployerAccount>();
     }
 }

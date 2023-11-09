@@ -1,6 +1,6 @@
 namespace ApplicationDomain.Exceptions;
 
-public class UserNotFoundException : Exception
+public class UserNotFoundException : NotFoundExceptionBase
 {
     public UserNotFoundException(string message) : base(message)
     {
