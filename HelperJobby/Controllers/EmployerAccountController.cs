@@ -45,7 +45,7 @@ namespace HelperJobby.Controllers
             return _mapper.Map<EmployerAccountDTO>(user);
         }
         
-        [HttpGet("{id}")]
+        [HttpGet("{userId}")]
 
         public async Task<EmployerAccountDTO> GetUserEmployerAccount(int id)
         {
@@ -53,10 +53,13 @@ namespace HelperJobby.Controllers
             return _mapper.Map<EmployerAccountDTO>(user);
         }
 
-        [HttpPut("{id}")]
-        public Task<EmployerAccountDTO> PutEmployerAccount(int id, [FromBody] EmployerAccountDTO updatedAccount)
+        [HttpPut("{userId}")]
+        public async Task<EmployerAccountDTO> PutEmployerAccount(int userId, [FromBody] UpdateEmployerAccountDTO updatedAccount)
         {
-            return null;
+            UpdateEmployerAccountDTOValidator.ValidateUser(updatedAccount);
+            var user = await _employerAccountService.UpdateEmployerAccount(userId, _mapper.Map<EmployerAccount>(updatedAccount));
+            var updatedAccountDTO = _mapper.Map<EmployerAccountDTO>(await _accountCommandRepository.Update(userId, user));
+            return updatedAccountDTO;
         }
     }
 }

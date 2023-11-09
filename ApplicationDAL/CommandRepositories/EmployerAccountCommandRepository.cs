@@ -31,8 +31,17 @@ public class EmployerAccountCommandRepository : IEmployerAccountCommandRepositor
         return account;
     }
 
-    public Task<EmployerAccount> Update(int accountId, EmployerAccount updatedInfo)
+    public async Task<EmployerAccount> Update(int userId, EmployerAccount updatedInfo)
     {
-        throw new NotImplementedException();
+        var user = await _applicationContext.Users.AsNoTracking().Include(u => u.EmployerAccount)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user.EmployerAccount == null)
+        {
+            throw new EmployerAccountNotFoundException();
+        }
+        
+        await _applicationContext.SaveChangesAsync();
+        return updatedInfo;
     }
 }

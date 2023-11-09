@@ -23,10 +23,14 @@ public class EmployerAccountService : IEmployerAccountService
         return account;
     }
 
-    public async Task<EmployerAccount> UpdateEmployerAccount(int accountId, EmployerAccount updatedAccount)
+    public async Task<EmployerAccount> UpdateEmployerAccount(int userId, EmployerAccount updatedAccount)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var account = await _employerAccountQueryRepository.GetEmployerAccount(accountId);
+        if (userId != currentUserId)
+        {
+            throw new ForbiddenException();
+        }
+        var account = await _employerAccountQueryRepository.GetEmployerAccount(userId);
         string regexPattern = @"^\+[1-9]{1,3}[0-9]{3,14}$";
         if (account.UserId != currentUserId)
         {
@@ -38,7 +42,7 @@ public class EmployerAccountService : IEmployerAccountService
         }
 
         if (!string.IsNullOrEmpty(updatedAccount.ContactNumber) &&
-            updatedAccount.ContactNumber != account.ContactNumber && Regex.IsMatch(updatedAccount.ContactNumber, regexPattern))
+            updatedAccount.ContactNumber != account.ContactNumber)
         {
             account.ContactNumber = updatedAccount.ContactNumber;
         }

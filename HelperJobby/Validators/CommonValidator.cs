@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace HelperJobby.Validators;
 
 public class CommonValidator
@@ -12,5 +14,11 @@ public class CommonValidator
     internal static bool HaveValidAccountType(string accountType)
     {
         return accountType == "Job seeker" || accountType == "Employer";
+    }
+
+    internal static bool BeValidPhoneNumber(string phoneNumber)
+    {
+        string regexPattern = @"^\+[1-9]{1,3}[0-9]{3,14}$";
+        return Regex.IsMatch(phoneNumber, regexPattern);
     }
 }
