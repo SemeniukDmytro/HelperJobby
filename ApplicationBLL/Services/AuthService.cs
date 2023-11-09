@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -10,7 +9,7 @@ using ApplicationDomain.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ApplicationBLL.Services.AuthService;
+namespace ApplicationBLL.Services;
 
 public class AuthService : IAuthService
 {

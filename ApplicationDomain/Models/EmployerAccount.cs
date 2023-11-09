@@ -7,6 +7,14 @@ public class EmployerAccount
 {
     public int Id { get; set; }
     
+    [Required]
+    [MaxLength(60)]
+    public string FullName { get; set; }
+    
+    [Required]
+    [MaxLength(50)]
+    public string ContactEmail { get; set; }
+    
     [ForeignKey("User")]
     public int UserId { get; set; }
     

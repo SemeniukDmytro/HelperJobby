@@ -1,11 +1,10 @@
 using ApplicationBLL.Interfaces;
-using ApplicationDomain.Absraction.ICommandRepositories;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 
-namespace ApplicationBLL.Services.UserService;
+namespace ApplicationBLL.Services;
 
 public class UserService : IUserService
 {

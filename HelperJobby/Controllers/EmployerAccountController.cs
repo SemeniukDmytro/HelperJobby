@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EmployerAccountDTO = HelperJobby.DTOs.Account.EmployerAccountDTO;
@@ -7,14 +8,20 @@ namespace HelperJobby.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class EmployerAccountController : ControllerBase
+    public class EmployerAccountController : ExtendedBaseController
     {
-        public EmployerAccountController()
+        public EmployerAccountController(IMapper mapper) : base(mapper)
         {
             
         }
 
-        [HttpGet]
+        [HttpPost]
+        public Task<EmployerAccountDTO> Create([FromBody] EmployerAccountDTO employerAccountDTO)
+        {
+            return null;
+        }
+
+        [HttpGet("my-employer-account")]
         public Task<EmployerAccountDTO> GetCurrentUserAccount()
         {
             return null;

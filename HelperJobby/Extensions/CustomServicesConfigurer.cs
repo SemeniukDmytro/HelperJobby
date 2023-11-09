@@ -1,8 +1,7 @@
 using System.Reflection;
 using ApplicationBLL.Interfaces;
 using ApplicationBLL.Logic;
-using ApplicationBLL.Services.AuthService;
-using ApplicationBLL.Services.UserService;
+using ApplicationBLL.Services;
 using ApplicationDAL.CommandRepositories;
 using ApplicationDAL.QueryRepositories;
 using ApplicationDomain.Absraction.ICommandRepositories;
@@ -24,6 +23,9 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IUserService, UserService>();
         serviceProvider.AddScoped<IUserQueryRepository, UserQueryRepository>();
         serviceProvider.AddScoped<IUserCommandRepository, UserCommandRepository>();
+        serviceProvider.AddScoped<IEmployerAccountService, EmployerAccountService>();
+        serviceProvider.AddScoped<IEmployerAccountQueryRepository, EmployerAccountQueryRepository>();
+        serviceProvider.AddScoped<IEmployerAccountCommandRepository, EmployerAccountCommandRepository>();
         
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());

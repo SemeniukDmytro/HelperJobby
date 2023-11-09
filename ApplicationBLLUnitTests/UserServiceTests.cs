@@ -1,5 +1,5 @@
 using ApplicationBLL.Interfaces;
-using ApplicationBLL.Services.UserService;
+using ApplicationBLL.Services;
 using ApplicationDomain.Absraction.ICommandRepositories;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Exceptions;

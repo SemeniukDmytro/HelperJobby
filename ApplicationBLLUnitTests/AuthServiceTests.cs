@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
-using ApplicationBLL.Services.AuthService;
+using ApplicationBLL.Services;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Exceptions;
