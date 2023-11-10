@@ -27,5 +27,17 @@ namespace HelperJobby.Controllers
             return null;
         }
 
+        [HttpPost("add-employee")]
+        public Task AddEmployeeEmail(OrganizationEmployeeEmailDTO employeeEmailDTO)
+        {
+            return null;
+        }
+        
+        [HttpPost("remove-employee")]
+        public Task RemoveEmployeeEmail(OrganizationEmployeeEmailDTO employeeEmailDTO)
+        {
+            return null;
+        }
+
     }
 }

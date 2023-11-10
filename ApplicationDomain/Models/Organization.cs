@@ -13,7 +13,8 @@ public class Organization
     
     [MaxLength(15)]
     public string PhoneNumber { get; set; }
-    
+    [Required]
+    public int OrganizationOwnerId { get; set; }
     public int NumberOfEmployees { get; set; }
     
     public List<OrganizationEmployeeEmail> EmployeeEmails { get; set; }

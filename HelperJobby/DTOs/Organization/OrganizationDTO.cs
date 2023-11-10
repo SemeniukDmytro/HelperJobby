@@ -8,6 +8,7 @@ public class OrganizationDTO
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
     public int NumberOfEmployees { get; set; }
-    public int EmployerAccountId { get; set; }
-    public EmployerAccountDTO EmployerAccount { get; set; }
+    public int OrganizationOwnerId { get; set; }
+    public List<EmployerAccountDTO> EmployeeAccounts { get; set; }
+    public List<OrganizationEmployeeEmailDTO> EmployeeEmails { get; set; }
 }

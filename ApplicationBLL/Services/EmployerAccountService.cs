@@ -33,6 +33,7 @@ public class EmployerAccountService : IEmployerAccountService
             {
                 Email = account.Email
             });
+            account.Organization.OrganizationOwnerId = currentUserId;
         }
         else
         {

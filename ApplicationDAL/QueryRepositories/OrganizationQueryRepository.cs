@@ -14,6 +14,11 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
         _applicationContext = applicationContext;
     }
 
+    public Task<Organization> GetOrganizationByIdPlain(int organizationId)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Organization> GetOrganizationById(int organizationId)
     {
         throw new NotImplementedException();
