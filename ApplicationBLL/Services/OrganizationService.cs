@@ -41,7 +41,7 @@ public class OrganizationService : IOrganizationService
             throw new ForbiddenException();
         }
 
-        if (organization.EmployeeEmails.Select(employeeEmail => employeeEmail.Email).Contains(employeeEmail.Email))
+        if (organization.EmployeeEmails.Any(e => e.Email == employeeEmail.Email))
         {
             throw new ForbiddenException("This email has already been added");
         }
@@ -56,7 +56,18 @@ public class OrganizationService : IOrganizationService
         {
             throw new ForbiddenException();
         }
-        if (!organization.EmployeeEmails.Select(employeeEmail => employeeEmail.Email).Contains(employeeEmail.Email))
+        bool emailExists = false;
+
+        foreach (var existingEmail in organization.EmployeeEmails)
+        {
+            if (existingEmail.Email == employeeEmail.Email)
+            {
+                employeeEmail.Id = existingEmail.Id;
+                emailExists = true;
+                break;
+            }
+        }
+        if (!emailExists)
         {
             throw new ForbiddenException("There isn't such email in organization employee list");
         }

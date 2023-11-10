@@ -73,7 +73,7 @@ public class OrganizationServiceTests
     }
     
     [Fact]
-    public async Task AddEmployeeEmailShouldAddEmployeeEmail()
+    public async Task AddEmployeeEmailShouldReturnEmployeeEmail()
     {
         //Arrange
         var employeeEmail = new OrganizationEmployeeEmail()
@@ -91,9 +91,11 @@ public class OrganizationServiceTests
         _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationWithEmployeesEmails(employeeEmail.OrganizationId)).ReturnsAsync(
             organization);
         //Act
-        await _organizationService.AddEmployeeEmail(employeeEmail);
-        //Assert
-        Assert.Contains(employeeEmail.Email, organization.EmployeeEmails.Select(e => e.Email));
+        var result = await _organizationService.AddEmployeeEmail(employeeEmail);
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(employeeEmail.Email, result.Email);
+        Assert.Equal(employeeEmail.OrganizationId, result.OrganizationId);
     }
     
     [Fact]
@@ -123,6 +125,7 @@ public class OrganizationServiceTests
         //Arrange
         var employeeEmail = new OrganizationEmployeeEmail()
         {
+            Id = 1,
             Email = "test@gmail.com",
             OrganizationId = 1
         };
@@ -140,9 +143,11 @@ public class OrganizationServiceTests
             .ReturnsAsync(organization
             );
         //Act
-        await _organizationService.RemoveEmployeeEmail(employeeEmail);
-        //Assert
-        Assert.Empty(organization.EmployeeEmails);
+        var result = await _organizationService.RemoveEmployeeEmail(employeeEmail);
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(employeeEmail.Email, result.Email);
+        Assert.Equal(employeeEmail.OrganizationId, result.OrganizationId);
     }
     
     [Fact]
