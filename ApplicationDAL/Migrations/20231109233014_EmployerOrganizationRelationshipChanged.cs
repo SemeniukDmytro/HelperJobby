@@ -23,11 +23,6 @@ namespace ApplicationDAL.Migrations
                 name: "EmployerAccountId",
                 table: "Organizations");
 
-            migrationBuilder.RenameColumn(
-                name: "ContactEmail",
-                table: "EmployerAccounts",
-                newName: "Email");
-
             migrationBuilder.AddColumn<int>(
                 name: "OrganizationId",
                 table: "EmployerAccounts",

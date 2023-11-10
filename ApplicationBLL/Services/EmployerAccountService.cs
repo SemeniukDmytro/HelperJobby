@@ -26,6 +26,19 @@ public class EmployerAccountService : IEmployerAccountService
         {
             throw new ForbiddenException();
         }
+        if (organization == null)
+        {
+            account.Organization.EmployeeEmails = new List<OrganizationEmployeeEmail>();
+            account.Organization.EmployeeEmails.Add(new OrganizationEmployeeEmail()
+            {
+                Email = account.Email
+            });
+        }
+        else
+        {
+            account.OrganizationId = organization.Id;
+            account.Organization = organization;
+        }
         account.UserId = currentUserId;
         return account;
     }

@@ -21,12 +21,15 @@ public class EmployerAccountProfile : Profile
             dest.User = context.Mapper.Map<UserDTO, User>(src.User);
             dest.Organization = context.Mapper.Map<OrganizationDTO, Organization>(src.Organization);
         });
-        CreateMap<CreateEmployerAccountDTO, EmployerAccount>().ForMember(dest => dest.Organization.Name, 
-            opt => opt.MapFrom(src => src.OrganizationName))
-            .ForMember(dest => dest.Organization.PhoneNumber, 
-                opt => opt.MapFrom(src => src.ContactNumber))
-            .ForMember(dest => dest.Organization.NumberOfEmployees, 
-                opt => opt.MapFrom(src => src.NumberOfEmployees));
+        CreateMap<CreateEmployerAccountDTO, EmployerAccount>().AfterMap((src, dest, context) =>
+        {
+            dest.Organization = new Organization()
+            {
+                Name = src.OrganizationName,
+                NumberOfEmployees = src.NumberOfEmployees,
+                PhoneNumber = src.ContactNumber
+            };
+        });
         CreateMap<UpdateEmployerAccountDTO, EmployerAccount>();
         ;
     }

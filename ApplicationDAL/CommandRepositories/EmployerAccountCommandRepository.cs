@@ -24,6 +24,11 @@ public class EmployerAccountCommandRepository : IEmployerAccountCommandRepositor
             throw new EmployerAccountAlreadyExistsException();
         }
 
+        if (account.OrganizationId != 0)
+        {
+            _applicationContext.Attach(account.Organization);
+        }
+
         account.User = user;
         _applicationContext.Attach(account.User);
         _applicationContext.EmployerAccounts.Add(account);

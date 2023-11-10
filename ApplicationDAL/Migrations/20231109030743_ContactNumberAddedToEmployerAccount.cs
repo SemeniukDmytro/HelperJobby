@@ -12,7 +12,7 @@ namespace ApplicationDAL.Migrations
         {
             migrationBuilder.AddColumn<string>(
                 name: "ContactNumber",
-                table: "EmployeeAccounts",
+                table: "EmployerAccounts",
                 type: "varchar(15)",
                 maxLength: 15,
                 nullable: false,
@@ -25,7 +25,7 @@ namespace ApplicationDAL.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "ContactNumber",
-                table: "EmployeeAccounts");
+                table: "EmployerAccounts");
         }
     }
 }

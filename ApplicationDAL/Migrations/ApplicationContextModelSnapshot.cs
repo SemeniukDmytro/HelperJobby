@@ -473,7 +473,7 @@ namespace ApplicationDAL.Migrations
             modelBuilder.Entity("ApplicationDomain.Models.EmployerAccount", b =>
                 {
                     b.HasOne("ApplicationDomain.Models.Organization", "Organization")
-                        .WithMany("EmployeeAccounts")
+                        .WithMany("EmployerAccounts")
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -643,7 +643,7 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDomain.Models.Organization", b =>
                 {
-                    b.Navigation("EmployeeAccounts");
+                    b.Navigation("EmployerAccounts");
 
                     b.Navigation("EmployeeEmails");
                 });

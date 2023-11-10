@@ -86,7 +86,6 @@ public class UserServiceTests
             Email = "oldemail@gmail.com"
         });
         _userQueryRepository.Setup(r => r.IsEmailAvailable(It.IsAny<string>())).ReturnsAsync(false);
-        _passwordHandler.Setup(h => h.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
         //Act & Assert
         await Assert.ThrowsAsync<EmailIsNotAvailable>(async () => await _userService.UpdateUser(It.IsAny<int>(), updatedUser));
     }
@@ -108,7 +107,6 @@ public class UserServiceTests
             AccountType = "Employer"
         });
         _userQueryRepository.Setup(r => r.IsEmailAvailable(It.IsAny<string>())).ReturnsAsync(false);
-        _passwordHandler.Setup(h => h.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
         _passwordHandler.Setup(h => h.ChangePassword(It.IsAny<string>())).Returns(updatedUser.PasswordHash);
         //Act
         var userToUpdate = await _userService.UpdateUser(It.IsAny<int>(), updatedUser);

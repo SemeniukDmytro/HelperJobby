@@ -73,7 +73,7 @@ namespace ApplicationDAL.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "EmployeeAccounts",
+                name: "EmployerAccounts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -88,13 +88,13 @@ namespace ApplicationDAL.Migrations
                         name: "FK_EmployerAccounts_Organizations_OrganizationId",
                         column: x => x.OrganizationId,
                         principalTable: "Organizations",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_EmployerAccounts_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -121,13 +121,13 @@ namespace ApplicationDAL.Migrations
                         name: "FK_JobSeekerAccounts_Addresses_AddressId",
                         column: x => x.AddressId,
                         principalTable: "Addresses",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_JobSeekerAccounts_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -164,8 +164,8 @@ namespace ApplicationDAL.Migrations
                     table.ForeignKey(
                         name: "FK_Jobs_EmployerAccounts_EmployerAccountId",
                         column: x => x.EmployerAccountId,
-                        principalTable: "EmployeeAccounts",
-                        principalColumn: "CurrentId",
+                        principalTable: "EmployerAccounts",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -185,7 +185,7 @@ namespace ApplicationDAL.Migrations
                         name: "FK_Resumes_JobSeekerAccounts_JobSeekerAccountId",
                         column: x => x.JobSeekerAccountId,
                         principalTable: "JobSeekerAccounts",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -205,13 +205,13 @@ namespace ApplicationDAL.Migrations
                         name: "FK_Interviews_JobSeekerAccounts_JobSeekerAccountId",
                         column: x => x.JobSeekerAccountId,
                         principalTable: "JobSeekerAccounts",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Interviews_Jobs_JobId",
                         column: x => x.JobId,
                         principalTable: "Jobs",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -231,13 +231,13 @@ namespace ApplicationDAL.Migrations
                         name: "FK_JobApplies_JobSeekerAccounts_JobSeekerAccountId",
                         column: x => x.JobSeekerAccountId,
                         principalTable: "JobSeekerAccounts",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_JobApplies_Jobs_JobId",
                         column: x => x.JobId,
                         principalTable: "Jobs",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -256,13 +256,13 @@ namespace ApplicationDAL.Migrations
                         name: "FK_SavedJobs_JobSeekerAccounts_JobSeekerAccountId",
                         column: x => x.JobSeekerAccountId,
                         principalTable: "JobSeekerAccounts",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_SavedJobs_Jobs_JobId",
                         column: x => x.JobId,
                         principalTable: "Jobs",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -294,7 +294,7 @@ namespace ApplicationDAL.Migrations
                         name: "FK_Educations_Resumes_ResumeId",
                         column: x => x.ResumeId,
                         principalTable: "Resumes",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -316,7 +316,7 @@ namespace ApplicationDAL.Migrations
                         name: "FK_Skills_Resumes_ResumeId",
                         column: x => x.ResumeId,
                         principalTable: "Resumes",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -349,7 +349,7 @@ namespace ApplicationDAL.Migrations
                         name: "FK_WorkExperiences_Resumes_ResumeId",
                         column: x => x.ResumeId,
                         principalTable: "Resumes",
-                        principalColumn: "CurrentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -361,13 +361,13 @@ namespace ApplicationDAL.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployerAccounts_OrganizationId",
-                table: "EmployeeAccounts",
+                table: "EmployerAccounts",
                 column: "OrganizationId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployerAccounts_UserId",
-                table: "EmployeeAccounts",
+                table: "EmployerAccounts",
                 column: "UserId",
                 unique: true);
 
@@ -465,7 +465,7 @@ namespace ApplicationDAL.Migrations
                 name: "Resumes");
 
             migrationBuilder.DropTable(
-                name: "EmployeeAccounts");
+                name: "EmployerAccounts");
 
             migrationBuilder.DropTable(
                 name: "JobSeekerAccounts");

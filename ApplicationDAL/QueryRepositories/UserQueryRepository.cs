@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ApplicationDAL.Context;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Exceptions;
@@ -19,7 +20,6 @@ public class UserQueryRepository :  IUserQueryRepository
     {
         var userEntity = await _applicationContext.Users.Include(u => u.EmployerAccount) 
             .Include(u => u.JobSeekerAccount).FirstOrDefaultAsync(u => u.Id == id);
-
         if (userEntity == null)
         {
             throw new UserNotFoundException("User with specified id doesn't exist");

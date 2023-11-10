@@ -32,7 +32,7 @@ namespace ApplicationDAL.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "Email",
-                table: "EmployeeAccounts",
+                table: "EmployerAccounts",
                 type: "varchar(50)",
                 maxLength: 50,
                 nullable: false,
@@ -41,7 +41,7 @@ namespace ApplicationDAL.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "FullName",
-                table: "EmployeeAccounts",
+                table: "EmployerAccounts",
                 type: "varchar(60)",
                 maxLength: 60,
                 nullable: false,
@@ -50,7 +50,7 @@ namespace ApplicationDAL.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployerAccounts_ContactEmail",
-                table: "EmployeeAccounts",
+                table: "EmployerAccounts",
                 column: "Email",
                 unique: true);
         }
@@ -60,15 +60,15 @@ namespace ApplicationDAL.Migrations
         {
             migrationBuilder.DropIndex(
                 name: "IX_EmployerAccounts_ContactEmail",
-                table: "EmployeeAccounts");
+                table: "EmployerAccounts");
 
             migrationBuilder.DropColumn(
                 name: "Email",
-                table: "EmployeeAccounts");
+                table: "EmployerAccounts");
 
             migrationBuilder.DropColumn(
                 name: "FullName",
-                table: "EmployeeAccounts");
+                table: "EmployerAccounts");
 
             migrationBuilder.AlterColumn<string>(
                 name: "PhoneNumber",

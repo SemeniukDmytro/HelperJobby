@@ -51,7 +51,7 @@ public class UserService : IUserService
             userEntity.Email = updatedUser.Email;
         }
 
-        if (!string.IsNullOrEmpty(updatedUser.PasswordHash) && !_passwordHandler.Verify(updatedUser.PasswordHash, userEntity.PasswordHash))
+        if (!string.IsNullOrEmpty(updatedUser.PasswordHash))
         {
             userEntity.PasswordHash = _passwordHandler.ChangePassword(updatedUser.PasswordHash);
         }
