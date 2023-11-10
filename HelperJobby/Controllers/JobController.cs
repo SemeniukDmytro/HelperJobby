@@ -13,7 +13,6 @@ namespace HelperJobby.Controllers
         {
             
         }
-
         [HttpGet("jobs/{id}")]
         public Task<IEnumerable<JobDTO>> GetJobsByUserId(int id)
         {
