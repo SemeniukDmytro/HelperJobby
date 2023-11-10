@@ -9,5 +9,6 @@ public class OrganizationProfile : Profile
     public OrganizationProfile()
     {
         CreateMap<Organization, OrganizationDTO>().ReverseMap();
+        CreateMap<UpdateOrganizationDTO, Organization>();
     }
 }

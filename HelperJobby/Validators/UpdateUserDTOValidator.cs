@@ -8,11 +8,6 @@ public class UpdateUserDTOValidator : AbstractValidator<CreateUpdateUserDTO>
 {
     public UpdateUserDTOValidator()
     {
-        RuleFor(u => u.Email)
-            .Length(4, 50).WithMessage("Length of your Email is invalid").When(u => !string.IsNullOrEmpty(u.Email))
-            .Must(CommonValidator.BeValidEmail).WithMessage("Please enter a valid email")
-            .When(u => !string.IsNullOrEmpty(u.Email));
-
         RuleFor(u => u.Password)
             .Length(8, 25).WithMessage("Length of your number is invalid")
             .When(u => !string.IsNullOrEmpty(u.Password));
@@ -24,6 +19,10 @@ public class UpdateUserDTOValidator : AbstractValidator<CreateUpdateUserDTO>
     
     public static void ValidateUser(CreateUpdateUserDTO user)
     {
+        if (!string.IsNullOrEmpty(user.Email))
+        {
+            CommonValidator.BeValidEmail(user.Email);
+        }
         var validator = new UpdateUserDTOValidator();
         var validationResult = validator.Validate(user);
 

@@ -8,11 +8,6 @@ public class LoginUserDTOValidator : AbstractValidator<LoginUserDTO>
 {
     public LoginUserDTOValidator()
     {
-        RuleFor(u => u.Email).Cascade(CascadeMode.Stop)
-            .NotEmpty().WithMessage("You can not have an empty email")
-            .Length(4, 50).WithMessage("Length of your Email is invalid")
-            .Must(CommonValidator.BeValidEmail).WithMessage("Please enter a valid email");
-        
         RuleFor(u => u.Password).Cascade(CascadeMode.Stop)
             .NotEmpty().WithMessage("Password can not be empty")
             .Length(8, 25).WithMessage("Length of your password is invalid");
@@ -20,6 +15,7 @@ public class LoginUserDTOValidator : AbstractValidator<LoginUserDTO>
     
     public static void ValidateUser(LoginUserDTO user)
     {
+        CommonValidator.BeValidEmail(user.Email);
         var validator = new LoginUserDTOValidator();
         var validationResult = validator.Validate(user);
 

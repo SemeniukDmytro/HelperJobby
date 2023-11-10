@@ -8,10 +8,6 @@ public class CreateUserDTOValidator : AbstractValidator<CreateUpdateUserDTO>
 {
     public CreateUserDTOValidator()
     {
-        RuleFor(u => u.Email).Cascade(CascadeMode.Stop)
-            .NotEmpty().WithMessage("You can not have an empty email")
-            .Length(4, 50).WithMessage("Length of your Email is invalid")
-            .Must(CommonValidator.BeValidEmail).WithMessage("Please enter a valid email");
 
         RuleFor(u => u.Password).Cascade(CascadeMode.Stop)
             .NotEmpty().WithMessage("You can not have an empty password")
@@ -24,6 +20,7 @@ public class CreateUserDTOValidator : AbstractValidator<CreateUpdateUserDTO>
 
     public static void ValidateUser(CreateUpdateUserDTO user)
     {
+        CommonValidator.BeValidEmail(user.Email);
         var validator = new CreateUserDTOValidator();
         var validationResult = validator.Validate(user);
 

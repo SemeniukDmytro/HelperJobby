@@ -32,27 +32,34 @@ public class OrganizationService : IOrganizationService
         return organization;
     }
 
-    public async Task<Organization> AddEmployeeEmail(OrganizationEmployeeEmail employeeEmail)
+    public async Task<OrganizationEmployeeEmail> AddEmployeeEmail(OrganizationEmployeeEmail employeeEmail)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var organization = await _organizationQueryRepository.GetOrganizationById(employeeEmail.OrganizationId);
+        var organization = await _organizationQueryRepository.GetOrganizationWithEmployeesEmails(employeeEmail.OrganizationId);
         if (organization.OrganizationOwnerId != currentUserId)
         {
             throw new ForbiddenException();
         }
-        organization.EmployeeEmails.Add(employeeEmail);
-        return organization;
+
+        if (organization.EmployeeEmails.Select(employeeEmail => employeeEmail.Email).Contains(employeeEmail.Email))
+        {
+            throw new ForbiddenException("This email has already been added");
+        }
+        return employeeEmail;
     }
 
-    public async Task<Organization> RemoveEmployeeEmail(OrganizationEmployeeEmail employeeEmail)
+    public async Task<OrganizationEmployeeEmail> RemoveEmployeeEmail(OrganizationEmployeeEmail employeeEmail)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var organization = await _organizationQueryRepository.GetOrganizationById(employeeEmail.OrganizationId);
+        var organization = await _organizationQueryRepository.GetOrganizationWithEmployeesEmails(employeeEmail.OrganizationId);
         if (organization.OrganizationOwnerId != currentUserId)
         {
             throw new ForbiddenException();
         }
-        organization.EmployeeEmails.Remove(employeeEmail);
-        return organization;
+        if (!organization.EmployeeEmails.Select(employeeEmail => employeeEmail.Email).Contains(employeeEmail.Email))
+        {
+            throw new ForbiddenException("There isn't such email in organization employee list");
+        }
+        return employeeEmail;
     }
 }

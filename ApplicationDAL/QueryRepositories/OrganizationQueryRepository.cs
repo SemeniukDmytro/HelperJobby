@@ -1,5 +1,6 @@
 using ApplicationDAL.Context;
 using ApplicationDomain.Absraction.IQueryRepositories;
+using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,14 +15,38 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
         _applicationContext = applicationContext;
     }
 
-    public Task<Organization> GetOrganizationByIdPlain(int organizationId)
+    public async Task<Organization> GetOrganizationByIdPlain(int organizationId)
     {
-        throw new NotImplementedException();
+        var organization = await _applicationContext.Organizations.FirstOrDefaultAsync(o => o.Id == organizationId);
+        if (organization == null)
+        {
+            throw new OrganizationNotFoundException();
+        }
+
+        return organization;
     }
 
-    public Task<Organization> GetOrganizationById(int organizationId)
+    public async Task<Organization> GetOrganizationById(int organizationId)
     {
-        throw new NotImplementedException();
+        var organization = await GetOrganizationByIdPlain(organizationId);
+        await _applicationContext.Entry(organization).Collection(o => o.EmployeeEmails).LoadAsync();
+        await _applicationContext.Entry(organization).Collection(o => o.EmployeeAccounts).LoadAsync();
+        return organization;
+    }
+
+    public async Task<Organization> GetOrganizationWithEmployeesEmails(int organizationId)
+    {
+        var organization = await GetOrganizationByIdPlain(organizationId);
+        await _applicationContext.Entry(organization).Collection(o => o.EmployeeEmails).LoadAsync();
+        _applicationContext.Entry(organization).State = EntityState.Detached;
+        return organization;
+    }
+
+    public async Task<Organization> GetOrganizationWithEmployees(int organizationId)
+    {
+        var organization = await GetOrganizationByIdPlain(organizationId);
+        await _applicationContext.Entry(organization).Collection(o => o.EmployeeAccounts).LoadAsync();
+        return organization;
     }
 
     public async Task<Organization?> GetOrganizationByName(string organizationName)

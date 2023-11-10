@@ -8,20 +8,19 @@ public class UpdateEmployerAccountDTOValidator : AbstractValidator<UpdateEmploye
 {
     UpdateEmployerAccountDTOValidator()
     {
-        RuleFor(a => a.Email)
-            .Length(4, 50).WithMessage("Length of your Email is invalid").When(a => !string.IsNullOrEmpty(a.Email))
-            .Must(CommonValidator.BeValidEmail).WithMessage("Please enter a valid email")
-            .When(a => !string.IsNullOrEmpty(a.Email));
-
-        RuleFor(a => a.ContactNumber)
-            .Length(4, 15).WithMessage("Length of your Password is invalid")
-            .When(a => !string.IsNullOrEmpty(a.ContactNumber))
-            .Must(CommonValidator.BeValidPhoneNumber).WithMessage("Please enter valid phone number")
-            .When(a => !string.IsNullOrEmpty(a.ContactNumber));
     }
     
     public static void ValidateUser(UpdateEmployerAccountDTO user)
     {
+        if (!string.IsNullOrEmpty(user.Email))
+        {
+            CommonValidator.BeValidEmail(user.Email);
+        }
+
+        if (!string.IsNullOrEmpty(user.ContactNumber))
+        {
+            CommonValidator.BeValidPhoneNumber(user.ContactNumber);
+        }
         var validator = new UpdateEmployerAccountDTOValidator();
         var validationResult = validator.Validate(user);
 

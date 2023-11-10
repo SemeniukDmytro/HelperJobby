@@ -1,3 +1,4 @@
+using ApplicationDAL.Context;
 using ApplicationDomain.Absraction.ICommandRepositories;
 using ApplicationDomain.Models;
 
@@ -5,13 +6,29 @@ namespace ApplicationDAL.CommandRepositories;
 
 public class OrganizationCommandRepository : IOrganizationCommandRepository
 {
-    public Task<Organization> CreateOrganization(Organization organization)
+    private readonly ApplicationContext _applicationContext;
+
+    public OrganizationCommandRepository(ApplicationContext applicationContext)
     {
-        throw new NotImplementedException();
+        _applicationContext = applicationContext;
     }
 
-    public Task<Organization> UpdateOrganizationById(int id, Organization organization)
+    public async Task<Organization> UpdateOrganizationById(int id, Organization organization)
     {
-        throw new NotImplementedException();
+        await _applicationContext.SaveChangesAsync();
+        return organization;
+    }
+
+    public async Task AddOrganizationEmployeesEmails(OrganizationEmployeeEmail organizationEmployeeEmail)
+    {
+        _applicationContext.OrganizationEmployeeEmails.Add(organizationEmployeeEmail);
+        await _applicationContext.SaveChangesAsync();
+
+    }
+
+    public async Task RemoveOrganizationEmployeesEmails(OrganizationEmployeeEmail organizationEmployeeEmail)
+    {
+        _applicationContext.OrganizationEmployeeEmails.Remove(organizationEmployeeEmail);
+        await _applicationContext.SaveChangesAsync();
     }
 }
