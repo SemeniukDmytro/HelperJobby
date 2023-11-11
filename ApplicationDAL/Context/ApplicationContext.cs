@@ -68,6 +68,12 @@ public class ApplicationContext : DbContext
             .HasForeignKey(o => o.OrganizationId)
             .IsRequired();
 
+        modelBuilder.Entity<EmployerAccount>()
+            .HasOne(ea => ea.CurrentJobCreation)
+            .WithOne(cj => cj.EmployerAccount)
+            .HasForeignKey<CurrentJobCreation>(cj => cj.EmployerAccountId)
+            .IsRequired();
+        
         modelBuilder.Entity<Organization>()
             .HasIndex(o => o.PhoneNumber)
             .IsUnique();

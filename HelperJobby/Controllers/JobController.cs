@@ -1,3 +1,5 @@
+using ApplicationDomain.Models;
+using HelperJobby.DTOs.Job;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using JobDTO = HelperJobby.DTOs.Job.JobDTO;
@@ -13,6 +15,37 @@ namespace HelperJobby.Controllers
         {
             
         }
+
+        [HttpGet("current-job-creation")]
+        public async Task<CurrentJobCreationDTO> GetCurrentJob()
+        {
+            return null;
+        }
+
+        [HttpPost("job-basics")]
+        public async Task StartJobPosting(JobBasicsDTO jobBasicsDTO)
+        {
+            
+        }
+
+        [HttpPut("job-details")]
+        public async Task AddJobDetails(JobDetailsDTO jobDetailsDto)
+        {
+            
+        }
+
+        [HttpPut("job-pay-benefits")]
+        public async Task AddPayAndBenefits(JobPayAndBenefitsDTO payAndBenefitsDTO)
+        {
+            
+        }
+
+        [HttpPut("job-description")]
+        public async Task AddJobDescriptionAndContactEmail(JobDescriptionDTO jobDescriptionDTO)
+        {
+            
+        }
+        
         [HttpGet("jobs/{id}")]
         public Task<IEnumerable<JobDTO>> GetJobsByUserId(int id)
         {

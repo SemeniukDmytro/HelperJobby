@@ -5,7 +5,7 @@ using ApplicationDomain.Enums;
 
 namespace ApplicationDomain.Models;
 
-public class Job
+public class CurrentJobCreation
 {
     public int Id { get; set; }
     
@@ -50,8 +50,4 @@ public class Job
     
     [Required]
     public EmployerAccount EmployerAccount { get; set; }
-    
-    public List<Interview> Interviews { get; set; }
-    
-    public List<JobApply> JobApplies { get; set; }
 }

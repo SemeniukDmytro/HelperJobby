@@ -8,7 +8,6 @@ namespace HelperJobby.DTOs.Job
     {
         public int Id { get; set; }
         public string JobTitle { get; set; }
-        public string CompanyName { get; set; }
         public int NumberOfOpenings { get; set; }
         public string Language { get; set; }
         public string Location { get; set; }

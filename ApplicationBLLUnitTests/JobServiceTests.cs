@@ -1,3 +1,5 @@
+using ApplicationDomain.Models;
+
 namespace ApplicationBLLUnitTests;
 
 public class JobServiceTests
@@ -5,7 +7,10 @@ public class JobServiceTests
     [Fact]
     public async Task CreateJobShouldReturnCreatedJob()
     {
-        
+        var createdJob = new Job()
+        {
+
+        };
     }
 
     [Fact]

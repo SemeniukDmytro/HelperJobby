@@ -30,4 +30,6 @@ public class EmployerAccount
     public Organization Organization { get; set; }
     
     public List<Job> Jobs { get; set; }
+    
+    public CurrentJobCreation CurrentJobCreation { get; set; }
 }
