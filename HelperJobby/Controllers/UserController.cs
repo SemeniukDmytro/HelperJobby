@@ -7,6 +7,7 @@ using HelperJobby.DTOs.User;
 using HelperJobby.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelperJobby.Controllers
 {
@@ -29,7 +30,8 @@ namespace HelperJobby.Controllers
         [HttpGet("{id}")]
         public async Task<UserDTO> GetUser(int id)
         {
-            var user = await _userQueryRepository.GetUserById(id);
+            var user = await _userQueryRepository.GetUser(id, q => q.Include(u => u.EmployerAccount) 
+                .Include(u => u.JobSeekerAccount));
             var userDTO = _mapper.Map<UserDTO>(user);
             
             return userDTO;
@@ -38,7 +40,8 @@ namespace HelperJobby.Controllers
         [HttpGet("current-user")]
         public async Task<UserDTO> GetUser()
         {
-            var user = await _userQueryRepository.GetUserById(_userService.GetCurrentUserId());
+            var user = await _userQueryRepository.GetUser(_userService.GetCurrentUserId(), q => q.Include(u => u.EmployerAccount) 
+                .Include(u => u.JobSeekerAccount));
             var userDTO = _mapper.Map<UserDTO>(user);
             return userDTO;
         }

@@ -32,7 +32,7 @@ public class OrganizationServiceTests
         var userId = 1;
         var organizationId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationByIdPlain(organizationId)).ReturnsAsync(
+        _organizationQueryRepositoryMock.Setup(r => r.GetOrganization(organizationId, false, false)).ReturnsAsync(
             new Organization()
             {
                 OrganizationOwnerId = userId,
@@ -60,7 +60,8 @@ public class OrganizationServiceTests
         var userId = 1;
         var organizationId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationByIdPlain(organizationId)).ReturnsAsync(
+        _organizationQueryRepositoryMock.Setup(r => r.GetOrganization(organizationId, false,
+            false)).ReturnsAsync(
             new Organization()
             {
                 OrganizationOwnerId = 2,
@@ -88,7 +89,8 @@ public class OrganizationServiceTests
             EmployeeEmails = new List<OrganizationEmployeeEmail>()
         };
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationWithEmployeesEmails(employeeEmail.OrganizationId)).ReturnsAsync(
+        _organizationQueryRepositoryMock.Setup(r => r.GetOrganization(employeeEmail.OrganizationId,
+            true, false)).ReturnsAsync(
             organization);
         //Act
         var result = await _organizationService.AddEmployeeEmail(employeeEmail);
@@ -109,7 +111,8 @@ public class OrganizationServiceTests
         };
         var userId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationWithEmployeesEmails(employeeEmail.OrganizationId)).ReturnsAsync(
+        _organizationQueryRepositoryMock.Setup(r => r.GetOrganization(employeeEmail.OrganizationId,
+            true, false)).ReturnsAsync(
             new Organization()
             {
                 OrganizationOwnerId = 2,
@@ -139,7 +142,7 @@ public class OrganizationServiceTests
             }
         };
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationWithEmployeesEmails(employeeEmail.OrganizationId))
+        _organizationQueryRepositoryMock.Setup(r => r.GetOrganization(employeeEmail.OrganizationId, true, false))
             .ReturnsAsync(organization
             );
         //Act
@@ -161,7 +164,8 @@ public class OrganizationServiceTests
         };
         var userId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationWithEmployeesEmails(employeeEmail.OrganizationId)).ReturnsAsync(
+        _organizationQueryRepositoryMock.Setup(r => r.GetOrganization(employeeEmail.OrganizationId,
+            true, false)).ReturnsAsync(
             new Organization()
             {
                 OrganizationOwnerId = 2,

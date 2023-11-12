@@ -41,7 +41,7 @@ public class UserService : IUserService
         {
             throw new Exception("Invalid user");
         }
-        var userEntity = await _userQueryRepository.GetUserByIdPlain(id);
+        var userEntity = await _userQueryRepository.GetUser(id);
         if (!string.IsNullOrEmpty(updatedUser.Email) && updatedUser.Email != userEntity.Email)
         {
             if ( !await _userQueryRepository.IsEmailAvailable(updatedUser.Email))

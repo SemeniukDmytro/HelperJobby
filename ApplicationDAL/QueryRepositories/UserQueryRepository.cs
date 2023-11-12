@@ -16,52 +16,19 @@ public class UserQueryRepository :  IUserQueryRepository
         _applicationContext = applicationContext;
     }
     
-    public async Task<User> GetUserById(int id)
+    
+    public async Task<User> GetUser(int userId, Func<IQueryable<User>, IQueryable<User>> includeQuery=null)
     {
-        var userEntity = await _applicationContext.Users.Include(u => u.EmployerAccount) 
-            .Include(u => u.JobSeekerAccount).FirstOrDefaultAsync(u => u.Id == id);
-        if (userEntity == null)
+        var query = _applicationContext.Users.AsQueryable();
+
+        if (includeQuery != null)
         {
-            throw new UserNotFoundException("User with specified id doesn't exist");
+            query = includeQuery(query);
         }
 
-        return userEntity;
-    }
+        var userEntity = await query.FirstOrDefaultAsync(u => u.Id == userId);
 
-    public async Task<User> GetUserWithEmployerAccount(int userId)
-    {
-        var userEntity = await _applicationContext.Users.Include(u => u.EmployerAccount)
-            .FirstOrDefaultAsync(u => u.Id == userId);
-
-        if (userEntity == null)
-        {
-            throw new UserNotFoundException("User with specified id doesn't exist");
-        }
-
-        return userEntity;
-    }
-
-    public async Task<User> GetUserWithJobSeekerAccount(int userId)
-    {
-        var userEntity = await _applicationContext.Users.Include(u => u.JobSeekerAccount)
-            .FirstOrDefaultAsync(u => u.Id == userId);
-
-        if (userEntity == null)
-        {
-            throw new UserNotFoundException("User with specified id doesn't exist");
-        }
-
-        return userEntity;
-    }
-
-    public async Task<User> GetUserByIdPlain(int id)
-    {
-        var userEntity = await _applicationContext.Users.FirstOrDefaultAsync(u => u.Id == id);
-        
-        if (userEntity == null)
-        {
-            throw new UserNotFoundException("User with specified id doesn't exist");
-        }
+        DoesUserExists(userEntity);
 
         return userEntity;
     }
@@ -80,5 +47,13 @@ public class UserQueryRepository :  IUserQueryRepository
         }
 
         return user;
+    }
+
+    private void DoesUserExists(User user)
+    {
+        if (user == null)
+        {
+            throw new UserNotFoundException("User with specified id doesn't exist");
+        }
     }
 }

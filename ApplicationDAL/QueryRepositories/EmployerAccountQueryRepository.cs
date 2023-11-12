@@ -19,7 +19,7 @@ public class EmployerAccountQueryRepository : IEmployerAccountQueryRepository
 
     public async Task<EmployerAccount> GetEmployerAccount(int userId)
     {
-        var user = await _userQueryRepository.GetUserWithEmployerAccount(userId);
+        var user = await _userQueryRepository.GetUser(userId, q => q.Include(u => u.EmployerAccount));
         var account = user.EmployerAccount;
         if (account == null)
         {

@@ -14,8 +14,11 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
     {
         _applicationContext = applicationContext;
     }
-
-    public async Task<Organization> GetOrganizationByIdPlain(int organizationId)
+    
+    public async Task<Organization> GetOrganization(
+        int organizationId,
+        bool loadEmployeesEmails = false,
+        bool loadEmployeeAccounts = false)
     {
         var organization = await _applicationContext.Organizations.FirstOrDefaultAsync(o => o.Id == organizationId);
         if (organization == null)
@@ -23,29 +26,16 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
             throw new OrganizationNotFoundException();
         }
 
-        return organization;
-    }
+        if (loadEmployeesEmails)
+        {
+            await _applicationContext.Entry(organization).Collection(o => o.EmployeeEmails).LoadAsync();
+        }
 
-    public async Task<Organization> GetOrganizationById(int organizationId)
-    {
-        var organization = await GetOrganizationByIdPlain(organizationId);
-        await _applicationContext.Entry(organization).Collection(o => o.EmployeeEmails).LoadAsync();
-        await _applicationContext.Entry(organization).Collection(o => o.EmployeeAccounts).LoadAsync();
-        return organization;
-    }
+        if (loadEmployeeAccounts)
+        {
+            await _applicationContext.Entry(organization).Collection(o => o.EmployeeAccounts).LoadAsync();
+        }
 
-    public async Task<Organization> GetOrganizationWithEmployeesEmails(int organizationId)
-    {
-        var organization = await GetOrganizationByIdPlain(organizationId);
-        await _applicationContext.Entry(organization).Collection(o => o.EmployeeEmails).LoadAsync();
-        _applicationContext.Entry(organization).State = EntityState.Detached;
-        return organization;
-    }
-
-    public async Task<Organization> GetOrganizationWithEmployees(int organizationId)
-    {
-        var organization = await GetOrganizationByIdPlain(organizationId);
-        await _applicationContext.Entry(organization).Collection(o => o.EmployeeAccounts).LoadAsync();
         return organization;
     }
 
