@@ -22,13 +22,13 @@ namespace HelperJobby.Controllers
 
         // PUT: api/CurrentJob/5
         [HttpPut("{id}")]
-        public void Put(int userId, [FromBody] CurrentJobCreationDTO value)
+        public void Put(int jobId, [FromBody] CurrentJobCreationDTO value)
         {
         }
 
         // DELETE: api/CurrentJob/5
         [HttpDelete("{id}")]
-        public void Delete(int userId)
+        public void Delete(int jobId)
         {
         }
     }

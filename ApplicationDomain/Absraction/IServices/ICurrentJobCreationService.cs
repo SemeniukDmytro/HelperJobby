@@ -4,9 +4,9 @@ namespace ApplicationDomain.Absraction.IServices;
 
 public interface ICurrentJobCreationService
 {
-    public Task StartJobCreation(CurrentJobCreation currentJobCreation);
+    public Task<CurrentJobCreation> StartJobCreation(CurrentJobCreation currentJobCreation);
 
-    public Task UpdateCurrentJob(int userId, CurrentJobCreation currentJobCreation);
+    public Task<CurrentJobCreation> UpdateCurrentJob(int jobId, int employerId, CurrentJobCreation currentJobCreation);
 
-    public Task DeleteCurrenJob(int userId);
+    public Task<CurrentJobCreation> DeleteCurrenJob(int jobId, int employerId);
 }
