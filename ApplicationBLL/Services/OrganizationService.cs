@@ -22,7 +22,7 @@ public class OrganizationService : IOrganizationService
     public async Task<Organization> UpdateOrganization(int organizationId, Organization updatedOrganization)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var organization = await _organizationQueryRepository.GetOrganization(organizationId);
+        var organization = await _organizationQueryRepository.GetOrganizationPlain(organizationId);
         if (organization.OrganizationOwnerId != currentUserId)
         {
             throw new ForbiddenException();
@@ -35,7 +35,7 @@ public class OrganizationService : IOrganizationService
     public async Task<OrganizationEmployeeEmail> AddEmployeeEmail(OrganizationEmployeeEmail employeeEmail)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var organization = await _organizationQueryRepository.GetOrganization(employeeEmail.OrganizationId, true);
+        var organization = await _organizationQueryRepository.GetOrganizationWithEmployeeEmails(employeeEmail.OrganizationId);
         if (organization.OrganizationOwnerId != currentUserId)
         {
             throw new ForbiddenException();
@@ -51,7 +51,7 @@ public class OrganizationService : IOrganizationService
     public async Task<OrganizationEmployeeEmail> RemoveEmployeeEmail(OrganizationEmployeeEmail employeeEmail)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var organization = await _organizationQueryRepository.GetOrganization(employeeEmail.OrganizationId, true);
+        var organization = await _organizationQueryRepository.GetOrganizationWithEmployeeEmails(employeeEmail.OrganizationId);
         if (organization.OrganizationOwnerId != currentUserId)
         {
             throw new ForbiddenException();

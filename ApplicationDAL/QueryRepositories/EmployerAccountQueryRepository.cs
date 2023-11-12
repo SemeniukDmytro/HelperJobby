@@ -3,24 +3,56 @@ using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace ApplicationDAL.QueryRepositories;
 
 public class EmployerAccountQueryRepository : IEmployerAccountQueryRepository
 {
     private readonly ApplicationContext _applicationContext;
-    private readonly IUserQueryRepository _userQueryRepository;
+    private readonly CustomQueryIncluder _customQueryIncluder;
 
-    public EmployerAccountQueryRepository(ApplicationContext applicationContext, IUserQueryRepository userQueryRepository)
+    public EmployerAccountQueryRepository(ApplicationContext applicationContext, CustomQueryIncluder customQueryIncluder)
     {
         _applicationContext = applicationContext;
-        _userQueryRepository = userQueryRepository;
+        _customQueryIncluder = customQueryIncluder;
     }
 
     public async Task<EmployerAccount> GetEmployerAccount(int userId)
     {
-        var user = await _userQueryRepository.GetUser(userId, q => q.Include(u => u.EmployerAccount));
+        return await GetUserWithEmployerAccount(userId, q => q.Include(u => u.EmployerAccount));
+    }
+
+    public async Task<EmployerAccount> GetEmployerAccountWithOrganization(int userId)
+    {
+        return await GetUserWithEmployerAccount(userId, q => q.Include(u => u.EmployerAccount).ThenInclude(ea => ea.Organization));
+    }
+
+    public async Task<EmployerAccount> GetEmployerAccountWithCurrentJobCreation(int userId)
+    {
+        return await GetUserWithEmployerAccount(userId, q => q.Include(u => u.EmployerAccount).ThenInclude(ea => ea.CurrentJobCreation));
+    }
+
+    public async Task<EmployerAccount> GetEmployerAccountOrganizationAndJobCreation(int userId)
+    {
+        return await GetUserWithEmployerAccount(userId, q => q
+            .Include(u => u.EmployerAccount)
+            .ThenInclude(ea => ea.Organization)
+            .Include(u => u.EmployerAccount)
+            .ThenInclude(ea => ea.CurrentJobCreation)
+        );
+    }
+
+    private async Task<EmployerAccount> GetUserWithEmployerAccount(int userId, Func<IQueryable<User>, IQueryable<User>> includeFunc = null)
+    {
+        var query = _applicationContext.Users.AsQueryable();
+        if (includeFunc != null)
+        {
+            query = includeFunc(query);
+        }
+        var user = await _customQueryIncluder.GetUser(userId, includeFunc);
         var account = user.EmployerAccount;
+
         if (account == null)
         {
             throw new EmployerAccountNotFoundException();
@@ -28,4 +60,5 @@ public class EmployerAccountQueryRepository : IEmployerAccountQueryRepository
 
         return account;
     }
+
 }

@@ -14,11 +14,7 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
     {
         _applicationContext = applicationContext;
     }
-    
-    public async Task<Organization> GetOrganization(
-        int organizationId,
-        bool loadEmployeesEmails = false,
-        bool loadEmployeeAccounts = false)
+    public async Task<Organization> GetOrganizationPlain(int organizationId)
     {
         var organization = await _applicationContext.Organizations.FirstOrDefaultAsync(o => o.Id == organizationId);
         if (organization == null)
@@ -26,16 +22,20 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
             throw new OrganizationNotFoundException();
         }
 
-        if (loadEmployeesEmails)
-        {
-            await _applicationContext.Entry(organization).Collection(o => o.EmployeeEmails).LoadAsync();
-        }
+        return organization;
+    }
 
-        if (loadEmployeeAccounts)
-        {
-            await _applicationContext.Entry(organization).Collection(o => o.EmployeeAccounts).LoadAsync();
-        }
+    public async Task<Organization> GetOrganizationWithEmployeeEmails(int organizationId)
+    {
+        var organization = await GetOrganizationPlain(organizationId);
+        await _applicationContext.Entry(organization).Collection(o => o.EmployeeEmails).LoadAsync();
+        return organization;
+    }
 
+    public async  Task<Organization> GetOrganizationWithEmployees(int organizationId)
+    {
+        var organization = await GetOrganizationPlain(organizationId);
+        await _applicationContext.Entry(organization).Collection(o => o.EmployeeAccounts).LoadAsync();
         return organization;
     }
 

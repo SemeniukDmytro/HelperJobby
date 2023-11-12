@@ -62,7 +62,7 @@ public class UserServiceTests
         {
             Email = "updatedemail@gmail.com"
         };
-        _userQueryRepository.Setup(r => r.GetUser(It.IsAny<int>(), null)).ReturnsAsync(new User()
+        _userQueryRepository.Setup(r => r.GetUserByIdPlain(It.IsAny<int>())).ReturnsAsync(new User()
         {
             Email = "oldemail@gmail.com"
         });
@@ -81,7 +81,7 @@ public class UserServiceTests
         {
             Email = "usedEmail@gmail.com"
         };
-        _userQueryRepository.Setup(r => r.GetUser(It.IsAny<int>(), null)).ReturnsAsync(new User()
+        _userQueryRepository.Setup(r => r.GetUserByIdPlain(It.IsAny<int>())).ReturnsAsync(new User()
         {
             Email = "oldemail@gmail.com"
         });
@@ -100,7 +100,7 @@ public class UserServiceTests
             PasswordHash = "newPassword",
             AccountType = "Job seeker"
         };
-        _userQueryRepository.Setup(r => r.GetUser(It.IsAny<int>(), null)).ReturnsAsync(new User()
+        _userQueryRepository.Setup(r => r.GetUserByIdPlain(It.IsAny<int>())).ReturnsAsync(new User()
         {
             Email = "oldemail@gmail.com",
             PasswordHash = "oldPassword",

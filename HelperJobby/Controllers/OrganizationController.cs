@@ -30,7 +30,7 @@ namespace HelperJobby.Controllers
         [HttpGet("{id}")]
         public async Task<OrganizationDTO> GetOrganizationById(int id)
         {
-            var organization = await _organizationQueryRepository.GetOrganization(id, false, true);
+            var organization = await _organizationQueryRepository.GetOrganizationWithEmployees(id);
             return _mapper.Map<OrganizationDTO>(organization);
         }
 

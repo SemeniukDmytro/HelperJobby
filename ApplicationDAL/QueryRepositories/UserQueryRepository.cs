@@ -10,27 +10,34 @@ namespace ApplicationDAL.QueryRepositories;
 public class UserQueryRepository :  IUserQueryRepository
 {
     private readonly ApplicationContext _applicationContext;
+    private readonly CustomQueryIncluder _customQueryIncluder;
     
-    public UserQueryRepository(ApplicationContext applicationContext)
+    public UserQueryRepository(ApplicationContext applicationContext, CustomQueryIncluder customQueryIncluder)
     {
         _applicationContext = applicationContext;
+        _customQueryIncluder = customQueryIncluder;
     }
     
-    
-    public async Task<User> GetUser(int userId, Func<IQueryable<User>, IQueryable<User>> includeQuery=null)
+
+    public async Task<User> GetUserByIdPlain(int userId)
     {
-        var query = _applicationContext.Users.AsQueryable();
+        return await _customQueryIncluder.GetUser(userId);
+    }
 
-        if (includeQuery != null)
-        {
-            query = includeQuery(query);
-        }
+    public async Task<User> GetUserWithEmployerAccount(int userId)
+    {
+        return await _customQueryIncluder.GetUser(userId, q => q.Include(u => u.EmployerAccount));
+    }
 
-        var userEntity = await query.FirstOrDefaultAsync(u => u.Id == userId);
+    public async Task<User> GetUserWithJobSeekerAccount(int userId)
+    {
+        return await _customQueryIncluder.GetUser(userId, q => q.Include(u => u.JobSeekerAccount));
+    }
 
-        DoesUserExists(userEntity);
-
-        return userEntity;
+    public async Task<User> GetUserById(int userId)
+    {
+        return await  _customQueryIncluder.GetUser(userId, q => q.Include(u => u.EmployerAccount)
+            .Include(u => u.JobSeekerAccount));
     }
 
     public async Task<bool> IsEmailAvailable(string email)
@@ -49,11 +56,4 @@ public class UserQueryRepository :  IUserQueryRepository
         return user;
     }
 
-    private void DoesUserExists(User user)
-    {
-        if (user == null)
-        {
-            throw new UserNotFoundException("User with specified id doesn't exist");
-        }
-    }
 }
