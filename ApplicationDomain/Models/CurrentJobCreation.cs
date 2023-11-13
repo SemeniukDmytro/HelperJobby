@@ -1,12 +1,14 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ApplicationDomain.Attributes;
 using ApplicationDomain.Enums;
 
 namespace ApplicationDomain.Models;
 
 public class CurrentJobCreation
 {
+    [ExcludeFromUpdate]
     public int Id { get; set; }
     
     [Required]
@@ -45,9 +47,10 @@ public class CurrentJobCreation
     [Column(TypeName = "text")]
     public string Description { get; set; }
     
+    [ExcludeFromUpdate]
     [ForeignKey("EmployerAccount")]
     public int EmployerAccountId { get; set; }
-    
+    [ExcludeFromUpdate]
     [Required]
     public EmployerAccount EmployerAccount { get; set; }
 }

@@ -1,5 +1,6 @@
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Attributes;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 
@@ -31,13 +32,52 @@ public class CurrentJobCreationService : ICurrentJobCreationService
         return currentJobCreation;
     }
 
-    public Task<CurrentJobCreation> UpdateCurrentJob(int jobId, int employerId, CurrentJobCreation currentJobCreation)
+    public async Task<CurrentJobCreation> UpdateCurrentJob(int jobId, int employerId, CurrentJobCreation currentJobCreation)
     {
-        throw new NotImplementedException();
-    }
+        var jobEntity = await _currentJobCreationQueryRepository.GetJobCreationById(jobId);
+        
+        if (jobEntity.EmployerAccountId != employerId)
+        {
+            throw new ForbiddenException();
+        }
+        
+        var entityProperties = jobEntity.GetType().GetProperties();
+        var updatedJobProperties = currentJobCreation.GetType().GetProperties();
 
-    public Task<CurrentJobCreation> DeleteCurrenJob(int jobId, int employerId)
+        foreach (var updatedProperty in updatedJobProperties)
+        {
+            if (Attribute.IsDefined(updatedProperty, typeof(ExcludeFromUpdateAttribute)))
+            {
+                continue;
+            }
+            
+            var entityProperty = entityProperties.FirstOrDefault(p => p.Name == updatedProperty.Name);
+            var test = updatedProperty.GetValue(currentJobCreation);
+            if (test != null && (test != default || (int)test == default))
+            {
+                var currentValue = entityProperty.GetValue(jobEntity);
+                var newValue = updatedProperty.GetValue(currentJobCreation);
+
+                if (!Equals(currentValue, newValue) || currentValue == null || currentValue.Equals(default))
+                {
+                    entityProperty.SetValue(jobEntity, newValue);
+                }
+            }
+        }
+
+        return jobEntity;
+
+    }
+    
+
+    public async Task<CurrentJobCreation> DeleteCurrenJob(int jobId, int employerId)
     {
-        throw new NotImplementedException();
+        var job = await _currentJobCreationQueryRepository.GetJobCreationById(jobId);
+        if (job.EmployerAccountId != employerId)
+        {
+            throw new ForbiddenException();
+        }
+
+        return job;
     }
 }

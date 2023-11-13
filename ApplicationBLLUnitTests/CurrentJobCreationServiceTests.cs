@@ -80,6 +80,38 @@ public class CurrentJobCreationServiceTests
     public async Task UpdateJobCreationShouldReturnUpdatedCurrentJob()
     {
         //Arrange
+        var newJob = new CurrentJobCreation
+        {
+            JobTypes = default,Salary = 1000,
+            Benefits = (EmployeeBenefits)3
+        };
+        var userId = 1;
+        var jobId = 1;
+        var employerAccountId = 1;
+        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
+        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId))
+            .ReturnsAsync(new CurrentJobCreation()
+            {
+                Id = jobId,
+                JobTitle = "new Job",
+                NumberOfOpenings = 4,
+                Language = "English",
+                Location = "random street, random city",
+                EmployerAccountId = employerAccountId
+            });
+        //Act
+        var job = await _currentJobCreationService.UpdateCurrentJob(jobId, employerAccountId, newJob);
+        //Assert
+        Assert.Equal("new Job", job.JobTitle);
+        Assert.Equal(newJob.Salary, job.Salary);
+        Assert.Equal(employerAccountId, job.EmployerAccountId);
+        Assert.Equal(jobId, job.Id);
+    }
+    
+    [Fact]
+    public async Task UpdateJobCreationShouldThrowForbiddenExceptionIfNotCurrentEmployerTriesToUpdate()
+    {
+        //Arrange
         var newJob = new CurrentJobCreation()
         {
             Salary = 1000,
@@ -89,19 +121,59 @@ public class CurrentJobCreationServiceTests
         var jobId = 1;
         var employerAccountId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId,userId))
+        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId))
             .ReturnsAsync(new CurrentJobCreation()
             {
-                Id = 2,
+                Id = jobId,
                 JobTitle = "new Job",
                 NumberOfOpenings = 4,
                 Language = "English",
-                Location = "random street, random city"
+                Location = "random street, random city",
+                EmployerAccountId = 2
             });
+        //Act & Assert
+        await Assert.ThrowsAsync<ForbiddenException>(async () =>
+            await _currentJobCreationService.UpdateCurrentJob(jobId, employerAccountId, newJob));
+    }
+
+    [Fact]
+    public async Task DeleteJobShouldReturnJobToDelete()
+    {
+        //Arrange
+        int jobId = 1;
+        int employerId = 1;
+        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId)).ReturnsAsync(
+            new CurrentJobCreation()
+            {
+                Id = jobId,
+                JobTitle = "Test",
+                EmployerAccountId = employerId
+            });
+        
         //Act
-        var job = await _currentJobCreationService.UpdateCurrentJob(2, 1, newJob);
+        var job = await _currentJobCreationService.DeleteCurrenJob(jobId, employerId);
         //Assert
-        Assert.Equal(newJob.Salary, job.Salary);
-        Assert.Equal(2, job.EmployerAccountId);
+        Assert.Equal("Test", job.JobTitle);
+        Assert.Equal(jobId, job.Id);
+        Assert.Equal(employerId, job.EmployerAccountId);
+    }
+    
+    [Fact]
+    public async Task DeleteJobShouldThrowForbiddentException()
+    {
+        //Arrange
+        int jobId = 1;
+        int employerId = 1;
+        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId)).ReturnsAsync(
+            new CurrentJobCreation()
+            {
+                Id = jobId,
+                JobTitle = "Test",
+                EmployerAccountId = 2
+            });
+        
+        //Act
+        //Assert
+        await Assert.ThrowsAsync<ForbiddenException>(async () => await _currentJobCreationService.DeleteCurrenJob(jobId, employerId));
     }
 }
