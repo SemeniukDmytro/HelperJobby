@@ -159,7 +159,7 @@ public class CurrentJobCreationServiceTests
     }
     
     [Fact]
-    public async Task DeleteJobShouldThrowForbiddentException()
+    public async Task DeleteJobShouldThrowForbiddenException()
     {
         //Arrange
         int jobId = 1;

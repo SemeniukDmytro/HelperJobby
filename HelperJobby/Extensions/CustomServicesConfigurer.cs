@@ -7,6 +7,7 @@ using ApplicationDAL.QueryRepositories;
 using ApplicationDomain.Absraction.ICommandRepositories;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Models;
 using FluentValidation;
 using HelperJobby.DTOs.User;
 using HelperJobby.Validators;
@@ -33,6 +34,9 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IJobQueryRepository, JobQueryRepository>();
         serviceProvider.AddScoped<IJobCommandRepository, JobCommandRepository>();
         serviceProvider.AddScoped<CustomQueryIncluder>();
+        serviceProvider.AddScoped<ICurrentJobCreationQueryRepository, CurrentJobCreationQueryRepository>();
+        serviceProvider.AddScoped<ICurrentJobCreationCommandRepository, CurrentJobCreationCommandRepository>();
+        serviceProvider.AddScoped<ICurrentJobCreationService, CurrentJobCreationService>();
         
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());

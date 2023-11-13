@@ -18,6 +18,7 @@ public class ApplicationContext : DbContext
     public virtual DbSet<Address> Addresses { get; set; }
     public virtual DbSet<Education> Educations { get; set; }
     public virtual DbSet<EmployerAccount> EmployerAccounts { get; set; }
+    public virtual DbSet<CurrentJobCreation> CurrentJobCreations { get; set; }
     public virtual DbSet<Interview> Interviews { get; set; }
     public virtual DbSet<Job> Jobs { get; set; }
     public virtual DbSet<JobApply> JobApplies { get; set; }

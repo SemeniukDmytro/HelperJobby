@@ -7,18 +7,18 @@ using HelperJobby.DTOs.Job;
 
 namespace HelperJobby.AutoMapperProfiles;
 
-public class JobProfile : Profile
+public class CurrentJobCreationProfile : Profile
 {
-    public JobProfile()
+    public CurrentJobCreationProfile()
     {
-        CreateMap<Job, JobDTO>().AfterMap((src, dest, context) =>
+        CreateMap<CurrentJobCreation, CurrentJobCreationDTO>().AfterMap((src, dest, context) =>
         {
             dest.EmployerAccount = context.Mapper.Map<EmployerAccount, EmployerAccountDTO>(src.EmployerAccount);
             dest.Benefits = FlagsEnumToArrayConverter.GetArrayWithEnumValues<EmployeeBenefits>((int)src.Benefits);
             dest.Schedule = FlagsEnumToArrayConverter.GetArrayWithEnumValues<Schedules>((int)src.Schedule);
             dest.JobType = FlagsEnumToArrayConverter.GetArrayWithEnumValues<JobTypes>((int)src.JobTypes);
         });
-        CreateMap<JobDTO, Job>().AfterMap((src, dest, context) =>
+        CreateMap<CurrentJobCreationDTO, CurrentJobCreation>().AfterMap((src, dest, context) =>
         {
             dest.EmployerAccount = context.Mapper.Map<EmployerAccountDTO, EmployerAccount>(src.EmployerAccount);
             dest.Benefits = FlagsEnumToArrayConverter.GetSingleValue(src.Benefits);
