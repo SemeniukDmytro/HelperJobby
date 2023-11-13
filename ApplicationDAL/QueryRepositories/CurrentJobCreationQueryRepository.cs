@@ -15,17 +15,29 @@ public class CurrentJobCreationQueryRepository : ICurrentJobCreationQueryReposit
         _applicationContext = applicationContext;
     }
 
-    public async Task<CurrentJobCreation> GetJobCreationById(int jobCreationId)
+    public async Task<CurrentJobCreation> GetJobCreationById(int jobCreationId, int employerAccountId)
     {
-        return await GetJob(jobCreationId);
+        return await GetJob(jobCreationId, employerAccountId);
     }
 
-    public async Task<CurrentJobCreation> GetJobCreationWithEmployerAccount(int jobCreationId)
+    public async Task<CurrentJobCreation> GetJobCreationByEmployerId(int employerId)
     {
-        return await GetJob(jobCreationId, q => q.Include(j => j.EmployerAccount));
+        var jobEntity =
+            await _applicationContext.CurrentJobCreations.FirstOrDefaultAsync(j => j.EmployerAccountId == employerId);
+        if (jobEntity == null)
+        {
+            throw new JobNotFoundException("There isn't any previous job creations");
+        }
+
+        return jobEntity;
+    }
+
+    public async Task<CurrentJobCreation> GetJobCreationWithEmployerAccount(int jobCreationId, int employerAccountId)
+    {
+        return await GetJob(jobCreationId, employerAccountId, q => q.Include(j => j.EmployerAccount));
     }
     
-    private  async Task<CurrentJobCreation> GetJob(int jobCreationId, Func<IQueryable<CurrentJobCreation>, IQueryable<CurrentJobCreation>> includeQuery=null)
+    private  async Task<CurrentJobCreation> GetJob(int jobCreationId, int employerAccountId, Func<IQueryable<CurrentJobCreation>, IQueryable<CurrentJobCreation>> includeQuery=null)
     {
         var query = _applicationContext.CurrentJobCreations.AsQueryable();
 
@@ -39,6 +51,11 @@ public class CurrentJobCreationQueryRepository : ICurrentJobCreationQueryReposit
         if (jobEntity == null)
         {
             throw new JobNotFoundException("User with specified id doesn't exist");
+        }
+
+        if (jobEntity.EmployerAccountId != employerAccountId)
+        {
+            throw new ForbiddenException();
         }
 
         return jobEntity;

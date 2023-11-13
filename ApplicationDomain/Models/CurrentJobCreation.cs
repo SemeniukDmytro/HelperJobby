@@ -22,14 +22,11 @@ public class CurrentJobCreation
     [MaxLength(20)]
     public string Language { get; set; }
     
-    [Required]
     [MaxLength(50)]
     public string Location { get; set; }
     
-    [Required]
     public JobTypes JobTypes { get; set; }
     
-    [Required]
     [Column(TypeName = "decimal(10,2)")]
     public decimal Salary { get; set; }
     
@@ -37,7 +34,6 @@ public class CurrentJobCreation
     
     public EmployeeBenefits Benefits { get; set; }
     
-    [Required]
     [MaxLength(50)]
     public string ContactEmail { get; set; }
     

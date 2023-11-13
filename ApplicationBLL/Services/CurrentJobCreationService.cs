@@ -32,11 +32,11 @@ public class CurrentJobCreationService : ICurrentJobCreationService
         return currentJobCreation;
     }
 
-    public async Task<CurrentJobCreation> UpdateCurrentJob(int jobId, int employerId, CurrentJobCreation currentJobCreation)
+    public async Task<CurrentJobCreation> UpdateCurrentJob(int jobId, int employerAccountId, CurrentJobCreation currentJobCreation)
     {
-        var jobEntity = await _currentJobCreationQueryRepository.GetJobCreationById(jobId);
+        var jobEntity = await _currentJobCreationQueryRepository.GetJobCreationById(jobId, employerAccountId);
         
-        if (jobEntity.EmployerAccountId != employerId)
+        if (jobEntity.EmployerAccountId != employerAccountId)
         {
             throw new ForbiddenException();
         }
@@ -70,10 +70,10 @@ public class CurrentJobCreationService : ICurrentJobCreationService
     }
     
 
-    public async Task<CurrentJobCreation> DeleteCurrenJob(int jobId, int employerId)
+    public async Task<CurrentJobCreation> DeleteCurrenJob(int jobId, int employerAccountId)
     {
-        var job = await _currentJobCreationQueryRepository.GetJobCreationById(jobId);
-        if (job.EmployerAccountId != employerId)
+        var job = await _currentJobCreationQueryRepository.GetJobCreationById(jobId, employerAccountId);
+        if (job.EmployerAccountId != employerAccountId)
         {
             throw new ForbiddenException();
         }

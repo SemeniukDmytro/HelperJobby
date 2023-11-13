@@ -8,5 +8,5 @@ public interface ICurrentJobCreationService
 
     public Task<CurrentJobCreation> UpdateCurrentJob(int jobId, int employerId, CurrentJobCreation currentJobCreation);
 
-    public Task<CurrentJobCreation> DeleteCurrenJob(int jobId, int employerId);
+    public Task<CurrentJobCreation> DeleteCurrenJob(int jobId, int employerAccountId);
 }

@@ -18,12 +18,8 @@ public class CurrentJobCreationProfile : Profile
             dest.Schedule = FlagsEnumToArrayConverter.GetArrayWithEnumValues<Schedules>((int)src.Schedule);
             dest.JobType = FlagsEnumToArrayConverter.GetArrayWithEnumValues<JobTypes>((int)src.JobTypes);
         });
-        CreateMap<CurrentJobCreationDTO, CurrentJobCreation>().AfterMap((src, dest, context) =>
-        {
-            dest.EmployerAccount = context.Mapper.Map<EmployerAccountDTO, EmployerAccount>(src.EmployerAccount);
-            dest.Benefits = FlagsEnumToArrayConverter.GetSingleValue(src.Benefits);
-            dest.Schedule = FlagsEnumToArrayConverter.GetSingleValue(src.Schedule);
-            dest.JobTypes = FlagsEnumToArrayConverter.GetSingleValue(src.JobType);
-        });
+        CreateMap<CurrentJobCreateDTO, CurrentJobCreation>().ForMember(dest => dest.Benefits, opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.Benefits)))
+            .ForMember(dest => dest.Schedule, opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.Schedule)))
+            .ForMember(dest => dest.JobTypes, opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.JobType)));
     }
 }

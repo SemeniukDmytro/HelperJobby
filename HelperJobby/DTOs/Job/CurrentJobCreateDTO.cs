@@ -1,11 +1,9 @@
 using ApplicationDomain.Enums;
-using HelperJobby.DTOs.Account;
 
 namespace HelperJobby.DTOs.Job;
 
-public class CurrentJobCreationDTO
+public class CurrentJobCreateDTO
 {
-    public int Id { get; set; }
     public string JobTitle { get; set; }
     public int NumberOfOpenings { get; set; }
     public string Language { get; set; }
@@ -17,6 +15,4 @@ public class CurrentJobCreationDTO
     public string ContactEmail { get; set; }
     public bool ResumeRequired { get; set; }
     public string Description { get; set; }
-    public int EmployerAccountId { get; set; }
-    public EmployerAccountDTO EmployerAccount { get; set; }
 }

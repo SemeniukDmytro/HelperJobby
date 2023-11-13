@@ -89,7 +89,7 @@ public class CurrentJobCreationServiceTests
         var jobId = 1;
         var employerAccountId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId))
+        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId, employerAccountId))
             .ReturnsAsync(new CurrentJobCreation()
             {
                 Id = jobId,
@@ -121,7 +121,7 @@ public class CurrentJobCreationServiceTests
         var jobId = 1;
         var employerAccountId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId))
+        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId, employerAccountId))
             .ReturnsAsync(new CurrentJobCreation()
             {
                 Id = jobId,
@@ -141,21 +141,21 @@ public class CurrentJobCreationServiceTests
     {
         //Arrange
         int jobId = 1;
-        int employerId = 1;
-        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId)).ReturnsAsync(
+        int employerAccountId = 1;
+        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId, employerAccountId)).ReturnsAsync(
             new CurrentJobCreation()
             {
                 Id = jobId,
                 JobTitle = "Test",
-                EmployerAccountId = employerId
+                EmployerAccountId = employerAccountId
             });
         
         //Act
-        var job = await _currentJobCreationService.DeleteCurrenJob(jobId, employerId);
+        var job = await _currentJobCreationService.DeleteCurrenJob(jobId, employerAccountId);
         //Assert
         Assert.Equal("Test", job.JobTitle);
         Assert.Equal(jobId, job.Id);
-        Assert.Equal(employerId, job.EmployerAccountId);
+        Assert.Equal(employerAccountId, job.EmployerAccountId);
     }
     
     [Fact]
@@ -163,8 +163,8 @@ public class CurrentJobCreationServiceTests
     {
         //Arrange
         int jobId = 1;
-        int employerId = 1;
-        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId)).ReturnsAsync(
+        int employerAccountId = 1;
+        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId, employerAccountId)).ReturnsAsync(
             new CurrentJobCreation()
             {
                 Id = jobId,
@@ -174,6 +174,6 @@ public class CurrentJobCreationServiceTests
         
         //Act
         //Assert
-        await Assert.ThrowsAsync<ForbiddenException>(async () => await _currentJobCreationService.DeleteCurrenJob(jobId, employerId));
+        await Assert.ThrowsAsync<ForbiddenException>(async () => await _currentJobCreationService.DeleteCurrenJob(jobId, employerAccountId));
     }
 }
