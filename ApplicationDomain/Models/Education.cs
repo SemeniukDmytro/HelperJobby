@@ -33,9 +33,9 @@ public class Education
     [Required]
     public DateOnly To { get; set; }
     
+    [Required]
     [ForeignKey("Resume")]
     public int ResumeId { get; set; }
     
-    [Required]
     public Resume Resume { get; set; }
 }

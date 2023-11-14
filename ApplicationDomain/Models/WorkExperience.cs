@@ -32,10 +32,8 @@ public class WorkExperience
 
     [MaxLength(2000)]
     public string Description { get; set; }
-    
+    [Required]
     [ForeignKey("Resume")]
     public int ResumeId { get; set; }
-    
-    [Required]
     public Resume Resume { get; set; }
 }

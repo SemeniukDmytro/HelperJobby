@@ -1,6 +1,8 @@
+using ApplicationDomain.Models;
+
 namespace ApplicationDomain.Absraction.IQueryRepositories;
 
-public class IJobQueryRepository
+public interface IJobQueryRepository
 {
-    
+    public Task<Job> GetJobById(int id, int employerAccountId);
 }

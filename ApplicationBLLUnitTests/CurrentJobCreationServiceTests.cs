@@ -151,7 +151,7 @@ public class CurrentJobCreationServiceTests
             });
         
         //Act
-        var job = await _currentJobCreationService.DeleteCurrenJob(jobId, employerAccountId);
+        var job = await _currentJobCreationService.DeleteCurrentJob(jobId, employerAccountId);
         //Assert
         Assert.Equal("Test", job.JobTitle);
         Assert.Equal(jobId, job.Id);
@@ -174,6 +174,6 @@ public class CurrentJobCreationServiceTests
         
         //Act
         //Assert
-        await Assert.ThrowsAsync<ForbiddenException>(async () => await _currentJobCreationService.DeleteCurrenJob(jobId, employerAccountId));
+        await Assert.ThrowsAsync<ForbiddenException>(async () => await _currentJobCreationService.DeleteCurrentJob(jobId, employerAccountId));
     }
 }

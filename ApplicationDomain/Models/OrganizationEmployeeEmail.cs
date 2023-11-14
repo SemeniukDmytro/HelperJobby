@@ -9,8 +9,8 @@ public class OrganizationEmployeeEmail
     [Required]
     [MaxLength(50)]
     public string Email { get; set; }
+    [Required]
     [ForeignKey("Organization")]
     public int OrganizationId { get; set; }
-    [Required]
     public Organization Organization;
 }

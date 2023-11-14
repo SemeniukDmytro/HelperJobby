@@ -24,9 +24,9 @@ public class EmployerAccount
     [Required]
     public User User { get; set; }
     
+    [Required]
     [ForeignKey("Organization")]
     public int OrganizationId { get; set; }
-    [Required]
     public Organization Organization { get; set; }
     
     public List<Job> Jobs { get; set; }

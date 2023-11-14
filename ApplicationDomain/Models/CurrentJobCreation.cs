@@ -43,10 +43,10 @@ public class CurrentJobCreation
     [Column(TypeName = "text")]
     public string Description { get; set; }
     
+    [Required]
     [ExcludeFromUpdate]
     [ForeignKey("EmployerAccount")]
     public int EmployerAccountId { get; set; }
     [ExcludeFromUpdate]
-    [Required]
     public EmployerAccount EmployerAccount { get; set; }
 }

@@ -56,7 +56,7 @@ namespace HelperJobby.Controllers
         [HttpDelete("employer-account/{employerId}/current-job/{jobId}")]
         public async Task Delete(int employerId, int jobId)
         {
-            var jobCreation = await _currentJobCreationService.DeleteCurrenJob(jobId, employerId);
+            var jobCreation = await _currentJobCreationService.DeleteCurrentJob(jobId, employerId);
             await _currentJobCreationCommandRepository.DeleteCurrentJob(jobCreation);
         }
 

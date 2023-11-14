@@ -25,5 +25,17 @@ namespace HelperJobby.Controllers
         {
             return null;
         }
+        
+        [HttpPost("save-job/{jobId}/{jobSeekerAccountId}")]
+        public Task SaveJob(int jobSeekerAccountId, int jobId)
+        {
+            return null;
+        }
+
+        [HttpPost("delete-saved-job{jobId}/{jobSeekerAccountId}")]
+        public Task DeleteSavedJob(int jobSeekerAccountId, int jobId)
+        {
+            return null;
+        }
     }
 }

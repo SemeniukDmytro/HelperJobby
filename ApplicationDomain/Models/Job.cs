@@ -1,12 +1,14 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ApplicationDomain.Attributes;
 using ApplicationDomain.Enums;
 
 namespace ApplicationDomain.Models;
 
 public class Job
 {
+    [ExcludeFromUpdate]
     public int Id { get; set; }
     
     [Required]
@@ -30,9 +32,8 @@ public class Job
     [Required]
     [Column(TypeName = "decimal(10,2)")]
     public decimal Salary { get; set; }
-    
+    [Required]
     public Schedules Schedule { get; set; }
-    
     public EmployeeBenefits Benefits { get; set; }
     
     [Required]
@@ -41,14 +42,14 @@ public class Job
     
     [DefaultValue(false)]
     public bool ResumeRequired { get; set; }
-    
+    [Required]
     [Column(TypeName = "text")]
     public string Description { get; set; }
-    
+    [ExcludeFromUpdate]
+    [Required]
     [ForeignKey("EmployerAccount")]
     public int EmployerAccountId { get; set; }
-    
-    [Required]
+    [ExcludeFromUpdate]
     public EmployerAccount EmployerAccount { get; set; }
     
     public List<Interview> Interviews { get; set; }

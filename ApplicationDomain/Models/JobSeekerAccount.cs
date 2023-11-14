@@ -16,10 +16,10 @@ public class JobSeekerAccount
     [MaxLength(15)]
     public string? PhoneNumber { get; set; }
     
+    [Required]
     [ForeignKey("User")]
     public int UserId { get; set; }
     
-    [Required]
     public User User { get; set; }
     
     [ForeignKey("Address")]

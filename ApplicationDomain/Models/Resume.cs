@@ -7,10 +7,10 @@ public class Resume
 {
     public int Id { get; set; }
     
+    [Required]
     [ForeignKey("JobSeekerAccount")]
     public int JobSeekerAccountId { get; set; }
     
-    [Required]
     public JobSeekerAccount JobSeekerAccount { get; set; }
     
     public List<Education> Educations { get; set; }

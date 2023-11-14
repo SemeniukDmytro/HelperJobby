@@ -1,3 +1,4 @@
+using ApplicationBLL.Logic;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Attributes;
@@ -40,37 +41,13 @@ public class CurrentJobCreationService : ICurrentJobCreationService
         {
             throw new ForbiddenException();
         }
-        
-        var entityProperties = jobEntity.GetType().GetProperties();
-        var updatedJobProperties = currentJobCreation.GetType().GetProperties();
 
-        foreach (var updatedProperty in updatedJobProperties)
-        {
-            if (Attribute.IsDefined(updatedProperty, typeof(ExcludeFromUpdateAttribute)))
-            {
-                continue;
-            }
-            
-            var entityProperty = entityProperties.FirstOrDefault(p => p.Name == updatedProperty.Name);
-            var test = updatedProperty.GetValue(currentJobCreation);
-            if (test != null && (test != default || (int)test == default))
-            {
-                var currentValue = entityProperty.GetValue(jobEntity);
-                var newValue = updatedProperty.GetValue(currentJobCreation);
-
-                if (!Equals(currentValue, newValue) || currentValue == null || currentValue.Equals(default))
-                {
-                    entityProperty.SetValue(jobEntity, newValue);
-                }
-            }
-        }
-
-        return jobEntity;
-
+        var updatedEntity = JobUpdateValidation<CurrentJobCreation>.Update(jobEntity, currentJobCreation);
+        return updatedEntity;
     }
     
 
-    public async Task<CurrentJobCreation> DeleteCurrenJob(int jobId, int employerAccountId)
+    public async Task<CurrentJobCreation> DeleteCurrentJob(int jobId, int employerAccountId)
     {
         var job = await _currentJobCreationQueryRepository.GetJobCreationById(jobId, employerAccountId);
         if (job.EmployerAccountId != employerAccountId)
