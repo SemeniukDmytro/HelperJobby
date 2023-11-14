@@ -25,5 +25,10 @@ public class JobProfile : Profile
             dest.Schedule = FlagsEnumToArrayConverter.GetSingleValue(src.Schedule);
             dest.JobTypes = FlagsEnumToArrayConverter.GetSingleValue(src.JobType);
         });
+        CreateMap<CurrentJobCreationDTO, JobDTO>().AfterMap((src, dest, context) =>
+        {
+            dest.Id = 0;
+        } );
+        CreateMap<UpdatedJobDTO, JobDTO>();
     }
 }

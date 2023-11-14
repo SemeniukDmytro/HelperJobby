@@ -48,7 +48,7 @@ namespace HelperJobby.Controllers
             var jobCreation =
                 await _currentJobCreationService.UpdateCurrentJob(jobId, employerId,
                     _mapper.Map<CurrentJobCreation>(currentJobCreationDTO));
-            var createdJobCreationDTO =  _mapper.Map<CurrentJobCreationDTO>(await _currentJobCreationCommandRepository.UpdateCurrenJob(jobCreation));
+            var createdJobCreationDTO =  _mapper.Map<CurrentJobCreationDTO>(await _currentJobCreationCommandRepository.UpdateCurrentJob(jobCreation));
             return createdJobCreationDTO;
         }
 

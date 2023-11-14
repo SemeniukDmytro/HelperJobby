@@ -17,7 +17,7 @@ public class CurrentJobCreationQueryRepository : ICurrentJobCreationQueryReposit
 
     public async Task<CurrentJobCreation> GetJobCreationById(int jobCreationId, int employerAccountId)
     {
-        return await GetJob(jobCreationId, employerAccountId);
+        return await GetCurrentJob(jobCreationId, employerAccountId);
     }
 
     public async Task<CurrentJobCreation> GetJobCreationByEmployerId(int employerId)
@@ -34,10 +34,10 @@ public class CurrentJobCreationQueryRepository : ICurrentJobCreationQueryReposit
 
     public async Task<CurrentJobCreation> GetJobCreationWithEmployerAccount(int jobCreationId, int employerAccountId)
     {
-        return await GetJob(jobCreationId, employerAccountId, q => q.Include(j => j.EmployerAccount));
+        return await GetCurrentJob(jobCreationId, employerAccountId, q => q.Include(j => j.EmployerAccount));
     }
     
-    private  async Task<CurrentJobCreation> GetJob(int jobCreationId, int employerAccountId, Func<IQueryable<CurrentJobCreation>, IQueryable<CurrentJobCreation>> includeQuery=null)
+    private  async Task<CurrentJobCreation> GetCurrentJob(int jobCreationId, int employerAccountId, Func<IQueryable<CurrentJobCreation>, IQueryable<CurrentJobCreation>> includeQuery=null)
     {
         var query = _applicationContext.CurrentJobCreations.AsQueryable();
 
@@ -46,18 +46,18 @@ public class CurrentJobCreationQueryRepository : ICurrentJobCreationQueryReposit
             query = includeQuery(query);
         }
 
-        var jobEntity = await query.FirstOrDefaultAsync(j => j.Id == jobCreationId);
+        var currenJobEntity = await query.FirstOrDefaultAsync(j => j.Id == jobCreationId);
 
-        if (jobEntity == null)
+        if (currenJobEntity == null)
         {
-            throw new JobNotFoundException("User with specified id doesn't exist");
+            throw new JobNotFoundException("Job with specified id doesn't exist");
         }
 
-        if (jobEntity.EmployerAccountId != employerAccountId)
+        if (currenJobEntity.EmployerAccountId != employerAccountId)
         {
             throw new ForbiddenException();
         }
 
-        return jobEntity;
+        return currenJobEntity;
     }
 }
