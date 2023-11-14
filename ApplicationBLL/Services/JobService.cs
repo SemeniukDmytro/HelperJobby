@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using ApplicationBLL.Logic;
+using ApplicationDomain.Absraction.ICommandRepositories;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Exceptions;
@@ -9,14 +10,10 @@ namespace ApplicationBLL.Services;
 
 public class JobService : IJobService
 {
-    private readonly IUserService _userServiceMock;
-    private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
     private readonly IJobQueryRepository _jobQueryRepository;
 
-    public JobService(IUserService userServiceMock, IEmployerAccountQueryRepository employerAccountQueryRepository, IJobQueryRepository jobQueryRepository)
+    public JobService(IJobQueryRepository jobQueryRepository)
     {
-        _userServiceMock = userServiceMock;
-        _employerAccountQueryRepository = employerAccountQueryRepository;
         _jobQueryRepository = jobQueryRepository;
     }
 
@@ -52,15 +49,5 @@ public class JobService : IJobService
         }
 
         return jobEntity;
-    }
-
-    public Task<SavedJob> SaveJob(int jobId, int jobSeekerId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<SavedJob> RemoveFromSaved(int jobId, int jobSeekerId)
-    {
-        throw new NotImplementedException();
     }
 }

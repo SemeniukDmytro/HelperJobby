@@ -18,17 +18,27 @@ public class JobProfile : Profile
             dest.Schedule = FlagsEnumToArrayConverter.GetArrayWithEnumValues<Schedules>((int)src.Schedule);
             dest.JobType = FlagsEnumToArrayConverter.GetArrayWithEnumValues<JobTypes>((int)src.JobTypes);
         });
-        CreateMap<JobDTO, Job>().AfterMap((src, dest, context) =>
-        {
-            dest.EmployerAccount = context.Mapper.Map<EmployerAccountDTO, EmployerAccount>(src.EmployerAccount);
-            dest.Benefits = FlagsEnumToArrayConverter.GetSingleValue(src.Benefits);
-            dest.Schedule = FlagsEnumToArrayConverter.GetSingleValue(src.Schedule);
-            dest.JobTypes = FlagsEnumToArrayConverter.GetSingleValue(src.JobType);
-        });
-        CreateMap<CurrentJobCreationDTO, JobDTO>().AfterMap((src, dest, context) =>
-        {
-            dest.Id = 0;
-        } );
-        CreateMap<UpdatedJobDTO, JobDTO>();
+        CreateMap<JobDTO, Job>()
+            .ForMember(dest => dest.Benefits, opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.Benefits)))
+            .ForMember(dest => dest.Schedule, opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.Schedule)))
+            .ForMember(dest => dest.JobTypes, opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.JobType)))
+            .AfterMap((src, dest, context) =>
+                dest.EmployerAccount = context.Mapper.Map<EmployerAccountDTO, EmployerAccount>(src.EmployerAccount));
+
+        CreateMap<CurrentJobCreationDTO, Job>()
+            .ForMember(dest => dest.Benefits,
+                opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.Benefits)))
+            .ForMember(dest => dest.Schedule,
+                opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.Schedule)))
+            .ForMember(dest => dest.JobTypes,
+                opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.JobType)));
+        CreateMap<UpdatedJobDTO, Job>()
+            .ForMember(dest => dest.Benefits,
+                opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.Benefits)))
+            .ForMember(dest => dest.Schedule,
+                opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.Schedule)))
+            .ForMember(dest => dest.JobTypes,
+                opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.JobType)));
+        CreateMap<Job, CurrentJobCreation>().ReverseMap();
     }
 }

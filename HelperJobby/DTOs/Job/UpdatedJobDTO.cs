@@ -15,5 +15,4 @@ public class UpdatedJobDTO
     public string ContactEmail { get; set; }
     public bool ResumeRequired { get; set; }
     public string Description { get; set; }
-    public int EmployerAccountId { get; set; }
 }

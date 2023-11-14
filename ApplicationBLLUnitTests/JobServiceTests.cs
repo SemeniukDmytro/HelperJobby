@@ -1,5 +1,6 @@
 using ApplicationBLL.Services;
 using ApplicationBLLUnitTests.Fixture;
+using ApplicationDomain.Absraction.ICommandRepositories;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Enums;
@@ -12,13 +13,11 @@ namespace ApplicationBLLUnitTests;
 public class JobServiceTests
 {
     private readonly IJobService _jobService;
-    private readonly Mock<IUserService> _userServiceMock = new();
-    private readonly Mock<IEmployerAccountQueryRepository> _employerAccountQueryRepository = new();
     private readonly Mock<IJobQueryRepository> _jobQueryRepository = new();
 
     public JobServiceTests()
     {
-        _jobService = new JobService(_userServiceMock.Object, _employerAccountQueryRepository.Object, _jobQueryRepository.Object);
+        _jobService = new JobService( _jobQueryRepository.Object);
     }
     
     [Fact]

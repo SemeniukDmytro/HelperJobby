@@ -48,7 +48,7 @@ public class JobQueryRepository : IJobQueryRepository
         List<Job> result = new List<Job>();
         foreach (var employerAccount in organization.EmployeeAccounts)
         {
-            result.AddRange(await GetJobsByUserId(employerAccount.Id));
+            result.AddRange(await GetJobsByUserId(employerAccount.UserId));
         }
 
         return result;
