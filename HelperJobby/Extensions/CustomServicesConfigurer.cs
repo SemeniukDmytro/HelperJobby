@@ -37,6 +37,9 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<ICurrentJobCreationQueryRepository, CurrentJobCreationQueryRepository>();
         serviceProvider.AddScoped<ICurrentJobCreationCommandRepository, CurrentJobCreationCommandRepository>();
         serviceProvider.AddScoped<ICurrentJobCreationService, CurrentJobCreationService>();
+        serviceProvider.AddScoped<IJobSeekerAccountService, JobSeekerAccountService>();
+        serviceProvider.AddScoped<IJobSeekerAccountCommandRepository, JobSeekerAccountCommandRepository>();
+        serviceProvider.AddScoped<IJobSeekerAccountQueryRepository, JobSeekerAccountQueryRepository>();
         
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());
