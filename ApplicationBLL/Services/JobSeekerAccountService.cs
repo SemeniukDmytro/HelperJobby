@@ -32,7 +32,34 @@ public class JobSeekerAccountService : IJobSeekerAccountService
         {
             throw new ForbiddenException();
         }
-        return updatedAccount;
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithAddress(userId);
+        if (jobSeekerAccount.UserId != userId)
+        {
+            throw new ForbiddenException();
+        }
+
+        if (updatedAccount.FirstName != "")
+        {
+            jobSeekerAccount.FirstName = updatedAccount.FirstName;
+        }
+
+        if (updatedAccount.LastName != "")
+        {
+            jobSeekerAccount.LastName = updatedAccount.LastName;
+        }
+        jobSeekerAccount.PhoneNumber = updatedAccount.PhoneNumber;
+        if (jobSeekerAccount.Address == null)
+        {
+            jobSeekerAccount.Address = updatedAccount.Address;
+        }
+        else
+        {
+            jobSeekerAccount.Address.City = updatedAccount.Address.City;
+            jobSeekerAccount.Address.Country = updatedAccount.Address.Country;
+            jobSeekerAccount.Address.StreetAddress = updatedAccount.Address.StreetAddress;
+            jobSeekerAccount.Address.PostalCode = updatedAccount.Address.PostalCode;
+        }
+        return jobSeekerAccount;
     }
 
     public async Task<SavedJob> SaveJob(int jobId, int userId)

@@ -20,5 +20,9 @@ public class JobSeekerAccountProfile : Profile
             dest.User = context.Mapper.Map<UserDTO, User>(src.User);
             dest.Address = context.Mapper.Map<AddressDTO, Address>(src.Address);
         });
+        CreateMap<UpdatedJobSeekerAccountDTO, JobSeekerAccount>().AfterMap((src, dest, context) =>
+        {
+            dest.Address = context.Mapper.Map<UpdateAddressDTO, Address>(src.Address);
+        });
     }
 }

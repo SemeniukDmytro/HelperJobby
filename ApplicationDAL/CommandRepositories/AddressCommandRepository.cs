@@ -1,3 +1,4 @@
+using ApplicationDAL.Context;
 using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Models;
 
@@ -5,9 +6,18 @@ namespace ApplicationDAL.CommandRepositories;
 
 public class AddressCommandRepository : IAddressCommandRepository
 {
-    public Task<Address> CreateAddress(Address address)
+    private readonly ApplicationContext _applicationContext;
+
+    public AddressCommandRepository(ApplicationContext applicationContext)
     {
-        throw new NotImplementedException();
+        _applicationContext = applicationContext;
+    }
+
+    public async Task<Address> CreateAddress(Address address)
+    {
+        _applicationContext.Addresses.Add(address);
+        await _applicationContext.SaveChangesAsync();
+        return address;
     }
 
     public Task<Address> UpdateAddress(int addressId, Address updatedAddress)

@@ -1,12 +1,20 @@
 using ApplicationBLL.Interfaces;
+using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Models;
 
 namespace ApplicationBLL.Logic;
 
 public class AddressChangeHandler : IAddressChangeHandler
 {
-    public Task<Address> ChangeAddress(Address oldAddress, Address updatedAddress)
+    private readonly IAddressCommandRepository _addressCommandRepository;
+
+    public AddressChangeHandler(IAddressCommandRepository addressCommandRepository)
     {
-        throw new NotImplementedException();
+        _addressCommandRepository = addressCommandRepository;
+    }
+
+    public async Task<Address> ChangeAddress(Address oldAddress, Address updatedAddress)
+    {
+        return updatedAddress;
     }
 }

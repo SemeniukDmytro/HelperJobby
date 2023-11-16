@@ -25,6 +25,7 @@ public static class JobSeekerAccountFixture
         FirstName = "Firstname",
         LastName = "Lastname",
         PhoneNumber = "",
+        UserId = 1,
         Address = new Address()
         {
             Id = 1,

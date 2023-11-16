@@ -46,7 +46,7 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());
         serviceProvider.AddScoped<IUserIdGetter>(provider => provider.GetService<CurrentUserIdProvider>());
         serviceProvider.AddSingleton<IPasswordHandler, PasswordHandler>();
-        serviceProvider.AddSingleton<IAddressChangeHandler, AddressChangeHandler>();
+        serviceProvider.AddScoped<IAddressChangeHandler, AddressChangeHandler>();
         serviceProvider.AddScoped<ICurrentUserChecker, CurrentUserChecker>();
     }
 

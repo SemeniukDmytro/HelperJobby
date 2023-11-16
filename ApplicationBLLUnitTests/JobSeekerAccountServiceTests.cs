@@ -35,14 +35,12 @@ public class JobSeekerAccountServiceTests
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
         _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerAccountWithAddress(userId)).ReturnsAsync(
             accountEntity);
-        _addressChangeHandler.Setup(h => h.ChangeAddress(accountEntity.Address, updatedAccount.Address)).ReturnsAsync(
-            updatedAccount.Address);
         //Act
         var result = await _jobSeekerAccountService.UpdateJobSeekerAccount(userId, updatedAccount);
         //Assert
         Assert.Equal(updatedAccount.FirstName, result.FirstName);
         Assert.Equal(updatedAccount.Address.City, result.Address.City);
-        Assert.Equal(updatedAccount.UserId, result.UserId);
+        Assert.Equal(accountEntity.UserId, result.UserId);
     }
 
     [Fact]
