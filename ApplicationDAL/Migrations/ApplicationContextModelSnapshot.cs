@@ -47,7 +47,7 @@ namespace ApplicationDAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.CurrentJobCreation", b =>
@@ -106,7 +106,7 @@ namespace ApplicationDAL.Migrations
                     b.HasIndex("EmployerAccountId")
                         .IsUnique();
 
-                    b.ToTable("CurrentJobCreations");
+                    b.ToTable("CurrentJobCreations", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Education", b =>
@@ -153,7 +153,7 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("ResumeId");
 
-                    b.ToTable("Educations");
+                    b.ToTable("Educations", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.EmployerAccount", b =>
@@ -190,7 +190,7 @@ namespace ApplicationDAL.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("EmployerAccounts");
+                    b.ToTable("EmployerAccounts", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Interview", b =>
@@ -210,7 +210,7 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("JobSeekerAccountId");
 
-                    b.ToTable("Interviews");
+                    b.ToTable("Interviews", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Job", b =>
@@ -268,7 +268,7 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("EmployerAccountId");
 
-                    b.ToTable("Jobs");
+                    b.ToTable("Jobs", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.JobApply", b =>
@@ -288,7 +288,7 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("JobSeekerAccountId");
 
-                    b.ToTable("JobApplies");
+                    b.ToTable("JobApplies", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.JobSeekerAccount", b =>
@@ -325,7 +325,7 @@ namespace ApplicationDAL.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("JobSeekerAccounts");
+                    b.ToTable("JobSeekerAccounts", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Organization", b =>
@@ -355,7 +355,7 @@ namespace ApplicationDAL.Migrations
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
 
-                    b.ToTable("Organizations");
+                    b.ToTable("Organizations", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.OrganizationEmployeeEmail", b =>
@@ -379,7 +379,7 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("OrganizationEmployeeEmails");
+                    b.ToTable("OrganizationEmployeeEmails", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Resume", b =>
@@ -396,7 +396,7 @@ namespace ApplicationDAL.Migrations
                     b.HasIndex("JobSeekerAccountId")
                         .IsUnique();
 
-                    b.ToTable("Resumes");
+                    b.ToTable("Resumes", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.SavedJob", b =>
@@ -413,7 +413,7 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("JobSeekerAccountId");
 
-                    b.ToTable("SavedJobs");
+                    b.ToTable("SavedJobs", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Skill", b =>
@@ -434,7 +434,7 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("ResumeId");
 
-                    b.ToTable("Skills");
+                    b.ToTable("Skills", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.User", b =>
@@ -463,7 +463,7 @@ namespace ApplicationDAL.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.WorkExperience", b =>
@@ -513,7 +513,7 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("ResumeId");
 
-                    b.ToTable("WorkExperiences");
+                    b.ToTable("WorkExperiences", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.CurrentJobCreation", b =>

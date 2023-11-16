@@ -11,15 +11,12 @@ public class WorkExperience
     [MaxLength(100)] 
     public string JobTitle { get; set; }
 
-    [Required]
     [MaxLength(100)] 
     public string Company { get; set; }
 
-    [Required]
     [MaxLength(45)] 
     public string Country { get; set; }
 
-    [Required]
     [MaxLength(30)]
     public string CityOrProvince { get; set; }
 
