@@ -29,7 +29,7 @@ public class JobService : IJobService
 
     public async Task<Job> UpdateJob(int jobId, int employerAccountId, Job updatedJob)
     {
-        var jobEntity = await _jobQueryRepository.GetJobById(jobId, employerAccountId);
+        var jobEntity = await _jobQueryRepository.GetJobForEmployersById(jobId, employerAccountId);
         
         if (jobEntity.EmployerAccountId != employerAccountId)
         {
@@ -42,7 +42,7 @@ public class JobService : IJobService
 
     public async Task<Job> DeleteJob(int jobId, int employerAccountId)
     {
-        var jobEntity = await _jobQueryRepository.GetJobById(jobId, employerAccountId);
+        var jobEntity = await _jobQueryRepository.GetJobForEmployersById(jobId, employerAccountId);
         if (jobEntity.EmployerAccountId != employerAccountId)
         {
             throw new ForbiddenException();

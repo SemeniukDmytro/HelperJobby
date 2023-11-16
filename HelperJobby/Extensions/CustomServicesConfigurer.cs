@@ -40,11 +40,14 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IJobSeekerAccountService, JobSeekerAccountService>();
         serviceProvider.AddScoped<IJobSeekerAccountCommandRepository, JobSeekerAccountCommandRepository>();
         serviceProvider.AddScoped<IJobSeekerAccountQueryRepository, JobSeekerAccountQueryRepository>();
+        serviceProvider.AddScoped<IAddressCommandRepository, AddressCommandRepository>();
         
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());
         serviceProvider.AddScoped<IUserIdGetter>(provider => provider.GetService<CurrentUserIdProvider>());
         serviceProvider.AddSingleton<IPasswordHandler, PasswordHandler>();
+        serviceProvider.AddSingleton<IAddressChangeHandler, AddressChangeHandler>();
+        serviceProvider.AddScoped<ICurrentUserChecker, CurrentUserChecker>();
     }
 
     public static void AddAutoMapperProfiles(this IServiceCollection services)

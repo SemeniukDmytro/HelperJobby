@@ -20,18 +20,25 @@ public class JobQueryRepository : IJobQueryRepository
         _organizationQueryRepository = organizationQueryRepository;
     }
 
-    public async Task<Job> GetJobById(int id, int employerAccountId)
+    public async Task<Job> GetJobForEmployersById(int id, int employerAccountId)
     {
-        var job = await _applicationContext.Jobs.FirstOrDefaultAsync(j => j.Id == id);
-        if (job == null)
-        {
-            throw new JobNotFoundException();
-        }
+        var job = await GetJobById(id);
         
         if (job.EmployerAccountId != employerAccountId)
         {
             throw new ForbiddenException();
         }
+        return job;
+    }
+
+    public async Task<Job> GetJobById(int jobId)
+    {
+        var job = await _applicationContext.Jobs.FirstOrDefaultAsync(j => j.Id == jobId);
+        if (job == null)
+        {
+            throw new JobNotFoundException();
+        }
+
         return job;
     }
 

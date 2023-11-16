@@ -14,4 +14,9 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task<JobSeekerAccount> GetJobSeekerAccountWithAddress(int userId)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -48,7 +48,7 @@ public class JobServiceTests
         var updatedJob = JobFixtures.UpdatedJob;
         var jobId = 1;
         var employerAccountId = 1;
-        _jobQueryRepository.Setup(r => r.GetJobById(jobId, employerAccountId))
+        _jobQueryRepository.Setup(r => r.GetJobForEmployersById(jobId, employerAccountId))
             .ReturnsAsync(jobEntity);
         //Act
         var job = await _jobService.UpdateJob(jobId, employerAccountId, updatedJob);
@@ -67,7 +67,7 @@ public class JobServiceTests
         var updatedJob = JobFixtures.UpdatedJob;
         var jobId = 1;
         var employerAccountId = 2;
-        _jobQueryRepository.Setup(r => r.GetJobById(jobId, employerAccountId))
+        _jobQueryRepository.Setup(r => r.GetJobForEmployersById(jobId, employerAccountId))
             .ReturnsAsync(jobEntity);
         //Act & assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
@@ -81,7 +81,7 @@ public class JobServiceTests
         var jobEntity = JobFixtures.JobEntity;
         int jobId = 1;
         int employerAccountId = 1;
-        _jobQueryRepository.Setup(r => r.GetJobById(jobId, employerAccountId)).ReturnsAsync(jobEntity);
+        _jobQueryRepository.Setup(r => r.GetJobForEmployersById(jobId, employerAccountId)).ReturnsAsync(jobEntity);
         
         //Act
         var job = await _jobService.DeleteJob(jobId, employerAccountId);
@@ -98,7 +98,7 @@ public class JobServiceTests
         var jobEntity = JobFixtures.JobEntity;
         int jobId = 1;
         int employerAccountId = 2;
-        _jobQueryRepository.Setup(r => r.GetJobById(jobId, employerAccountId)).ReturnsAsync(jobEntity);
+        _jobQueryRepository.Setup(r => r.GetJobForEmployersById(jobId, employerAccountId)).ReturnsAsync(jobEntity);
         
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () => await _jobService.DeleteJob(jobId, employerAccountId));

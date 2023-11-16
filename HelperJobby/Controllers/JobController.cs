@@ -44,7 +44,7 @@ namespace HelperJobby.Controllers
         [HttpGet("{employerAccountId}/job/{jobId}")]
         public async Task<JobDTO> GetJobById(int jobId, int employerAccountId)
         {
-            return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobById(jobId, employerAccountId));
+            return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobForEmployersById(jobId, employerAccountId));
         }
 
         [HttpPost("{employerAccountId}/create-job/{jobCreationId}")]
