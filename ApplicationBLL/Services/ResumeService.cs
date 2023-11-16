@@ -1,3 +1,5 @@
+using ApplicationBLL.Interfaces;
+using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Models;
 
@@ -5,18 +7,31 @@ namespace ApplicationBLL.Services;
 
 public class ResumeService : IResumeService
 {
-    public Task<Resume> CreateResume(int userId, Resume resume)
+    private readonly ICurrentUserChecker _currentUserChecker;
+    private readonly IResumeQueryRepository _resumeQueryRepository;
+    private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+
+    public ResumeService(ICurrentUserChecker currentUserChecker, IResumeQueryRepository resumeQueryRepository, 
+        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository)
     {
-        throw new NotImplementedException();
+        _currentUserChecker = currentUserChecker;
+        _resumeQueryRepository = resumeQueryRepository;
+        _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
     }
 
-    public Task<Resume> UpdateResume(int userId, int resumeId, Resume resume)
+    public async Task<Resume> CreateResume(int userId, Resume resume)
     {
-        throw new NotImplementedException();
+        _currentUserChecker.IsCurrentUser(userId);
+        var jobSeekerAccount = await  _jobSeekerAccountQueryRepository.GetJobSeekerAccountByUserId(userId);
+        resume.JobSeekerAccountId = jobSeekerAccount.Id;
+        return resume;
     }
 
-    public Task<Resume> DeleteResume(int userId, int resumeId)
+
+    public async Task<Resume> DeleteResume(int userId, int resumeId)
     {
-        throw new NotImplementedException();
+        _currentUserChecker.IsCurrentUser(userId);
+        var resumeEntity = await _resumeQueryRepository.GetResumeById(resumeId);
+        return resumeEntity;
     }
 }
