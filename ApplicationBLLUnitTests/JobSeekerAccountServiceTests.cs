@@ -5,6 +5,7 @@ using ApplicationBLLUnitTests.Fixture;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Exceptions;
+using ApplicationDomain.Models;
 using Moq;
 
 namespace ApplicationBLLUnitTests;
@@ -14,15 +15,15 @@ public class JobSeekerAccountServiceTests
     private readonly JobSeekerAccountService _jobSeekerAccountService;
     private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerQueryRepositoryMock = new();
     private readonly Mock<IUserService> _userServiceMock = new();
-    private readonly Mock<IAddressChangeHandler> _addressChangeHandler = new();
     private readonly Mock<IJobQueryRepository> _jobQueryRepositoryMock = new();
     private readonly Mock<ICurrentUserChecker> _currentUserCheckerMock = new();
+    private readonly Mock<ISavedJobQueryRepository> _savedJobQueryRepositoryMock = new();
 
     public JobSeekerAccountServiceTests()
     {
         _jobSeekerAccountService =
             new JobSeekerAccountService(_jobSeekerQueryRepositoryMock.Object, _userServiceMock.Object,
-                _addressChangeHandler.Object, _jobQueryRepositoryMock.Object, _currentUserCheckerMock.Object);
+                _jobQueryRepositoryMock.Object, _currentUserCheckerMock.Object, _savedJobQueryRepositoryMock.Object);
     }
 
     [Fact]
@@ -117,7 +118,11 @@ public class JobSeekerAccountServiceTests
         });
         _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerAccountWithSavedJobs(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
-        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(jobEntity);
+        _savedJobQueryRepositoryMock.Setup(r => r.GetSavedJobByJobAndUserIds(jobId, userId)).ReturnsAsync(new SavedJob()
+        {
+            JobId = jobId,
+            JobSeekerAccountId = jobSeekerAccountEntity.Id
+        });
         //Act
         var savedJob = await _jobSeekerAccountService.RemoveJobFromSaved(jobId, userId);
         //Assert
@@ -137,7 +142,6 @@ public class JobSeekerAccountServiceTests
         });
         _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerAccountWithSavedJobs(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
-        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(jobEntity);
         //Act & Assert 
         await Assert.ThrowsAsync<JobSavingException>(async () =>  await _jobSeekerAccountService.RemoveJobFromSaved(jobId, userId));
     }

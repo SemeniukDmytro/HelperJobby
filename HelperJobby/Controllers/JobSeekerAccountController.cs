@@ -3,6 +3,7 @@ using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Account;
+using HelperJobby.DTOs.UserJobInteractions;
 using HelperJobby.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +18,14 @@ namespace HelperJobby.Controllers
     {
         private readonly IJobSeekerAccountService _jobSeekerAccountService;
         private readonly IJobSeekerAccountCommandRepository _jobSeekerAccountCommandRepository;
+        private readonly ISavedJobCommandRepository _savedJobCommandRepository;
         
         public JobSeekerAccountController(IJobSeekerAccountService jobSeekerAccountService,
-            IJobSeekerAccountCommandRepository jobSeekerAccountCommandRepository, IMapper mapper) : base(mapper)
+            IJobSeekerAccountCommandRepository jobSeekerAccountCommandRepository, IMapper mapper, ISavedJobCommandRepository savedJobCommandRepository) : base(mapper)
         {
             _jobSeekerAccountService = jobSeekerAccountService;
             _jobSeekerAccountCommandRepository = jobSeekerAccountCommandRepository;
+            _savedJobCommandRepository = savedJobCommandRepository;
         }
         
         [HttpGet]
@@ -43,15 +46,18 @@ namespace HelperJobby.Controllers
         }
         
         [HttpPost("save-job/{jobId}/{userId}")]
-        public Task SaveJob(int userId, int jobId)
+        public async Task<SavedJobDTO> SaveJob(int jobId, int userId)
         {
-            return null;
+            var savedJob = await _jobSeekerAccountService.SaveJob(jobId, userId);
+            savedJob = await _savedJobCommandRepository.CreateSavedJob(savedJob);
+            return _mapper.Map<SavedJobDTO>(savedJob);
         }
 
-        [HttpPost("delete-saved-job{jobId}/{userId}")]
-        public Task DeleteSavedJob(int userId, int jobId)
+        [HttpPost("delete-saved-job/{jobId}/{userId}")]
+        public async Task DeleteSavedJob(int jobId, int userId)
         {
-            return null;
+            var savedJob = await _jobSeekerAccountService.RemoveJobFromSaved(jobId, userId);
+            await _savedJobCommandRepository.DeleteSavedJob(savedJob);
         }
     }
 }

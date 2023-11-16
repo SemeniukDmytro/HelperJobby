@@ -40,13 +40,13 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IJobSeekerAccountService, JobSeekerAccountService>();
         serviceProvider.AddScoped<IJobSeekerAccountCommandRepository, JobSeekerAccountCommandRepository>();
         serviceProvider.AddScoped<IJobSeekerAccountQueryRepository, JobSeekerAccountQueryRepository>();
-        serviceProvider.AddScoped<IAddressCommandRepository, AddressCommandRepository>();
+        serviceProvider.AddScoped<ISavedJobCommandRepository, SavedJobCommandRepository>();
+        serviceProvider.AddScoped<ISavedJobQueryRepository, SavedJobQueryRepository>();
         
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());
         serviceProvider.AddScoped<IUserIdGetter>(provider => provider.GetService<CurrentUserIdProvider>());
         serviceProvider.AddSingleton<IPasswordHandler, PasswordHandler>();
-        serviceProvider.AddScoped<IAddressChangeHandler, AddressChangeHandler>();
         serviceProvider.AddScoped<ICurrentUserChecker, CurrentUserChecker>();
     }
 

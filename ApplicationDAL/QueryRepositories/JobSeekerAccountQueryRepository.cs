@@ -22,9 +22,11 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
         return jobSeekerAccount;
     }
 
-    public Task<JobSeekerAccount> GetJobSeekerAccountWithSavedJobs(int userId)
+    public async Task<JobSeekerAccount> GetJobSeekerAccountWithSavedJobs(int userId)
     {
-        throw new NotImplementedException();
+        var jobSeekerAccount = await GetUserWithJobSeekerAccount(userId, q => q.Include(u => u.JobSeekerAccount));
+        await _applicationContext.Entry(jobSeekerAccount).Collection(a => a.SavedJobs).LoadAsync();
+        return jobSeekerAccount;
     }
 
     public async Task<JobSeekerAccount> GetJobSeekerAccountWithAddress(int userId)

@@ -12,17 +12,17 @@ public class JobSeekerAccountService : IJobSeekerAccountService
     private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
     private readonly IUserService _userService;
     private readonly ICurrentUserChecker _currentUserChecker;
-    private readonly IAddressChangeHandler _addressChangeHandler;
     private readonly IJobQueryRepository _jobQueryRepository;
-
+    private readonly ISavedJobQueryRepository _savedJobQueryRepository;
+    
     public JobSeekerAccountService(IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IUserService userService, 
-        IAddressChangeHandler addressChangeHandler, IJobQueryRepository jobQueryRepository, ICurrentUserChecker currentUserChecker)
+        IJobQueryRepository jobQueryRepository, ICurrentUserChecker currentUserChecker, ISavedJobQueryRepository savedJobQueryRepository)
     {
         _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
         _userService = userService;
-        _addressChangeHandler = addressChangeHandler;
         _jobQueryRepository = jobQueryRepository;
         _currentUserChecker = currentUserChecker;
+        _savedJobQueryRepository = savedJobQueryRepository;
     }
 
     public async Task<JobSeekerAccount> UpdateJobSeekerAccount(int userId, JobSeekerAccount updatedAccount)
@@ -65,6 +65,7 @@ public class JobSeekerAccountService : IJobSeekerAccountService
     public async Task<SavedJob> SaveJob(int jobId, int userId)
     {
         _currentUserChecker.IsCurrentUser(userId);
+        var job = await _jobQueryRepository.GetJobById(jobId);
         var jobSeekerAccountAccountWithSavedJobs = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithSavedJobs(userId);
         bool jobAlreadySaved = jobSeekerAccountAccountWithSavedJobs.SavedJobs.Select(j => j.JobId).Contains(jobId);
         if (jobAlreadySaved)
@@ -74,7 +75,9 @@ public class JobSeekerAccountService : IJobSeekerAccountService
         var savedJob = new SavedJob()
         {
             JobId = jobId,
-            JobSeekerAccountId = jobSeekerAccountAccountWithSavedJobs.Id
+            JobSeekerAccountId = jobSeekerAccountAccountWithSavedJobs.Id,
+            Job = job,
+            JobSeekerAccount = jobSeekerAccountAccountWithSavedJobs
         };
         return savedJob;
     }
@@ -82,17 +85,13 @@ public class JobSeekerAccountService : IJobSeekerAccountService
     public async Task<SavedJob> RemoveJobFromSaved(int jobId, int userId)
     {
         _currentUserChecker.IsCurrentUser(userId);
+        var savedJob = await _savedJobQueryRepository.GetSavedJobByJobAndUserIds(jobId, userId);
         var jobSeekerAccountAccountWithSavedJobs = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithSavedJobs(userId);
         bool jobNotSaved = !jobSeekerAccountAccountWithSavedJobs.SavedJobs.Select(j => j.JobId).Contains(jobId);
         if (jobNotSaved)
         {
             throw new JobSavingException("This job doesn't saved");
         }
-        var savedJob = new SavedJob()
-        {
-            JobId = jobId,
-            JobSeekerAccountId = jobSeekerAccountAccountWithSavedJobs.Id
-        };
         return savedJob;
     }
 }
