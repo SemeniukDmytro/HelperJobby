@@ -1,4 +1,5 @@
 using ApplicationDomain.Absraction.ICommandRepositories;
+using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Models;
 using AutoMapper;
@@ -19,19 +20,25 @@ namespace HelperJobby.Controllers
         private readonly IJobSeekerAccountService _jobSeekerAccountService;
         private readonly IJobSeekerAccountCommandRepository _jobSeekerAccountCommandRepository;
         private readonly ISavedJobCommandRepository _savedJobCommandRepository;
+        private readonly IUserService _userService;
+        private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
         
         public JobSeekerAccountController(IJobSeekerAccountService jobSeekerAccountService,
-            IJobSeekerAccountCommandRepository jobSeekerAccountCommandRepository, IMapper mapper, ISavedJobCommandRepository savedJobCommandRepository) : base(mapper)
+            IJobSeekerAccountCommandRepository jobSeekerAccountCommandRepository, IMapper mapper, ISavedJobCommandRepository savedJobCommandRepository, IUserService userService, IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository) : base(mapper)
         {
             _jobSeekerAccountService = jobSeekerAccountService;
             _jobSeekerAccountCommandRepository = jobSeekerAccountCommandRepository;
             _savedJobCommandRepository = savedJobCommandRepository;
+            _userService = userService;
+            _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
         }
         
         [HttpGet]
-        public Task<JobSeekerAccountDTO> GetCurrentUserAccount()
+        public async Task<JobSeekerAccountDTO> GetCurrentUserAccount()
         {
-            return null;
+            var jobSeekerAccount =
+              await  _jobSeekerAccountQueryRepository.GetJobSeekerAccountByUserId(_userService.GetCurrentUserId());
+            return _mapper.Map<JobSeekerAccountDTO>(jobSeekerAccount);
         }
 
         [HttpPut("{userId}")]

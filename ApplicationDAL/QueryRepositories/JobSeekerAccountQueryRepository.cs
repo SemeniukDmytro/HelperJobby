@@ -22,6 +22,12 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
         return jobSeekerAccount;
     }
 
+    public async Task<JobSeekerAccount> GetJobSeekerAccountWithResume(int userId)
+    {
+        return await GetUserWithJobSeekerAccount(userId, q => q.Include(u => u.JobSeekerAccount)
+            .ThenInclude(a => a.Resume));
+    }
+
     public async Task<JobSeekerAccount> GetJobSeekerAccountWithSavedJobs(int userId)
     {
         var jobSeekerAccount = await GetUserWithJobSeekerAccount(userId, q => q.Include(u => u.JobSeekerAccount));
