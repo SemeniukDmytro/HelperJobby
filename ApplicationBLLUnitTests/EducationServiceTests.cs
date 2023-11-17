@@ -15,13 +15,12 @@ public class EducationServiceTests
     private readonly Mock<ICurrentUserChecker> _currentUserCheckerMock = new();
     private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<IEducationQueryRepository> _educationQueryRepositoryMock = new();
-    private readonly Mock<IResumeQueryRepository> _resumeQueryRepositoryMock = new();
     private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
 
     public EducationServiceTests()
     {
         _educationService = new EducationService(_currentUserCheckerMock.Object, _educationQueryRepositoryMock.Object,
-            _jobSeekerAccountRepository.Object, _userServiceMock.Object, _resumeQueryRepositoryMock.Object);
+            _jobSeekerAccountRepository.Object, _userServiceMock.Object);
     }
 
     [Fact]

@@ -11,17 +11,15 @@ public class EducationService : IEducationService
     private readonly ICurrentUserChecker _currentUserChecker;
     private readonly IUserService _userService;
     private readonly IEducationQueryRepository _educationQueryRepository;
-    private readonly IResumeQueryRepository _resumeQueryRepository;
     private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
 
     public EducationService(ICurrentUserChecker currentUserChecker, IEducationQueryRepository educationQueryRepository,
-        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IUserService userService, IResumeQueryRepository resumeQueryRepository)
+        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IUserService userService)
     {
         _currentUserChecker = currentUserChecker;
         _educationQueryRepository = educationQueryRepository;
         _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
         _userService = userService;
-        _resumeQueryRepository = resumeQueryRepository;
     }
 
     public async Task<Education> AddEducation(int resumeId, Education education)
