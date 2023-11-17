@@ -1,3 +1,4 @@
+using ApplicationDAL.Context;
 using ApplicationDomain.Absraction.ICommandRepositories;
 using ApplicationDomain.Models;
 
@@ -5,13 +6,23 @@ namespace ApplicationDAL.CommandRepositories;
 
 public class SkillCommandRepository : ISkillCommandRepository
 {
-    public Task<Skill> CreateSkill(Skill skill)
+    private readonly ApplicationContext _applicationContext;
+
+    public SkillCommandRepository(ApplicationContext applicationContext)
     {
-        throw new NotImplementedException();
+        _applicationContext = applicationContext;
     }
 
-    public Task DeleteSkill(Skill skill)
+    public async Task<Skill> CreateSkill(Skill skill)
     {
-        throw new NotImplementedException();
+        _applicationContext.Skills.Add(skill);
+        await _applicationContext.SaveChangesAsync();
+        return skill;
+    }
+
+    public async Task DeleteSkill(Skill skill)
+    {
+        _applicationContext.Skills.Remove(skill);
+        await _applicationContext.SaveChangesAsync();
     }
 }

@@ -1,17 +1,44 @@
+using ApplicationBLL.Interfaces;
+using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 
 namespace ApplicationBLL.Services;
 
 public class SkillService : ISkillService
 {
-    public Task<Skill> AddSkill(int resumeId, Skill skill)
+    private readonly ICurrentUserChecker _currentUserChecker;
+    private readonly IUserService _userService;
+    private readonly ISkillQueryRepository _skillQueryRepository;
+    private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+
+    public SkillService(IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, ISkillQueryRepository skillQueryRepository,
+        IUserService userService, ICurrentUserChecker currentUserChecker)
     {
-        throw new NotImplementedException();
+        _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
+        _skillQueryRepository = skillQueryRepository;
+        _userService = userService;
+        _currentUserChecker = currentUserChecker;
     }
 
-    public Task DeleteSkill(int skillId, int userId)
+    public async Task<Skill> AddSkill(int resumeId, Skill skill)
     {
-        throw new NotImplementedException();
+        var currentUserId = _userService.GetCurrentUserId();
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
+        if (jobSeekerAccount.Resume.Id != resumeId)
+        {
+            throw new ForbiddenException();
+        }
+
+        skill.ResumeId = resumeId;
+        return skill;
+    }
+
+    public async Task<Skill> DeleteSkill(int skillId, int userId)
+    {
+        _currentUserChecker.IsCurrentUser(userId);
+        var skillEntity = await _skillQueryRepository.GetSkillById(skillId);
+        return skillEntity;
     }
 }
