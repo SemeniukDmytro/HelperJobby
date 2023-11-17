@@ -1,0 +1,8 @@
+namespace HelperJobby.DTOs.Resume;
+
+public class CreateResumeDTO
+{
+    public List<CreateEducationDTO> Educations { get; set; }
+    public List<CreateWorkExperienceDTO> WorkExperiences { get; set; }
+    public List<CreateSkillDTO> Skills { get; set; }
+}

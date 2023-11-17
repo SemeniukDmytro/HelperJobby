@@ -16,5 +16,6 @@ public class EducationProfile : Profile
         {
             dest.Resume = context.Mapper.Map<ResumeDTO, Resume>(src.Resume);
         });
+        CreateMap<CreateEducationDTO, Education>();
     }
 }

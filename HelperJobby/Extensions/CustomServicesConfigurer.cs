@@ -9,6 +9,7 @@ using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
 using ApplicationDomain.Models;
 using FluentValidation;
+using HelperJobby.DTOs.Resume;
 using HelperJobby.DTOs.User;
 using HelperJobby.Validators;
 
@@ -42,6 +43,12 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IJobSeekerAccountQueryRepository, JobSeekerAccountQueryRepository>();
         serviceProvider.AddScoped<ISavedJobCommandRepository, SavedJobCommandRepository>();
         serviceProvider.AddScoped<ISavedJobQueryRepository, SavedJobQueryRepository>();
+        serviceProvider.AddScoped<IResumeService, ResumeService>();
+        serviceProvider.AddScoped<IResumeCommandRepository, ResumeCommandRepository>();
+        serviceProvider.AddScoped<IResumeQueryRepository, ResumeQueryRepository>();
+        serviceProvider.AddScoped<IEducationService, EducationService>();
+        serviceProvider.AddScoped<IEducationCommandRepository, EducationCommandRepository>();
+        serviceProvider.AddScoped<IEducationQueryRepository, EducationQueryRepository>();
         
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());

@@ -28,7 +28,7 @@ public class ResumeService : IResumeService
     }
 
 
-    public async Task<Resume> DeleteResume(int userId, int resumeId)
+    public async Task<Resume> DeleteResume(int resumeId, int userId)
     {
         _currentUserChecker.IsCurrentUser(userId);
         var resumeEntity = await _resumeQueryRepository.GetResumeById(resumeId);

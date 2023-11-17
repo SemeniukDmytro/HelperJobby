@@ -1,5 +1,6 @@
 using ApplicationDomain.Models;
 using AutoMapper;
+using HelperJobby.DTOs.Resume;
 using EducationDTO = HelperJobby.DTOs.Resume.EducationDTO;
 using ResumeDTO = HelperJobby.DTOs.Resume.ResumeDTO;
 using SkillDTO = HelperJobby.DTOs.Resume.SkillDTO;
@@ -18,5 +19,6 @@ public class SkillProfile : Profile
         {
             dest.Resume = context.Mapper.Map<ResumeDTO, Resume>(src.Resume);
         });
+        CreateMap<CreateSkillDTO, Skill>();
     }
 }

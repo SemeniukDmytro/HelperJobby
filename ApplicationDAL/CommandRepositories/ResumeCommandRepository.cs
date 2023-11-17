@@ -1,3 +1,4 @@
+using ApplicationDAL.Context;
 using ApplicationDomain.Absraction.ICommandRepositories;
 using ApplicationDomain.Models;
 
@@ -5,18 +6,23 @@ namespace ApplicationDAL.CommandRepositories;
 
 public class ResumeCommandRepository : IResumeCommandRepository
 {
-    public Task<Resume> CreateResume(Resume resume)
+    private readonly ApplicationContext _applicationContext;
+
+    public ResumeCommandRepository(ApplicationContext applicationContext)
     {
-        throw new NotImplementedException();
+        _applicationContext = applicationContext;
     }
 
-    public Task<Resume> UpdateResume(Resume resume)
+    public async Task<Resume> CreateResume(Resume resume)
     {
-        throw new NotImplementedException();
+        _applicationContext.Resumes.Add(resume);
+        await _applicationContext.SaveChangesAsync();
+        return resume;
     }
 
-    public Task DeleteResume(Resume resume)
+    public async Task DeleteResume(Resume resume)
     {
-        throw new NotImplementedException();
+        _applicationContext.Resumes.Remove(resume);
+        await _applicationContext.SaveChangesAsync();
     }
 }
