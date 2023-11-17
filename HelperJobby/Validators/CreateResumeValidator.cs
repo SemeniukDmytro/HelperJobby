@@ -25,7 +25,7 @@ public class CreateResumeValidator : AbstractValidator<CreateResumeDTO>
         }
 
         resume.Educations.ForEach(CreateEducationDTOValidator.ValidateCreatedEducation);
-        resume.WorkExperiences.ForEach(CreateWorkExperienceDTOValidator.ValidateCreatedWorkExperience);
+        resume.WorkExperiences.ForEach(CreateUpdateWorkExperienceDTOValidator.ValidateCreatedWorkExperience);
         resume.Skills.ForEach(CreateSkillDTOValidator.ValidateCreatedSkill);
     }
 }

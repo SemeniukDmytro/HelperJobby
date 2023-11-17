@@ -21,9 +21,9 @@ public class WorkExperience
     public string CityOrProvince { get; set; }
 
     [Required]
-    public DateTime From { get; set; }
+    public DateOnly From { get; set; }
 
-    public DateTime? To { get; set; }
+    public DateOnly? To { get; set; }
 
     public bool CurrentlyWorkHere { get; set; }
 

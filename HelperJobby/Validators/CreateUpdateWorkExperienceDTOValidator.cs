@@ -4,18 +4,18 @@ using HelperJobby.DTOs.Resume;
 
 namespace HelperJobby.Validators;
 
-public class CreateWorkExperienceDTOValidator : AbstractValidator<CreateWorkExperienceDTO>
+public class CreateUpdateWorkExperienceDTOValidator : AbstractValidator<CreateWorkExperienceDTO>
 {
-    public CreateWorkExperienceDTOValidator()
+    public CreateUpdateWorkExperienceDTOValidator()
     {
         RuleFor(we => we.JobTitle).Cascade(FluentValidation.CascadeMode.Stop)
             .NotEmpty().WithMessage("You can not provide an empty job title")
-            .MaximumLength(30).WithMessage("Maximum length of job title field exceeded");
+            .MaximumLength(100).WithMessage("Maximum length of job title field exceeded");
     }
     
     public static void ValidateCreatedWorkExperience(CreateWorkExperienceDTO workExperience)
     {
-        var validator = new CreateWorkExperienceDTOValidator();
+        var validator = new CreateUpdateWorkExperienceDTOValidator();
         var validationResult = validator.Validate(workExperience);
 
         if (!validationResult.IsValid)

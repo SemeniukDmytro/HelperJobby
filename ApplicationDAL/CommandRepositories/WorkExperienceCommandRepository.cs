@@ -1,3 +1,4 @@
+using ApplicationDAL.Context;
 using ApplicationDomain.Absraction.ICommandRepositories;
 using ApplicationDomain.Models;
 
@@ -5,18 +6,30 @@ namespace ApplicationDAL.CommandRepositories;
 
 public class WorkExperienceCommandRepository : IWorkExperienceCommandRepository
 {
-    public Task<WorkExperience> Create(WorkExperience workExperience)
+    private readonly ApplicationContext _applicationContext;
+
+    public WorkExperienceCommandRepository(ApplicationContext applicationContext)
     {
-        throw new NotImplementedException();
+        _applicationContext = applicationContext;
     }
 
-    public Task<WorkExperience> Update(WorkExperience workExperience)
+    public async Task<WorkExperience> Create(WorkExperience workExperience)
     {
-        throw new NotImplementedException();
+        _applicationContext.WorkExperiences.Add(workExperience);
+        await _applicationContext.SaveChangesAsync();
+        return workExperience;    
     }
 
-    public Task Delete(WorkExperience workExperience)
+    public async Task<WorkExperience> Update(WorkExperience workExperience)
     {
-        throw new NotImplementedException();
+        _applicationContext.WorkExperiences.Update(workExperience);
+        await _applicationContext.SaveChangesAsync();
+        return workExperience;
+    }
+
+    public async Task Delete(WorkExperience workExperience)
+    {
+        _applicationContext.WorkExperiences.Remove(workExperience);
+        await _applicationContext.SaveChangesAsync();
     }
 }

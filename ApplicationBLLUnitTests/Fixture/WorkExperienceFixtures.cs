@@ -10,8 +10,8 @@ public static class WorkExperienceFixtures
         Company = "ABC Inc.",
         Country = "United States",
         CityOrProvince = "New York",
-        From = new DateTime(2020, 1, 1),
-        To = new DateTime(2022, 12, 31),
+        From = new DateOnly(2020, 1, 1),
+        To = new DateOnly(2022, 12, 31),
         CurrentlyWorkHere = false,
         Description = "Worked as a software developer on various projects."
     };
@@ -22,8 +22,8 @@ public static class WorkExperienceFixtures
         Company = "ABC Inc.",
         Country = "United States",
         CityOrProvince = "Los Angeles",
-        From = new DateTime(2020, 1, 1),
-        To = new DateTime(2022, 12, 31),
+        From = new DateOnly(2020, 1, 1),
+        To = new DateOnly(2022, 12, 31),
         CurrentlyWorkHere = false,
         Description = "Worked as a software developer on various projects."
     };
@@ -35,8 +35,8 @@ public static class WorkExperienceFixtures
         Company = "ABC Inc.",
         Country = "United States",
         CityOrProvince = "New York",
-        From = new DateTime(2020, 1, 1),
-        To = new DateTime(2022, 12, 31),
+        From = new DateOnly(2020, 1, 1),
+        To = new DateOnly(2022, 12, 31),
         CurrentlyWorkHere = false,
         Description = "Worked as a software developer on various projects.",
         ResumeId = 1
