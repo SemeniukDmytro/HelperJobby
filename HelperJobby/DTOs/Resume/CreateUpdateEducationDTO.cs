@@ -1,6 +1,6 @@
 namespace HelperJobby.DTOs.Resume;
 
-public class CreateEducationDTO
+public class CreateUpdateEducationDTO
 {
     public string LevelOfEducation { get; set; }
     public string FieldOfStudy { get; set; }

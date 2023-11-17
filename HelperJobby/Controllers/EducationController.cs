@@ -1,5 +1,10 @@
+using ApplicationDomain.Absraction.ICommandRepositories;
+using ApplicationDomain.Absraction.IQueryRepositories;
+using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Resume;
+using HelperJobby.Validators;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
@@ -8,35 +13,54 @@ namespace HelperJobby.Controllers
     [ApiController]
     public class EducationController : ExtendedBaseController
     {
-        public EducationController(IMapper mapper) : base(mapper)
+        private readonly IEducationQueryRepository _educationQueryRepository;
+        private readonly IEducationCommandRepository _educationCommandRepository;
+        private readonly IEducationService _educationService;
+        
+        public EducationController(IMapper mapper, IEducationService educationService, 
+            IEducationCommandRepository educationCommandRepository, IEducationQueryRepository educationQueryRepository) : base(mapper)
         {
+            _educationService = educationService;
+            _educationCommandRepository = educationCommandRepository;
+            _educationQueryRepository = educationQueryRepository;
         }
         
         // GET: api/Education/5
-        [HttpGet("{id}")]
-        public async Task<EducationDTO> Get(int id)
+        [HttpGet("{educationId}")]
+        public async Task<EducationDTO> Get(int educationId)
         {
-            return null;
+            var education = await _educationQueryRepository.GetEducationById(educationId);
+            return _mapper.Map<EducationDTO>(education);
         }
 
         // POST: api/Education
-        [HttpPost]
-        public async Task<EducationDTO> Post(int resumeId, int userId, [FromBody] EducationDTO value)
+        [HttpPost("{resumeId}")]
+        public async Task<EducationDTO> Post(int resumeId, [FromBody] CreateUpdateEducationDTO createEducationDto)
         {
-            return null;
+            CreateEducationDTOValidator.ValidateCreatedEducation(createEducationDto);
+            var education = _mapper.Map<Education>(createEducationDto);
+            education = await _educationService.AddEducation(resumeId, education);
+            education = await _educationCommandRepository.Create(education);
+            return _mapper.Map<EducationDTO>(education);
         }
 
         // PUT: api/Education/5
-        [HttpPut("{id}")]
-        public async Task<EducationDTO> Put(int id, [FromBody] EducationDTO value)
+        [HttpPut("{educationId}/user/{userId}")]
+        public async Task<EducationDTO> Put(int educationId, int userId, [FromBody] CreateUpdateEducationDTO updateEducationDto)
         {
-            return null;
+            CreateEducationDTOValidator.ValidateCreatedEducation(updateEducationDto);
+            var education = _mapper.Map<Education>(updateEducationDto);
+            education = await _educationService.UpdateEducation(educationId, userId, education);
+            education = await _educationCommandRepository.Update(education);
+            return _mapper.Map<EducationDTO>(education);
         }
 
         // DELETE: api/Education/5
-        [HttpDelete("{id}")]
-        public async Task Delete(int id, int userId)
+        [HttpDelete("{educationId}/user/{userId}")]
+        public async Task Delete(int educationId, int userId)
         {
+             var education = await _educationService.Delete(educationId, userId);
+             await _educationCommandRepository.Delete(education);
         }
 
        

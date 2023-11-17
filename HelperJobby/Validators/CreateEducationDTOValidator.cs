@@ -4,7 +4,7 @@ using HelperJobby.DTOs.Resume;
 
 namespace HelperJobby.Validators;
 
-public class CreateEducationDTOValidator : AbstractValidator<CreateEducationDTO>
+public class CreateEducationDTOValidator : AbstractValidator<CreateUpdateEducationDTO>
 {
     public CreateEducationDTOValidator()
     {
@@ -13,10 +13,10 @@ public class CreateEducationDTOValidator : AbstractValidator<CreateEducationDTO>
             .MaximumLength(30).WithMessage("Maximum length of level of education field exceeded");
     }
     
-    public static void ValidateCreatedEducation(CreateEducationDTO education)
+    public static void ValidateCreatedEducation(CreateUpdateEducationDTO updateEducation)
     {
         var validator = new CreateEducationDTOValidator();
-        var validationResult = validator.Validate(education);
+        var validationResult = validator.Validate(updateEducation);
 
         if (!validationResult.IsValid)
         {

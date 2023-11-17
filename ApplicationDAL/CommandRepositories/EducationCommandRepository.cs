@@ -1,3 +1,4 @@
+using ApplicationDAL.Context;
 using ApplicationDomain.Absraction.ICommandRepositories;
 using ApplicationDomain.Models;
 
@@ -5,18 +6,30 @@ namespace ApplicationDAL.CommandRepositories;
 
 public class EducationCommandRepository : IEducationCommandRepository
 {
-    public Task<Education> Create(Education education)
+    private readonly ApplicationContext _applicationContext;
+
+    public EducationCommandRepository(ApplicationContext applicationContext)
     {
-        throw new NotImplementedException();
+        _applicationContext = applicationContext;
     }
 
-    public Task<Education> Update(Education education)
+    public async Task<Education> Create(Education education)
     {
-        throw new NotImplementedException();
+        _applicationContext.Educations.Add(education);
+        await _applicationContext.SaveChangesAsync();
+        return education;
     }
 
-    public Task Delete(Education education)
+    public async Task<Education> Update(Education education)
     {
-        throw new NotImplementedException();
+        _applicationContext.Educations.Update(education);
+        await _applicationContext.SaveChangesAsync();
+        return education;
+    }
+
+    public async Task Delete(Education education)
+    {
+        _applicationContext.Educations.Remove(education);
+        await _applicationContext.SaveChangesAsync();
     }
 }
