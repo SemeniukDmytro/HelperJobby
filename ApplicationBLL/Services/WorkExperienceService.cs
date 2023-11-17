@@ -1,6 +1,7 @@
 using ApplicationBLL.Interfaces;
 using ApplicationDomain.Absraction.IQueryRepositories;
 using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 
 namespace ApplicationBLL.Services;
@@ -21,18 +22,44 @@ public class WorkExperienceService : IWorkExperienceService
         _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
     }
 
-    public Task<WorkExperience> AddEducation(int resumeId, WorkExperience education)
+    public async Task<WorkExperience> AddWorkExperience(int resumeId, WorkExperience workExperience)
     {
-        throw new NotImplementedException();
+        var currentUserId = _userService.GetCurrentUserId();
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
+        if (jobSeekerAccount.Resume.Id != resumeId)
+        {
+            throw new ForbiddenException();
+        }
+
+        workExperience.ResumeId = resumeId;
+        return workExperience;
     }
 
-    public Task<WorkExperience> UpdateEducation(int workExperienceId, int userId, WorkExperience updatedEducation)
+    public async Task<WorkExperience> UpdateWorkExperience(int workExperienceId, int userId, WorkExperience updatedWorkExperience)
     {
-        throw new NotImplementedException();
+        _currentUserChecker.IsCurrentUser(userId);
+        var workExperienceEntity = await _workExperienceQueryRepository.GetWorkExperienceById(workExperienceId);
+        workExperienceEntity = UpdateWorkExperience(workExperienceEntity, updatedWorkExperience);
+        return workExperienceEntity;
     }
 
-    public Task<WorkExperience> Delete(int workExperienceId, int userId)
+    private WorkExperience UpdateWorkExperience(WorkExperience workExperienceEntity, WorkExperience updatedWorkExperience)
     {
-        throw new NotImplementedException();
+        workExperienceEntity.From = updatedWorkExperience.From;
+        workExperienceEntity.To = updatedWorkExperience.To;
+        workExperienceEntity.Country = updatedWorkExperience.Country;
+        workExperienceEntity.Company = updatedWorkExperience.Company;
+        workExperienceEntity.Description = updatedWorkExperience.Description;
+        workExperienceEntity.CityOrProvince = updatedWorkExperience.CityOrProvince;
+        workExperienceEntity.JobTitle = updatedWorkExperience.JobTitle;
+        workExperienceEntity.CurrentlyWorkHere = updatedWorkExperience.CurrentlyWorkHere;
+        return workExperienceEntity;
+    }
+    
+    public async Task<WorkExperience> Delete(int workExperienceId, int userId)
+    {
+        _currentUserChecker.IsCurrentUser(userId);
+        var educationEntity = await _workExperienceQueryRepository.GetWorkExperienceById(workExperienceId);
+        return educationEntity;
     }
 }

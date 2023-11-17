@@ -4,7 +4,7 @@ namespace ApplicationDomain.Absraction.IServices;
 
 public interface IWorkExperienceService
 {
-    public Task<WorkExperience> AddEducation(int resumeId, WorkExperience education);
-    public Task<WorkExperience> UpdateEducation(int workExperienceId, int userId, WorkExperience updatedEducation);
+    public Task<WorkExperience> AddWorkExperience(int resumeId, WorkExperience workExperience);
+    public Task<WorkExperience> UpdateWorkExperience(int workExperienceId, int userId, WorkExperience updatedWorkExperience);
     public Task<WorkExperience> Delete(int workExperienceId, int userId);
 }
