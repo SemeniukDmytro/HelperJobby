@@ -43,6 +43,13 @@ public class EmployerAccountQueryRepository : IEmployerAccountQueryRepository
         );
     }
 
+    public async Task<EmployerAccount> GetEmployerWithJobs(int userId)
+    {
+        var employerAccount = await GetUserWithEmployerAccount(userId);
+        await _applicationContext.Entry(employerAccount).Collection(e => e.Jobs).LoadAsync();
+        return employerAccount;
+    }
+
     private async Task<EmployerAccount> GetUserWithEmployerAccount(int userId, Func<IQueryable<User>, IQueryable<User>> includeFunc = null)
     {
         var query = _applicationContext.Users.AsQueryable();

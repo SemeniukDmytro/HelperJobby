@@ -40,6 +40,14 @@ public static class JobSeekerAccountFixture
                 JobId = 2,
                 JobSeekerAccountId = 1
             }
+        },
+        Interviews = new List<Interview>()
+        {
+            new Interview()
+            {
+                JobId = 1,
+                JobSeekerAccountId = 1
+            }
         }
     };
     
