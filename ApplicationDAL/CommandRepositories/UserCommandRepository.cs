@@ -1,5 +1,5 @@
 using ApplicationDAL.Context;
-using ApplicationDomain.Absraction.ICommandRepositories;
+using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Models;
 
 namespace ApplicationDAL.CommandRepositories;

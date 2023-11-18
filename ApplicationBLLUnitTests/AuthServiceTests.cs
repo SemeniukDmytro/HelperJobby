@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using ApplicationBLL.Services;
-using ApplicationDomain.Absraction.IQueryRepositories;
-using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Abstraction.IQueryRepositories;
+using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Microsoft.Extensions.Configuration;

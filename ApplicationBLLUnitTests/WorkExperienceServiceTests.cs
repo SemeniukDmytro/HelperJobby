@@ -1,8 +1,8 @@
 using ApplicationBLL.Interfaces;
 using ApplicationBLL.Services;
 using ApplicationBLLUnitTests.Fixture;
-using ApplicationDomain.Absraction.IQueryRepositories;
-using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Abstraction.IQueryRepositories;
+using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
 using Moq;
 

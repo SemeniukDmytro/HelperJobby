@@ -1,5 +1,5 @@
 using ApplicationBLL.Interfaces;
-using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
 
 namespace ApplicationBLL.Logic;

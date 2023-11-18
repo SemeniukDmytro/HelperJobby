@@ -17,35 +17,28 @@ namespace HelperJobby.Controllers
         }
         
         [HttpGet("job/{id}/job-aplies")]
-        public Task<IEnumerable<JobApplyDTO>> GetUserJobAppliesForOffer(int jobId)
+        public Task<IEnumerable<JobApplyDTO>> GetUserJobAppliesByJobId(int jobId)
         {
             return null;
         }
 
         // GET: api/JobApply/5
-        [HttpGet("{id}")]
-        public Task<JobApplyDTO> Get(int id)
+        [HttpGet("{jobId}/job-seeker/{jobSeekerId}")]
+        public Task<JobApplyDTO> GetJobApplyByJobSeekerIdAndJobId(int jobId, int jobSeekerId)
         {
             return null;
         }
 
         // POST: api/JobApply
-        [HttpPost]
-        public Task<JobApplyDTO> Post([FromBody] JobApplyDTO value)
-        {
-            return null;
-        }
-
-        // PUT: api/JobApply/5
-        [HttpPut("{id}")]
-        public Task<JobApplyDTO> Put(int id, [FromBody] JobApplyDTO value)
+        [HttpPost("{jobId}/user/{userId}")]
+        public Task<JobApplyDTO> Post(int userId, int jobId)
         {
             return null;
         }
 
         // DELETE: api/JobApply/5
-        [HttpDelete("{id}")]
-        public Task Delete(int id)
+        [HttpDelete("{jobId}/jobSeeker/{jobSeekerId}")]
+        public Task Delete(int jobId, int jobSeekerId)
         {
             return null;
         }

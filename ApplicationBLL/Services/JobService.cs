@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using ApplicationBLL.Logic;
-using ApplicationDomain.Absraction.ICommandRepositories;
-using ApplicationDomain.Absraction.IQueryRepositories;
-using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Abstraction.ICommandRepositories;
+using ApplicationDomain.Abstraction.IQueryRepositories;
+using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 

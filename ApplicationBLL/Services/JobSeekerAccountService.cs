@@ -1,7 +1,7 @@
 using ApplicationBLL.Interfaces;
 using ApplicationBLL.Logic;
-using ApplicationDomain.Absraction.IQueryRepositories;
-using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Abstraction.IQueryRepositories;
+using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 

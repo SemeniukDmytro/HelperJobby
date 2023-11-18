@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using ApplicationDAL.Context;
-using ApplicationDomain.Absraction.IQueryRepositories;
+using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Microsoft.EntityFrameworkCore;

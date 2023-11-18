@@ -1,7 +1,7 @@
 using ApplicationBLL.Interfaces;
 using ApplicationBLL.Services;
-using ApplicationDomain.Absraction.ICommandRepositories;
-using ApplicationDomain.Absraction.IQueryRepositories;
+using ApplicationDomain.Abstraction.ICommandRepositories;
+using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Moq;

@@ -1,6 +1,6 @@
-using ApplicationDomain.Absraction.ICommandRepositories;
-using ApplicationDomain.Absraction.IQueryRepositories;
-using ApplicationDomain.Absraction.IServices;
+using ApplicationDomain.Abstraction.ICommandRepositories;
+using ApplicationDomain.Abstraction.IQueryRepositories;
+using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Resume;
