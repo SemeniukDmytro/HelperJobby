@@ -1,4 +1,5 @@
 using ApplicationBLL.Services;
+using ApplicationBLLUnitTests.Fixture;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Enums;
@@ -63,7 +64,7 @@ public class CurrentJobCreationServiceTests
         _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccountWithCurrentJobCreation(userId))
             .ReturnsAsync(new EmployerAccount()
             {
-                Id = 2,
+                Id = 1,
                 CurrentJobCreation = new CurrentJobCreation()
                 {
                 JobTitle = "new Job",
@@ -89,7 +90,9 @@ public class CurrentJobCreationServiceTests
         var jobId = 1;
         var employerAccountId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId, employerAccountId))
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId)).ReturnsAsync(
+            EmployerAccountFixtures.EmployerAccountEntity);
+        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId))
             .ReturnsAsync(new CurrentJobCreation()
             {
                 Id = jobId,
@@ -100,7 +103,7 @@ public class CurrentJobCreationServiceTests
                 EmployerAccountId = employerAccountId
             });
         //Act
-        var job = await _currentJobCreationService.UpdateCurrentJob(jobId, employerAccountId, newJob);
+        var job = await _currentJobCreationService.UpdateCurrentJob(jobId, newJob);
         //Assert
         Assert.Equal("new Job", job.JobTitle);
         Assert.Equal(newJob.Salary, job.Salary);
@@ -121,7 +124,9 @@ public class CurrentJobCreationServiceTests
         var jobId = 1;
         var employerAccountId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId, employerAccountId))
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId)).ReturnsAsync(
+            EmployerAccountFixtures.EmployerAccountEntity);
+        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId))
             .ReturnsAsync(new CurrentJobCreation()
             {
                 Id = jobId,
@@ -133,7 +138,7 @@ public class CurrentJobCreationServiceTests
             });
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
-            await _currentJobCreationService.UpdateCurrentJob(jobId, employerAccountId, newJob));
+            await _currentJobCreationService.UpdateCurrentJob(jobId, newJob));
     }
 
     [Fact]
@@ -141,21 +146,24 @@ public class CurrentJobCreationServiceTests
     {
         //Arrange
         int jobId = 1;
-        int employerAccountId = 1;
-        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId, employerAccountId)).ReturnsAsync(
+        int userId = 1;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId)).ReturnsAsync(
+            EmployerAccountFixtures.EmployerAccountEntity);
+        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId)).ReturnsAsync(
             new CurrentJobCreation()
             {
                 Id = jobId,
                 JobTitle = "Test",
-                EmployerAccountId = employerAccountId
+                EmployerAccountId = 1
             });
         
         //Act
-        var job = await _currentJobCreationService.DeleteCurrentJob(jobId, employerAccountId);
+        var job = await _currentJobCreationService.DeleteCurrentJob(jobId);
         //Assert
         Assert.Equal("Test", job.JobTitle);
         Assert.Equal(jobId, job.Id);
-        Assert.Equal(employerAccountId, job.EmployerAccountId);
+        Assert.Equal(1, job.EmployerAccountId);
     }
     
     [Fact]
@@ -163,8 +171,11 @@ public class CurrentJobCreationServiceTests
     {
         //Arrange
         int jobId = 1;
-        int employerAccountId = 1;
-        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId, employerAccountId)).ReturnsAsync(
+        int userId = 1;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId)).ReturnsAsync(
+            EmployerAccountFixtures.EmployerAccountEntity);
+        _currentJobCreationQueryRepository.Setup(r => r.GetJobCreationById(jobId)).ReturnsAsync(
             new CurrentJobCreation()
             {
                 Id = jobId,
@@ -174,6 +185,6 @@ public class CurrentJobCreationServiceTests
         
         //Act
         //Assert
-        await Assert.ThrowsAsync<ForbiddenException>(async () => await _currentJobCreationService.DeleteCurrentJob(jobId, employerAccountId));
+        await Assert.ThrowsAsync<ForbiddenException>(async () => await _currentJobCreationService.DeleteCurrentJob(jobId));
     }
 }

@@ -47,11 +47,11 @@ namespace HelperJobby.Controllers
             return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobForEmployersById(jobId, employerAccountId));
         }
 
-        [HttpPost("{employerAccountId}/create-job/{jobCreationId}")]
-        public async Task<JobDTO> CreateJob(int employerAccountId, int jobCreationId)
+        [HttpPost("/create-job/{jobCreationId}")]
+        public async Task<JobDTO> CreateJob(int jobCreationId)
         {
             var currentJobToCreate =
-                await _currentJobCreationQueryRepository.GetJobCreationById(jobCreationId, employerAccountId);
+                await _currentJobCreationQueryRepository.GetJobCreationById(jobCreationId);
             var createdJob = await _jobService.CreateJob(_mapper.Map<Job>(currentJobToCreate));
             createdJob = await _jobCommandRepository.CreateJob(currentJobToCreate, createdJob);
             return _mapper.Map<JobDTO>(createdJob);

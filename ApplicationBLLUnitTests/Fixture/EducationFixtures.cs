@@ -27,7 +27,7 @@ public static class EducationFixtures
         To = new DateOnly(2005, 12, 10)
         
     };
-    public static Education EducationEntity = new Education()
+    public static Education FirstEducationEntity = new Education()
     {
         Id = 1,
         LevelOfEducation = "Bachelor's",
@@ -38,7 +38,18 @@ public static class EducationFixtures
         From = new DateOnly(2000, 12, 10),
         To = new DateOnly(2005, 12, 10),
         ResumeId = 1
-        
+    };
+    public static Education SecondEducationEntity = new Education()
+    {
+        Id = 2,
+        LevelOfEducation = "Bachelor's",
+        FieldOfStudy = "Software engineering",
+        SchoolName = "random school",
+        Country = "Canada",
+        City = "Toronto",
+        From = new DateOnly(2000, 12, 10),
+        To = new DateOnly(2005, 12, 10),
+        ResumeId = 2
     };
     
 }

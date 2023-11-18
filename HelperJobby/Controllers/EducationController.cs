@@ -45,21 +45,21 @@ namespace HelperJobby.Controllers
         }
 
         // PUT: api/Education/5
-        [HttpPut("{educationId}/user/{userId}")]
-        public async Task<EducationDTO> Put(int educationId, int userId, [FromBody] CreateUpdateEducationDTO updateEducationDto)
+        [HttpPut("{educationId}")]
+        public async Task<EducationDTO> Put(int educationId, [FromBody] CreateUpdateEducationDTO updateEducationDto)
         {
             CreateEducationDTOValidator.ValidateCreatedEducation(updateEducationDto);
             var education = _mapper.Map<Education>(updateEducationDto);
-            education = await _educationService.UpdateEducation(educationId, userId, education);
+            education = await _educationService.UpdateEducation(educationId, education);
             education = await _educationCommandRepository.Update(education);
             return _mapper.Map<EducationDTO>(education);
         }
 
         // DELETE: api/Education/5
-        [HttpDelete("{educationId}/user/{userId}")]
-        public async Task Delete(int educationId, int userId)
+        [HttpDelete("{educationId}")]
+        public async Task Delete(int educationId)
         {
-             var education = await _educationService.Delete(educationId, userId);
+             var education = await _educationService.Delete(educationId);
              await _educationCommandRepository.Delete(education);
         }
 

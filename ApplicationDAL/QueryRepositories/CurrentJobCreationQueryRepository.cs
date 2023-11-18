@@ -15,9 +15,9 @@ public class CurrentJobCreationQueryRepository : ICurrentJobCreationQueryReposit
         _applicationContext = applicationContext;
     }
 
-    public async Task<CurrentJobCreation> GetJobCreationById(int jobCreationId, int employerAccountId)
+    public async Task<CurrentJobCreation> GetJobCreationById(int jobCreationId)
     {
-        return await GetCurrentJob(jobCreationId, employerAccountId);
+        return await GetCurrentJob(jobCreationId);
     }
 
     public async Task<CurrentJobCreation> GetJobCreationByEmployerId(int employerId)
@@ -32,12 +32,12 @@ public class CurrentJobCreationQueryRepository : ICurrentJobCreationQueryReposit
         return jobEntity;
     }
 
-    public async Task<CurrentJobCreation> GetJobCreationWithEmployerAccount(int jobCreationId, int employerAccountId)
+    public async Task<CurrentJobCreation> GetJobCreationWithEmployerAccount(int jobCreationId)
     {
-        return await GetCurrentJob(jobCreationId, employerAccountId, q => q.Include(j => j.EmployerAccount));
+        return await GetCurrentJob(jobCreationId, q => q.Include(j => j.EmployerAccount));
     }
     
-    private  async Task<CurrentJobCreation> GetCurrentJob(int jobCreationId, int employerAccountId, Func<IQueryable<CurrentJobCreation>, IQueryable<CurrentJobCreation>> includeQuery=null)
+    private  async Task<CurrentJobCreation> GetCurrentJob(int jobCreationId, Func<IQueryable<CurrentJobCreation>, IQueryable<CurrentJobCreation>> includeQuery=null)
     {
         var query = _applicationContext.CurrentJobCreations.AsQueryable();
 
@@ -51,11 +51,6 @@ public class CurrentJobCreationQueryRepository : ICurrentJobCreationQueryReposit
         if (currenJobEntity == null)
         {
             throw new JobNotFoundException("Job with specified id doesn't exist");
-        }
-
-        if (currenJobEntity.EmployerAccountId != employerAccountId)
-        {
-            throw new ForbiddenException();
         }
 
         return currenJobEntity;

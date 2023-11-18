@@ -8,15 +8,13 @@ namespace ApplicationBLL.Services;
 
 public class EducationService : IEducationService
 {
-    private readonly ICurrentUserChecker _currentUserChecker;
     private readonly IUserService _userService;
     private readonly IEducationQueryRepository _educationQueryRepository;
     private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
 
-    public EducationService(ICurrentUserChecker currentUserChecker, IEducationQueryRepository educationQueryRepository,
+    public EducationService(IEducationQueryRepository educationQueryRepository,
         IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IUserService userService)
     {
-        _currentUserChecker = currentUserChecker;
         _educationQueryRepository = educationQueryRepository;
         _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
         _userService = userService;
@@ -35,10 +33,15 @@ public class EducationService : IEducationService
         return education;
     }
 
-    public async Task<Education> UpdateEducation(int educationId, int userId, Education updatedEducation)
+    public async Task<Education> UpdateEducation(int educationId, Education updatedEducation)
     {
-        _currentUserChecker.IsCurrentUser(userId);
+        var currentUserId = _userService.GetCurrentUserId();
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
         var educationEntity = await _educationQueryRepository.GetEducationById(educationId);
+        if (educationEntity.ResumeId != jobSeekerAccount.Resume.Id)
+        {
+            throw new ForbiddenException();
+        }
         educationEntity = UpdateEducation(educationEntity, updatedEducation);
         return educationEntity;
     }
@@ -55,10 +58,16 @@ public class EducationService : IEducationService
         return educationEntity;
     }
     
-    public async Task<Education> Delete(int educationId, int userId)
+    public async Task<Education> Delete(int educationId)
     {
-        _currentUserChecker.IsCurrentUser(userId);
+        
+        var currentUserId = _userService.GetCurrentUserId();
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
         var educationEntity = await _educationQueryRepository.GetEducationById(educationId);
+        if (educationEntity.ResumeId != jobSeekerAccount.Resume.Id)
+        {
+            throw new ForbiddenException();
+        }
         return educationEntity;
     }
 }

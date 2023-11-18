@@ -33,11 +33,12 @@ public class CurrentJobCreationService : ICurrentJobCreationService
         return currentJobCreation;
     }
 
-    public async Task<CurrentJobCreation> UpdateCurrentJob(int jobId, int employerAccountId, CurrentJobCreation currentJobCreation)
+    public async Task<CurrentJobCreation> UpdateCurrentJob(int jobId, CurrentJobCreation currentJobCreation)
     {
-        var jobEntity = await _currentJobCreationQueryRepository.GetJobCreationById(jobId, employerAccountId);
+        var currentEmployer = await  _employerAccountQueryRepository.GetEmployerAccount(_userService.GetCurrentUserId());
+        var jobEntity = await _currentJobCreationQueryRepository.GetJobCreationById(jobId);
         
-        if (jobEntity.EmployerAccountId != employerAccountId)
+        if (jobEntity.EmployerAccountId != currentEmployer.Id)
         {
             throw new ForbiddenException();
         }
@@ -47,10 +48,11 @@ public class CurrentJobCreationService : ICurrentJobCreationService
     }
     
 
-    public async Task<CurrentJobCreation> DeleteCurrentJob(int jobId, int employerAccountId)
+    public async Task<CurrentJobCreation> DeleteCurrentJob(int jobId)
     {
-        var job = await _currentJobCreationQueryRepository.GetJobCreationById(jobId, employerAccountId);
-        if (job.EmployerAccountId != employerAccountId)
+        var currentEmployer = await  _employerAccountQueryRepository.GetEmployerAccount(_userService.GetCurrentUserId());
+        var job = await _currentJobCreationQueryRepository.GetJobCreationById(jobId);
+        if (job.EmployerAccountId != currentEmployer.Id)
         {
             throw new ForbiddenException();
         }

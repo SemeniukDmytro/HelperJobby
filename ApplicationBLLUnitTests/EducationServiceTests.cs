@@ -12,15 +12,14 @@ namespace ApplicationBLLUnitTests;
 public class EducationServiceTests
 {
     private readonly IEducationService _educationService;
-    private readonly Mock<ICurrentUserChecker> _currentUserCheckerMock = new();
     private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<IEducationQueryRepository> _educationQueryRepositoryMock = new();
-    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
+    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountQueryRepository = new();
 
     public EducationServiceTests()
     {
-        _educationService = new EducationService(_currentUserCheckerMock.Object, _educationQueryRepositoryMock.Object,
-            _jobSeekerAccountRepository.Object, _userServiceMock.Object);
+        _educationService = new EducationService(_educationQueryRepositoryMock.Object,
+            _jobSeekerAccountQueryRepository.Object, _userServiceMock.Object);
     }
 
     [Fact]
@@ -34,7 +33,7 @@ public class EducationServiceTests
         jobSeekerAccount.Resume = resume;
         var education = EducationFixtures.CreatedEducation;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId)).ReturnsAsync(jobSeekerAccount);
+        _jobSeekerAccountQueryRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId)).ReturnsAsync(jobSeekerAccount);
         //Act
         var createdEducation = await _educationService.AddEducation(resumeId, education);
         //Assert
@@ -53,7 +52,7 @@ public class EducationServiceTests
         jobSeekerAccount.Resume = resume;
         var education = EducationFixtures.CreatedEducation;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId)).ReturnsAsync(jobSeekerAccount);
+        _jobSeekerAccountQueryRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId)).ReturnsAsync(jobSeekerAccount);
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _educationService.AddEducation(resumeId, education));
@@ -64,14 +63,17 @@ public class EducationServiceTests
     {
         //Arrange
         var userId = 1;
-        var resumeId = 1;
         var educationId = 1;
         var education = EducationFixtures.UpdatedEducation;
-        var educationEntity = EducationFixtures.EducationEntity;
+        var educationEntity = EducationFixtures.FirstEducationEntity;
+        var jobSeekerWithResume = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        jobSeekerWithResume.Resume = ResumeFixtures.ResumeEntity;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountQueryRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+            .ReturnsAsync(jobSeekerWithResume);
         _educationQueryRepositoryMock.Setup(r => r.GetEducationById(educationId)).ReturnsAsync(educationEntity);
-        _currentUserCheckerMock.Setup(us => us.IsCurrentUser(userId)).Callback(()=> {});
         //Act
-        var updatedEducation = await _educationService.UpdateEducation(resumeId, userId, education);
+        var updatedEducation = await _educationService.UpdateEducation(educationId, education);
         //Assert
         Assert.Equal(updatedEducation.ResumeId, educationEntity.ResumeId);
         Assert.Equal(updatedEducation.LevelOfEducation, educationEntity.LevelOfEducation);
@@ -83,15 +85,18 @@ public class EducationServiceTests
     {
         //Arrange
         var userId = 1;
-        var resumeId = 2;
+        var educationId = 2;
         var education = EducationFixtures.UpdatedEducation;
-        _currentUserCheckerMock.Setup(us => us.IsCurrentUser(userId)).Callback(() =>
-        {
-            throw new ForbiddenException();
-        });
+        var jobSeekerWithResume = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        jobSeekerWithResume.Resume = ResumeFixtures.ResumeEntity;
+        var educationEntity = EducationFixtures.SecondEducationEntity;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountQueryRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+            .ReturnsAsync(jobSeekerWithResume);
+        _educationQueryRepositoryMock.Setup(r => r.GetEducationById(educationId)).ReturnsAsync(educationEntity);
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
-            await _educationService.UpdateEducation(resumeId, userId, education));
+            await _educationService.UpdateEducation(educationId, education));
     }
     
     [Fact]
@@ -100,12 +105,15 @@ public class EducationServiceTests
         //Arrange
         var userId = 1;
         var educationId = 1;
-        var educationEntity = EducationFixtures.EducationEntity;
-        _currentUserCheckerMock.Setup(us => us.IsCurrentUser(userId)).Callback(() =>
-        { });
+        var educationEntity = EducationFixtures.FirstEducationEntity;
+        var jobSeekerWithResume = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        jobSeekerWithResume.Resume = ResumeFixtures.ResumeEntity;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountQueryRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+            .ReturnsAsync(jobSeekerWithResume);
         _educationQueryRepositoryMock.Setup(r => r.GetEducationById(educationId)).ReturnsAsync(educationEntity);
         //Act
-        var educationToDelete = await _educationService.Delete(educationId, userId);
+        var educationToDelete = await _educationService.Delete(educationId);
         //Assert
         Assert.Equal(educationEntity.Id, educationToDelete.Id);
     }
@@ -116,13 +124,14 @@ public class EducationServiceTests
         //Arrange
         var userId = 1;
         var educationId = 1;
-        var educationEntity = EducationFixtures.EducationEntity;
-        _currentUserCheckerMock.Setup(us => us.IsCurrentUser(userId)).Callback(() =>
-        {
-            throw new ForbiddenException();
-        });
+        var educationEntity = EducationFixtures.SecondEducationEntity;
+        var jobSeekerWithResume = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        jobSeekerWithResume.Resume = ResumeFixtures.ResumeEntity;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountQueryRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+            .ReturnsAsync(jobSeekerWithResume);
         _educationQueryRepositoryMock.Setup(r => r.GetEducationById(educationId)).ReturnsAsync(educationEntity);
         //Act % Assert
-        await Assert.ThrowsAsync<ForbiddenException>( async () => await _educationService.Delete(educationId, userId));
+        await Assert.ThrowsAsync<ForbiddenException>( async () => await _educationService.Delete(educationId));
     }
 }
