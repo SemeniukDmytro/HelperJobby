@@ -1,6 +1,6 @@
+using HelperJobby.DTOs.UserJobInteractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using InterviewDTO = HelperJobby.DTOs.UserJobInteractions.InterviewDTO;
 
 namespace HelperJobby.Controllers
 {
@@ -9,36 +9,36 @@ namespace HelperJobby.Controllers
     [Authorize]
     public class InterviewController : ControllerBase
     {
-        // GET: api/Interview
-        [HttpGet]
-        public Task<IEnumerable<InterviewDTO>> GetCurrentUserInterviews(int id)
+        // GET: api/Interview/my-interviews
+        [HttpGet("my-interviews")]
+        public Task<IEnumerable<InterviewDTO>> GetCurrentJobSeekerInterviews()
+        {
+            return null;
+        }
+        
+        // GET: api/Interview/{jobId}/interviews
+        [HttpGet("{jobId}/interviews")]
+        public async Task<IEnumerable<InterviewDTO>> GetJobAppliesByJobId(int jobId)
         {
             return null;
         }
 
-        // GET: api/Interview/5
-        [HttpGet("{id}")]
+        // GET: api/Interview/{jobId}/job-seeker/{jobSeekerId}
+        [HttpGet("{jobId}/job-seeker/{jobSeekerId}")]
         public Task<InterviewDTO> Get(int id)
         {
             return null;
         }
 
-        // POST: api/Interview
-        [HttpPost]
-        public Task<InterviewDTO> Post([FromBody] InterviewDTO value)
+        // POST: api/Interview/{jobId}/job-seeker/{jobSeekerId}
+        [HttpPost("{jobId}/job-seeker/{jobSeekerId}")]
+        public Task<InterviewDTO> CreateInterview(int jobId, int jobSeekerId)
         {
             return null;
         }
 
-        // PUT: api/Interview/5
-        [HttpPut("{id}")]
-        public Task<InterviewDTO> Put(int id, [FromBody] InterviewDTO value)
-        {
-            return null;
-        }
-
-        // DELETE: api/Interview/5
-        [HttpDelete("{id}")]
+        // DELETE: api/Interview/{jobId}/job-seeker/{jobSeekerId}
+        [HttpDelete("{jobId}/job-seeker/{jobSeekerId}")]
         public Task Delete(int id)
         {
             return null;
