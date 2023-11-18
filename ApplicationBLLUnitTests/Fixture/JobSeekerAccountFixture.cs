@@ -32,6 +32,14 @@ public static class JobSeekerAccountFixture
             City = "TestCity",
             Country = "Canada",
             PostalCode = ""
+        },
+        JobApplies = new List<JobApply>()
+        {
+            new JobApply()
+            {
+                JobId = 2,
+                JobSeekerAccountId = 1
+            }
         }
     };
     

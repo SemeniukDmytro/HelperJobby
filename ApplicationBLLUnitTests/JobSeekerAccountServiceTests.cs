@@ -17,13 +17,12 @@ public class JobSeekerAccountServiceTests
     private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<IJobQueryRepository> _jobQueryRepositoryMock = new();
     private readonly Mock<ICurrentUserChecker> _currentUserCheckerMock = new();
-    private readonly Mock<ISavedJobQueryRepository> _savedJobQueryRepositoryMock = new();
 
     public JobSeekerAccountServiceTests()
     {
         _jobSeekerAccountService =
             new JobSeekerAccountService(_jobSeekerQueryRepositoryMock.Object, _userServiceMock.Object,
-                _jobQueryRepositoryMock.Object, _currentUserCheckerMock.Object, _savedJobQueryRepositoryMock.Object);
+                _jobQueryRepositoryMock.Object, _currentUserCheckerMock.Object);
     }
 
     [Fact]
@@ -113,16 +112,11 @@ public class JobSeekerAccountServiceTests
         int userId = 1;
         int jobId = 1;
         var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntityWithSavedJobs;
-        var jobEntity = JobFixtures.JobEntity;_currentUserCheckerMock.Setup(c => c.IsCurrentUser(userId)).Callback(() =>
+        _currentUserCheckerMock.Setup(c => c.IsCurrentUser(userId)).Callback(() =>
         {
         });
         _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerAccountWithSavedJobs(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
-        _savedJobQueryRepositoryMock.Setup(r => r.GetSavedJobByJobAndUserIds(jobId, userId)).ReturnsAsync(new SavedJob()
-        {
-            JobId = jobId,
-            JobSeekerAccountId = jobSeekerAccountEntity.Id
-        });
         //Act
         var savedJob = await _jobSeekerAccountService.RemoveJobFromSaved(jobId, userId);
         //Assert
@@ -137,7 +131,7 @@ public class JobSeekerAccountServiceTests
         int userId = 1;
         int jobId = 2;
         var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntityWithSavedJobs;
-        var jobEntity = JobFixtures.JobEntity;_currentUserCheckerMock.Setup(c => c.IsCurrentUser(userId)).Callback(() =>
+        _currentUserCheckerMock.Setup(c => c.IsCurrentUser(userId)).Callback(() =>
         {
         });
         _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerAccountWithSavedJobs(userId))
