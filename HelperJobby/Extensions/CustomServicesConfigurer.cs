@@ -58,6 +58,9 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IJobApplyService, JobApplyService>();
         serviceProvider.AddScoped<IJobApplyCommandRepository, JobApplyCommandRepository>();
         serviceProvider.AddScoped<IJobApplyQueryRepository, JobApplyQueryRepository>();
+        serviceProvider.AddScoped<IInterviewService, InterviewService>();
+        serviceProvider.AddScoped<IInterviewCommandRepository, InterviewCommandRepository>();
+        serviceProvider.AddScoped<IInterviewQueryRepository, InterviewQueryRepository>();
         
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());

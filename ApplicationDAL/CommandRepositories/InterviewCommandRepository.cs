@@ -1,3 +1,4 @@
+using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Models;
 
@@ -5,13 +6,23 @@ namespace ApplicationDAL.CommandRepositories;
 
 public class InterviewCommandRepository : IInterviewCommandRepository
 {
-    public Task<Interview> CreateInterview(Interview interview)
+    private readonly ApplicationContext _applicationContext;
+
+    public InterviewCommandRepository(ApplicationContext applicationContext)
     {
-        throw new NotImplementedException();
+        _applicationContext = applicationContext;
     }
 
-    public Task DeleteInterview(Interview interview)
+    public async Task<Interview> CreateInterview(Interview interview)
     {
-        throw new NotImplementedException();
+        _applicationContext.Interviews.Add(interview);
+        await _applicationContext.SaveChangesAsync();
+        return interview;
+    }
+
+    public async Task DeleteInterview(Interview interview)
+    {
+        _applicationContext.Interviews.Remove(interview);
+        await _applicationContext.SaveChangesAsync();
     }
 }

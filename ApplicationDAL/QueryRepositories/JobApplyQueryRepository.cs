@@ -21,7 +21,7 @@ public class JobApplyQueryRepository : IJobApplyQueryRepository
             await _applicationContext.JobApplies.FirstOrDefaultAsync(j => j.JobId == jobId && j.JobSeekerAccountId == jobSeekerId);
         if (jobApply == null)
         {
-            throw new JobApplyingException("Job with such id does not exist");
+            throw new JobApplyingException("Job apply wasn't found");
         }
 
         return jobApply;

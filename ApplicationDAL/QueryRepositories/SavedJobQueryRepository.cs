@@ -22,7 +22,7 @@ public class SavedJobQueryRepository : ISavedJobQueryRepository
             await _applicationContext.SavedJobs.FirstOrDefaultAsync(j => j.JobId == jobId && j.JobSeekerAccountId == jobSeekerAccountId);
         if (savedJob == null)
         {
-            throw new JobSavingException("Job with such id does not exist");
+            throw new JobSavingException("Saved job wasn't found");
         }
 
         return savedJob;

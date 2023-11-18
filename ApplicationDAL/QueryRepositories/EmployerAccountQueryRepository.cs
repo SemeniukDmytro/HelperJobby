@@ -45,7 +45,7 @@ public class EmployerAccountQueryRepository : IEmployerAccountQueryRepository
 
     public async Task<EmployerAccount> GetEmployerWithJobs(int userId)
     {
-        var employerAccount = await GetUserWithEmployerAccount(userId);
+        var employerAccount = await GetUserWithEmployerAccount(userId, q => q.Include(u => u.EmployerAccount));
         await _applicationContext.Entry(employerAccount).Collection(e => e.Jobs).LoadAsync();
         return employerAccount;
     }
