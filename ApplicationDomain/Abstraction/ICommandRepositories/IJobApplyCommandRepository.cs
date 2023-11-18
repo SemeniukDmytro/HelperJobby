@@ -4,6 +4,6 @@ namespace ApplicationDomain.Abstraction.ICommandRepositories;
 
 public interface IJobApplyCommandRepository
 {
-    public Task<JobApply> CreateJobApply();
-    public Task DeleteJobApply();
+    public Task<JobApply> CreateJobApply(JobApply jobApply);
+    public Task DeleteJobApply(JobApply jobApply);
 }

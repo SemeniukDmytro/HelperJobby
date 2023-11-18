@@ -13,5 +13,5 @@ public class JobApplyDTO
 
     public JobSeekerAccountDTO JobSeekerAccount { get; set; }
 
-    public DateTime DateTimeOfApply { get; set; }
+    public DateTime DateTime { get; set; }
 }

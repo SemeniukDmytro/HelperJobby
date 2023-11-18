@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Exceptions;
@@ -59,5 +60,25 @@ public class JobQueryRepository : IJobQueryRepository
         }
 
         return result;
+    }
+
+    public async Task<Job> GetJobWithJobApplies(int jobId)
+    {
+        return await GetJobWithCollectionAsync(jobId, j => j.JobApplies);
+    }
+
+    public async Task<Job> GetJobWithInterviews(int jobId)
+    {
+        return await GetJobWithCollectionAsync(jobId, j => j.Interviews);
+    }
+
+
+    private async Task<Job> GetJobWithCollectionAsync<T>(
+        int jobId, 
+        Expression<Func<Job, IEnumerable<T>>> collectionProperty) where T : class
+    {
+        var jobSeekerAccount = await GetJobById(jobId);
+        await _applicationContext.Entry(jobSeekerAccount).Collection(collectionProperty).LoadAsync();
+        return jobSeekerAccount;
     }
 }

@@ -34,11 +34,20 @@ namespace HelperJobby.Controllers
         }
         
         [HttpGet]
-        public async Task<JobSeekerAccountDTO> GetCurrentUserAccount()
+        public async Task<JobSeekerAccountDTO> GetCurrentJobSeeker()
         {
             var jobSeekerAccount =
               await  _jobSeekerAccountQueryRepository.GetJobSeekerAccountByUserId(_userService.GetCurrentUserId());
             return _mapper.Map<JobSeekerAccountDTO>(jobSeekerAccount);
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<SavedJobDTO>> GetSavedJobsOfCurrentJobSeeker()
+        {
+            var jobSeekerAccount =
+                await _jobSeekerAccountQueryRepository
+                    .GetJobSeekerAccountWithSavedJobs(_userService.GetCurrentUserId());
+            return _mapper.Map<IEnumerable<SavedJobDTO>>(jobSeekerAccount.SavedJobs);
         }
 
         [HttpPut("{userId}")]

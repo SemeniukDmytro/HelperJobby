@@ -55,6 +55,9 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<ISkillService, SkillService>();
         serviceProvider.AddScoped<ISkillCommandRepository, SkillCommandRepository>();
         serviceProvider.AddScoped<ISkillQueryRepository, SkillQueryRepository>();
+        serviceProvider.AddScoped<IJobApplyService, JobApplyService>();
+        serviceProvider.AddScoped<IJobApplyCommandRepository, JobApplyCommandRepository>();
+        serviceProvider.AddScoped<IJobApplyQueryRepository, JobApplyQueryRepository>();
         
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());

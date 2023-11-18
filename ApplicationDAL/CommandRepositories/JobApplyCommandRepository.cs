@@ -1,17 +1,31 @@
+using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationDAL.CommandRepositories;
 
 public class JobApplyCommandRepository : IJobApplyCommandRepository
 {
-    public Task<JobApply> CreateJobApply()
+    private readonly ApplicationContext _applicationContext;
+
+    public JobApplyCommandRepository(ApplicationContext applicationContext)
     {
-        throw new NotImplementedException();
+        _applicationContext = applicationContext;
     }
 
-    public Task DeleteJobApply()
+    public async Task<JobApply> CreateJobApply(JobApply jobApply)
     {
-        throw new NotImplementedException();
+        _applicationContext.Entry(jobApply.Job).State = EntityState.Unchanged;
+        _applicationContext.Entry(jobApply.JobSeekerAccount).State = EntityState.Unchanged;
+        _applicationContext.JobApplies.Add(jobApply);
+        await _applicationContext.SaveChangesAsync();
+        return jobApply;
+    }
+
+    public async Task DeleteJobApply(JobApply jobApply)
+    {
+        _applicationContext.JobApplies.Remove(jobApply);
+        await _applicationContext.SaveChangesAsync();
     }
 }

@@ -1,3 +1,7 @@
+using ApplicationDomain.Abstraction.ICommandRepositories;
+using ApplicationDomain.Abstraction.IQueryRepositories;
+using ApplicationDomain.Abstraction.IServices;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using JobApplyDTO = HelperJobby.DTOs.UserJobInteractions.JobApplyDTO;
@@ -7,40 +11,67 @@ namespace HelperJobby.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class JobApplyController : ControllerBase
+    public class JobApplyController : ExtendedBaseController
     {
-        // GET: api/JobApply
-        [HttpGet("{id}/my-job-applies")]
-        public Task<IEnumerable<JobApplyDTO>> GetUserJobApplies(int userId)
+        private readonly IJobQueryRepository _jobQueryRepository;
+        private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+        private readonly IJobApplyService _jobApplyService;
+        private readonly IJobApplyQueryRepository _jobApplyQueryRepository;
+        private readonly IJobApplyCommandRepository _jobApplyCommandRepository;
+        private readonly IUserService _userService;
+        
+        public JobApplyController(IMapper mapper, IJobApplyCommandRepository jobApplyCommandRepository,
+            IJobApplyQueryRepository jobApplyQueryRepository, IJobApplyService jobApplyService, 
+            IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IJobQueryRepository jobQueryRepository, IUserService userService) : base(mapper)
         {
-            return null;
+            _jobApplyCommandRepository = jobApplyCommandRepository;
+            _jobApplyQueryRepository = jobApplyQueryRepository;
+            _jobApplyService = jobApplyService;
+            _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
+            _jobQueryRepository = jobQueryRepository;
+            _userService = userService;
+        }
+        // GET: api/JobApply
+        [HttpGet("my-job-applies")]
+        public async Task<IEnumerable<JobApplyDTO>> GetUserJobApplies()
+        {
+            var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithJobApplies(_userService.GetCurrentUserId());
+            return _mapper.Map<IEnumerable<JobApplyDTO>>(jobSeekerAccount.JobApplies);
         }
         
-        [HttpGet("job/{id}/job-aplies")]
-        public Task<IEnumerable<JobApplyDTO>> GetUserJobAppliesByJobId(int jobId)
+        [HttpGet("{jobId}/job-applies")]
+        public async Task<IEnumerable<JobApplyDTO>> GetJobAppliesByJobId(int jobId)
         {
-            return null;
+            var job = await _jobQueryRepository.GetJobWithJobApplies(jobId);
+            return _mapper.Map<IEnumerable<JobApplyDTO>>(job.JobApplies);
         }
 
         // GET: api/JobApply/5
         [HttpGet("{jobId}/job-seeker/{jobSeekerId}")]
-        public Task<JobApplyDTO> GetJobApplyByJobSeekerIdAndJobId(int jobId, int jobSeekerId)
+        public async Task<JobApplyDTO> GetJobApplyByJobSeekerIdAndJobId(int jobId, int jobSeekerId)
         {
-            return null;
+            var jobApply = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, jobSeekerId);
+            var jobApplyDTO = _mapper.Map<JobApplyDTO>(jobApply);
+            return jobApplyDTO;
         }
 
         // POST: api/JobApply
-        [HttpPost("{jobId}/user/{userId}")]
-        public Task<JobApplyDTO> Post(int userId, int jobId)
+        [HttpPost("{jobId}/job-seeker/{jobSeekerId}")]
+        public async Task<JobApplyDTO> Post(int jobId, int jobSeekerId)
         {
-            return null;
+            var jobApply = await _jobApplyService.PostJobApply(jobId, jobSeekerId);
+            jobApply = await _jobApplyCommandRepository.CreateJobApply(jobApply);
+            return _mapper.Map<JobApplyDTO>(jobApply);
         }
 
         // DELETE: api/JobApply/5
-        [HttpDelete("{jobId}/jobSeeker/{jobSeekerId}")]
-        public Task Delete(int jobId, int jobSeekerId)
+        [HttpDelete("{jobId}/job-seeker/{jobSeekerId}")]
+        public async Task Delete(int jobId, int jobSeekerId)
         {
-            return null;
+            var jobApply = await _jobApplyService.DeleteJobApply(jobId, jobSeekerId);
+            await _jobApplyCommandRepository.DeleteJobApply(jobApply);
         }
+
+        
     }
 }
