@@ -8,13 +8,12 @@ namespace ApplicationBLL.Services;
 public class OrganizationService : IOrganizationService
 {
     private readonly IUserService _userService;
-    private readonly IUserQueryRepository _userQueryRepository;
     private readonly IOrganizationQueryRepository _organizationQueryRepository;
 
-    public OrganizationService(IUserService userService, IUserQueryRepository userQueryRepository, IOrganizationQueryRepository organizationQueryRepository)
+    public OrganizationService(IUserService userService,
+        IOrganizationQueryRepository organizationQueryRepository)
     {
         _userService = userService;
-        _userQueryRepository = userQueryRepository;
         _organizationQueryRepository = organizationQueryRepository;
     }
     
@@ -32,45 +31,40 @@ public class OrganizationService : IOrganizationService
         return organization;
     }
 
-    public async Task<OrganizationEmployeeEmail> AddEmployeeEmail(OrganizationEmployeeEmail employeeEmail)
+    public async Task<OrganizationEmployeeEmail> AddEmployeeEmail(int organizationId, OrganizationEmployeeEmail employeeEmail)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var organization = await _organizationQueryRepository.GetOrganizationWithEmployeeEmails(employeeEmail.OrganizationId);
+        var organization = await _organizationQueryRepository.GetOrganizationPlain(organizationId);
         if (organization.OrganizationOwnerId != currentUserId)
         {
             throw new ForbiddenException();
         }
-
-        if (organization.EmployeeEmails.Any(e => e.Email == employeeEmail.Email))
+        
+        var potentialEmail =
+            await _organizationQueryRepository.GetEmployeeEmailByOrganizationId(organizationId, employeeEmail.Email);
+        if (potentialEmail != null)
         {
             throw new ForbiddenException("This email has already been added");
         }
+
+        employeeEmail.OrganizationId = organization.Id;
         return employeeEmail;
     }
 
-    public async Task<OrganizationEmployeeEmail> RemoveEmployeeEmail(OrganizationEmployeeEmail employeeEmail)
+    public async Task<OrganizationEmployeeEmail> RemoveEmployeeEmail(int organizationId, OrganizationEmployeeEmail employeeEmail)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var organization = await _organizationQueryRepository.GetOrganizationWithEmployeeEmails(employeeEmail.OrganizationId);
+        var organization = await _organizationQueryRepository.GetOrganizationPlain(organizationId);
         if (organization.OrganizationOwnerId != currentUserId)
         {
             throw new ForbiddenException();
         }
-        bool emailExists = false;
-
-        foreach (var existingEmail in organization.EmployeeEmails)
-        {
-            if (existingEmail.Email == employeeEmail.Email)
-            {
-                employeeEmail.Id = existingEmail.Id;
-                emailExists = true;
-                break;
-            }
-        }
-        if (!emailExists)
+        var potentialEmail =
+            await _organizationQueryRepository.GetEmployeeEmailByOrganizationId(organizationId, employeeEmail.Email);
+        if (potentialEmail == null)
         {
             throw new ForbiddenException("There isn't such email in organization employee list");
         }
-        return employeeEmail;
+        return potentialEmail;
     }
 }

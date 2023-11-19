@@ -32,6 +32,14 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
         return organization;
     }
 
+    public async Task<OrganizationEmployeeEmail?> GetEmployeeEmailByOrganizationId(int organizationId, string email)
+    {
+        var employeeEmail = await _applicationContext.OrganizationEmployeeEmails.Where(e =>
+            e.OrganizationId == organizationId &&
+            e.Email == email).FirstOrDefaultAsync();
+        return employeeEmail;
+    }
+
     public async  Task<Organization> GetOrganizationWithEmployees(int organizationId)
     {
         var organization = await GetOrganizationPlain(organizationId);
@@ -46,7 +54,6 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
         {
             return null;
         }
-        await _applicationContext.Entry(organization).Collection(o => o.EmployeeEmails).LoadAsync();
         return organization;
     }
 }

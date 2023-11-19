@@ -40,26 +40,26 @@ namespace HelperJobby.Controllers
         {
             UpdateOrganizationDTOValidator.ValidateOrganization(updatedOrganizationDTO);
             var organization = await _organizationService.UpdateOrganization(id, _mapper.Map<Organization>(updatedOrganizationDTO));
-            organization = await _organizationCommandRepository.UpdateOrganizationById(id, organization);
+            organization = await _organizationCommandRepository.UpdateOrganizationById(organization);
             return _mapper.Map<OrganizationDTO>(organization);
         }
 
-        [HttpPost("add-employee")]
-        public async Task AddEmployeeEmail(OrganizationEmployeeEmailDTO employeeEmailDTO)
+        [HttpPost("{organizationId}/add-employee")]
+        public async Task AddEmployeeEmail(int organizationId, OrganizationEmployeeEmailDTO employeeEmailDTO)
         {
             OrganizationEmployeeEmailDTOValidator.ValidateEmail(employeeEmailDTO);
             var employeeEmail =
-                await _organizationService.AddEmployeeEmail(_mapper.Map<OrganizationEmployeeEmail>(employeeEmailDTO));
+                await _organizationService.AddEmployeeEmail(organizationId, _mapper.Map<OrganizationEmployeeEmail>(employeeEmailDTO));
             await _organizationCommandRepository.AddOrganizationEmployeesEmails(employeeEmail);
 
         }
         
-        [HttpPost("remove-employee")]
-        public async Task RemoveEmployeeEmail(OrganizationEmployeeEmailDTO employeeEmailDTO)
+        [HttpPost("{organizationId}/remove-employee")]
+        public async Task RemoveEmployeeEmail(int organizationId, OrganizationEmployeeEmailDTO employeeEmailDTO)
         {
             OrganizationEmployeeEmailDTOValidator.ValidateEmail(employeeEmailDTO);
             var employeeEmail =
-                await _organizationService.RemoveEmployeeEmail(_mapper.Map<OrganizationEmployeeEmail>(employeeEmailDTO));
+                await _organizationService.RemoveEmployeeEmail(organizationId, _mapper.Map<OrganizationEmployeeEmail>(employeeEmailDTO));
             await _organizationCommandRepository.RemoveOrganizationEmployeesEmails(employeeEmail);
         }
 

@@ -13,7 +13,7 @@ public class OrganizationCommandRepository : IOrganizationCommandRepository
         _applicationContext = applicationContext;
     }
 
-    public async Task<Organization> UpdateOrganizationById(int id, Organization organization)
+    public async Task<Organization> UpdateOrganizationById(Organization organization)
     {
         await _applicationContext.SaveChangesAsync();
         return organization;

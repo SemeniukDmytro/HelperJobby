@@ -22,9 +22,15 @@ public class EmployerAccountService : IEmployerAccountService
     {
         var currentUserId = _userService.GetCurrentUserId();
         var organization = await _organizationQueryRepository.GetOrganizationByName(account.Organization.Name);
-        if (organization != null && !organization.EmployeeEmails.Select(ee => ee.Email).Contains(account.Email))
+        
+        if (organization != null)
         {
-            throw new ForbiddenException();
+            var employeeEmail =
+                await _organizationQueryRepository.GetEmployeeEmailByOrganizationId(organization.Id, account.Email);
+            if (employeeEmail == null)
+            {
+                throw new ForbiddenException();
+            }
         }
         if (organization == null)
         {

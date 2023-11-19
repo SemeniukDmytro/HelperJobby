@@ -12,12 +12,12 @@ public class EmployerAccountServiceTests
     private readonly EmployerAccountService _employerAccountService;
     private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<IEmployerAccountQueryRepository> _employerAccountQueryRepositoryMock = new ();
-    private readonly Mock<IOrganizationQueryRepository> _organizationQueryRepository = new();
+    private readonly Mock<IOrganizationQueryRepository> _organizationQueryRepositoryMock = new();
 
     public EmployerAccountServiceTests()
     {
         _employerAccountService = new EmployerAccountService(_userServiceMock.Object, _employerAccountQueryRepositoryMock.Object,
-            _organizationQueryRepository.Object);
+            _organizationQueryRepositoryMock.Object);
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public class EmployerAccountServiceTests
         };
         var userId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepository.Setup(r => r.GetOrganizationByName(createdAccount.Organization.Name))
+        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationByName(createdAccount.Organization.Name))
             .ReturnsAsync((Organization?)null);
         //Act
         var account  = await _employerAccountService.CreateEmployerAccount(createdAccount);
@@ -49,6 +49,8 @@ public class EmployerAccountServiceTests
     public async Task CreateShouldReturnCreatedAccountIfOrganizationAlreadyCreatedAndEmployerIsPartOfAnOrganization()
     {
         //Arrange
+        var userId = 1;
+        var organizationId = 1;
         var createdAccount = new EmployerAccount()
         {
             FullName = "test first",
@@ -58,21 +60,26 @@ public class EmployerAccountServiceTests
                 Name = "createdOrganization"
             }
         };
-        var userId = 1;
+        var employeeEmail = new OrganizationEmployeeEmail()
+        {
+            Id = 1,
+            Email = "test@gmail.com"
+
+        };
         Organization organization = new Organization()
         {
+            Id = organizationId,
             Name = "createdOrganization",
             EmployeeEmails = new List<OrganizationEmployeeEmail>()
             {
-                new OrganizationEmployeeEmail()
-                {
-                    Email = "test@gmail.com"
-                }
+                employeeEmail
             }
         };
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepository.Setup(r => r.GetOrganizationByName(createdAccount.Organization.Name))
+        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationByName(createdAccount.Organization.Name))
             .ReturnsAsync(organization);
+        _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmailByOrganizationId(organization.Id,
+            "test@gmail.com")).ReturnsAsync(employeeEmail);
         //Act
         var account  = await _employerAccountService.CreateEmployerAccount(createdAccount);
         //Assert
@@ -107,8 +114,10 @@ public class EmployerAccountServiceTests
             }
         };
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepository.Setup(r => r.GetOrganizationByName(createdAccount.Organization.Name))
+        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationByName(createdAccount.Organization.Name))
             .ReturnsAsync(organization);
+        _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmailByOrganizationId(organization.Id,
+            "test@gmail.com")).ReturnsAsync((OrganizationEmployeeEmail?)null);
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _employerAccountService.CreateEmployerAccount(createdAccount));
     }

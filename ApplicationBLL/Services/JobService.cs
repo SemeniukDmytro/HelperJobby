@@ -11,10 +11,14 @@ namespace ApplicationBLL.Services;
 public class JobService : IJobService
 {
     private readonly IJobQueryRepository _jobQueryRepository;
+    private readonly IUserService _userService;
+    private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
 
-    public JobService(IJobQueryRepository jobQueryRepository)
+    public JobService(IJobQueryRepository jobQueryRepository, IUserService userService, IEmployerAccountQueryRepository employerAccountQueryRepository)
     {
         _jobQueryRepository = jobQueryRepository;
+        _userService = userService;
+        _employerAccountQueryRepository = employerAccountQueryRepository;
     }
 
     public async Task<Job> CreateJob(Job job)
@@ -27,25 +31,29 @@ public class JobService : IJobService
         return job;
     }
 
-    public async Task<Job> UpdateJob(int jobId, int employerAccountId, Job updatedJob)
+    public async Task<Job> UpdateJob(int jobId, Job updatedJob)
     {
-        var jobEntity = await _jobQueryRepository.GetJobForEmployersById(jobId, employerAccountId);
+        var currentUserId = _userService.GetCurrentUserId();
+        var employer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
+        var jobEntity = await _jobQueryRepository.GetJobById(jobId);
         
-        if (jobEntity.EmployerAccountId != employerAccountId)
+        if (jobEntity.EmployerAccountId != employer.Id)
         {
-            throw new ForbiddenException();
+            throw new ForbiddenException("You can not update this job information");
         }
 
         var updatedEntity = JobUpdateValidation<CurrentJobCreation>.Update(jobEntity, updatedJob);
         return updatedEntity;
     }
 
-    public async Task<Job> DeleteJob(int jobId, int employerAccountId)
+    public async Task<Job> DeleteJob(int jobId)
     {
-        var jobEntity = await _jobQueryRepository.GetJobForEmployersById(jobId, employerAccountId);
-        if (jobEntity.EmployerAccountId != employerAccountId)
+        var currentUserId = _userService.GetCurrentUserId();
+        var employer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
+        var jobEntity = await _jobQueryRepository.GetJobById(jobId);
+        if (jobEntity.EmployerAccountId != employer.Id)
         {
-            throw new ForbiddenException();
+            throw new ForbiddenException("You can not delete this job");
         }
 
         return jobEntity;

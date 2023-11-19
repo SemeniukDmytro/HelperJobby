@@ -374,10 +374,10 @@ namespace ApplicationDAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
                     b.HasIndex("OrganizationId");
+
+                    b.HasIndex("Email", "OrganizationId")
+                        .IsUnique();
 
                     b.ToTable("OrganizationEmployeeEmails");
                 });

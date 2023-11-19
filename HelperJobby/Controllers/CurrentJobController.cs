@@ -42,11 +42,11 @@ namespace HelperJobby.Controllers
         }
 
         // PUT: api/CurrentJob/5
-        [HttpPut("{jobId}")]
-        public async Task<CurrentJobCreationDTO> Put(int jobId, [FromBody] CurrentJobCreateDTO currentJobCreationDTO)
+        [HttpPut("{currentJobId}")]
+        public async Task<CurrentJobCreationDTO> Put(int currentJobId, [FromBody] CurrentJobCreateDTO currentJobCreationDTO)
         {
             var jobCreation =
-                await _currentJobCreationService.UpdateCurrentJob(jobId,
+                await _currentJobCreationService.UpdateCurrentJob(currentJobId,
                     _mapper.Map<CurrentJobCreation>(currentJobCreationDTO));
             var createdJobCreationDTO =  _mapper.Map<CurrentJobCreationDTO>(await _currentJobCreationCommandRepository.UpdateCurrentJob(jobCreation));
             return createdJobCreationDTO;

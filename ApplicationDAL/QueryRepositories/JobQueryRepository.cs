@@ -21,17 +21,6 @@ public class JobQueryRepository : IJobQueryRepository
         _organizationQueryRepository = organizationQueryRepository;
     }
 
-    public async Task<Job> GetJobForEmployersById(int id, int employerAccountId)
-    {
-        var job = await GetJobById(id);
-        
-        if (job.EmployerAccountId != employerAccountId)
-        {
-            throw new ForbiddenException();
-        }
-        return job;
-    }
-
     public async Task<Job> GetJobById(int jobId)
     {
         var job = await _applicationContext.Jobs.FirstOrDefaultAsync(j => j.Id == jobId);

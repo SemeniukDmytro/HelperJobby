@@ -14,10 +14,13 @@ public class JobServiceTests
 {
     private readonly IJobService _jobService;
     private readonly Mock<IJobQueryRepository> _jobQueryRepository = new();
+    private readonly Mock<IUserService> _userServiceMock = new();
+    private readonly Mock<IEmployerAccountQueryRepository> _employerAccountQueryRepository = new();
 
     public JobServiceTests()
     {
-        _jobService = new JobService( _jobQueryRepository.Object);
+        _jobService = new JobService( _jobQueryRepository.Object, _userServiceMock.Object,
+            _employerAccountQueryRepository.Object);
     }
     
     [Fact]
@@ -47,15 +50,18 @@ public class JobServiceTests
         var jobEntity = JobFixtures.FirstJobEntity;
         var updatedJob = JobFixtures.UpdatedJob;
         var jobId = 1;
-        var employerAccountId = 1;
-        _jobQueryRepository.Setup(r => r.GetJobForEmployersById(jobId, employerAccountId))
+        var employerAccount = EmployerAccountFixtures.EmployerAccountEntity;
+        var currentUserId = 1;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(currentUserId);
+        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId)).ReturnsAsync(employerAccount);
+        _jobQueryRepository.Setup(r => r.GetJobById(jobId))
             .ReturnsAsync(jobEntity);
         //Act
-        var job = await _jobService.UpdateJob(jobId, employerAccountId, updatedJob);
+        var job = await _jobService.UpdateJob(jobId, updatedJob);
         //Assert
         Assert.Equal(updatedJob.JobTitle, job.JobTitle);
         Assert.Equal(updatedJob.Salary, job.Salary);
-        Assert.Equal(employerAccountId, job.EmployerAccountId);
+        Assert.Equal(employerAccount.Id, job.EmployerAccountId);
         Assert.Equal(jobId, job.Id);
     }
 
@@ -63,15 +69,18 @@ public class JobServiceTests
     public async Task UpdateJobShouldThrowForbiddenExceptionIfOtherEmployerTriesToChangeJob()
     {
         //Arrange
-        var jobEntity = JobFixtures.FirstJobEntity;
+        var jobEntity = JobFixtures.SecondJobEntity;
         var updatedJob = JobFixtures.UpdatedJob;
-        var jobId = 1;
-        var employerAccountId = 2;
-        _jobQueryRepository.Setup(r => r.GetJobForEmployersById(jobId, employerAccountId))
+        var jobId = 2;
+        var employerAccount = EmployerAccountFixtures.EmployerAccountEntity;
+        var currentUserId = 1;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(currentUserId);
+        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId)).ReturnsAsync(employerAccount);
+        _jobQueryRepository.Setup(r => r.GetJobById(jobId))
             .ReturnsAsync(jobEntity);
         //Act & assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
-            await _jobService.UpdateJob(jobId, employerAccountId, updatedJob));
+            await _jobService.UpdateJob(jobId, updatedJob));
     }
 
     [Fact]
@@ -80,11 +89,15 @@ public class JobServiceTests
         //Arrange
         var jobEntity = JobFixtures.FirstJobEntity;
         int jobId = 1;
-        int employerAccountId = 1;
-        _jobQueryRepository.Setup(r => r.GetJobForEmployersById(jobId, employerAccountId)).ReturnsAsync(jobEntity);
+        var employerAccount = EmployerAccountFixtures.EmployerAccountEntity;
+        var currentUserId = 1;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(currentUserId);
+        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId)).ReturnsAsync(employerAccount);
+        _jobQueryRepository.Setup(r => r.GetJobById(jobId))
+            .ReturnsAsync(jobEntity);
         
         //Act
-        var job = await _jobService.DeleteJob(jobId, employerAccountId);
+        var job = await _jobService.DeleteJob(jobId);
         //Assert
         Assert.Equal(jobEntity.JobTitle, job.JobTitle);
         Assert.Equal(jobEntity.Id, job.Id);
@@ -95,12 +108,16 @@ public class JobServiceTests
     public async Task DeleteJobShouldThrowForbiddenExceptionIfOtherEmployerTriesToDeleteJob()
     {
         //Arrange
-        var jobEntity = JobFixtures.FirstJobEntity;
-        int jobId = 1;
-        int employerAccountId = 2;
-        _jobQueryRepository.Setup(r => r.GetJobForEmployersById(jobId, employerAccountId)).ReturnsAsync(jobEntity);
+        var jobEntity = JobFixtures.SecondJobEntity;
+        var jobId = 2;
+        var employerAccount = EmployerAccountFixtures.EmployerAccountEntity;
+        var currentUserId = 1;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(currentUserId);
+        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId)).ReturnsAsync(employerAccount);
+        _jobQueryRepository.Setup(r => r.GetJobById(jobId))
+            .ReturnsAsync(jobEntity);
         
         //Act & Assert
-        await Assert.ThrowsAsync<ForbiddenException>(async () => await _jobService.DeleteJob(jobId, employerAccountId));
+        await Assert.ThrowsAsync<ForbiddenException>(async () => await _jobService.DeleteJob(jobId));
     }
 }

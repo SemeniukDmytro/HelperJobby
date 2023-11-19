@@ -41,13 +41,13 @@ namespace HelperJobby.Controllers
             return _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByOrganizationId(organizationId));
         }
         
-        [HttpGet("{employerAccountId}/job/{jobId}")]
-        public async Task<JobDTO> GetJobById(int jobId, int employerAccountId)
+        [HttpGet("{jobId}")]
+        public async Task<JobDTO> GetJobById(int jobId)
         {
-            return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobForEmployersById(jobId, employerAccountId));
+            return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobById(jobId));
         }
 
-        [HttpPost("/create-job/{jobCreationId}")]
+        [HttpPost("create-job/{jobCreationId}")]
         public async Task<JobDTO> CreateJob(int jobCreationId)
         {
             var currentJobToCreate =
@@ -57,18 +57,18 @@ namespace HelperJobby.Controllers
             return _mapper.Map<JobDTO>(createdJob);
         }
 
-        [HttpPut("{employerAccountId}/update-job/{jobId}")]
-        public async Task<JobDTO> PutJob(int employerAccountId, int jobId,  UpdatedJobDTO updatedJob)
+        [HttpPut("{jobId}")]
+        public async Task<JobDTO> PutJob(int jobId,  UpdatedJobDTO updatedJob)
         {
-            var job = await _jobService.UpdateJob(jobId, employerAccountId, _mapper.Map<Job>(updatedJob));
+            var job = await _jobService.UpdateJob(jobId, _mapper.Map<Job>(updatedJob));
             job = await _jobCommandRepository.UpdateJob(job);
             return _mapper.Map<JobDTO>(job);
         }
 
-        [HttpDelete("{employerAccountId}/delete-job/{jobId}")]
-        public async Task DeleteJob(int employerAccountId, int jobId)
+        [HttpDelete("{jobId}")]
+        public async Task DeleteJob(int jobId)
         {
-            var job = await _jobService.DeleteJob(jobId, employerAccountId);
+            var job = await _jobService.DeleteJob(jobId);
             await _jobCommandRepository.DeleteJob(job);
         }
     }

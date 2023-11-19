@@ -85,7 +85,7 @@ public class ApplicationContext : DbContext
             .HasForeignKey(ee => ee.OrganizationId);
 
         modelBuilder.Entity<OrganizationEmployeeEmail>()
-            .HasIndex(ee => ee.Email)
+            .HasIndex(ee => new {ee.Email, ee.OrganizationId})
             .IsUnique();
         
         modelBuilder.Entity<Job>()
