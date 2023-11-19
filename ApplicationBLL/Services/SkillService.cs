@@ -8,18 +8,16 @@ namespace ApplicationBLL.Services;
 
 public class SkillService : ISkillService
 {
-    private readonly ICurrentUserChecker _currentUserChecker;
     private readonly IUserService _userService;
     private readonly ISkillQueryRepository _skillQueryRepository;
     private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
 
     public SkillService(IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, ISkillQueryRepository skillQueryRepository,
-        IUserService userService, ICurrentUserChecker currentUserChecker)
+        IUserService userService)
     {
         _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
         _skillQueryRepository = skillQueryRepository;
         _userService = userService;
-        _currentUserChecker = currentUserChecker;
     }
 
     public async Task<Skill> AddSkill(int resumeId, Skill skill)
@@ -28,17 +26,22 @@ public class SkillService : ISkillService
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
         if (jobSeekerAccount.Resume.Id != resumeId)
         {
-            throw new ForbiddenException();
+            throw new ForbiddenException("You can not add skill to this resume");
         }
 
         skill.ResumeId = resumeId;
         return skill;
     }
 
-    public async Task<Skill> DeleteSkill(int skillId, int userId)
+    public async Task<Skill> DeleteSkill(int skillId)
     {
-        _currentUserChecker.IsCurrentUser(userId);
+        var currentUserId = _userService.GetCurrentUserId();
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
         var skillEntity = await _skillQueryRepository.GetSkillById(skillId);
+        if (jobSeekerAccount.Resume.Id != skillEntity.ResumeId)
+        {
+            throw new ForbiddenException();
+        }
         return skillEntity;
     }
 }

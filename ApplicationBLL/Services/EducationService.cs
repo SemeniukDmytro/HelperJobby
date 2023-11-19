@@ -26,7 +26,7 @@ public class EducationService : IEducationService
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
         if (jobSeekerAccount.Resume.Id != resumeId)
         {
-            throw new ForbiddenException();
+            throw new ForbiddenException("You can not add education to this resume");
         }
 
         education.ResumeId = resumeId;

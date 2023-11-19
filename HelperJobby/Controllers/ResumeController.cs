@@ -36,21 +36,21 @@ namespace HelperJobby.Controllers
         }
 
         // POST: api/Resume
-        [HttpPost("{userId}")]
-        public async Task<ResumeDTO> PostResume(int userId, [FromBody] CreateResumeDTO createdResume)
+        [HttpPost]
+        public async Task<ResumeDTO> PostResume([FromBody] CreateResumeDTO createdResume)
         {
             CreateResumeValidator.ValidateCreatedResume(createdResume);
             var resume = _mapper.Map<Resume>(createdResume);
-            resume = await _resumeService.CreateResume(userId, resume);
+            resume = await _resumeService.CreateResume(resume);
             resume = await _resumeCommandRepository.CreateResume(resume);
             return _mapper.Map<ResumeDTO>(resume);
         }
 
         // DELETE: api/Resume/5
-            [HttpDelete("{resumeId}/user/{userId}")]
-        public async Task DeleteResume(int resumeId, int userId)
+            [HttpDelete("{resumeId}")]
+        public async Task DeleteResume(int resumeId)
         {
-            var resume = await _resumeService.DeleteResume(resumeId, userId);
+            var resume = await _resumeService.DeleteResume(resumeId);
             await _resumeCommandRepository.DeleteResume(resume);
         }
 

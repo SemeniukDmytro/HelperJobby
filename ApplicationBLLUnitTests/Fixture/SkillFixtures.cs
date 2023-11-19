@@ -6,13 +6,13 @@ public static class SkillFixtures
 {
     public static Skill CreatedSkill = new Skill()
     {
-        Name = "Work in team"
+        Name = "Recruiting"
     };
 
     public static Skill SkillEntity = new Skill()
     {
         Id = 1,
-        Name = "Work in team",
+        Name = "Recruiting",
         ResumeId = 1
     };
 }

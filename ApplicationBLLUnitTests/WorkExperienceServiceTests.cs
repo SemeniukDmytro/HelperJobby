@@ -11,14 +11,13 @@ namespace ApplicationBLLUnitTests;
 public class WorkExperienceServiceTests
 {
     private readonly IWorkExperienceService _workExperienceService;
-    private readonly Mock<ICurrentUserChecker> _currentUserCheckerMock = new();
     private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<IWorkExperienceQueryRepository> _workExperienceQueryRepositoryMock = new();
     private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
 
     public WorkExperienceServiceTests()
     {
-        _workExperienceService = new WorkExperienceService(_currentUserCheckerMock.Object, _userServiceMock.Object,
+        _workExperienceService = new WorkExperienceService(_userServiceMock.Object,
             _workExperienceQueryRepositoryMock.Object, _jobSeekerAccountRepository.Object);
     }
     
@@ -63,14 +62,17 @@ public class WorkExperienceServiceTests
     {
         //Arrange
         var userId = 1;
-        var resumeId = 1;
         var workExperienceId = 1;
         var workExperience = WorkExperienceFixtures.UpdatedWorkExperience;
-        var workExperienceEntity = WorkExperienceFixtures.WorkExperienceEntity;
-        _workExperienceQueryRepositoryMock.Setup(r => r.GetWorkExperienceById(workExperienceId)).ReturnsAsync(workExperienceEntity);
-        _currentUserCheckerMock.Setup(us => us.IsCurrentUser(userId)).Callback(()=> {});
+        var workExperienceEntity = WorkExperienceFixtures.FirstWorkExperienceEntity;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+            .ReturnsAsync(jobSeekerAccountEntity);
+        _workExperienceQueryRepositoryMock.Setup(r => r.GetWorkExperienceById(workExperienceId))
+            .ReturnsAsync(workExperienceEntity);
         //Act
-        var updateWorkExperience = await _workExperienceService.UpdateWorkExperience(resumeId, userId, workExperience);
+        var updateWorkExperience = await _workExperienceService.UpdateWorkExperience(workExperienceId, workExperience);
         //Assert
         Assert.Equal(updateWorkExperience.ResumeId, workExperienceEntity.ResumeId);
         Assert.Equal(updateWorkExperience.JobTitle, workExperienceEntity.JobTitle);
@@ -82,15 +84,18 @@ public class WorkExperienceServiceTests
     {
         //Arrange
         var userId = 1;
-        var resumeId = 2;
+        var workExperienceId = 2;
         var workExperience = WorkExperienceFixtures.UpdatedWorkExperience;
-        _currentUserCheckerMock.Setup(us => us.IsCurrentUser(userId)).Callback(() =>
-        {
-            throw new ForbiddenException();
-        });
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        var workExperienceEntity = WorkExperienceFixtures.SecondWorkExperienceEntity;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+            .ReturnsAsync(jobSeekerAccountEntity);
+        _workExperienceQueryRepositoryMock.Setup(r => r.GetWorkExperienceById(workExperienceId))
+            .ReturnsAsync(workExperienceEntity);
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
-            await _workExperienceService.UpdateWorkExperience(resumeId, userId, workExperience));
+            await _workExperienceService.UpdateWorkExperience(workExperienceId, workExperience));
     }
     
     [Fact]
@@ -99,12 +104,14 @@ public class WorkExperienceServiceTests
         //Arrange
         var userId = 1;
         var workExperienceId = 1;
-        var workExperienceEntity = WorkExperienceFixtures.WorkExperienceEntity;
-        _currentUserCheckerMock.Setup(us => us.IsCurrentUser(userId)).Callback(() =>
-            { });
+        var workExperienceEntity = WorkExperienceFixtures.FirstWorkExperienceEntity;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+            .ReturnsAsync(jobSeekerAccountEntity);
         _workExperienceQueryRepositoryMock.Setup(r => r.GetWorkExperienceById(workExperienceId)).ReturnsAsync(workExperienceEntity);
         //Act
-        var educationToDelete = await _workExperienceService.Delete(workExperienceId, userId);
+        var educationToDelete = await _workExperienceService.Delete(workExperienceId);
         //Assert
         Assert.Equal(workExperienceEntity.WorkExperienceId, educationToDelete.WorkExperienceId);
     }
@@ -115,13 +122,13 @@ public class WorkExperienceServiceTests
         //Arrange
         var userId = 1;
         var workExperienceId = 1;
-        var workExperienceEntity = WorkExperienceFixtures.WorkExperienceEntity;
-        _currentUserCheckerMock.Setup(us => us.IsCurrentUser(userId)).Callback(() =>
-        {
-            throw new ForbiddenException();
-        });
+        var workExperienceEntity = WorkExperienceFixtures.SecondWorkExperienceEntity;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+            .ReturnsAsync(jobSeekerAccountEntity);
         _workExperienceQueryRepositoryMock.Setup(r => r.GetWorkExperienceById(workExperienceId)).ReturnsAsync(workExperienceEntity);
         //Act % Assert
-        await Assert.ThrowsAsync<ForbiddenException>( async () => await _workExperienceService.Delete(workExperienceId, userId));
+        await Assert.ThrowsAsync<ForbiddenException>( async () => await _workExperienceService.Delete(workExperienceId));
     }
 }

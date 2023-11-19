@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
@@ -9,7 +5,6 @@ using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Resume;
 using HelperJobby.Validators;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
@@ -50,10 +45,10 @@ namespace HelperJobby.Controllers
         }
 
         // DELETE: api/Skill/5
-        [HttpDelete("{skillId}/user/{userId}")]
-        public async Task DeleteSkill(int skillId, int userId)
+        [HttpDelete("{skillId}")]
+        public async Task DeleteSkill(int skillId)
         {
-            var skillEntity = await _skillService.DeleteSkill(skillId, userId);
+            var skillEntity = await _skillService.DeleteSkill(skillId);
             await _skillCommandRepository.DeleteSkill(skillEntity);
         }
 

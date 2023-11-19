@@ -33,6 +33,7 @@ public static class JobSeekerAccountFixture
             Country = "Canada",
             PostalCode = ""
         },
+        Resume = ResumeFixtures.ResumeEntity,
         JobApplies = new List<JobApply>()
         {
             new JobApply()
@@ -51,7 +52,7 @@ public static class JobSeekerAccountFixture
         }
     };
     
-    public static readonly JobSeekerAccount JobSeekerAccountEntityWithSavedJobs = new()
+    public static readonly JobSeekerAccount SecondJobSeekerAccountEntity = new()
     {
         Id = 1,
         FirstName = "Firstname",

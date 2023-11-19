@@ -12,13 +12,12 @@ namespace ApplicationBLLUnitTests;
 public class ResumeServiceTests
 {
     private readonly IResumeService _resumeService;
-    private readonly Mock<ICurrentUserChecker> _currentUserCheckerMock = new();
-    private readonly Mock<IResumeQueryRepository> _resumeQueryRepositoryMock = new();
+    private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
 
     public ResumeServiceTests()
     {
-        _resumeService = new ResumeService(_currentUserCheckerMock.Object, _resumeQueryRepositoryMock.Object,
+        _resumeService = new ResumeService(_userServiceMock.Object,
             _jobSeekerAccountRepository.Object);
     }
 
@@ -28,45 +27,45 @@ public class ResumeServiceTests
         //Arrange
         var userId = 1;
         var createdResume = ResumeFixtures.CreatedResume;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
-        _currentUserCheckerMock.Setup(c => c.IsCurrentUser(userId)).Callback(() => {});
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountByUserId(userId))
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.SecondJobSeekerAccountEntity;
+        _userServiceMock.Setup(c => c.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
         //Act
-        var resume = await  _resumeService.CreateResume(userId, createdResume);
+        var resume = await  _resumeService.CreateResume(createdResume);
         //Assert
         Assert.Equal(createdResume.Educations.Count, resume.Educations.Count);
         Assert.Equal(createdResume.JobSeekerAccountId, jobSeekerAccountEntity.Id);
     }
-
+    
     [Fact]
-    public async Task CreateResumeShouldThrowForbiddenExceptionIfNotCurrentUserTriesToCreate()
+    public async Task CreateResumeShouldThrowForbiddenExceptionIfCurrentUserAlreadyHasResume()
     {
         //Arrange
         var userId = 1;
         var createdResume = ResumeFixtures.CreatedResume;
-        _currentUserCheckerMock.Setup(c => c.IsCurrentUser(userId)).Callback(() =>
-        {
-            throw new ForbiddenException();
-        });
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        _userServiceMock.Setup(c => c.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+            .ReturnsAsync(jobSeekerAccountEntity);
         //Act & Assert
-        await  Assert.ThrowsAsync<ForbiddenException>(async () =>  await  _resumeService.CreateResume(userId, createdResume));
+        await Assert.ThrowsAsync<ForbiddenException>(async () => await _resumeService.CreateResume(createdResume));
     }
     
-
     [Fact]
     public async Task DeleteResumeShouldReturnResumeToDelete()
     {
         //Arrange
         var userId = 1;
         var resumeId = 1;
-        var resumeEntity = ResumeFixtures.ResumeEntity;
-        _currentUserCheckerMock.Setup(c => c.IsCurrentUser(userId)).Callback(() => { });
-        _resumeQueryRepositoryMock.Setup(r => r.GetResumeById(resumeId)).ReturnsAsync(resumeEntity);
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        _userServiceMock.Setup(c => c.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+            .ReturnsAsync(jobSeekerAccountEntity);
         //Act
-        var resume = await _resumeService.DeleteResume(userId, resumeId);
+        var resume = await _resumeService.DeleteResume(resumeId);
         //Assert
-        Assert.Equal(resumeEntity.Id, resume.Id);
+        Assert.Equal(resumeId, resume.Id);
     }
 
     [Fact]
@@ -74,12 +73,12 @@ public class ResumeServiceTests
     {
         //Arrange
         var userId = 1;
-        var resumeId = 1;
-        _currentUserCheckerMock.Setup(c => c.IsCurrentUser(userId)).Callback(() =>
-        {
-            throw new ForbiddenException();
-        });
+        var resumeId = 2;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        _userServiceMock.Setup(c => c.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+            .ReturnsAsync(jobSeekerAccountEntity);
         //Act & Assert
-        await  Assert.ThrowsAsync<ForbiddenException>(async () =>  await  _resumeService.DeleteResume(userId, resumeId));
+        await  Assert.ThrowsAsync<ForbiddenException>(async () =>  await  _resumeService.DeleteResume(resumeId));
     }
 }

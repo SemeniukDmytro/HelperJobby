@@ -44,21 +44,21 @@ namespace HelperJobby.Controllers
         }
 
         // PUT: api/WorkExperience/{workExperienceId}/user/{userId}
-        [HttpPut("{workExperienceId}/user/{userId}")]
-        public async Task<WorkExperienceDTO> Put(int workExperienceId, int userId, [FromBody] CreateWorkExperienceDTO updateWorkExperienceDTO)
+        [HttpPut("{workExperienceId}")]
+        public async Task<WorkExperienceDTO> Put(int workExperienceId, [FromBody] CreateWorkExperienceDTO updateWorkExperienceDTO)
         {
             CreateUpdateWorkExperienceDTOValidator.ValidateCreatedWorkExperience(updateWorkExperienceDTO);
             var workExperience = _mapper.Map<WorkExperience>(updateWorkExperienceDTO);
-            workExperience = await _workExperienceService.UpdateWorkExperience(workExperienceId, userId, workExperience);
+            workExperience = await _workExperienceService.UpdateWorkExperience(workExperienceId, workExperience);
             workExperience = await _workExperienceCommandRepository.Update(workExperience);
             return _mapper.Map<WorkExperienceDTO>(workExperience);
         }
 
         // DELETE: api/WorkExperience/{workExperienceId}/user/{userId}
-        [HttpDelete("{workExperienceId}/user/{userId}")]
-        public async Task Delete(int workExperienceId, int userId)
+        [HttpDelete("{workExperienceId}")]
+        public async Task Delete(int workExperienceId)
         {
-            var  workExperience = await _workExperienceService.Delete(workExperienceId, userId);
+            var  workExperience = await _workExperienceService.Delete(workExperienceId);
             await _workExperienceCommandRepository.Delete(workExperience);
         }
     }

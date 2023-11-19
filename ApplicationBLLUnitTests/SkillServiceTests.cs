@@ -4,6 +4,7 @@ using ApplicationBLLUnitTests.Fixture;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
+using ApplicationDomain.Models;
 using Moq;
 
 namespace ApplicationBLLUnitTests;
@@ -11,7 +12,6 @@ namespace ApplicationBLLUnitTests;
 public class SkillServiceTests
 {
     private readonly ISkillService _skillService;
-    private readonly Mock<ICurrentUserChecker> _currentUserCheckerMock = new();
     private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<ISkillQueryRepository> _skillQueryRepositoryMock = new();
     private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
@@ -19,7 +19,7 @@ public class SkillServiceTests
     public SkillServiceTests()
     {
         _skillService = new SkillService(_jobSeekerAccountRepository.Object, _skillQueryRepositoryMock.Object,
-            _userServiceMock.Object, _currentUserCheckerMock.Object);
+            _userServiceMock.Object);
     }
     
     [Fact]
@@ -65,11 +65,13 @@ public class SkillServiceTests
         var userId = 1;
         var skillId = 1;
         var skillEntity = SkillFixtures.SkillEntity;
-        _currentUserCheckerMock.Setup(us => us.IsCurrentUser(userId)).Callback(() =>
-            { });
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+            .ReturnsAsync(jobSeekerAccountEntity);
         _skillQueryRepositoryMock.Setup(r => r.GetSkillById(skillId)).ReturnsAsync(skillEntity);
         //Act
-        var skill = await _skillService.DeleteSkill(skillId, userId);
+        var skill = await _skillService.DeleteSkill(skillId);
         //Assert
         Assert.Equal(skillEntity.Id, skill.Id);
     }
@@ -79,14 +81,17 @@ public class SkillServiceTests
     {
         //Arrange
         var userId = 1;
-        var skillId = 1;
-        var skillEntity = SkillFixtures.SkillEntity;
-        _currentUserCheckerMock.Setup(us => us.IsCurrentUser(userId)).Callback(() =>
+        var skillId = 2;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+            .ReturnsAsync(jobSeekerAccountEntity);
+        _skillQueryRepositoryMock.Setup(r => r.GetSkillById(skillId)).ReturnsAsync(new Skill()
         {
-            throw new ForbiddenException();
+            Id = skillId,
+            ResumeId = 2,
         });
-        _skillQueryRepositoryMock.Setup(r => r.GetSkillById(skillId)).ReturnsAsync(skillEntity);
         //Act % Assert
-        await Assert.ThrowsAsync<ForbiddenException>( async () => await _skillService.DeleteSkill(skillId, userId));
+        await Assert.ThrowsAsync<ForbiddenException>( async () => await _skillService.DeleteSkill(skillId));
     }
 }

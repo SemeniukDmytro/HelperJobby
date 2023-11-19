@@ -1,4 +1,3 @@
-using ApplicationBLL.Interfaces;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
@@ -8,15 +7,13 @@ namespace ApplicationBLL.Services;
 
 public class WorkExperienceService : IWorkExperienceService
 {
-    private readonly ICurrentUserChecker _currentUserChecker;
     private readonly IUserService _userService;
     private readonly IWorkExperienceQueryRepository _workExperienceQueryRepository;
     private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
 
-    public WorkExperienceService(ICurrentUserChecker currentUserChecker, IUserService userService, 
+    public WorkExperienceService(IUserService userService, 
         IWorkExperienceQueryRepository workExperienceQueryRepository, IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository)
     {
-        _currentUserChecker = currentUserChecker;
         _userService = userService;
         _workExperienceQueryRepository = workExperienceQueryRepository;
         _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
@@ -28,17 +25,22 @@ public class WorkExperienceService : IWorkExperienceService
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
         if (jobSeekerAccount.Resume.Id != resumeId)
         {
-            throw new ForbiddenException();
+            throw new ForbiddenException("You can not add work experience to this resume");
         }
 
         workExperience.ResumeId = resumeId;
         return workExperience;
     }
 
-    public async Task<WorkExperience> UpdateWorkExperience(int workExperienceId, int userId, WorkExperience updatedWorkExperience)
+    public async Task<WorkExperience> UpdateWorkExperience(int workExperienceId, WorkExperience updatedWorkExperience)
     {
-        _currentUserChecker.IsCurrentUser(userId);
+        var currentUserId = _userService.GetCurrentUserId();
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
         var workExperienceEntity = await _workExperienceQueryRepository.GetWorkExperienceById(workExperienceId);
+        if (workExperienceEntity.ResumeId != jobSeekerAccount.Resume.Id)
+        {
+            throw new ForbiddenException();
+        }
         workExperienceEntity = UpdateWorkExperience(workExperienceEntity, updatedWorkExperience);
         return workExperienceEntity;
     }
@@ -56,10 +58,15 @@ public class WorkExperienceService : IWorkExperienceService
         return workExperienceEntity;
     }
     
-    public async Task<WorkExperience> Delete(int workExperienceId, int userId)
+    public async Task<WorkExperience> Delete(int workExperienceId)
     {
-        _currentUserChecker.IsCurrentUser(userId);
-        var educationEntity = await _workExperienceQueryRepository.GetWorkExperienceById(workExperienceId);
-        return educationEntity;
+        var currentUserId = _userService.GetCurrentUserId();
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
+        var workExperience = await _workExperienceQueryRepository.GetWorkExperienceById(workExperienceId);
+        if (workExperience.ResumeId != jobSeekerAccount.Resume.Id)
+        {
+            throw new ForbiddenException();
+        }
+        return workExperience;
     }
 }

@@ -59,7 +59,7 @@ public class JobSeekerAccountServiceTests
         int userId = 1;
         int jobId = 2;
         int jobSeekerId = 1;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntityWithSavedJobs;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.SecondJobSeekerAccountEntity;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
         _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerAccountByUserId(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
@@ -79,7 +79,7 @@ public class JobSeekerAccountServiceTests
         int userId = 1;
         int jobId = 1;
         int jobSeekerId = 2;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntityWithSavedJobs;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.SecondJobSeekerAccountEntity;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
         _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerAccountByUserId(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
@@ -94,7 +94,7 @@ public class JobSeekerAccountServiceTests
         int userId = 1;
         int jobId = 1;
         int jobSeekerId = 1;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntityWithSavedJobs;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.SecondJobSeekerAccountEntity;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
         _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerAccountByUserId(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
@@ -112,7 +112,7 @@ public class JobSeekerAccountServiceTests
         int userId = 1;
         int jobId = 1;
         int jobSeekerId = 1;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntityWithSavedJobs;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.SecondJobSeekerAccountEntity;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
         _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerAccountByUserId(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
@@ -136,7 +136,7 @@ public class JobSeekerAccountServiceTests
         int userId = 1;
         int jobId = 1;
         int jobSeekerId = 2;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntityWithSavedJobs;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.SecondJobSeekerAccountEntity;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
         _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerAccountByUserId(userId))
             .ReturnsAsync(jobSeekerAccountEntity);

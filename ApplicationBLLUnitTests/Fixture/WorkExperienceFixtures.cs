@@ -28,7 +28,7 @@ public static class WorkExperienceFixtures
         Description = "Worked as a software developer on various projects."
     };
     
-    public static WorkExperience WorkExperienceEntity = new WorkExperience()
+    public static WorkExperience FirstWorkExperienceEntity = new WorkExperience()
     {
         WorkExperienceId = 1,
         JobTitle = "Software Developer",
@@ -40,6 +40,20 @@ public static class WorkExperienceFixtures
         CurrentlyWorkHere = false,
         Description = "Worked as a software developer on various projects.",
         ResumeId = 1
+    };
+    
+    public static WorkExperience SecondWorkExperienceEntity = new WorkExperience()
+    {
+        WorkExperienceId = 2,
+        JobTitle = "Software Developer",
+        Company = "ABC Inc.",
+        Country = "United States",
+        CityOrProvince = "New York",
+        From = new DateOnly(2020, 1, 1),
+        To = new DateOnly(2022, 12, 31),
+        CurrentlyWorkHere = false,
+        Description = "Worked as a software developer on various projects.",
+        ResumeId = 2
     };
     
 }
