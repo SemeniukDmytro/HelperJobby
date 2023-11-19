@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
@@ -18,11 +19,28 @@ public class InterviewQueryRepository : IInterviewQueryRepository
 
     public async Task<Interview> GetInterviewByJobIdAndJobSeekerId(int jobId, int jobSeekerId)
     {
-        var interview =
-            await _applicationContext.Interviews.FirstOrDefaultAsync(j => j.JobId == jobId && j.JobSeekerAccountId == jobSeekerId);
+        return await GetInterview(jobId, jobSeekerId);
+    }
+
+    public async Task<Interview> GetInterviewWithJob(int jobId, int jobSeekerId)
+    {
+        return await GetInterview(jobId, jobSeekerId, q => q.Include(i => i.Job));
+    }
+
+    private async Task<Interview> GetInterview(int jobId, int jobSeekerId, Func<IQueryable<Interview>, IQueryable<Interview>> includeFunc = null)
+    {
+        var query = _applicationContext.Interviews.Where(j => j.JobId == jobId && j.JobSeekerAccountId == jobSeekerId);
+
+        if (includeFunc != null)
+        {
+            query = includeFunc(query);
+        }
+
+        var interview = await query.FirstOrDefaultAsync();
+
         if (interview == null)
         {
-            throw new JobApplyingException("Interview wasn't found");
+            throw new InvalidInterviewException("Interview wasn't found");
         }
 
         return interview;

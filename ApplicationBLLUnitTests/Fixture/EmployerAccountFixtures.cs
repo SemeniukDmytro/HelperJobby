@@ -12,7 +12,7 @@ public static class EmployerAccountFixtures
         UserId = 1,
         Jobs = new List<Job>()
         {
-            JobFixtures.JobEntity
+            JobFixtures.FirstJobEntity
         },
         Organization = new Organization()
         {

@@ -3,6 +3,7 @@ using ApplicationBLLUnitTests.Fixture;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
+using ApplicationDomain.Models;
 using Moq;
 
 namespace ApplicationBLLUnitTests;
@@ -11,14 +12,14 @@ public class InterviewServiceTests
 {
     private readonly IInterviewService _interviewService;
     private readonly Mock<IUserService> _userServiceMock = new ();
-    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerQueryRepository = new();
+    private readonly Mock<IInterviewQueryRepository> _interviewQueryRepositoryMock = new();
     private readonly Mock<IJobQueryRepository> _jobQueryRepositoryMock = new();
     private readonly Mock<IEmployerAccountQueryRepository> _employerAccountQueryRepository = new();
 
     public InterviewServiceTests()
     {
-        _interviewService = new InterviewService(_userServiceMock.Object, _jobSeekerQueryRepository.Object,
-            _jobQueryRepositoryMock.Object, _employerAccountQueryRepository.Object);
+        _interviewService = new InterviewService(_userServiceMock.Object,
+            _jobQueryRepositoryMock.Object, _employerAccountQueryRepository.Object, _interviewQueryRepositoryMock.Object);
     }
     
     [Fact]
@@ -28,9 +29,12 @@ public class InterviewServiceTests
         var currentUserId = 1;
         var jobSeekerId = 1;
         var jobId = 1;
+        _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerId(jobId, jobSeekerId))
+            .ThrowsAsync(new InvalidInterviewException("Interview not found"));
         _userServiceMock.Setup(u => u.GetCurrentUserId()).Returns(currentUserId);
-        _employerAccountQueryRepository.Setup(r => r.GetEmployerWithJobs(currentUserId))
+        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId))
             .ReturnsAsync(EmployerAccountFixtures.EmployerAccountEntity);
+        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(JobFixtures.FirstJobEntity);
         //Act
         var createdInterview = await _interviewService.PostInterview(jobId, jobSeekerId);
         //Assert
@@ -46,12 +50,28 @@ public class InterviewServiceTests
         var currentUserId = 1;
         var jobSeekerId = 1;
         var jobId = 2;
+        _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerId(jobId, jobSeekerId))
+            .ThrowsAsync(new InvalidInterviewException("Interview not found"));
         _userServiceMock.Setup(u => u.GetCurrentUserId()).Returns(currentUserId);
-        _employerAccountQueryRepository.Setup(r => r.GetEmployerWithJobs(currentUserId))
+        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId))
             .ReturnsAsync(EmployerAccountFixtures.EmployerAccountEntity);
+        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(JobFixtures.SecondJobEntity);
         //Act & Assert
         await Assert.ThrowsAsync 
         <ForbiddenException>(async () => await _interviewService.PostInterview(jobId, jobSeekerId));
+    }
+    
+    [Fact]
+    public async Task CreateInterviewShouldThrowInvalidInterviewExceptionIfInterviewAlreadyExists()
+    {
+        //Arrange
+        var jobSeekerId = 1;
+        var jobId = 2;
+        _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerId(jobId, jobSeekerId))
+            .ReturnsAsync(new Interview()); 
+        //Act & Assert
+        await Assert.ThrowsAsync 
+            <InvalidInterviewException>(async () => await _interviewService.PostInterview(jobId, jobSeekerId));
     }
 
     [Fact]
@@ -61,8 +81,15 @@ public class InterviewServiceTests
         var currentUserId = 1;
         var jobSeekerId = 1;
         var jobId = 1;
+        _interviewQueryRepositoryMock.Setup(r => r.GetInterviewWithJob(jobId, jobSeekerId))
+            .ReturnsAsync(new Interview()
+            {
+                JobSeekerAccountId = jobSeekerId,
+                JobId = jobId,
+                Job = JobFixtures.FirstJobEntity
+            }); 
         _userServiceMock.Setup(u => u.GetCurrentUserId()).Returns(currentUserId);
-        _employerAccountQueryRepository.Setup(r => r.GetEmployerWithJobs(currentUserId))
+        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId))
             .ReturnsAsync(EmployerAccountFixtures.EmployerAccountEntity);
         //Act
         var interview = await  _interviewService.DeleteInterview(jobId, jobSeekerId);
@@ -78,11 +105,17 @@ public class InterviewServiceTests
         var currentUserId = 1;
         var jobSeekerId = 1;
         var jobId = 2;
+        _interviewQueryRepositoryMock.Setup(r => r.GetInterviewWithJob(jobId, jobSeekerId))
+            .ReturnsAsync(new Interview()
+            {
+                JobSeekerAccountId = jobSeekerId,
+                JobId = jobId,
+                Job = JobFixtures.SecondJobEntity
+            }); 
         _userServiceMock.Setup(u => u.GetCurrentUserId()).Returns(currentUserId);
-        _employerAccountQueryRepository.Setup(r => r.GetEmployerWithJobs(currentUserId))
+        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId))
             .ReturnsAsync(EmployerAccountFixtures.EmployerAccountEntity);
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () => await _interviewService.DeleteInterview(jobId, jobSeekerId));
     }
-    
 }

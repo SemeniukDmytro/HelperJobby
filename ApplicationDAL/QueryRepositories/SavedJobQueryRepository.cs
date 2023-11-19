@@ -16,13 +16,30 @@ public class SavedJobQueryRepository : ISavedJobQueryRepository
     }
     
 
-    public async Task<SavedJob> GetSavedJobByJobAndUserIds(int jobId, int jobSeekerAccountId)
+    public async Task<SavedJob> GetSavedJobByJobIdAndJobSeekerId(int jobId, int jobSeekerId)
     {
-        var savedJob =
-            await _applicationContext.SavedJobs.FirstOrDefaultAsync(j => j.JobId == jobId && j.JobSeekerAccountId == jobSeekerAccountId);
+        return await GetSavedJob(jobId, jobSeekerId);
+    }
+
+    public async Task<SavedJob> GetSavedJobWithJob(int jobId, int jobSeekerId)
+    {
+        return await GetSavedJob(jobId, jobSeekerId, q => q.Include(s => s.Job));
+    }
+
+    private async Task<SavedJob> GetSavedJob(int jobId, int jobSeekerId, Func<IQueryable<SavedJob>, IQueryable<SavedJob>> includeFunc = null)
+    {
+        var query = _applicationContext.SavedJobs.Where(j => j.JobId == jobId && j.JobSeekerAccountId == jobSeekerId);
+
+        if (includeFunc != null)
+        {
+            query = includeFunc(query);
+        }
+
+        var savedJob = await query.FirstOrDefaultAsync();
+
         if (savedJob == null)
         {
-            throw new JobSavingException("Saved job wasn't found");
+            throw new JobNotFoundException("Saved job wasn't found");
         }
 
         return savedJob;

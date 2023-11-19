@@ -35,7 +35,7 @@ public static class JobFixtures
         EmployerAccountId = 1
     };
     
-    public static readonly Job JobEntity = new()
+    public static readonly Job FirstJobEntity = new()
     {   
         Id = 1,
         JobTitle = "Software engineer",
@@ -49,6 +49,22 @@ public static class JobFixtures
         ContactEmail = "test@gmail.com",
         Description = "test description",
         EmployerAccountId = 1
+    };
+    
+    public static readonly Job SecondJobEntity = new()
+    {   
+        Id = 2,
+        JobTitle = "Software engineer",
+        NumberOfOpenings = 10,
+        Language = "English",
+        Location = "Random Address",
+        JobTypes = JobTypes.Freelance,
+        Salary = 100.90m,
+        Schedule = Schedules.DayShift,
+        Benefits = EmployeeBenefits.CommuterBenefits,
+        ContactEmail = "test@gmail.com",
+        Description = "test description",
+        EmployerAccountId = 2
     };
     
     public static readonly Job UpdatedJob = new()

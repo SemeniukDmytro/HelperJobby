@@ -4,5 +4,6 @@ namespace ApplicationDomain.Abstraction.IQueryRepositories;
 
 public interface ISavedJobQueryRepository
 {
-    public Task<SavedJob> GetSavedJobByJobAndUserIds(int jobId, int jobSeekerAccountId);
+    public Task<SavedJob> GetSavedJobByJobIdAndJobSeekerId(int jobId, int jobSeekerAccountId);
+    public Task<SavedJob> GetSavedJobWithJob(int jobId, int jobSeekerAccountId);
 }

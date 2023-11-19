@@ -44,7 +44,7 @@ public class JobServiceTests
     public async Task UpdateJobShouldReturnUpdatedJob()
     {
         //Arrange
-        var jobEntity = JobFixtures.JobEntity;
+        var jobEntity = JobFixtures.FirstJobEntity;
         var updatedJob = JobFixtures.UpdatedJob;
         var jobId = 1;
         var employerAccountId = 1;
@@ -63,7 +63,7 @@ public class JobServiceTests
     public async Task UpdateJobShouldThrowForbiddenExceptionIfOtherEmployerTriesToChangeJob()
     {
         //Arrange
-        var jobEntity = JobFixtures.JobEntity;
+        var jobEntity = JobFixtures.FirstJobEntity;
         var updatedJob = JobFixtures.UpdatedJob;
         var jobId = 1;
         var employerAccountId = 2;
@@ -78,7 +78,7 @@ public class JobServiceTests
     public async Task DeleteJobShouldReturnJobToDelete()
     {
         //Arrange
-        var jobEntity = JobFixtures.JobEntity;
+        var jobEntity = JobFixtures.FirstJobEntity;
         int jobId = 1;
         int employerAccountId = 1;
         _jobQueryRepository.Setup(r => r.GetJobForEmployersById(jobId, employerAccountId)).ReturnsAsync(jobEntity);
@@ -95,7 +95,7 @@ public class JobServiceTests
     public async Task DeleteJobShouldThrowForbiddenExceptionIfOtherEmployerTriesToDeleteJob()
     {
         //Arrange
-        var jobEntity = JobFixtures.JobEntity;
+        var jobEntity = JobFixtures.FirstJobEntity;
         int jobId = 1;
         int employerAccountId = 2;
         _jobQueryRepository.Setup(r => r.GetJobForEmployersById(jobId, employerAccountId)).ReturnsAsync(jobEntity);

@@ -16,8 +16,6 @@ public class JobApplyCommandRepository : IJobApplyCommandRepository
 
     public async Task<JobApply> CreateJobApply(JobApply jobApply)
     {
-        _applicationContext.Entry(jobApply.Job).State = EntityState.Unchanged;
-        _applicationContext.Entry(jobApply.JobSeekerAccount).State = EntityState.Unchanged;
         _applicationContext.JobApplies.Add(jobApply);
         await _applicationContext.SaveChangesAsync();
         return jobApply;
