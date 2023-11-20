@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using ApplicationBLL.Services;
 using ApplicationDomain.Abstraction.IQueryRepositories;
@@ -6,11 +5,10 @@ using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Moq;
 using Xunit.Abstractions;
 
-namespace ApplicationBLLUnitTests;
+namespace BLLUnitTests.ServicesTests;
 
 public class AuthServiceTests
 {

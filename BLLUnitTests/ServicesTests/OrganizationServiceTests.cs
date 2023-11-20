@@ -5,7 +5,7 @@ using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Moq;
 
-namespace ApplicationBLLUnitTests;
+namespace BLLUnitTests.ServicesTests;
 
 public class OrganizationServiceTests
 {

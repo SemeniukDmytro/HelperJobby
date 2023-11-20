@@ -1,13 +1,12 @@
 using ApplicationBLL.Interfaces;
 using ApplicationBLL.Services;
-using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Moq;
 using Xunit.Abstractions;
 
-namespace ApplicationBLLUnitTests;
+namespace BLLUnitTests.ServicesTests;
 
 public class UserServiceTests
 {

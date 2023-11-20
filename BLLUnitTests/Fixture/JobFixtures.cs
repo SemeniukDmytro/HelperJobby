@@ -1,7 +1,7 @@
 using ApplicationDomain.Enums;
 using ApplicationDomain.Models;
 
-namespace ApplicationBLLUnitTests.Fixture;
+namespace BLLUnitTests.Fixture;
 
 public static class JobFixtures
 {   

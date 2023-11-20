@@ -6,9 +6,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationDAL", "Applicati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationBLL", "ApplicationBLL\ApplicationBLL.csproj", "{D88535AB-FEC2-49BB-85FB-A53ADD06D2B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationBLLUnitTests", "ApplicationBLLUnitTests\ApplicationBLLUnitTests.csproj", "{34A73369-8653-4E9E-A412-CB78B7179C52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLLUnitTests", "BLLUnitTests\BLLUnitTests.csproj", "{34A73369-8653-4E9E-A412-CB78B7179C52}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationDomain", "ApplicationDomain\ApplicationDomain.csproj", "{F1DBC37D-CCF4-4AEA-856E-A5D184E37593}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API_IntegrationTests", "API_IntegrationTests\API_IntegrationTests.csproj", "{B87C9081-E07B-4F41-91D6-7EFBDA13254C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +38,9 @@ Global
 		{F1DBC37D-CCF4-4AEA-856E-A5D184E37593}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1DBC37D-CCF4-4AEA-856E-A5D184E37593}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1DBC37D-CCF4-4AEA-856E-A5D184E37593}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B87C9081-E07B-4F41-91D6-7EFBDA13254C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B87C9081-E07B-4F41-91D6-7EFBDA13254C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B87C9081-E07B-4F41-91D6-7EFBDA13254C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B87C9081-E07B-4F41-91D6-7EFBDA13254C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

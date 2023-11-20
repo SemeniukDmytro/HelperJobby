@@ -1,14 +1,11 @@
 using ApplicationBLL.Services;
-using ApplicationBLLUnitTests.Fixture;
-using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
-using ApplicationDomain.Enums;
 using ApplicationDomain.Exceptions;
-using ApplicationDomain.Models;
+using BLLUnitTests.Fixture;
 using Moq;
 
-namespace ApplicationBLLUnitTests;
+namespace BLLUnitTests.ServicesTests;
 
 public class JobServiceTests
 {

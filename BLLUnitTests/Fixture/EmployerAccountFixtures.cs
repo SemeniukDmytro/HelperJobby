@@ -1,6 +1,6 @@
 using ApplicationDomain.Models;
 
-namespace ApplicationBLLUnitTests.Fixture;
+namespace BLLUnitTests.Fixture;
 
 public static class EmployerAccountFixtures
 {

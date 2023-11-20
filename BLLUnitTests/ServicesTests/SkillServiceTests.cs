@@ -1,13 +1,12 @@
-using ApplicationBLL.Interfaces;
 using ApplicationBLL.Services;
-using ApplicationBLLUnitTests.Fixture;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
+using BLLUnitTests.Fixture;
 using Moq;
 
-namespace ApplicationBLLUnitTests;
+namespace BLLUnitTests.ServicesTests;
 
 public class SkillServiceTests
 {
