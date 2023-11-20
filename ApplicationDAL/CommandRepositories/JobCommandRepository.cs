@@ -1,6 +1,7 @@
 using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationDAL.CommandRepositories;
 
@@ -23,6 +24,7 @@ public class JobCommandRepository : IJobCommandRepository
 
     public async Task<Job> UpdateJob(Job updatedJob)
     {
+        _applicationContext.Jobs.Update(updatedJob);
         await _applicationContext.SaveChangesAsync();
         return updatedJob;
     }

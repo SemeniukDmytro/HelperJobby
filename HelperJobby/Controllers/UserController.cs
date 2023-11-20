@@ -7,7 +7,6 @@ using HelperJobby.DTOs.User;
 using HelperJobby.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace HelperJobby.Controllers
 {

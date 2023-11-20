@@ -21,6 +21,20 @@ public class EmployerAccountService : IEmployerAccountService
     public async Task<EmployerAccount> CreateEmployerAccount(EmployerAccount account)
     {
         var currentUserId = _userService.GetCurrentUserId();
+        EmployerAccount employerAccount = null;
+        try
+        {
+            employerAccount = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
+        }
+        catch (Exception e)
+        {
+        }
+
+        if (employerAccount != null)
+        {
+            throw new EmployerAccountAlreadyExistsException();
+        }
+        
         var organization = await _organizationQueryRepository.GetOrganizationByName(account.Organization.Name);
         
         if (organization != null)

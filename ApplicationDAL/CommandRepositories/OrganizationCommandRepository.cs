@@ -15,6 +15,7 @@ public class OrganizationCommandRepository : IOrganizationCommandRepository
 
     public async Task<Organization> UpdateOrganizationById(Organization organization)
     {
+        _applicationContext.Organizations.Update(organization);
         await _applicationContext.SaveChangesAsync();
         return organization;
     }

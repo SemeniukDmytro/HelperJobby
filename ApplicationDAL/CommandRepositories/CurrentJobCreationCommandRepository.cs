@@ -23,6 +23,7 @@ public class CurrentJobCreationCommandRepository : ICurrentJobCreationCommandRep
 
     public async Task<CurrentJobCreation> UpdateCurrentJob(CurrentJobCreation jobCreation)
     {
+        _applicationContext.CurrentJobCreations.Update(jobCreation);
         await _applicationContext.SaveChangesAsync();
         return jobCreation;
     }

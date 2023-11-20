@@ -1,5 +1,6 @@
 using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.ICommandRepositories;
+using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -9,43 +10,28 @@ namespace ApplicationDAL.CommandRepositories;
 public class EmployerAccountCommandRepository : IEmployerAccountCommandRepository
 {
     private readonly ApplicationContext _applicationContext;
+    private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
 
-    public EmployerAccountCommandRepository(ApplicationContext applicationContext)
+    public EmployerAccountCommandRepository(ApplicationContext applicationContext, IEmployerAccountQueryRepository employerAccountQueryRepository)
     {
         _applicationContext = applicationContext;
+        _employerAccountQueryRepository = employerAccountQueryRepository;
     }
 
     public async Task<EmployerAccount> Create(EmployerAccount account)
     {
-        var user = await _applicationContext.Users.AsNoTracking().Include(u => u.EmployerAccount)
-            .FirstOrDefaultAsync(u => u.Id == account.UserId);
-        if (user.EmployerAccount != null)
-        {
-            throw new EmployerAccountAlreadyExistsException();
-        }
-
         if (account.OrganizationId != 0)
         {
             _applicationContext.Attach(account.Organization);
         }
-
-        account.User = user;
-        _applicationContext.Attach(account.User);
         _applicationContext.EmployerAccounts.Add(account);
         await _applicationContext.SaveChangesAsync();
         return account;
     }
 
-    public async Task<EmployerAccount> Update(int userId, EmployerAccount updatedInfo)
+    public async Task<EmployerAccount> Update(EmployerAccount updatedInfo)
     {
-        var user = await _applicationContext.Users.AsNoTracking().Include(u => u.EmployerAccount)
-            .FirstOrDefaultAsync(u => u.Id == userId);
-
-        if (user.EmployerAccount == null)
-        {
-            throw new EmployerAccountNotFoundException();
-        }
-        
+        _applicationContext.EmployerAccounts.Update(updatedInfo);
         await _applicationContext.SaveChangesAsync();
         return updatedInfo;
     }

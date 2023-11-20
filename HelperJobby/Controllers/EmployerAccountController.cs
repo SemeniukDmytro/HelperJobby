@@ -59,7 +59,7 @@ namespace HelperJobby.Controllers
         {
             UpdateEmployerAccountDTOValidator.ValidateUser(updatedAccount);
             var employerAccount = await _employerAccountService.UpdateEmployerAccount(userId, _mapper.Map<EmployerAccount>(updatedAccount));
-            var updatedAccountDTO = _mapper.Map<EmployerAccountDTO>(await _accountCommandRepository.Update(userId, employerAccount));
+            var updatedAccountDTO = _mapper.Map<EmployerAccountDTO>(await _accountCommandRepository.Update(employerAccount));
             return updatedAccountDTO;
         }
     }

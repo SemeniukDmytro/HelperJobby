@@ -5,5 +5,5 @@ namespace ApplicationDomain.Abstraction.ICommandRepositories;
 public interface IEmployerAccountCommandRepository
 {
     public Task<EmployerAccount> Create(EmployerAccount account);
-    public Task<EmployerAccount> Update(int userId, EmployerAccount updatedInfo);
+    public Task<EmployerAccount> Update(EmployerAccount updatedInfo);
 }
