@@ -18,6 +18,21 @@ public static class EmployerAccountFixtures
         {
             Name = "newOrganization"
         }
-        
+    };
+    
+    public static EmployerAccount SecondEmployerAccountEntity = new EmployerAccount()
+    {
+        Id = 2,
+        FullName = "test name",
+        Email = "secondEmployer@gmail.com",
+        UserId = 2,
+        Jobs = new List<Job>()
+        {
+            JobFixtures.FirstJobEntity
+        },
+        Organization = new Organization()
+        {
+            Name = "newOrganization"
+        }
     };
 }

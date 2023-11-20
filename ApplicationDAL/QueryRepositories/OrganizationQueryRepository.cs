@@ -32,6 +32,16 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
         return organization;
     }
 
+    public async Task<OrganizationEmployeeEmail> GetEmployeeEmail(int employeeEmailId)
+    {
+        var employeeEmail = await _applicationContext.OrganizationEmployeeEmails.Include(e => e.Organization)
+            .FirstOrDefaultAsync(e => e.Id == employeeEmailId);
+        if (employeeEmail == null)
+        {
+            throw new EmployeeEmailException("Employee email not found");
+        }
+        return employeeEmail;
+    }
     public async Task<OrganizationEmployeeEmail?> GetEmployeeEmailByOrganizationId(int organizationId, string email)
     {
         var employeeEmail = await _applicationContext.OrganizationEmployeeEmails.Where(e =>

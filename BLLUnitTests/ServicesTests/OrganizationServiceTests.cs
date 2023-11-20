@@ -3,6 +3,7 @@ using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
+using BLLUnitTests.Fixture;
 using Moq;
 
 namespace BLLUnitTests.ServicesTests;
@@ -12,11 +13,12 @@ public class OrganizationServiceTests
     private OrganizationService _organizationService;
     private Mock<IUserService> _userServiceMock = new();
     private Mock<IOrganizationQueryRepository> _organizationQueryRepositoryMock = new();
+    private readonly Mock<IEmployerAccountQueryRepository> _employerAccountQueryRepositoryMock  = new ();
 
     public OrganizationServiceTests()
     {
         _organizationService = new OrganizationService(_userServiceMock.Object,
-            _organizationQueryRepositoryMock.Object);
+            _organizationQueryRepositoryMock.Object, _employerAccountQueryRepositoryMock.Object);
     }
     
     [Fact]
@@ -144,24 +146,26 @@ public class OrganizationServiceTests
     public async Task RemoveEmployeeEmailShouldAddEmployeeEmail()
     {
         //Arrange
-        var organizationId = 1;
+        var emailId = 1;
         var userId = 1;
-        var employeeEmail = new OrganizationEmployeeEmail()
-        {
-            Id = 1,
-            Email = "test@gmail.com"
-        };
         var organization = new Organization()
         {
             OrganizationOwnerId = 1
         };
+        var employeeEmail = new OrganizationEmployeeEmail()
+        {
+            Id = emailId,
+            Email = "test@gmail.com",
+            Organization = organization
+        };
+        
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationPlain(organizationId))
-            .ReturnsAsync(organization);
-        _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmailByOrganizationId(organizationId,
-            employeeEmail.Email)).ReturnsAsync(employeeEmail);
+        _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmail(emailId))
+            .ReturnsAsync(employeeEmail);
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId))
+            .ReturnsAsync(EmployerAccountFixtures.SecondEmployerAccountEntity);
         //Act
-        var result = await _organizationService.RemoveEmployeeEmail(organizationId, employeeEmail);
+        var result = await _organizationService.RemoveEmployeeEmail(emailId);
         // Assert
         Assert.NotNull(result);
         Assert.Equal(employeeEmail.Email, result.Email);
@@ -172,45 +176,47 @@ public class OrganizationServiceTests
     public async Task RemoveEmployeeEmailShouldThrowForbiddenException()
     {
         //Arrange
-        var organizationId = 1;
+        var employeeEmailId = 1;
         var userId = 1;
         var employeeEmail = new OrganizationEmployeeEmail()
         {
             Email = "test@gmail.com",
-            OrganizationId = 1
-        };
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationPlain(organizationId))
-            .ReturnsAsync(
-            new Organization()
+            OrganizationId = 2,
+            Organization = new Organization()
             {
                 OrganizationOwnerId = 2
-            });
+            }
+        };
+        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
+        _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmail(employeeEmailId))
+            .ReturnsAsync(employeeEmail);
         //Act & Assert
-        await Assert.ThrowsAsync<ForbiddenException>(async () => await _organizationService.RemoveEmployeeEmail(organizationId, employeeEmail));
+        await Assert.ThrowsAsync<ForbiddenException>(async () => await _organizationService.RemoveEmployeeEmail(employeeEmailId));
     }
     
     [Fact]
-    public async Task RemoveEmployeeEmailShouldThrowForbiddenExceptionIfThereIsntSuchEmployeeInOrganization()
+    public async Task RemoveEmployeeEmailShouldThrowForbiddenExceptionIfCurrentUserRemovesHisEmail()
     {
         //Arrange
-        var organizationId = 1;
+        var emailId = 1;
         var userId = 1;
+        var organization = new Organization()
+        {
+            OrganizationOwnerId = 1
+        };
         var employeeEmail = new OrganizationEmployeeEmail()
         {
+            Id = emailId,
             Email = "test@gmail.com",
-            OrganizationId = 1
+            Organization = organization
         };
+        
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationPlain(organizationId))
-            .ReturnsAsync(
-                new Organization()
-                {
-                    OrganizationOwnerId = 1
-                });
-        _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmailByOrganizationId(organizationId,
-            employeeEmail.Email)).ReturnsAsync((OrganizationEmployeeEmail?)null);
+        _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmail(emailId))
+            .ReturnsAsync(employeeEmail);
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId))
+            .ReturnsAsync(EmployerAccountFixtures.EmployerAccountEntity);
         //Act & Assert
-        await Assert.ThrowsAsync<ForbiddenException>(async () => await _organizationService.RemoveEmployeeEmail(organizationId, employeeEmail));
+        await Assert.ThrowsAsync<ForbiddenException>(async () => await _organizationService.RemoveEmployeeEmail(emailId));
     }
 }

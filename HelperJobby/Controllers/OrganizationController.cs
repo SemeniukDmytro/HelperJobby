@@ -16,15 +16,17 @@ namespace HelperJobby.Controllers
         private readonly IOrganizationQueryRepository _organizationQueryRepository;
         private readonly IOrganizationService _organizationService;
         private readonly IOrganizationCommandRepository _organizationCommandRepository;
+        private readonly IEmployerAccountCommandRepository _employerAccountCommandRepository;
 
         // GET: api/Organization/5
         public OrganizationController(IOrganizationQueryRepository organizationQueryRepository,
             IOrganizationService organizationService, IOrganizationCommandRepository organizationCommandRepository,
-            IMapper mapper) : base(mapper)
+            IMapper mapper, IEmployerAccountCommandRepository employerAccountCommandRepository) : base(mapper)
         {
             _organizationQueryRepository = organizationQueryRepository;
             _organizationService = organizationService;
             _organizationCommandRepository = organizationCommandRepository;
+            _employerAccountCommandRepository = employerAccountCommandRepository;
         }
 
         [HttpGet("{id}")]
@@ -54,13 +56,13 @@ namespace HelperJobby.Controllers
 
         }
         
-        [HttpPost("{organizationId}/remove-employee")]
-        public async Task RemoveEmployeeEmail(int organizationId, OrganizationEmployeeEmailDTO employeeEmailDTO)
+        [HttpPost("{employeeEmailId}/remove-employee")]
+        public async Task RemoveEmployeeEmail(int employeeEmailId)
         {
-            OrganizationEmployeeEmailDTOValidator.ValidateEmail(employeeEmailDTO);
             var employeeEmail =
-                await _organizationService.RemoveEmployeeEmail(organizationId, _mapper.Map<OrganizationEmployeeEmail>(employeeEmailDTO));
+                await _organizationService.RemoveEmployeeEmail(employeeEmailId);
             await _organizationCommandRepository.RemoveOrganizationEmployeesEmails(employeeEmail);
+            await _employerAccountCommandRepository.RemoveEmployeeByEmployeeEmail(employeeEmail);
         }
 
     }

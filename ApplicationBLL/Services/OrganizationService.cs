@@ -9,12 +9,14 @@ public class OrganizationService : IOrganizationService
 {
     private readonly IUserService _userService;
     private readonly IOrganizationQueryRepository _organizationQueryRepository;
+    private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
 
     public OrganizationService(IUserService userService,
-        IOrganizationQueryRepository organizationQueryRepository)
+        IOrganizationQueryRepository organizationQueryRepository, IEmployerAccountQueryRepository employerAccountQueryRepository)
     {
         _userService = userService;
         _organizationQueryRepository = organizationQueryRepository;
+        _employerAccountQueryRepository = employerAccountQueryRepository;
     }
     
 
@@ -51,20 +53,19 @@ public class OrganizationService : IOrganizationService
         return employeeEmail;
     }
 
-    public async Task<OrganizationEmployeeEmail> RemoveEmployeeEmail(int organizationId, OrganizationEmployeeEmail employeeEmail)
+    public async Task<OrganizationEmployeeEmail> RemoveEmployeeEmail(int employeeEmailId)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var organization = await _organizationQueryRepository.GetOrganizationPlain(organizationId);
-        if (organization.OrganizationOwnerId != currentUserId)
+        var employeeEmail = await _organizationQueryRepository.GetEmployeeEmail(employeeEmailId);
+        if (employeeEmail.Organization.OrganizationOwnerId != currentUserId)
         {
             throw new ForbiddenException();
         }
-        var potentialEmail =
-            await _organizationQueryRepository.GetEmployeeEmailByOrganizationId(organizationId, employeeEmail.Email);
-        if (potentialEmail == null)
+        var currentEmployer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
+        if (currentEmployer.Email == employeeEmail.Email)
         {
-            throw new ForbiddenException("There isn't such email in organization employee list");
+            throw new ForbiddenException("You can not remove yourself from your organization");
         }
-        return potentialEmail;
+        return employeeEmail;
     }
 }

@@ -35,4 +35,15 @@ public class EmployerAccountCommandRepository : IEmployerAccountCommandRepositor
         await _applicationContext.SaveChangesAsync();
         return updatedInfo;
     }
+
+    public async Task RemoveEmployeeByEmployeeEmail(OrganizationEmployeeEmail employeeEmail)
+    {
+        var employee =
+            await _applicationContext.EmployerAccounts.FirstOrDefaultAsync(e => e.Email == employeeEmail.Email);
+        if (employee != null)
+        {
+            _applicationContext.EmployerAccounts.Remove(employee);
+            await _applicationContext.SaveChangesAsync();
+        }
+    }
 }

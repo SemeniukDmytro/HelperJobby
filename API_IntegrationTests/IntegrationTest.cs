@@ -24,13 +24,7 @@ public class IntegrationTest
                     services.RemoveAll(typeof(ApplicationContext));
                     services.RemoveAll(typeof(DbContextOptions<ApplicationContext>));
                     services.AddDbContext<ApplicationContext>(options =>
-                    {
-                        options.UseMySql(connectionString, 
-                            ServerVersion.AutoDetect(connectionString),
-                            x => x.MigrationsAssembly("ApplicationDAL"));
-                        options.EnableSensitiveDataLogging();
-                        options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                    });
+                    options.UseInMemoryDatabase("TestDb"));
                 });
             });
         TestClient = appFactory.CreateClient();
@@ -41,6 +35,18 @@ public class IntegrationTest
         var authUser = await GetUserAsync();
         TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authUser.Token);
         return authUser.User;
+    }
+
+    protected async Task<AuthUserDTO> LoginUser(string email, string password)
+    {
+        var response = await TestClient.PostAsJsonAsync("/api/auth/sign-in", new LoginUserDTO()
+        {
+            Email = email,
+            Password = password
+        });
+        var authUserDTO = await response.Content.ReadAsAsync<AuthUserDTO>();
+        TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authUserDTO.Token);
+        return authUserDTO;
     }
 
     private async Task<AuthUserDTO> GetUserAsync()
@@ -54,14 +60,9 @@ public class IntegrationTest
         return loginResponse;
     }
 
-    protected async Task RegisterNewUser(string email, string password, string accountType)
+    protected async Task RegisterNewUser(CreateUpdateUserDTO newUser)
     {
-        var response = await TestClient.PostAsJsonAsync("/api/auth/sign-up", new CreateUpdateUserDTO()
-        {
-            Email = email,
-            Password = password,
-            AccountType = "Job seeker"
-        });
+        await TestClient.PostAsJsonAsync("/api/auth/sign-up", newUser);
     }
     
     

@@ -6,5 +6,5 @@ public interface IOrganizationService
 {
     public Task<Organization> UpdateOrganization(int organizationId, Organization updatedOrganization);
     public Task<OrganizationEmployeeEmail> AddEmployeeEmail(int organizationId, OrganizationEmployeeEmail employeeEmail);
-    public Task<OrganizationEmployeeEmail> RemoveEmployeeEmail(int organizationId, OrganizationEmployeeEmail employeeEmail);
+    public Task<OrganizationEmployeeEmail> RemoveEmployeeEmail(int employeeEmailId);
 }

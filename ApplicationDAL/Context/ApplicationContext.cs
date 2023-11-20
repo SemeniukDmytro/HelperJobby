@@ -64,6 +64,10 @@ public class ApplicationContext : DbContext
             .HasForeignKey<Resume>(r => r.JobSeekerAccountId)
             .IsRequired();
 
+        modelBuilder.Entity<EmployerAccount>()
+            .HasIndex(e => e.Email)
+            .IsUnique();
+
         modelBuilder.Entity<EmployerAccount>().HasOne(ea => ea.Organization)
             .WithMany(o => o.EmployeeAccounts)
             .HasForeignKey(o => o.OrganizationId)
