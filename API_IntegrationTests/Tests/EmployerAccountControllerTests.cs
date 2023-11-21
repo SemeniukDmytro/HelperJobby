@@ -24,7 +24,7 @@ public class EmployerAccountControllerTests : IntegrationTest
         
         //Act
         var employerCreationResponse = await TestClient.PostAsJsonAsync(requestUri, createdEmployer);
-        await LogHelper.LogNotSuccessfulResponse(employerCreationResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(employerCreationResponse, TestOutputHelper);
         
         //Assert
         employerCreationResponse.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -48,7 +48,7 @@ public class EmployerAccountControllerTests : IntegrationTest
         newEmployer.OrganizationName = employerWithCreatedOrganization.Organization.Name;
         //Act
         var employerCreationResponse = await TestClient.PostAsJsonAsync(requestUri, newEmployer);
-        await LogHelper.LogNotSuccessfulResponse(employerCreationResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(employerCreationResponse, TestOutputHelper);
         
         //Assert
         employerCreationResponse.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -73,7 +73,7 @@ public class EmployerAccountControllerTests : IntegrationTest
         
         //Act
         var response = await TestClient.PutAsJsonAsync(requestUri, updateEmployerAccountDTO);
-        await LogHelper.LogNotSuccessfulResponse(response, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(response, TestOutputHelper);
         
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -93,7 +93,7 @@ public class EmployerAccountControllerTests : IntegrationTest
 
         //Act
         var response = await TestClient.GetAsync(requestUri);
-        await LogHelper.LogNotSuccessfulResponse(response, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(response, TestOutputHelper);
         //Assert
         var employer = await response.Content.ReadAsAsync<EmployerAccountDTO>();
         Assert.Equal(createdEmployer.Id, employer.Id);
@@ -109,7 +109,7 @@ public class EmployerAccountControllerTests : IntegrationTest
 
         //Act
         var response = await TestClient.GetAsync(requestUri);
-        await LogHelper.LogNotSuccessfulResponse(response, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(response, TestOutputHelper);
         //Assert
         var employer = await response.Content.ReadAsAsync<EmployerAccountDTO>();
         Assert.Equal(createdEmployer.Id, employer.Id);

@@ -23,10 +23,10 @@ public class CurrentJobControllerTests : IntegrationTest
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
         var requestUri = $"{_baseUri}/{employer.Id}/current-job-creation";
-        var currentJobCreation = await CurrentJobCreation();
+        var currentJobCreation = await CreateNewCurrentJob(CurrentJobFixtures.NewJobCreation);
         //Act
         var jobGetResponse = await TestClient.GetAsync(requestUri);
-        await LogHelper.LogNotSuccessfulResponse(jobGetResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(jobGetResponse, TestOutputHelper);
         //Assert
         jobGetResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var receivedCurrentJob = await jobGetResponse.Content.ReadAsAsync<CurrentJobCreationDTO>();
@@ -43,7 +43,7 @@ public class CurrentJobControllerTests : IntegrationTest
         
         //Act
         var currentJobCreationResponse = await TestClient.PostAsJsonAsync(_baseUri, newCurrentJob);
-        await LogHelper.LogNotSuccessfulResponse(currentJobCreationResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(currentJobCreationResponse, TestOutputHelper);
         
         //Assert
         currentJobCreationResponse.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -58,7 +58,7 @@ public class CurrentJobControllerTests : IntegrationTest
     {
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
-        var currentJobCreation = await CurrentJobCreation();
+        var currentJobCreation = await CreateNewCurrentJob(CurrentJobFixtures.NewJobCreation);
         var updatedJob = new CurrentJobCreateDTO()
         {
         JobTitle = "",
@@ -76,7 +76,7 @@ public class CurrentJobControllerTests : IntegrationTest
         var requestUri = $"{_baseUri}/{currentJobCreation.Id}";
         //Act
         var updateResponse = await TestClient.PutAsJsonAsync(requestUri, updatedJob);
-        await LogHelper.LogNotSuccessfulResponse(updateResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(updateResponse, TestOutputHelper);
         //Assert
         updateResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var updatedCurrenJob = await updateResponse.Content.ReadAsAsync<CurrentJobCreationDTO>();
@@ -95,25 +95,16 @@ public class CurrentJobControllerTests : IntegrationTest
     {
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
-        var currentJobCreation = await CurrentJobCreation();
+        var currentJobCreation = await CreateNewCurrentJob(CurrentJobFixtures.NewJobCreation);
         var requestUri = $"{_baseUri}/{currentJobCreation.Id}";
         //Act
         var jobDeleteResponse = await TestClient.DeleteAsync(requestUri);
-        await LogHelper.LogNotSuccessfulResponse(jobDeleteResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(jobDeleteResponse, TestOutputHelper);
         //Assert
         jobDeleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var jobGetResponse = await TestClient.GetAsync($"{_baseUri}/{employer.Id}/current-job-creation");
-        await LogHelper.LogNotSuccessfulResponse(jobGetResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(jobGetResponse, TestOutputHelper);
         jobGetResponse.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
     }
-
-
-    private async Task<CurrentJobCreationDTO> CurrentJobCreation()
-    {
-        var newCurrentJob = CurrentJobFixtures.NewJobCreation;
-        var currentJobCreationResponse = await TestClient.PostAsJsonAsync(_baseUri, newCurrentJob);
-        await LogHelper.LogNotSuccessfulResponse(currentJobCreationResponse, TestOutputHelper);
-        currentJobCreationResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        return await currentJobCreationResponse.Content.ReadAsAsync<CurrentJobCreationDTO>();
-    }
+    
 }

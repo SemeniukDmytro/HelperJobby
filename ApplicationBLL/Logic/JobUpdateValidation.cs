@@ -1,4 +1,5 @@
 using ApplicationDomain.Attributes;
+using ApplicationDomain.Enums;
 
 namespace ApplicationBLL.Logic;
 
@@ -34,6 +35,11 @@ public class JobUpdateValidation<T>
     
     private static bool IsValid(object value)
     {
+        if (value is EmployeeBenefits)
+        {
+            return true;
+        }
+        
         if (value == null)
         {
             return false;

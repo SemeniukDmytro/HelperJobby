@@ -25,7 +25,7 @@ public class OrganizationControllerTests : IntegrationTest
         
         //Act
         var organizationResponse = await TestClient.GetAsync(requestUri);
-        await LogHelper.LogNotSuccessfulResponse(organizationResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(organizationResponse, TestOutputHelper);
         
         //Assert
         organizationResponse.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -47,7 +47,7 @@ public class OrganizationControllerTests : IntegrationTest
         };
         //Act
         var organizationResponse = await TestClient.PutAsJsonAsync(requestUri, updatedOrganization);
-        await LogHelper.LogNotSuccessfulResponse(organizationResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(organizationResponse, TestOutputHelper);
         
         //Assert
         organizationResponse.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -70,7 +70,7 @@ public class OrganizationControllerTests : IntegrationTest
         //Act
         var addEmailResponse = await TestClient.PostAsJsonAsync($"/api/organization/{employerAccount.Organization.Id}/add-employee",
             newEmployeeEmail);
-        await LogHelper.LogNotSuccessfulResponse(addEmailResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(addEmailResponse, TestOutputHelper);
         
         
         //Assert
@@ -91,7 +91,7 @@ public class OrganizationControllerTests : IntegrationTest
         };
         var addEmailResponse = await TestClient.PostAsJsonAsync($"/api/organization/{employerAccount.Organization.Id}/add-employee",
             newEmployeeEmail);
-        await LogHelper.LogNotSuccessfulResponse(addEmailResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(addEmailResponse, TestOutputHelper);
         addEmailResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var email = await addEmailResponse.Content.ReadAsAsync<OrganizationEmployeeEmailDTO>();
         await AuthenticateAsync();
@@ -99,19 +99,19 @@ public class OrganizationControllerTests : IntegrationTest
         newEmployer.OrganizationName = employerAccount.Organization.Name;
         newEmployer.Email = email.Email;
         var employerResponse = await TestClient.PostAsJsonAsync("/api/employerAccount", newEmployer);
-        await LogHelper.LogNotSuccessfulResponse(employerResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(employerResponse, TestOutputHelper);
         var employerToRemove = await employerResponse.Content.ReadAsAsync<EmployerAccountDTO>();
         await LoginUser(employerAccount.User.Email, "randomPwd");
         var requestUri = $"{baseUri}/{email.Id}/remove-employee";
         
         //Act
         var removeEmployeeEmailResponse = await TestClient.PostAsJsonAsync(requestUri, email.Id);
-        await LogHelper.LogNotSuccessfulResponse(removeEmployeeEmailResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(removeEmployeeEmailResponse, TestOutputHelper);
         
         //Assert
         removeEmployeeEmailResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var removedEmployeeResponse = await TestClient.GetAsync($"/api/EmployerAccount/{employerToRemove.UserId}");
-        await LogHelper.LogNotSuccessfulResponse(removedEmployeeResponse, TestOutputHelper);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(removedEmployeeResponse, TestOutputHelper);
         removedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
     }
 }

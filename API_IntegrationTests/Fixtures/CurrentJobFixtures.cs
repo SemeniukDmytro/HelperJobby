@@ -19,4 +19,19 @@ public class CurrentJobFixtures
         ResumeRequired = true,
         Description = ""
     };
+    
+    public static readonly CurrentJobCreateDTO CompletedJobCreation = new()
+    {
+        JobTitle = "Software Developer",
+        NumberOfOpenings = 3,
+        Language = "English",
+        Location = "New York",
+        JobType = new List<JobTypes> { JobTypes.FullTime, JobTypes.Apprenticeship },
+        Salary = 80000.00m,
+        Schedule = new List<Schedules> { Schedules.Holidays, Schedules.Other },
+        Benefits = new List<EmployeeBenefits> { EmployeeBenefits.CommuterBenefits },
+        ContactEmail = "employer@gmail.com",
+        ResumeRequired = true,
+        Description = "You need to know C#"
+    };
 }

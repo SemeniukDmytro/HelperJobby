@@ -1,8 +1,12 @@
+using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using API_IntegrationTests.Fixtures;
 using API_IntegrationTests.TestHelpers;
 using ApplicationDAL.Context;
+using FluentAssertions;
 using HelperJobby.DTOs.Account;
+using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.User;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -77,6 +81,21 @@ public class IntegrationTest
         var authUserDTO = await response.Content.ReadAsAsync<AuthUserDTO>();
         TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authUserDTO.Token);
         return authUserDTO;
+    }
+    
+    protected async Task<CurrentJobCreationDTO> CreateNewCurrentJob(CurrentJobCreateDTO currentJobCreateDTO)
+    {
+        var newCurrentJob = currentJobCreateDTO;
+        var currentJobCreationResponse = await TestClient.PostAsJsonAsync("/api/CurrentJob", newCurrentJob);
+        return await currentJobCreationResponse.Content.ReadAsAsync<CurrentJobCreationDTO>();
+    }
+    
+    protected async Task<JobDTO> CreateJob()
+    {
+        var currentJobCreation = await CreateNewCurrentJob(CurrentJobFixtures.CompletedJobCreation);
+        var requestUri = $"/api/job/create-job/{currentJobCreation.Id}";
+        var jobCreateResponse = await TestClient.PostAsJsonAsync(requestUri, currentJobCreation.Id);
+        return await jobCreateResponse.Content.ReadAsAsync<JobDTO>();
     }
 
     private async Task RegisterNewUser(CreateUpdateUserDTO newUser)
