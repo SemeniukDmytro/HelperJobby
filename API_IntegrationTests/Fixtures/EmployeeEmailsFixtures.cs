@@ -4,7 +4,7 @@ namespace API_IntegrationTests.Fixtures;
 
 public class EmployeeEmailsFixtures
 {
-    public static readonly OrganizationEmployeeEmailDTO emailForAdding = new OrganizationEmployeeEmailDTO()
+    public static readonly CreateOrganizationEmployeeEmailDTO emailForAdding = new CreateOrganizationEmployeeEmailDTO()
     {
         Email = "test@gmail.com"
     };

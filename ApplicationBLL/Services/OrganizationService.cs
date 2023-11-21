@@ -28,8 +28,16 @@ public class OrganizationService : IOrganizationService
         {
             throw new ForbiddenException();
         }
-        organization.NumberOfEmployees = updatedOrganization.NumberOfEmployees;
-        organization.PhoneNumber = updatedOrganization.PhoneNumber;
+
+        if (updatedOrganization.NumberOfEmployees != default)
+        {
+            organization.NumberOfEmployees = updatedOrganization.NumberOfEmployees;
+        }
+
+        if (!string.IsNullOrEmpty(updatedOrganization.PhoneNumber))
+        {
+            organization.PhoneNumber = updatedOrganization.PhoneNumber;
+        }
         return organization;
     }
 

@@ -16,11 +16,11 @@ namespace API_IntegrationTests;
 public class IntegrationTest
 {
     protected readonly HttpClient TestClient;
-    private readonly ITestOutputHelper _testOutputHelper;
+    protected readonly ITestOutputHelper TestOutputHelper;
 
     protected IntegrationTest(ITestOutputHelper testOutputHelper)
     {
-        _testOutputHelper = testOutputHelper;
+        TestOutputHelper = testOutputHelper;
         var connectionString =
             "Server=34.132.58.30; User=root; Database=HelperJobbyTestsDB; Port=3306; Password=aAI9E)1k|d(t\"Jr#;";
         var appFactory = new WebApplicationFactory<Program>()
@@ -67,7 +67,7 @@ public class IntegrationTest
         return employerWithCreatedOrganization;
     }
     
-    private async Task<AuthUserDTO> LoginUser(string email, string password)
+    protected async Task<AuthUserDTO> LoginUser(string email, string password)
     {
         var response = await TestClient.PostAsJsonAsync("/api/auth/sign-in", new LoginUserDTO()
         {

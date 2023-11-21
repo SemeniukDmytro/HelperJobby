@@ -10,5 +10,5 @@ public class OrganizationDTO
     public int NumberOfEmployees { get; set; }
     public int OrganizationOwnerId { get; set; }
     public List<EmployerAccountDTO> EmployeeAccounts { get; set; }
-    public List<OrganizationEmployeeEmailDTO> EmployeeEmails { get; set; }
+    public List<CreateOrganizationEmployeeEmailDTO> EmployeeEmails { get; set; }
 }

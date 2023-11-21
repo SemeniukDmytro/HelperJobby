@@ -1,11 +1,9 @@
 ﻿using System.Net;
-using System.Net.Http.Json;
-using API_IntegrationTests.Fixtures;
 using FluentAssertions;
 using HelperJobby.DTOs.User;
 using Xunit.Abstractions;
 
-namespace API_IntegrationTests;
+namespace API_IntegrationTests.Tests;
 
 public class UserControllerTests : IntegrationTest
 {

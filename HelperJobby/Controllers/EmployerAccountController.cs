@@ -46,6 +46,7 @@ namespace HelperJobby.Controllers
         }
         
         [HttpPost]
+        [DebuggerStepThrough]
         public async Task<EmployerAccountDTO> Create([FromBody] CreateEmployerAccountDTO createdEmployerAccountDTO)
         {
             EmployerAccountDTOValidator.ValidateAccount(createdEmployerAccountDTO);

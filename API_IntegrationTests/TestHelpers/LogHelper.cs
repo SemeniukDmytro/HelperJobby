@@ -2,7 +2,7 @@ using Xunit.Abstractions;
 
 namespace API_IntegrationTests.TestHelpers;
 
-public static class ResponseLogger
+public static class LogHelper
 {
     public static async Task LogNotSuccessfulResponse(HttpResponseMessage response, ITestOutputHelper testOutputHelper)
     {

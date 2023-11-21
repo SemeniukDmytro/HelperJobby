@@ -47,13 +47,13 @@ namespace HelperJobby.Controllers
         }
 
         [HttpPost("{organizationId}/add-employee")]
-        public async Task AddEmployeeEmail(int organizationId, OrganizationEmployeeEmailDTO employeeEmailDTO)
+        public async Task<OrganizationEmployeeEmailDTO> AddEmployeeEmail(int organizationId, CreateOrganizationEmployeeEmailDTO employeeEmailDTO)
         {
             OrganizationEmployeeEmailDTOValidator.ValidateEmail(employeeEmailDTO);
             var employeeEmail =
                 await _organizationService.AddEmployeeEmail(organizationId, _mapper.Map<OrganizationEmployeeEmail>(employeeEmailDTO));
-            await _organizationCommandRepository.AddOrganizationEmployeesEmails(employeeEmail);
-
+            employeeEmail = await _organizationCommandRepository.AddOrganizationEmployeesEmails(employeeEmail);
+            return _mapper.Map<OrganizationEmployeeEmailDTO>(employeeEmail);
         }
         
         [HttpPost("{employeeEmailId}/remove-employee")]
