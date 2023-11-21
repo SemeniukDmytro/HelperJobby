@@ -9,6 +9,7 @@ public class EmployerAccountDTO
     public int Id { get; set; }
     public int UserId { get; set; }
     public string Email { get; set; }
+    public string ContactNumber { get; set; }
     public string FullName { get; set; }
     public UserDTO User { get; set; }
     public int OrganizationId { get; set; }

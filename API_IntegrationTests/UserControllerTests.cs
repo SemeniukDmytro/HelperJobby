@@ -3,17 +3,22 @@ using System.Net.Http.Json;
 using API_IntegrationTests.Fixtures;
 using FluentAssertions;
 using HelperJobby.DTOs.User;
+using Xunit.Abstractions;
 
 namespace API_IntegrationTests;
 
 public class UserControllerTests : IntegrationTest
 {
+    public UserControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+    {
+    }
+    
     [Fact]
     public async Task GetUserById_ReturnsSuccessfulResponseAndUser()
     {
         // Arrange
-        await AuthenticateAsync();
-        int userId = 1;
+        var createdUser = await AuthenticateAsync();
+        int userId = createdUser.Id;
         var requestUri = $"/api/User/{userId}";
 
         // Act
@@ -30,9 +35,7 @@ public class UserControllerTests : IntegrationTest
     public async Task GetCurrentUser_ReturnsSuccessfulResponseAndUser()
     {
         // Arrange
-        var newUser = NewUsersFixtures.newUser;
-        await RegisterNewUser(newUser);
-        var currentUser = await LoginUser(newUser.Email, newUser.Password);
+        var currentUser = await AuthenticateAsync();
         var requestUri = $"/api/User/current-user";
 
         // Act
@@ -42,8 +45,8 @@ public class UserControllerTests : IntegrationTest
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var user = response.Content.ReadAsAsync<UserDTO>().Result;
         Assert.True(response.IsSuccessStatusCode);
-        Assert.Equal(currentUser.User.Id, user.Id);
-        Assert.Equal(currentUser.User.AccountType, user.AccountType);
+        Assert.Equal(currentUser.Id, user.Id);
+        Assert.Equal(currentUser.AccountType, user.AccountType);
     }
     
     
@@ -51,22 +54,22 @@ public class UserControllerTests : IntegrationTest
     public async Task UpdateUserShouldReturnUpdatedUser()
     {
         //Arrange
-        var newUser = NewUsersFixtures.newUser;
-        await RegisterNewUser(newUser);
-        var currentUser = await LoginUser(newUser.Email, newUser.Password);
+        var currentUser = await AuthenticateAsync();
         var updatedUser = new CreateUpdateUserDTO()
         {
             Email = "",
             Password = "",
             AccountType = "Employer"
         };
-        var requestUri = $"api/user/{currentUser.User.Id}";
+        var requestUri = $"api/user/{currentUser.Id}";
         //Act
         var response = await TestClient.PutAsJsonAsync(requestUri, updatedUser);
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var responseContent = await response.Content.ReadAsAsync<UserDTO>(); 
-        Assert.Equal(currentUser.User.Id, responseContent.Id);
+        Assert.Equal(currentUser.Id, responseContent.Id);
         Assert.Equal(updatedUser.AccountType, responseContent.AccountType);
     }
+
+   
 }

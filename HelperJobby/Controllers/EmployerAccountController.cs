@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
@@ -38,10 +39,9 @@ namespace HelperJobby.Controllers
         }
         
         [HttpGet("{userId}")]
-
-        public async Task<EmployerAccountDTO> GetUserEmployerAccount(int id)
+        public async Task<EmployerAccountDTO> GetUserEmployerAccount(int userId)
         {
-            var user = await _accountQueryRepository.GetEmployerAccount(id);
+            var user = await _accountQueryRepository.GetEmployerAccount(userId);
             return _mapper.Map<EmployerAccountDTO>(user);
         }
         

@@ -52,11 +52,6 @@ public class EmployerAccountQueryRepository : IEmployerAccountQueryRepository
 
     private async Task<EmployerAccount> GetUserWithEmployerAccount(int userId, Func<IQueryable<User>, IQueryable<User>> includeFunc = null)
     {
-        var query = _applicationContext.Users.AsQueryable();
-        if (includeFunc != null)
-        {
-            query = includeFunc(query);
-        }
         var user = await _customQueryIncluder.GetUser(userId, includeFunc);
         var account = user.EmployerAccount;
 

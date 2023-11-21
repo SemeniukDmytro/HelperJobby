@@ -41,7 +41,7 @@ public class CommonValidator
             throw new ValidationException("Length of your phone number is invalid");
         }
         
-        string regexPattern = @"^\+[1-9]{1,3}[0-9]{3,14}$";
+        string regexPattern = @"^\+[0-9]{1,3}[0-9]{3,14}$";
         if (!Regex.IsMatch(phoneNumber, regexPattern))
         {
             throw new ValidationException("Please enter a valid phone number");

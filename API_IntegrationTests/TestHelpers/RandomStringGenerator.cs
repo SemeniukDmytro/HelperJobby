@@ -13,19 +13,14 @@ public class RandomStringGenerator
         return localPart + domain;
     }
     
-    public static string GenerateRandomNumberWithPlus(int length)
+    public static string GeneratePhoneNumber()
     {
-        var stringBuilder = new StringBuilder();
-        stringBuilder.Append('+'); // Start with '+'
+        int countryCode = random.Next(1, 1000);
+        int phoneNumber = random.Next(1000, 999999999);
 
-        for (int i = 0; i < length; i++)
-        {
-            stringBuilder.Append(random.Next(0, 10));
-        }
-
-        return stringBuilder.ToString();
+        string phoneNumberString = $"+{countryCode:D3}{phoneNumber:D9}";
+        return phoneNumberString;
     }
-
     public static string GenerateRandomString(int length)
     {
         const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
