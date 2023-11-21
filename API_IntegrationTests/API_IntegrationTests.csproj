@@ -29,6 +29,7 @@
     <ItemGroup>
       <ProjectReference Include="..\ApplicationDAL\ApplicationDAL.csproj" />
       <ProjectReference Include="..\HelperJobby\HelperJobby.csproj" />
+
     </ItemGroup>
 
 

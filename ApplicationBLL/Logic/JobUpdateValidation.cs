@@ -17,19 +17,48 @@ public class JobUpdateValidation<T>
             }
             
             var entityProperty = entityProperties.FirstOrDefault(p => p.Name == updatedProperty.Name);
-            var valueOfProperty = updatedProperty.GetValue(updatedEntity);
-            if (valueOfProperty != null && (valueOfProperty != default || (int)valueOfProperty == default))
+            if (entityProperty != null)
             {
+                var updatedValue = updatedProperty.GetValue(updatedEntity);
                 var currentValue = entityProperty.GetValue(entityToUpdate);
-                var newValue = updatedProperty.GetValue(updatedEntity);
 
-                if (!Equals(currentValue, newValue) || currentValue == null || currentValue.Equals(default))
+                if (IsValid(updatedValue))
                 {
-                    entityProperty.SetValue(entityToUpdate, newValue);
+                    entityProperty.SetValue(entityToUpdate, updatedValue);
                 }
             }
         }
 
         return entityToUpdate;
+    }
+    
+    private static bool IsValid(object value)
+    {
+        if (value == null)
+        {
+            return false;
+        }
+
+        if (value is decimal)
+        {
+            return (decimal)value != 0.0m;
+        }
+
+        if (value is int)
+        {
+            return (int)value != 0;
+        }
+
+        if (int.TryParse(value.ToString(), out var possibleInt))
+        {
+            return possibleInt != 0;
+        }
+    
+        if (value is string && string.IsNullOrEmpty((string)value))
+        {
+            return false;
+        }
+
+        return true;
     }
 }
