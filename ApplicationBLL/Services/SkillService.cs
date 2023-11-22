@@ -29,6 +29,11 @@ public class SkillService : ISkillService
             throw new ForbiddenException("You can not add skill to this resume");
         }
 
+        if (string.IsNullOrEmpty(skill.Name))
+        {
+            throw new InvalidSkillException("Provide valid name");
+        }
+
         skill.ResumeId = resumeId;
         return skill;
     }

@@ -47,6 +47,11 @@ public class WorkExperienceService : IWorkExperienceService
 
     private WorkExperience UpdateWorkExperience(WorkExperience workExperienceEntity, WorkExperience updatedWorkExperience)
     {
+        if (string.IsNullOrEmpty(workExperienceEntity.JobTitle))
+        {
+            throw new InvalidWorkExperienceException("You can not pass the empty job title");
+        }
+        
         workExperienceEntity.From = updatedWorkExperience.From;
         workExperienceEntity.To = updatedWorkExperience.To;
         workExperienceEntity.Country = updatedWorkExperience.Country;

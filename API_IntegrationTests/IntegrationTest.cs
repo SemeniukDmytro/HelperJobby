@@ -115,6 +115,24 @@ public class IntegrationTest
         var createEducationResponse = await TestClient.PostAsJsonAsync(requestUri, createdEducation);
         return await createEducationResponse.Content.ReadAsAsync<EducationDTO>();
     }
+    
+    protected async Task<WorkExperienceDTO> CreateWorkExperience()
+    {
+        var createdResume = await CreateResume();
+        var requestUri = $"api/WorkExperience/{createdResume.Id}";
+        var createWorkExperienceDto = WorkExperienceFixtures.FirstWorkExperience;
+        var createWorkExperienceResponse = await TestClient.PostAsJsonAsync(requestUri, createWorkExperienceDto);
+        return await createWorkExperienceResponse.Content.ReadAsAsync<WorkExperienceDTO>();
+    }
+    
+    protected async Task<SkillDTO> AddSkill()
+    {
+        var createdResume = await CreateResume();
+        var requestUri = $"api/Skill/{createdResume.Id}";
+        var createdSkill = SkillFixtures.FirstSkill;
+        var addSkillResponse = await TestClient.PostAsJsonAsync(requestUri, createdSkill);
+        return await addSkillResponse.Content.ReadAsAsync<SkillDTO>();
+    }
 
     private async Task RegisterNewUser(CreateUpdateUserDTO newUser)
     {
