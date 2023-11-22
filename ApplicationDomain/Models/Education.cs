@@ -12,22 +12,22 @@ public class Education
     public string LevelOfEducation { get; set; }
     
     [MaxLength(30)]
-    public string FieldOfStudy { get; set; }
+    public string? FieldOfStudy { get; set; }
     
     [MaxLength(70)]
-    public string SchoolName { get; set; }
+    public string? SchoolName { get; set; }
     
     [MaxLength(45)]
-    public string Country { get; set; }
+    public string? Country { get; set; }
     
     [MaxLength(30)]
-    public string City { get; set; }
+    public string? City { get; set; }
     
     [Required]
-    public DateOnly From { get; set; }
+    public DateOnly? From { get; set; }
     
     [Required]
-    public DateOnly To { get; set; }
+    public DateOnly? To { get; set; }
     
     [Required]
     [ForeignKey("Resume")]

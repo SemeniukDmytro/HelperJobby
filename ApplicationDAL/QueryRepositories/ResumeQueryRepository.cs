@@ -17,14 +17,16 @@ public class ResumeQueryRepository : IResumeQueryRepository
 
     public async Task<Resume> GetResumeById(int resumeId)
     {
-        var resume = await _applicationContext.Resumes.Include(r => r.JobSeekerAccount).FirstOrDefaultAsync(r => r.Id == resumeId);
+        var resume = await _applicationContext.Resumes
+            .Include(r => r.JobSeekerAccount)
+            .Include(r => r.Educations)
+            .Include(r => r.WorkExperiences)
+            .Include(r => r.Skills)
+            .FirstOrDefaultAsync(r => r.Id == resumeId);
         if (resume == null)
         {
             throw new ResumeNotFoundException();
         }
-        await _applicationContext.Entry(resume).Collection(r => r.Educations).LoadAsync();
-        await _applicationContext.Entry(resume).Collection(r => r.WorkExperiences).LoadAsync();
-        await _applicationContext.Entry(resume).Collection(r => r.Skills).LoadAsync();
         return resume;
     }
 }

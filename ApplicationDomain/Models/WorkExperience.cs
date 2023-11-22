@@ -12,23 +12,23 @@ public class WorkExperience
     public string JobTitle { get; set; }
 
     [MaxLength(100)] 
-    public string Company { get; set; }
+    public string? Company { get; set; }
 
     [MaxLength(45)] 
-    public string Country { get; set; }
+    public string? Country { get; set; }
 
     [MaxLength(30)]
-    public string CityOrProvince { get; set; }
+    public string? CityOrProvince { get; set; }
 
     [Required]
-    public DateOnly From { get; set; }
+    public DateOnly? From { get; set; }
 
     public DateOnly? To { get; set; }
 
-    public bool CurrentlyWorkHere { get; set; }
+    public bool? CurrentlyWorkHere { get; set; }
 
     [MaxLength(2000)]
-    public string Description { get; set; }
+    public string? Description { get; set; }
     [Required]
     [ForeignKey("Resume")]
     public int ResumeId { get; set; }

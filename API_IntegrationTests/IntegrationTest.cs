@@ -7,6 +7,7 @@ using ApplicationDAL.Context;
 using FluentAssertions;
 using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Job;
+using HelperJobby.DTOs.Resume;
 using HelperJobby.DTOs.User;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -96,6 +97,23 @@ public class IntegrationTest
         var requestUri = $"/api/job/create-job/{currentJobCreation.Id}";
         var jobCreateResponse = await TestClient.PostAsJsonAsync(requestUri, currentJobCreation.Id);
         return await jobCreateResponse.Content.ReadAsAsync<JobDTO>();
+    }
+
+    protected async Task<ResumeDTO> CreateResume()
+    {
+        var createdResumeDTO = ResumeFixtures.Resume;
+        var requestUri = "/api/resume";
+        var response = await TestClient.PostAsJsonAsync(requestUri, createdResumeDTO);
+        return await response.Content.ReadAsAsync<ResumeDTO>();
+    }
+
+    protected async Task<EducationDTO> CreateEducation()
+    {
+        var createdResume = await CreateResume();
+        var requestUri = $"api/education/{createdResume.Id}";
+        var createdEducation = EducationFixtures.FirstEducation;
+        var createEducationResponse = await TestClient.PostAsJsonAsync(requestUri, createdEducation);
+        return await createEducationResponse.Content.ReadAsAsync<EducationDTO>();
     }
 
     private async Task RegisterNewUser(CreateUpdateUserDTO newUser)

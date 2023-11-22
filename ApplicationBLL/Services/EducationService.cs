@@ -48,6 +48,11 @@ public class EducationService : IEducationService
 
     private Education UpdateEducation(Education educationEntity, Education updatedEducation)
     {
+        if (string.IsNullOrEmpty(updatedEducation.LevelOfEducation))
+        {
+            throw new InvalidEducationException("Level of education is required");
+        }
+        
         educationEntity.From = updatedEducation.From;
         educationEntity.To = updatedEducation.To;
         educationEntity.Country = updatedEducation.Country;
