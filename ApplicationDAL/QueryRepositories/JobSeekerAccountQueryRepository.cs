@@ -35,11 +35,7 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
         return await GetUserWithJobSeekerAccount(userId, q => q.Include(u => u.JobSeekerAccount)
             .ThenInclude(a => a.Address));
     }
-
-    public async Task<JobSeekerAccount> GetJobSeekerAccountWithSavedJobs(int userId)
-    {
-        return await GetJobSeekerAccountWithCollectionAsync(userId, a => a.SavedJobs);
-    }
+    
 
     public async Task<JobSeekerAccount> GetJobSeekerAccountWithJobApplies(int userId)
     {

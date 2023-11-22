@@ -38,7 +38,25 @@ public class JobQueryRepository : IJobQueryRepository
         await _applicationContext.Entry(employerAccount).Collection(e => e.Jobs).LoadAsync();
         return employerAccount.Jobs;
     }
-
+    
+    public async Task<IEnumerable<Job>> GetJobSeekerSavedJobs(int userId)
+    {
+        var savedJobs = await _applicationContext.Users
+            .Include(u => u.JobSeekerAccount)
+            .ThenInclude(j => j.SavedJobs)
+            .ThenInclude(s => s.Job)
+            .Where(u => u.Id == userId)
+            .SelectMany(u => u.JobSeekerAccount.SavedJobs.Select(sj => sj.Job).Select(sj => new Job()
+            {
+                Id = sj.Id,
+                JobTitle = sj.JobTitle,
+                Salary = sj.Salary,
+                Schedule = sj.Schedule,
+                Location = sj.Location
+            }))
+            .ToListAsync();
+        return savedJobs;
+    }
     public async Task<IEnumerable<Job>> GetJobsByOrganizationId(int organizationId)
     {
         var organization = await _organizationQueryRepository.GetOrganizationWithEmployees(organizationId);
