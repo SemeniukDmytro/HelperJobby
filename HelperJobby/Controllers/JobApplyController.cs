@@ -56,19 +56,19 @@ namespace HelperJobby.Controllers
         }
 
         // POST: api/JobApply
-        [HttpPost("{jobId}/job-seeker/{jobSeekerId}")]
-        public async Task<JobApplyDTO> Post(int jobId, int jobSeekerId)
+        [HttpPost("{jobId}")]
+        public async Task<JobApplyDTO> Post(int jobId)
         {
-            var jobApply = await _jobApplyService.PostJobApply(jobId, jobSeekerId);
+            var jobApply = await _jobApplyService.PostJobApply(jobId);
             jobApply = await _jobApplyCommandRepository.CreateJobApply(jobApply);
             return _mapper.Map<JobApplyDTO>(jobApply);
         }
 
         // DELETE: api/JobApply/5
-        [HttpDelete("{jobId}/job-seeker/{jobSeekerId}")]
-        public async Task Delete(int jobId, int jobSeekerId)
+        [HttpDelete("{jobId}")]
+        public async Task Delete(int jobId)
         {
-            var jobApply = await _jobApplyService.DeleteJobApply(jobId, jobSeekerId);
+            var jobApply = await _jobApplyService.DeleteJobApply(jobId);
             await _jobApplyCommandRepository.DeleteJobApply(jobApply);
         }
 

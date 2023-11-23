@@ -29,7 +29,7 @@ public class InterviewServiceTests
         var currentUserId = 1;
         var jobSeekerId = 1;
         var jobId = 1;
-        _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerId(jobId, jobSeekerId))
+        _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, jobSeekerId))
             .ThrowsAsync(new InvalidInterviewException("Interview not found"));
         _userServiceMock.Setup(u => u.GetCurrentUserId()).Returns(currentUserId);
         _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId))
@@ -50,7 +50,7 @@ public class InterviewServiceTests
         var currentUserId = 1;
         var jobSeekerId = 1;
         var jobId = 2;
-        _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerId(jobId, jobSeekerId))
+        _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, jobSeekerId))
             .ThrowsAsync(new InvalidInterviewException("Interview not found"));
         _userServiceMock.Setup(u => u.GetCurrentUserId()).Returns(currentUserId);
         _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId))
@@ -67,7 +67,7 @@ public class InterviewServiceTests
         //Arrange
         var jobSeekerId = 1;
         var jobId = 2;
-        _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerId(jobId, jobSeekerId))
+        _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, jobSeekerId))
             .ReturnsAsync(new Interview()); 
         //Act & Assert
         await Assert.ThrowsAsync 

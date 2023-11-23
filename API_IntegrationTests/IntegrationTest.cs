@@ -9,6 +9,7 @@ using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.Resume;
 using HelperJobby.DTOs.User;
+using HelperJobby.DTOs.UserJobInteractions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -132,6 +133,18 @@ public class IntegrationTest
         var createdSkill = SkillFixtures.FirstSkill;
         var addSkillResponse = await TestClient.PostAsJsonAsync(requestUri, createdSkill);
         return await addSkillResponse.Content.ReadAsAsync<SkillDTO>();
+    }
+
+    protected async Task<InterviewDTO> CreateInterviewByAuthEmployer()
+    {
+        var user = await AuthenticateAsync();
+        var getJobSeekerResponse = await TestClient.GetAsync("api/JobSeekerAccount/current-job-seeker");
+        var newJobSeeker = await getJobSeekerResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
+        var employerAccount = await CreateEmployerWithNewOrganizationForAuthUser();
+        var createdJob = await CreateJob(); 
+        var requestUri = $"/api/Interview/{createdJob.Id}/job-seeker/{newJobSeeker.Id}"; 
+        var createInterviewResponse = await TestClient.PostAsJsonAsync(requestUri, "");
+        return await createInterviewResponse.Content.ReadAsAsync<InterviewDTO>();
     }
 
     private async Task RegisterNewUser(CreateUpdateUserDTO newUser)

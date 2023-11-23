@@ -2,6 +2,7 @@ using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using AutoMapper;
+using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.UserJobInteractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,17 +33,17 @@ namespace HelperJobby.Controllers
         }
         // GET: api/Interview/my-interviews
         [HttpGet("my-interviews")]
-        public async Task<IEnumerable<InterviewDTO>> GetCurrentJobSeekerInterviews()
+        public async Task<IEnumerable<JobDTO>> GetCurrentJobSeekerInterviews()
         {
             var currentJobSeeker = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithInterviews(
                 _userService.GetCurrentUserId());
-            return _mapper.Map<IEnumerable<InterviewDTO>>(currentJobSeeker.Interviews);
+            return _mapper.Map<IEnumerable<JobDTO>>(currentJobSeeker);
 
         }
         
         // GET: api/Interview/{jobId}/interviews
         [HttpGet("{jobId}/interviews")]
-        public async Task<IEnumerable<InterviewDTO>> GetJobAppliesByJobId(int jobId)
+        public async Task<IEnumerable<InterviewDTO>> GetInterviewsByJobId(int jobId)
         {
             var job = await _jobQueryRepository.GetJobWithInterviews(jobId);
             return _mapper.Map<IEnumerable<InterviewDTO>>(job.Interviews);
@@ -52,7 +53,7 @@ namespace HelperJobby.Controllers
         [HttpGet("{jobId}/job-seeker/{jobSeekerId}")]
         public async Task<InterviewDTO> Get(int jobId, int jobSeekerId)
         {
-            var interview = await _interviewQueryRepository.GetInterviewByJobIdAndJobSeekerId(jobId, jobSeekerId);
+            var interview = await _interviewQueryRepository.GetInterviewByJobIdAndJobSeeker(jobId, jobSeekerId);
             return _mapper.Map<InterviewDTO>(interview);
         }
 

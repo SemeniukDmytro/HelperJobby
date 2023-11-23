@@ -42,11 +42,46 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
         return await GetJobSeekerAccountWithCollectionAsync(userId, a => a.JobApplies);
     }
 
-    public async Task<JobSeekerAccount> GetJobSeekerAccountWithInterviews(int userId)
+    public async Task<IEnumerable<Job>> GetJobSeekerAccountWithInterviews(int userId)
     {
-        return await GetJobSeekerAccountWithCollectionAsync(userId, a => a.Interviews);
+        var test = await _applicationContext.Users
+            .Include(u => u.JobSeekerAccount)
+            .ThenInclude(j => j.Interviews)
+            .ThenInclude(i => i.Job).FirstOrDefaultAsync(u => u.Id == userId);
+        List<Job> interviews = new List<Job>();
+        try
+        {
+            interviews = await _applicationContext.Users
+                .Where(u => u.Id == userId)
+                .SelectMany(u => u.JobSeekerAccount.Interviews
+                    .Select(sj => sj.Job)
+                    .Select(sj => new Job
+                    {
+                        Id = sj.Id,
+                        JobTitle = sj.JobTitle,
+                        Salary = sj.Salary,
+                        Schedule = sj.Schedule,
+                        Location = sj.Location,
+                        Interviews = sj.Interviews
+                            .Select(i => new Interview
+                            {
+                                DateTime = i.DateTime
+                            })
+                            .ToList()
+                    }))
+                .ToListAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        
+        
+        return interviews;
     }
     
+
     private async Task<JobSeekerAccount> GetUserWithJobSeekerAccount(int userId, Func<IQueryable<User>, IQueryable<User>> includeFunc = null)
     {
         var query = _applicationContext.Users.AsQueryable();

@@ -27,11 +27,8 @@ public class JobSeekerControllerTests : IntegrationTest
         var firstCreatedJob = await CreateJob();
         var secondCreatedJob = await CreateJob();
         await AuthenticateAsync();
-        var jobSeekerAccountResponse = await TestClient.GetAsync($"{baseUri}/current-job-seeker");
-        var jobSeeker =
-            await jobSeekerAccountResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
-        var saveJobFirstRequestUri = $"{baseUri}/save-job/{firstCreatedJob.Id}/{jobSeeker.Id}";
-        var saveJobSecondRequestUri = $"{baseUri}/save-job/{secondCreatedJob.Id}/{jobSeeker.Id}";
+        var saveJobFirstRequestUri = $"{baseUri}/save-job/{firstCreatedJob.Id}";
+        var saveJobSecondRequestUri = $"{baseUri}/save-job/{secondCreatedJob.Id}";
         await TestClient.PostAsJsonAsync(saveJobFirstRequestUri, "");
         await TestClient.PostAsJsonAsync(saveJobSecondRequestUri, "");
         
@@ -92,12 +89,9 @@ public class JobSeekerControllerTests : IntegrationTest
     {
         //Arrange
         var employerAccount = await CreateEmployerWithNewOrganizationForAuthUser();
-        var createdJob = await CreateJob();
-        var newUser = await AuthenticateAsync();
-        var getNotUpdatedJobSeekerAccountResponse = await TestClient.GetAsync($"{baseUri}/current-job-seeker");
-        var jobSeeker =
-            await getNotUpdatedJobSeekerAccountResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
-        var requestUri = $"{baseUri}/save-job/{createdJob.Id}/{jobSeeker.Id}"; 
+        var createdJob = await CreateJob(); 
+        await AuthenticateAsync();
+        var requestUri = $"{baseUri}/save-job/{createdJob.Id}"; 
         
         //Act
         var saveJobResponse = await TestClient.PostAsJsonAsync(requestUri, "");
@@ -107,7 +101,6 @@ public class JobSeekerControllerTests : IntegrationTest
         Assert.Equal(HttpStatusCode.OK, saveJobResponse.StatusCode);
         var savedJob = await saveJobResponse.Content.ReadAsAsync<SavedJobDTO>();
         Assert.Equal(savedJob.JobId, createdJob.Id);
-        Assert.Equal(jobSeeker.Id, savedJob.JobSeekerAccountId);
     }
     
     [Fact]
@@ -116,13 +109,10 @@ public class JobSeekerControllerTests : IntegrationTest
         //Arrange
         var employerAccount = await CreateEmployerWithNewOrganizationForAuthUser();
         var createdJob = await CreateJob();
-        var newUser = await AuthenticateAsync();
-        var getNotUpdatedJobSeekerAccountResponse = await TestClient.GetAsync($"{baseUri}/current-job-seeker");
-        var jobSeeker =
-            await getNotUpdatedJobSeekerAccountResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
-        var saveJobResponse = await TestClient.PostAsJsonAsync($"{baseUri}/save-job/{createdJob.Id}/{jobSeeker.Id}", "");
+        await AuthenticateAsync();
+        var saveJobResponse = await TestClient.PostAsJsonAsync($"{baseUri}/save-job/{createdJob.Id}", "");
         var savedJob = await saveJobResponse.Content.ReadAsAsync<SavedJobDTO>();
-        var requestUri = $"{baseUri}/delete-saved-job/{savedJob.JobId}/{savedJob.JobSeekerAccountId}"; 
+        var requestUri = $"{baseUri}/delete-saved-job/{savedJob.JobId}"; 
         
         //Act
         var removeSavedJobResponse = await TestClient.DeleteAsync(requestUri);

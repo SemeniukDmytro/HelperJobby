@@ -19,13 +19,14 @@ public class JobApplyService : IJobApplyService
         _jobApplyQueryRepository = jobApplyQueryRepository;
     }
 
-    public async Task<JobApply> PostJobApply(int jobId, int jobSeekerId)
+    public async Task<JobApply> PostJobApply(int jobId)
     {
         var currentUserId = _userService.GetCurrentUserId();
+        var currentJobSeeker = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountByUserId(currentUserId);
         JobApply jobApply = null;
         try
         {
-            jobApply = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, jobSeekerId);
+            jobApply = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, currentJobSeeker.Id);
         }
         catch (Exception e)
         {
@@ -35,30 +36,21 @@ public class JobApplyService : IJobApplyService
         {
             throw new JobApplyingException("You have already applied");
         }
-        var currentJobSeeker = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountByUserId(currentUserId);
-        if (currentJobSeeker.Id != jobSeekerId)
-        {
-            throw new ForbiddenException();
-        }
         
         var createdJobApply = new JobApply()
         {
             JobId = jobId,
-            JobSeekerAccountId = jobSeekerId,
+            JobSeekerAccountId = currentJobSeeker.Id,
             DateTime = DateTime.UtcNow
         };
         return createdJobApply;
     }
 
-    public async Task<JobApply> DeleteJobApply(int jobId, int jobSeekerId)
+    public async Task<JobApply> DeleteJobApply(int jobId)
     {
         var currentUserId = _userService.GetCurrentUserId();
         var currentJobSeeker = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountByUserId(currentUserId);
-        var jobApply = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, jobSeekerId);
-        if (currentJobSeeker.Id != jobSeekerId)
-        {
-            throw new ForbiddenException();
-        }
+        var jobApply = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, currentJobSeeker.Id);
         return jobApply;
     }
 }

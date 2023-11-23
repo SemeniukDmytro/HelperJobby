@@ -58,18 +58,14 @@ public class JobSeekerAccountService : IJobSeekerAccountService
         return jobSeekerAccount;
     }
 
-    public async Task<SavedJob> SaveJob(int jobId, int jobSeekerId)
+    public async Task<SavedJob> SaveJob(int jobId)
     {
         var currentUserId = _userService.GetCurrentUserId();
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountByUserId(currentUserId);
-        if (jobSeekerId != jobSeekerAccount.Id)
-        {
-            throw new ForbiddenException();
-        }
         SavedJob savedJob = null;
         try
         {
-            savedJob = await _savedJobQueryRepository.GetSavedJobByJobIdAndJobSeekerId(jobId, jobSeekerId);
+            savedJob = await _savedJobQueryRepository.GetSavedJobByJobIdAndJobSeekerId(jobId, jobSeekerAccount.Id);
         }
         catch (Exception e)
         {
@@ -83,21 +79,17 @@ public class JobSeekerAccountService : IJobSeekerAccountService
         var newSavedJob = new SavedJob()
         {
             JobId = jobId,
-            JobSeekerAccountId = jobSeekerId
+            JobSeekerAccountId = jobSeekerAccount.Id
         };
 
         return newSavedJob;
     }
 
-    public async Task<SavedJob> RemoveJobFromSaved(int jobId, int jobSeekerId)
+    public async Task<SavedJob> RemoveJobFromSaved(int jobId)
     {
         var currentUserId = _userService.GetCurrentUserId();
         var jobSeeker = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountByUserId(currentUserId);
-        if (jobSeeker.Id != jobSeekerId)
-        {
-            throw new ForbiddenException();
-        }
-        var savedJob = await _savedJobQueryRepository.GetSavedJobByJobIdAndJobSeekerId(jobId, jobSeekerId);
+        var savedJob = await _savedJobQueryRepository.GetSavedJobByJobIdAndJobSeekerId(jobId, jobSeeker.Id);
         return savedJob;
     }
 }

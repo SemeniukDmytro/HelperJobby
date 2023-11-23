@@ -17,7 +17,13 @@ public class InterviewQueryRepository : IInterviewQueryRepository
         _applicationContext = applicationContext;
     }
 
-    public async Task<Interview> GetInterviewByJobIdAndJobSeekerId(int jobId, int jobSeekerId)
+    public async Task<Interview> GetInterviewByJobIdAndJobSeeker(int jobId, int jobSeekerId)
+    {
+        return await GetInterview(jobId, jobSeekerId, q => q
+            .Include(i => i.JobSeekerAccount));
+    }
+    
+    public async Task<Interview> GetInterviewByJobIdAndJobSeekerIdPlain(int jobId, int jobSeekerId)
     {
         return await GetInterview(jobId, jobSeekerId);
     }

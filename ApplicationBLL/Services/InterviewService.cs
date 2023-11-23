@@ -26,7 +26,7 @@ public class InterviewService : IInterviewService
         Interview interview = null;
         try
         {
-            interview = await _interviewQueryRepository.GetInterviewByJobIdAndJobSeekerId(jobId, jobSeekerId);
+            interview = await _interviewQueryRepository.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, jobSeekerId);
         }
         catch (Exception e)
         {
@@ -47,7 +47,8 @@ public class InterviewService : IInterviewService
         var newInterview = new Interview()
         {
             JobId = jobId,
-            JobSeekerAccountId = jobSeekerId
+            JobSeekerAccountId = jobSeekerId,
+            DateTime = DateTime.UtcNow
         };
         return newInterview;
     }

@@ -35,29 +35,11 @@ public class JobApplyServiceTests
         _jobSeekerQueryRepository.Setup(r => r.GetJobSeekerAccountByUserId(currentUserId))
             .ReturnsAsync(jobSeekerAccount);
         //Act
-        var createdJobApply = await _jobApplyService.PostJobApply(jobId, jobSeekerId);
+        var createdJobApply = await _jobApplyService.PostJobApply(jobId);
         //Assert
         Assert.Equal(jobSeekerId, createdJobApply.JobSeekerAccountId);
         Assert.Equal(jobId, createdJobApply.JobId);
         
-    }
-
-    [Fact]
-    public async Task CreateJobApplyShouldThrowForbiddenExceptionIfNotCurrentUserTriesToApply()
-    {
-        //Arrange
-        var currentUserId = 1;
-        var jobSeekerId = 2;
-        var jobId = 1;
-        var jobSeekerAccount = JobSeekerAccountFixture.JobSeekerAccountEntity;
-        _userServiceMock.Setup(u => u.GetCurrentUserId()).Returns(currentUserId);
-        _jobApplyQueryRepositoryMock.Setup(r => r.GetJobApplyByJobIdAndJobSeekerId(jobId, jobSeekerId))
-            .ThrowsAsync(new JobApplyingException("You have already applied"));
-        _jobSeekerQueryRepository.Setup(r => r.GetJobSeekerAccountByUserId(currentUserId))
-            .ReturnsAsync(jobSeekerAccount);
-        //Act & Assert
-        await Assert.ThrowsAsync 
-        <ForbiddenException>(async () => await _jobApplyService.PostJobApply(jobId, jobSeekerId));
     }
     
     [Fact]
@@ -80,7 +62,7 @@ public class JobApplyServiceTests
             .ReturnsAsync(jobSeekerAccount);
         //Act & Assert
         await Assert.ThrowsAsync 
-            <JobApplyingException>(async () => await _jobApplyService.PostJobApply(jobId, jobSeekerId));
+            <JobApplyingException>(async () => await _jobApplyService.PostJobApply(jobId));
     }
 
     [Fact]
@@ -101,31 +83,11 @@ public class JobApplyServiceTests
         _jobSeekerQueryRepository.Setup(r => r.GetJobSeekerAccountByUserId(currentUserId))
             .ReturnsAsync(jobSeekerAccount);
         //Act
-        var createdJobApply = await _jobApplyService.DeleteJobApply(jobId, jobSeekerId);
+        var createdJobApply = await _jobApplyService.DeleteJobApply(jobId);
         //Assert
         Assert.Equal(jobSeekerId, createdJobApply.JobSeekerAccountId);
         Assert.Equal(jobId, createdJobApply.JobId);
     }
 
-    [Fact]
-    public async Task DeleteJobShouldThrowForbiddenExceptionIfNotCurrentUserTriesToDelete()
-    {
-        //Arrange
-        var currentUserId = 1;
-        var jobSeekerId = 2;
-        var jobId = 2;
-        var jobSeekerAccount = JobSeekerAccountFixture.JobSeekerAccountEntity;
-        _jobApplyQueryRepositoryMock.Setup(r => r.GetJobApplyByJobIdAndJobSeekerId(jobId, jobSeekerId))
-            .ReturnsAsync(new JobApply()
-            {
-                JobId = 2, 
-                JobSeekerAccountId = 1
-            });
-        _userServiceMock.Setup(u => u.GetCurrentUserId()).Returns(currentUserId);
-        _jobSeekerQueryRepository.Setup(r => r.GetJobSeekerAccountByUserId(currentUserId))
-            .ReturnsAsync(jobSeekerAccount);
-        //Act & Assert
-        await Assert.ThrowsAsync 
-            <ForbiddenException>(async () => await _jobApplyService.DeleteJobApply(jobId, jobSeekerId));
-    }
+    
 }

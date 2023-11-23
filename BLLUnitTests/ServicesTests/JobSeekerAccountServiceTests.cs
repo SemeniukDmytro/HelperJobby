@@ -66,26 +66,12 @@ public class JobSeekerAccountServiceTests
         _savedJobQueryRepository.Setup(r => r.GetSavedJobByJobIdAndJobSeekerId(jobId, jobSeekerId))
             .ThrowsAsync(new JobSavingException("Saved job not found"));
         //Act
-        var savedJob = await _jobSeekerAccountService.SaveJob(jobId, jobSeekerId);
+        var savedJob = await _jobSeekerAccountService.SaveJob(jobId);
         //Assert
         Assert.Equal(jobId, savedJob.JobId);
         Assert.Equal(jobSeekerAccountEntity.Id, savedJob.JobSeekerAccountId);
     }
-
-    [Fact]
-    public async Task SaveJobShouldThrowForbiddenExceptionIfNotCurrentUserTriesToSave()
-    {
-        //Arrange
-        int userId = 1;
-        int jobId = 1;
-        int jobSeekerId = 2;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.SecondJobSeekerAccountEntity;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerAccountByUserId(userId))
-            .ReturnsAsync(jobSeekerAccountEntity);
-        //Act & Assert 
-        await Assert.ThrowsAsync<ForbiddenException>(async () =>  await _jobSeekerAccountService.SaveJob(jobId, jobSeekerId));
-    }
+    
 
     [Fact]
     public async Task SaveJobShouldThrowJobSavingExceptionIfJobAlreadySaved()
@@ -102,7 +88,7 @@ public class JobSeekerAccountServiceTests
             .ReturnsAsync(new SavedJob());
         //Act & Assert
         await Assert.ThrowsAsync<JobSavingException>(async () =>
-            await _jobSeekerAccountService.SaveJob(jobId, jobSeekerId)); 
+            await _jobSeekerAccountService.SaveJob(jobId)); 
     }
     
     [Fact]
@@ -123,26 +109,10 @@ public class JobSeekerAccountServiceTests
                 JobSeekerAccountId = jobSeekerId
             });
         //Act
-        var savedJob = await _jobSeekerAccountService.RemoveJobFromSaved(jobId, jobSeekerId);
+        var savedJob = await _jobSeekerAccountService.RemoveJobFromSaved(jobId);
         //Assert
         Assert.Equal(jobId, savedJob.JobId);
         Assert.Equal(jobSeekerAccountEntity.Id, savedJob.JobSeekerAccountId);
-    }
-
-    [Fact]
-    public async Task RemoveJobFromSavedShouldThrowForbiddenExceptionIfNotCurrentUserTriesToRemove()
-    {
-        //Arrange
-        int userId = 1;
-        int jobId = 1;
-        int jobSeekerId = 2;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.SecondJobSeekerAccountEntity;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerAccountByUserId(userId))
-            .ReturnsAsync(jobSeekerAccountEntity);
-        //Act & Assert
-        await Assert.ThrowsAsync<ForbiddenException>(async () =>
-            await _jobSeekerAccountService.RemoveJobFromSaved(jobId, jobSeekerId)); 
     }
 
 }

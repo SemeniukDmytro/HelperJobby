@@ -63,18 +63,18 @@ namespace HelperJobby.Controllers
             return jobSeekerAccountDTO;
         }
         
-        [HttpPost("save-job/{jobId}/{jobSeekerId}")]
-        public async Task<SavedJobDTO> SaveJob(int jobId, int jobSeekerId)
+        [HttpPost("save-job/{jobId}")]
+        public async Task<SavedJobDTO> SaveJob(int jobId)
         {
-            var savedJob = await _jobSeekerAccountService.SaveJob(jobId, jobSeekerId);
+            var savedJob = await _jobSeekerAccountService.SaveJob(jobId);
             savedJob = await _savedJobCommandRepository.CreateSavedJob(savedJob);
             return _mapper.Map<SavedJobDTO>(savedJob);
         }
 
-        [HttpDelete("delete-saved-job/{jobId}/{jobSeekerId}")]
-        public async Task DeleteSavedJob(int jobId, int jobSeekerId)
+        [HttpDelete("delete-saved-job/{jobId}")]
+        public async Task DeleteSavedJob(int jobId)
         {
-            var savedJob = await _jobSeekerAccountService.RemoveJobFromSaved(jobId, jobSeekerId);
+            var savedJob = await _jobSeekerAccountService.RemoveJobFromSaved(jobId);
             await _savedJobCommandRepository.DeleteSavedJob(savedJob);
         }
     }
