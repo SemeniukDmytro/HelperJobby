@@ -2,8 +2,6 @@ using System.Net;
 using API_IntegrationTests.Fixtures;
 using API_IntegrationTests.TestHelpers;
 using ApplicationDomain.Enums;
-using ApplicationDomain.Models;
-using FluentAssertions;
 using HelperJobby.DTOs.Job;
 using Xunit.Abstractions;
 
@@ -28,7 +26,7 @@ public class CurrentJobControllerTests : IntegrationTest
         var jobGetResponse = await TestClient.GetAsync(requestUri);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(jobGetResponse, TestOutputHelper);
         //Assert
-        jobGetResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, jobGetResponse.StatusCode);
         var receivedCurrentJob = await jobGetResponse.Content.ReadAsAsync<CurrentJobCreationDTO>();
         Assert.Equal(currentJobCreation.Id, receivedCurrentJob.Id);
         Assert.Equal(currentJobCreation.JobTitle, receivedCurrentJob.JobTitle);
@@ -46,7 +44,7 @@ public class CurrentJobControllerTests : IntegrationTest
         await ExceptionsLogHelper.LogNotSuccessfulResponse(currentJobCreationResponse, TestOutputHelper);
         
         //Assert
-        currentJobCreationResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, currentJobCreationResponse.StatusCode);
         var currentJobCreation = await currentJobCreationResponse.Content.ReadAsAsync<CurrentJobCreationDTO>();
         Assert.NotEqual(0, currentJobCreation.Id);
         Assert.Equal(employer.Id, currentJobCreation.EmployerAccountId);
@@ -78,7 +76,7 @@ public class CurrentJobControllerTests : IntegrationTest
         var updateResponse = await TestClient.PutAsJsonAsync(requestUri, updatedJob);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(updateResponse, TestOutputHelper);
         //Assert
-        updateResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, updateResponse.StatusCode);
         var updatedCurrenJob = await updateResponse.Content.ReadAsAsync<CurrentJobCreationDTO>();
         Assert.NotEqual(0, updatedCurrenJob.Id);
         Assert.Equal(currentJobCreation.JobTitle, updatedCurrenJob.JobTitle);
@@ -101,10 +99,10 @@ public class CurrentJobControllerTests : IntegrationTest
         var jobDeleteResponse = await TestClient.DeleteAsync(requestUri);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(jobDeleteResponse, TestOutputHelper);
         //Assert
-        jobDeleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, jobDeleteResponse.StatusCode);
         var jobGetResponse = await TestClient.GetAsync($"{_baseUri}/{employer.Id}/current-job-creation");
         await ExceptionsLogHelper.LogNotSuccessfulResponse(jobGetResponse, TestOutputHelper);
-        jobGetResponse.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+        Assert.Equal(HttpStatusCode.InternalServerError, jobGetResponse.StatusCode);
     }
     
 }

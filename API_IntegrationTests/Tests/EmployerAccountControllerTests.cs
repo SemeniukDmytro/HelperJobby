@@ -1,7 +1,6 @@
 using System.Net;
 using API_IntegrationTests.Fixtures;
 using API_IntegrationTests.TestHelpers;
-using FluentAssertions;
 using HelperJobby.DTOs.Account;
 using Xunit.Abstractions;
 
@@ -27,7 +26,7 @@ public class EmployerAccountControllerTests : IntegrationTest
         await ExceptionsLogHelper.LogNotSuccessfulResponse(employerCreationResponse, TestOutputHelper);
         
         //Assert
-        employerCreationResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, employerCreationResponse.StatusCode);
         var employer = await employerCreationResponse.Content.ReadAsAsync<EmployerAccountDTO>();
         Assert.NotEqual(0, employer.Id);
         Assert.NotEqual(0, employer.Organization.Id);
@@ -46,12 +45,13 @@ public class EmployerAccountControllerTests : IntegrationTest
         await AuthenticateAsync();
         var newEmployer = NewEmployerFixtures.EmployerCreationInCreatedOrganization;
         newEmployer.OrganizationName = employerWithCreatedOrganization.Organization.Name;
+        
         //Act
         var employerCreationResponse = await TestClient.PostAsJsonAsync(requestUri, newEmployer);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(employerCreationResponse, TestOutputHelper);
         
         //Assert
-        employerCreationResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, employerCreationResponse.StatusCode);
         var employer = await employerCreationResponse.Content.ReadAsAsync<EmployerAccountDTO>();
         Assert.NotEqual(0, employer.Id);
         Assert.NotEqual(0, employer.Organization.Id);
@@ -72,12 +72,12 @@ public class EmployerAccountControllerTests : IntegrationTest
         };
         
         //Act
-        var response = await TestClient.PutAsJsonAsync(requestUri, updateEmployerAccountDTO);
-        await ExceptionsLogHelper.LogNotSuccessfulResponse(response, TestOutputHelper);
+        var updateEmployerResponse = await TestClient.PutAsJsonAsync(requestUri, updateEmployerAccountDTO);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(updateEmployerResponse, TestOutputHelper);
         
         //Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var updatedEmployer = await response.Content.ReadAsAsync<EmployerAccountDTO>();
+        Assert.Equal(HttpStatusCode.OK, updateEmployerResponse.StatusCode);
+        var updatedEmployer = await updateEmployerResponse.Content.ReadAsAsync<EmployerAccountDTO>();
         Assert.Equal(currentEmployer.Id, updatedEmployer.Id);
         Assert.Equal(currentEmployer.ContactNumber, updatedEmployer.ContactNumber);
         Assert.Equal(currentEmployer.UserId, updatedEmployer.UserId);
@@ -92,10 +92,12 @@ public class EmployerAccountControllerTests : IntegrationTest
         var requestUri = $"/api/EmployerAccount/{createdEmployer.UserId}";
 
         //Act
-        var response = await TestClient.GetAsync(requestUri);
-        await ExceptionsLogHelper.LogNotSuccessfulResponse(response, TestOutputHelper);
+        var getEmployerResponse = await TestClient.GetAsync(requestUri);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(getEmployerResponse, TestOutputHelper);
+        
         //Assert
-        var employer = await response.Content.ReadAsAsync<EmployerAccountDTO>();
+        Assert.Equal(HttpStatusCode.OK, getEmployerResponse.StatusCode);
+        var employer = await getEmployerResponse.Content.ReadAsAsync<EmployerAccountDTO>();
         Assert.Equal(createdEmployer.Id, employer.Id);
         Assert.Equal(createdEmployer.Email, employer.Email);
     }
@@ -108,10 +110,12 @@ public class EmployerAccountControllerTests : IntegrationTest
         var requestUri = $"/api/EmployerAccount/my-employer-account";
 
         //Act
-        var response = await TestClient.GetAsync(requestUri);
-        await ExceptionsLogHelper.LogNotSuccessfulResponse(response, TestOutputHelper);
+        var getEmployerResponse = await TestClient.GetAsync(requestUri);
+        await ExceptionsLogHelper.LogNotSuccessfulResponse(getEmployerResponse, TestOutputHelper);
+        
         //Assert
-        var employer = await response.Content.ReadAsAsync<EmployerAccountDTO>();
+        Assert.Equal(HttpStatusCode.OK, getEmployerResponse.StatusCode);
+        var employer = await getEmployerResponse.Content.ReadAsAsync<EmployerAccountDTO>();
         Assert.Equal(createdEmployer.Id, employer.Id);
         Assert.Equal(createdEmployer.Email, employer.Email);
     }

@@ -4,7 +4,6 @@ using System.Net.Http.Json;
 using API_IntegrationTests.Fixtures;
 using API_IntegrationTests.TestHelpers;
 using ApplicationDAL.Context;
-using FluentAssertions;
 using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.Resume;
@@ -72,6 +71,14 @@ public class IntegrationTest
         var employerWithCreatedOrganization = await response.Content.ReadAsAsync<EmployerAccountDTO>();
         return employerWithCreatedOrganization;
     }
+
+    protected async Task<JobSeekerAccountDTO> GetCurrentJobSeekerAccount()
+    {
+        await AuthenticateAsync();
+        var getJobSeekerRequestUri = "api/JobSeekerAccount/current-job-seeker";
+        var jobSeekerResponse = await TestClient.GetAsync(getJobSeekerRequestUri);
+        return await jobSeekerResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
+    }
     
     protected async Task<AuthUserDTO> LoginUser(string email, string password)
     {
@@ -137,14 +144,20 @@ public class IntegrationTest
 
     protected async Task<InterviewDTO> CreateInterviewByAuthEmployer()
     {
-        var user = await AuthenticateAsync();
-        var getJobSeekerResponse = await TestClient.GetAsync("api/JobSeekerAccount/current-job-seeker");
-        var newJobSeeker = await getJobSeekerResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
+        var newJobSeeker = await GetCurrentJobSeekerAccount();
         var employerAccount = await CreateEmployerWithNewOrganizationForAuthUser();
         var createdJob = await CreateJob(); 
         var requestUri = $"/api/Interview/{createdJob.Id}/job-seeker/{newJobSeeker.Id}"; 
         var createInterviewResponse = await TestClient.PostAsJsonAsync(requestUri, "");
         return await createInterviewResponse.Content.ReadAsAsync<InterviewDTO>();
+    }
+
+    protected async Task<InterviewDTO> CreateInterview(int jobId, int jobSeekerId)
+    {
+        var secondInterviewCreateRequestUri = $"/api/Interview/{jobId}/job-seeker/{jobSeekerId}"; 
+        var interviewCreateResponse = await TestClient.PostAsJsonAsync(secondInterviewCreateRequestUri, "");
+        return  await interviewCreateResponse.Content.ReadAsAsync<InterviewDTO>();
+
     }
 
     private async Task RegisterNewUser(CreateUpdateUserDTO newUser)

@@ -37,48 +37,52 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
     }
     
 
-    public async Task<JobSeekerAccount> GetJobSeekerAccountWithJobApplies(int userId)
+    public async Task<IEnumerable<Job>> GetJobSeekerAccountWithJobApplies(int userId)
     {
-        return await GetJobSeekerAccountWithCollectionAsync(userId, a => a.JobApplies);
+        var jobApplies = await _applicationContext.Users
+            .Where(u => u.Id == userId)
+            .SelectMany(u => u.JobSeekerAccount.JobApplies
+                .Select(sj => sj.Job)
+                .Select(sj => new Job
+                {
+                    Id = sj.Id,
+                    JobTitle = sj.JobTitle,
+                    Salary = sj.Salary,
+                    Schedule = sj.Schedule,
+                    Location = sj.Location,
+                    JobApplies = sj.JobApplies
+                        .Select(j => new JobApply()
+                        {
+                            DateTime = j.DateTime
+                        })
+                        .ToList()
+                }))
+            .ToListAsync();
+        return jobApplies;
     }
 
     public async Task<IEnumerable<Job>> GetJobSeekerAccountWithInterviews(int userId)
     {
-        var test = await _applicationContext.Users
-            .Include(u => u.JobSeekerAccount)
-            .ThenInclude(j => j.Interviews)
-            .ThenInclude(i => i.Job).FirstOrDefaultAsync(u => u.Id == userId);
-        List<Job> interviews = new List<Job>();
-        try
-        {
-            interviews = await _applicationContext.Users
-                .Where(u => u.Id == userId)
-                .SelectMany(u => u.JobSeekerAccount.Interviews
-                    .Select(sj => sj.Job)
-                    .Select(sj => new Job
-                    {
-                        Id = sj.Id,
-                        JobTitle = sj.JobTitle,
-                        Salary = sj.Salary,
-                        Schedule = sj.Schedule,
-                        Location = sj.Location,
-                        Interviews = sj.Interviews
-                            .Select(i => new Interview
-                            {
-                                DateTime = i.DateTime
-                            })
-                            .ToList()
-                    }))
-                .ToListAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-        
-        
-        return interviews;
+       var interviews = await _applicationContext.Users
+            .Where(u => u.Id == userId)
+            .SelectMany(u => u.JobSeekerAccount.Interviews
+                .Select(sj => sj.Job)
+                .Select(sj => new Job
+                {
+                    Id = sj.Id,
+                    JobTitle = sj.JobTitle,
+                    Salary = sj.Salary,
+                    Schedule = sj.Schedule,
+                    Location = sj.Location,
+                    Interviews = sj.Interviews
+                        .Select(i => new Interview
+                        {
+                            DateTime = i.DateTime
+                        })
+                        .ToList()
+                }))
+            .ToListAsync();
+    return interviews;
     }
     
 
@@ -94,12 +98,4 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
         return account;
     }
     
-    private async Task<JobSeekerAccount> GetJobSeekerAccountWithCollectionAsync<T>(
-        int userId, 
-        Expression<Func<JobSeekerAccount, IEnumerable<T>>> collectionProperty) where T : class
-    {
-        var jobSeekerAccount = await GetUserWithJobSeekerAccount(userId, q => q.Include(u => u.JobSeekerAccount));
-        await _applicationContext.Entry(jobSeekerAccount).Collection(collectionProperty).LoadAsync();
-        return jobSeekerAccount;
-    }
 }

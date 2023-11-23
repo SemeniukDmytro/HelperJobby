@@ -21,20 +21,12 @@ public class InterviewControllerTests : IntegrationTest
     {
         //Arrange
         var jobSeekersAmount = 2; //change if created more jobSeekers
-        await AuthenticateAsync();
-        var getJobSeekerFirstResponse = await TestClient.GetAsync("api/JobSeekerAccount/current-job-seeker");
-        var firstJobSeeker = await getJobSeekerFirstResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
-        await AuthenticateAsync();
-        var getJobSeekerSecondResponse = await TestClient.GetAsync("api/JobSeekerAccount/current-job-seeker");
-        var secondJobSeeker = await getJobSeekerSecondResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
+        var firstJobSeeker = await GetCurrentJobSeekerAccount();
+        var secondJobSeeker = await GetCurrentJobSeekerAccount();
         var employerAccount = await CreateEmployerWithNewOrganizationForAuthUser();
         var createdJob = await CreateJob();
-        var firstInterviewCreateRequestUri = $"{_baseUri}/{createdJob.Id}/job-seeker/{firstJobSeeker.Id}"; 
-        var secondInterviewCreateRequestUri = $"{_baseUri}/{createdJob.Id}/job-seeker/{secondJobSeeker.Id}"; 
-        var firstInterviewCreateResponse = await TestClient.PostAsJsonAsync(firstInterviewCreateRequestUri, "");
-        var secondInterviewCreateResponse = await TestClient.PostAsJsonAsync(secondInterviewCreateRequestUri, "");
-        var firstInterview = await firstInterviewCreateResponse.Content.ReadAsAsync<InterviewDTO>();
-        var secondInterview = await secondInterviewCreateResponse.Content.ReadAsAsync<InterviewDTO>();
+        var firstInterview = await CreateInterview(createdJob.Id, firstJobSeeker.Id);
+        var secondInterview = await CreateInterview(createdJob.Id, secondJobSeeker.Id);
         var requestUri = $"api/Interview/{createdJob.Id}/interviews"; 
 
         //Act

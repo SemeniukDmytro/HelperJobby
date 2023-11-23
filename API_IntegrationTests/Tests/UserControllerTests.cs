@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using FluentAssertions;
 using HelperJobby.DTOs.User;
 using Xunit.Abstractions;
 
@@ -20,12 +19,11 @@ public class UserControllerTests : IntegrationTest
         var requestUri = $"/api/User/{userId}";
 
         // Act
-        var response = await TestClient.GetAsync(requestUri);
+        var getUserResponse = await TestClient.GetAsync(requestUri);
         
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var user = response.Content.ReadAsAsync<UserDTO>().Result;
-        Assert.True(response.IsSuccessStatusCode);
+        Assert.Equal(HttpStatusCode.OK, getUserResponse.StatusCode);
+        var user = getUserResponse.Content.ReadAsAsync<UserDTO>().Result;
         Assert.Equal(userId, user.Id);
     }
     
@@ -37,12 +35,11 @@ public class UserControllerTests : IntegrationTest
         var requestUri = $"/api/User/current-user";
 
         // Act
-        var response = await TestClient.GetAsync(requestUri);
+        var getUserResponse = await TestClient.GetAsync(requestUri);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var user = response.Content.ReadAsAsync<UserDTO>().Result;
-        Assert.True(response.IsSuccessStatusCode);
+        Assert.Equal(HttpStatusCode.OK, getUserResponse.StatusCode);
+        var user = getUserResponse.Content.ReadAsAsync<UserDTO>().Result;
         Assert.Equal(currentUser.Id, user.Id);
         Assert.Equal(currentUser.AccountType, user.AccountType);
     }
@@ -60,11 +57,13 @@ public class UserControllerTests : IntegrationTest
             AccountType = "Employer"
         };
         var requestUri = $"api/user/{currentUser.Id}";
+        
         //Act
-        var response = await TestClient.PutAsJsonAsync(requestUri, updatedUser);
+        var updateUserResponse = await TestClient.PutAsJsonAsync(requestUri, updatedUser);
+        
         //Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var responseContent = await response.Content.ReadAsAsync<UserDTO>(); 
+        Assert.Equal(HttpStatusCode.OK, updateUserResponse.StatusCode);
+        var responseContent = await updateUserResponse.Content.ReadAsAsync<UserDTO>(); 
         Assert.Equal(currentUser.Id, responseContent.Id);
         Assert.Equal(updatedUser.AccountType, responseContent.AccountType);
     }
