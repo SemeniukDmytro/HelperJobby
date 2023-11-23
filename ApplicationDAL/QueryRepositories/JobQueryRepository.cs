@@ -69,23 +69,15 @@ public class JobQueryRepository : IJobQueryRepository
         return result;
     }
 
-    public async Task<Job> GetJobWithJobApplies(int jobId)
+    public async Task<Job> GetJobWithJobApplies(Job job)
     {
-        return await GetJobWithCollectionAsync(jobId, j => j.JobApplies);
+        await _applicationContext.Entry(job).Collection(j => j.JobApplies).LoadAsync();
+        return job;
     }
 
-    public async Task<Job> GetJobWithInterviews(int jobId)
+    public async Task<Job> GetJobWithInterviews(Job job)
     {
-        return await GetJobWithCollectionAsync(jobId, j => j.Interviews);
-    }
-
-
-    private async Task<Job> GetJobWithCollectionAsync<T>(
-        int jobId, 
-        Expression<Func<Job, IEnumerable<T>>> collectionProperty) where T : class
-    {
-        var jobSeekerAccount = await GetJobById(jobId);
-        await _applicationContext.Entry(jobSeekerAccount).Collection(collectionProperty).LoadAsync();
-        return jobSeekerAccount;
+        await _applicationContext.Entry(job).Collection(j => j.Interviews).LoadAsync();
+        return job;
     }
 }

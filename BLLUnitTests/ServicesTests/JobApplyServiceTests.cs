@@ -14,13 +14,57 @@ public class JobApplyServiceTests
     private readonly Mock<IUserService> _userServiceMock = new ();
     private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerQueryRepository = new();
     private readonly Mock<IJobApplyQueryRepository> _jobApplyQueryRepositoryMock = new();
+    private readonly Mock<IJobQueryRepository> _jobQueryRepositoryMock = new();
+    private readonly Mock<IEmployerAccountQueryRepository> _employerQueryRepositoryMock = new();
     
     public JobApplyServiceTests()
     {
         _jobApplyService = new JobApplyService(_userServiceMock.Object, _jobSeekerQueryRepository.Object,
-            _jobApplyQueryRepositoryMock.Object);
+            _jobApplyQueryRepositoryMock.Object, _employerQueryRepositoryMock.Object, _jobQueryRepositoryMock.Object);
     }
 
+    [Fact]
+    public async Task GetJobAppliesForSpecifiedShouldReturnJob()
+    {
+        //Arrange
+        var jobId = 1;
+        var userId = 1;
+        var employer = EmployerAccountFixtures.EmployerAccountEntity;
+        var job = JobFixtures.FirstJobEntity;
+
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _employerQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId))
+            .ReturnsAsync(employer);
+        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(job);
+
+        //Act
+        var jobForJobApplies = await _jobApplyService.GetJobAppliesForSpecificJob(jobId);
+
+        //Assert
+        Assert.Equal(job.Id, jobForJobApplies.Id);
+        Assert.Equal(job.JobTitle, jobForJobApplies.JobTitle);
+    }
+
+    [Fact]
+    public async Task GetJobAppliesShouldThrowAnExceptionIfNotJobEmployerTriesToGet()
+    {
+        //Arrange
+        var jobId = 2;
+        var userId = 1;
+        var employer = EmployerAccountFixtures.EmployerAccountEntity;
+        var job = JobFixtures.SecondJobEntity;
+
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _employerQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId))
+            .ReturnsAsync(employer);
+        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(job);
+
+        //Act && Assert
+        await Assert.ThrowsAsync<ForbiddenException>(async () =>
+            await _jobApplyService.GetJobAppliesForSpecificJob(jobId));
+    }
+    
+    
     [Fact]
     public async Task CreateJobApplyShouldReturnCreatedJobApply()
     {

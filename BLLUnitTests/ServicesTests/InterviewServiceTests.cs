@@ -22,6 +22,48 @@ public class InterviewServiceTests
             _jobQueryRepositoryMock.Object, _employerAccountQueryRepository.Object, _interviewQueryRepositoryMock.Object);
     }
     
+    
+    [Fact]
+    public async Task GetJobAppliesForSpecifiedShouldReturnJob()
+    {
+        //Arrange
+        var jobId = 1;
+        var userId = 1;
+        var employer = EmployerAccountFixtures.EmployerAccountEntity;
+        var job = JobFixtures.FirstJobEntity;
+
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(userId))
+            .ReturnsAsync(employer);
+        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(job);
+
+        //Act
+        var jobForInterviews = await _interviewService.GetInterviewsForSpecificJob(jobId);
+
+        //Assert
+        Assert.Equal(job.Id, jobForInterviews.Id);
+        Assert.Equal(job.JobTitle, jobForInterviews.JobTitle);
+    }
+
+    [Fact]
+    public async Task GetJobAppliesShouldThrowAnExceptionIfNotJobEmployerTriesToGet()
+    {
+        //Arrange
+        var jobId = 2;
+        var userId = 1;
+        var employer = EmployerAccountFixtures.EmployerAccountEntity;
+        var job = JobFixtures.SecondJobEntity;
+
+        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
+        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(userId))
+            .ReturnsAsync(employer);
+        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(job);
+
+        //Act && Assert
+        await Assert.ThrowsAsync<ForbiddenException>(async () =>
+            await _interviewService.GetInterviewsForSpecificJob(jobId));
+    }
+    
     [Fact]
     public async Task CreateInterviewShouldReturnCreatedInterview()
     {

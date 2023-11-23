@@ -45,7 +45,8 @@ namespace HelperJobby.Controllers
         [HttpGet("{jobId}/interviews")]
         public async Task<IEnumerable<InterviewDTO>> GetInterviewsByJobId(int jobId)
         {
-            var job = await _jobQueryRepository.GetJobWithInterviews(jobId);
+            var job = await _interviewService.GetInterviewsForSpecificJob(jobId);
+            job = await _jobQueryRepository.GetJobWithInterviews(job);
             return _mapper.Map<IEnumerable<InterviewDTO>>(job.Interviews);
         }
 

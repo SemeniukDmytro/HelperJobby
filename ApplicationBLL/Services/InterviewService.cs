@@ -21,6 +21,19 @@ public class InterviewService : IInterviewService
         _interviewQueryRepository = interviewQueryRepository;
     }
 
+    public async Task<Job> GetInterviewsForSpecificJob(int jobId)
+    {
+        var currentUserId = _userService.GetCurrentUserId();
+        var currentEmployer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
+        var job = await _jobQueryRepository.GetJobById(jobId);
+        if (job.EmployerAccountId != currentEmployer.Id)
+        {
+            throw new ForbiddenException("You can not have access to this information");
+        }
+
+        return job;
+    }
+
     public async Task<Interview> PostInterview(int jobId, int jobSeekerId)
     {
         Interview interview = null;

@@ -10,13 +10,30 @@ public class JobApplyService : IJobApplyService
     private readonly IUserService _userService;
     private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
     private readonly IJobApplyQueryRepository _jobApplyQueryRepository;
+    private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
+    private readonly IJobQueryRepository _jobQueryRepository;
 
     public JobApplyService(IUserService userService, IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository,
-        IJobApplyQueryRepository jobApplyQueryRepository)
+        IJobApplyQueryRepository jobApplyQueryRepository, IEmployerAccountQueryRepository employerAccountQueryRepository, IJobQueryRepository jobQueryRepository)
     {
         _userService = userService;
         _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
         _jobApplyQueryRepository = jobApplyQueryRepository;
+        _employerAccountQueryRepository = employerAccountQueryRepository;
+        _jobQueryRepository = jobQueryRepository;
+    }
+
+    public async Task<Job> GetJobAppliesForSpecificJob(int jobId)
+    {
+        var currentUserId = _userService.GetCurrentUserId();
+        var currentEmployer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
+        var job = await _jobQueryRepository.GetJobById(jobId);
+        if (job.EmployerAccountId != currentEmployer.Id)
+        {
+            throw new ForbiddenException("You can not have access to this information");
+        }
+
+        return job;
     }
 
     public async Task<JobApply> PostJobApply(int jobId)
