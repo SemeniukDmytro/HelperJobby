@@ -13,12 +13,14 @@ public class JobService : IJobService
     private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IUserService _userService;
     private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
+    private readonly IContentIndexingService _contentIndexingService;
 
-    public JobService(IJobQueryRepository jobQueryRepository, IUserService userService, IEmployerAccountQueryRepository employerAccountQueryRepository)
+    public JobService(IJobQueryRepository jobQueryRepository, IUserService userService, IEmployerAccountQueryRepository employerAccountQueryRepository, IContentIndexingService contentIndexingService)
     {
         _jobQueryRepository = jobQueryRepository;
         _userService = userService;
         _employerAccountQueryRepository = employerAccountQueryRepository;
+        _contentIndexingService = contentIndexingService;
     }
 
     public async Task<Job> CreateJob(Job job)
@@ -28,6 +30,7 @@ public class JobService : IJobService
             throw new JobNotValidException();
         }
 
+        await _contentIndexingService.IndexJobContent(job);
         return job;
     }
 

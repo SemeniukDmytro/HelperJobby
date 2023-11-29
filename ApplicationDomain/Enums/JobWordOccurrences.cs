@@ -1,5 +1,6 @@
 namespace ApplicationDomain.Enums;
 
+[Flags]
 public enum JobWordOccurrences
 {
     JobTitle = 1,

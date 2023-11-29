@@ -13,11 +13,12 @@ public class JobServiceTests
     private readonly Mock<IJobQueryRepository> _jobQueryRepository = new();
     private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<IEmployerAccountQueryRepository> _employerAccountQueryRepository = new();
+    private readonly Mock<IContentIndexingService> _contentIndexingServiceMock = new();
 
     public JobServiceTests()
     {
         _jobService = new JobService( _jobQueryRepository.Object, _userServiceMock.Object,
-            _employerAccountQueryRepository.Object);
+            _employerAccountQueryRepository.Object, _contentIndexingServiceMock.Object);
     }
     
     [Fact]
