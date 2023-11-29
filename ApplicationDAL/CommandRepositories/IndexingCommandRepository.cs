@@ -44,8 +44,7 @@ public class IndexingCommandRepository : IIndexingCommandRepository
         }
         foreach (var processedJobWord in wordsToRemove)
         {
-            processedJobWord.JobIndexedWord.JobCount--;
-            if (processedJobWord.JobIndexedWord.JobCount <= 0)
+            if (--processedJobWord.JobIndexedWord.JobCount <= 0)
             {
                 _applicationContext.IndexedJobWords.Remove(processedJobWord.JobIndexedWord);
             }

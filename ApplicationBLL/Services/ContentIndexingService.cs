@@ -75,6 +75,11 @@ public class ContentIndexingService : IContentIndexingService
         await IndexJobContent(job);
     }
 
+    public async Task DeleteIndexedJobContent(Job job)
+    {
+        await _indexingCommandRepository.RemoveProcessedJobWords(job.Id);
+    }
+
     public async Task IndexResumeContent(Resume resume)
     {
         throw new NotImplementedException();

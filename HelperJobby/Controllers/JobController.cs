@@ -49,7 +49,7 @@ namespace HelperJobby.Controllers
             return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobById(jobId));
         }
 
-        [HttpPost("create-job/{jobCreationId}")]
+        [HttpPost("{jobCreationId}")]
         public async Task<JobDTO> CreateJob(int jobCreationId)
         {
             var currentJobToCreate =
@@ -73,6 +73,7 @@ namespace HelperJobby.Controllers
         public async Task DeleteJob(int jobId)
         {
             var job = await _jobService.DeleteJob(jobId);
+            await _contentIndexingService.DeleteIndexedJobContent(job);
             await _jobCommandRepository.DeleteJob(job);
         }
     }
