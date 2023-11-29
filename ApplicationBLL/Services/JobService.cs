@@ -30,7 +30,6 @@ public class JobService : IJobService
             throw new JobNotValidException();
         }
 
-        await _contentIndexingService.IndexJobContent(job);
         return job;
     }
 

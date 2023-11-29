@@ -35,37 +35,44 @@ public class ContentIndexingService : IContentIndexingService
         var processedContent = WordFrequencyCounter(TextNormalization(job.JobTitle),
             jobFeatures.ToArray(), TextNormalization(job.Description));
 
-        List<IndexedJobWord> newIndexedJobWords = new List<IndexedJobWord>();
+        List<JobIndexedWord> newIndexedJobWords = new List<JobIndexedWord>();
         List<ProcessedJobWord> newProcessedJobWords = new List<ProcessedJobWord>();
         
-        var keysToRetrieve = processedContent.Select(keyValuePair => keyValuePair.Key).ToList();
-        var wordEntities = await _indexingQueryRepository.GetIndexedJobWords(keysToRetrieve);
+        var wordsToRetrieve = processedContent.Select(keyValuePair => keyValuePair.Key).ToList();
+        var wordEntities = await _indexingQueryRepository.GetIndexedJobWords(wordsToRetrieve);
         
         
         foreach (var keyValuePair in processedContent)
         {
             
             var possibleWordEntity = wordEntities.FirstOrDefault(w => w.Word == keyValuePair.Key);
-            
+            keyValuePair.Value.JobId = job.Id;
             if (possibleWordEntity != null)
             {
-                keyValuePair.Value.IndexedJobWordId = possibleWordEntity.Id;
+                possibleWordEntity.JobCount++;
+                await _indexingCommandRepository.UpdateIndexedWordJobCount(possibleWordEntity);
+                keyValuePair.Value.JobIndexedWordId = possibleWordEntity.Id;
                 newProcessedJobWords.Add(keyValuePair.Value);
             }
             else
             {
-                newIndexedJobWords.Add(new IndexedJobWord()
+                newIndexedJobWords.Add(new JobIndexedWord()
                 {
+                    JobCount = 1,
                     Word = keyValuePair.Key,
                     ProcessedJobWords = new List<ProcessedJobWord>() {keyValuePair.Value}
                 });
             }
             
         }
-
-        
         await _indexingCommandRepository.SaveIndexedJobWords(newIndexedJobWords);
         await _indexingCommandRepository.SaveProcessedJobWords(newProcessedJobWords);
+    } 
+    
+    public async Task UpdateAndIndexJobContent(Job job)
+    {
+        await _indexingCommandRepository.RemoveProcessedJobWords(job.Id);
+        await IndexJobContent(job);
     }
 
     public async Task IndexResumeContent(Resume resume)

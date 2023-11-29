@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ApplicationDomain.Enums;
+using ApplicationDomain.Models;
 
 namespace ApplicationDomain.IndexedModels;
 
@@ -12,8 +13,15 @@ public class ProcessedResumeWord
     public int WordCount { get; set; }
     
     [Required]
-    [ForeignKey("IndexedResumeWord")]
-    public int IndexedResumeWordId { get; set; }
+    [ForeignKey("ResumeIndexedWord")]
+    public int ResumeIndexedWordId { get; set; }
     
-    public IndexedResumeWord IndexedResumeWord { get; set; }
+    public ResumeIndexedWord ResumeIndexedWord { get; set; }
+    
+    [Required]
+    [ForeignKey("Resume")]
+    public int ResumeId { get; set; }
+
+    public Resume Resume { get; set; }
+    
 }

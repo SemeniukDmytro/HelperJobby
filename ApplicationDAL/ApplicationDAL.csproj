@@ -23,9 +23,6 @@
 
 
 
-    <ItemGroup>
-      <Folder Include="SearchContextMigrations\" />
-    </ItemGroup>
 
 
 </Project>

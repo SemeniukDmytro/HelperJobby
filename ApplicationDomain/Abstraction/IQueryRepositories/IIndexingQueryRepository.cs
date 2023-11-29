@@ -4,9 +4,7 @@ namespace ApplicationDomain.Abstraction.IQueryRepositories;
 
 public interface IIndexingQueryRepository
 {
-    public Task<IndexedJobWord> GetIndexedJobWord(string word);
+    public Task<IEnumerable<JobIndexedWord>> GetIndexedJobWords(List<string> words);
 
-    public Task<IEnumerable<IndexedJobWord>> GetIndexedJobWords(List<string> words);
-
-    public Task<IndexedResumeWord> GetIndexedResumeWord(string word);
+    public Task<IEnumerable<ProcessedJobWord>> GetProcessedJobWordsByJobId(int jobId);
 }

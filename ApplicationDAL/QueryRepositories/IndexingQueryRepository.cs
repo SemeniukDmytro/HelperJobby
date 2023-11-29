@@ -8,29 +8,25 @@ namespace ApplicationDAL.QueryRepositories;
 
 public class IndexingQueryRepository : IIndexingQueryRepository
 {
-    private readonly SearchEngineContext _searchEngineContext;
+    private readonly ApplicationContext _applicationContext;
 
-    public IndexingQueryRepository(SearchEngineContext searchEngineContext)
+    public IndexingQueryRepository(ApplicationContext applicationContext)
     {
-        _searchEngineContext = searchEngineContext;
+        _applicationContext = applicationContext;
     }
-
-    public async Task<IndexedJobWord> GetIndexedJobWord(string word)
+    
+    public async Task<IEnumerable<JobIndexedWord>> GetIndexedJobWords(List<string> words)
     {
-        var indexedWord = await _searchEngineContext.IndexedJobWords.FirstOrDefaultAsync(w => w.Word == word);
-        return indexedWord;
-    }
-
-    public async Task<IEnumerable<IndexedJobWord>> GetIndexedJobWords(List<string> words)
-    {
-        var results = await _searchEngineContext.IndexedJobWords.Where(w => words.Contains(w.Word))
+        var results = await _applicationContext.IndexedJobWords.Where(w => words.Contains(w.Word))
             .ToListAsync();
         return results;
     }
-
-    public async Task<IndexedResumeWord> GetIndexedResumeWord(string word)
+    
+    public async Task<IEnumerable<ProcessedJobWord>> GetProcessedJobWordsByJobId(int jobId)
     {
-        var indexedWord = await _searchEngineContext.IndexedResumeWords.FirstOrDefaultAsync(w => w.Word == word);
-        return indexedWord;
+        var receivedWords = await _applicationContext.ProcessedJobsWords.Include(w => w.JobIndexedWord)
+            .Where(w => w.JobId == jobId).ToListAsync();
+        return receivedWords;
     }
+
 }

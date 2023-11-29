@@ -1,27 +1,60 @@
 using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.ICommandRepositories;
+using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.IndexedModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationDAL.CommandRepositories;
 
 public class IndexingCommandRepository : IIndexingCommandRepository
 {
-    private readonly SearchEngineContext _searchEngineContext;
+    private readonly ApplicationContext _applicationContext;
+    private readonly IIndexingQueryRepository _indexingQueryRepository; 
 
-    public IndexingCommandRepository(SearchEngineContext searchEngineContext)
+    public IndexingCommandRepository(ApplicationContext applicationContext, IIndexingQueryRepository indexingQueryRepository)
     {
-        _searchEngineContext = searchEngineContext;
+        _applicationContext = applicationContext;
+        _indexingQueryRepository = indexingQueryRepository;
     }
 
-    public async Task SaveIndexedJobWords(List<IndexedJobWord> indexedJobWords)
+    public async Task SaveIndexedJobWords(List<JobIndexedWord> indexedJobWords)
     {
-        _searchEngineContext.IndexedJobWords.AddRange(indexedJobWords);
-        await _searchEngineContext.SaveChangesAsync();
+        _applicationContext.IndexedJobWords.AddRange(indexedJobWords);
+        await _applicationContext.SaveChangesAsync();
+    }
+
+    public async Task UpdateIndexedWordJobCount(JobIndexedWord indexedWord)
+    {
+       _applicationContext.Entry(indexedWord).Property(i => i.JobCount).IsModified = true;
     }
 
     public async Task SaveProcessedJobWords(List<ProcessedJobWord> processedJobWords)
     {
-        _searchEngineContext.ProcessedJobsWords.AddRange(processedJobWords);
-        await _searchEngineContext.SaveChangesAsync();
+        _applicationContext.ProcessedJobsWords.AddRange(processedJobWords);
+        await _applicationContext.SaveChangesAsync();
+    }
+    
+    
+    public async Task RemoveProcessedJobWords(int jobId)
+    {
+        var wordsToRemove = (await _indexingQueryRepository.GetProcessedJobWordsByJobId(jobId)).ToList();
+        if (wordsToRemove.Count == 0)
+        {
+            return;
+        }
+        foreach (var processedJobWord in wordsToRemove)
+        {
+            processedJobWord.JobIndexedWord.JobCount--;
+            if (processedJobWord.JobIndexedWord.JobCount <= 0)
+            {
+                _applicationContext.IndexedJobWords.Remove(processedJobWord.JobIndexedWord);
+            }
+            else
+            {
+                await UpdateIndexedWordJobCount(processedJobWord.JobIndexedWord);
+            }
+        }
+        _applicationContext.ProcessedJobsWords.RemoveRange(wordsToRemove);
+        await _applicationContext.SaveChangesAsync();
     }
 }

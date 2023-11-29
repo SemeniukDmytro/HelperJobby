@@ -1,3 +1,4 @@
+using ApplicationDomain.IndexedModels;
 using ApplicationDomain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,6 +31,10 @@ public class ApplicationContext : DbContext
     public virtual DbSet<OrganizationEmployeeEmail> OrganizationEmployeeEmails { get; set; }
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<WorkExperience> WorkExperiences { get; set; }
+    public DbSet<ResumeIndexedWord> IndexedResumeWords { get; set; }
+    public DbSet<JobIndexedWord> IndexedJobWords { get; set; }
+    public DbSet<ProcessedResumeWord> ProcessedResumesWords { get; set; }
+    public DbSet<ProcessedJobWord> ProcessedJobsWords { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -150,6 +155,34 @@ public class ApplicationContext : DbContext
             .HasOne(ja => ja.JobSeekerAccount)
             .WithMany(j => j.JobApplies)
             .HasForeignKey(ja => ja.JobSeekerAccountId);
+        
+        modelBuilder.Entity<JobIndexedWord>()
+            .HasMany(iw => iw.ProcessedJobWords)
+            .WithOne(w => w.JobIndexedWord)
+            .HasForeignKey(w => w.JobIndexedWordId);
+
+        modelBuilder.Entity<JobIndexedWord>()
+            .HasIndex(iw => iw.Word)
+            .IsUnique();
+
+        modelBuilder.Entity<ResumeIndexedWord>()
+            .HasMany(iw => iw.ProcessedResumeWords)
+            .WithOne(w => w.ResumeIndexedWord)
+            .HasForeignKey(w => w.ResumeIndexedWordId);
+
+        modelBuilder.Entity<ResumeIndexedWord>()
+            .HasIndex(iw => iw.Word)
+            .IsUnique();
+
+        modelBuilder.Entity<ProcessedJobWord>()
+            .HasOne(pw => pw.Job)
+            .WithMany()
+            .HasForeignKey(pw => pw.JobId);
+
+        modelBuilder.Entity<ProcessedResumeWord>()
+            .HasOne(pw => pw.Resume)
+            .WithMany()
+            .HasForeignKey(pw => pw.ResumeId);
 
     }
     
