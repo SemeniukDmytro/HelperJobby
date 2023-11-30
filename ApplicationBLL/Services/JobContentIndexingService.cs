@@ -9,15 +9,15 @@ using ApplicationDomain.Models;
 
 namespace ApplicationBLL.Services;
 
-public class ContentIndexingService : IContentIndexingService
+public class JobContentIndexingService : IJobContentIndexingService
 {
-    private readonly IIndexingQueryRepository _indexingQueryRepository;
-    private readonly IIndexingCommandRepository _indexingCommandRepository;
+    private readonly IJobIndexingQueryRepository _jobIndexingQueryRepository;
+    private readonly IJobIndexingCommandRepository _jobIndexingCommandRepository;
 
-    public ContentIndexingService(IIndexingQueryRepository indexingQueryRepository, IIndexingCommandRepository indexingCommandRepository)
+    public JobContentIndexingService(IJobIndexingQueryRepository jobIndexingQueryRepository, IJobIndexingCommandRepository jobIndexingCommandRepository)
     {
-        _indexingQueryRepository = indexingQueryRepository;
-        _indexingCommandRepository = indexingCommandRepository;
+        _jobIndexingQueryRepository = jobIndexingQueryRepository;
+        _jobIndexingCommandRepository = jobIndexingCommandRepository;
     }
 
     public async Task IndexJobContent(Job job)
@@ -32,14 +32,14 @@ public class ContentIndexingService : IContentIndexingService
         jobFeatures.AddRange(FlagsEnumToArrayConverter.
             GetArrayWithEnumValues<JobTypes>((int)job.JobTypes)
             .Select(b => b.ToString().ToLower()));
-        var processedContent = WordFrequencyCounter(TextNormalization(job.JobTitle),
-            jobFeatures.ToArray(), TextNormalization(job.Description));
+        var processedContent = WordFrequencyCounterForJob(TextSplitter.TextNormalization(job.JobTitle),
+            jobFeatures.ToArray(), TextSplitter.TextNormalization(job.Description));
 
         List<JobIndexedWord> newIndexedJobWords = new List<JobIndexedWord>();
         List<ProcessedJobWord> newProcessedJobWords = new List<ProcessedJobWord>();
         
         var wordsToRetrieve = processedContent.Select(keyValuePair => keyValuePair.Key).ToList();
-        var wordEntities = await _indexingQueryRepository.GetIndexedJobWords(wordsToRetrieve);
+        var wordEntities = await _jobIndexingQueryRepository.GetJobIndexedWords(wordsToRetrieve);
         
         
         foreach (var keyValuePair in processedContent)
@@ -50,7 +50,7 @@ public class ContentIndexingService : IContentIndexingService
             if (possibleWordEntity != null)
             {
                 possibleWordEntity.JobCount++;
-                await _indexingCommandRepository.UpdateIndexedWordJobCount(possibleWordEntity);
+                await _jobIndexingCommandRepository.UpdateIndexedWordJobCount(possibleWordEntity);
                 keyValuePair.Value.JobIndexedWordId = possibleWordEntity.Id;
                 newProcessedJobWords.Add(keyValuePair.Value);
             }
@@ -65,50 +65,24 @@ public class ContentIndexingService : IContentIndexingService
             }
             
         }
-        await _indexingCommandRepository.SaveIndexedJobWords(newIndexedJobWords);
-        await _indexingCommandRepository.SaveProcessedJobWords(newProcessedJobWords);
+        await _jobIndexingCommandRepository.SaveIndexedJobWords(newIndexedJobWords);
+        await _jobIndexingCommandRepository.SaveProcessedJobWords(newProcessedJobWords);
     } 
     
     public async Task UpdateAndIndexJobContent(Job job)
     {
-        await _indexingCommandRepository.RemoveProcessedJobWords(job.Id);
+        await _jobIndexingCommandRepository.RemoveProcessedJobWords(job.Id);
         await IndexJobContent(job);
     }
 
     public async Task DeleteIndexedJobContent(Job job)
     {
-        await _indexingCommandRepository.RemoveProcessedJobWords(job.Id);
-    }
-
-    public async Task IndexResumeContent(Resume resume)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task IndexEducationContent(Education education)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task IndexWorkExperienceContent(WorkExperience workExperience)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task IndexSkill(Skill skill)
-    {
-        throw new NotImplementedException();
+        await _jobIndexingCommandRepository.RemoveProcessedJobWords(job.Id);
     }
     
-    private string[] TextNormalization(string text)
-    {
-        text = text.ToLower();
-        var separators = new[] { ' ', '.', ',', ';', ':', '!', '?'};
-        string[] tokens = text.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-        return tokens;
-    }
+    
 
-    private Dictionary<string, ProcessedJobWord> WordFrequencyCounter(string[] titleWords, string[] jobFeatures,
+    private Dictionary<string, ProcessedJobWord> WordFrequencyCounterForJob(string[] titleWords, string[] jobFeatures,
         string[] descriptionWords)
     {
         var result = new Dictionary<string, ProcessedJobWord>();
@@ -144,7 +118,5 @@ public class ContentIndexingService : IContentIndexingService
             }
         }
     }
-    
-    
 
 }

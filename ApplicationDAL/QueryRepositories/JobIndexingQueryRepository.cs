@@ -6,22 +6,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationDAL.QueryRepositories;
 
-public class IndexingQueryRepository : IIndexingQueryRepository
+public class JobIndexingQueryRepository : IJobIndexingQueryRepository
 {
     private readonly ApplicationContext _applicationContext;
 
-    public IndexingQueryRepository(ApplicationContext applicationContext)
+    public JobIndexingQueryRepository(ApplicationContext applicationContext)
     {
         _applicationContext = applicationContext;
     }
     
-    public async Task<IEnumerable<JobIndexedWord>> GetIndexedJobWords(List<string> words)
+    public async Task<IEnumerable<JobIndexedWord>> GetJobIndexedWords(List<string> words)
     {
-        var results = await _applicationContext.IndexedJobWords.Where(w => words.Contains(w.Word))
+        var results = await _applicationContext.IndexedJobWords
+            .Where(w => words.Contains(w.Word))
             .ToListAsync();
         return results;
     }
-    
+
     public async Task<IEnumerable<ProcessedJobWord>> GetProcessedJobWordsByJobId(int jobId)
     {
         var receivedWords = await _applicationContext.ProcessedJobsWords.Include(w => w.JobIndexedWord)

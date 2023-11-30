@@ -2,7 +2,7 @@ using ApplicationDomain.IndexedModels;
 
 namespace ApplicationDomain.Abstraction.ICommandRepositories;
 
-public interface IIndexingCommandRepository
+public interface IJobIndexingCommandRepository
 {
     public Task SaveIndexedJobWords(List<JobIndexedWord> indexedJobWords);
     public Task UpdateIndexedWordJobCount(JobIndexedWord indexedWord);

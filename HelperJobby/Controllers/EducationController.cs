@@ -16,13 +16,15 @@ namespace HelperJobby.Controllers
         private readonly IEducationQueryRepository _educationQueryRepository;
         private readonly IEducationCommandRepository _educationCommandRepository;
         private readonly IEducationService _educationService;
+        private readonly IResumeContentIndexingService _resumeContentIndexingService;
         
         public EducationController(IMapper mapper, IEducationService educationService, 
-            IEducationCommandRepository educationCommandRepository, IEducationQueryRepository educationQueryRepository) : base(mapper)
+            IEducationCommandRepository educationCommandRepository, IEducationQueryRepository educationQueryRepository, IResumeContentIndexingService resumeContentIndexingService) : base(mapper)
         {
             _educationService = educationService;
             _educationCommandRepository = educationCommandRepository;
             _educationQueryRepository = educationQueryRepository;
+            _resumeContentIndexingService = resumeContentIndexingService;
         }
         
         // GET: api/Education/5
@@ -41,6 +43,7 @@ namespace HelperJobby.Controllers
             var education = _mapper.Map<Education>(createEducationDto);
             education = await _educationService.AddEducation(resumeId, education);
             education = await _educationCommandRepository.Create(education);
+            await _resumeContentIndexingService.IndexEducationContent(education);
             return _mapper.Map<EducationDTO>(education);
         }
 
@@ -52,6 +55,7 @@ namespace HelperJobby.Controllers
             var education = _mapper.Map<Education>(updateEducationDto);
             education = await _educationService.UpdateEducation(educationId, education);
             education = await _educationCommandRepository.Update(education);
+            await _resumeContentIndexingService.UpdateIndexedEducationContent(education);
             return _mapper.Map<EducationDTO>(education);
         }
 
@@ -60,6 +64,7 @@ namespace HelperJobby.Controllers
         public async Task Delete(int educationId)
         {
              var education = await _educationService.Delete(educationId);
+             await _resumeContentIndexingService.DeleteIndexedEducationContent(education);
              await _educationCommandRepository.Delete(education);
         }
 

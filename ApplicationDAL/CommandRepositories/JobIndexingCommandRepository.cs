@@ -6,15 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationDAL.CommandRepositories;
 
-public class IndexingCommandRepository : IIndexingCommandRepository
+public class JobIndexingCommandRepository : IJobIndexingCommandRepository
 {
     private readonly ApplicationContext _applicationContext;
-    private readonly IIndexingQueryRepository _indexingQueryRepository; 
+    private readonly IJobIndexingQueryRepository _jobIndexingQueryRepository; 
 
-    public IndexingCommandRepository(ApplicationContext applicationContext, IIndexingQueryRepository indexingQueryRepository)
+    public JobIndexingCommandRepository(ApplicationContext applicationContext, IJobIndexingQueryRepository jobIndexingQueryRepository)
     {
         _applicationContext = applicationContext;
-        _indexingQueryRepository = indexingQueryRepository;
+        _jobIndexingQueryRepository = jobIndexingQueryRepository;
     }
 
     public async Task SaveIndexedJobWords(List<JobIndexedWord> indexedJobWords)
@@ -23,21 +23,21 @@ public class IndexingCommandRepository : IIndexingCommandRepository
         await _applicationContext.SaveChangesAsync();
     }
 
-    public async Task UpdateIndexedWordJobCount(JobIndexedWord indexedWord)
-    {
-       _applicationContext.Entry(indexedWord).Property(i => i.JobCount).IsModified = true;
-    }
 
     public async Task SaveProcessedJobWords(List<ProcessedJobWord> processedJobWords)
     {
         _applicationContext.ProcessedJobsWords.AddRange(processedJobWords);
         await _applicationContext.SaveChangesAsync();
     }
+    public async Task UpdateIndexedWordJobCount(JobIndexedWord indexedWord)
+    {
+       _applicationContext.Entry(indexedWord).Property(i => i.JobCount).IsModified = true;
+    }
     
     
     public async Task RemoveProcessedJobWords(int jobId)
     {
-        var wordsToRemove = (await _indexingQueryRepository.GetProcessedJobWordsByJobId(jobId)).ToList();
+        var wordsToRemove = (await _jobIndexingQueryRepository.GetProcessedJobWordsByJobId(jobId)).ToList();
         if (wordsToRemove.Count == 0)
         {
             return;

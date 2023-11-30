@@ -19,16 +19,16 @@ namespace HelperJobby.Controllers
         private readonly IJobCommandRepository _jobCommandRepository;
         private readonly IJobService _jobService;
         private readonly ICurrentJobCreationQueryRepository _currentJobCreationQueryRepository;
-        private readonly IContentIndexingService _contentIndexingService;
+        private readonly IJobContentIndexingService _jobContentIndexingService;
         
         public JobController(IMapper mapper, IJobQueryRepository jobQueryRepository, IJobCommandRepository jobCommandRepository,
-            IJobService jobService, ICurrentJobCreationQueryRepository currentJobCreationQueryRepository, IContentIndexingService contentIndexingService) : base(mapper)
+            IJobService jobService, ICurrentJobCreationQueryRepository currentJobCreationQueryRepository, IJobContentIndexingService jobContentIndexingService) : base(mapper)
         {
             _jobQueryRepository = jobQueryRepository;
             _jobCommandRepository = jobCommandRepository;
             _jobService = jobService;
             _currentJobCreationQueryRepository = currentJobCreationQueryRepository;
-            _contentIndexingService = contentIndexingService;
+            _jobContentIndexingService = jobContentIndexingService;
         }
         
         [HttpGet("jobs/{userId}")]
@@ -56,7 +56,7 @@ namespace HelperJobby.Controllers
                 await _currentJobCreationQueryRepository.GetJobCreationById(jobCreationId);
             var createdJob = await _jobService.CreateJob(_mapper.Map<Job>(currentJobToCreate));
             createdJob = await _jobCommandRepository.CreateJob(currentJobToCreate, createdJob);
-            await _contentIndexingService.IndexJobContent(createdJob);
+            await _jobContentIndexingService.IndexJobContent(createdJob);
             return _mapper.Map<JobDTO>(createdJob);
         }
 
@@ -65,7 +65,7 @@ namespace HelperJobby.Controllers
         {
             var job = await _jobService.UpdateJob(jobId, _mapper.Map<Job>(updatedJob));
             job = await _jobCommandRepository.UpdateJob(job);
-            await _contentIndexingService.UpdateAndIndexJobContent(job);
+            await _jobContentIndexingService.UpdateAndIndexJobContent(job);
             return _mapper.Map<JobDTO>(job);
         }
 
@@ -73,7 +73,7 @@ namespace HelperJobby.Controllers
         public async Task DeleteJob(int jobId)
         {
             var job = await _jobService.DeleteJob(jobId);
-            await _contentIndexingService.DeleteIndexedJobContent(job);
+            await _jobContentIndexingService.DeleteIndexedJobContent(job);
             await _jobCommandRepository.DeleteJob(job);
         }
     }
