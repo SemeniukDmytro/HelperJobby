@@ -34,7 +34,7 @@ public class ResumeIndexingCommandRepository : IResumeIndexingCommandRepository
         _applicationContext.Entry(indexedWord).Property(i => i.ResumesCount).IsModified = true;
     }
 
-    public async Task DeleteProcessedResumeWordsByResumeId(int resumeId, List<string> words)
+    public async Task RemoveProcessedResumeWordsByResumeId(int resumeId, List<string> words)
     {
         var wordsToDelete = await _resumeIndexingQueryRepository.GetProcessedAndIndexedWordsByResumeId(resumeId, words);
         foreach (var word in wordsToDelete)
@@ -47,6 +47,28 @@ public class ResumeIndexingCommandRepository : IResumeIndexingCommandRepository
             _applicationContext.Remove(word.ProcessedResumeWords[0]);
         }
 
+        await _applicationContext.SaveChangesAsync();
+    }
+    
+    public async Task RemoveProcessedResumeWords(int resumeId)
+    {
+        var wordsToRemove = (await _resumeIndexingQueryRepository.GetProcessedResumeWordsByResumeId(resumeId)).ToList();
+        if (wordsToRemove.Count == 0)
+        {
+            return;
+        }
+        foreach (var processedResumeWord in wordsToRemove)
+        {
+            if (--processedResumeWord.ResumeIndexedWord.ResumesCount <= 0)
+            {
+                _applicationContext.IndexedResumeWords.Remove(processedResumeWord.ResumeIndexedWord);
+            }
+            else
+            {
+                await UpdateIndexedWordResumeCount(processedResumeWord.ResumeIndexedWord);
+            }
+        }
+        _applicationContext.ProcessedResumesWords.RemoveRange(wordsToRemove);
         await _applicationContext.SaveChangesAsync();
     }
 }

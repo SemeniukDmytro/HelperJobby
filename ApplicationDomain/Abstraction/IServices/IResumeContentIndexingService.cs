@@ -6,12 +6,10 @@ public interface IResumeContentIndexingService
 {
     public Task IndexResumeContent(Resume resume);
 
-    public Task IndexEducationContent(Education education);
+    public Task RemoveResumeIndexedContent(Resume resume);
 
-    public  Task UpdateIndexedEducationContent(Education education);
-    public Task DeleteIndexedEducationContent(Education education);
+    public Task IndexResumeRelatedContent(string content, int resumeId);
 
-    public Task IndexWorkExperienceContent(WorkExperience workExperience);
-
-    public Task IndexSkill(Skill skill);
+    public Task UpdateIndexedResumeRelatedContent(string oldContent, string updatedContent, int resumeId);
+    public Task RemoveIndexedResumeRelatedContent(string content, int resumeId);
 }

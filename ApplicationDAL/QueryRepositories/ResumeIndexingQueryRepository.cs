@@ -30,9 +30,17 @@ public class ResumeIndexingQueryRepository : IResumeIndexingQueryRepository
             {
                 Id = w.Id,
                 Word = w.Word,
+                ResumesCount = w.ResumesCount,
                 ProcessedResumeWords = w.ProcessedResumeWords.Where(pw => pw.ResumeId == resumeId).ToList()
             })
             .ToListAsync();
         return resumeIndexedWords;
+    }
+    
+    public async Task<IEnumerable<ProcessedResumeWord>> GetProcessedResumeWordsByResumeId(int resumeId)
+    {
+        var receivedWords = await _applicationContext.ProcessedResumesWords.Include(w => w.ResumeIndexedWord)
+            .Where(w => w.ResumeId == resumeId).ToListAsync();
+        return receivedWords;
     }
 }

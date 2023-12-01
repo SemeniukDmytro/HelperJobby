@@ -73,7 +73,7 @@ namespace HelperJobby.Controllers
         public async Task DeleteJob(int jobId)
         {
             var job = await _jobService.DeleteJob(jobId);
-            await _jobContentIndexingService.DeleteIndexedJobContent(job);
+            await _jobContentIndexingService.RemoveIndexedJobContent(job);
             await _jobCommandRepository.DeleteJob(job);
         }
     }

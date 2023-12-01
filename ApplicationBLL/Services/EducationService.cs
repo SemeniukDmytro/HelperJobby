@@ -11,13 +11,15 @@ public class EducationService : IEducationService
     private readonly IUserService _userService;
     private readonly IEducationQueryRepository _educationQueryRepository;
     private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+    private readonly IResumeContentIndexingService _resumeContentIndexingService;
 
     public EducationService(IEducationQueryRepository educationQueryRepository,
-        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IUserService userService)
+        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IUserService userService, IResumeContentIndexingService resumeContentIndexingService)
     {
         _educationQueryRepository = educationQueryRepository;
         _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
         _userService = userService;
+        _resumeContentIndexingService = resumeContentIndexingService;
     }
 
     public async Task<Education> AddEducation(int resumeId, Education education)
@@ -42,7 +44,9 @@ public class EducationService : IEducationService
         {
             throw new ForbiddenException();
         }
+        var oldEducationFieldOfStudy = educationEntity.FieldOfStudy;
         educationEntity = UpdateEducation(educationEntity, updatedEducation);
+        await _resumeContentIndexingService.UpdateIndexedResumeRelatedContent(oldEducationFieldOfStudy, educationEntity.FieldOfStudy, educationEntity.ResumeId);
         return educationEntity;
     }
 

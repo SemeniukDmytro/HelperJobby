@@ -8,5 +8,7 @@ public interface IResumeIndexingCommandRepository
     public Task SaveProcessedResumeWords(List<ProcessedResumeWord> processedResumeWords);
     public Task UpdateIndexedWordResumeCount(ResumeIndexedWord indexedWord);
 
-    public Task DeleteProcessedResumeWordsByResumeId(int resumeId, List<string> words);
+    public Task RemoveProcessedResumeWordsByResumeId(int resumeId, List<string> words);
+    public Task RemoveProcessedResumeWords(int resumeId);
+
 }

@@ -43,7 +43,7 @@ namespace HelperJobby.Controllers
             var education = _mapper.Map<Education>(createEducationDto);
             education = await _educationService.AddEducation(resumeId, education);
             education = await _educationCommandRepository.Create(education);
-            await _resumeContentIndexingService.IndexEducationContent(education);
+            await _resumeContentIndexingService.IndexResumeRelatedContent(education.FieldOfStudy, education.ResumeId);
             return _mapper.Map<EducationDTO>(education);
         }
 
@@ -55,7 +55,6 @@ namespace HelperJobby.Controllers
             var education = _mapper.Map<Education>(updateEducationDto);
             education = await _educationService.UpdateEducation(educationId, education);
             education = await _educationCommandRepository.Update(education);
-            await _resumeContentIndexingService.UpdateIndexedEducationContent(education);
             return _mapper.Map<EducationDTO>(education);
         }
 
@@ -64,7 +63,7 @@ namespace HelperJobby.Controllers
         public async Task Delete(int educationId)
         {
              var education = await _educationService.Delete(educationId);
-             await _resumeContentIndexingService.DeleteIndexedEducationContent(education);
+             await _resumeContentIndexingService.RemoveIndexedResumeRelatedContent(education.FieldOfStudy, education.ResumeId);
              await _educationCommandRepository.Delete(education);
         }
 

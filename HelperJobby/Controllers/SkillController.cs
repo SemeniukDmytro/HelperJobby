@@ -16,13 +16,15 @@ namespace HelperJobby.Controllers
         private readonly ISkillService _skillService;
         private readonly ISkillCommandRepository _skillCommandRepository;
         private readonly ISkillQueryRepository _skillQueryRepository;
+        private readonly IResumeContentIndexingService _resumeContentIndexingService;
         
         public SkillController(IMapper mapper, ISkillCommandRepository skillCommandRepository, 
-            ISkillService skillService, ISkillQueryRepository skillQueryRepository) : base(mapper)
+            ISkillService skillService, ISkillQueryRepository skillQueryRepository, IResumeContentIndexingService resumeContentIndexingService) : base(mapper)
         {
             _skillCommandRepository = skillCommandRepository;
             _skillService = skillService;
             _skillQueryRepository = skillQueryRepository;
+            _resumeContentIndexingService = resumeContentIndexingService;
         }
 
         // GET: api/Skill/5
@@ -41,6 +43,7 @@ namespace HelperJobby.Controllers
             var skill = _mapper.Map<Skill>(createdSkillDTO);
             skill = await _skillService.AddSkill(resumeId, skill);
             skill = await _skillCommandRepository.CreateSkill(skill);
+            await _resumeContentIndexingService.IndexResumeRelatedContent(skill.Name, skill.ResumeId);
             return _mapper.Map<SkillDTO>(skill);
         }
 
@@ -48,8 +51,10 @@ namespace HelperJobby.Controllers
         [HttpDelete("{skillId}")]
         public async Task DeleteSkill(int skillId)
         {
-            var skillEntity = await _skillService.DeleteSkill(skillId);
-            await _skillCommandRepository.DeleteSkill(skillEntity);
+            var skill = await _skillService.DeleteSkill(skillId);
+            await _resumeContentIndexingService.RemoveIndexedResumeRelatedContent(skill.Name, skill.ResumeId);
+            await _skillCommandRepository.DeleteSkill(skill);
+            
         }
 
     }

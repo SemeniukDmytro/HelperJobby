@@ -8,6 +8,6 @@ public interface IJobContentIndexingService
 
     public Task UpdateAndIndexJobContent(Job job);
 
-    public Task DeleteIndexedJobContent(Job job);
+    public Task RemoveIndexedJobContent(Job job);
     
 }

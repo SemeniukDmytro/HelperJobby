@@ -13,11 +13,13 @@ public class WorkExperienceServiceTests
     private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<IWorkExperienceQueryRepository> _workExperienceQueryRepositoryMock = new();
     private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
+    private readonly Mock<IResumeContentIndexingService> _resumeContentIndexingServiceMock = new();
+
 
     public WorkExperienceServiceTests()
     {
         _workExperienceService = new WorkExperienceService(_userServiceMock.Object,
-            _workExperienceQueryRepositoryMock.Object, _jobSeekerAccountRepository.Object);
+            _workExperienceQueryRepositoryMock.Object, _jobSeekerAccountRepository.Object, _resumeContentIndexingServiceMock.Object);
     }
     
     [Fact]

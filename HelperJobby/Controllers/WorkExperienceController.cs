@@ -16,12 +16,14 @@ namespace HelperJobby.Controllers
         private readonly IWorkExperienceQueryRepository _workExperienceQueryRepository;
         private readonly IWorkExperienceCommandRepository _workExperienceCommandRepository;
         private readonly IWorkExperienceService _workExperienceService;
+        private readonly IResumeContentIndexingService _resumeContentIndexingService;
         
-        public WorkExperienceController(IMapper mapper, IWorkExperienceService workExperienceService, IWorkExperienceCommandRepository workExperienceCommandRepository, IWorkExperienceQueryRepository workExperienceQueryRepository) : base(mapper)
+        public WorkExperienceController(IMapper mapper, IWorkExperienceService workExperienceService, IWorkExperienceCommandRepository workExperienceCommandRepository, IWorkExperienceQueryRepository workExperienceQueryRepository, IResumeContentIndexingService resumeContentIndexingService) : base(mapper)
         {
             _workExperienceService = workExperienceService;
             _workExperienceCommandRepository = workExperienceCommandRepository;
             _workExperienceQueryRepository = workExperienceQueryRepository;
+            _resumeContentIndexingService = resumeContentIndexingService;
         }
 
         // GET: api/WorkExperience/5
@@ -40,6 +42,7 @@ namespace HelperJobby.Controllers
             var workExperience = _mapper.Map<WorkExperience>(createWorkExperienceDTO);
             workExperience = await _workExperienceService.AddWorkExperience(resumeId, workExperience);
             workExperience = await _workExperienceCommandRepository.Create(workExperience);
+            await _resumeContentIndexingService.IndexResumeRelatedContent(workExperience.JobTitle, workExperience.ResumeId);
             return _mapper.Map<WorkExperienceDTO>(workExperience);
         }
 
@@ -59,6 +62,7 @@ namespace HelperJobby.Controllers
         public async Task Delete(int workExperienceId)
         {
             var  workExperience = await _workExperienceService.Delete(workExperienceId);
+            await _resumeContentIndexingService.RemoveIndexedResumeRelatedContent(workExperience.JobTitle, workExperience.ResumeId);
             await _workExperienceCommandRepository.Delete(workExperience);
         }
     }

@@ -10,13 +10,15 @@ public class WorkExperienceService : IWorkExperienceService
     private readonly IUserService _userService;
     private readonly IWorkExperienceQueryRepository _workExperienceQueryRepository;
     private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+    private readonly IResumeContentIndexingService _resumeContentIndexingService;
 
     public WorkExperienceService(IUserService userService, 
-        IWorkExperienceQueryRepository workExperienceQueryRepository, IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository)
+        IWorkExperienceQueryRepository workExperienceQueryRepository, IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IResumeContentIndexingService resumeContentIndexingService)
     {
         _userService = userService;
         _workExperienceQueryRepository = workExperienceQueryRepository;
         _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
+        _resumeContentIndexingService = resumeContentIndexingService;
     }
 
     public async Task<WorkExperience> AddWorkExperience(int resumeId, WorkExperience workExperience)
@@ -41,7 +43,12 @@ public class WorkExperienceService : IWorkExperienceService
         {
             throw new ForbiddenException();
         }
+
+        var oldWorkExperienceJobTitle = workExperienceEntity.JobTitle;
         workExperienceEntity = UpdateWorkExperience(workExperienceEntity, updatedWorkExperience);
+        await _resumeContentIndexingService.UpdateIndexedResumeRelatedContent(oldWorkExperienceJobTitle,
+            workExperienceEntity.JobTitle,
+            workExperienceEntity.ResumeId);
         return workExperienceEntity;
     }
 
