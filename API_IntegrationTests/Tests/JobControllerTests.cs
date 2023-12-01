@@ -81,7 +81,7 @@ public class JobControllerTests : IntegrationTest
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
         var currentJobCreation = await CreateNewCurrentJob(CurrentJobFixtures.CompletedJobCreation);
-        var requestUri = $"/api/job/create-job/{currentJobCreation.Id}";
+        var requestUri = $"/api/job/{currentJobCreation.Id}";
         
         //Act
         var jobCreateResponse = await TestClient.PostAsJsonAsync(requestUri, currentJobCreation.Id);

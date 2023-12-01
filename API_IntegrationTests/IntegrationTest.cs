@@ -102,7 +102,7 @@ public class IntegrationTest
     protected async Task<JobDTO> CreateJob()
     {
         var currentJobCreation = await CreateNewCurrentJob(CurrentJobFixtures.CompletedJobCreation);
-        var requestUri = $"/api/job/create-job/{currentJobCreation.Id}";
+        var requestUri = $"/api/job/{currentJobCreation.Id}";
         var jobCreateResponse = await TestClient.PostAsJsonAsync(requestUri, currentJobCreation.Id);
         return await jobCreateResponse.Content.ReadAsAsync<JobDTO>();
     }

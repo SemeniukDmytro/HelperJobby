@@ -19,10 +19,7 @@ public class WorkExperience
 
     [MaxLength(30)]
     public string? CityOrProvince { get; set; }
-
-    [Required]
     public DateOnly? From { get; set; }
-
     public DateOnly? To { get; set; }
 
     public bool? CurrentlyWorkHere { get; set; }

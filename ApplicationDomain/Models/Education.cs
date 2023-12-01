@@ -22,11 +22,7 @@ public class Education
     
     [MaxLength(30)]
     public string? City { get; set; }
-    
-    [Required]
     public DateOnly? From { get; set; }
-    
-    [Required]
     public DateOnly? To { get; set; }
     
     [Required]
