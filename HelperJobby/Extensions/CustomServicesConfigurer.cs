@@ -67,6 +67,8 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IResumeIndexingQueryRepository, ResumeIndexingQueryRepository>();
         serviceProvider.AddScoped<IResumeIndexingCommandRepository, ResumeIndexingCommandRepository>();
         serviceProvider.AddScoped<IResumeContentIndexingService, ResumeContentIndexingService>();
+        serviceProvider.AddScoped<ISearchService, SearchService>();
+        serviceProvider.AddScoped<IRankingService, RankingService>();
         
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());
