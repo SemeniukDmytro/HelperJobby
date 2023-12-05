@@ -11,11 +11,13 @@ public class ResumeContentIndexingService : IResumeContentIndexingService
 {
     private readonly IResumeIndexingQueryRepository _resumeIndexingQueryRepository;
     private readonly IResumeIndexingCommandRepository _resumeIndexingCommandRepository;
+    private readonly IRankingService _rankingService;
 
-    public ResumeContentIndexingService(IResumeIndexingQueryRepository resumeIndexingQueryRepository, IResumeIndexingCommandRepository resumeIndexingCommandRepository)
+    public ResumeContentIndexingService(IResumeIndexingQueryRepository resumeIndexingQueryRepository, IResumeIndexingCommandRepository resumeIndexingCommandRepository, IRankingService rankingService)
     {
         _resumeIndexingQueryRepository = resumeIndexingQueryRepository;
         _resumeIndexingCommandRepository = resumeIndexingCommandRepository;
+        _rankingService = rankingService;
     }
 
     public async Task IndexResumeContent(Resume resume)
@@ -81,9 +83,9 @@ public class ResumeContentIndexingService : IResumeContentIndexingService
         var newIndexedResumeWords = new List<ResumeIndexedWord>();
         var newProcessedResumeWords = new List<ProcessedResumeWord>();
 
-        foreach (var keyValuePair in processedContent)
+        foreach (var weightedWord in processedContent)
         {
-            var possibleWordEntity = wordEntities.FirstOrDefault(w => w.Word == keyValuePair.Key);
+            var possibleWordEntity = wordEntities.FirstOrDefault(w => w.Word == weightedWord.Key);
             if (possibleWordEntity != null)
             {
                 possibleWordEntity.ResumesCount++;
@@ -92,7 +94,7 @@ public class ResumeContentIndexingService : IResumeContentIndexingService
                 {
                     ResumeId = resumeId,
                     ResumeIndexedWordId = possibleWordEntity.Id,
-                    WordCount = keyValuePair.Value
+                    Rating = _rankingService.CalculateResumeWordScore(weightedWord.Value)
                 });
             }
             else
@@ -100,13 +102,13 @@ public class ResumeContentIndexingService : IResumeContentIndexingService
                 newIndexedResumeWords.Add(new ResumeIndexedWord()
                 {
                     ResumesCount = 1,
-                    Word = keyValuePair.Key,
+                    Word = weightedWord.Key,
                     ProcessedResumeWords = new List<ProcessedResumeWord>()
                     {
                         new()
                         {
                             ResumeId = resumeId,
-                            WordCount = keyValuePair.Value
+                            Rating = _rankingService.CalculateResumeWordScore(weightedWord.Value)
                         }
                     }
                 });

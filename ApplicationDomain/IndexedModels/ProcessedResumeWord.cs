@@ -10,7 +10,8 @@ public class ProcessedResumeWord
     public int Id { get; set; }
     
     [Required]
-    public int WordCount { get; set; }
+    [Column(TypeName = "decimal(6,2)")]
+    public decimal Rating { get; set; }
     
     [Required]
     [ForeignKey("ResumeIndexedWord")]

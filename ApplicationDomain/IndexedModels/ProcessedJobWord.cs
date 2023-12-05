@@ -10,10 +10,8 @@ public class ProcessedJobWord
     public int Id { get; set; }
     
     [Required]
-    public int WordCount { get; set; }
-    
-    [Required]
-    public JobWordOccurrences JobWordOccurrences { get; set; }
+    [Column(TypeName = "decimal(6,2)")]
+    public decimal Rating { get; set; }
     
     [Required]
     [ForeignKey("Job")]

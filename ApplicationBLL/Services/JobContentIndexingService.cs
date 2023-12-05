@@ -13,11 +13,13 @@ public class JobContentIndexingService : IJobContentIndexingService
 {
     private readonly IJobIndexingQueryRepository _jobIndexingQueryRepository;
     private readonly IJobIndexingCommandRepository _jobIndexingCommandRepository;
+    private readonly IRankingService _rankingService;
 
-    public JobContentIndexingService(IJobIndexingQueryRepository jobIndexingQueryRepository, IJobIndexingCommandRepository jobIndexingCommandRepository)
+    public JobContentIndexingService(IJobIndexingQueryRepository jobIndexingQueryRepository, IJobIndexingCommandRepository jobIndexingCommandRepository, IRankingService rankingService)
     {
         _jobIndexingQueryRepository = jobIndexingQueryRepository;
         _jobIndexingCommandRepository = jobIndexingCommandRepository;
+        _rankingService = rankingService;
     }
 
     public async Task IndexJobContent(Job job)
@@ -32,7 +34,7 @@ public class JobContentIndexingService : IJobContentIndexingService
         jobFeatures.AddRange(FlagsEnumToArrayConverter.
             GetArrayWithEnumValues<JobTypes>((int)job.JobTypes)
             .Select(b => b.ToString().ToLower()));
-        var processedContent = WordFrequencyCounterForJob(TextSplitter.TextNormalization(job.JobTitle),
+        var processedContent = _rankingService.CalculateJobWordScores(TextSplitter.TextNormalization(job.JobTitle),
             jobFeatures.ToArray(), TextSplitter.TextNormalization(job.Description));
 
         List<JobIndexedWord> newIndexedJobWords = new List<JobIndexedWord>();
@@ -42,25 +44,29 @@ public class JobContentIndexingService : IJobContentIndexingService
         var wordEntities = await _jobIndexingQueryRepository.GetJobIndexedWords(wordsToRetrieve);
         
         
-        foreach (var keyValuePair in processedContent)
+        foreach (var weightedWord in processedContent)
         {
             
-            var possibleWordEntity = wordEntities.FirstOrDefault(w => w.Word == keyValuePair.Key);
-            keyValuePair.Value.JobId = job.Id;
+            var possibleWordEntity = wordEntities.FirstOrDefault(w => w.Word == weightedWord.Key);
+            ProcessedJobWord newProcessedJobWord = new ProcessedJobWord()
+            {
+                Rating = weightedWord.Value,
+                JobId = job.Id
+            };
             if (possibleWordEntity != null)
             {
                 possibleWordEntity.JobCount++;
                 await _jobIndexingCommandRepository.UpdateIndexedWordJobCount(possibleWordEntity);
-                keyValuePair.Value.JobIndexedWordId = possibleWordEntity.Id;
-                newProcessedJobWords.Add(keyValuePair.Value);
+                newProcessedJobWord.JobIndexedWordId = possibleWordEntity.Id;
+                newProcessedJobWords.Add(newProcessedJobWord);
             }
             else
             {
                 newIndexedJobWords.Add(new JobIndexedWord()
                 {
                     JobCount = 1,
-                    Word = keyValuePair.Key,
-                    ProcessedJobWords = new List<ProcessedJobWord>() {keyValuePair.Value}
+                    Word = weightedWord.Key,
+                    ProcessedJobWords = new List<ProcessedJobWord>() {newProcessedJobWord}
                 });
             }
             
@@ -80,43 +86,5 @@ public class JobContentIndexingService : IJobContentIndexingService
         await _jobIndexingCommandRepository.RemoveProcessedJobWords(job.Id);
     }
     
-    
-
-    private Dictionary<string, ProcessedJobWord> WordFrequencyCounterForJob(string[] titleWords, string[] jobFeatures,
-        string[] descriptionWords)
-    {
-        var result = new Dictionary<string, ProcessedJobWord>();
-
-        ProcessWords(titleWords, JobWordOccurrences.JobTitle);
-        ProcessWords(jobFeatures, JobWordOccurrences.JobFeatures);
-        ProcessWords(descriptionWords, JobWordOccurrences.JobDescription);
-
-        return result;
-        
-        void ProcessWords(string[] words, JobWordOccurrences jobWordOccurrence)
-        {
-            foreach (var word in words)
-            {
-                if (result.TryGetValue(word, out var processedJobWord))
-                {
-                    if ((processedJobWord.JobWordOccurrences & jobWordOccurrence) != jobWordOccurrence)
-                    {
-                        processedJobWord.JobWordOccurrences |= jobWordOccurrence;
-                    }
-
-                    processedJobWord.WordCount++;
-                    result[word] = processedJobWord;
-                }
-                else
-                {
-                    result.Add(word, new ProcessedJobWord
-                    {
-                        WordCount = 1,
-                        JobWordOccurrences = jobWordOccurrence
-                    });
-                }
-            }
-        }
-    }
 
 }

@@ -1,6 +1,7 @@
 using System.Reflection;
 using ApplicationBLL.Interfaces;
 using ApplicationBLL.Logic;
+using ApplicationBLL.RatingSystem;
 using ApplicationBLL.Services;
 using ApplicationDAL.CommandRepositories;
 using ApplicationDAL.QueryRepositories;
@@ -69,6 +70,7 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IResumeContentIndexingService, ResumeContentIndexingService>();
         serviceProvider.AddScoped<ISearchService, SearchService>();
         serviceProvider.AddScoped<IRankingService, RankingService>();
+        serviceProvider.AddScoped<ISearchQueryRepository, SearchQueryRepository>();
         
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());

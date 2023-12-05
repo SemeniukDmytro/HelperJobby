@@ -1,19 +1,26 @@
+using ApplicationDomain.Abstraction.IQueryRepositories;
+using ApplicationDomain.IndexedModels;
 using AutoMapper;
 using HelperJobby.DTOs.Job;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers;
 
+[Route("api/[controller]")]
+[ApiController]
 public class SearchController : ExtendedBaseController
 {
-    public SearchController(IMapper mapper) : base(mapper)
+    private readonly ISearchQueryRepository _queryRepository;
+    
+    public SearchController(IMapper mapper, ISearchQueryRepository queryRepository) : base(mapper)
     {
+        _queryRepository = queryRepository;
     }
 
-    [HttpGet]
-    public async Task<IEnumerable<JobDTO>> SearchJobs(string query)
+    [HttpGet("jobs")]
+    public async Task<IEnumerable<ProcessedJobWord>> SearchJobs(string query)
     {
-        return null;
+        return await _queryRepository.GetProcessedJobWordsByWord(query);
     }
 
     [HttpGet]
