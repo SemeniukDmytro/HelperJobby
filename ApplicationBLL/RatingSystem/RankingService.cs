@@ -46,7 +46,12 @@ public class RankingService : IRankingService
         
         return wordCount * ratingMultiplier;
     }
-    
+
+    public decimal CombineFrequencyAndRanking(int frequency, decimal totalRank)
+    {
+        return (frequency * RankingConstants.QueryResultFrequencyWeight) * (totalRank * RankingConstants.QueryResultTotalRankWeight);
+    }
+
     private decimal GetBoundedMultiplier(int wordFrequencyValue)
     {
         decimal inverseFrequency = 1.0m / wordFrequencyValue;
