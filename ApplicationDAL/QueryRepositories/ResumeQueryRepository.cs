@@ -29,4 +29,28 @@ public class ResumeQueryRepository : IResumeQueryRepository
         }
         return resume;
     }
+
+    public async Task<IEnumerable<Resume>> GetResumesByResumeIds(List<int> resumeIds)
+    {
+        var resumes = await _applicationContext.Resumes
+            .Where(r => resumeIds.Contains(r.Id))
+            .Select(r => new Resume
+            {
+                Id = r.Id,
+                Educations = r.Educations
+                    .Select(e => new Education() { FieldOfStudy = e.FieldOfStudy, LevelOfEducation = e.LevelOfEducation})
+                    .ToList(),
+
+                WorkExperiences = r.WorkExperiences
+                    .Select(w => new WorkExperience() { JobTitle = w.JobTitle })
+                    .ToList(),
+
+                Skills = r.Skills
+                    .Select(s => new Skill() { Name = s.Name })
+                    .ToList()
+            })
+            .ToListAsync();
+
+        return resumes;
+    }
 }

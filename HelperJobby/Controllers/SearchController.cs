@@ -1,7 +1,10 @@
 using ApplicationDomain.Abstraction.IQueryRepositories;
+using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.IndexedModels;
+using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Job;
+using HelperJobby.DTOs.Resume;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers;
@@ -10,22 +13,29 @@ namespace HelperJobby.Controllers;
 [ApiController]
 public class SearchController : ExtendedBaseController
 {
-    private readonly ISearchQueryRepository _queryRepository;
+    private readonly ISearchService _searchService;
+    private readonly IJobQueryRepository _jobQueryRepository;
+    private readonly IResumeQueryRepository _resumeQueryRepository;
     
-    public SearchController(IMapper mapper, ISearchQueryRepository queryRepository) : base(mapper)
+    public SearchController(IMapper mapper, ISearchService searchService, IJobQueryRepository jobQueryRepository
+        , IResumeQueryRepository resumeQueryRepository) : base(mapper)
     {
-        _queryRepository = queryRepository;
+        _searchService = searchService;
+        _jobQueryRepository = jobQueryRepository;
+        _resumeQueryRepository = resumeQueryRepository;
     }
 
     [HttpGet("jobs")]
-    public async Task<IEnumerable<ProcessedJobWord>> SearchJobs(string query)
+    public async Task<IEnumerable<JobDTO>> SearchJobs(string query)
     {
-        return await _queryRepository.GetProcessedJobWordsByWord(query);
+        var jobIdsToLoad = await _searchService.FindJobsIds(query);
+        return _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByJobIds(jobIdsToLoad));
     }
 
-    [HttpGet]
-    public async Task<IEnumerable<JobDTO>> SearchResumes(string query)
+    [HttpGet("resumes")]
+    public async Task<IEnumerable<ResumeDTO>> SearchResumes(string query)
     {
-        return null;
+        var resumesToLoad = await _searchService.FindResumeIds(query);
+        return _mapper.Map<IEnumerable<ResumeDTO>>(await _resumeQueryRepository.GetResumesByResumeIds(resumesToLoad));
     }
 }

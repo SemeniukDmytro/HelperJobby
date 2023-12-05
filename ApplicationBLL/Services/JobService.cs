@@ -13,14 +13,12 @@ public class JobService : IJobService
     private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IUserService _userService;
     private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
-    private readonly IJobContentIndexingService _jobContentIndexingService;
 
-    public JobService(IJobQueryRepository jobQueryRepository, IUserService userService, IEmployerAccountQueryRepository employerAccountQueryRepository, IJobContentIndexingService jobContentIndexingService)
+    public JobService(IJobQueryRepository jobQueryRepository, IUserService userService, IEmployerAccountQueryRepository employerAccountQueryRepository)
     {
         _jobQueryRepository = jobQueryRepository;
         _userService = userService;
         _employerAccountQueryRepository = employerAccountQueryRepository;
-        _jobContentIndexingService = jobContentIndexingService;
     }
 
     public async Task<Job> CreateJob(Job job)

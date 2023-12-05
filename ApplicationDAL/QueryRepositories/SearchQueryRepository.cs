@@ -27,4 +27,17 @@ public class SearchQueryRepository : ISearchQueryRepository
         
         return processedJobWords;
     }
+    
+    public async Task<IEnumerable<ProcessedResumeWord>> GetProcessedResumeWordsByWord(string word)
+    {
+        
+        var processedJobWords = await _applicationContext.ProcessedResumesWords
+            .Where(p => p.ResumeIndexedWord.Word == word)
+            .OrderByDescending(p => p.Rating )
+            .Skip(0)
+            .Take(10)
+            .ToListAsync();
+        
+        return processedJobWords;
+    }
 }
