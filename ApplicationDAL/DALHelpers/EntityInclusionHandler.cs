@@ -3,13 +3,13 @@ using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ApplicationDAL.QueryRepositories;
+namespace ApplicationDAL.DALHelpers;
 
-public class CustomQueryIncluder
+public class EntityInclusionHandler
 {
-    private  ApplicationContext _applicationContext;
+    private readonly ApplicationContext _applicationContext;
 
-    public CustomQueryIncluder(ApplicationContext applicationContext)
+    public EntityInclusionHandler(ApplicationContext applicationContext)
     {
          _applicationContext = applicationContext;
     }

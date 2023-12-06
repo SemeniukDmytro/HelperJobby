@@ -1,4 +1,5 @@
 using ApplicationDAL.Context;
+using ApplicationDAL.DALHelpers;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
@@ -10,12 +11,12 @@ namespace ApplicationDAL.QueryRepositories;
 public class EmployerAccountQueryRepository : IEmployerAccountQueryRepository
 {
     private readonly ApplicationContext _applicationContext;
-    private readonly CustomQueryIncluder _customQueryIncluder;
+    private readonly EntityInclusionHandler _entityInclusionHandler;
 
-    public EmployerAccountQueryRepository(ApplicationContext applicationContext, CustomQueryIncluder customQueryIncluder)
+    public EmployerAccountQueryRepository(ApplicationContext applicationContext, EntityInclusionHandler entityInclusionHandler)
     {
         _applicationContext = applicationContext;
-        _customQueryIncluder = customQueryIncluder;
+        _entityInclusionHandler = entityInclusionHandler;
     }
 
     public async Task<EmployerAccount> GetEmployerAccount(int userId)
@@ -52,7 +53,7 @@ public class EmployerAccountQueryRepository : IEmployerAccountQueryRepository
 
     private async Task<EmployerAccount> GetUserWithEmployerAccount(int userId, Func<IQueryable<User>, IQueryable<User>> includeFunc = null)
     {
-        var user = await _customQueryIncluder.GetUser(userId, includeFunc);
+        var user = await _entityInclusionHandler.GetUser(userId, includeFunc);
         var account = user.EmployerAccount;
 
         if (account == null)

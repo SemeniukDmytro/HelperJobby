@@ -1,9 +1,9 @@
 using ApplicationDAL.Context;
-using ApplicationDomain.Abstraction.ICommandRepositories;
-using ApplicationDomain.Abstraction.IQueryRepositories;
+using ApplicationDomain.Abstraction.SearchICommandRepositories;
+using ApplicationDomain.Abstraction.SearchIQueryRepositories;
 using ApplicationDomain.IndexedModels;
 
-namespace ApplicationDAL.CommandRepositories;
+namespace ApplicationDAL.SearchCommandRepositories;
 
 public class ResumeIndexingCommandRepository : IResumeIndexingCommandRepository
 {

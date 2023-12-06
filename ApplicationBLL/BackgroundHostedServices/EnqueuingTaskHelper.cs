@@ -1,5 +1,6 @@
 using ApplicationDomain.Abstraction.BackgroundInterfaces;
 using ApplicationDomain.Abstraction.IServices;
+using ApplicationDomain.Abstraction.SearchRelatedIServices;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ApplicationBLL.BackgroundHostedServices;

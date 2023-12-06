@@ -1,10 +1,9 @@
-using System.Diagnostics;
 using ApplicationDAL.Context;
-using ApplicationDomain.Abstraction.IQueryRepositories;
+using ApplicationDomain.Abstraction.SearchIQueryRepositories;
 using ApplicationDomain.IndexedModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace ApplicationDAL.QueryRepositories;
+namespace ApplicationDAL.SearchQueryRepositories;
 
 public class JobIndexingQueryRepository : IJobIndexingQueryRepository
 {

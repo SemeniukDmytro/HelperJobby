@@ -1,13 +1,12 @@
-using System.Diagnostics;
 using ApplicationBLL.Logic;
-using ApplicationDomain.Abstraction.ICommandRepositories;
-using ApplicationDomain.Abstraction.IQueryRepositories;
-using ApplicationDomain.Abstraction.IServices;
+using ApplicationDomain.Abstraction.SearchICommandRepositories;
+using ApplicationDomain.Abstraction.SearchIQueryRepositories;
+using ApplicationDomain.Abstraction.SearchRelatedIServices;
 using ApplicationDomain.Enums;
 using ApplicationDomain.IndexedModels;
 using ApplicationDomain.Models;
 
-namespace ApplicationBLL.Services;
+namespace ApplicationBLL.SearchRelatedServices;
 
 public class JobContentIndexingService : IJobContentIndexingService
 {

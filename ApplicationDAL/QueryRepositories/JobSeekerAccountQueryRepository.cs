@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Linq.Expressions;
 using ApplicationDAL.Context;
+using ApplicationDAL.DALHelpers;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +11,12 @@ namespace ApplicationDAL.QueryRepositories;
 public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
 {
     private readonly ApplicationContext _applicationContext;
-    private readonly CustomQueryIncluder _customQueryIncluder;
+    private readonly EntityInclusionHandler _entityInclusionHandler;
 
-    public JobSeekerAccountQueryRepository(ApplicationContext applicationContext, CustomQueryIncluder customQueryIncluder)
+    public JobSeekerAccountQueryRepository(ApplicationContext applicationContext, EntityInclusionHandler entityInclusionHandler)
     {
         _applicationContext = applicationContext;
-        _customQueryIncluder = customQueryIncluder;
+        _entityInclusionHandler = entityInclusionHandler;
     }
 
     public async Task<JobSeekerAccount> GetJobSeekerAccountByUserId(int userId)
@@ -93,7 +94,7 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
         {
             query = includeFunc(query);
         }
-        var user = await _customQueryIncluder.GetUser(userId, includeFunc);
+        var user = await _entityInclusionHandler.GetUser(userId, includeFunc);
         var account = user.JobSeekerAccount;
         return account;
     }

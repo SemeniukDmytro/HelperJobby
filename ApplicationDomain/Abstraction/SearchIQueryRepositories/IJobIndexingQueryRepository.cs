@@ -1,6 +1,6 @@
 using ApplicationDomain.IndexedModels;
 
-namespace ApplicationDomain.Abstraction.IQueryRepositories;
+namespace ApplicationDomain.Abstraction.SearchIQueryRepositories;
 
 public interface IJobIndexingQueryRepository
 {

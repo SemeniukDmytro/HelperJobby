@@ -1,6 +1,6 @@
 using ApplicationDomain.Models;
 
-namespace ApplicationDomain.Abstraction.IServices;
+namespace ApplicationDomain.Abstraction.SearchRelatedIServices;
 
 public interface IJobContentIndexingService
 {

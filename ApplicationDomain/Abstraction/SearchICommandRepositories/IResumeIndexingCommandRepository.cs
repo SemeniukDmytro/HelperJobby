@@ -1,6 +1,6 @@
 using ApplicationDomain.IndexedModels;
 
-namespace ApplicationDomain.Abstraction.ICommandRepositories;
+namespace ApplicationDomain.Abstraction.SearchICommandRepositories;
 
 public interface IResumeIndexingCommandRepository
 {

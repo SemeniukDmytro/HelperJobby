@@ -1,4 +1,5 @@
 using ApplicationDomain.Abstraction.IServices;
+using ApplicationDomain.Abstraction.SearchRelatedIServices;
 
 namespace ApplicationBLL.RatingSystem;
 
