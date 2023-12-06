@@ -1,4 +1,5 @@
 using ApplicationBLL.Interfaces;
+using ApplicationDomain.Abstraction.BackgroundInterfaces;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
@@ -11,15 +12,15 @@ public class EducationService : IEducationService
     private readonly IUserService _userService;
     private readonly IEducationQueryRepository _educationQueryRepository;
     private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
-    private readonly IResumeContentIndexingService _resumeContentIndexingService;
+    private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
 
     public EducationService(IEducationQueryRepository educationQueryRepository,
-        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IUserService userService, IResumeContentIndexingService resumeContentIndexingService)
+        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IUserService userService, IEnqueuingTaskHelper enqueuingTaskHelper)
     {
         _educationQueryRepository = educationQueryRepository;
         _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
         _userService = userService;
-        _resumeContentIndexingService = resumeContentIndexingService;
+        _enqueuingTaskHelper = enqueuingTaskHelper;
     }
 
     public async Task<Education> AddEducation(int resumeId, Education education)
@@ -46,7 +47,10 @@ public class EducationService : IEducationService
         }
         var oldEducationFieldOfStudy = educationEntity.FieldOfStudy;
         educationEntity = UpdateEducation(educationEntity, updatedEducation);
-        await _resumeContentIndexingService.UpdateIndexedResumeRelatedContent(oldEducationFieldOfStudy, educationEntity.FieldOfStudy, educationEntity.ResumeId);
+        await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
+        {
+            await indexingService.UpdateIndexedResumeRelatedContent(oldEducationFieldOfStudy, educationEntity.FieldOfStudy, educationEntity.ResumeId);
+        });
         return educationEntity;
     }
 

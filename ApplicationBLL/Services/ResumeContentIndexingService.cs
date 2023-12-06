@@ -56,7 +56,7 @@ public class ResumeContentIndexingService : IResumeContentIndexingService
         var oldProcessedContent = ProcessAndValidateContent(oldContent);
         if (oldProcessedContent == null) return;
         
-        var updatedProcessedContent = ProcessAndValidateContent(oldContent);
+        var updatedProcessedContent = ProcessAndValidateContent(updatedContent);
         if (updatedProcessedContent == null) return;
         
         var wordsToDelete = oldProcessedContent.Select(keyValuePair => keyValuePair.Key).ToList();

@@ -1,3 +1,4 @@
+using ApplicationDomain.Abstraction.BackgroundInterfaces;
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
@@ -19,14 +20,15 @@ namespace HelperJobby.Controllers
         private readonly IResumeQueryRepository _resumeQueryRepository;
         private readonly IResumeService _resumeService;
         private readonly IResumeCommandRepository _resumeCommandRepository;
-        private readonly IResumeContentIndexingService _resumeContentIndexingService;
+        private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
         
-        public ResumeController(IMapper mapper, IResumeQueryRepository resumeQueryRepository, IResumeCommandRepository resumeCommandRepository, IResumeService resumeService, IResumeContentIndexingService resumeContentIndexingService) : base(mapper)
+        public ResumeController(IMapper mapper, IResumeQueryRepository resumeQueryRepository, IResumeCommandRepository resumeCommandRepository, 
+            IResumeService resumeService, IEnqueuingTaskHelper enqueuingTaskHelper) : base(mapper)
         {
             _resumeQueryRepository = resumeQueryRepository;
             _resumeCommandRepository = resumeCommandRepository;
             _resumeService = resumeService;
-            _resumeContentIndexingService = resumeContentIndexingService;
+            _enqueuingTaskHelper = enqueuingTaskHelper;
         }
 
         // GET: api/Resume/5
@@ -45,16 +47,22 @@ namespace HelperJobby.Controllers
             var resume = _mapper.Map<Resume>(createdResume);
             resume = await _resumeService.CreateResume(resume);
             resume = await _resumeCommandRepository.CreateResume(resume);
-            await _resumeContentIndexingService.IndexResumeContent(resume);
+            await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
+            {
+                await indexingService.IndexResumeContent(resume);
+            });
             return _mapper.Map<ResumeDTO>(resume);
         }
 
         // DELETE: api/Resume/5
-            [HttpDelete("{resumeId}")]
+        [HttpDelete("{resumeId}")]
         public async Task DeleteResume(int resumeId)
         {
             var resume = await _resumeService.DeleteResume(resumeId);
-            await _resumeContentIndexingService.RemoveResumeIndexedContent(resume);
+            await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
+            {
+                await indexingService.RemoveResumeIndexedContent(resume);
+            });
             await _resumeCommandRepository.DeleteResume(resume);
         }
 

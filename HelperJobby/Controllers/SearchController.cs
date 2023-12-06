@@ -5,6 +5,7 @@ using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.Resume;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers;

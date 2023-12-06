@@ -1,4 +1,5 @@
 using ApplicationBLL.Services;
+using ApplicationDomain.Abstraction.BackgroundInterfaces;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
@@ -13,12 +14,12 @@ public class EducationServiceTests
     private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<IEducationQueryRepository> _educationQueryRepositoryMock = new();
     private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountQueryRepository = new();
-    private readonly Mock<IResumeContentIndexingService> _resumeContentIndexingServiceMock = new();
+    private readonly Mock<IEnqueuingTaskHelper> _enqueuingTaskHelperMock = new();
 
     public EducationServiceTests()
     {
         _educationService = new EducationService(_educationQueryRepositoryMock.Object,
-            _jobSeekerAccountQueryRepository.Object, _userServiceMock.Object, _resumeContentIndexingServiceMock.Object);
+            _jobSeekerAccountQueryRepository.Object, _userServiceMock.Object, _enqueuingTaskHelperMock.Object);
     }
 
     [Fact]

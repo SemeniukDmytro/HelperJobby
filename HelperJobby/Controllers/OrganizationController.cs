@@ -5,12 +5,14 @@ using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Organization;
 using HelperJobby.Validators;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrganizationController : ExtendedBaseController
     {
         private readonly IOrganizationQueryRepository _organizationQueryRepository;

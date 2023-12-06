@@ -4,12 +4,14 @@ using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Job;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CurrentJobController : ExtendedBaseController
     {
         private readonly ICurrentJobCreationService _currentJobCreationService;

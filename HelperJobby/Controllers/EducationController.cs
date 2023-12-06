@@ -1,3 +1,4 @@
+using ApplicationDomain.Abstraction.BackgroundInterfaces;
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
@@ -5,26 +6,30 @@ using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Resume;
 using HelperJobby.Validators;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EducationController : ExtendedBaseController
     {
         private readonly IEducationQueryRepository _educationQueryRepository;
         private readonly IEducationCommandRepository _educationCommandRepository;
         private readonly IEducationService _educationService;
-        private readonly IResumeContentIndexingService _resumeContentIndexingService;
+        private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
+
         
         public EducationController(IMapper mapper, IEducationService educationService, 
-            IEducationCommandRepository educationCommandRepository, IEducationQueryRepository educationQueryRepository, IResumeContentIndexingService resumeContentIndexingService) : base(mapper)
+            IEducationCommandRepository educationCommandRepository, IEducationQueryRepository educationQueryRepository, 
+            IEnqueuingTaskHelper enqueuingTaskHelper) : base(mapper)
         {
             _educationService = educationService;
             _educationCommandRepository = educationCommandRepository;
             _educationQueryRepository = educationQueryRepository;
-            _resumeContentIndexingService = resumeContentIndexingService;
+            _enqueuingTaskHelper = enqueuingTaskHelper;
         }
         
         // GET: api/Education/5
@@ -43,7 +48,10 @@ namespace HelperJobby.Controllers
             var education = _mapper.Map<Education>(createEducationDto);
             education = await _educationService.AddEducation(resumeId, education);
             education = await _educationCommandRepository.Create(education);
-            await _resumeContentIndexingService.IndexResumeRelatedContent(education.FieldOfStudy, education.ResumeId);
+            await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
+            {
+                await indexingService.IndexResumeRelatedContent(education.FieldOfStudy, education.ResumeId);
+            });
             return _mapper.Map<EducationDTO>(education);
         }
 
@@ -63,7 +71,10 @@ namespace HelperJobby.Controllers
         public async Task Delete(int educationId)
         {
              var education = await _educationService.Delete(educationId);
-             await _resumeContentIndexingService.RemoveIndexedResumeRelatedContent(education.FieldOfStudy, education.ResumeId);
+             await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
+             {
+                 await indexingService.RemoveIndexedResumeRelatedContent(education.FieldOfStudy, education.ResumeId);
+             });
              await _educationCommandRepository.Delete(education);
         }
 

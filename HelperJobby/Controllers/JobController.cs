@@ -1,3 +1,4 @@
+using ApplicationDomain.Abstraction.BackgroundInterfaces;
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
@@ -19,16 +20,17 @@ namespace HelperJobby.Controllers
         private readonly IJobCommandRepository _jobCommandRepository;
         private readonly IJobService _jobService;
         private readonly ICurrentJobCreationQueryRepository _currentJobCreationQueryRepository;
-        private readonly IJobContentIndexingService _jobContentIndexingService;
+        private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
         
         public JobController(IMapper mapper, IJobQueryRepository jobQueryRepository, IJobCommandRepository jobCommandRepository,
-            IJobService jobService, ICurrentJobCreationQueryRepository currentJobCreationQueryRepository, IJobContentIndexingService jobContentIndexingService) : base(mapper)
+            IJobService jobService, ICurrentJobCreationQueryRepository currentJobCreationQueryRepository,
+            IEnqueuingTaskHelper enqueuingTaskHelper) : base(mapper)
         {
             _jobQueryRepository = jobQueryRepository;
             _jobCommandRepository = jobCommandRepository;
             _jobService = jobService;
             _currentJobCreationQueryRepository = currentJobCreationQueryRepository;
-            _jobContentIndexingService = jobContentIndexingService;
+            _enqueuingTaskHelper = enqueuingTaskHelper;
         }
         
         [HttpGet("jobs/{userId}")]
@@ -52,20 +54,29 @@ namespace HelperJobby.Controllers
         [HttpPost("{jobCreationId}")]
         public async Task<JobDTO> CreateJob(int jobCreationId)
         {
-            var currentJobToCreate =
-                await _currentJobCreationQueryRepository.GetJobCreationById(jobCreationId);
+            var currentJobToCreate = await _currentJobCreationQueryRepository.GetJobCreationById(jobCreationId);
             var createdJob = await _jobService.CreateJob(_mapper.Map<Job>(currentJobToCreate));
             createdJob = await _jobCommandRepository.CreateJob(currentJobToCreate, createdJob);
-            await _jobContentIndexingService.IndexJobContent(createdJob);
+
+            await _enqueuingTaskHelper.EnqueueJobIndexingTaskAsync(async indexingService =>
+            {
+                await indexingService.IndexJobContent(createdJob);
+            });
+
             return _mapper.Map<JobDTO>(createdJob);
         }
 
         [HttpPut("{jobId}")]
-        public async Task<JobDTO> PutJob(int jobId,  UpdatedJobDTO updatedJob)
+        public async Task<JobDTO> PutJob(int jobId, UpdatedJobDTO updatedJob)
         {
             var job = await _jobService.UpdateJob(jobId, _mapper.Map<Job>(updatedJob));
             job = await _jobCommandRepository.UpdateJob(job);
-            await _jobContentIndexingService.UpdateAndIndexJobContent(job);
+
+            await _enqueuingTaskHelper.EnqueueJobIndexingTaskAsync(async indexingService =>
+            {
+                await indexingService.UpdateAndIndexJobContent(job);
+            });
+
             return _mapper.Map<JobDTO>(job);
         }
 
@@ -73,7 +84,12 @@ namespace HelperJobby.Controllers
         public async Task DeleteJob(int jobId)
         {
             var job = await _jobService.DeleteJob(jobId);
-            await _jobContentIndexingService.RemoveIndexedJobContent(job);
+
+            await _enqueuingTaskHelper.EnqueueJobIndexingTaskAsync(async indexingService =>
+            {
+                await indexingService.RemoveIndexedJobContent(job);
+            });
+
             await _jobCommandRepository.DeleteJob(job);
         }
     }

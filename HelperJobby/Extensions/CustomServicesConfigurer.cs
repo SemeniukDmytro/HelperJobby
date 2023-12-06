@@ -1,10 +1,12 @@
 using System.Reflection;
+using ApplicationBLL.BackgroundHostedServices;
 using ApplicationBLL.Interfaces;
 using ApplicationBLL.Logic;
 using ApplicationBLL.RatingSystem;
 using ApplicationBLL.Services;
 using ApplicationDAL.CommandRepositories;
 using ApplicationDAL.QueryRepositories;
+using ApplicationDomain.Abstraction.BackgroundInterfaces;
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
@@ -72,6 +74,11 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IRankingService, RankingService>();
         serviceProvider.AddScoped<ISearchQueryRepository, SearchQueryRepository>();
         
+        //background related
+        serviceProvider.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>(); 
+        serviceProvider.AddHostedService<QueuedHostedService>();
+        serviceProvider.AddScoped<IEnqueuingTaskHelper, EnqueuingTaskHelper>();
+
         serviceProvider.AddScoped<CurrentUserIdProvider>();
         serviceProvider.AddScoped<IUserIdSetter>(provider => provider.GetService<CurrentUserIdProvider>());
         serviceProvider.AddScoped<IUserIdGetter>(provider => provider.GetService<CurrentUserIdProvider>());

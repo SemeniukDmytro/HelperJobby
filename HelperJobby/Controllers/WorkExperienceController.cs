@@ -1,3 +1,4 @@
+    using ApplicationDomain.Abstraction.BackgroundInterfaces;
     using ApplicationDomain.Abstraction.ICommandRepositories;
     using ApplicationDomain.Abstraction.IQueryRepositories;
     using ApplicationDomain.Abstraction.IServices;
@@ -5,25 +6,29 @@
     using AutoMapper;
     using HelperJobby.DTOs.Resume;
     using HelperJobby.Validators;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class WorkExperienceController : ExtendedBaseController
     {
         private readonly IWorkExperienceQueryRepository _workExperienceQueryRepository;
         private readonly IWorkExperienceCommandRepository _workExperienceCommandRepository;
         private readonly IWorkExperienceService _workExperienceService;
-        private readonly IResumeContentIndexingService _resumeContentIndexingService;
+        private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
         
-        public WorkExperienceController(IMapper mapper, IWorkExperienceService workExperienceService, IWorkExperienceCommandRepository workExperienceCommandRepository, IWorkExperienceQueryRepository workExperienceQueryRepository, IResumeContentIndexingService resumeContentIndexingService) : base(mapper)
+        public WorkExperienceController(IMapper mapper, IWorkExperienceService workExperienceService, 
+            IWorkExperienceCommandRepository workExperienceCommandRepository, IWorkExperienceQueryRepository workExperienceQueryRepository,
+            IEnqueuingTaskHelper enqueuingTaskHelper) : base(mapper)
         {
             _workExperienceService = workExperienceService;
             _workExperienceCommandRepository = workExperienceCommandRepository;
             _workExperienceQueryRepository = workExperienceQueryRepository;
-            _resumeContentIndexingService = resumeContentIndexingService;
+            _enqueuingTaskHelper = enqueuingTaskHelper;
         }
 
         // GET: api/WorkExperience/5
@@ -42,7 +47,10 @@ namespace HelperJobby.Controllers
             var workExperience = _mapper.Map<WorkExperience>(createWorkExperienceDTO);
             workExperience = await _workExperienceService.AddWorkExperience(resumeId, workExperience);
             workExperience = await _workExperienceCommandRepository.Create(workExperience);
-            await _resumeContentIndexingService.IndexResumeRelatedContent(workExperience.JobTitle, workExperience.ResumeId);
+            await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
+            {
+                await indexingService.IndexResumeRelatedContent(workExperience.JobTitle, workExperience.ResumeId);
+            });
             return _mapper.Map<WorkExperienceDTO>(workExperience);
         }
 
@@ -62,7 +70,10 @@ namespace HelperJobby.Controllers
         public async Task Delete(int workExperienceId)
         {
             var  workExperience = await _workExperienceService.Delete(workExperienceId);
-            await _resumeContentIndexingService.RemoveIndexedResumeRelatedContent(workExperience.JobTitle, workExperience.ResumeId);
+            await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
+            {
+                await indexingService.RemoveIndexedResumeRelatedContent(workExperience.JobTitle, workExperience.ResumeId);
+            });
             await _workExperienceCommandRepository.Delete(workExperience);
         }
     }

@@ -1,3 +1,4 @@
+using ApplicationDomain.Abstraction.BackgroundInterfaces;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
@@ -10,15 +11,16 @@ public class WorkExperienceService : IWorkExperienceService
     private readonly IUserService _userService;
     private readonly IWorkExperienceQueryRepository _workExperienceQueryRepository;
     private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
-    private readonly IResumeContentIndexingService _resumeContentIndexingService;
+    private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
 
     public WorkExperienceService(IUserService userService, 
-        IWorkExperienceQueryRepository workExperienceQueryRepository, IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IResumeContentIndexingService resumeContentIndexingService)
+        IWorkExperienceQueryRepository workExperienceQueryRepository, IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository,
+        IEnqueuingTaskHelper enqueuingTaskHelper)
     {
         _userService = userService;
         _workExperienceQueryRepository = workExperienceQueryRepository;
         _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
-        _resumeContentIndexingService = resumeContentIndexingService;
+        _enqueuingTaskHelper = enqueuingTaskHelper;
     }
 
     public async Task<WorkExperience> AddWorkExperience(int resumeId, WorkExperience workExperience)
@@ -46,9 +48,12 @@ public class WorkExperienceService : IWorkExperienceService
 
         var oldWorkExperienceJobTitle = workExperienceEntity.JobTitle;
         workExperienceEntity = UpdateWorkExperience(workExperienceEntity, updatedWorkExperience);
-        await _resumeContentIndexingService.UpdateIndexedResumeRelatedContent(oldWorkExperienceJobTitle,
-            workExperienceEntity.JobTitle,
-            workExperienceEntity.ResumeId);
+        await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
+        {
+            await indexingService.UpdateIndexedResumeRelatedContent(oldWorkExperienceJobTitle,
+                workExperienceEntity.JobTitle,
+                workExperienceEntity.ResumeId);
+        });
         return workExperienceEntity;
     }
 
