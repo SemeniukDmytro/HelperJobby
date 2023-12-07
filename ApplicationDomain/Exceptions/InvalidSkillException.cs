@@ -1,6 +1,6 @@
 namespace ApplicationDomain.Exceptions;
 
-public class InvalidSkillException : Exception
+public class InvalidSkillException : InvalidModelExceptionBase
 {
     public InvalidSkillException(string? message) :
         base(message)

@@ -1,7 +1,6 @@
-﻿using System.Diagnostics;
-using ApplicationBLL.Interfaces;
+﻿using ApplicationBLL.Interfaces;
 
-namespace HelperJobby.Middlwares;
+namespace HelperJobby.Middlewares;
 
 public class CurrentUserIdSetterMiddleware
 {

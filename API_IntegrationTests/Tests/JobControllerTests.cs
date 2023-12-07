@@ -132,10 +132,10 @@ public class JobControllerTests : IntegrationTest
         Assert.Equal(updatedJobDTO.NumberOfOpenings, updatedJob.NumberOfOpenings);
         Assert.Equal(updatedJobDTO.Language, updatedJob.Language);
         Assert.Equal(updatedJobDTO.Location, updatedJob.Location);
-        Assert.Equal(updatedJobDTO.JobType, updatedJob.JobType);
+        Assert.Equal(updatedJobDTO.JobType.Select(j => j.ToString()), updatedJob.JobType);
         Assert.Equal(updatedJobDTO.Salary, updatedJob.Salary);
-        Assert.Equal(updatedJobDTO.Schedule, updatedJob.Schedule);
-        Assert.Equal(updatedJobDTO.Benefits, updatedJob.Benefits);
+        Assert.Equal(updatedJobDTO.Schedule.Select(s => s.ToString()), updatedJob.Schedule);
+        Assert.Equal(updatedJobDTO.Benefits.Select(b => b.ToString()), updatedJob.Benefits);
         Assert.Equal(updatedJobDTO.ContactEmail, updatedJob.ContactEmail);
         Assert.Equal(updatedJobDTO.ResumeRequired, updatedJob.ResumeRequired);
         Assert.Equal(updatedJobDTO.Description, updatedJob.Description);

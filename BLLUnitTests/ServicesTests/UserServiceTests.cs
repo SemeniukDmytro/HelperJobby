@@ -50,7 +50,7 @@ public class UserServiceTests
         };
         _userQueryRepository.Setup(r => r.IsEmailAvailable(It.IsAny<string>())).ReturnsAsync(false);
         //Act & Assert
-        await Assert.ThrowsAsync<EmailIsNotAvailable>( async () => await _userService.CreateUser(user));
+        await Assert.ThrowsAsync<EmailIsNotAvailableException>( async () => await _userService.CreateUser(user));
     }
 
     [Fact]
@@ -86,7 +86,7 @@ public class UserServiceTests
         });
         _userQueryRepository.Setup(r => r.IsEmailAvailable(It.IsAny<string>())).ReturnsAsync(false);
         //Act & Assert
-        await Assert.ThrowsAsync<EmailIsNotAvailable>(async () => await _userService.UpdateUser(It.IsAny<int>(), updatedUser));
+        await Assert.ThrowsAsync<EmailIsNotAvailableException>(async () => await _userService.UpdateUser(It.IsAny<int>(), updatedUser));
     }
     
     [Fact]

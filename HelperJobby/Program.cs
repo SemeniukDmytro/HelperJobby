@@ -1,7 +1,7 @@
 using System.Text;
 using ApplicationDAL.Context;
 using HelperJobby.Extensions;
-using HelperJobby.Middlwares;
+using HelperJobby.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -57,6 +57,7 @@ app.UseRouting();
 app.UseCors("Frontend");
 app.UseAuthorization();
 app.UseMiddleware<CurrentUserIdSetterMiddleware>();
+app.UseMiddleware<ExceptionsHandlingMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

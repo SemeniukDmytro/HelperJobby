@@ -32,7 +32,7 @@ public class EmployerAccountService : IEmployerAccountService
 
         if (employerAccount != null)
         {
-            throw new EmployerAccountAlreadyExistsException();
+            throw new ForbiddenException("Employer account has already been created");
         }
         
         var organization = await _organizationQueryRepository.GetOrganizationByName(account.Organization.Name);

@@ -38,7 +38,7 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
             .FirstOrDefaultAsync(e => e.Id == employeeEmailId);
         if (employeeEmail == null)
         {
-            throw new EmployeeEmailException("Employee email not found");
+            throw new EmployeeEmailNotFoundException("Employee email not found");
         }
         return employeeEmail;
     }

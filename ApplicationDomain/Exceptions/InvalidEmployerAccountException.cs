@@ -2,7 +2,7 @@ using System.Runtime.Serialization;
 
 namespace ApplicationDomain.Exceptions;
 
-public class InvalidEmployerAccountException : Exception
+public class InvalidEmployerAccountException : InvalidModelExceptionBase
 {
     public InvalidEmployerAccountException(string? message) : base(message)
     {

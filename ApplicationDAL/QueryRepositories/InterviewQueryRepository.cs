@@ -46,7 +46,7 @@ public class InterviewQueryRepository : IInterviewQueryRepository
 
         if (interview == null)
         {
-            throw new InvalidInterviewException("Interview wasn't found");
+            throw new InterviewOperatingException("Interview wasn't found");
         }
 
         return interview;

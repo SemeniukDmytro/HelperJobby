@@ -37,7 +37,7 @@ public class JobServiceTests
         //Arrange
         var invalidJob = JobFixtures.InvalidCreatedJob;
         //Act & assert
-        await Assert.ThrowsAsync<JobNotValidException>(async () => await _jobService.CreateJob(invalidJob));
+        await Assert.ThrowsAsync<InvalidJobException>(async () => await _jobService.CreateJob(invalidJob));
     }
 
     [Fact]

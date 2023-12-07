@@ -27,7 +27,7 @@ public class UserService : IUserService
     {
         if (!await _userQueryRepository.IsEmailAvailable(registerUser.Email))
         {
-            throw new EmailIsNotAvailable();
+            throw new EmailIsNotAvailableException();
         }
         registerUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerUser.PasswordHash);
         registerUser.JobSeekerAccount = new JobSeekerAccount();
@@ -46,7 +46,7 @@ public class UserService : IUserService
         {
             if ( !await _userQueryRepository.IsEmailAvailable(updatedUser.Email))
             {
-                throw new EmailIsNotAvailable();
+                throw new EmailIsNotAvailableException();
             }
             userEntity.Email = updatedUser.Email;
         }

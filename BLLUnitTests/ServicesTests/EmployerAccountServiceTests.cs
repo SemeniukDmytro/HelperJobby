@@ -146,7 +146,7 @@ public class EmployerAccountServiceTests
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
         _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId))
             .ReturnsAsync(EmployerAccountFixtures.EmployerAccountEntity);
-        await Assert.ThrowsAsync<EmployerAccountAlreadyExistsException>(async () =>
+        await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _employerAccountService.CreateEmployerAccount(createdAccount));
     }
     

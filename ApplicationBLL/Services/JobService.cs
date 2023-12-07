@@ -25,7 +25,7 @@ public class JobService : IJobService
     {
         if (!Validator.TryValidateObject(job, new ValidationContext(job), null, true))
         {
-            throw new JobNotValidException();
+            throw new InvalidJobException();
         }
 
         return job;

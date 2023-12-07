@@ -1,6 +1,6 @@
 namespace ApplicationDomain.Exceptions;
 
-public class InvalidEducationException : Exception
+public class InvalidEducationException : InvalidModelExceptionBase
 {
     public InvalidEducationException(string? message) :
         base(message)

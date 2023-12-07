@@ -47,7 +47,7 @@ public class InterviewService : IInterviewService
 
         if (interview != null)
         {
-            throw new InvalidInterviewException("This interview is already created");
+            throw new InterviewOperatingException("This interview is already created");
         }
         var currentUserId = _userService.GetCurrentUserId();
         var currentEmployer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
