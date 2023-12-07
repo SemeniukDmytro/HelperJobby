@@ -16,20 +16,47 @@ public class SearchQueryRepository : ISearchQueryRepository
     {
         _applicationContext = applicationContext;
     }
-
-    public async Task<IEnumerable<ProcessedJobWord>> GetProcessedJobWordsByWord(int numberOfResultsToSkip, string word)
+    
+    public async Task<IEnumerable<ProcessedJobWord>> GetProcessedJobWordsByWord(string word, string location,
+        int numberOfResultsToSkip, bool isRemote, decimal pay, JobTypes jobType, string? language )
     {
         
-        var processedJobWords = await _applicationContext.ProcessedJobsWords
-            .Where(p => p.JobIndexedWord.Word == word)
-            .OrderByDescending(p => p.Rating )
+        var query = _applicationContext.ProcessedJobsWords.Where(p => p.JobIndexedWord.Word == word);
+
+        if (isRemote)
+        {
+            query = query.Where(p => p.Job.Location.ToLower().Contains("remote"));
+        }
+
+        if (pay > 0)
+        {
+            query = query.Where(p => p.Job.Salary >= pay);
+        }
+
+        if ((int)jobType != 0)
+        {
+            query = query.Where(p => (p.Job.JobTypes & jobType) != 0);
+        }
+
+        if (!string.IsNullOrEmpty(location))
+        {
+            query = query.Where(p => p.Job.Location.Contains(location));
+        }
+
+        if (!string.IsNullOrEmpty(language))
+        {
+            query = query.Where(p => p.Job.Language.ToLower() == language.ToLower());
+        }
+        
+        var processedJobWords = await query
+            .OrderByDescending(p => p.Rating)
             .Skip(numberOfResultsToSkip)
             .Take(NumberOfResultsPerPage)
             .ToListAsync();
         
         return processedJobWords;
     }
-    
+
     public async Task<IEnumerable<ProcessedResumeWord>> GetProcessedResumeWordsByWord(int numberOfResultsToSkip, string word)
     {
         
@@ -41,11 +68,5 @@ public class SearchQueryRepository : ISearchQueryRepository
             .ToListAsync();
         
         return processedJobWords;
-    }
-
-    public Task<IEnumerable<ProcessedJobWord>> GetFilteredProcessedJobWordsByWord(int numberOfResultsToSkip, string word, bool isRemote, decimal pay, JobTypes jobType, string location,
-        string language)
-    {
-        throw new NotImplementedException();
     }
 }

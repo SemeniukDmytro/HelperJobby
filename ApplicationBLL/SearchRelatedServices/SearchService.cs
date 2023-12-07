@@ -1,6 +1,7 @@
 using ApplicationBLL.Logic;
 using ApplicationDomain.Abstraction.SearchIQueryRepositories;
 using ApplicationDomain.Abstraction.SearchRelatedIServices;
+using ApplicationDomain.Enums;
 
 namespace ApplicationBLL.SearchRelatedServices;
 
@@ -21,8 +22,10 @@ public class SearchService : ISearchService
         _searchQueryRepository = searchQueryRepository;
         _rankingService = rankingService;
     }
+    
 
-    public async Task<List<int>> FindJobsIds(int numberOfResultsToSkip, string query)
+    public async Task<List<int>> FindJobIds(string query, string location, int numberOfResultsToSkip,
+        bool isRemote, decimal pay, JobTypes jobType, string language)
     {
         if (string.IsNullOrEmpty(query))
         {
@@ -35,7 +38,8 @@ public class SearchService : ISearchService
 
         foreach (var word in processedQuery)
         {
-            var rankedIdsMatches = (await _searchQueryRepository.GetProcessedJobWordsByWord(numberOfResultsToSkip, word)).ToList();
+            var rankedIdsMatches = (await _searchQueryRepository.GetProcessedJobWordsByWord(word, 
+                location ,numberOfResultsToSkip, isRemote, pay, jobType, language)).ToList();
 
             foreach (var match in rankedIdsMatches)
             {
@@ -65,7 +69,8 @@ public class SearchService : ISearchService
         Dictionary<int, (int Frequency, decimal TotalRank)> resumeFrequencyAndRank = new();
         foreach (var word in processedQuery)
         {
-            var rankedIdsMatches = (await _searchQueryRepository.GetProcessedResumeWordsByWord(numberOfResultsToSkip, word)).ToList();
+            var rankedIdsMatches = (await _searchQueryRepository
+                .GetProcessedResumeWordsByWord(numberOfResultsToSkip, word)).ToList();
 
             foreach (var match in rankedIdsMatches)
             {
@@ -105,4 +110,6 @@ public class SearchService : ISearchService
         
         return filteredQuery;
     }
+    
+    
 }

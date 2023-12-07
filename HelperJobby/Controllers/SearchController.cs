@@ -1,6 +1,7 @@
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Abstraction.SearchRelatedIServices;
+using ApplicationDomain.Enums;
 using ApplicationDomain.IndexedModels;
 using ApplicationDomain.Models;
 using AutoMapper;
@@ -27,19 +28,24 @@ public class SearchController : ExtendedBaseController
         _resumeQueryRepository = resumeQueryRepository;
     }
     
-    //GET: api/search/jobs?query={your query}&start={how many jobs to skip}
     [HttpGet("jobs")]
-    public async Task<IEnumerable<JobDTO>> SearchJobs(string query, string start)
+    public async Task<IEnumerable<JobDTO>> SearchJobs(
+        [FromQuery] string query,
+        [FromQuery] string location,
+        [FromQuery] int start = 0,
+        [FromQuery] bool isRemote = false,
+        [FromQuery] decimal pay = 0,
+        [FromQuery] JobTypes jobType = 0,
+        [FromQuery] string language = "")
     {
-        var jobIdsToLoad = await _searchService.FindJobsIds(int.Parse(start), query);
+        var jobIdsToLoad = await _searchService.FindJobIds(query, location, start, isRemote, pay, jobType, language);
         return _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByJobIds(jobIdsToLoad));
     }
     
-    //GET: api/search/resumes?query={your query}&start={how many resumes to skip}
     [HttpGet("resumes")]
-    public async Task<IEnumerable<ResumeDTO>> SearchResumes(string query, string start)
+    public async Task<IEnumerable<ResumeDTO>> SearchResumes(string query, [FromQuery] int start)
     {
-        var resumesToLoad = await _searchService.FindResumeIds(int.Parse(start), query);
+        var resumesToLoad = await _searchService.FindResumeIds(start, query);
         return _mapper.Map<IEnumerable<ResumeDTO>>(await _resumeQueryRepository.GetResumesByResumeIds(resumesToLoad));
     }
 }
