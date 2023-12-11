@@ -1,8 +1,41 @@
+using System.Text;
+using ApplicationDAL.Context;
+using HelperJobby.Extensions;
+using HelperJobby.Middlewares;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.ConfigureCustomServices();
+builder.Services.AddAutoMapperProfiles();
+
+
+var connectionString = builder.Configuration.GetConnectionString("Default");
+builder.Services.AddDbContext<ApplicationContext>(options =>
+{
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+});
+
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+    );
+
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateAudience = false,
+        ValidateIssuer = false,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtKey"]!))
+    };
+});
 
 builder.Services.AddCors(options => options.AddPolicy("Frontend", policy =>
 {
@@ -22,6 +55,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCors("Frontend");
+app.UseAuthorization();
+app.UseMiddleware<CurrentUserIdSetterMiddleware>();
+app.UseMiddleware<ExceptionsHandlingMiddleware>();
 
 app.MapControllerRoute(
     name: "default",
