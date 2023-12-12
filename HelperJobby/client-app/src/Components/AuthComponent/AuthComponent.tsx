@@ -1,7 +1,8 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import './AuthComponent.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from '@fortawesome/free-solid-svg-icons';
+import AuthService from "../../Services/AuthService";
 
 interface AuthComponentProps {}
 
@@ -23,9 +24,25 @@ const AuthComponent: FC<AuthComponentProps> = () => {
         return result;
     }
     
+    let isEmailRegistered: boolean = false;
+
+    useEffect(() => {
+        const authService = new AuthService();
+        authService
+            .IsEmailRegistered(`is-registered?email=${email}`)
+            .then((result) => {
+                isEmailRegistered = result; 
+                console.log(isEmailRegistered);
+            })
+            .catch((error) => {
+                console.error('Error checking email registration:', error);
+            });
+    }, []);
+    
+    
     let isFormInvalid = email.trim() === '';
 
-    const onFormSubmit = (e : React.FormEvent<HTMLFormElement>) => {
+    const  onFormSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
         if (!ValidateEmail(email)){
@@ -36,6 +53,15 @@ const AuthComponent: FC<AuthComponentProps> = () => {
         else 
         {
             setError("")
+        }
+
+        try {
+            const authService = new AuthService();
+            const result = await authService.IsEmailRegistered(`is-registered?email=${email}`);
+            isEmailRegistered = result;
+            console.log(isEmailRegistered);
+        } catch (error) {
+            console.error('Error checking email registration:', error);
         }
     }
 

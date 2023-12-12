@@ -65,5 +65,19 @@ public class AuthService : IAuthService
         var token = CreateToken(userEntity.Id, userEntity.Email);
         return token;
     }
-    
+
+    public async Task<bool> DoesUserRegistered(string email)
+    {
+        User userEntity = null;
+        try
+        {
+            userEntity = await _userQueryRepository.GetUserByEmail(email);
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
+
+        return userEntity != null;
+    }
 }

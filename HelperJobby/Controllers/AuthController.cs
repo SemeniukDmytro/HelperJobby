@@ -22,12 +22,20 @@ namespace HelperJobby.Controllers
         private readonly IAuthService _authService;
         private readonly IUserQueryRepository _userQueryRepository;
         private readonly IUserCommandRepository _userCommandRepository;
-        public AuthController(IUserService userService, IAuthService authService, IMapper mapper, IValidator<CreateUpdateUserDTO> registerUserValidator, IValidator<LoginUserDTO> loginUserValidator, IUserQueryRepository userQueryRepository, IUserCommandRepository userCommandRepository) : base(mapper)
+        public AuthController(IUserService userService, IAuthService authService, IMapper mapper,
+        IUserQueryRepository userQueryRepository, IUserCommandRepository userCommandRepository) : base(mapper)
         {
             _userService = userService;
             _authService = authService;
             _userQueryRepository = userQueryRepository;
             _userCommandRepository = userCommandRepository;
+        }
+
+        [HttpPost("is-registered")]
+        public async Task<bool> IsEmailRegistered(string email)
+        {
+            var isRegistered = await _authService.DoesUserRegistered(email);
+            return isRegistered; 
         }
         
         [HttpPost("sign-up")]
