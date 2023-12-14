@@ -35,7 +35,7 @@ $fontFamily :  -apple-system, sans-serif;
   max-width: 90%;
   width: 30rem;
 }
-.email-form-container{
+.auth-form-container{
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -47,7 +47,7 @@ $fontFamily :  -apple-system, sans-serif;
   padding: 1.5rem;
 }
 
-.email-form-title{
+.auth-form-title-box{
   display: flex;
   margin-bottom: 0.5rem;
 }
@@ -59,7 +59,7 @@ $fontFamily :  -apple-system, sans-serif;
   color: rgb(45, 45, 45);
 }
 
-.email-form-subtitle{
+.auth-form-subtitle-box{
   margin-top: 0.5rem;
   display: flex;
   margin-bottom: 0.5rem;
@@ -72,7 +72,7 @@ $fontFamily :  -apple-system, sans-serif;
   color: rgb(89, 89, 89);
 }
 
-.email-input-box{
+.auth-input-box{
   display: flex;
   width: 100%;
   flex-direction: column;

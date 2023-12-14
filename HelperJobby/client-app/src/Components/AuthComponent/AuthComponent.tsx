@@ -3,13 +3,15 @@ import './AuthComponent.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from '@fortawesome/free-solid-svg-icons';
 import AuthService from "../../Services/AuthService";
-
+import {NavigateFunction, useNavigate} from "react-router-dom";
 interface AuthComponentProps {}
 
 const AuthComponent: FC<AuthComponentProps> = () => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const [isSubmitInvalid, setIsSubmitInvalid] = useState(false);
+    
+    const navigate : NavigateFunction = useNavigate();
     const ValidateEmail = (email : string) : boolean => {
         let result : boolean = true;
         const atSignIndex : number = email.lastIndexOf('@');
@@ -25,23 +27,9 @@ const AuthComponent: FC<AuthComponentProps> = () => {
     }
     
     let isEmailRegistered: boolean = false;
-
-    useEffect(() => {
-        const authService = new AuthService();
-        authService
-            .IsEmailRegistered(`is-registered?email=${email}`)
-            .then((result) => {
-                isEmailRegistered = result; 
-                console.log(isEmailRegistered);
-            })
-            .catch((error) => {
-                console.error('Error checking email registration:', error);
-            });
-    }, []);
-    
-    
     let isFormInvalid = email.trim() === '';
 
+    
     const  onFormSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
@@ -57,14 +45,20 @@ const AuthComponent: FC<AuthComponentProps> = () => {
 
         try {
             const authService = new AuthService();
-            const result = await authService.IsEmailRegistered(`is-registered?email=${email}`);
+            const result = await authService.IsEmailRegistered(email);
             isEmailRegistered = result;
-            console.log(isEmailRegistered);
-        } catch (error) {
+
+            if (!isFormInvalid) {
+                localStorage.setItem('email', email);   
+                localStorage.setItem('isEmailRegistered', JSON.stringify(isEmailRegistered));
+                navigate('/continue-auth');
+            }
+        }
+        catch (error) 
+        {
             console.error('Error checking email registration:', error);
         }
     }
-
     return (
         <div className="container">
             <div className="passpage-container">
@@ -72,14 +66,14 @@ const AuthComponent: FC<AuthComponentProps> = () => {
                     <span className="logo">HelperJobby</span>
                 </div>
                 <div className="form-box">
-                    <div className="email-form-container">
-                        <div className="email-form-title">
+                    <div className="auth-form-container">
+                        <div className="auth-form-title-box">
                             <span className="form-title">Ready to take next step?</span>
                         </div>
-                        <div className="email-form-subtitle">
+                        <div className="auth-form-subtitle-box">
                             <span className="form-subtitle">Create an account or sign in.</span>
                         </div>
-                        <form className="email-input-box" onSubmit={onFormSubmit}>
+                        <form className="auth-input-box" onSubmit={onFormSubmit}>
                             <div className="input-label-box">
                                 <label className={`input-label ${isSubmitInvalid ? 'invalid-text' : ''}`}>Email address
                                     <span className="required-mark"> *</span>

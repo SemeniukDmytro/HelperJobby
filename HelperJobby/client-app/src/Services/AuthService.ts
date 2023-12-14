@@ -25,8 +25,8 @@ class AuthService {
         return fetch(url, options);
     }
     
-    public async IsEmailRegistered(url : string) : Promise<boolean>{
-        return this.request(url).then(res => res.json())
+    public async IsEmailRegistered(email : string) : Promise<boolean>{
+        return this.request(`is-registered?email=${email}`).then(res => res.json())
     }
 }
 
