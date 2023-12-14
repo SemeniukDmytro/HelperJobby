@@ -7,22 +7,22 @@ interface PasswordFormProps {}
 
 const PasswordForm: FC<PasswordFormProps> = () =>
 {
-    let isRegisteredUser : boolean = false;
-    let userEmail : string = "";
+    let isRegisteredUser : boolean;
+    let userEmail : string;
     
-    useEffect(() => {
-        const storedEmail = localStorage.getItem('email');
-        const storedIsEmailRegistered = localStorage.getItem('isEmailRegistered');
-        console.log(storedIsEmailRegistered);
-
-        userEmail = storedEmail || '';
-        isRegisteredUser = storedIsEmailRegistered ? JSON.parse(storedIsEmailRegistered) : false;
-        localStorage.removeItem('email');
-        localStorage.removeItem('isEmailRegistered');
-    }, []);
-    
-    
-    let titleText : string = isRegisteredUser ? "Welcome back" : "Create your account";
+   
+    const storedEmail = localStorage.getItem('email');
+    const storedIsEmailRegistered = localStorage.getItem('isEmailRegistered');
+    userEmail = storedEmail || '';
+    isRegisteredUser = storedIsEmailRegistered ? true : false;
+    let titleText : string;
+    if (isRegisteredUser){
+        titleText = "Welcome back";
+    }
+    else {
+        titleText = "Create your account"
+    }
+    //let titleText : string = isRegisteredUser ? "Welcome back" : "Create your account";
     
     return (
         <div className="container">
