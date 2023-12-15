@@ -31,7 +31,7 @@ namespace HelperJobby.Controllers
             _userCommandRepository = userCommandRepository;
         }
 
-        [HttpPost("is-registered")]
+        [HttpGet("is-registered")]
         public async Task<bool> IsEmailRegistered(string email)
         {
             var isRegistered = await _authService.DoesUserRegistered(email);
