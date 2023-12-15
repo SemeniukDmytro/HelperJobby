@@ -6,6 +6,7 @@ import AuthService from "../../Services/AuthService";
 import AuthContext from "../../Contexts/AuthContext";
 import {ValidateEmail} from "../../Helpers/EmailValidator";
 import SignInForm from "../PasswordForm/SignInForm";
+import AccountTypeForm from "../AccountTypeForm/AccountTypeForm";
 
 interface AuthComponentProps {}
 
@@ -13,7 +14,9 @@ const AuthComponent: FC<AuthComponentProps> = () => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const [isSubmitInvalid, setIsSubmitInvalid] = useState(false);
-    const [renderPasswordForm, setRenderPasswordForm] = useState(false);
+    const [renderAuthPage, setRenderAuthPage] = useState(true);
+    const [renderSignInPage, setRenderSignInPage] = useState(false);
+    const [renderAccountTypeForm, setRenderAccountTypeForm] = useState(false);
     
     let isEmailRegistered: boolean = false;
     let isFormInvalid = email.trim() === '';
@@ -37,7 +40,14 @@ const AuthComponent: FC<AuthComponentProps> = () => {
             const authService = new AuthService();
             isEmailRegistered = await authService.IsEmailRegistered(email).finally(() => checkEmailInProcess = false);
             if (!checkEmailInProcess){
-                setRenderPasswordForm(true);
+                if (!isEmailRegistered){
+                    setRenderAuthPage(false);
+                    setRenderAccountTypeForm(true);
+                }
+                else {
+                    setRenderAuthPage(false);
+                    setRenderSignInPage(true);
+                }
             }
         }
         catch (error) 
@@ -54,7 +64,7 @@ const AuthComponent: FC<AuthComponentProps> = () => {
                     <div className="logo-container">
                         <span className="logo">HelperJobby</span>
                     </div>
-                    {!renderPasswordForm ? (
+                    {renderAuthPage && (
                         <div className="form-box">
                             <div className="auth-form-container">
                                 <div className="auth-form-title-box">
@@ -90,12 +100,19 @@ const AuthComponent: FC<AuthComponentProps> = () => {
                                 </form>
                             </div>
                         </div>
-                    )
-                        :
-                        <SignInForm>
-                        </SignInForm>
+                    )}
+                    { renderSignInPage &&
+                        (
+                            <SignInForm>
+                            </SignInForm>
+                        )
                     }
-                    
+                    { renderAccountTypeForm &&
+                        (
+                            <AccountTypeForm>
+                            </AccountTypeForm>
+                        )
+                    }
                 </div>
             </div>
         </AuthContext.Provider>

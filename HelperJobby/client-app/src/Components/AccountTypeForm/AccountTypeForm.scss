@@ -26,7 +26,6 @@
 
 .type-form-subtitle{
   font-size: 0.875rem;
-  color:  rgb(45, 45, 45);;
 }
 
 .employer-button-box{
@@ -44,6 +43,7 @@
   border-radius: 0.5rem;
   padding: 0.5rem;
   transition-duration: 0.2s;
+  user-select: none;
   &:hover{
     cursor: pointer;
     color: rgb(22, 64, 129);
