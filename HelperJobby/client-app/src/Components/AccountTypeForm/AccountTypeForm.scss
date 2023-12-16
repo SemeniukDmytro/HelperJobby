@@ -44,8 +44,8 @@
   padding: 0.5rem;
   transition-duration: 0.2s;
   user-select: none;
+  cursor: pointer;
   &:hover{
-    cursor: pointer;
     color: rgb(22, 64, 129);
     border-color: rgb(63, 115, 211);;
     background-color: rgb(238, 241, 254);

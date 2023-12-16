@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import './AuthComponent.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +7,7 @@ import AuthContext from "../../Contexts/AuthContext";
 import {ValidateEmail} from "../../Helpers/EmailValidator";
 import SignInForm from "../PasswordForm/SignInForm";
 import AccountTypeForm from "../AccountTypeForm/AccountTypeForm";
+import {useNavigate} from "react-router-dom";
 
 interface AuthComponentProps {}
 
@@ -14,54 +15,64 @@ const AuthComponent: FC<AuthComponentProps> = () => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const [isSubmitInvalid, setIsSubmitInvalid] = useState(false);
+    const [isEmailRegistered, setIsEmailRegistered] = useState(false);
+    const [checkEmailInProcess, setCheckEmailInProcess] = useState(true);
+    
     const [renderAuthPage, setRenderAuthPage] = useState(true);
     const [renderSignInPage, setRenderSignInPage] = useState(false);
     const [renderAccountTypeForm, setRenderAccountTypeForm] = useState(false);
     
-    let isEmailRegistered: boolean = false;
     let isFormInvalid = email.trim() === '';
-    let checkEmailInProcess = true;
 
-    
-    const  onFormSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
+    useEffect(() => {
+        if (!checkEmailInProcess) {
+            setRenderAuthPage(false);
+
+            if (isEmailRegistered) {
+                setRenderSignInPage(true);
+            } 
+            else {
+                setRenderAccountTypeForm(true);
+            }
+        }
+    }, [checkEmailInProcess, isEmailRegistered]);
+    const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
-        if (!ValidateEmail(email)){
-            setError("Error: Invalid email address\n")
+
+        if (!ValidateEmail(email)) {
+            setError("Error: Invalid email address\n");
             setIsSubmitInvalid(true);
             isFormInvalid = true;
-        }
-        else 
-        {
-            setError("")
+        } else {
+            setError("");
         }
 
         try {
             const authService = new AuthService();
-            isEmailRegistered = await authService.IsEmailRegistered(email).finally(() => checkEmailInProcess = false);
-            if (!checkEmailInProcess){
-                if (!isEmailRegistered){
-                    setRenderAuthPage(false);
-                    setRenderAccountTypeForm(true);
-                }
-                else {
-                    setRenderAuthPage(false);
-                    setRenderSignInPage(true);
-                }
-            }
-        }
-        catch (error) 
-        {
+
+            // Show loading indicator
+            setCheckEmailInProcess(true);
+
+            const isEmailRegisteredValue = await authService.IsEmailRegistered(email);
+
+            setIsEmailRegistered(isEmailRegisteredValue);
+        } catch (error) {
             console.error('Error checking email registration:', error);
+        } finally {
+            setCheckEmailInProcess(false);
         }
+    };
+
+    const navigate = useNavigate();
+    function GoToDefaultPage() {
+        navigate("/");
     }
-    
-    
+
     return (
         <AuthContext.Provider value={{email: email, isRegisteredUser: isEmailRegistered}}>
             <div className="container">
                 <div className="passpage-container">
-                    <div className="logo-container">
+                    <div className="logo-container" onClick={GoToDefaultPage}>
                         <span className="logo">HelperJobby</span>
                     </div>
                     {renderAuthPage && (

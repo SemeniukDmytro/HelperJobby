@@ -9,7 +9,6 @@ function App() {
   <Routes>
     <Route path="/" element={<AuthComponent />} />
     <Route path={"auth-page"} element={<AuthComponent/>}></Route>
-    <Route path={"temp"} element={<AccountTypeForm/>}/>
   </Routes>
   )
 }
