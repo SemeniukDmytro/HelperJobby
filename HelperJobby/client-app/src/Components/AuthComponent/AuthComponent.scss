@@ -76,6 +76,8 @@
 .input-label-box{
   padding-top: 1rem;
   display: flex;
+  flex-direction: column;
+  margin-bottom: 0.25rem;
 }
 
 .input-label{

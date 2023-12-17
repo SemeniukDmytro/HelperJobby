@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from '@fortawesome/free-solid-svg-icons';
 import AuthService from "../../Services/AuthService";
 import AuthContext from "../../Contexts/AuthContext";
-import {ValidateEmail} from "../../Helpers/EmailValidator";
+import {IsValidEmail} from "../../Helpers/AuthValidators";
 import SignInForm from "../PasswordForm/SignInForm";
 import AccountTypeForm from "../AccountTypeForm/AccountTypeForm";
 import {useNavigate} from "react-router-dom";
@@ -39,10 +39,11 @@ const AuthComponent: FC<AuthComponentProps> = () => {
     const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!ValidateEmail(email)) {
+        if (!IsValidEmail(email)) {
             setError("Error: Invalid email address\n");
             setIsSubmitInvalid(true);
             isFormInvalid = true;
+            return;
         } else {
             setError("");
         }
