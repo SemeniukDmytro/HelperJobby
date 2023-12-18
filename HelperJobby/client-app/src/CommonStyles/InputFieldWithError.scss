@@ -1,0 +1,93 @@
+.auth-input-box{
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.input-label-box{
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.25rem;
+}
+
+.input-label{
+  font-weight: 600;
+  line-height: 1.5rem;
+  color: rgb(45, 45, 45);
+  margin-bottom: 0.25rem;
+}
+
+.required-mark{
+  color: rgb(169, 37, 43);
+}
+
+.input-box{
+  max-width: 100%;
+  padding-bottom: 1.5rem;
+}
+
+.input-field{
+  display: flex;
+  max-width: calc(100% - 1rem);
+  width: 100%;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  border-style: solid;
+  padding: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  border-color: rgb(45, 45, 45);
+}
+
+.input-field:hover {
+  border-color: rgb(63, 115, 211);
+}
+.input-field:focus-visible {
+  outline: none;
+  border-color: rgb(63, 115, 211);
+  border-style: solid;
+}
+
+.error-box{
+  margin-top: 0.25rem;
+}
+
+.error-text{
+  color: rgb(169, 37, 43);
+}
+
+.error-svg{
+  padding-right: 0.25rem;
+}
+
+.invalid-input-border{
+  border-color: rgb(169, 37, 43);
+  &:focus-visible{
+    border-color: rgb(169, 37, 43) !important;
+  }
+  &:hover{
+    border-color: rgb(169, 37, 43) !important;
+  }
+}
+
+.submit-button{
+  background: none rgb(37, 87, 167);
+  line-height: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  &:disabled{
+    opacity: 0.5;
+    cursor: auto;
+  }
+}
+
+
+.submit-button-text{
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+}

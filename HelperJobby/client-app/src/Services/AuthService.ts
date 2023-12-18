@@ -1,33 +1,22 @@
-const headers = {
-    "Accept" : "application/json",
-    "Content-type" : "application/json"
-}
-
-function joinURL(baseUrl: string, url : string) : string{
-    return `${baseUrl}/${url}`;
-}
+import httpInternalService from "./HttpInternalService";
+import HttpInternalService from "./HttpInternalService";
+import {CreateUserDTO} from "../DTOs/CreateUserDTO";
 
 class AuthService {
-    private readonly domain : string;
+    private readonly baseURI : string = "api/auth";
+    private readonly httpInternalService : HttpInternalService;
     constructor() {
-       this.domain = "https://localhost:7214/api/auth";
-    }
-    
-    
-    async request(url : string, method = "POST", data=null){
-        url = joinURL(this.domain, url);
-        const options = {
-            headers,
-            method,
-            body : data ? JSON.stringify(data) : null
-        }
-        
-        return fetch(url, options);
+        this.httpInternalService = new HttpInternalService();
     }
     
     public async IsEmailRegistered(email : string) : Promise<boolean>{
-        return (await this.request(`is-registered?email=${email}`,"GET")).json()
+        return (await this.httpInternalService.Request(`${this.baseURI}/is-registered?email=${email}`,"GET")).json()
     }
+
+    public async RegisterNewUser(createdUser: CreateUserDTO): Promise<Response> {
+        return await this.httpInternalService.Request(`${this.baseURI}/sign-up`, "POST", createdUser);
+    }
+    
 }
 
 export default  AuthService

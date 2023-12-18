@@ -5,9 +5,11 @@ import {faArrowRightLong, faCircleExclamation} from '@fortawesome/free-solid-svg
 import AuthService from "../../Services/AuthService";
 import AuthContext from "../../Contexts/AuthContext";
 import {IsValidEmail} from "../../Helpers/AuthValidators";
-import SignInForm from "../PasswordForm/SignInForm";
+import SignInForm from "../SignInForm/SignInForm";
 import AccountTypeForm from "../AccountTypeForm/AccountTypeForm";
-import {useNavigate} from "react-router-dom";
+import AppLogo from "../AppLogo/AppLogo";
+import "../../CommonStyles/AuthFormBox.scss";
+import "../../CommonStyles/InputFieldWithError.scss";
 
 interface AuthComponentProps {}
 
@@ -64,69 +66,51 @@ const AuthComponent: FC<AuthComponentProps> = () => {
         }
     };
 
-    const navigate = useNavigate();
-    function GoToDefaultPage() {
-        navigate("/");
-    }
+    
 
     return (
         <AuthContext.Provider value={{email: email, isRegisteredUser: isEmailRegistered}}>
-            <div className="container">
-                <div className="passpage-container">
-                    <div className="logo-container" onClick={GoToDefaultPage}>
-                        <span className="logo">HelperJobby</span>
-                    </div>
-                    {renderAuthPage && (
-                        <div className="form-box">
-                            <div className="auth-form-container">
-                                <div className="auth-form-title-box">
-                                    <span className="form-title">Ready to take next step?</span>
-                                </div>
-                                <div className="auth-form-subtitle-box">
-                                    <span className="form-subtitle">Create an account or sign in.</span>
-                                </div>
-                                <form className="auth-input-box" onSubmit={onFormSubmit}>
-                                    <div className="input-label-box">
-                                        <label className={`input-label ${isSubmitInvalid ? 'invalid-text' : ''}`}>Email address
-                                            <span className="required-mark"> *</span>
-                                        </label>
-                                    </div>
-                                    <div className={`input-box`}>
-                                        <input className={`email-input-field ${isSubmitInvalid ? 'invalid-input-border' : ''}`} value={email} type="text"
-                                               onChange={(e) => {setEmail(e.target.value);
-                                                   setError("");
-                                                   setIsSubmitInvalid(false)}}/>
-                                        <div className={"error-box"}>
-                                            {isSubmitInvalid &&
-                                                <>
-                                                    <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation} />
-                                                    <span className={`error-text`}>{error}</span>
-                                                </>
-                                            }
-                                        </div>
-                                    </div>
-                                    <button className="submit-button" type={"submit"} disabled={isFormInvalid}>
-                                        <span className="continue-text">Continue</span>
-                                        <FontAwesomeIcon className="continue-arrow" icon={faArrowRightLong} />
-                                    </button>
-                                </form>
+            {renderAuthPage && (
+                <AppLogo>
+                    <div className="form-box">
+                        <div className="auth-form-container">
+                            <div className="auth-form-title-box">
+                                <span className="form-title">Ready to take next step?</span>
                             </div>
+                            <div className="auth-form-subtitle-box">
+                                <span className="form-subtitle">Create an account or sign in.</span>
+                            </div>
+                            <form className="auth-input-box" onSubmit={onFormSubmit}>
+                                <div className="input-label-box">
+                                    <label className={`input-label ${isSubmitInvalid ? 'error-text' : ''}`}>Email address
+                                        <span className="required-mark"> *</span>
+                                    </label>
+                                </div>
+                                <div className={`input-box`}>
+                                    <input className={`input-field ${isSubmitInvalid ? 'invalid-input-border' : ''}`} value={email} type="text"
+                                           onChange={(e) => {setEmail(e.target.value);
+                                               setError("");
+                                               setIsSubmitInvalid(false)}}/>
+                                    <div className={"error-box"}>
+                                        {isSubmitInvalid &&
+                                            <>
+                                                <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation} />
+                                                <span className={`error-text`}>{error}</span>
+                                            </>
+                                        }
+                                    </div>
+                                </div>
+                                <button className="submit-button" type={"submit"} disabled={isFormInvalid}>
+                                    <span className="submit-button-text">Continue</span>
+                                    <FontAwesomeIcon className="continue-arrow" icon={faArrowRightLong} />
+                                </button>
+                            </form>
                         </div>
-                    )}
-                    { renderSignInPage &&
-                        (
-                            <SignInForm>
-                            </SignInForm>
-                        )
-                    }
-                    { renderAccountTypeForm &&
-                        (
-                            <AccountTypeForm>
-                            </AccountTypeForm>
-                        )
-                    }
-                </div>
-            </div>
+                    </div>
+                </AppLogo>
+                )}
+                { renderSignInPage && <SignInForm/>}
+                { renderAccountTypeForm && <AccountTypeForm/>}
         </AuthContext.Provider>
     )
 };
