@@ -41,10 +41,10 @@ namespace HelperJobby.Controllers
 
         // POST: api/WorkExperience/{resumeId}
         [HttpPost("{resumeId}")]
-        public async Task<WorkExperienceDTO> Post(int resumeId, [FromBody] CreateWorkExperienceDTO createWorkExperienceDTO)
+        public async Task<WorkExperienceDTO> Post(int resumeId, [FromBody] CreateUpdateWorkExperienceDTO createUpdateWorkExperienceDto)
         {
-            CreateUpdateWorkExperienceDTOValidator.ValidateCreatedWorkExperience(createWorkExperienceDTO);
-            var workExperience = _mapper.Map<WorkExperience>(createWorkExperienceDTO);
+            CreateUpdateWorkExperienceDTOValidator.ValidateCreatedWorkExperience(createUpdateWorkExperienceDto);
+            var workExperience = _mapper.Map<WorkExperience>(createUpdateWorkExperienceDto);
             workExperience = await _workExperienceService.AddWorkExperience(resumeId, workExperience);
             workExperience = await _workExperienceCommandRepository.Create(workExperience);
             await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
@@ -56,10 +56,10 @@ namespace HelperJobby.Controllers
 
         // PUT: api/WorkExperience/{workExperienceId}/user/{userId}
         [HttpPut("{workExperienceId}")]
-        public async Task<WorkExperienceDTO> Put(int workExperienceId, [FromBody] CreateWorkExperienceDTO updateWorkExperienceDTO)
+        public async Task<WorkExperienceDTO> Put(int workExperienceId, [FromBody] CreateUpdateWorkExperienceDTO updateUpdateWorkExperienceDto)
         {
-            CreateUpdateWorkExperienceDTOValidator.ValidateCreatedWorkExperience(updateWorkExperienceDTO);
-            var workExperience = _mapper.Map<WorkExperience>(updateWorkExperienceDTO);
+            CreateUpdateWorkExperienceDTOValidator.ValidateCreatedWorkExperience(updateUpdateWorkExperienceDto);
+            var workExperience = _mapper.Map<WorkExperience>(updateUpdateWorkExperienceDto);
             workExperience = await _workExperienceService.UpdateWorkExperience(workExperienceId, workExperience);
             workExperience = await _workExperienceCommandRepository.Update(workExperience);
             return _mapper.Map<WorkExperienceDTO>(workExperience);

@@ -1,6 +1,6 @@
 namespace HelperJobby.DTOs.Resume;
 
-public class CreateWorkExperienceDTO
+public class CreateUpdateWorkExperienceDTO
 {
     public string? JobTitle { get; set; }
     public string? Company { get; set; }

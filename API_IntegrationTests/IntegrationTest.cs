@@ -128,7 +128,7 @@ public class IntegrationTest
     {
         var createdResume = await CreateResume();
         var requestUri = $"api/WorkExperience/{createdResume.Id}";
-        var createWorkExperienceDto = WorkExperienceFixtures.FirstWorkExperience;
+        var createWorkExperienceDto = WorkExperienceFixtures.FirstUpdateWorkExperience;
         var createWorkExperienceResponse = await TestClient.PostAsJsonAsync(requestUri, createWorkExperienceDto);
         return await createWorkExperienceResponse.Content.ReadAsAsync<WorkExperienceDTO>();
     }

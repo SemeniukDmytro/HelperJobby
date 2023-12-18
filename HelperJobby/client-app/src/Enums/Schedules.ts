@@ -1,7 +1,4 @@
-namespace ApplicationDomain.Enums;
-[Flags]
-public enum Schedules
-{
+enum Schedules {
     MondayToFriday = 1,
     WeekendsAsNeeded = 1 << 1,
     EightHourShift = 1 << 2,
@@ -18,5 +15,7 @@ public enum Schedules
     TwelveHourShift = 1 << 13,
     FourHourShift = 1 << 14,
     WeekendsOnly = 1 << 15,
-    Other = 1 << 16
+    Other = 1 << 16,
 }
+
+export default Schedules;

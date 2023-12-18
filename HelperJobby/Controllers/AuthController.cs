@@ -39,14 +39,19 @@ namespace HelperJobby.Controllers
         }
         
         [HttpPost("sign-up")]
-        public async Task Register([FromBody] CreateUpdateUserDTO newUser)
+        public async Task<AuthUserDTO> Register([FromBody] CreateUpdateUserDTO newUser)
         {
             CreateUserDTOValidator.ValidateUser(newUser);
 
             var user = _mapper.Map<User>(newUser);
             
             user = await _userService.CreateUser(user);
-            await _userCommandRepository.CreateUser(user);
+            user = await _userCommandRepository.CreateUser(user);
+            return new AuthUserDTO()
+            {
+                User = _mapper.Map<UserDTO>(user),
+                Token = await _authService.AuthUser(user)
+            };
         }
         
         [HttpPost("sign-in")]

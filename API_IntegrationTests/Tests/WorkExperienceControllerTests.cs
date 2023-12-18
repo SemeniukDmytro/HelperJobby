@@ -39,7 +39,7 @@ public class WorkExperienceControllerTests : IntegrationTest
         await AuthenticateAsync();
         var createdResume = await CreateResume();
         var requestUri = $"{_baseUri}/{createdResume.Id}";
-        var createdWorkExperience = WorkExperienceFixtures.FirstWorkExperience;
+        var createdWorkExperience = WorkExperienceFixtures.FirstUpdateWorkExperience;
 
         // Act
         var createWorkExperienceResponse = await TestClient.PostAsJsonAsync(requestUri, createdWorkExperience);
@@ -58,7 +58,7 @@ public class WorkExperienceControllerTests : IntegrationTest
         await AuthenticateAsync();
         var createdWorkExperience = await CreateWorkExperience();
         var requestUri = $"{_baseUri}/{createdWorkExperience.WorkExperienceId}";
-        var updatedWorkExperienceDTO = new CreateWorkExperienceDTO()
+        var updatedWorkExperienceDTO = new CreateUpdateWorkExperienceDTO()
         {
             JobTitle = "Product Manager",
             Company = "NewCompany Inc.",

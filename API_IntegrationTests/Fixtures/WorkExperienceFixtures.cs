@@ -4,7 +4,7 @@ namespace API_IntegrationTests.Fixtures;
 
 public class WorkExperienceFixtures
 {
-    public static readonly CreateWorkExperienceDTO FirstWorkExperience = new CreateWorkExperienceDTO
+    public static readonly CreateUpdateWorkExperienceDTO FirstUpdateWorkExperience = new CreateUpdateWorkExperienceDTO
     {
         JobTitle = "Software Engineer",
         Company = "TechCo Inc.",
@@ -16,7 +16,7 @@ public class WorkExperienceFixtures
         Description = "Developed web applications and collaborated with cross-functional teams."
     };
 
-    public static readonly CreateWorkExperienceDTO SecondWorkExperience = new CreateWorkExperienceDTO
+    public static readonly CreateUpdateWorkExperienceDTO SecondUpdateWorkExperience = new CreateUpdateWorkExperienceDTO
     {
         JobTitle = "Product Manager",
         Company = "ProductX Ltd.",

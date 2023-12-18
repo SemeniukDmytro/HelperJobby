@@ -1,6 +1,5 @@
-import httpInternalService from "./HttpInternalService";
 import HttpInternalService from "./HttpInternalService";
-import {CreateUserDTO} from "../DTOs/CreateUserDTO";
+import {CreateUserDTO} from "../DTOs/UserDTOs/CreateUserDTO";
 
 class AuthService {
     private readonly baseURI : string = "api/auth";

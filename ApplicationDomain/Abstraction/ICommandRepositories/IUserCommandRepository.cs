@@ -4,7 +4,7 @@ namespace ApplicationDomain.Abstraction.ICommandRepositories;
 
 public interface IUserCommandRepository
 {
-    public Task CreateUser(User user);
+    public Task<User> CreateUser(User user);
 
     public Task<User> UpdateUser(User user);
 }

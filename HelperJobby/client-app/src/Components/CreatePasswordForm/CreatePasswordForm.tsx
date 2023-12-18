@@ -2,7 +2,6 @@ import React, {FC, useEffect, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {useAuthContext} from "../../Contexts/AuthContext";
-
 import "./CreatePasswordForm.scss"
 import {useAccountTypeContext} from "../../Contexts/AccountTypeContext";
 import {IsValidPasswordMaximalLength, IsValidPasswordMinimalLength} from "../../Helpers/AuthValidators";
@@ -11,7 +10,7 @@ import AuthComponent from "../AuthComponent/AuthComponent";
 import "../../CommonStyles/AuthFormBox.scss";
 import "../../CommonStyles/InputFieldWithError.scss";
 import AuthService from "../../Services/AuthService";
-import {CreateUserDTO} from "../../DTOs/CreateUserDTO";
+import {CreateUserDTO} from "../../DTOs/UserDTOs/CreateUserDTO";
 
 
 interface CreatePasswordFormProps {}

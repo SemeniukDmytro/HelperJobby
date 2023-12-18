@@ -13,10 +13,11 @@ public class UserCommandRepository : IUserCommandRepository
         _applicationContext = applicationContext;
     }
 
-    public async Task CreateUser(User user)
+    public async Task<User> CreateUser(User user)
     {
         _applicationContext.Users.Add(user);
         await _applicationContext.SaveChangesAsync();
+        return user;
     }
 
     public async Task<User> UpdateUser(User user)
