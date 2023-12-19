@@ -1,13 +1,17 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
+using ApplicationDomain.AuthRelatedModels;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ApplicationBLL.Services;
 
@@ -66,6 +70,18 @@ public class AuthService : IAuthService
         return token;
     }
 
+    public RefreshToken GenerateRefreshToken()
+    {
+        var refreshToken = new RefreshToken()
+        {
+            Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+            CreatedAt = DateTime.UtcNow,
+            Expires = DateTime.Now.AddDays(30)
+        };
+
+        return refreshToken;
+    }
+    
     public async Task<bool> DoesUserRegistered(string email)
     {
         User userEntity = null;
@@ -79,5 +95,36 @@ public class AuthService : IAuthService
         }
 
         return userEntity != null;
+    }
+
+    public async Task<User> RefreshToken(string accessToken, string refreshToken)
+    {
+        var principal = GetPrincipalFromExpiredToken(accessToken);
+        if (principal?.Identity.Name is null)
+        {
+            throw new UnauthorizedException();
+        }
+        string userId = principal.FindFirst("id")?.Value;
+        var user = await _userQueryRepository.GetUserByIdWithRefreshToken(int.Parse(userId));
+
+        if (user == null || user.RefreshToken.Token != refreshToken ||
+            user.RefreshToken.Expires < DateTime.UtcNow)
+        {
+            throw new UnauthorizedException();
+        }
+
+        return user;
+    }
+
+    public ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
+    {
+        var validation = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            ValidateAudience = false,
+            ValidateIssuer = false,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]!))
+        };
+        return new JwtSecurityTokenHandler().ValidateToken(token, validation, out _);
     }
 }

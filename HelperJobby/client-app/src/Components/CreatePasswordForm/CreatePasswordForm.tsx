@@ -17,12 +17,13 @@ interface CreatePasswordFormProps {}
 
 const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
     let emailInfo = useAuthContext();
-    let accountTypeInfo = useAccountTypeContext();
+    let accountTypeContextInfo = useAccountTypeContext();
     
     const [password, setPassword] = useState("");
     const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
     const [error, setError] = useState("");
-    const [accountType, setAccountType] = useState<string>("");
+    const [accountTypeChanger, setAccountTypeChanger] = useState<string>("");
+    const [accountType, setAccountType] = useState(accountTypeContextInfo);
     const [formTitle, setFormTitle] = useState("");
     
     const [renderInitialAuthPage, setRenderInitialAuthPage] = useState(false);
@@ -45,11 +46,11 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
         let createdUser: CreateUserDTO = {
             password: password,
             email: emailInfo.email,
-            accountType: accountTypeInfo,
+            accountType: accountType,
         };
 
         try {
-            await authService.RegisterNewUser(createdUser);
+            let newUser = await authService.RegisterNewUser(createdUser);
         } catch (error) {
             console.error("Error creating user:", error);
         }
@@ -58,25 +59,25 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
     }
     
     useEffect(() => {
-      if (accountTypeInfo == "Employer"){
-        setAccountType("a job seeker");
+      if (accountTypeContextInfo == "Employer"){
+        setAccountTypeChanger("a job seeker");
         setFormTitle("Create your employer account")
       }  
       else {
-          setAccountType("an employer")
+          setAccountTypeChanger("an employer")
           setFormTitle("Create your account");
       }
     },[]);
     
     function ChangeAccountType() {
-        if (accountType === "an employer"){
-            accountTypeInfo = "Employer";
-            setAccountType("a job seeker");
+        if (accountTypeChanger === "an employer"){
+            setAccountType("Employer");
+            setAccountTypeChanger("a job seeker");
             setFormTitle("Create your employer account");
         }
         else {
-            accountTypeInfo = "Job seeker";
-            setAccountType("an employer");
+            setAccountType("Job seeker");
+            setAccountTypeChanger("an employer");
             setFormTitle("Create your account");
         }
     }
@@ -128,7 +129,7 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
                     </form>
                     <div>
                         <a className={"type-change-button"} onClick={ChangeAccountType}>
-                            <span className={"type-change-text"}>Wait, I am {accountType}</span>
+                            <span className={"type-change-text"}>Wait, I am {accountTypeChanger}</span>
                             <FontAwesomeIcon className="type-continue-arrow" icon={faArrowRightLong}/>
                         </a>
                     </div>

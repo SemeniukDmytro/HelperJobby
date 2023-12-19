@@ -11,14 +11,14 @@ const AccountTypeForm: FC<AccountTypeFormProps> = () =>
 {
     const [renderCreatePasswordForm, setRenderCreatePasswordForm] = useState(false);
     
-    let accountType = "Job seeker";
+    const [accountType, setAccountType] = useState("Job seeker");
     function HandleEmployerTypeSelection() {
-        accountType = "Employer"
+        setAccountType("Employer");
         setRenderCreatePasswordForm(true);
     }
 
     function HandleJobSeekerTypeSelection() {
-        accountType = "Job seeker";
+        setAccountType("Job seeker");
         setRenderCreatePasswordForm(true);
     }
     

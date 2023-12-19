@@ -25,6 +25,11 @@ public class UserQueryRepository :  IUserQueryRepository
         return await _entityInclusionHandler.GetUser(userId);
     }
 
+    public async Task<User> GetUserByIdWithRefreshToken(int userId)
+    {
+        return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.RefreshToken));
+    }
+
     public async Task<User> GetUserWithEmployerAccount(int userId)
     {
         return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.EmployerAccount));

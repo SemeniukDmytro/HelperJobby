@@ -1,9 +1,11 @@
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
+using ApplicationDomain.AuthRelatedModels;
 using ApplicationDomain.Models;
 using AutoMapper;
 using FluentValidation;
+using HelperJobby.DTOs.AuthModels;
 using HelperJobby.DTOs.User;
 using HelperJobby.Validators;
 using Microsoft.AspNetCore.Authorization;
@@ -46,7 +48,9 @@ namespace HelperJobby.Controllers
             var user = _mapper.Map<User>(newUser);
             
             user = await _userService.CreateUser(user);
+            user.RefreshToken = _authService.GenerateRefreshToken();
             user = await _userCommandRepository.CreateUser(user);
+            SetRefreshToken(user.RefreshToken);
             return new AuthUserDTO()
             {
                 User = _mapper.Map<UserDTO>(user),
@@ -60,13 +64,39 @@ namespace HelperJobby.Controllers
             LoginUserDTOValidator.ValidateUser(loginUserDTO);
             
             var userEntity = await _userQueryRepository.GetUserByEmail(loginUserDTO.Email);
-
+            userEntity.RefreshToken = _authService.GenerateRefreshToken();
+            await _userCommandRepository.UpdateUser(userEntity);
+            SetRefreshToken(userEntity.RefreshToken);
             return new AuthUserDTO()
             {
                 User = _mapper.Map<UserDTO>(userEntity),
                 Token = await _authService.AuthUser(userEntity)
             };
         }
+
+        [HttpPost("Refresh-token")]
+        public async Task<AuthUserDTO> RefreshToken([FromBody] RefreshModelDTO refreshModelDTO)
+        {
+            var userEntity = await _authService.RefreshToken(refreshModelDTO.AccessToken, refreshModelDTO.AccessToken);
+            return new AuthUserDTO()
+            {
+                User = _mapper.Map<UserDTO>(userEntity),
+                Token = await _authService.AuthUser(userEntity)
+            };
+
+        }
+        
+        private void SetRefreshToken(RefreshToken newRefreshToken)
+        {
+            var cookieOptions = new CookieOptions()
+            {
+                HttpOnly = true,
+                Expires = newRefreshToken.Expires
+            };
+            Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
+            
+        }
+
     }
     
 }
