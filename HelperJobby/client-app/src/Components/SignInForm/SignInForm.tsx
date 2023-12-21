@@ -1,8 +1,7 @@
 import React, {FC, useContext, useEffect} from 'react';
-import '../AuthComponent/AuthComponent.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
-import {useAuthContext} from "../../Contexts/AuthContext";
+import {useAuthContext} from "../../Contexts/EmailProviderContext";
 import AppLogo from "../AppLogo/AppLogo";
 import "../../CommonStyles/AuthFormBox.scss";
 import "../../CommonStyles/InputFieldWithError.scss";

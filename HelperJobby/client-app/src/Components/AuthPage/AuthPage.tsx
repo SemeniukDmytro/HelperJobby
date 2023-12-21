@@ -1,9 +1,9 @@
 import React, {FC, useEffect, useState} from 'react';
-import './AuthComponent.scss'
+import './AuthPage.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from '@fortawesome/free-solid-svg-icons';
 import AuthService from "../../Services/AuthService";
-import AuthContext from "../../Contexts/AuthContext";
+import EmailProviderContext from "../../Contexts/EmailProviderContext";
 import {IsValidEmail} from "../../Helpers/AuthValidators";
 import SignInForm from "../SignInForm/SignInForm";
 import AccountTypeForm from "../AccountTypeForm/AccountTypeForm";
@@ -13,7 +13,7 @@ import "../../CommonStyles/InputFieldWithError.scss";
 
 interface AuthComponentProps {}
 
-const AuthComponent: FC<AuthComponentProps> = () => {
+const AuthPage: FC<AuthComponentProps> = () => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const [isSubmitInvalid, setIsSubmitInvalid] = useState(false);
@@ -69,7 +69,7 @@ const AuthComponent: FC<AuthComponentProps> = () => {
     
 
     return (
-        <AuthContext.Provider value={{email: email, isRegisteredUser: isEmailRegistered}}>
+        <EmailProviderContext.Provider value={{email: email, isRegisteredUser: isEmailRegistered}}>
             {renderAuthPage && (
                 <AppLogo>
                     <div className="form-box">
@@ -111,8 +111,8 @@ const AuthComponent: FC<AuthComponentProps> = () => {
                 )}
                 { renderSignInPage && <SignInForm/>}
                 { renderAccountTypeForm && <AccountTypeForm/>}
-        </AuthContext.Provider>
+        </EmailProviderContext.Provider>
     )
 };
 
-export default AuthComponent;
+export default AuthPage;

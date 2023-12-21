@@ -1,16 +1,18 @@
 import React, {FC, useEffect, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
-import {useAuthContext} from "../../Contexts/AuthContext";
+import {useAuthContext} from "../../Contexts/EmailProviderContext";
 import "./CreatePasswordForm.scss"
 import {useAccountTypeContext} from "../../Contexts/AccountTypeContext";
 import {IsValidPasswordMaximalLength, IsValidPasswordMinimalLength} from "../../Helpers/AuthValidators";
 import AppLogo from "../AppLogo/AppLogo";
-import AuthComponent from "../AuthComponent/AuthComponent";
+import AuthPage from "../AuthPage/AuthPage";
 import "../../CommonStyles/AuthFormBox.scss";
 import "../../CommonStyles/InputFieldWithError.scss";
 import AuthService from "../../Services/AuthService";
 import {CreateUserDTO} from "../../DTOs/UserDTOs/CreateUserDTO";
+import {useAuth} from "../../Contexts/AuthContext";
+import {useNavigate} from "react-router-dom";
 
 
 interface CreatePasswordFormProps {}
@@ -27,7 +29,8 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
     const [formTitle, setFormTitle] = useState("");
     
     const [renderInitialAuthPage, setRenderInitialAuthPage] = useState(false);
-    
+    const [authUser, setAuthUser] = useAuth();
+    const navigate = useNavigate();
     async function HandleAccountCreation(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         if (!IsValidPasswordMaximalLength(password)){
@@ -51,11 +54,11 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
 
         try {
             let newUser = await authService.RegisterNewUser(createdUser);
+            setAuthUser(newUser); // Use the callback form of setAuthUser
+            navigate('/temp');
         } catch (error) {
             console.error("Error creating user:", error);
         }
-
-
     }
     
     useEffect(() => {
@@ -138,7 +141,7 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
         </AppLogo>
         ) :
         (
-            <AuthComponent/>
+            <AuthPage/>
         )
         
 )};

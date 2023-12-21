@@ -1,4 +1,4 @@
-export interface EmailInfo{
+export interface EmailProviderContextProps {
     email : string,
     isRegisteredUser : boolean;
 }
