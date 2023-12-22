@@ -1,7 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
-import {useAuth} from "../../Hooks/useAuth";
 import {Navigate, Outlet, useLocation} from "react-router-dom";
-import {UserService} from "../../Services/UserService";
+import {UserService} from "../../services/userService";
 
 interface RequireAuthProps {}
 

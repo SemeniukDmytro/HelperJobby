@@ -1,31 +1,30 @@
 import React, {FC, useContext, useEffect, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
-import {useAuthContext} from "../../Contexts/EmailProviderContext";
 import "./CreatePasswordForm.scss"
-import {useAccountTypeContext} from "../../Contexts/AccountTypeContext";
-import {IsValidPasswordMaximalLength, IsValidPasswordMinimalLength} from "../../Helpers/AuthValidators";
 import AppLogo from "../AppLogo/AppLogo";
-import AuthPage from "../AuthPage/AuthPage";
-import "../../CommonStyles/AuthFormBox.scss";
-import "../../CommonStyles/InputFieldWithError.scss";
-import AuthService from "../../Services/AuthService";
-import {CreateUserDTO} from "../../DTOs/UserDTOs/CreateUserDTO";
+import "../../Assets/scssSharedStyles/AuthFormBox.scss";
+import "../../Assets/scssSharedStyles/InputFieldWithError.scss";
+import AuthService from "../../services/authService";
 import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../Hooks/useAuth";
+import {useAuth} from "../../hooks/useAuth";
+import {IsValidPasswordMaximalLength, IsValidPasswordMinimalLength} from "../../utils/authValidators";
+import {CreateUserDTO} from "../../DTOs/userRelatedDTOs/CreateUserDTO";
+import {useAccountType} from "../../hooks/useAccountType";
+import {useEmail} from "../../hooks/useEmail";
+import EmailForm from "../EmailForm/EmailForm";
 
 
 interface CreatePasswordFormProps {}
 
 const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
-    let emailInfo = useAuthContext();
-    let accountTypeContextInfo = useAccountTypeContext();
+    let {email, setEmail} = useEmail();
+    const {accountType, setAccountType} = useAccountType();
     
     const [password, setPassword] = useState("");
     const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
     const [error, setError] = useState("");
     const [accountTypeChanger, setAccountTypeChanger] = useState<string>("");
-    const [accountType, setAccountType] = useState(accountTypeContextInfo);
     const [formTitle, setFormTitle] = useState("");
     
     const [renderInitialAuthPage, setRenderInitialAuthPage] = useState(false);
@@ -46,11 +45,14 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
         }
         
         const authService = new AuthService();
-
+        if (accountType === null){
+            setAccountType("Employer");
+        }
+        
         let createdUser: CreateUserDTO = {
             password: password,
-            email: emailInfo.email,
-            accountType: accountType,
+            email: email,
+            accountType: accountType!,
         };
 
         try {
@@ -64,7 +66,7 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
     }
     
     useEffect(() => {
-      if (accountTypeContextInfo == "Employer"){
+      if (accountType == "Employer"){
         setAccountTypeChanger("a job seeker");
         setFormTitle("Create your employer account")
       }  
@@ -101,7 +103,7 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
                     </div>
                     <div className="auth-form-subtitle-box subtitle-font-size">
                         <span className="form-subtitle">Signing up as&nbsp;</span>
-                        <span className={"user-email"}>{emailInfo.email}</span>
+                        <span className={"user-email"}>{email}</span>
                         <button className={"return-button"} onClick={goToInitialAuthPage}>
                             <span className={"return-button-text"}>(not you?)</span>
                         </button>
@@ -143,7 +145,7 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
         </AppLogo>
         ) :
         (
-            <AuthPage/>
+            <EmailForm/>
         )
         
 )};

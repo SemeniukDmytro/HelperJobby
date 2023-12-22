@@ -1,16 +1,16 @@
-import React, {FC, useContext, useEffect} from 'react';
+import React, {FC} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
-import {useAuthContext} from "../../Contexts/EmailProviderContext";
 import AppLogo from "../AppLogo/AppLogo";
-import "../../CommonStyles/AuthFormBox.scss";
-import "../../CommonStyles/InputFieldWithError.scss";
+import "../../Assets/scssSharedStyles/AuthFormBox.scss";
+import "../../Assets/scssSharedStyles/InputFieldWithError.scss";
+import {useEmail} from "../../hooks/useEmail";
 
 interface PasswordFormProps {}
 
 const SignInForm: FC<PasswordFormProps> = () =>
 {
-    const emailInfo = useAuthContext();
+    const emailInfo = useEmail();
     
     async function  AuthUser(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
