@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {useAuthContext} from "../../Contexts/EmailProviderContext";
@@ -11,8 +11,8 @@ import "../../CommonStyles/AuthFormBox.scss";
 import "../../CommonStyles/InputFieldWithError.scss";
 import AuthService from "../../Services/AuthService";
 import {CreateUserDTO} from "../../DTOs/UserDTOs/CreateUserDTO";
-import {useAuth} from "../../Contexts/AuthContext";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../Hooks/useAuth";
 
 
 interface CreatePasswordFormProps {}
@@ -29,7 +29,8 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
     const [formTitle, setFormTitle] = useState("");
     
     const [renderInitialAuthPage, setRenderInitialAuthPage] = useState(false);
-    const [authUser, setAuthUser] = useAuth();
+
+    const {setAuthUser} = useAuth();
     const navigate = useNavigate();
     async function HandleAccountCreation(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -53,9 +54,10 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
         };
 
         try {
-            let newUser = await authService.RegisterNewUser(createdUser);
-            setAuthUser(newUser); // Use the callback form of setAuthUser
-            navigate('/temp');
+            let newUser = await authService.registerNewUser(createdUser);
+            localStorage.setItem("accessToken", newUser.token);
+            setAuthUser(newUser);
+            navigate("/temp");
         } catch (error) {
             console.error("Error creating user:", error);
         }

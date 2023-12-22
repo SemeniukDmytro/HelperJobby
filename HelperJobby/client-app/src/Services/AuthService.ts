@@ -9,12 +9,17 @@ class AuthService {
         this.httpInternalService = new HttpInternalService();
     }
     
-    public async IsEmailRegistered(email : string) : Promise<boolean>{
-        return (await this.httpInternalService.Request(`${this.baseURI}/is-registered?email=${email}`,"GET")).json()
+    public async isEmailRegistered(email : string) : Promise<boolean>{
+        return (await this.httpInternalService.getRequest(`${this.baseURI}/is-registered?email=${email}`)).json()
     }
 
-    public async RegisterNewUser(createdUser: CreateUserDTO): Promise<AuthUserDTO> {
-        return (await this.httpInternalService.Request(`${this.baseURI}/sign-up`, "POST", createdUser)).json();
+    public async registerNewUser(createdUser: CreateUserDTO): Promise<AuthUserDTO> {
+        return (await this.httpInternalService.requestWithCookies(`${this.baseURI}/sign-up`, "POST", createdUser)).json();
+    }
+    
+    public async refreshToken(): Promise<AuthUserDTO>{
+        return (await this.httpInternalService.requestWithCookies(`${this.baseURI}/refresh-token`, "POST",
+            null, {"Authorization" : `Bearer ${localStorage.getItem("authToken")}`})).json()
     }
     
 }

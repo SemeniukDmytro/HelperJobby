@@ -1,32 +1,30 @@
-import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useState} from "react";
+import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState} from "react";
 import {AuthUserDTO} from "../DTOs/UserDTOs/AuthUserDTO";
 import {AuthContextProps} from "../ContextsTypes/AuthContextProps";
+import AuthService from "../Services/AuthService";
 
-const AuthContext = createContext<AuthContextProps | null>(null);
+const AuthContext = createContext<AuthContextProps>({authUser : null
+    , setAuthUser : () => {}});
 
-export function useAuth(): [AuthUserDTO | null, Dispatch<SetStateAction<AuthUserDTO | null>>] {
-    const authUserInfo = useContext(AuthContext);
-
-    if (authUserInfo?.authUser === undefined) {
-        return [null, (() => {}) as Dispatch<SetStateAction<AuthUserDTO | null>>];
+export function AuthProvider({children} : {children: ReactNode; }) 
+{
+    const [auth, setAuth] = useState<AuthUserDTO | null>(null);
+    
+     async function refreshToken() {
+        const authService = new AuthService();
+        setAuth((await  authService.refreshToken()))
     }
 
-    return [authUserInfo?.authUser, authUserInfo?.setAuthUser];
-}
-
-export function AuthProvider({
-                                 user,
-                                 setAuthUser,
-                                 children
-                             }: {
-    user: AuthUserDTO | null;
-    setAuthUser: Dispatch<SetStateAction<AuthUserDTO | null>>;
-    children: ReactNode;
-}) {
+    useEffect(  () => {
+            refreshToken();
+        },[]);
+        
     return (
-        <AuthContext.Provider value={{ authUser: user, setAuthUser }}>
+        <AuthContext.Provider value={{authUser : auth, setAuthUser : setAuth }}>
             {children}
         </AuthContext.Provider>
     );
 }
+
+export default AuthContext;
 

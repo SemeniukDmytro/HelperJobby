@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import './AuthPage.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from '@fortawesome/free-solid-svg-icons';
@@ -25,6 +25,7 @@ const AuthPage: FC<AuthComponentProps> = () => {
     const [renderAccountTypeForm, setRenderAccountTypeForm] = useState(false);
     
     let isFormInvalid = email.trim() === '';
+    
 
     useEffect(() => {
         if (!checkEmailInProcess) {
@@ -52,11 +53,9 @@ const AuthPage: FC<AuthComponentProps> = () => {
 
         try {
             const authService = new AuthService();
-
-            // Show loading indicator
             setCheckEmailInProcess(true);
 
-            const isEmailRegisteredValue = await authService.IsEmailRegistered(email);
+            const isEmailRegisteredValue = await authService.isEmailRegistered(email);
 
             setIsEmailRegistered(isEmailRegisteredValue);
         } catch (error) {

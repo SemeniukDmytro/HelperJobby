@@ -74,16 +74,18 @@ namespace HelperJobby.Controllers
             };
         }
 
-        [HttpPost("Refresh-token")]
-        public async Task<AuthUserDTO> RefreshToken([FromBody] RefreshModelDTO refreshModelDTO)
+        [HttpPost("refresh-token")]
+        public async Task<AuthUserDTO> RefreshToken()
         {
-            var userEntity = await _authService.RefreshToken(refreshModelDTO.AccessToken, refreshModelDTO.AccessToken);
+            var refreshToken = Request.Cookies["refreshToken"];
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+            var accessToken = authorizationHeader.Substring("Bearer ".Length).Trim();
+            var userEntity = await _authService.RefreshToken(accessToken, refreshToken);
             return new AuthUserDTO()
             {
                 User = _mapper.Map<UserDTO>(userEntity),
                 Token = await _authService.AuthUser(userEntity)
             };
-
         }
         
         private void SetRefreshToken(RefreshToken newRefreshToken)
@@ -91,10 +93,12 @@ namespace HelperJobby.Controllers
             var cookieOptions = new CookieOptions()
             {
                 HttpOnly = true,
-                Expires = newRefreshToken.Expires
+                Expires = newRefreshToken.Expires,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Domain = "localhost"
             };
             Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
-            
         }
 
     }

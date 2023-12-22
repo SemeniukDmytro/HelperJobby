@@ -100,7 +100,7 @@ public class AuthService : IAuthService
     public async Task<User> RefreshToken(string accessToken, string refreshToken)
     {
         var principal = GetPrincipalFromExpiredToken(accessToken);
-        if (principal?.Identity.Name is null)
+        if (principal.FindFirst("id")?.Value is null)
         {
             throw new UnauthorizedException();
         }
