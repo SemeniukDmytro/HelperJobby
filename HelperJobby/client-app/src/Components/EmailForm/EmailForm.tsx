@@ -8,7 +8,7 @@ import AccountTypeForm from "../AccountTypeForm/AccountTypeForm";
 import AppLogo from "../AppLogo/AppLogo";
 import "../../Assets/scssSharedStyles/AuthFormBox.scss";
 import "../../Assets/scssSharedStyles/InputFieldWithError.scss";
-import {IsValidEmail} from "../../utils/authValidators";
+import {IsValidEmail} from "../../utils/authFormValidators";
 import {useEmail} from "../../hooks/useEmail";
 
 interface AuthComponentProps {}

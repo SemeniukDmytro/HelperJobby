@@ -8,7 +8,7 @@ import "../../Assets/scssSharedStyles/InputFieldWithError.scss";
 import AuthService from "../../services/authService";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../hooks/useAuth";
-import {IsValidPasswordMaximalLength, IsValidPasswordMinimalLength} from "../../utils/authValidators";
+import {IsValidPasswordMaximalLength, IsValidPasswordMinimalLength} from "../../utils/authFormValidators";
 import {CreateUserDTO} from "../../DTOs/userRelatedDTOs/CreateUserDTO";
 import {useAccountType} from "../../hooks/useAccountType";
 import {useEmail} from "../../hooks/useEmail";

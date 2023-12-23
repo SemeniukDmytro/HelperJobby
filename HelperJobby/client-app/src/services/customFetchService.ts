@@ -1,13 +1,12 @@
-import {setAuthHeader} from "../utils/setHeaders";
-
-const DEFAULT_HEADERS : { [key: string]: string } = {
+import {addAuthHeader} from "../utils/addAuthHeader";
+export const DEFAULT_HEADERS : { [key: string]: string } = {
     "Accept": "application/json",
     "Content-type": "application/json",
 }
+export const DOMAIN = "https://localhost:7214";
+
 class CustomFetchService {
-    private readonly domain : string;
     constructor() {
-        this.domain = "https://localhost:7214";
     }
 
     private  joinURL(baseUrl: string, url : string) : string{
@@ -15,14 +14,14 @@ class CustomFetchService {
     }
 
     private async request(url: string, method: string, data: object | null = null, customHeaders: { [key: string]: string } = {}) {
-        url = this.joinURL(this.domain, url);
-
+        
+        url = this.joinURL(DOMAIN, url);
         let headers = {
             ...DEFAULT_HEADERS,
             ...customHeaders,
         };
 
-        headers = setAuthHeader(headers);
+        headers = await addAuthHeader(headers);
 
         const options = {
             headers,
@@ -47,7 +46,7 @@ class CustomFetchService {
     async getRequest(url: string, headers: { [key: string]: string } = {}): Promise<Response> {
         return this.request(url, 'GET', null, headers);
     }
-    async createRequest(url: string, data: object, headers: { [key: string]: string } = {}): Promise<Response> {
+    async postRequest(url: string, data: object, headers: { [key: string]: string } = {}): Promise<Response> {
         return this.request(url, 'POST', data,headers);
     }
 
@@ -57,26 +56,6 @@ class CustomFetchService {
 
     async deleteRequest(url: string, headers: { [key: string]: string } = {}): Promise<Response> {
         return this.request(url, 'DELETE', null, headers);
-    }
-
-    async requestWithCookies(url : string, method : string, data : object | null = null, customHeaders: { [key: string]: string } = {}){
-        url = this.joinURL(this.domain, url);
-        let headers: { [key: string]: string }  = {
-            ...DEFAULT_HEADERS,
-            ...customHeaders,
-        };
-
-        headers = setAuthHeader(headers);
-        console.log(headers);
-        
-        const options = {
-            headers,
-            method,
-            credentials : "include" as RequestCredentials,
-            body: data ? JSON.stringify(data) : null,
-        };
-
-        return fetch(url, options);
     }
 
 }
