@@ -24,8 +24,7 @@ const AccountTypeForm: FC<AccountTypeFormProps> = () =>
 
     
     return (
-        <AccountTypeProvider>
-            {!renderCreatePasswordForm ? (
+            !renderCreatePasswordForm ? (
                 <AppLogo>
                     <div className="form-box">
                         <div className="auth-form-container">
@@ -57,8 +56,6 @@ const AccountTypeForm: FC<AccountTypeFormProps> = () =>
                  <CreatePasswordForm>
                  </CreatePasswordForm>
              )
-            }
-        </AccountTypeProvider>
     )
         
 };

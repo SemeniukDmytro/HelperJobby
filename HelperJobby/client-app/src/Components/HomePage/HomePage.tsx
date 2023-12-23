@@ -32,6 +32,7 @@ const HomePage: FC<HomePageProps> = () => {
               <button onClick={testMethod}>
                 Test
               </button>
+              <span>dadsaads</span>
               <span>{user?.email}</span>
           </div>
         

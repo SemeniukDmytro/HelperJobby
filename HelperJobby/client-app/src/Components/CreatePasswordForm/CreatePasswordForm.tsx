@@ -20,7 +20,8 @@ interface CreatePasswordFormProps {}
 const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
     let {email, setEmail} = useEmail();
     const {accountType, setAccountType} = useAccountType();
-    
+    const {setAuthUser} = useAuth();
+
     const [password, setPassword] = useState("");
     const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
     const [error, setError] = useState("");
@@ -29,7 +30,6 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
     
     const [renderInitialAuthPage, setRenderInitialAuthPage] = useState(false);
 
-    const {setAuthUser} = useAuth();
     const navigate = useNavigate();
     async function HandleAccountCreation(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -45,9 +45,6 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
         }
         
         const authService = new AuthService();
-        if (accountType === null){
-            setAccountType("Employer");
-        }
         
         let createdUser: CreateUserDTO = {
             password: password,
@@ -58,12 +55,18 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
         try {
             let newUser = await authService.registerNewUser(createdUser);
             localStorage.setItem("accessToken", newUser.token);
+            console.log(newUser.token);
+            console.log(localStorage.getItem("accessToken"))
             setAuthUser(newUser);
-            navigate("/temp");
         } catch (error) {
             console.error("Error creating user:", error);
         }
+        finally {
+            navigate("/temp");
+        }
     }
+    
+    
     
     useEffect(() => {
       if (accountType == "Employer"){

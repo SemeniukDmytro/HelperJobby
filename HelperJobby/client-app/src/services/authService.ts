@@ -19,7 +19,7 @@ class AuthService {
     
     public async refreshToken(): Promise<AuthUserDTO>{
         return (await this.httpInternalService.requestWithCookies(`${this.baseURI}/refresh-token`, "POST",
-            null, {"Authorization" : `Bearer ${localStorage.getItem("authToken")}`})).json()
+            null)).json()
     }
     
 }

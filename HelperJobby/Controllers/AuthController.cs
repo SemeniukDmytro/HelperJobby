@@ -79,7 +79,7 @@ namespace HelperJobby.Controllers
         {
             var refreshToken = Request.Cookies["refreshToken"];
             var authorizationHeader = Request.Headers["Authorization"].ToString();
-            var accessToken = authorizationHeader.Substring("Bearer ".Length).Trim();
+            var accessToken = authorizationHeader.Replace("Bearer ", "");
             var userEntity = await _authService.RefreshToken(accessToken, refreshToken);
             return new AuthUserDTO()
             {

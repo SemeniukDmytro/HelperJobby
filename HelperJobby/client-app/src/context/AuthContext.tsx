@@ -13,11 +13,12 @@ export function AuthProvider({children} : {children: ReactNode; })
      async function refreshToken() {
          
         const authService = new AuthService();
-        setAuthUser((await  authService.refreshToken()))
+        const user = await  authService.refreshToken();
+        console.log(user);
     }   
 
     useEffect(  () => {
-            refreshToken();
+        refreshToken();
         },[]);
         
     return (

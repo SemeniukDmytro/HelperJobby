@@ -1,3 +1,5 @@
+import {setAuthHeader} from "../utils/setHeaders";
+
 const DEFAULT_HEADERS : { [key: string]: string } = {
     "Accept": "application/json",
     "Content-type": "application/json",
@@ -20,14 +22,7 @@ class CustomFetchService {
             ...customHeaders,
         };
 
-        let accessToken = localStorage.getItem("accessToken");
-
-        if (accessToken) {
-            headers = {
-                ...headers,
-                Authorization: `Bearer ${accessToken}`,
-            };
-        }
+        headers = setAuthHeader(headers);
 
         const options = {
             headers,
@@ -64,13 +59,16 @@ class CustomFetchService {
         return this.request(url, 'DELETE', null, headers);
     }
 
-    async requestWithCookies(url : string, method : string, data : object | null = null, customHeaders = {}){
+    async requestWithCookies(url : string, method : string, data : object | null = null, customHeaders: { [key: string]: string } = {}){
         url = this.joinURL(this.domain, url);
-        const headers = {
+        let headers: { [key: string]: string }  = {
             ...DEFAULT_HEADERS,
             ...customHeaders,
         };
 
+        headers = setAuthHeader(headers);
+        console.log(headers);
+        
         const options = {
             headers,
             method,

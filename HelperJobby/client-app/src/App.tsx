@@ -13,10 +13,10 @@ function App() {
             {/* public routes*/}
             <Route path="/" element={<AuthPage/>} />
             <Route path={"auth-page"} element={<AuthPage/>}></Route>
-            <Route path={"temp"} element={<HomePage/>}/>
 
             {/*private routes */}
             <Route element={<RequireAuth/>}>
+                <Route path={"temp"} element={<HomePage/>}/>
             </Route>
         </Routes>
       </AuthProvider>
