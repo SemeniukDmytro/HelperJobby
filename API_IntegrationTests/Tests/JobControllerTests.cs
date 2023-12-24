@@ -90,7 +90,7 @@ public class JobControllerTests : IntegrationTest
 
         //Assert
         Assert.Equal(HttpStatusCode.OK, jobCreateResponse.StatusCode);
-        Assert.Equal(HttpStatusCode.InternalServerError, currentJobGetResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, currentJobGetResponse.StatusCode);
         var createdJob = await jobCreateResponse.Content.ReadAsAsync<JobDTO>();
         Assert.NotEqual(0, createdJob.Id);
         Assert.Equal(currentJobCreation.Benefits.Count, createdJob.Benefits.Count);
@@ -156,7 +156,7 @@ public class JobControllerTests : IntegrationTest
         
         //Assert
         Assert.Equal(HttpStatusCode.OK, deleteJobResponse.StatusCode);
-        Assert.Equal(HttpStatusCode.InternalServerError, getJobResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, getJobResponse.StatusCode);
 
     }
 }

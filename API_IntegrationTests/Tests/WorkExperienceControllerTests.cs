@@ -95,6 +95,6 @@ public class WorkExperienceControllerTests : IntegrationTest
         // Assert
         Assert.Equal(HttpStatusCode.OK, deleteWorkExperienceResponse.StatusCode);
         var getWorkExperienceResponse = await TestClient.GetAsync(requestUri);
-        Assert.Equal(HttpStatusCode.InternalServerError, getWorkExperienceResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, getWorkExperienceResponse.StatusCode);
     }
 }

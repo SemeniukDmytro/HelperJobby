@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using ApplicationBLL.Interfaces;
 using ApplicationBLL.Services;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
@@ -15,12 +16,13 @@ public class AuthServiceTests
     private IAuthService _authService;
     private Mock<IUserQueryRepository> _userQueryRepostitoryMock = new();
     private Mock<IConfiguration> _configurationMock = new();
+    private Mock<IPasswordHandler> _passwordHandlerMock = new();
     private ITestOutputHelper _outputHelper;
     
     public AuthServiceTests(ITestOutputHelper outputHelper)
     {
         _outputHelper = outputHelper;
-        _authService = new AuthService( _configurationMock.Object, _userQueryRepostitoryMock.Object);
+        _authService = new AuthService( _configurationMock.Object, _userQueryRepostitoryMock.Object, _passwordHandlerMock.Object);
     }
 
     [Fact]
@@ -87,7 +89,7 @@ public class AuthServiceTests
             PasswordHash = "correctPassword"
         };
         
-        _userQueryRepostitoryMock.Setup(c => c.GetUserByEmail(It.IsAny<string>())).ReturnsAsync(
+        _userQueryRepostitoryMock.Setup(c => c.GetUserByEmailWithRefreshToken(It.IsAny<string>())).ReturnsAsync(
             new User()
             {
                 Email = "correct@gmail.com",
@@ -95,11 +97,12 @@ public class AuthServiceTests
             });
         _configurationMock.Setup(c => c["JwtKey"])
             .Returns("Super secret key that will be stored somewhere secretly, so you will never know its real value");
+        _passwordHandlerMock.Setup(h => h.Verify(loginUser.PasswordHash, "correctPassword")).Returns(true);
         //Act
-        var token = _authService.AuthUser(loginUser).Result;
+        var result = _authService.AuthUser(loginUser).Result;
         //Assert
-        Assert.NotEmpty(token);
-        var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(token);
+        Assert.NotEmpty(result.authToken);
+        var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(result.authToken);
         Assert.Equal(jwtToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value, loginUser.Email);
     }
     

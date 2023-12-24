@@ -117,6 +117,6 @@ public class JobApplyControllerTests : IntegrationTest
         
         //Assert
         Assert.Equal(HttpStatusCode.OK, deleteJobApplyResponse.StatusCode);
-        Assert.Equal(HttpStatusCode.InternalServerError, getJobApplyResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.Conflict, getJobApplyResponse.StatusCode);
     }
 }

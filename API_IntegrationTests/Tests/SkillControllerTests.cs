@@ -65,6 +65,6 @@ public class SkillControllerTests : IntegrationTest
         // Assert
         Assert.Equal(HttpStatusCode.OK, deleteSkillResponse.StatusCode);
         var getSkillResponse = await TestClient.GetAsync(requestUri);
-        Assert.Equal(HttpStatusCode.InternalServerError, getSkillResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, getSkillResponse.StatusCode);
     }
 }

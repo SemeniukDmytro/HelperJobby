@@ -102,7 +102,7 @@ public class CurrentJobControllerTests : IntegrationTest
         Assert.Equal(HttpStatusCode.OK, jobDeleteResponse.StatusCode);
         var jobGetResponse = await TestClient.GetAsync($"{_baseUri}/{employer.Id}/current-job-creation");
         await ExceptionsLogHelper.LogNotSuccessfulResponse(jobGetResponse, TestOutputHelper);
-        Assert.Equal(HttpStatusCode.InternalServerError, jobGetResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, jobGetResponse.StatusCode);
     }
     
 }

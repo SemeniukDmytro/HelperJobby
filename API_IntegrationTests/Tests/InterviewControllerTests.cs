@@ -107,7 +107,7 @@ public class InterviewControllerTests : IntegrationTest
         Assert.Equal(HttpStatusCode.OK, deleteInterviewResponse.StatusCode);
         var getInterviewResponse =
             await TestClient.GetAsync(requestUri);
-        Assert.Equal(HttpStatusCode.InternalServerError, getInterviewResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.Conflict, getInterviewResponse.StatusCode);
         
     }
 }

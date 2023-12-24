@@ -70,6 +70,6 @@ public class ResumeControllerTests : IntegrationTest
         //Assert
         Assert.Equal(HttpStatusCode.OK, deleteResumeResponse.StatusCode);
         var getResumeResponse = await TestClient.GetAsync(requestUri);
-        Assert.Equal(HttpStatusCode.InternalServerError, getResumeResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, getResumeResponse.StatusCode);
     }
 }

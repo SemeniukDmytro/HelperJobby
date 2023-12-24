@@ -110,6 +110,6 @@ public class OrganizationControllerTests : IntegrationTest
         Assert.Equal(HttpStatusCode.OK, removeEmployeeEmailResponse.StatusCode);
         var getRemovedEmployeeResponse = await TestClient.GetAsync($"/api/EmployerAccount/{employerToRemove.UserId}");
         await ExceptionsLogHelper.LogNotSuccessfulResponse(getRemovedEmployeeResponse, TestOutputHelper);
-        Assert.Equal(HttpStatusCode.InternalServerError, getRemovedEmployeeResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, getRemovedEmployeeResponse.StatusCode);
     }
 }
