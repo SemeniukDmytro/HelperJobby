@@ -16,9 +16,8 @@ interface AuthComponentProps {}
 const EmailForm: FC<AuthComponentProps> = () => {
     const {email, setEmail} = useEmail();
     const [error, setError] = useState("");
-    const [isSubmitInvalid, setIsSubmitInvalid] = useState(false);
-    const [isEmailRegistered, setIsEmailRegistered] = useState(false);
-    const [checkEmailInProcess, setCheckEmailInProcess] = useState(true);
+    const [isEmailInvalid, setIsEmailInvalid] = useState(false);
+    const [isEmailRegistered, setIsEmailRegistered] = useState<boolean | null>(null);
     
     const [renderAuthPage, setRenderAuthPage] = useState(true);
     const [renderSignInPage, setRenderSignInPage] = useState(false);
@@ -27,24 +26,23 @@ const EmailForm: FC<AuthComponentProps> = () => {
     let isFormInvalid = email.trim() === '';
     
 
-    useEffect(() => {
-        if (!checkEmailInProcess) {
+    useEffect(() => { 
+        if (isEmailRegistered != null){
             setRenderAuthPage(false);
-
             if (isEmailRegistered) {
                 setRenderSignInPage(true);
-            } 
-            else {
+            }
+            else{
                 setRenderAccountTypeForm(true);
             }
         }
-    }, [checkEmailInProcess, isEmailRegistered]);
+    }, [isEmailRegistered]);
     const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!IsValidEmail(email)) {
             setError("Error: Invalid email address\n");
-            setIsSubmitInvalid(true);
+            setIsEmailInvalid(true);
             isFormInvalid = true;
             return;
         } else {
@@ -53,15 +51,11 @@ const EmailForm: FC<AuthComponentProps> = () => {
 
         try {
             const authService = new AuthService();
-            setCheckEmailInProcess(true);
 
-            const isEmailRegisteredValue = await authService.isEmailRegistered(email);
-
-            setIsEmailRegistered(isEmailRegisteredValue);
+            const response = await authService.isEmailRegistered(email);
+            setIsEmailRegistered(response);
         } catch (error) {
             console.error('Error checking email registration:', error);
-        } finally {
-            setCheckEmailInProcess(false);
         }
     };
 
@@ -81,17 +75,17 @@ const EmailForm: FC<AuthComponentProps> = () => {
                             </div>
                             <form className="auth-input-box" onSubmit={onFormSubmit}>
                                 <div className="input-label-box">
-                                    <label className={`input-label ${isSubmitInvalid ? 'error-text' : ''}`}>Email address
+                                    <label className={`input-label ${isEmailInvalid ? 'error-text' : ''}`}>Email address
                                         <span className="required-mark"> *</span>
                                     </label>
                                 </div>
                                 <div className={`input-box`}>
-                                    <input className={`input-field ${isSubmitInvalid ? 'invalid-input-border' : ''}`} value={email} type="text"
+                                    <input className={`input-field ${isEmailInvalid ? 'invalid-input-border' : ''}`} value={email} type="text"
                                            onChange={(e) => {setEmail(e.target.value);
                                                setError("");
-                                               setIsSubmitInvalid(false)}}/>
+                                               setIsEmailInvalid(false)}}/>
                                     <div className={"error-box"}>
-                                        {isSubmitInvalid &&
+                                        {isEmailInvalid &&
                                             <>
                                                 <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation} />
                                                 <span className={`error-text`}>{error}</span>

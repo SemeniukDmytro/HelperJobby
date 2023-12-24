@@ -3,15 +3,14 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
+using ApplicationBLL.Interfaces;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.AuthRelatedModels;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ApplicationBLL.Services;
 
@@ -19,15 +18,17 @@ public class AuthService : IAuthService
 {
     private readonly IConfiguration _configuration;
     private readonly IUserQueryRepository _userQueryRepository;
+    private readonly IPasswordHandler _passwordHandler;
 
-    public AuthService(IConfiguration configuration, IUserQueryRepository userQueryRepository)
+    public AuthService(IConfiguration configuration, IUserQueryRepository userQueryRepository, IPasswordHandler passwordHandler)
     {
         _configuration = configuration;
         _userQueryRepository = userQueryRepository;
+        _passwordHandler = passwordHandler;
     }
+    
 
-
-    public string CreateToken(int userId, string userEmail)
+    public string CreateAuthToken(int userId, string userEmail)
     {
         var identity = new ClaimsIdentity(new GenericIdentity(userEmail, "Token"), new[]
         {
@@ -47,29 +48,12 @@ public class AuthService : IAuthService
 
         var token = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.Now.AddMinutes(1),
+            expires: DateTime.Now.AddMinutes(15),
             signingCredentials: creds);
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
         return jwt;
     }
-
-    public async Task<string> AuthUser(User loginUser)
-    {
-        var userEntity = await _userQueryRepository.GetUserByEmail(loginUser.Email);
-        if (userEntity == null)
-        {
-            throw new UserNotFoundException("User with provided email is not found");
-        }
-
-        if (!loginUser.PasswordHash.Equals(userEntity.PasswordHash))
-        {
-            throw new UserNotFoundException("Password provided for specified email is wrong");
-        }
-        
-        var token = CreateToken(userEntity.Id, userEntity.Email);
-        return token;
-    }
-
+    
     public RefreshToken GenerateRefreshToken()
     {
         var refreshToken = new RefreshToken()
@@ -82,21 +66,6 @@ public class AuthService : IAuthService
         return refreshToken;
     }
     
-    public async Task<bool> DoesUserRegistered(string email)
-    {
-        User userEntity = null;
-        try
-        {
-            userEntity = await _userQueryRepository.GetUserByEmail(email);
-        }
-        catch (Exception e)
-        {
-            // ignored
-        }
-
-        return userEntity != null;
-    }
-
     public async Task<User> RefreshToken(string accessToken, string refreshToken)
     {
         var principal = GetPrincipalFromExpiredToken(accessToken);
@@ -116,16 +85,48 @@ public class AuthService : IAuthService
         return user;
     }
 
-    public ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
+    private ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
     {
         var validation = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
             ValidateAudience = false,
             ValidateIssuer = false,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]!)),
-            ValidateLifetime = false
+            ValidateLifetime = false,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]!))
         };
         return new JwtSecurityTokenHandler().ValidateToken(token, validation, out _);
     }
+
+    public async Task<(User user, string authToken)> AuthUser(User loginUser)
+    {
+        var userEntity = await _userQueryRepository.GetUserByEmailWithRefreshToken(loginUser.Email);
+
+        if (!_passwordHandler.Verify(loginUser.PasswordHash, userEntity.PasswordHash))
+        {
+            throw new UserNotFoundException("Password provided for specified email is wrong");
+        }
+        
+        var token = CreateAuthToken(userEntity.Id, userEntity.Email);
+        return (userEntity, token);
+    }
+
+    
+    
+    public async Task<bool> IsUserRegistered(string email)
+    {
+        User userEntity = null;
+        try
+        {
+            userEntity = await _userQueryRepository.GetUserByEmail(email);
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
+
+        return userEntity != null;
+    }
+
+    
 }

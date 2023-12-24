@@ -18,7 +18,7 @@ import EmailForm from "../EmailForm/EmailForm";
 interface CreatePasswordFormProps {}
 
 const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
-    let {email, setEmail} = useEmail();
+    const {email, setEmail} = useEmail();
     const {accountType, setAccountType} = useAccountType();
     const {setAuthUser} = useAuth();
 
@@ -28,7 +28,7 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
     const [accountTypeChanger, setAccountTypeChanger] = useState<string>("");
     const [formTitle, setFormTitle] = useState("");
     
-    const [renderInitialAuthPage, setRenderInitialAuthPage] = useState(false);
+    const [renderEmailForm, setRenderEmailForm] = useState(false);
 
     const navigate = useNavigate();
     async function HandleAccountCreation(e: React.FormEvent<HTMLFormElement>) {
@@ -53,7 +53,7 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
         };
 
         try {
-            let newUser = await authService.registerNewUser(createdUser);
+            let newUser = await authService.register(createdUser);
             localStorage.setItem("accessToken", newUser.token);
             console.log(newUser.token);
             console.log(localStorage.getItem("accessToken"))
@@ -93,11 +93,12 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
     }
 
     function goToInitialAuthPage() {
-        setRenderInitialAuthPage(true);
+        setRenderEmailForm(true);
+        setEmail("");
     }
 
     return (
-        !renderInitialAuthPage ? (
+        !renderEmailForm ? (
             <AppLogo>
             <div className="form-box">
                 <div className="auth-form-container">
@@ -119,19 +120,17 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
                             <span className={"password-subtitle"}>Use at least 8 characters</span>
                         </div>
                         <div className={`input-box`}>
-                            <input className={`input-field`} type="password" onChange={e => {
+                            <input className={`input-field ${isPasswordInvalid ? 'invalid-input-border' : ''}`} type="password" onChange={e => {
                                 setPassword(e.target.value);
                                 setError("");
                                 setIsPasswordInvalid(false);
                             }}/>
-                            <div className={"error-box"}>
-                                {isPasswordInvalid &&
-                                    <>
-                                        <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
-                                        <span className={`error-text`}>Error : {error}</span>
-                                    </>
-                                }
-                            </div>
+                            {isPasswordInvalid &&
+                                <div className={"error-box"}>
+                                    <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
+                                    <span className={`error-text`}>Error : {error}</span>
+                                </div>
+                            }
                         </div>
                         <button className="submit-button" type={"submit"}>
                             <span className="submit-button-text">Create account</span>

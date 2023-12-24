@@ -36,7 +36,7 @@ namespace HelperJobby.Controllers
         [HttpGet("is-registered")]
         public async Task<bool> IsEmailRegistered(string email)
         {
-            var isRegistered = await _authService.DoesUserRegistered(email);
+            var isRegistered = await _authService.IsUserRegistered(email);
             return isRegistered; 
         }
         
@@ -51,10 +51,11 @@ namespace HelperJobby.Controllers
             user.RefreshToken = _authService.GenerateRefreshToken();
             user = await _userCommandRepository.CreateUser(user);
             SetRefreshToken(user.RefreshToken);
+            var userWithToken = await _authService.AuthUser(_mapper.Map<User>(newUser));
             return new AuthUserDTO()
             {
-                User = _mapper.Map<UserDTO>(user),
-                Token = await _authService.AuthUser(user)
+                User = _mapper.Map<UserDTO>(userWithToken.user),
+                Token = userWithToken.authToken
             };
         }
         
@@ -62,16 +63,18 @@ namespace HelperJobby.Controllers
         public async Task<AuthUserDTO> Login([FromBody] LoginUserDTO loginUserDTO)
         {
             LoginUserDTOValidator.ValidateUser(loginUserDTO);
+
+            var userWithToken = await _authService.AuthUser(_mapper.Map<User>(loginUserDTO));
             
-            var userEntity = await _userQueryRepository.GetUserByEmail(loginUserDTO.Email);
-            userEntity.RefreshToken = _authService.GenerateRefreshToken();
-            await _userCommandRepository.UpdateUser(userEntity);
-            SetRefreshToken(userEntity.RefreshToken);
-            return new AuthUserDTO()
+            var authUser =  new AuthUserDTO()
             {
-                User = _mapper.Map<UserDTO>(userEntity),
-                Token = await _authService.AuthUser(userEntity)
+                User = _mapper.Map<UserDTO>(userWithToken.user),
+                Token = userWithToken.authToken
             };
+            userWithToken.user.RefreshToken = _authService.GenerateRefreshToken();
+            await _userCommandRepository.UpdateUser(userWithToken.user);
+            SetRefreshToken(userWithToken.user.RefreshToken);
+            return authUser;
         }
 
         [HttpPost("refresh-token")]
@@ -81,10 +84,11 @@ namespace HelperJobby.Controllers
             var authorizationHeader = Request.Headers["Authorization"].ToString();
             var accessToken = authorizationHeader.Replace("Bearer ", "");
             var userEntity = await _authService.RefreshToken(accessToken, refreshToken);
+            var userWithToken = await _authService.AuthUser(_mapper.Map<User>(userEntity));
             return new AuthUserDTO()
             {
-                User = _mapper.Map<UserDTO>(userEntity),
-                Token = await _authService.AuthUser(userEntity)
+                User = _mapper.Map<UserDTO>(userWithToken.user),
+                Token = userWithToken.authToken
             };
         }
         

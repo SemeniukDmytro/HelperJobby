@@ -62,4 +62,13 @@ public class UserQueryRepository :  IUserQueryRepository
         return user;
     }
 
+    public async Task<User> GetUserByEmailWithRefreshToken(string email)
+    {
+        var user = await _applicationContext.Users.Include(u => u.RefreshToken).FirstOrDefaultAsync(u => u.Email == email);
+        if (user == null)
+        {
+            throw new UserNotFoundException("User with provided email is not found");
+        }
+        return user;
+    }
 }

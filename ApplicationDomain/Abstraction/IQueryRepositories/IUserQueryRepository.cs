@@ -12,4 +12,6 @@ public interface IUserQueryRepository
     public Task<User> GetUserById(int userId);
     public Task<bool> IsEmailAvailable(string email);
     public Task<User> GetUserByEmail(string email);
+    public Task<User> GetUserByEmailWithRefreshToken(string email);
+
 }

@@ -2,8 +2,7 @@ import CustomFetchService, {DEFAULT_HEADERS, DOMAIN} from "./customFetchService"
 import {CreateUserDTO} from "../DTOs/userRelatedDTOs/CreateUserDTO";
 import {AuthUserDTO} from "../DTOs/userRelatedDTOs/AuthUserDTO";
 import {getAuthToken} from "../utils/AuthTokenInteraction";
-import {Exception} from "sass";
-import {addAuthHeader} from "../utils/addAuthHeader";
+import {LoginUserDTO} from "../DTOs/userRelatedDTOs/LoginUserDTO";
 
 class AuthService {
     private readonly baseURI : string = "api/auth";
@@ -16,8 +15,12 @@ class AuthService {
         return (await this.httpInternalService.getRequest(`${this.baseURI}/is-registered?email=${email}`)).json()
     }
 
-    public async registerNewUser(createdUser: CreateUserDTO): Promise<AuthUserDTO> {
-        return (await this.httpInternalService.postRequest(`${this.baseURI}/sign-up`, createdUser)).json();
+    public async register(createdUserDTO: CreateUserDTO): Promise<AuthUserDTO> {
+        return (await this.httpInternalService.postRequest(`${this.baseURI}/sign-up`, createdUserDTO)).json();
+    }
+    
+    public async login(loginUserDTO : LoginUserDTO) : Promise<AuthUserDTO>{
+        return (await this.httpInternalService.postRequest(`${this.baseURI}/sign-in`, loginUserDTO)).json();
     }
     
     public async refreshToken(): Promise<AuthUserDTO>{

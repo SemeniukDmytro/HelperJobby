@@ -3,7 +3,7 @@ import {getAuthToken, setAuthToken} from "./AuthTokenInteraction";
 
 export async function addAuthHeader(headers : { [key: string]: string }) : Promise<{ [key: string]: string }> {
     let accessToken = getAuthToken();
-    if (accessToken) {
+    if (accessToken && accessToken !== "undefined") {
         headers = {
             ...headers,
             Authorization: `Bearer ${accessToken}`,

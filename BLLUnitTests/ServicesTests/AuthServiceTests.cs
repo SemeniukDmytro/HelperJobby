@@ -33,7 +33,7 @@ public class AuthServiceTests
         _configurationMock.Setup(c => c["JwtKey"])
             .Returns("Super secret key that will be stored somewhere secretly, so you will never know its real value");
         //Act
-        string token = _authService.CreateToken(id, email);
+        string token = _authService.CreateAuthToken(id, email);
         var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(token);
         //Assert
         Assert.Equal(jwtToken.Claims.FirstOrDefault(c => c.Type == "sub")?.Value, id.ToString());

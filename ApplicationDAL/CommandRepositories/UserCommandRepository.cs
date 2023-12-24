@@ -22,6 +22,7 @@ public class UserCommandRepository : IUserCommandRepository
 
     public async Task<User> UpdateUser(User user)
     {
+        _applicationContext.Attach(user);
         _applicationContext.Users.Update(user);
         await _applicationContext.SaveChangesAsync();
         return user;
