@@ -5,14 +5,13 @@ import RequireAuth from "./Components/RequireAuth/RequireAuth";
 import React from "react";
 import {AuthProvider} from "./context/AuthContext";
 import AuthPage from "./Pages/AuthPage/AuthPage";
-import HomePageHeader from "./Components/HomePageHeader/HomePageHeader";
 
 function App() {
   return (
       <AuthProvider>
         <Routes>
             {/* public routes*/}
-            <Route path="/" element={<HomePageHeader/>} />
+            <Route path="/" element={<HomePage/>} />
             <Route path={"auth-page"} element={<AuthPage/>}></Route>
             {/*private routes */}
             <Route element={<RequireAuth/>}>
