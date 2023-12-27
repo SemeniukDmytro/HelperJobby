@@ -61,7 +61,15 @@
 .tab-name{
   font-weight: 500;
   font-size: 1.125rem;
-  color: global-variables.$lighter-black;
+  color: global-variables.$neutral-color-1000;
+}
+
+.title-container{
+  display: flex;
+  box-sizing: border-box;
+  padding: 1rem;
+  color: global-variables.$neutral-color-700;
+  font-size: 0.875rem;
 }
 
 .jobs-container{
@@ -70,7 +78,7 @@
   flex-direction: row;
   justify-content: center;
   max-width: 65.25rem;
-  margin: 0 auto 12rem;
+  margin: 0 auto;
   width: 100%;
 }
 
@@ -79,10 +87,121 @@
   flex-direction: column;
   max-width: 30.125rem;
   width: 100%;
+  margin-bottom: 2rem;
+  margin-right: 1.5rem;
 }
 
-.detailed-job-description-column{
+.detailed-description-column{
   display: flex;
   flex-direction: column;
   flex-basis: 53%;
+  padding-top: 20px;
+}
+
+.detailed-description-sticky{
+  margin-top: 1rem;
+  position: sticky;
+  top: 1rem;
+  min-height: 600px;
+  display: flex;
+  border: 1px solid global-variables.$neutral-color-500;
+  border-radius: 0.5rem;
+}
+
+.detailed-description-content-box{
+  margin-top: 0.5rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.job-header-container{
+  padding: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  border-bottom: 1px solid global-variables.$neutral-color-400;
+  box-shadow: 0 2px 4px #00000014;
+  word-break: break-word;
+}
+
+.job-header-title{
+  display: flex;
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: global-variables.$neutral-color-1000;
+}
+
+
+.header-company-name{
+  display: flex;
+  color: global-variables.$dark-blue;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  font-size: 0.9375rem;
+  &:hover{
+    color: global-variables.$dark-blue-hover;
+  }
+}
+
+.header-job-location{
+  display: flex;
+  color: global-variables.$neutral-color-700;
+  font-size: 0.9375rem;
+  margin-bottom: 0.5rem;
+}
+
+.header-job-salary{
+  display: flex;
+  color: global-variables.$neutral-color-900;
+  font-size: 0.9375rem;
+  margin-bottom: 1.5rem;
+}
+
+.header-job-interactions-box{
+  display: flex;
+  flex-direction: row;
+}
+
+.apply-button{
+  display: flex;
+  margin-right: 1rem;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  background-color: #2557a7;
+  border: none;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  line-height: 1.5;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: 0.1s;
+  cursor: pointer;
+  &:hover{
+    background-color: global-variables.$dark-blue-hover;
+  }
+  &:active{
+    background-color: global-variables.$dark-blue-active;
+  }
+}
+
+.save-job-button{
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1.25rem;
+  width: 2.5rem;
+  cursor: pointer;
+  transition: 0.2s;
+  &:hover{
+    background-color: global-variables.$neutral-color-400;
+  }
+  &:active{
+    background-color: global-variables.$neutral-color-500;
+    box-shadow: global-variables.$button-inner-shadow;
+  }
 }

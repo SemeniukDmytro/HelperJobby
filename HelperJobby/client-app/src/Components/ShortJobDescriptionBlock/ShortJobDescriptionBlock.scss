@@ -1,13 +1,5 @@
 @use "../../Assets/scssSharedStyles/global-variables";
 
-.title-container{
-  display: flex;
-  box-sizing: border-box;
-  padding: 1rem;
-  color: global-variables.$dark-gray;
-  font-size: 0.875rem;
-}
-
 .short-job-description-component-box{
   display: flex;
   position: relative;
@@ -15,6 +7,7 @@
   border-radius: 0.5rem;
   cursor: pointer;
   user-select: none;
+  margin-bottom: 0.5rem;
 }
 
 .short-description-content-box{
@@ -47,16 +40,16 @@
     background-color: #eef1fe;
   }
   &:active{
-    box-shadow: rgba(45, 45, 45, 0.08) 0px 0.125rem 0.25rem 0px inset, rgba(45, 45, 45, 0.12) 0px 0.0625rem 0.1875rem 0px inset, rgba(45, 45, 45, 0.2) 0px 0px 0.125rem 0px inset;
+    box-shadow: global-variables.$button-inner-shadow;
   }
   font-size: 1.25rem;
   font-weight: 100;
-  color: global-variables.$dark-gray;
+  color: global-variables.$neutral-color-900;
 }
 
 .new-job-container{
   display: flex;
-  border: 1px solid global-variables.$semi-light-gray;
+  border: 1px solid global-variables.$neutral-color-400;
   width: fit-content;
   border-radius: 0.25rem;
   box-sizing: border-box;
@@ -74,7 +67,7 @@
   letter-spacing: -.06px;
   font-weight: 600;
   margin-bottom: 0.25rem;
-  color: global-variables.$lighter-black;
+  color: global-variables.$neutral-color-1000;
 }
 
 .medium-description-text{
@@ -83,7 +76,7 @@
   font-size: 1rem;
   letter-spacing: -.06px;
   margin-bottom: 0.25rem;
-  color: global-variables.$dark-gray;
+  color: global-variables.$neutral-color-900;
 }
 
 .job-features-info{
@@ -94,11 +87,11 @@
 }
 
 .job-feature{
-  background-color: global-variables.$light-gray;
+  background-color: global-variables.$neutral-color-400;
   border-radius: 0.25rem;
   box-sizing: border-box;
   padding: 0.25rem 0.5rem;
-  color: global-variables.$semi-dark-gray;
+  color: global-variables.$neutral-color-800;
   font-weight: 700;
   font-size: 0.875rem;
   margin-right: 0.25rem;
@@ -107,7 +100,7 @@
 .short-description-content{
   margin-top: 1rem;
   display: flex;
-  color: #6f6f6f;
+  color: global-variables.$neutral-color-700;
   font-size: 0.933rem;
   margin-bottom: 0.5rem;
 }
@@ -115,5 +108,5 @@
 .date-posted{
   display: flex;
   font-size: 0.825rem;
-  color: #6f6f6f;
+  color: global-variables.$neutral-color-700;
 }
