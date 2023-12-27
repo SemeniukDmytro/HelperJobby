@@ -18,6 +18,7 @@ namespace HelperJobby.DTOs.Job
         public string ContactEmail { get; set; }
         public bool ResumeRequired { get; set; }
         public string Description { get; set; }
+        public DateOnly DatePosted { get; set; }
         public int EmployerAccountId { get; set; }
         public EmployerAccountDTO EmployerAccount { get; set; }
         public List<InterviewDTO> Interviews { get; set; }

@@ -45,6 +45,10 @@ public class Job
     [Required]
     [Column(TypeName = "text")]
     public string Description { get; set; }
+    
+    [Required]
+    public DateOnly DatePosted { get; set; }
+    
     [ExcludeFromUpdate]
     [Required]
     [ForeignKey("EmployerAccount")]

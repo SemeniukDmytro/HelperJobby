@@ -27,7 +27,7 @@ public class JobService : IJobService
         {
             throw new InvalidJobException();
         }
-
+        job.DatePosted = DateOnly.FromDateTime(DateTime.UtcNow);
         return job;
     }
 

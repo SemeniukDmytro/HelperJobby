@@ -2,79 +2,47 @@ import React, {FC, useState} from 'react';
 import PublicHomePageHeader from "../PublicHomePageHeader/PublicHomePageHeader";
 import "./HomePage.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faLocationDot, faMagnifyingGlass, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faEllipsisVertical, faLocationDot, faMagnifyingGlass, faXmark} from "@fortawesome/free-solid-svg-icons";
+import JobSearchBar from "../JobSearchBar/JobSearchBar";
+import JobSearchPromoContainer from "../JobSearchPromoContainer/JobSearchPromoContainer";
+import ShortJobDescriptionBlock from "../ShortJobDescriptionBlock/ShortJobDescriptionBlock";
 
 
 interface HomePageProps {}
 
 const HomePage: FC<HomePageProps> = () => {
-    const [jobQueryFocus, setJobQueryFocus] = useState(false);
-    const [locationQueryFocus, setLocationQueryFocus] = useState(false);
-    function handleJobQueryFocus() {
-        setJobQueryFocus(true);
-    }
-
-    function handleJobQueryBlur() {
-        setJobQueryFocus(false);
-    }
-    function handleLocationQueryFocus() {
-        setLocationQueryFocus(true);
-    }
-    function handleLocationQueryBlur() {
-        setLocationQueryFocus(false);
-    }
-
-    
 
     return (
         <div className={"job-search-layout"}>
             <PublicHomePageHeader></PublicHomePageHeader>
             <div className={"header-and-main-content-separator"}></div>
             <div className={"main-content"}>
-                <div className={"search-container"}>
-                    <div className={"search-boxes"}>
-                        <form className={"search-form"}>
-                            <div className={"input-fields-box"}>
-                                <div className={`query-box ${jobQueryFocus ? "job-query-box-focus" : ""}`}>
-                                    <div className={"test"}></div>
-                                    <div className={"icon-box"}>
-                                        <FontAwesomeIcon icon={faMagnifyingGlass}/>
-                                    </div>
-                                    <input className={`query-input`}
-                                           placeholder={"Job title, keywords or company"}
-                                           onFocus={handleJobQueryFocus}
-                                           onBlur={handleJobQueryBlur}/>
-                                    <div className={"cross-icon-box"}>
-                                        <div className={"cross-outline"}>
-                                            <FontAwesomeIcon className={"cross-icon"} icon={faXmark}/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={"separator"}></div>
-                                <div className={`query-box ${locationQueryFocus ? "location-query-box-focus" : ""}`}>
-                                    <div className={"icon-box"}>
-                                        <FontAwesomeIcon icon={faLocationDot} />
-                                    </div>
-                                    <input className={"query-input"}
-                                           placeholder={`City, province, or "remote"`}
-                                           onFocus={handleLocationQueryFocus}
-                                           onBlur={handleLocationQueryBlur}/>
-                                    <div className={"cross-icon-box"}>
-                                        <div className={"cross-outline"}>
-                                            <FontAwesomeIcon className={"cross-icon"} icon={faXmark}/>
-                                        </div>
-                                    </div>
-                                </div>
+                <JobSearchBar/>
+                <JobSearchPromoContainer/>
+                <div className={"search-results-container"}>
+                    <nav className={"search-results-navbar"}>
+                        <button className={"tab-container"}>
+                            <span className={"tab-name"}>Job feed</span>
+                            <div className={"search-underline"}></div>
+                        </button>
+                        <button className={"tab-container"}>
+                            <span className={"tab-name"}>New results for recent searches</span>
+                        </button>
+                    </nav>
+                    <div className={"jobs-container"}>
+                        <div className={"short-job-descriptions-column"}>
+                            <div className={"title-container"}>
+                                <span>Jobs based on your activity on indeed</span>
                             </div>
-                            <div className={"search-button-box"}>
-                                <button className={"search-button"}>
-                                    <span>Find jobs</span>
-                                </button>
-                            </div>
-                        </form>
+                            <ShortJobDescriptionBlock></ShortJobDescriptionBlock>
+                        </div>
+                        <div className={"detailed-job-description-column"}>
+                            
+                        </div>
                     </div>
                 </div>
             </div>
+            
         </div>
         
     )

@@ -15,6 +15,7 @@ export interface JobDTO {
     contactEmail: string;
     resumeRequired: boolean;
     description: string;
+    datePosted: Date;
     employerAccountId: number;
     employerAccount: EmployerAccountDTO;
     interviews: InterviewDTO[];
