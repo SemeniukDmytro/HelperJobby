@@ -102,6 +102,7 @@
   margin-top: 1rem;
   position: sticky;
   top: 1rem;
+  height: 698px;
   min-height: 600px;
   display: flex;
   border: 1px solid global-variables.$neutral-color-500;
@@ -125,7 +126,6 @@
   width: 100%;
   border-bottom: 1px solid global-variables.$neutral-color-400;
   box-shadow: 0 2px 4px #00000014;
-  word-break: break-word;
 }
 
 .job-header-title{
@@ -134,6 +134,12 @@
   font-size: 1.125rem;
   font-weight: 700;
   color: global-variables.$neutral-color-1000;
+}
+
+.full-header-info{
+  display: flex;
+  flex-direction: column;
+  transition:0.5s ease;
 }
 
 
@@ -160,18 +166,33 @@
   display: flex;
   color: global-variables.$neutral-color-900;
   font-size: 0.9375rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.short-header-info {
+  display: flex;
+  flex-direction: row;
+  font-size: 0.9375rem;
+  color: global-variables.$neutral-color-700;
+  margin-bottom: 1rem;
+  word-wrap: break-word;
+}
+
+.short-company-name{
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .header-job-interactions-box{
   display: flex;
   flex-direction: row;
+  margin-bottom: 0.5rem;
 }
 
 .apply-button{
   display: flex;
   margin-right: 1rem;
-  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
   background-color: #2557a7;
   border: none;
   border-radius: 0.5rem;
@@ -204,4 +225,17 @@
     background-color: global-variables.$neutral-color-500;
     box-shadow: global-variables.$button-inner-shadow;
   }
+}
+
+.job-details-scroll-window{
+  flex: 1 1;
+  height: calc(100vh - 12px);
+  overflow-y: auto;
+  flex-direction: column;
+  overscroll-behavior-y: auto;
+}
+
+.job-details-header{
+  display: flex;
+  flex-direction: column;
 }
