@@ -1,10 +1,11 @@
 import './App.css';
 import {Route, Routes} from "react-router-dom";
-import HomePage from "./Components/HomePage/HomePage";
+import HomeComponent from "./Components/HomeComponent/HomeComponent";
 import RequireAuth from "./Components/RequireAuth/RequireAuth";
 import React from "react";
 import {AuthProvider} from "./context/AuthContext";
 import AuthPage from "./Pages/AuthPage/AuthPage";
+import HomePage from "./Pages/HomePage/HomePage";
 
 function App() {
   return (

@@ -1,0 +1,12 @@
+.job-details-scroll-window{
+  flex: 1 1;
+  height: calc(100vh - 12px);
+  overflow-y: auto;
+  flex-direction: column;
+  overscroll-behavior-y: auto;
+}
+
+.job-details-header{
+  display: flex;
+  flex-direction: column;
+}
