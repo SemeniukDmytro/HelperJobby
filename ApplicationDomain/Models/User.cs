@@ -24,4 +24,5 @@ public class User
     public EmployerAccount EmployerAccount { get; set; }
     
     public RefreshToken RefreshToken { get; set; }
+    public List<RecentUserSearch> RecentUserSearches;
 }

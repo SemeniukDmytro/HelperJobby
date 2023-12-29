@@ -51,5 +51,17 @@ namespace HelperJobby.Controllers
             updatedUserModel = await _userCommandRepository.UpdateUser(updatedUserModel);
             return _mapper.Map<UserDTO>(updatedUserModel);
         }
+
+        [HttpGet("recent-searches")]
+        public async Task<IEnumerable<RecentUserSearch>> GetUserRecentSearches()
+        {
+            return null;
+        }
+
+        [HttpDelete("recent-user-search/{id}")]
+        public async Task DeleteUserRecentSearch(int id)
+        {
+            
+        }
     }
 }

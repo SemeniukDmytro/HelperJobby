@@ -37,6 +37,7 @@ public class ApplicationContext : DbContext
     public DbSet<ProcessedResumeWord> ProcessedResumesWords { get; set; }
     public DbSet<ProcessedJobWord> ProcessedJobsWords { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<RecentUserSearch> RecentUserSearches { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -190,6 +191,11 @@ public class ApplicationContext : DbContext
             .HasOne(u => u.RefreshToken)
             .WithOne(t => t.User)
             .HasForeignKey<RefreshToken>(t => t.UserId);
+
+        modelBuilder.Entity<RecentUserSearch>()
+            .HasOne(rs => rs.User)
+            .WithMany(u => u.RecentUserSearches)
+            .HasForeignKey(rs => rs.UserId);
     }
     
 }
