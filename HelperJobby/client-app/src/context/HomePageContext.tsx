@@ -3,7 +3,7 @@ import {HomePageContextProps} from "../contextTypes/HomePageContextProps";
 
 const HomePageContext = createContext<HomePageContextProps>(
     {
-        mainContentRef : null,
+        mainContentReference : null,
         setMainContentRef : () => {},
         fullHeaderGridTemplate : null,
         setFullHeaderGridTemplate : () => {},
@@ -18,7 +18,7 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
     return(
         <HomePageContext.Provider
             value={{
-                mainContentRef,
+                mainContentReference: mainContentRef,
                 setMainContentRef,
                 fullHeaderGridTemplate,
                 setFullHeaderGridTemplate,

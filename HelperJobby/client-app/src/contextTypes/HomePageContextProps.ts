@@ -1,7 +1,7 @@
 import {Dispatch, MutableRefObject, SetStateAction} from "react";
 
 export interface HomePageContextProps{
-    mainContentRef : MutableRefObject<HTMLDivElement | null> | null;
+    mainContentReference : MutableRefObject<HTMLDivElement | null> | null;
     setMainContentRef : Dispatch<SetStateAction<MutableRefObject<HTMLDivElement | null> | null>>;
     fullHeaderGridTemplate: number | null;
     setFullHeaderGridTemplate : Dispatch<SetStateAction<number | null>>;

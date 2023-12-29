@@ -13,15 +13,15 @@ import JobDescriptionHeader from "../JobDescriptionHeader/JobDescriptionHeader";
 import JobDetailsScrollWindow from "../JobDetailsScrollWindow/JobDetailsScrollWindow";
 
 
-interface HomePageProps {}
+interface HomeComponentProps {}
 
-const HomeComponent: FC<HomePageProps> = () => {
+const HomeComponent: FC<HomeComponentProps> = () => {
 
     const [stickyHeight, setStickyHeight] = useState(361.2);
     const mainContentRef = useRef<HTMLDivElement | null>(null);
     const {setMainContentRef} = useHomePage();
     const updateStickyHeight = () => {
-        const newHeight = 361.2 + window.scrollY;
+        let newHeight = 361.2 + window.scrollY;
         if (newHeight > 698){
             setStickyHeight(698)
         }
@@ -47,7 +47,6 @@ const HomeComponent: FC<HomePageProps> = () => {
     }, []);
     const handleMainContentRef = () => {
         setMainContentRef(mainContentRef);
-        
     };
 
 
