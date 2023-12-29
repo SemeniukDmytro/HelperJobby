@@ -5,5 +5,5 @@ namespace ApplicationDomain.Abstraction.IQueryRepositories;
 public interface IRecentUserSearchQueryRepository
 {
     public Task<RecentUserSearch> GetRecentUserSearchById(int searchId);
-    public Task<IEnumerable<RecentUserSearch>> GetRecentUserSearches();
+    public Task<IEnumerable<RecentUserSearch>> GetRecentUserSearches(int userId);
 }

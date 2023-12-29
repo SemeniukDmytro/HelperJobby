@@ -9,4 +9,6 @@ public interface IEnqueuingTaskHelper
     public Task EnqueueJobIndexingTaskAsync(Func<IJobContentIndexingService, Task> indexingAction);
     public Task EnqueueResumeIndexingTaskAsync(Func<IResumeContentIndexingService, Task> indexingAction);
 
+    public Task EnqueueAddingRecentSearchTask(Func<IRecentUserSearchService, Task> addingRecentSearchAction);
+
 }

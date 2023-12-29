@@ -4,6 +4,6 @@ namespace ApplicationDomain.Abstraction.ICommandRepositories;
 
 public interface IRecentUserSearchCommandRepository
 {
-    public Task<RecentUserSearch> CreateRecentUserSearch(RecentUserSearch userSearch);
+    public Task CreateRecentUserSearch(RecentUserSearch userSearch);
     public Task DeleteRecentUserSearch(RecentUserSearch userSearch);
 }

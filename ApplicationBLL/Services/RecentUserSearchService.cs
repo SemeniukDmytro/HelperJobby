@@ -1,17 +1,54 @@
+using ApplicationDomain.Abstraction.ICommandRepositories;
+using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
+using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 
 namespace ApplicationBLL.Services;
 
 public class RecentUserSearchService : IRecentUserSearchService
 {
-    public Task<RecentUserSearch> AddRecentSearch(string query, string location)
+    private readonly IUserService _userService;
+    private readonly IRecentUserSearchCommandRepository _recentUserSearchCommandRepository;
+    private readonly IRecentUserSearchQueryRepository _recentUserSearchQueryRepository;
+
+    public RecentUserSearchService(IUserService userService, IRecentUserSearchCommandRepository recentUserSearchCommandRepository, IRecentUserSearchQueryRepository recentUserSearchQueryRepository)
     {
-        throw new NotImplementedException();
+        _userService = userService;
+        _recentUserSearchCommandRepository = recentUserSearchCommandRepository;
+        _recentUserSearchQueryRepository = recentUserSearchQueryRepository;
     }
 
-    public Task<RecentUserSearch> DeleteRecentSearch(int searchId)
+    public async Task AddRecentSearch(string query, string location, int userId)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrEmpty(query) || string.IsNullOrEmpty(location))
+        {
+            throw new InvalidSearchException();
+        }
+
+        var recentUserSearch = new RecentUserSearch()
+        {
+            Location = location,
+            Query = query,
+            UserId = userId
+        };
+        var recentSearches = (await _recentUserSearchQueryRepository.GetRecentUserSearches(userId)).ToArray();
+        if (recentSearches.Length >= 10)
+        {
+            await _recentUserSearchCommandRepository.DeleteRecentUserSearch(recentSearches.Last());
+        }
+        await _recentUserSearchCommandRepository.CreateRecentUserSearch(recentUserSearch);
+    }
+
+    public async Task<RecentUserSearch> DeleteRecentSearch(int searchId)
+    {
+        var searchEntity = await _recentUserSearchQueryRepository.GetRecentUserSearchById(searchId);
+        var currentUserId = _userService.GetCurrentUserId();
+        if (searchEntity.UserId != currentUserId)
+        {
+            throw new ForbiddenException();
+        }
+
+        return searchEntity;
     }
 }

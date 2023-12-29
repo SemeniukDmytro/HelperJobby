@@ -1,3 +1,4 @@
+using ApplicationDomain.Abstraction.BackgroundInterfaces;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Abstraction.SearchRelatedIServices;
@@ -19,13 +20,17 @@ public class SearchController : ExtendedBaseController
     private readonly ISearchService _searchService;
     private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IResumeQueryRepository _resumeQueryRepository;
+    private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
+    private readonly IUserService _userService;
     
     public SearchController(IMapper mapper, ISearchService searchService, IJobQueryRepository jobQueryRepository
-        , IResumeQueryRepository resumeQueryRepository) : base(mapper)
+        , IResumeQueryRepository resumeQueryRepository, IEnqueuingTaskHelper enqueuingTaskHelper, IUserService userService) : base(mapper)
     {
         _searchService = searchService;
         _jobQueryRepository = jobQueryRepository;
         _resumeQueryRepository = resumeQueryRepository;
+        _enqueuingTaskHelper = enqueuingTaskHelper;
+        _userService = userService;
     }
     
     [HttpGet("jobs")]
@@ -38,7 +43,22 @@ public class SearchController : ExtendedBaseController
         [FromQuery] JobTypes jobType = 0,
         [FromQuery] string language = "")
     {
+        var userId = 0;
+        try
+        {
+            userId = _userService.GetCurrentUserId();
+        }
+        catch (Exception e)
+        {
+        }
         var jobIdsToLoad = await _searchService.FindJobIds(query, location, start, isRemote, pay, jobType, language);
+        if (userId != 0)
+        {
+            await _enqueuingTaskHelper.EnqueueAddingRecentSearchTask(async recentUserSearchService =>
+            {
+                await recentUserSearchService.AddRecentSearch(query, location, userId);
+            });
+        }
         return _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByJobIds(jobIdsToLoad));
     }
     

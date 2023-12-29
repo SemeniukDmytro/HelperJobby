@@ -18,12 +18,18 @@ namespace HelperJobby.Controllers
         private readonly IUserQueryRepository _userQueryRepository;
         private readonly IUserCommandRepository _userCommandRepository;
         private readonly IUserService _userService;
+        private readonly IRecentUserSearchService _recentUserSearchService;
+        private readonly IRecentUserSearchQueryRepository _recentUserSearchQueryRepository;
+        private readonly IRecentUserSearchCommandRepository _recentUserSearchCommandRepository;
         
-        public UserController(IUserQueryRepository userQueryRepository, IMapper mapper, IUserService userService, IUserCommandRepository userCommandRepository) : base(mapper)
+        public UserController(IUserQueryRepository userQueryRepository, IMapper mapper, IUserService userService, IUserCommandRepository userCommandRepository, IRecentUserSearchService recentUserSearchService, IRecentUserSearchQueryRepository recentUserSearchQueryRepository, IRecentUserSearchCommandRepository recentUserSearchCommandRepository) : base(mapper)
         {
             _userQueryRepository = userQueryRepository;
             _userService = userService;
             _userCommandRepository = userCommandRepository;
+            _recentUserSearchService = recentUserSearchService;
+            _recentUserSearchQueryRepository = recentUserSearchQueryRepository;
+            _recentUserSearchCommandRepository = recentUserSearchCommandRepository;
         }
 
         [HttpGet("{id}")]
@@ -55,13 +61,15 @@ namespace HelperJobby.Controllers
         [HttpGet("recent-searches")]
         public async Task<IEnumerable<RecentUserSearch>> GetUserRecentSearches()
         {
-            return null;
+            var currentUserId = _userService.GetCurrentUserId();
+            return await _recentUserSearchQueryRepository.GetRecentUserSearches(currentUserId);
         }
 
-        [HttpDelete("recent-user-search/{id}")]
-        public async Task DeleteUserRecentSearch(int id)
+        [HttpDelete("remove-search/{searchId}")]
+        public async Task DeleteUserRecentSearch(int searchId)
         {
-            
+            var recentSearchEntity = await _recentUserSearchService.DeleteRecentSearch(searchId);
+            await _recentUserSearchCommandRepository.DeleteRecentUserSearch(recentSearchEntity);
         }
     }
 }

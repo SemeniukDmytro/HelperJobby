@@ -4,6 +4,6 @@ namespace ApplicationDomain.Abstraction.IServices;
 
 public interface IRecentUserSearchService
 {
-    public Task<RecentUserSearch> AddRecentSearch(string query, string location);
+    public Task AddRecentSearch(string query, string location, int userId);
     public Task<RecentUserSearch> DeleteRecentSearch(int searchId);
 }

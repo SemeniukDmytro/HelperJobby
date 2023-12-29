@@ -1,4 +1,5 @@
 using ApplicationBLL.Logic;
+using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Abstraction.SearchIQueryRepositories;
 using ApplicationDomain.Abstraction.SearchRelatedIServices;
 using ApplicationDomain.Enums;
@@ -16,22 +17,26 @@ public class SearchService : ISearchService
 
     private readonly ISearchQueryRepository _searchQueryRepository;
     private readonly IRankingService _rankingService;
+    private readonly IRecentUserSearchService _recentUserSearchService;
 
-    public SearchService(ISearchQueryRepository searchQueryRepository, IRankingService rankingService)
+    public SearchService(ISearchQueryRepository searchQueryRepository, IRankingService rankingService, IRecentUserSearchService recentUserSearchService)
     {
         _searchQueryRepository = searchQueryRepository;
         _rankingService = rankingService;
+        _recentUserSearchService = recentUserSearchService;
     }
     
 
     public async Task<List<int>> FindJobIds(string query, string location, int numberOfResultsToSkip,
         bool isRemote, decimal pay, JobTypes jobType, string language)
     {
-        if (string.IsNullOrEmpty(query))
+        if (string.IsNullOrEmpty(query) || string.IsNullOrEmpty(location))
         {
             return null;
         }
 
+        //await _recentUserSearchService.AddRecentSearch(query, location);
+        
         var processedQuery = ProcessQuery(query);
         
         Dictionary<int, (int Frequency, decimal TotalRank)> jobFrequencyAndRank = new();

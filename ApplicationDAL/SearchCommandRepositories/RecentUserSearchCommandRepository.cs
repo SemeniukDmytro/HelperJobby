@@ -1,3 +1,4 @@
+using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Models;
@@ -6,13 +7,22 @@ namespace ApplicationDAL.SearchCommandRepositories;
 
 public class RecentUserSearchCommandRepository : IRecentUserSearchCommandRepository
 {
-    public Task<RecentUserSearch> CreateRecentUserSearch(RecentUserSearch userSearch)
+    private readonly ApplicationContext _applicationContext;
+
+    public RecentUserSearchCommandRepository(ApplicationContext applicationContext)
     {
-        throw new NotImplementedException();
+        _applicationContext = applicationContext;
     }
 
-    public Task DeleteRecentUserSearch(RecentUserSearch userSearch)
+    public async Task CreateRecentUserSearch(RecentUserSearch userSearch)
     {
-        throw new NotImplementedException();
+        _applicationContext.RecentUserSearches.Add(userSearch);
+        await _applicationContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteRecentUserSearch(RecentUserSearch userSearch)
+    {
+        _applicationContext.RecentUserSearches.Remove(userSearch);
+        await _applicationContext.SaveChangesAsync();
     }
 }
