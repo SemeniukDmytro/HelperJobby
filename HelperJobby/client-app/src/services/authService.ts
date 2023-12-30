@@ -1,26 +1,26 @@
 import CustomFetchService, {DEFAULT_HEADERS, DOMAIN} from "./customFetchService";
-import {CreateUserDTO} from "../DTOs/userRelatedDTOs/CreateUserDTO";
+import {CreateUpdateUserDTO} from "../DTOs/userRelatedDTOs/CreateUpdateUserDTO";
 import {AuthUserDTO} from "../DTOs/userRelatedDTOs/AuthUserDTO";
 import {getAuthToken} from "../utils/AuthTokenInteraction";
 import {LoginUserDTO} from "../DTOs/userRelatedDTOs/LoginUserDTO";
 
 class AuthService {
     private readonly baseURI : string = "api/auth";
-    private readonly httpInternalService : CustomFetchService;
+    private readonly customFetchService : CustomFetchService;
     constructor() {
-        this.httpInternalService = new CustomFetchService();
+        this.customFetchService = new CustomFetchService();
     }
     
     public async isEmailRegistered(email : string) : Promise<boolean>{
-        return (await this.httpInternalService.getRequest(`${this.baseURI}/is-registered?email=${email}`)).json()
+        return (await this.customFetchService.get<boolean>(`${this.baseURI}/is-registered?email=${email}`));
     }
 
-    public async register(createdUserDTO: CreateUserDTO): Promise<AuthUserDTO> {
-        return (await this.httpInternalService.postRequest(`${this.baseURI}/sign-up`, createdUserDTO)).json();
+    public async register(createdUserDTO: CreateUpdateUserDTO): Promise<AuthUserDTO> {
+        return (await this.customFetchService.post<AuthUserDTO>(`${this.baseURI}/sign-up`, createdUserDTO));
     }
     
     public async login(loginUserDTO : LoginUserDTO) : Promise<AuthUserDTO>{
-        return (await this.httpInternalService.postRequest(`${this.baseURI}/sign-in`, loginUserDTO)).json();
+        return (await this.customFetchService.post<AuthUserDTO>(`${this.baseURI}/sign-in`, loginUserDTO));
     }
     
     public async refreshToken(): Promise<AuthUserDTO>{

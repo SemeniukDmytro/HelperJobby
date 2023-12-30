@@ -43,19 +43,24 @@ class CustomFetchService {
         }
     }
 
-    async getRequest(url: string, headers: { [key: string]: string } = {}): Promise<Response> {
-        return this.request(url, 'GET', null, headers);
-    }
-    async postRequest(url: string, data: object, headers: { [key: string]: string } = {}): Promise<Response> {
-        return this.request(url, 'POST', data,headers);
+    async get<T>(url: string, headers: { [key: string]: string } = {}): Promise<T> {
+        const response = await this.request(url, "GET", null, headers);
+        return response.json();
     }
 
-    async updateRequest(url: string, data: object, headers: { [key: string]: string } = {}): Promise<Response> {
-        return this.request(url, 'PUT', data, headers);
+    async post<T>(url: string, body: object, headers: { [key: string]: string } = {}): Promise<T> {
+        const response = await this.request(url, "POST", body, headers);
+        return response.json();
     }
 
-    async deleteRequest(url: string, headers: { [key: string]: string } = {}): Promise<Response> {
-        return this.request(url, 'DELETE', null, headers);
+    async put<T>(url: string, body: object, headers: { [key: string]: string } = {}): Promise<T> {
+        const response = await this.request(url, "PUT", body, headers);
+        return response.json();
+    }
+
+    async delete<T>(url: string, headers: { [key: string]: string } = {}): Promise<T> {
+        const response = await this.request(url, "DELETE", null, headers);
+        return response.json();
     }
 
 }

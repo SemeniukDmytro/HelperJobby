@@ -1,4 +1,4 @@
-export interface CreateUserDTO
+export interface CreateUpdateUserDTO
 {
     email : string;
     password: string;

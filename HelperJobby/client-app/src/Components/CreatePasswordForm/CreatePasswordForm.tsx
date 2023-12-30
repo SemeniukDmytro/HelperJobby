@@ -9,7 +9,7 @@ import AuthService from "../../services/authService";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../hooks/useAuth";
 import {IsValidPasswordMaximalLength, IsValidPasswordMinimalLength} from "../../utils/authFormValidators";
-import {CreateUserDTO} from "../../DTOs/userRelatedDTOs/CreateUserDTO";
+import {CreateUpdateUserDTO} from "../../DTOs/userRelatedDTOs/CreateUpdateUserDTO";
 import {useAccountType} from "../../hooks/useAccountType";
 import {useEmail} from "../../hooks/useEmail";
 import EmailForm from "../EmailForm/EmailForm";
@@ -46,7 +46,7 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
         
         const authService = new AuthService();
         
-        let createdUser: CreateUserDTO = {
+        let createdUser: CreateUpdateUserDTO = {
             password: password,
             email: email,
             accountType: accountType!,

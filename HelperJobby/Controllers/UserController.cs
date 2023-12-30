@@ -59,10 +59,10 @@ namespace HelperJobby.Controllers
         }
 
         [HttpGet("recent-searches")]
-        public async Task<IEnumerable<RecentUserSearch>> GetUserRecentSearches()
+        public async Task<IEnumerable<RecentUserSearchDTO>> GetUserRecentSearches()
         {
             var currentUserId = _userService.GetCurrentUserId();
-            return await _recentUserSearchQueryRepository.GetRecentUserSearches(currentUserId);
+            return _mapper.Map<IEnumerable<RecentUserSearchDTO>>(await _recentUserSearchQueryRepository.GetRecentUserSearches(currentUserId));
         }
 
         [HttpDelete("remove-search/{searchId}")]

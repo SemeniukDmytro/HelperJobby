@@ -4,6 +4,9 @@ import "./JobDetailScrollWindow.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMoneyBillAlt} from "@fortawesome/free-regular-svg-icons";
 import {faBriefcase, faChevronDown, faChevronUp, faClock} from "@fortawesome/free-solid-svg-icons";
+import {UserService} from "../../services/userService";
+import {useAuth} from "../../hooks/useAuth";
+import {CreateUpdateUserDTO} from "../../DTOs/userRelatedDTOs/CreateUpdateUserDTO";
 
 interface JobDetailsScrollWindowProps {}
 
@@ -11,6 +14,7 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
     
     const [showAllBenefits, setShowAllBenefits] = useState(false);
     const [benefitsButtonText, setBenefitsButtonText] = useState("Show more");
+    const {authUser, setAuthUser} = useAuth();
     
     const {
         mainContentReference,
@@ -54,7 +58,7 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
         }
     }
 
-    function displayAllBenefits() {
+   async function displayAllBenefits() {
         if (!showAllBenefits){
             setBenefitsButtonText("Show less")
             setShowAllBenefits(true);
@@ -62,6 +66,16 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
         else {
             setBenefitsButtonText("Show more")
             setShowAllBenefits(false);
+        }
+        const userService = new UserService();
+        let updatedUser : CreateUpdateUserDTO = {
+            email : "",
+            accountType : "Employer",
+            password : "",
+        }
+        if (authUser){
+            console.log(authUser);
+           await userService.updateUser(authUser?.user.id, updatedUser);
         }
     }
 

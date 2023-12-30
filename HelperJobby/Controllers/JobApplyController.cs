@@ -3,6 +3,7 @@ using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Models;
 using AutoMapper;
+using HelperJobby.DTOs.Job;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using JobApplyDTO = HelperJobby.DTOs.UserJobInteractions.JobApplyDTO;
@@ -34,10 +35,10 @@ namespace HelperJobby.Controllers
         }
         // GET: api/JobApply
         [HttpGet("my-job-applies")]
-        public async Task<IEnumerable<Job>> GetUserJobApplies()
+        public async Task<IEnumerable<JobDTO>> GetUserJobApplies()
         {
             var jobApplies = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithJobApplies(_userService.GetCurrentUserId());
-            return _mapper.Map<IEnumerable<Job>>(jobApplies);
+            return _mapper.Map<IEnumerable<JobDTO>>(jobApplies);
         }
         
         [HttpGet("{jobId}/job-applies")]
