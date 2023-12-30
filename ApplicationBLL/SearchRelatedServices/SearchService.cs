@@ -17,13 +17,11 @@ public class SearchService : ISearchService
 
     private readonly ISearchQueryRepository _searchQueryRepository;
     private readonly IRankingService _rankingService;
-    private readonly IRecentUserSearchService _recentUserSearchService;
 
-    public SearchService(ISearchQueryRepository searchQueryRepository, IRankingService rankingService, IRecentUserSearchService recentUserSearchService)
+    public SearchService(ISearchQueryRepository searchQueryRepository, IRankingService rankingService)
     {
         _searchQueryRepository = searchQueryRepository;
         _rankingService = rankingService;
-        _recentUserSearchService = recentUserSearchService;
     }
     
 
@@ -34,8 +32,6 @@ public class SearchService : ISearchService
         {
             return null;
         }
-
-        //await _recentUserSearchService.AddRecentSearch(query, location);
         
         var processedQuery = ProcessQuery(query);
         

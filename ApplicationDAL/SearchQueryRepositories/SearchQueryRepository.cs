@@ -56,7 +56,7 @@ public class SearchQueryRepository : ISearchQueryRepository
         
         return processedJobWords;
     }
-
+    
     public async Task<IEnumerable<ProcessedResumeWord>> GetProcessedResumeWordsByWord(int numberOfResultsToSkip, string word)
     {
         

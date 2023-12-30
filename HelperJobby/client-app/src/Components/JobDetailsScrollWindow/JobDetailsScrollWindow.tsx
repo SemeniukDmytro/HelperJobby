@@ -14,7 +14,6 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
     
     const [showAllBenefits, setShowAllBenefits] = useState(false);
     const [benefitsButtonText, setBenefitsButtonText] = useState("Show more");
-    const {authUser, setAuthUser} = useAuth();
     
     const {
         mainContentReference,
@@ -66,16 +65,6 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
         else {
             setBenefitsButtonText("Show more")
             setShowAllBenefits(false);
-        }
-        const userService = new UserService();
-        let updatedUser : CreateUpdateUserDTO = {
-            email : "",
-            accountType : "Employer",
-            password : "",
-        }
-        if (authUser){
-            console.log(authUser);
-           await userService.updateUser(authUser?.user.id, updatedUser);
         }
     }
 

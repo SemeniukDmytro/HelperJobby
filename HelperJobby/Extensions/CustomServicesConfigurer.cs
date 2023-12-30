@@ -83,6 +83,7 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IRecentUserSearchQueryRepository, RecentUserSearchQueryRepository>();
         serviceProvider.AddScoped<IRecentUserSearchCommandRepository, RecentUserSearchCommandRepository>();
         serviceProvider.AddScoped<IRecentUserSearchService, RecentUserSearchService>();
+        serviceProvider.AddScoped<IRecommendationService, RecommendationService>();
         
         //background related
         serviceProvider.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>(); 

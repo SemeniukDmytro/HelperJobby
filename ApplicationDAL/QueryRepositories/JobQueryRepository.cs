@@ -13,6 +13,8 @@ public class JobQueryRepository : IJobQueryRepository
     private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
     private readonly IOrganizationQueryRepository _organizationQueryRepository;
 
+    private const int RandomJobsToTake = 10;
+
     public JobQueryRepository(ApplicationContext applicationContext, IEmployerAccountQueryRepository employerAccountQueryRepository, 
         IOrganizationQueryRepository organizationQueryRepository)
     {
@@ -87,5 +89,13 @@ public class JobQueryRepository : IJobQueryRepository
     {
         await _applicationContext.Entry(job).Collection(j => j.Interviews).LoadAsync();
         return job;
+    }
+
+    public async Task<IEnumerable<Job>> GetRandomJobs()
+    {
+        var jobsCount = _applicationContext.Jobs.Count();
+        var startingPoint = Math.Max(new Random().Next(jobsCount) - 10, 0);
+        return await _applicationContext.Jobs.Skip(startingPoint).Take(RandomJobsToTake).ToListAsync();
+
     }
 }
