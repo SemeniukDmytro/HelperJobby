@@ -1,16 +1,15 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import PublicHomePageHeader from "../PublicHomePageHeader/PublicHomePageHeader";
 import "./HomeComponent.scss";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-    faHeart
-} from "@fortawesome/free-regular-svg-icons";
 import JobSearchBar from "../JobSearchBar/JobSearchBar";
 import JobSearchPromoContainer from "../JobSearchPromoContainer/JobSearchPromoContainer";
 import ShortJobDescriptionBlock from "../ShortJobDescriptionBlock/ShortJobDescriptionBlock";
 import {useHomePage} from "../../hooks/useHomePage";
 import JobDescriptionHeader from "../JobDescriptionHeader/JobDescriptionHeader";
 import JobDetailsScrollWindow from "../JobDetailsScrollWindow/JobDetailsScrollWindow";
+import {JobDTO} from "../../DTOs/jobRelatetedDTOs/JobDTO";
+import {RecommendationService} from "../../services/recommendationService";
+import {useAuth} from "../../hooks/useAuth";
 
 
 interface HomeComponentProps {}
@@ -20,6 +19,10 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     const [stickyHeight, setStickyHeight] = useState(361.2);
     const mainContentRef = useRef<HTMLDivElement | null>(null);
     const {setMainContentRef} = useHomePage();
+    const [recommendedJobs, setRecommendedJobs] = useState<JobDTO[]>([]);
+    const recommendationService = new RecommendationService();
+    const [loading, setLoading] = useState(true);
+
     const updateStickyHeight = () => {
         let newHeight = 361.2 + window.scrollY;
         if (newHeight > 698){
@@ -35,23 +38,36 @@ const HomeComponent: FC<HomeComponentProps> = () => {
         const handleScroll = () => {
             updateStickyHeight();
         };
-        window.addEventListener('scroll', handleScroll);
-
+        window.addEventListener('scroll', handleScroll); 
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, [stickyHeight]);
 
     useEffect(() => {
-        handleMainContentRef();
+        const fetchData = async () => {
+            setLoading(true);
+            await Promise.all([handleMainContentRef(), loadRecommendationJobs()]);
+            setLoading(false);
+        };
+
+        fetchData();
     }, []);
     const handleMainContentRef = () => {
         setMainContentRef(mainContentRef);
     };
-
+    
+    async function loadRecommendationJobs(){
+        const retrievedJobs = await recommendationService.getRandomJobs();
+        setRecommendedJobs(retrievedJobs);
+    }
 
     return (
-        <div className={"job-search-layout"}>
+        loading ? (
+            <div>Loading ..</div>
+            ) : 
+        (
+            <div className={"job-search-layout"}>
             <PublicHomePageHeader></PublicHomePageHeader>
             <div className={"header-and-main-content-separator"}></div>
             <div className={"main-content"}  ref={mainContentRef}>
@@ -72,9 +88,9 @@ const HomeComponent: FC<HomeComponentProps> = () => {
                             <div className={"title-container"}>
                                 <span>Jobs based on your activity on indeed</span>
                             </div>
-                            <ShortJobDescriptionBlock></ShortJobDescriptionBlock>
-                            <ShortJobDescriptionBlock></ShortJobDescriptionBlock>
-                            <ShortJobDescriptionBlock></ShortJobDescriptionBlock>
+                            {recommendedJobs.map((job, index) => (
+                                <ShortJobDescriptionBlock key={index} job={job}></ShortJobDescriptionBlock>
+                            ))}
                         </div>
                         <div className={"detailed-description-column"}>
                             <div style={{height : `${stickyHeight}px`}} className={"detailed-description-sticky"}>
@@ -89,7 +105,7 @@ const HomeComponent: FC<HomeComponentProps> = () => {
             </div>
             
         </div>
-        
+        )
     )
 };
 

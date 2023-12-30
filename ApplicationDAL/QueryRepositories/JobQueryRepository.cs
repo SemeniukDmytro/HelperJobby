@@ -95,7 +95,31 @@ public class JobQueryRepository : IJobQueryRepository
     {
         var jobsCount = _applicationContext.Jobs.Count();
         var startingPoint = Math.Max(new Random().Next(jobsCount) - 10, 0);
-        return await _applicationContext.Jobs.Skip(startingPoint).Take(RandomJobsToTake).ToListAsync();
+        return await _applicationContext.Jobs.Skip(startingPoint).Take(RandomJobsToTake).
+            Select(j => new Job()
+            {
+                Id = j.Id,
+                JobTitle = j.JobTitle,
+                NumberOfOpenings = j.NumberOfOpenings,
+                Language = j.Language,
+                Location = j.Location,
+                JobTypes = j.JobTypes,
+                Salary = j.Salary,
+                Schedule = j.Schedule,
+                Benefits = j.Benefits,
+                ContactEmail = j.ContactEmail,
+                ResumeRequired = j.ResumeRequired,
+                Description = j.Description,
+                EmployerAccount = new EmployerAccount()
+                {
+                    Organization = new Organization()
+                    {
+                        Id = j.EmployerAccount.OrganizationId,
+                        Name = j.EmployerAccount.Organization.Name
+                    }
+                }
+            })
+            .ToListAsync();
 
     }
 }

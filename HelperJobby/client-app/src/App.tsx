@@ -12,7 +12,7 @@ function App() {
       <AuthProvider>
         <Routes>
             {/* public routes*/}
-            <Route path="/" element={<AuthPage/>} />
+            <Route path="/" element={<HomePage/>} />
             <Route path={"auth-page"} element={<AuthPage/>}></Route>
             {/*private routes */}
             <Route element={<RequireAuth/>}>

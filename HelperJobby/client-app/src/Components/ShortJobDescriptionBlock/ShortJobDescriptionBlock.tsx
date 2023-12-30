@@ -2,10 +2,14 @@ import React, { FC } from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons";
 import "./ShortJobDescriptionBlock.scss";
+import {JobDTO} from "../../DTOs/jobRelatetedDTOs/JobDTO";
 
-interface ShortJobDescriptionBlockProps {}
+interface ShortJobDescriptionBlockProps {
+    job : JobDTO
+}
 
-const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = () => {
+const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : ShortJobDescriptionBlockProps) => {
+    const {job} = props; 
     
    return (
        <div className={"short-job-description-component-box"}>
@@ -18,10 +22,10 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = () => {
                        <span>New</span>
                    </div>
                    <a className={"job-title"}>
-                       Travaille à maison Work at home Bilingual Customer Service
+                       {job.jobTitle}
                    </a>
                    <a className={"medium-description-text"}>
-                       Company name
+                       Organization name
                    </a>
 
                    <div className={"medium-description-text"}>

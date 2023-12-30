@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class RecommendationController : ExtendedBaseController
     {
         private readonly IRecommendationService _recommendationService;

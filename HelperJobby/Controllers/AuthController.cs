@@ -84,11 +84,10 @@ namespace HelperJobby.Controllers
             var authorizationHeader = Request.Headers["Authorization"].ToString();
             var accessToken = authorizationHeader.Replace("Bearer ", "");
             var userEntity = await _authService.RefreshToken(accessToken, refreshToken);
-            var userWithToken = await _authService.AuthUser(_mapper.Map<User>(userEntity));
             return new AuthUserDTO()
             {
-                User = _mapper.Map<UserDTO>(userWithToken.user),
-                Token = userWithToken.authToken
+                User = _mapper.Map<UserDTO>(userEntity),
+                Token = _authService.CreateAuthToken(userEntity.Id, userEntity.Email)
             };
         }
         

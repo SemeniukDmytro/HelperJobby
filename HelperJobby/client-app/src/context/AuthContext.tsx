@@ -14,9 +14,20 @@ export function AuthProvider({children} : {children: ReactNode; })
      async function refreshAuthUser() {
          
         const authService = new AuthService();
-        const refreshedAuthUser = await  authService.refreshToken();
-        setAuthUser(refreshedAuthUser);
-        setAuthToken(refreshedAuthUser.token);
+        let refreshedAuthUser : AuthUserDTO | null = null;
+        try {
+            refreshedAuthUser = await authService.refreshToken();
+        }
+        catch (e){
+            
+        }
+        finally {
+            if (refreshedAuthUser?.user){
+                setAuthUser(refreshedAuthUser);
+                setAuthToken(refreshedAuthUser.token);
+            }
+        }
+        
     }   
 
     useEffect(  () => {

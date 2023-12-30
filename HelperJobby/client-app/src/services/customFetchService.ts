@@ -27,6 +27,7 @@ class CustomFetchService {
             headers,
             method,
             body: data ? JSON.stringify(data) : null,
+            credentials : "include" as RequestCredentials,
         };
 
         try {
