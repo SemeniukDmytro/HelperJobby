@@ -27,6 +27,11 @@ public class JobService : IJobService
         {
             throw new InvalidJobException();
         }
+
+        if (!SalaryChecker.CheckMinimalSalary(job.Salary, job.SalaryRate))
+        {
+            throw new InvalidJobException("This wage appears to be below the minimum wage for this location");
+        }
         job.DatePosted = DateOnly.FromDateTime(DateTime.UtcNow);
         return job;
     }

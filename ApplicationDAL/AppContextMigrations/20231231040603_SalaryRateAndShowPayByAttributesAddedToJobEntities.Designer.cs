@@ -3,16 +3,19 @@ using System;
 using ApplicationDAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ApplicationDAL.Migrations
+namespace ApplicationDAL.AppContextMigrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20231231040603_SalaryRateAndShowPayByAttributesAddedToJobEntities")]
+    partial class SalaryRateAndShowPayByAttributesAddedToJobEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,8 +231,8 @@ namespace ApplicationDAL.Migrations
 
                     b.Property<string>("ShowPayBy")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                        .HasMaxLength(14)
+                        .HasColumnType("varchar(14)");
 
                     b.HasKey("Id");
 
@@ -403,8 +406,8 @@ namespace ApplicationDAL.Migrations
 
                     b.Property<string>("ShowPayBy")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                        .HasMaxLength(14)
+                        .HasColumnType("varchar(14)");
 
                     b.HasKey("Id");
 

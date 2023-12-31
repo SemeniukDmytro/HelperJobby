@@ -13,6 +13,8 @@ namespace HelperJobby.DTOs.Job
         public string Location { get; set; }
         public List<string> JobType { get; set; }
         public decimal Salary { get; set; }
+        public string SalaryRate { get; set; }
+        public string ShowPayBy { get; set; }
         public List<string> Schedule { get; set; }
         public List<string> Benefits { get; set; }
         public string ContactEmail { get; set; }
