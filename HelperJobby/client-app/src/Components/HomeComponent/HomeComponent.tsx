@@ -22,6 +22,7 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     const [recommendedJobs, setRecommendedJobs] = useState<JobDTO[]>([]);
     const recommendationService = new RecommendationService();
     const [loading, setLoading] = useState(true);
+    const {authUser} = useAuth();
 
     const updateStickyHeight = () => {
         let newHeight = 361.2 + window.scrollY;
@@ -64,7 +65,7 @@ const HomeComponent: FC<HomeComponentProps> = () => {
 
     return (
         loading ? (
-            <div>Loading ..</div>
+            <div>Loading...</div>
             ) : 
         (
             <div className={"job-search-layout"}>

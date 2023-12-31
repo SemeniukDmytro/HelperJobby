@@ -10,7 +10,7 @@ import "./SignInForm.scss";
 import {IsValidPasswordMaximalLength, IsValidPasswordMinimalLength} from "../../utils/authFormValidators";
 import {LoginUserDTO} from "../../DTOs/userRelatedDTOs/LoginUserDTO";
 import AuthService from "../../services/authService";
-import {setAuthToken} from "../../utils/AuthTokenInteraction";
+import {setAuthToken} from "../../utils/authTokenInteraction";
 import {useAuth} from "../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 
@@ -55,6 +55,7 @@ const SignInForm: FC<SignInFormProps> = () =>
             navigate("/temp");
         }
         catch (error) {
+            console.log(error)
         }
     }
 

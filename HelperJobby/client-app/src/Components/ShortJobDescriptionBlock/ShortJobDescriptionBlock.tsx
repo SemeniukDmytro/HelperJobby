@@ -3,6 +3,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons";
 import "./ShortJobDescriptionBlock.scss";
 import {JobDTO} from "../../DTOs/jobRelatetedDTOs/JobDTO";
+import {jobTypesConverter, schedulesEnumConverter} from "../../utils/enumToStringConverter";
+import schedules from "../../enums/Schedules";
 
 interface ShortJobDescriptionBlockProps {
     job : JobDTO
@@ -10,7 +12,8 @@ interface ShortJobDescriptionBlockProps {
 
 const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : ShortJobDescriptionBlockProps) => {
     const {job} = props; 
-    
+    console.log(jobTypesConverter(job.jobType[0]))
+    console.log(schedulesEnumConverter(job.schedule[0]), "schedule")
    return (
        <div className={"short-job-description-component-box"}>
            <button className={"more-options-box"}>
@@ -25,16 +28,16 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
                        {job.jobTitle}
                    </a>
                    <a className={"medium-description-text"}>
-                       Organization name
+                       {job.employerAccount.organization.name}
                    </a>
 
                    <div className={"medium-description-text"}>
-                       <span >Job location</span>
+                       <span >{job.location}</span>
                    </div>
 
                    <div className={"job-features-info"}>
                        <div className={"job-feature"}>
-                           <span>Job feature</span>
+                           <span>${job.salary}</span>
                        </div>
                        <div className={"job-feature"}>
                            <span>Job feature</span>

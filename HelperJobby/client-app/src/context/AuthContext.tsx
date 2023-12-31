@@ -2,7 +2,7 @@ import {createContext, ReactNode, useEffect, useState} from "react";
 import AuthService from "../services/authService";
 import {AuthContextProps} from "../contextTypes/AuthContextProps";
 import {AuthUserDTO} from "../DTOs/userRelatedDTOs/AuthUserDTO";
-import {setAuthToken} from "../utils/AuthTokenInteraction";
+import {setAuthToken} from "../utils/authTokenInteraction";
 
 const AuthContext = createContext<AuthContextProps>({authUser : null, 
     setAuthUser : () => {}});

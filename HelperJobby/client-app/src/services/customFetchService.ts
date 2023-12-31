@@ -29,17 +29,13 @@ class CustomFetchService {
             body: data ? JSON.stringify(data) : null,
             credentials : "include" as RequestCredentials,
         };
-
         try {
             const response = await fetch(url, options);
-
-            if (!response.ok) {
-                throw new Error(`Request failed with status: ${response.status}`);
+            if (!response.ok){
+                console.log(await response.json())
             }
-
             return response;
         } catch (error) {
-            console.error("Error in request:", error);
             throw error;    
         }
     }

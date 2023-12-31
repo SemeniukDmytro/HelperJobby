@@ -1,5 +1,5 @@
 import AuthService from "../services/authService";
-import {getAuthToken, setAuthToken} from "./AuthTokenInteraction";
+import {getAuthToken, setAuthToken} from "./authTokenInteraction";
 
 export async function addAuthHeader(headers : { [key: string]: string }) : Promise<{ [key: string]: string }> {
     let accessToken = getAuthToken();

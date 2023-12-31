@@ -55,8 +55,6 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
         try {
             let newUser = await authService.register(createdUser);
             localStorage.setItem("accessToken", newUser.token);
-            console.log(newUser.token);
-            console.log(localStorage.getItem("accessToken"))
             setAuthUser(newUser);
         } catch (error) {
             console.error("Error creating user:", error);

@@ -1,7 +1,7 @@
 import CustomFetchService, {DEFAULT_HEADERS, DOMAIN} from "./customFetchService";
 import {CreateUpdateUserDTO} from "../DTOs/userRelatedDTOs/CreateUpdateUserDTO";
 import {AuthUserDTO} from "../DTOs/userRelatedDTOs/AuthUserDTO";
-import {getAuthToken} from "../utils/AuthTokenInteraction";
+import {getAuthToken} from "../utils/authTokenInteraction";
 import {LoginUserDTO} from "../DTOs/userRelatedDTOs/LoginUserDTO";
 
 class AuthService {
