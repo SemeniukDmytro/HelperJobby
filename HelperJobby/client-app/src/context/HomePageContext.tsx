@@ -1,5 +1,7 @@
-import {createContext, MutableRefObject, ReactNode, useState} from "react";
+import {createContext, MutableRefObject, ReactNode, useEffect, useState} from "react";
 import {HomePageContextProps} from "../contextTypes/HomePageContextProps";
+import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
+import {JobSeekerAccountService} from "../services/jobSeekerAccountService";
 
 const HomePageContext = createContext<HomePageContextProps>(
     {
@@ -8,13 +10,28 @@ const HomePageContext = createContext<HomePageContextProps>(
         fullHeaderGridTemplate : null,
         setFullHeaderGridTemplate : () => {},
         shortHeaderGridTemplate : null,
-        setShortHeaderGridTemplate : () => {}
+        setShortHeaderGridTemplate : () => {},
+        userSavedJobs : [],
+        setUserSavedJobs : () => {}
     }); 
 
 export function HomePageContextProvider({ children } : {children: ReactNode}){
     const [mainContentRef, setMainContentRef] = useState<MutableRefObject<HTMLDivElement | null> | null>(null);
     const [fullHeaderGridTemplate, setFullHeaderGridTemplate] = useState<number | null>(null);
     const [shortHeaderGridTemplate, setShortHeaderGridTemplate] = useState<number | null>(null);
+    const [userSavedJobs, setUserSavedJobs] = useState<JobDTO[]>([]);
+    
+    const jobSeekerService : JobSeekerAccountService = new JobSeekerAccountService();
+
+    useEffect(() => {
+        const checkIsJobSaved = async () => {
+            const response = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
+            setUserSavedJobs(response);
+        }
+        
+        checkIsJobSaved();
+    }, []);
+    
     return(
         <HomePageContext.Provider
             value={{
@@ -23,7 +40,9 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
                 fullHeaderGridTemplate,
                 setFullHeaderGridTemplate,
                 shortHeaderGridTemplate,
-                setShortHeaderGridTemplate
+                setShortHeaderGridTemplate,
+                userSavedJobs,
+                setUserSavedJobs
             }}>
             {children}
         </HomePageContext.Provider>

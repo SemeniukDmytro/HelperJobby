@@ -9,6 +9,8 @@ export interface UpdatedJobDTO {
     location: string;
     jobType: JobTypes[];
     salary: number;
+    salaryRate: string;
+    showPayBy: string;
     schedule: Schedules[];
     benefits: EmployeeBenefits[];
     contactEmail: string;

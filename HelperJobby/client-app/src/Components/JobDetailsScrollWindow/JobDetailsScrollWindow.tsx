@@ -4,9 +4,6 @@ import "./JobDetailScrollWindow.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMoneyBillAlt} from "@fortawesome/free-regular-svg-icons";
 import {faBriefcase, faChevronDown, faChevronUp, faClock} from "@fortawesome/free-solid-svg-icons";
-import {UserService} from "../../services/userService";
-import {useAuth} from "../../hooks/useAuth";
-import {CreateUpdateUserDTO} from "../../DTOs/userRelatedDTOs/CreateUpdateUserDTO";
 
 interface JobDetailsScrollWindowProps {}
 

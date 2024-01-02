@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
 import { UserService } from '../../services/userService';
 import { UserDTO } from '../../DTOs/userRelatedDTOs/UserDTO';
 

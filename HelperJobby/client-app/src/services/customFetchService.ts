@@ -1,4 +1,6 @@
 import {addAuthHeader} from "../utils/addAuthHeader";
+import {ServerError, ServerErrorDTO} from "../ErrorDTOs/ServerErrorDTO";
+
 export const DEFAULT_HEADERS : { [key: string]: string } = {
     "Accept": "application/json",
     "Content-type": "application/json",
@@ -29,15 +31,11 @@ class CustomFetchService {
             body: data ? JSON.stringify(data) : null,
             credentials : "include" as RequestCredentials,
         };
-        try {
-            const response = await fetch(url, options);
-            if (!response.ok){
-                console.log(await response.json())
-            }
-            return response;
-        } catch (error) {
-            throw error;    
+        const response = await fetch(url, options);
+        if (!response.ok){
+            throw new ServerError("dasda", await response.json());
         }
+        return response;
     }
 
     async get<T>(url: string, headers: { [key: string]: string } = {}): Promise<T> {

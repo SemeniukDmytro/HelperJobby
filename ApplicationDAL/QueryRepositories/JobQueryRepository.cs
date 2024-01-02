@@ -105,11 +105,14 @@ public class JobQueryRepository : IJobQueryRepository
                 Location = j.Location,
                 JobTypes = j.JobTypes,
                 Salary = j.Salary,
+                SalaryRate = j.SalaryRate,
+                ShowPayBy = j.ShowPayBy,
                 Schedule = j.Schedule,
                 Benefits = j.Benefits,
                 ContactEmail = j.ContactEmail,
                 ResumeRequired = j.ResumeRequired,
                 Description = j.Description,
+                DatePosted = j.DatePosted,
                 EmployerAccount = new EmployerAccount()
                 {
                     Organization = new Organization()
