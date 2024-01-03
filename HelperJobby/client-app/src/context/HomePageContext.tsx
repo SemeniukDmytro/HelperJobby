@@ -2,6 +2,9 @@ import {createContext, MutableRefObject, ReactNode, useEffect, useState} from "r
 import {HomePageContextProps} from "../contextTypes/HomePageContextProps";
 import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
 import {JobSeekerAccountService} from "../services/jobSeekerAccountService";
+import {RecommendationService} from "../services/recommendationService";
+import {RecentUserSearchDTO} from "../DTOs/userRelatedDTOs/RecentUserSearchDTO";
+import {UserService} from "../services/userService";
 
 const HomePageContext = createContext<HomePageContextProps>(
     {
@@ -14,7 +17,11 @@ const HomePageContext = createContext<HomePageContextProps>(
         userSavedJobs : [],
         setUserSavedJobs : () => {},
         selectedJob : null,
-        setSelectedJob : () => {}
+        setSelectedJob : () => {},
+        recommendedJobs : [],
+        setRecommendedJobs : () => {},
+        recentUserSearches : [],
+        setRecentUserSearches : () => {}
     }); 
 
 export function HomePageContextProvider({ children } : {children: ReactNode}){
@@ -23,19 +30,50 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
     const [shortHeaderGridTemplate, setShortHeaderGridTemplate] = useState<number | null>(null);
     const [userSavedJobs, setUserSavedJobs] = useState<JobDTO[]>([]);
     const [selectedJob, setSelectedJob] = useState<JobDTO | null>(null);
+    const [recommendedJobs, setRecommendedJobs] = useState<JobDTO[]>([]);
+    const [recentUserSearches, setRecentUserSearches] = useState<RecentUserSearchDTO[]>([]);
+    
+    const recommendationService = new RecommendationService();
+    const [loading, setLoading] = useState(true);
     
     const jobSeekerService : JobSeekerAccountService = new JobSeekerAccountService();
+    const userService = new UserService();
 
     useEffect(() => {
-        const checkIsJobSaved = async () => {
-            const response = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
-            setUserSavedJobs(response);
-        }
-        
-        checkIsJobSaved();
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                await loadRecommendationJobs();
+                await checkIsJobSaved();
+                await loadRecentUserSearches();
+            }
+            catch (error){
+                console.log(error)
+            }
+            setLoading(false);
+        };
+
+        fetchData();
     }, []);
+
+    async function loadRecommendationJobs(){
+        const retrievedJobs = await recommendationService.getRandomJobs();
+        setSelectedJob(retrievedJobs[0]);
+        setRecommendedJobs(retrievedJobs);
+    }
+
+    async function checkIsJobSaved() {
+        const response = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
+        setUserSavedJobs(response);
+    }
+    
+    async function loadRecentUserSearches(){
+        const response = await userService.getUserRecentSearches();
+        setRecentUserSearches(response);
+    }
     
     return(
+        loading ? <>Loading...</> :
         <HomePageContext.Provider
             value={{
                 mainContentReference: mainContentRef,
@@ -47,7 +85,11 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
                 userSavedJobs,
                 setUserSavedJobs,
                 selectedJob,
-                setSelectedJob
+                setSelectedJob,
+                recommendedJobs,
+                setRecommendedJobs,
+                recentUserSearches,
+                setRecentUserSearches
             }}>
             {children}
         </HomePageContext.Provider>

@@ -72,47 +72,6 @@
   font-size: 0.875rem;
 }
 
-.jobs-container{
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  max-width: 65.25rem;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.short-job-descriptions-column {
-  display: flex;
-  flex-direction: column;
-  max-width: 30.125rem;
-  width: 100%;
-  margin-bottom: 2rem;
-  margin-right: 1.5rem;
-}
-
-.detailed-description-column{
-  display: flex;
-  flex-direction: column;
-  flex-basis: 53%;
-  padding-top: 20px;
-}
-
-.detailed-description-sticky{
-  margin-top: 1rem;
-  position: sticky;
-  top: 1rem;
-  height: 698px;
-  min-height: 600px;
-  display: flex;
-  border: 1px solid global-variables.$neutral-color-500;
-  border-radius: 0.5rem;
-}
-
-.detailed-description-content-box{
-  margin-top: 0.5rem;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+.selected-tab-font-weight{
+  font-weight: 700;
 }

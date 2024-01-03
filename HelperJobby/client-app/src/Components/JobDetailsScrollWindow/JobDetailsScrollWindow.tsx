@@ -14,7 +14,6 @@ interface JobDetailsScrollWindowProps {
 const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
 
     const {selectedJob} = useHomePage();
-    console.log(selectedJob?.description);
     
     const {mainContentReference,
         setFullHeaderGridTemplate,
@@ -47,6 +46,17 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
             }
         };
     }, [mainContentReference]);
+
+    useEffect(() => {
+        if (selectedJob!.benefits.length < 6){
+            setDisplayedBenefits(selectedJob!.benefits);
+        }
+        else {
+            setDisplayedBenefits(selectedJob!.benefits.slice(0, 6));    
+            setShowAllBenefits(false);
+            setBenefitsButtonText("Show more")
+        }
+    }, [selectedJob]);
     
     function focusOnInnerContent() {
 
@@ -58,12 +68,6 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
         else {
             setFullHeaderGridTemplate(1);
             setShortHeaderGridTemplate(0);
-        }
-        if (selectedJob!.benefits.length < 6){
-            setDisplayedBenefits(selectedJob!.benefits);
-        }
-        else {
-            setDisplayedBenefits(selectedJob!.benefits.slice(0, 6));
         }
     }
 

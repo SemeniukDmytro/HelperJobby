@@ -3,75 +3,33 @@ import PublicHomePageHeader from "../PublicHomePageHeader/PublicHomePageHeader";
 import "./HomeComponent.scss";
 import JobSearchBar from "../JobSearchBar/JobSearchBar";
 import JobSearchPromoContainer from "../JobSearchPromoContainer/JobSearchPromoContainer";
-import ShortJobDescriptionBlock from "../ShortJobDescriptionBlock/ShortJobDescriptionBlock";
 import {useHomePage} from "../../hooks/useHomePage";
-import JobDescriptionHeader from "../JobDescriptionHeader/JobDescriptionHeader";
-import JobDetailsScrollWindow from "../JobDetailsScrollWindow/JobDetailsScrollWindow";
-import {JobDTO} from "../../DTOs/jobRelatetedDTOs/JobDTO";
-import {RecommendationService} from "../../services/recommendationService";
+import RecommendedJobs from "../RecommendedJobs/RecommendedJobs";
+import {SelectedTabs} from "../../enums/SelectedTabs";
+import RecentSearches from "../RecentSearches/RecentSearches";
 
 
 interface HomeComponentProps {}
 
 const HomeComponent: FC<HomeComponentProps> = () => {
-
-    const [stickyHeight, setStickyHeight] = useState(361.2);
     const mainContentRef = useRef<HTMLDivElement | null>(null);
-    const {setMainContentRef, selectedJob, setSelectedJob} = useHomePage();
-    const [recommendedJobs, setRecommendedJobs] = useState<JobDTO[]>([]);
-    const recommendationService = new RecommendationService();
-    const [loading, setLoading] = useState(true);
-    const updateStickyHeight = () => {
-        let newHeight = 361.2 + window.scrollY;
-        if (newHeight > 698){
-            setStickyHeight(698)
-        }
-        else{
-            setStickyHeight(newHeight);
-        }
-    };
-    
-    useEffect(() => {
-        updateStickyHeight();
-        const handleScroll = () => {
-            updateStickyHeight();
-        };
-        window.addEventListener('scroll', handleScroll); 
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [stickyHeight]);
+    const {setMainContentRef} = useHomePage();
+    const [selectedTab, setSelectedTab] = useState<SelectedTabs>(1);
 
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                await Promise.all([handleMainContentRef(), loadRecommendationJobs()]);
-            }
-            catch (error){
-                console.log(error)
-            }
-            setLoading(false);
-        };
-
-        fetchData();
-    }, []);
-    const handleMainContentRef = () => {
         setMainContentRef(mainContentRef);
-    };
-    
-    async function loadRecommendationJobs(){
-        const retrievedJobs = await recommendationService.getRandomJobs();
-        setSelectedJob(retrievedJobs[0]);
-        setRecommendedJobs(retrievedJobs);
+    }, []);
+
+    function showJobFeed() {
+        setSelectedTab(1);
+    }
+
+    function showRecentSearches() {
+        setSelectedTab(2);
     }
 
     return (
-        loading ? (
-            <div>Loading...</div>
-            ) : 
-        (
-            <div className={"job-search-layout"}>
+        <div className={"job-search-layout"}>
             <PublicHomePageHeader></PublicHomePageHeader>
             <div className={"header-and-main-content-separator"}></div>
             <div className={"main-content"}  ref={mainContentRef}>
@@ -79,37 +37,20 @@ const HomeComponent: FC<HomeComponentProps> = () => {
                 <JobSearchPromoContainer/>
                 <div className={"search-results-container"}>
                     <nav className={"search-results-navbar"}>
-                        <button className={"tab-container"}>
-                            <span className={"tab-name"}>Job feed</span>
-                            <div className={"search-underline"}></div>
+                        <button className={"tab-container"} onClick={showJobFeed}>
+                            <span className={`tab-name ${selectedTab=== 1 ? "selected-tab-font-weight" : ""}`}>Job feed</span>
+                            {selectedTab === 1 && <div className={"search-underline"}></div>}
                         </button>
-                        <button className={"tab-container"}>
-                            <span className={"tab-name"}>New results for recent searches</span>
+                        <button className={"tab-container"} onClick={showRecentSearches}>
+                            <span className={`tab-name ${selectedTab === 2 ? "selected-tab-font-weight" : ""}`}>New results for recent searches</span>
+                            {selectedTab === 2 && <div className={"search-underline"}></div>}
                         </button>
                     </nav>
-                    <div className={"jobs-container"}>
-                        <div className={"short-job-descriptions-column"}>
-                            <div className={"title-container"}>
-                                <span>Jobs based on your activity on indeed</span>
-                            </div>
-                            {recommendedJobs.map((job, index) => (
-                                <ShortJobDescriptionBlock key={index} job={job}></ShortJobDescriptionBlock>
-                            ))}
-                        </div>
-                        <div className={"detailed-description-column"}>
-                            <div style={{height : `${stickyHeight}px`}} className={"detailed-description-sticky"}>
-                                <div className={"detailed-description-content-box"}>    
-                                    <JobDescriptionHeader></JobDescriptionHeader>
-                                    <JobDetailsScrollWindow></JobDetailsScrollWindow>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {selectedTab === 1 && <RecommendedJobs/>}
+                    {selectedTab === 2 && <RecentSearches/>}
                 </div>
             </div>
-            
         </div>
-        )
     )
 };
 
