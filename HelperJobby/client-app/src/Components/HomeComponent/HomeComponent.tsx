@@ -45,7 +45,12 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            await Promise.all([handleMainContentRef(), loadRecommendationJobs()]);
+            try {
+                await Promise.all([handleMainContentRef(), loadRecommendationJobs()]);
+            }
+            catch (error){
+                console.log(error)
+            }
             setLoading(false);
         };
 

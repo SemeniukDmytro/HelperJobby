@@ -1,0 +1,13 @@
+@use "../../Assets/scssSharedStyles/global-variables";
+
+.job-details-info-value{
+  background-color: global-variables.$neutral-color-200;
+  box-sizing: border-box;
+  padding: 0.25rem 0.5rem;
+  color: global-variables.$neutral-color-800;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 0.25rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}

@@ -4,6 +4,9 @@ import "./JobDetailScrollWindow.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMoneyBillAlt} from "@fortawesome/free-regular-svg-icons";
 import {faBriefcase, faChevronDown, faChevronUp, faClock} from "@fortawesome/free-solid-svg-icons";
+import JobDetailsFeatureBox from "../JobDetailsFeatureBox/JobDetailsFeatureBox";
+import {thousandsDisplayHelper} from "../../utils/thousandsDisplayHelper";
+import {jobTypesConverter, schedulesEnumConverter} from "../../utils/enumToStringConverter";
 
 interface JobDetailsScrollWindowProps {
 }
@@ -11,6 +14,7 @@ interface JobDetailsScrollWindowProps {
 const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
 
     const {selectedJob} = useHomePage();
+    console.log(selectedJob?.description);
     
     const {mainContentReference,
         setFullHeaderGridTemplate,
@@ -18,6 +22,7 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
     
     const [showAllBenefits, setShowAllBenefits] = useState(false);
     const [benefitsButtonText, setBenefitsButtonText] = useState("Show more");
+    const [displayedBenefits, setDisplayedBenefits] = useState<string[]>([]);
     
     const jobDetailsScrollWindowRef = useRef<HTMLDivElement | null>(null);
 
@@ -54,15 +59,23 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
             setFullHeaderGridTemplate(1);
             setShortHeaderGridTemplate(0);
         }
+        if (selectedJob!.benefits.length < 6){
+            setDisplayedBenefits(selectedJob!.benefits);
+        }
+        else {
+            setDisplayedBenefits(selectedJob!.benefits.slice(0, 6));
+        }
     }
 
    async function displayAllBenefits() {
         if (!showAllBenefits){
             setBenefitsButtonText("Show less")
+            setDisplayedBenefits(selectedJob!.benefits);    
             setShowAllBenefits(true);
         }
         else {
             setBenefitsButtonText("Show more")
+            setDisplayedBenefits(selectedJob!.benefits.slice(0, 6));
             setShowAllBenefits(false);
         }
     }
@@ -82,25 +95,27 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
                             <div className={"job-details-info"}>
                                 <span>Pay</span>
                             </div>
-                            <div className={"job-details-info-value"}>
-                                <span>$60,000–$100,000 a year</span>
+                            <div className={"detailed-job-features"}>
+                                <JobDetailsFeatureBox featureText={`$${thousandsDisplayHelper(selectedJob!.salary)} ${selectedJob?.salaryRate}`}/>
                             </div>
                         </div>
                     </div>
-                    <div className={"short-main-info"}>
+                    {selectedJob!.jobType.length > 0 && <div className={"short-main-info"}>
                         <div className={"job-details-icon-box"}>
                             <FontAwesomeIcon icon={faBriefcase} />
                         </div>
                         <div className={"job-details-header-info-box"}>
                             <div className={"job-details-info"}>
-                                <span>Job type</span>
+                                <span>Job types</span>
                             </div>
-                            <div className={"job-details-info-value"}>
-                                <span>Permanent</span>
+                            <div className={"detailed-job-features"}>
+                                {selectedJob?.jobType.map((jobType, index) => (
+                                    <JobDetailsFeatureBox  key={index} featureText={jobTypesConverter(jobType)}></JobDetailsFeatureBox>
+                                ))}
                             </div>
                         </div>
-                    </div>
-                    <div className={"short-main-info"}>
+                    </div>}
+                    {selectedJob!.schedule.length > 0 && <div className={"short-main-info"}>
                         <div className={"job-details-icon-box"}>
                             <FontAwesomeIcon icon={faClock} />
                         </div>
@@ -108,13 +123,15 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
                             <div className={"job-details-info"}>
                                 <span>Schedule</span>
                             </div>
-                            <div className={"job-details-info-value"}>
-                                <span>Monday to Friday</span>
+                            <div className={"detailed-job-features"}>
+                                {selectedJob?.schedule.map((schedule, index) => (
+                                    <JobDetailsFeatureBox  key={index} featureText={schedulesEnumConverter(schedule)}></JobDetailsFeatureBox>
+                                ))}
                             </div>
                         </div>
-                    </div>
+                    </div>}
                 </div>
-                <div className={"job-details-header"}>
+                {selectedJob!.benefits.length > 0 && <div className={"job-details-header"}>
                     <div className={"job-title-info title-additional-spacing"}>
                         <span>Benefits</span>
                         <div className={"job-details-subtitle"}>
@@ -123,29 +140,22 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
                     </div>
                     <div className={"benefits-box"}>
                         <ul className={"benefits"}>
-                            <li>Dental Care</li>
-                            <li>Dental Care</li>
-                            <li>Dental Care</li>
-                            <li>Dental Care</li>
-                            <li>Dental Care</li>
-                            <li>Dental Care</li>
-                            <li>Dental Care</li>
-                            <li>Dental Care</li>
-                            <li>Dental Care</li>
-                            <li>Dental Care</li>
-                            <li>Dental Care</li>
+                            {displayedBenefits.map((benefit, index) => (
+                                <li key={index}>{benefit}</li>
+                            ))}
                         </ul>
-                        { !showAllBenefits && <div className={"background-fade"}></div> }
+                        { (!showAllBenefits && selectedJob!.benefits.length > 6)&& <div className={"background-fade"}></div> }
                     </div>
-                    <button className={"show-more-benefits-button"} onClick={displayAllBenefits}>
+                    {selectedJob!.benefits.length > 6 && <button className={"show-more-benefits-button"} onClick={displayAllBenefits}>
                         <span>{benefitsButtonText}</span>
                         {!showAllBenefits &&<FontAwesomeIcon className={"show-more-arrow"} icon={faChevronDown} />}
                         {showAllBenefits &&<FontAwesomeIcon className={"show-more-arrow"} icon={faChevronUp} />}
-                    </button>
-                </div>
+                    </button>}
+                </div>}
                 <div className={"full-description-box"}>
-                    What is Lorem Ipsum?
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    <div style={{whiteSpace: "pre-wrap"}}>
+                        {selectedJob?.description}
+                    </div>
                 </div>
                 
             </div>
