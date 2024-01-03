@@ -12,7 +12,9 @@ const HomePageContext = createContext<HomePageContextProps>(
         shortHeaderGridTemplate : null,
         setShortHeaderGridTemplate : () => {},
         userSavedJobs : [],
-        setUserSavedJobs : () => {}
+        setUserSavedJobs : () => {},
+        selectedJob : null,
+        setSelectedJob : () => {}
     }); 
 
 export function HomePageContextProvider({ children } : {children: ReactNode}){
@@ -20,6 +22,7 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
     const [fullHeaderGridTemplate, setFullHeaderGridTemplate] = useState<number | null>(null);
     const [shortHeaderGridTemplate, setShortHeaderGridTemplate] = useState<number | null>(null);
     const [userSavedJobs, setUserSavedJobs] = useState<JobDTO[]>([]);
+    const [selectedJob, setSelectedJob] = useState<JobDTO | null>(null);
     
     const jobSeekerService : JobSeekerAccountService = new JobSeekerAccountService();
 
@@ -42,7 +45,9 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
                 shortHeaderGridTemplate,
                 setShortHeaderGridTemplate,
                 userSavedJobs,
-                setUserSavedJobs
+                setUserSavedJobs,
+                selectedJob,
+                setSelectedJob
             }}>
             {children}
         </HomePageContext.Provider>

@@ -5,17 +5,19 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMoneyBillAlt} from "@fortawesome/free-regular-svg-icons";
 import {faBriefcase, faChevronDown, faChevronUp, faClock} from "@fortawesome/free-solid-svg-icons";
 
-interface JobDetailsScrollWindowProps {}
+interface JobDetailsScrollWindowProps {
+}
 
 const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
+
+    const {selectedJob} = useHomePage();
+    
+    const {mainContentReference,
+        setFullHeaderGridTemplate,
+        setShortHeaderGridTemplate} = useHomePage();
     
     const [showAllBenefits, setShowAllBenefits] = useState(false);
     const [benefitsButtonText, setBenefitsButtonText] = useState("Show more");
-    
-    const {
-        mainContentReference,
-        setFullHeaderGridTemplate,
-        setShortHeaderGridTemplate} = useHomePage();
     
     const jobDetailsScrollWindowRef = useRef<HTMLDivElement | null>(null);
 

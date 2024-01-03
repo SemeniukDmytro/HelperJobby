@@ -17,7 +17,7 @@ const HomeComponent: FC<HomeComponentProps> = () => {
 
     const [stickyHeight, setStickyHeight] = useState(361.2);
     const mainContentRef = useRef<HTMLDivElement | null>(null);
-    const {setMainContentRef} = useHomePage();
+    const {setMainContentRef, selectedJob, setSelectedJob} = useHomePage();
     const [recommendedJobs, setRecommendedJobs] = useState<JobDTO[]>([]);
     const recommendationService = new RecommendationService();
     const [loading, setLoading] = useState(true);
@@ -57,6 +57,7 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     
     async function loadRecommendationJobs(){
         const retrievedJobs = await recommendationService.getRandomJobs();
+        setSelectedJob(retrievedJobs[0]);
         setRecommendedJobs(retrievedJobs);
     }
 

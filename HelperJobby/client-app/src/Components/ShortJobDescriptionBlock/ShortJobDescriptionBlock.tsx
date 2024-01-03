@@ -15,9 +15,10 @@ import {useNavigate} from "react-router-dom";
 import {JobSeekerAccountService} from "../../services/jobSeekerAccountService";
 import {ServerError} from "../../ErrorDTOs/ServerErrorDTO";
 import {useHomePage} from "../../hooks/useHomePage";
+import {logErrorInfo} from "../../utils/logErrorInfo";
 
 interface ShortJobDescriptionBlockProps {
-    job : JobDTO
+    job : JobDTO;
 }
 
 const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : ShortJobDescriptionBlockProps) => {
@@ -25,7 +26,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
     const currentComponentRef = useRef<HTMLDivElement | null>(null);
 
     const {authUser} = useAuth();
-    const {userSavedJobs, setUserSavedJobs} = useHomePage();
+    const {userSavedJobs, setUserSavedJobs, selectedJob, setSelectedJob} = useHomePage();
     const navigate = useNavigate();
 
     const [shortDescription, setShortDescription] = useState<string[]>([]);
@@ -37,26 +38,25 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
     const [jobPostDaysDifference, setJobPostDaysDifference] = useState(0);
     const [isJobSaved, setIsJobSaved] = useState(false);
     const [saveJobButtonText, setSaveJobButtonText] = useState("");
+    const [isSelected, setIsSelected] = useState(false);
 
     const jobSeekerService = new JobSeekerAccountService();
 
     useEffect(() => {
         setShortDescription(descriptionSplitter(job.description));
         checkIsNewJob();
+        
     }, []);
 
-    const checkIsJobSaved = () => {
-        if (userSavedJobs && userSavedJobs) {
-            const isSaved = userSavedJobs.some(savedJob => savedJob.id === props.job.id);
-            setIsJobSaved(isSaved);
-            if (isSaved){
-                setSaveJobButtonText("Remove from saved");
-            }
-            else {
-                setSaveJobButtonText("Save job")
-            }
+    useEffect(() => {
+        if (job.id == selectedJob?.id){
+            setIsSelected(true);
         }
-    }
+        else {
+            setIsSelected(false)
+        }
+    }, [selectedJob]);
+    
 
     useEffect(() => {
         setShortDescription(descriptionSplitter(job.description));
@@ -101,6 +101,19 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
         }
     }
 
+    function checkIsJobSaved() {
+        if (userSavedJobs && userSavedJobs) {
+            const isSaved = userSavedJobs.some(savedJob => savedJob.id === props.job.id);
+            setIsJobSaved(isSaved);
+            if (isSaved){
+                setSaveJobButtonText("Remove from saved");
+            }
+            else {
+                setSaveJobButtonText("Save job")
+            }
+        }
+    }
+
     async function saveJob() {
         if (authUser === undefined || authUser === null){
             navigate('/auth-page')
@@ -108,23 +121,24 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
         }
         try {
             if (isJobSaved){
-                setSaveJobButtonText("Save job");
-                setIsJobSaved(false);
                 await jobSeekerService.deleteSavedJob(job.id);
-                
+                setSaveJobButtonText("Save job");
+                setIsJobSaved(!isJobSaved);
+                setUserSavedJobs((prevSavedJobs) => prevSavedJobs.filter(savedJob => savedJob.id !== job.id));
             }
             else {
+                await jobSeekerService.saveJob(job.id);
                 setSaveJobButtonText("Remove job from saved")
-                setIsJobSaved(true);
+                setIsJobSaved(!isJobSaved);
                 setIsSuccessfulPopup(true);
                 setPopUpText("Job successfully saved!");
                 setShowPopup(true);
-                await jobSeekerService.saveJob(job.id);
+                setUserSavedJobs((prevSavedJobs) => [...prevSavedJobs, job]);
             }
         }
         catch (error){
             if (error instanceof ServerError){
-                console.log(error.ServerErrorDTO)
+                logErrorInfo(error)
             }
         }
     }
@@ -133,8 +147,19 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
         setMoreOptionsVisible(!moreOptionsVisible);
     }
 
+
+    function handleJobClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+        const isMoreOptionsClick =
+            event.target instanceof Element &&
+            (event.target.classList.contains("more-options-box") || event.target.closest(".more-options-box"));
+        if (isMoreOptionsClick) {
+            return;
+        }
+        setSelectedJob(job);
+    }
+
     return (
-       <div ref={currentComponentRef} className={"short-job-description-component-box"}>
+       <div ref={currentComponentRef} className={`short-job-description-component-box ${isSelected ? "job-selected-border" : ""}`} onClick={handleJobClick}>
            {showPopup && <NotifyPopupWindow isSuccessful={isSuccessfulPopup} text={popUpText}/>}
            <div className={"more-options-absolute-container"}>
                <button className={"more-options-box"} onClick={showMoreOptions}>

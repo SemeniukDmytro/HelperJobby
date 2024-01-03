@@ -53,9 +53,15 @@ class CustomFetchService {
         return response.json();
     }
 
-    async delete<T>(url: string, headers: { [key: string]: string } = {}): Promise<T> {
+    async delete<T>(url: string, headers: { [key: string]: string } = {}): Promise<T | void> {
         const response = await this.request(url, "DELETE", null, headers);
-        return response.json();
+        try {
+            let result = await response.json();
+            return result;
+        }
+        catch (error){
+            return;
+        }
     }
 
 }

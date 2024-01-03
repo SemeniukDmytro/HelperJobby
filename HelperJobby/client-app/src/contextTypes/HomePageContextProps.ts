@@ -9,5 +9,7 @@ export interface HomePageContextProps{
     shortHeaderGridTemplate : number | null;
     setShortHeaderGridTemplate : Dispatch<SetStateAction<number | null>>;
     userSavedJobs : JobDTO[];
-    setUserSavedJobs : Dispatch<SetStateAction<JobDTO[]>>
+    setUserSavedJobs : Dispatch<SetStateAction<JobDTO[]>>;
+    selectedJob : JobDTO | null;
+    setSelectedJob : Dispatch<SetStateAction<JobDTO | null>>
 }
