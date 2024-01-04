@@ -21,7 +21,8 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
 
     public async Task<JobSeekerAccount> GetJobSeekerAccountByUserId(int userId)
     {
-        var jobSeekerAccount = await GetUserWithJobSeekerAccount(userId, q => q.Include(u => u.JobSeekerAccount));
+        var jobSeekerAccount =
+            await _applicationContext.JobSeekerAccounts.Where(j => j.UserId == userId).FirstOrDefaultAsync();
         return jobSeekerAccount;
     }
 

@@ -6,7 +6,7 @@ import {useHomePage} from "../../hooks/useHomePage";
 import RecommendedJobs from "../RecommendedJobs/RecommendedJobs";
 import {SelectedTabs} from "../../enums/SelectedTabs";
 import RecentSearches from "../RecentSearches/RecentSearches";
-import HomePageHeader from "../HomePageHeader/HomePageHeader";
+import PageWrapWithHeader from "../PageWrapWithHeader/PageWrapWithHeader";
 
 
 interface HomeComponentProps {}
@@ -29,28 +29,27 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     }
 
     return (
-        <div className={"job-search-layout"}>
-            <HomePageHeader></HomePageHeader>
-            <div className={"header-and-main-content-separator"}></div>
-            <div className={"main-content"}  ref={mainContentRef}>
-                <JobSearchBar/>
-                <JobSearchPromoContainer/>
-                <div className={"search-results-container"}>
-                    <nav className={"search-results-navbar"}>
-                        <button className={"tab-container"} onClick={showJobFeed}>
-                            <span className={`tab-name ${selectedTab=== 1 ? "selected-tab-font-weight" : ""}`}>Job feed</span>
-                            {selectedTab === 1 && <div className={"search-underline"}></div>}
-                        </button>
-                        <button className={"tab-container"} onClick={showRecentSearches}>
-                            <span className={`tab-name ${selectedTab === 2 ? "selected-tab-font-weight" : ""}`}>New results for recent searches</span>
-                            {selectedTab === 2 && <div className={"search-underline"}></div>}
-                        </button>
-                    </nav>
-                    {selectedTab === 1 && <RecommendedJobs/>}
-                    {selectedTab === 2 && <RecentSearches/>}
+            <PageWrapWithHeader>
+                <div className={"header-and-main-content-separator"}></div>
+                <div className={"main-content"}  ref={mainContentRef}>
+                    <JobSearchBar/>
+                    <JobSearchPromoContainer/>
+                    <div className={"search-results-container"}>
+                        <nav className={"search-results-navbar"}>
+                            <button className={"tab-container"} onClick={showJobFeed}>
+                                <span className={`tab-name ${selectedTab=== 1 ? "selected-tab-font-weight" : ""}`}>Job feed</span>
+                                {selectedTab === 1 && <div className={"search-underline"}></div>}
+                            </button>
+                            <button className={"tab-container"} onClick={showRecentSearches}>
+                                <span className={`tab-name ${selectedTab === 2 ? "selected-tab-font-weight" : ""}`}>New results for recent searches</span>
+                                {selectedTab === 2 && <div className={"search-underline"}></div>}
+                            </button>
+                        </nav>
+                        {selectedTab === 1 && <RecommendedJobs/>}
+                        {selectedTab === 2 && <RecentSearches/>}
+                    </div>
                 </div>
-            </div>
-        </div>
+            </PageWrapWithHeader>
     )
 };
 

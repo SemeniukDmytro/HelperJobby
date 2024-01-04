@@ -2,7 +2,7 @@ import {createContext, ReactNode, useEffect, useState} from "react";
 import AuthService from "../services/authService";
 import {AuthContextProps} from "../contextTypes/AuthContextProps";
 import {AuthUserDTO} from "../DTOs/userRelatedDTOs/AuthUserDTO";
-import {setAuthToken} from "../utils/authTokenInteraction";
+import {getAuthToken, setAuthToken} from "../utils/authTokenInteraction";
 
 const AuthContext = createContext<AuthContextProps>({authUser : null, 
     setAuthUser : () => {}});
@@ -16,7 +16,10 @@ export function AuthProvider({children} : {children: ReactNode; })
         const authService = new AuthService();
         let refreshedAuthUser : AuthUserDTO | null = null;
         try {
-            refreshedAuthUser = await authService.refreshToken();
+            const authToken = getAuthToken();
+            if (authToken !== null && authToken !== "undefined"){
+                refreshedAuthUser = await authService.refreshToken();
+            }
         }
         catch (e){
             

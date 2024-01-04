@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import AppLogo from "../AppLogo/AppLogo";
@@ -13,6 +13,8 @@ import AuthService from "../../services/authService";
 import {setAuthToken} from "../../utils/authTokenInteraction";
 import {useAuth} from "../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
+import NotifyPopupWindow from "../NotifyPopupWindow/NotifyPopupWindow";
+import {ServerError} from "../../ErrorDTOs/ServerErrorDTO";
 
 interface SignInFormProps {}
 
@@ -25,11 +27,24 @@ const SignInForm: FC<SignInFormProps> = () =>
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
+    const [isSuccessfulNotify, setIsSuccessfulNotify] = useState(false);
+    const [notifyMessage, setNotifyMessage] = useState("");
+    const [showPopup, setShowPopup] = useState(false);
     
     const [renderEmailForm, setRenderEmailForm] = useState(false);
     
     const isEmptyPassword = password.trim() == "";
     const authService : AuthService = new AuthService();
+
+    useEffect(() => {
+        if (showPopup) {
+            const timer = setTimeout(() => {
+                setShowPopup(false);
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [showPopup]);
     
     async function  AuthUser(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -55,7 +70,11 @@ const SignInForm: FC<SignInFormProps> = () =>
             navigate("/temp");
         }
         catch (error) {
-            console.log(error)
+            if (error instanceof ServerError){
+                setIsSuccessfulNotify(false);
+                setNotifyMessage(error.ServerErrorDTO.detail);
+                setShowPopup(true);
+            }
         }
     }
 
@@ -68,6 +87,7 @@ const SignInForm: FC<SignInFormProps> = () =>
         renderEmailForm ? (<EmailForm/>) :
             (
                 <AppLogo>
+                    {showPopup && <NotifyPopupWindow isSuccessful={isSuccessfulNotify} text={notifyMessage}/>}
                     <div className="form-box">
                         <div className="auth-form-container">
                             <div className="auth-form-title-box">

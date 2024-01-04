@@ -13,6 +13,10 @@ export class ResumeService {
     public async getResume(id: number): Promise<ResumeDTO> {
         return await this.customFetchService.get<ResumeDTO>(`${this.baseURI}/${id}`);
     }
+    
+    public async getResumeByJobSeekerId(jobSeekerId : number){
+        return await this.customFetchService.get<ResumeDTO>(`${this.baseURI}/job-seeker/${jobSeekerId}`);
+    }
 
     public async postResume(createdResume: CreateResumeDTO): Promise<ResumeDTO> {
         return await this.customFetchService.post<ResumeDTO>(this.baseURI, createdResume);

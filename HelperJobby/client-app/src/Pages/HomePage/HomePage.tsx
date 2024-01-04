@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import HomeComponent from "../../Components/HomeComponent/HomeComponent";
-import {HomePageContextProvider} from "../../context/HomePageContext";
+import {HomePageContextProvider} from "../../contexts/HomePageContext";
 
 interface HomePageProps{
 

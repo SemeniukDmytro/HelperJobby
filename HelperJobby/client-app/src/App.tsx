@@ -1,13 +1,11 @@
 import './App.css';
 import {Route, Routes} from "react-router-dom";
-import HomeComponent from "./Components/HomeComponent/HomeComponent";
 import RequireAuth from "./Components/RequireAuth/RequireAuth";
 import React from "react";
-import {AuthProvider} from "./context/AuthContext";
 import AuthPage from "./Pages/AuthPage/AuthPage";
 import HomePage from "./Pages/HomePage/HomePage";
-import NotifyPopupWindow from "./Components/NotifyPopupWindow/NotifyPopupWindow";
-import AuthUserHomePageHeader from "./Components/AuthUserHomePageHeader/AuthUserHomePageHeader";
+import {AuthProvider} from "./contexts/AuthContext";
+import {JobSeekerProvider} from "./contexts/JobSeekerContext";
 
 function App() {
   return (
@@ -18,7 +16,9 @@ function App() {
             <Route path={"auth-page"} element={<AuthPage/>}></Route>
             {/*private routes */}
             <Route element={<RequireAuth/>}>
-                <Route path={"temp"} element={<HomePage/>}/>
+                <JobSeekerProvider>
+                    <Route path={"temp"} element={<HomePage/>}/>
+                </JobSeekerProvider>
             </Route>
         </Routes>
       </AuthProvider>

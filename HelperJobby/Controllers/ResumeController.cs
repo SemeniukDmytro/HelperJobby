@@ -8,7 +8,6 @@ using HelperJobby.DTOs.Resume;
 using HelperJobby.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ResumeDTO = HelperJobby.DTOs.Resume.ResumeDTO;
 
 namespace HelperJobby.Controllers
 {
@@ -36,6 +35,13 @@ namespace HelperJobby.Controllers
         public async Task<ResumeDTO> GetResume(int id)
         {
             var resume = await _resumeQueryRepository.GetResumeById(id);
+            return _mapper.Map<ResumeDTO>(resume);
+        }
+
+        [HttpGet("job-seeker/{jobSeekerId}")]
+        public async Task<ResumeDTO> GetResumeByJobSeekerId(int jobSeekerId)
+        {
+            var resume = await _resumeQueryRepository.GetResumeByJobSeekerId(jobSeekerId);
             return _mapper.Map<ResumeDTO>(resume);
         }
 
