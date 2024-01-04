@@ -90,6 +90,14 @@ namespace HelperJobby.Controllers
                 Token = _authService.CreateAuthToken(userEntity.Id, userEntity.Email)
             };
         }
+
+        [HttpDelete("revoke-token")]
+        public async Task RevokeToken()
+        {
+            var userId = _userService.GetCurrentUserId();
+            var refreshToken = await _userQueryRepository.GetRefreshTokenByUserId(userId);
+            await _userCommandRepository.DeleteUserRefreshToken(refreshToken);
+        }
         
         private void SetRefreshToken(RefreshToken newRefreshToken)
         {

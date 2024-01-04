@@ -1,3 +1,4 @@
+using ApplicationDomain.AuthRelatedModels;
 using ApplicationDomain.Models;
 
 namespace ApplicationDomain.Abstraction.IQueryRepositories;
@@ -13,5 +14,6 @@ public interface IUserQueryRepository
     public Task<bool> IsEmailAvailable(string email);
     public Task<User> GetUserByEmail(string email);
     public Task<User> GetUserByEmailWithRefreshToken(string email);
+    public Task<RefreshToken> GetRefreshTokenByUserId(int userId);
 
 }

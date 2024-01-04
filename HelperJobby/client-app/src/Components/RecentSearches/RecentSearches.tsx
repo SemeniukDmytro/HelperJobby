@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
-import "./RecentSearches.scss"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faXmark} from "@fortawesome/free-solid-svg-icons";
+import "./RecentSearches.scss";
 import RecentSearch from "../RecentSearch/RecentSearch";
 import {useHomePage} from "../../hooks/useHomePage";
 

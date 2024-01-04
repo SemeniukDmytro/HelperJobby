@@ -1,5 +1,4 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import PublicHomePageHeader from "../PublicHomePageHeader/PublicHomePageHeader";
 import "./HomeComponent.scss";
 import JobSearchBar from "../JobSearchBar/JobSearchBar";
 import JobSearchPromoContainer from "../JobSearchPromoContainer/JobSearchPromoContainer";
@@ -7,6 +6,7 @@ import {useHomePage} from "../../hooks/useHomePage";
 import RecommendedJobs from "../RecommendedJobs/RecommendedJobs";
 import {SelectedTabs} from "../../enums/SelectedTabs";
 import RecentSearches from "../RecentSearches/RecentSearches";
+import HomePageHeader from "../HomePageHeader/HomePageHeader";
 
 
 interface HomeComponentProps {}
@@ -30,7 +30,7 @@ const HomeComponent: FC<HomeComponentProps> = () => {
 
     return (
         <div className={"job-search-layout"}>
-            <PublicHomePageHeader></PublicHomePageHeader>
+            <HomePageHeader></HomePageHeader>
             <div className={"header-and-main-content-separator"}></div>
             <div className={"main-content"}  ref={mainContentRef}>
                 <JobSearchBar/>

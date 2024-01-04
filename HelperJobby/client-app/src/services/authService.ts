@@ -48,6 +48,10 @@ class AuthService {
         return response.json();
     }
     
+    public async revokeToken(){
+        return await this.customFetchService.delete<void>(`${this.baseURI}/revoke-token`);
+    }
+    
 }
 
 export default  AuthService

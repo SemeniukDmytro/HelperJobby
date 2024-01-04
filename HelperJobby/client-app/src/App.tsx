@@ -7,6 +7,7 @@ import {AuthProvider} from "./context/AuthContext";
 import AuthPage from "./Pages/AuthPage/AuthPage";
 import HomePage from "./Pages/HomePage/HomePage";
 import NotifyPopupWindow from "./Components/NotifyPopupWindow/NotifyPopupWindow";
+import AuthUserHomePageHeader from "./Components/AuthUserHomePageHeader/AuthUserHomePageHeader";
 
 function App() {
   return (

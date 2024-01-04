@@ -1,5 +1,6 @@
 using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.ICommandRepositories;
+using ApplicationDomain.AuthRelatedModels;
 using ApplicationDomain.Models;
 
 namespace ApplicationDAL.CommandRepositories;
@@ -26,5 +27,11 @@ public class UserCommandRepository : IUserCommandRepository
         _applicationContext.Users.Update(user);
         await _applicationContext.SaveChangesAsync();
         return user;
+    }
+
+    public async Task DeleteUserRefreshToken(RefreshToken refreshToken)
+    {
+        _applicationContext.RefreshTokens.Remove(refreshToken);
+        await _applicationContext.SaveChangesAsync();
     }
 }
