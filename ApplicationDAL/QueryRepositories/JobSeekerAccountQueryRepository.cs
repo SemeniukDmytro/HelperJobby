@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Linq.Expressions;
 using ApplicationDAL.Context;
 using ApplicationDAL.DALHelpers;
 using ApplicationDomain.Abstraction.IQueryRepositories;
@@ -37,7 +35,24 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
         return await GetUserWithJobSeekerAccount(userId, q => q.Include(u => u.JobSeekerAccount)
             .ThenInclude(a => a.Address));
     }
-    
+
+    public async Task<JobSeekerAccount> GetJobSeekerAccountWithAddressAndResume(int userId)
+    {
+        var jobSeekerAccount =
+            await _applicationContext.JobSeekerAccounts.Where(j => j.UserId == userId)
+                .Select(j => new JobSeekerAccount()
+                {
+                    Id = j.Id,
+                    FirstName = j.FirstName,
+                    LastName = j.LastName,
+                    AddressId = j.AddressId,
+                    Address = j.Address,
+                    Resume = j.Resume,
+                    PhoneNumber = j.PhoneNumber
+                }).FirstOrDefaultAsync();
+        return jobSeekerAccount;
+    }
+
 
     public async Task<IEnumerable<Job>> GetJobSeekerAccountWithJobApplies(int userId)
     {

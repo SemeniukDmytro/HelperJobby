@@ -1,7 +1,7 @@
 import React, {FC} from "react";
-import EmailForm from "../../Components/EmailForm/EmailForm";
 import {EmailProvider} from "../../contexts/EmailContext";
 import {AccountTypeProvider} from "../../contexts/AccountTypeContext";
+import EmailForm from "./PageComponents/EmailForm/EmailForm";
 
 interface AuthPageProps{
     

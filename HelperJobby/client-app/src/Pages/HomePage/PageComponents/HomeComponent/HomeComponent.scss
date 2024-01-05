@@ -1,0 +1,70 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.header-and-main-content-separator{
+  position: relative;
+  display: flex;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.main-content{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.search-results-container{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-results-navbar{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border-bottom: 1px solid #dcdccd;
+}
+
+.tab-container{
+  position: relative;
+  display: flex;
+  max-width: 288px;
+  width: 50%;
+  justify-content: center;
+  box-sizing: border-box;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.search-underline{
+  position: absolute;
+  width: 100%;
+  height: 0.25rem;
+  bottom: 0rem;
+  left: 0;
+  background-color: global-variables.$dark-blue;
+}
+
+.tab-name{
+  font-weight: 500;
+  font-size: 1.125rem;
+  color: global-variables.$neutral-color-1000;
+}
+
+.title-container{
+  display: flex;
+  box-sizing: border-box;
+  padding: 1rem;
+  color: global-variables.$neutral-color-700;
+  font-size: 0.875rem;
+}
+
+.selected-tab-font-weight{
+  font-weight: 700;
+}

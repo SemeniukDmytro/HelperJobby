@@ -15,6 +15,10 @@ export class JobSeekerAccountService {
     public async getCurrentJobSeeker(): Promise<JobSeekerAccountDTO> {
         return await this.customFetchService.get<JobSeekerAccountDTO>(`${this.baseURI}/current-job-seeker`);
     }
+    
+    public async getCurrentJobSeekerAllInfo() : Promise<JobSeekerAccountDTO>{
+        return await this.customFetchService.get<JobSeekerAccountDTO>(`${this.baseURI}/current-job-seeker-all-info`);
+    }
 
     public async getSavedJobsOfCurrentJobSeeker(): Promise<JobDTO[]> {
         return await this.customFetchService.get<JobDTO[]>(`${this.baseURI}/my-saved-jobs`);

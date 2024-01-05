@@ -41,6 +41,13 @@
     <ItemGroup>
         <InternalsVisibleTo Include="API_IntegrationTests" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="client-app\src\Components\Header\" />
+      <Folder Include="client-app\src\Pages\AuthPage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\HomePage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\JobSeekerProfilePage\PageComponents\" />
+    </ItemGroup>
     
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
         <!-- Ensure Node.js is installed -->

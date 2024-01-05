@@ -2,6 +2,8 @@ import React, { FC, useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { UserService } from '../../services/userService';
 import { UserDTO } from '../../DTOs/userRelatedDTOs/UserDTO';
+import {JobSeekerProvider} from "../../contexts/JobSeekerContext";
+import {useAuth} from "../../hooks/useAuth";
 
 interface RequireAuthProps {}
 
@@ -31,7 +33,9 @@ const RequireAuth: FC<RequireAuthProps> = () => {
             <span>Loading...</span>
         </>
     ) : user ? (
-        <Outlet />
+        <JobSeekerProvider>
+            <Outlet />
+        </JobSeekerProvider>
     ) : (
         <Navigate to="auth-page" state={{ from: location }} replace />
     );

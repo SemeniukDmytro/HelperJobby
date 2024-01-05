@@ -5,7 +5,7 @@ import React from "react";
 import AuthPage from "./Pages/AuthPage/AuthPage";
 import HomePage from "./Pages/HomePage/HomePage";
 import {AuthProvider} from "./contexts/AuthContext";
-import {JobSeekerProvider} from "./contexts/JobSeekerContext";
+import JobSeekerProfile from "./Pages/JobSeekerProfilePage/PageComponents/JobSeekerProfile/JobSeekerProfile";
 
 function App() {
   return (
@@ -15,10 +15,10 @@ function App() {
             <Route path="/" element={<HomePage/>} />
             <Route path={"auth-page"} element={<AuthPage/>}></Route>
             {/*private routes */}
+
             <Route element={<RequireAuth/>}>
-                <JobSeekerProvider>
-                    <Route path={"temp"} element={<HomePage/>}/>
-                </JobSeekerProvider>
+                <Route path={"temp"} element={<HomePage/>}/>
+                <Route path={"my-profile"} element={<JobSeekerProfile/>}/>
             </Route>
         </Routes>
       </AuthProvider>

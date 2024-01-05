@@ -1,0 +1,124 @@
+@use "../../../Assets/scssSharedStyles/global-variables";
+
+.nav-buttons-block{
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-button-box{
+  margin: 0 0.5rem;
+  display: flex;
+  position: relative;
+}
+
+.nav-button{
+  box-sizing: border-box;
+  border: none;
+  padding: 1rem 1rem 0;
+  background-color: transparent;
+  transition: 0.2s;
+  font-size: 1.25rem;  
+  cursor: pointer;
+  &:hover{
+    background-color: global-variables.$light-blue;
+  }
+}
+
+.underline{
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background-color: #2557a7;
+  left: 0;
+  bottom: 0;
+}
+
+.nav-button-box:hover .underline{
+  width: 100%;
+}
+
+.profile-more-options-line{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.profile-more-options{
+  right: -1.875rem;
+  position: absolute;
+  top: calc(100% - 0.25rem);
+  box-shadow: global-variables.$field-box-shadow;
+  width: 23.125rem;
+  background-color: white;
+  z-index: 4;
+  border: 1px solid global-variables.$neutral-color-400;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-email-info{
+  display: flex;
+  font-weight: 700;
+  padding: 1.5rem;
+  color: global-variables.$neutral-color-900;
+}
+
+.more-profile-option-button{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border: none;
+  cursor: pointer;
+  background-color: white;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: global-variables.$neutral-color-1000;
+  &:hover{
+    background-color: global-variables.$light-blue;
+  }
+  &:active{
+    background-color: global-variables.$light-blue-active;
+    box-shadow: global-variables.$button-inner-shadow;
+  }
+}
+
+.big-icon{
+  font-size: 1.5rem;
+  transition: 0.2s;
+}
+
+.more-profile-option-button:hover .big-icon{
+  color: global-variables.$dark-blue-hover;
+}
+
+.more-options-dividing-line{
+  display: flex;
+  flex-grow: 1;
+  margin-top: 1rem;
+  border-bottom: 2px solid global-variables.$neutral-color-300;
+}
+
+.sign-out-button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  background: white;
+  border-bottom-right-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+  color: global-variables.$dark-blue;
+  font-size: 1rem;
+  font-weight: 700;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  &:hover{
+    background-color: global-variables.$light-blue;
+  }
+}
