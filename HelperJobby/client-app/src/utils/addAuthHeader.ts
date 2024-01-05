@@ -14,7 +14,9 @@ export async function addAuthHeader(headers : { [key: string]: string }) : Promi
         if (isTokenExpired){
             const authService = new AuthService();
             const authUser = await authService.refreshToken();
-            setAuthToken(authUser.token);
+            if (authUser.token && authUser.token !== "undefined" && authUser.token !== undefined){
+                setAuthToken(authUser.token);
+            }
         }
     }
     return headers;

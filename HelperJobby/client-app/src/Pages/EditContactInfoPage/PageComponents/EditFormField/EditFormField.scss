@@ -17,7 +17,6 @@
   display: flex;
   position: relative;
   border-radius: 0.5rem;
-  margin-bottom: 1.5rem;  
   transition: border-bottom 0.2s;
 }
 
@@ -38,4 +37,26 @@
 .field-focus{
   border-radius: 0.5rem;
   border-bottom: 4px solid global-variables.$dark-blue;
+}
+
+.red-field-focus{
+  border-color: global-variables.$error-color;
+  &:focus{
+    border-color: global-variables.$error-color;
+  }
+}
+
+.field-label-subtitle{
+  display: flex;
+  margin-bottom:0.25rem;
+  font-size: 0.9375rem;
+  color: global-variables.$neutral-color-800;
+}
+
+.input-field-spacing{
+  margin-bottom: 1.5rem;
+}
+
+.error-color{
+  
 }

@@ -37,7 +37,7 @@ const RequireAuth: FC<RequireAuthProps> = () => {
             <Outlet />
         </JobSeekerProvider>
     ) : (
-        <Navigate to="auth-page" state={{ from: location }} replace />
+        <Navigate to="/" state={{ from: location }} replace />
     );
 };
 
