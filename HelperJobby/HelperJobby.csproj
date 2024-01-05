@@ -45,6 +45,7 @@
     <ItemGroup>
       <Folder Include="client-app\src\Components\Header\" />
       <Folder Include="client-app\src\Pages\AuthPage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\EditContactInfoPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\HomePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\JobSeekerProfilePage\PageComponents\" />
     </ItemGroup>

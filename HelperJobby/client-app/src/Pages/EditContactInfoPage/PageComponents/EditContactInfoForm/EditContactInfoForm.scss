@@ -1,0 +1,103 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.edit-contact-layout{
+  display: flex;
+  padding: 0 1rem;
+  flex-direction: column;
+  position: relative;
+  width: 602px;
+  margin: 0 auto;
+}
+
+.back-button-header{
+  position: sticky;
+  top: 0px;
+  display: flex;
+  flex-grow: 1;
+  margin: 0.5rem 0;
+}
+
+.back-button{
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  transition: 0.2s;
+  color: global-variables.$neutral-color-1000;
+  font-size: 1.25rem;
+  cursor: pointer;
+  &:hover{
+    background-color: global-variables.$light-blue;
+    color: global-variables.$dark-blue;
+  }
+  &:active{
+    background-color: global-variables.$light-blue-active;
+    box-shadow: global-variables.$button-inner-shadow;
+    color: global-variables.$dark-blue-hover;
+  }
+}
+
+.edit-form-layout{
+  display: flex;
+  flex-direction: column;
+  padding: 0 0.75rem;
+}
+
+.edit-contact-form-header{
+  display: flex;
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: global-variables.$neutral-color-1000;
+}
+
+.edit-email-layout{
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid global-variables.$neutral-color-400;
+  margin-bottom: 2rem;
+}
+
+.edit-email-label{
+  display: flex;
+  cursor: default;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: global-variables.$neutral-color-1000;
+}
+
+.change-email-box{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.current-email{
+  color: global-variables.$neutral-color-1000;
+}
+
+.change-email-link{
+  font-weight: 700;
+  cursor: pointer;
+  color: global-variables.$dark-blue;
+  &:hover{
+    color: global-variables.$dark-blue-hover;
+  }
+}
+
+.edit-link{
+  margin-right: 0.5rem;
+}
+
+.edit-location-label{
+  color: global-variables.$neutral-color-1000;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.edit-location-subtitle{
+  color: global-variables.$neutral-color-700;
+}

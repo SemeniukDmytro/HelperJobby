@@ -5,12 +5,12 @@
   "component": {
     "default": {
       "path": "src/components",
-      "withStyle": false,
+      "withStyle": true,
       "withTest": false,
       "withStory": false,
       "withLazy": false
     }
   },
-  "usesCssModule": true,
+  "usesCssModule": false,
   "cssPreprocessor": "scss"
 }

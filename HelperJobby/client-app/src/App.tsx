@@ -5,20 +5,23 @@ import React from "react";
 import AuthPage from "./Pages/AuthPage/AuthPage";
 import HomePage from "./Pages/HomePage/HomePage";
 import {AuthProvider} from "./contexts/AuthContext";
-import JobSeekerProfile from "./Pages/JobSeekerProfilePage/PageComponents/JobSeekerProfile/JobSeekerProfile";
+import JobSeekerProfilePage from "./Pages/JobSeekerProfilePage/JobSeekerProfilePage";
+import EditContactInfoPage from "./Pages/EditContactInfoPage/EditContactInfoPage";
 
 function App() {
   return (
       <AuthProvider>
         <Routes>
+            
             {/* public routes*/}
             <Route path="/" element={<HomePage/>} />
             <Route path={"auth-page"} element={<AuthPage/>}></Route>
+            
             {/*private routes */}
-
             <Route element={<RequireAuth/>}>
                 <Route path={"temp"} element={<HomePage/>}/>
-                <Route path={"my-profile"} element={<JobSeekerProfile/>}/>
+                <Route path={"my-profile"} element={<JobSeekerProfilePage/>}/>
+                <Route path={"edit-contact"} element={<EditContactInfoPage/>}/>
             </Route>
         </Routes>
       </AuthProvider>

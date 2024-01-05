@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import "./JobSeekerProfile.scss";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {useAuth} from "../../../../hooks/useAuth";
@@ -9,20 +9,25 @@ import {JobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/JobSeekerAccount
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleRight, faEnvelope, faFileLines, faLocationDot, faPhone, faUser} from "@fortawesome/free-solid-svg-icons";
+import {useNavigate} from "react-router-dom";
 
 interface JobSeekerProfileProps {}
 
 const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
     const {jobSeeker, setJobSeeker} = useJobSeeker();
-    const {authUser, setAuthUser} = useAuth();
+    const {authUser} = useAuth();
     const jobSeekerService = new JobSeekerAccountService();
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 if (jobSeeker === null){
+                    setLoading(true);
                     const jobSeeker = await getJobSeekerAccount();
                     setJobSeeker(jobSeeker);
+                    setLoading(false);
                 }
             }
             catch (error){
@@ -42,14 +47,19 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
     async function getJobSeekerAccount() : Promise<JobSeekerAccountDTO> {
         return  await jobSeekerService.getCurrentJobSeekerAllInfo();
     }
-    
+
+    function navigateToEditContactPage() {
+        navigate("/edit-contact")
+    }
+
     return (
+        loading ? (<span>Loading...</span>) :
         <PageWrapWithHeader>
             <div className={"profile-info-layout"}>
                 <div className={"profile-info-container"}>
                     <div className={"profile-header-info"}>
                         {!jobSeeker?.firstName || !jobSeeker.lastName ?  
-                            (<a className={"job-seeker-add-name"}>
+                            (<a className={"job-seeker-add-name"} onClick={navigateToEditContactPage}>
                                 Add name 
                             </a>)
                             :
@@ -66,7 +76,7 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
                         </div>
                     </div>
                     <div className={"change-job-seeker-info-section"}>
-                        <button className={"change-job-seeker-info-button"}>
+                        <button className={"change-job-seeker-info-button"} onClick={navigateToEditContactPage}>
                             <div className={"job-seeker-info-line"}>
                                 <FontAwesomeIcon className={"start-of-line-icon"} icon={faEnvelope} />
                                 <span>{authUser?.user.email}</span>
