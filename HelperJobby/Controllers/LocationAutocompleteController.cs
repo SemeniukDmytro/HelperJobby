@@ -20,18 +20,18 @@ namespace HelperJobby.Controllers
         [Route("street_addresses")]
         public async Task<List<string>> GetAutocompletesForStreetAddress(
             [FromQuery] string input,
-            [FromQuery] string countryTld)
+            [FromQuery] string countryA2code)
         {
-            return await _locationService.GetStreetAddressAutocomplete(input, countryTld);
+            return await _locationService.GetStreetAddressAutocomplete(input, countryA2code);
         }
         
         [HttpGet]
         [Route("cities")]
         public async Task<List<string>> GetAutocompletesForCity(
             [FromQuery] string input,
-            [FromQuery] string countryTld)
+            [FromQuery] string countryA2code)
         {
-            return await _locationService.GetCityAutocomplete(input, countryTld);
+            return await _locationService.GetCityAutocomplete(input, countryA2code);
         }
     }
 

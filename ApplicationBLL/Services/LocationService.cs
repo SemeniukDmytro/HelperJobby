@@ -26,7 +26,7 @@ public class LocationService : ILocationService
 
         using (HttpClient client = new HttpClient())
         {
-            var regionSpecification = string.IsNullOrEmpty(countryCode) ? "" : $"&region={countryCode}";
+            var regionSpecification = string.IsNullOrEmpty(countryCode) ? "" : $"&components=country:{countryCode}";
             var requestURI =
                 $"{GoogleMapsApiUrl}place/autocomplete/json?input={input}&key={apiKey}&types={resultType}{regionSpecification}";
             

@@ -9,7 +9,6 @@ interface EditFormFieldProps {
     isRequired : boolean;
     inputFieldValue : string;
     setInputFieldValue : Dispatch<SetStateAction<string>>;
-    fieldSubtitle? : string;
     inputRef?: React.RefObject<HTMLInputElement>;
 }
 
@@ -17,7 +16,6 @@ const EditFormField: FC<EditFormFieldProps> = ({ inputFieldValue,
                                                setInputFieldValue, 
                                                fieldLabel, 
                                                isRequired ,
-                                               fieldSubtitle,
                                                inputRef}) => {
     
     const [inputFocus, setInputFocus] = useState(false);
@@ -53,9 +51,6 @@ const EditFormField: FC<EditFormFieldProps> = ({ inputFieldValue,
             <span>{fieldLabel}&nbsp;</span>
             {isRequired && <span className={"required-mark"}>*</span>}
         </div>
-        {fieldSubtitle && <div className={"field-label-subtitle"}>
-            {fieldSubtitle}
-        </div>}
         <div className={"field-input-container"}>
             <div className={`border-lining ${inputFocus ? "field-focus" : ""} ${isInvalidValue ? "red-field-focus" : ""}`}>
 

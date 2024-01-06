@@ -11,16 +11,18 @@ import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
 import {isNotEmpty} from "../../../../utils/commonValidators";
 import {JobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
-import {useNavigate} from "react-router-dom";
 import {UpdateJobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/UpdateEmployerAccountDTO";
 import CountrySelector from "../CountrySelector/CountrySelector";
-import {countries} from "../../../../AppConstData/CountriesData";
-import {LocationAutocompleteService} from "../../../../services/LocationAutocompleteService";
+import {LocationAutocompleteService} from "../../../../services/locationAutocompleteService";
+import {mapCountryWithTld} from "../../../../utils/countryWithTldMapper";
+import EditEmail from "../EditEmail/EditEmail";
+import {useNavigate} from "react-router-dom";
 
 interface EditContactInfoFormProps {}
 
 const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     const {authUser} = useAuth();
+    const navigate = useNavigate();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("")
@@ -35,18 +37,17 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     const lastNameInputRef = useRef<HTMLInputElement>(null);
     const countryInputRef = useRef<HTMLInputElement>(null);
     const cityInputRef = useRef<HTMLInputElement>(null);
+    
     const jobSeekerService = new JobSeekerAccountService;
-    const navigate = useNavigate();
+    const locationAutocompleteService = new LocationAutocompleteService();
 
     const [streetAddressInputFocus, setStreetAddressInputFocus] = useState(false);
-    const locationAutocompleteService = new LocationAutocompleteService();
     const [streetAddressAutocompleteResults, setStreetAddressAutocompleteResults] = useState<string[][]>([])
     const streetAddressInputRef = useRef<HTMLInputElement>(null);
-    const [autocompleteTop, setAutocompleteTop] = useState<number | null>(null);
-    const [autoCompleteLeft, setAutoCompleteLeft] = useState<number | null>(null);
-    const autoCompleteRef = useRef<HTMLDivElement | null>(null);
-    const [displayAutoCompleteStreetResults, setDisplayAutoCompleteStreetResults] = useState(false);
-    let timeoutId: NodeJS.Timeout;
+    const streetsAutoCompleteRef = useRef<HTMLDivElement | null>(null);
+    const [showStreetsAutoComplete, setShowStreetsAutoComplete] = useState(false);
+    const [delayedStreetAddress, setDelayedStreetAddress] = useState("");
+    const [autoCompleteSelected, setAutoCompleteSelected] = useState(false);
     
     let newJobSeekerInstanceWasLoaded = false;
     
@@ -74,38 +75,86 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     }, []);
 
     useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (!autoCompleteSelected){
+                setDelayedStreetAddress(streetAddress);
+            }
+        }, 300);
+        return () => clearTimeout(timeout)
+    }, [streetAddress]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (delayedStreetAddress.length <= 0 || streetAddress.length<=0) {
+                return;
+            }
+            try {
+                const response = await locationAutocompleteService.GetAutocompletesForStreetAddress(
+                    delayedStreetAddress,
+                    mapCountryWithTld(country)
+                );
+                const separatedValues = response.map((result) => result.split(', '));
+                const autoCompleteResults = separatedValues.map((values) => values.slice(0, values.length - 1));
+                if (autoCompleteResults.length > 0) {
+                    setShowStreetsAutoComplete(true);
+                } else {
+                    setShowStreetsAutoComplete(false);
+                }
+                setStreetAddressAutocompleteResults(autoCompleteResults);
+            } catch (error) {
+                if (error instanceof ServerError) {
+                    logErrorInfo(error);
+                }
+            }
+        }
+        fetchData();
+    }, [delayedStreetAddress]);
+
+    useEffect(() => {
         if (jobSeeker && !newJobSeekerInstanceWasLoaded){
             setJobSeekerValues(jobSeeker);
         }
     }, [jobSeeker]);
+    function goBackToJobSeekerProfile() {
+        navigate("/my-profile");
+    }
+
+    const getTopPosition = () => {
+        if (!streetAddressInputRef.current || !streetsAutoCompleteRef.current) {
+            return;
+        }
+
+        const streetInputRect = streetAddressInputRef.current?.getBoundingClientRect();
+        streetsAutoCompleteRef.current.style.left = `${streetInputRect.left}px`;
+
+        const windowScrollY = window.scrollY;
+        const viewPortHeight = window.innerHeight;
+
+        if (viewPortHeight - streetInputRect.bottom > 250) {
+            streetsAutoCompleteRef.current.style.top = `${streetInputRect.bottom + windowScrollY + 3}px`;
+        } else {
+            streetsAutoCompleteRef.current.style.top = `${streetInputRect.top + windowScrollY - streetsAutoCompleteRef.current!.clientHeight - 6}px`;
+        }
+    };
 
     useEffect(() => {
-        const getTopPosition = () => {
-            const streetInputRect = streetAddressInputRef.current?.getBoundingClientRect();
-            if (streetInputRect == undefined){
-                return;
-            }
-            setAutoCompleteLeft(streetInputRect.left);
-            const windowScrollY = window.scrollY;
-            const viewPortHeight = window.innerHeight;
-            if(viewPortHeight - streetInputRect.bottom > 250){
-                setAutocompleteTop(streetInputRect.bottom+windowScrollY + 3)
-            }
-            else {
-                if (autoCompleteRef.current){
-                    setAutocompleteTop(streetInputRect.top+windowScrollY-autoCompleteRef.current!.clientHeight - 6)
-                }
-            }
-        };
         getTopPosition();
+
+        const handleResize = () => {
+            getTopPosition();
+        };
+
         window.addEventListener('scroll', getTopPosition);
+        window.addEventListener('resize', handleResize);
+
         return () => {
             window.removeEventListener('scroll', getTopPosition);
+            window.removeEventListener('resize', handleResize);
         };
-    }, [window.scrollY, autoCompleteRef]);
+    }, [streetsAutoCompleteRef, streetAddressInputRef, streetAddressAutocompleteResults]);
 
     const closeAutocomplete = () => {
-        setDisplayAutoCompleteStreetResults(false);
+        setShowStreetsAutoComplete(false);
     };
 
     useEffect(() => {
@@ -181,46 +230,14 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
             }
         }
         finally {
-            navigate("/my-profile")
+            goBackToJobSeekerProfile();
         }
         
     }
-    function goBackToJobSeekerProfile() {
-        navigate("/my-profile");
-    }
 
-    async function changeInputFieldValue(e: ChangeEvent<HTMLInputElement>) {
+    async function streetAddressChangeHandler(e: ChangeEvent<HTMLInputElement>) {
+        setAutoCompleteSelected(false);
         setStreetAddress(e.target.value);
-        clearTimeout(timeoutId);
-
-        if(streetAddress){
-            timeoutId = setTimeout(async () => {
-                try {
-                    const response = await locationAutocompleteService.GetAutocompletesForStreetAddress(e.target.value, mapCountryWithTld());
-                    const autoCompleteResults = response.map((result) => result.split(',').slice(0, 2));
-                    if (autoCompleteResults.length > 0){
-                        setDisplayAutoCompleteStreetResults(true);
-                    }
-                    setStreetAddressAutocompleteResults(autoCompleteResults);
-                    
-                }
-                catch (error){
-                    if (error instanceof ServerError){
-                        logErrorInfo(error)
-                    }
-                }
-            }, 700);
-        }
-    }
-
-    function mapCountryWithTld(){
-        const countryObject = countries.find((c) => c.name === country);
-
-        if (countryObject) {
-            return countryObject.tld;
-        } else {
-            return '';
-        }
     }
 
     function handleInputFocus() {
@@ -230,17 +247,31 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     function handleInputBlur() {
         setStreetAddressInputFocus(false);
     }
+
+
+    function handleStreetSelect(locationResult : string[]) {
+        const citySeparated = locationResult.slice(locationResult.length-2, locationResult.length);
+        const streetAddressSeparated = locationResult.slice(0, locationResult.length-2);
+        const lastElement = citySeparated[0];
+        if (/\d/.test(lastElement)){
+            citySeparated.shift();
+            streetAddressSeparated.push(lastElement);
+        }
+        setCity(citySeparated.join(", "));
+        setStreetAddress(streetAddressSeparated.join(", "))
+        setAutoCompleteSelected(true);
+    }
     
 
     return (
         loading ? (<span>Loading...</span>) :
             (<PageWrapWithHeader>
-                {displayAutoCompleteStreetResults && <div className={"autocomplete-results"} ref={autoCompleteRef} style={{ top: `${autocompleteTop}px`,
-                left: `${autoCompleteLeft}px`}}>
+                {showStreetsAutoComplete && 
+                    <div className={"autocomplete-results"} ref={streetsAutoCompleteRef}>
                     {streetAddressAutocompleteResults.map((locationResult, index)  => (
-                        <div className={"autocomplete-result"} key={index}>{locationResult.join(',')}</div>
-                    ))}
-                </div>}
+                        <div className={"autocomplete-result"} key={index} onClick={() => handleStreetSelect(locationResult)}>{locationResult.join(', ')}</div>))}
+                    </div>
+                }
                 <div className={"edit-contact-layout"}>
                   
                   <div className={"back-button-header"}>
@@ -259,20 +290,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                          setInputFieldValue={setLastName} inputRef={lastNameInputRef}/>
                           <EditFormField fieldLabel={"Phone"} isRequired={false} inputFieldValue={phoneNumber}
                                          setInputFieldValue={setPhoneNumber}/>
-                          <div className={"edit-email-layout"}>
-                              <div className={"edit-email-label"}>
-                                  Email
-                              </div>
-                              <div className={"change-email-box"}>
-                                  <div className={"current-email"}>
-                                      {authUser?.user.email}
-                                  </div>
-                                  <a className={"change-email-link"}>
-                                      <span className={"edit-link"}>Edit</span>
-                                      <FontAwesomeIcon icon={faArrowRight}/>
-                                  </a>
-                              </div>
-                          </div>
+                          <EditEmail/>
                           <div className={"edit-location-layout"}>
                               <div className={"edit-location-label"}>
                                   Location
@@ -294,7 +312,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                       <input className={`field-input`}
                                              value={streetAddress}
                                              type={"text"}
-                                             onChange={changeInputFieldValue}
+                                             onChange={streetAddressChangeHandler}
                                              onFocus={handleInputFocus}
                                              onBlur={handleInputBlur}
                                              ref={streetAddressInputRef}/>
