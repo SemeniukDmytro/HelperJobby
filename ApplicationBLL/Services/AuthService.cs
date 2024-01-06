@@ -77,7 +77,6 @@ public class AuthService : IAuthService
         }
         string userId = principal.FindFirst("id")?.Value;
         var user = await _userQueryRepository.GetUserByIdWithRefreshToken(int.Parse(userId));
-        bool da = refreshToken == user.RefreshToken.Token;
         if (user == null || user.RefreshToken.Token != refreshToken ||
             user.RefreshToken.Expires < DateTime.UtcNow)
         {
