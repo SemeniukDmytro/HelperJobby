@@ -6,32 +6,32 @@ namespace HelperJobby.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GoogleMapsController : ControllerBase
+    public class LocationAutocompleteController : ControllerBase
     {
         private const string GoogleMapsApiUrl = "https://maps.googleapis.com/maps/api/";
         private readonly ILocationService _locationService;
 
-        public GoogleMapsController(ILocationService locationService)
+        public LocationAutocompleteController(ILocationService locationService)
         {
             _locationService = locationService;
         }
 
         [HttpGet]
-        [Route("autocomplete/street_addresses")]
+        [Route("street_addresses")]
         public async Task<List<string>> GetAutocompletesForStreetAddress(
             [FromQuery] string input,
-            [FromQuery] string countryCode)
+            [FromQuery] string countryTld)
         {
-            return await _locationService.GetStreetAddressAutocomplete(input, countryCode);
+            return await _locationService.GetStreetAddressAutocomplete(input, countryTld);
         }
         
         [HttpGet]
-        [Route("autocomplete/street_addresses")]
+        [Route("cities")]
         public async Task<List<string>> GetAutocompletesForCity(
             [FromQuery] string input,
-            [FromQuery] string countryCode)
+            [FromQuery] string countryTld)
         {
-            return await _locationService.GetCityAutocomplete(input, countryCode);
+            return await _locationService.GetCityAutocomplete(input, countryTld);
         }
     }
 

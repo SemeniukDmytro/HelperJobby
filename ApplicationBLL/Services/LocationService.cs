@@ -7,7 +7,7 @@ namespace ApplicationBLL.Services;
 public class LocationService : ILocationService
 {
     private const string GoogleMapsApiUrl = "https://maps.googleapis.com/maps/api/";
-    private const string StreetAddressType = "street-address";
+    private const string StreetAddressType = "address";
     private const string CityAddressType = "city";
     
     public async Task<List<string>> GetStreetAddressAutocomplete(string input, string countryCode)
@@ -26,8 +26,10 @@ public class LocationService : ILocationService
 
         using (HttpClient client = new HttpClient())
         {
+            var regionSpecification = string.IsNullOrEmpty(countryCode) ? "" : $"&region={countryCode}";
             var requestURI =
-                $"{GoogleMapsApiUrl}place/autocomplete/json?input={input}&key={apiKey}&types={resultType}&components=country:{countryCode}";
+                $"{GoogleMapsApiUrl}place/autocomplete/json?input={input}&key={apiKey}&types={resultType}{regionSpecification}";
+            
             HttpResponseMessage response = await client.GetAsync(requestURI);
 
             if (response.IsSuccessStatusCode)

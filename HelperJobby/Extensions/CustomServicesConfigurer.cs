@@ -84,6 +84,7 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IRecentUserSearchCommandRepository, RecentUserSearchCommandRepository>();
         serviceProvider.AddScoped<IRecentUserSearchService, RecentUserSearchService>();
         serviceProvider.AddScoped<IRecommendationService, RecommendationService>();
+        serviceProvider.AddScoped<ILocationService, LocationService>();
         
         //background related
         serviceProvider.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>(); 
