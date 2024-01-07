@@ -5,18 +5,22 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {isNotEmpty} from "../../../../utils/commonValidators";
 
 interface EditFormFieldProps {
-    fieldLabel : string | undefined;
+    fieldLabel : string;
     isRequired : boolean;
     inputFieldValue : string;
     setInputFieldValue : Dispatch<SetStateAction<string>>;
     inputRef?: React.RefObject<HTMLInputElement>;
+    setShowAutocompleteWindow? : Dispatch<SetStateAction<boolean>>;
+    fieldSubtitle? : string;
 }
 
 const EditFormField: FC<EditFormFieldProps> = ({ inputFieldValue, 
                                                setInputFieldValue, 
                                                fieldLabel, 
                                                isRequired ,
-                                               inputRef}) => {
+                                               inputRef,
+                                               setShowAutocompleteWindow,
+                                               fieldSubtitle}) => {
     
     const [inputFocus, setInputFocus] = useState(false);
     const [isInvalidValue, setIsInvalidValue] = useState(false); 
@@ -34,6 +38,9 @@ const EditFormField: FC<EditFormFieldProps> = ({ inputFieldValue,
 
     function changeInputFieldValue(e: ChangeEvent<HTMLInputElement>) {
         setIsInvalidValue(false);
+        if (setShowAutocompleteWindow){
+            setShowAutocompleteWindow(true);
+        }
         setInputFieldValue(e.target.value);
     }
 
@@ -51,6 +58,9 @@ const EditFormField: FC<EditFormFieldProps> = ({ inputFieldValue,
             <span>{fieldLabel}&nbsp;</span>
             {isRequired && <span className={"required-mark"}>*</span>}
         </div>
+        {fieldSubtitle && <div className={"field-label-subtitle"}>
+            {fieldSubtitle}
+        </div>}
         <div className={"field-input-container"}>
             <div className={`border-lining ${inputFocus ? "field-focus" : ""} ${isInvalidValue ? "red-field-focus" : ""}`}>
 

@@ -1,6 +1,6 @@
 import {countries} from "../AppConstData/CountriesData";
 
-export function mapCountryWithTld(country : string){
+export function mapCountryWithA2Code(country : string){
     const countryObject = countries.find((c) => c.name === country);
 
     if (countryObject) {

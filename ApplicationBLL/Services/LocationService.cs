@@ -8,7 +8,7 @@ public class LocationService : ILocationService
 {
     private const string GoogleMapsApiUrl = "https://maps.googleapis.com/maps/api/";
     private const string StreetAddressType = "address";
-    private const string CityAddressType = "city";
+    private const string CityAddressType = "(cities)";
     
     public async Task<List<string>> GetStreetAddressAutocomplete(string input, string countryCode)
     {
