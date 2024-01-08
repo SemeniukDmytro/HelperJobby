@@ -196,10 +196,10 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                               <CountrySelector country={country} setCountry={setCountry}></CountrySelector>
                               <EditFormField fieldLabel={"Street address"} isRequired={false} inputFieldValue={streetAddress} setInputFieldValue={setStreetAddress}
                                              setShowAutocompleteWindow={setShowStreetsAutocomplete} inputRef={streetAddressInputRef}
-                              fieldSubtitle={"Visible only to you"}/>
+                                             fieldSubtitle={"Visible only to you"} displayGoogleLogo={true}/>
                               <EditFormField fieldLabel={"City, Province / Territory"} isRequired={true} inputFieldValue={city} inputRef={cityInputRef}
                                              setInputFieldValue={setCity}
-                                             setShowAutocompleteWindow={setShowCityAutoComplete}/>
+                                             setShowAutocompleteWindow={setShowCityAutoComplete} displayGoogleLogo={true}/>
                               <EditFormField fieldLabel={"Postal code"} isRequired={false} inputFieldValue={postalCode}
                                              setInputFieldValue={setPostalCode}/>
                           </div>

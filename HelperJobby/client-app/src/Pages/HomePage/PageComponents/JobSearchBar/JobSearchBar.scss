@@ -135,6 +135,9 @@
   border-radius: 0.5rem;
   padding: 0.625rem;
   margin-right: 0.5rem;
+  cursor: pointer;
+  background: transparent;
+  border: none;
   &:hover {
     background-color: #eef1fe;
   }
@@ -147,4 +150,26 @@
 .cross-icon {
   font-weight: 400;
   color: #949494;
+}
+
+.location-search-autocomplete-window{
+  position: absolute;
+  z-index: 4;
+  box-shadow: global-variables.$field-box-shadow;
+  border-radius: 0.5rem;
+  border: 1px solid global-variables.$neutral-color-500;
+  top: +4rem;
+  max-height: 230px;
+  background: white;
+  width: 100%;
+  overflow: auto;
+  .autocomplete-result:first-child {
+    border-top-right-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
+  }
+
+  .autocomplete-result:last-child {
+    border-bottom-right-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+  }
 }

@@ -13,16 +13,17 @@ function App() {
       <AuthProvider>
         <Routes>
             
-            {/* public routes*/}
-            <Route path="/" element={<HomePage/>} />
-            <Route path={"auth-page"} element={<AuthPage/>}></Route>
             
-            {/*private routes */}
+            {/* auth routes*/}
             <Route element={<RequireAuth/>}>
-                <Route path={"temp"} element={<HomePage/>}/>
+                <Route path={"/"} element={<HomePage/>}/>
                 <Route path={"my-profile"} element={<JobSeekerProfilePage/>}/>
                 <Route path={"edit-contact"} element={<EditContactInfoPage/>}/>
             </Route>
+
+            {/*public routes */}
+            <Route path="/" element={<HomePage/>}/>
+            <Route path={"auth-page"} element={<AuthPage/>}></Route>
         </Routes>
       </AuthProvider>
   )

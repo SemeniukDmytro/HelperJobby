@@ -3,6 +3,8 @@ import './EditFormField.scss';
 import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {isNotEmpty} from "../../../../utils/commonValidators";
+import GoogleImage from '../../../../Assets/pictures/google_on_white_hdpi.png'
+
 
 interface EditFormFieldProps {
     fieldLabel : string;
@@ -12,6 +14,7 @@ interface EditFormFieldProps {
     inputRef?: React.RefObject<HTMLInputElement>;
     setShowAutocompleteWindow? : Dispatch<SetStateAction<boolean>>;
     fieldSubtitle? : string;
+    displayGoogleLogo? : boolean;
 }
 
 const EditFormField: FC<EditFormFieldProps> = ({ inputFieldValue, 
@@ -20,7 +23,8 @@ const EditFormField: FC<EditFormFieldProps> = ({ inputFieldValue,
                                                isRequired ,
                                                inputRef,
                                                setShowAutocompleteWindow,
-                                               fieldSubtitle}) => {
+                                               fieldSubtitle,
+                                               displayGoogleLogo}) => {
     
     const [inputFocus, setInputFocus] = useState(false);
     const [isInvalidValue, setIsInvalidValue] = useState(false); 
@@ -72,6 +76,7 @@ const EditFormField: FC<EditFormFieldProps> = ({ inputFieldValue,
                    onFocus={handleInputFocus}
                    onBlur={handleInputBlur}
                    ref={inputRef}/>
+            {displayGoogleLogo && <img className={"google-logo"} src={GoogleImage} alt={""}></img>}
         </div>
         <div className={"input-field-spacing"}>
             {isInvalidValue && isRequired &&
