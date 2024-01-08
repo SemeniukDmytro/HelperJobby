@@ -77,6 +77,7 @@
 
 .query-input{
   box-sizing: border-box;
+  position: relative;
   height: 60px;
   flex: 1;
   padding: 0.5rem 0.5rem 0.5rem 0.25rem;
@@ -100,11 +101,33 @@
 }
 
 .cross-icon-box{
+  position: absolute;
+  top: 0.75rem;
+  background-color: white;
+  right: 0.5rem;
   display: flex;
+  z-index: 1;
   justify-content: center;
-  min-width: 24px;
-  max-height: 60px;
+  align-items: center;
+  max-width: 44px;
+  max-height: 44px;
+  width: 100%;
   flex-direction: column;
+}
+
+.cross-outline {
+  display: flex;
+  position: relative;
+  line-height: 1.5rem;
+  border-radius: 0.5rem;
+  padding: 0.625rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  &:hover {
+    background-color: #eef1fe;
+  }
 }
 
 .search-button-box{
@@ -128,20 +151,6 @@
   }
 }
 
-.cross-outline {
-  display: flex;
-  position: relative;
-  line-height: 1.5rem;
-  border-radius: 0.5rem;
-  padding: 0.625rem;
-  margin-right: 0.5rem;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  &:hover {
-    background-color: #eef1fe;
-  }
-}
 
 .cross-outline:hover .cross-icon {
   color: global-variables.$dark-blue ;
@@ -158,7 +167,7 @@
   box-shadow: global-variables.$field-box-shadow;
   border-radius: 0.5rem;
   border: 1px solid global-variables.$neutral-color-500;
-  top: +4rem;
+  top: 4rem;
   max-height: 230px;
   background: white;
   width: 100%;

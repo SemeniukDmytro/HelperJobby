@@ -23,6 +23,7 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = () => {
         selectedJob} = useHomePage();
     
     const [isJobSaved, setIsJobSaved] = useState(false);
+    const [showRemoveFromSaved, setShowRemoveFromSaved] = useState(false);
     
     const moreActionsButtonRef = useRef<HTMLButtonElement | null>(null);
     
@@ -41,13 +42,14 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = () => {
         else {
             setIsJobSaved(false)
         }
-    }, [userSavedJobs]);
+    }, [userSavedJobs, []]);
 
     async function removeSavedJob() {
         try {
            await jobSeekerService.deleteSavedJob(selectedJob!.id);
            setIsJobSaved(false);
             setUserSavedJobs((prevSavedJobs) => prevSavedJobs.filter(savedJob => savedJob.id !== selectedJob?.id));
+            setShowRemoveFromSaved(false);
         }
         catch (error){
             if (error instanceof ServerError){
@@ -102,17 +104,17 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = () => {
                 <button className={"save-job-button"} onClick={saveJob}>
                     <FontAwesomeIcon icon={regularHeart} />
                 </button>) : (
-                <button className={"saved-job-button"} ref={moreActionsButtonRef}>
+                <button className={"saved-job-button"} ref={moreActionsButtonRef} onClick={() => setShowRemoveFromSaved(!showRemoveFromSaved)}>
                     <FontAwesomeIcon className={"saved-job-heart"} icon={solidHeart} />
                     <FontAwesomeIcon className={"drop-down-more-options"} icon={faCaretDown} />
                 </button>)}
             </div>
-            {isJobSaved && <div className={"undo-action-box"}>
+            {showRemoveFromSaved && <div className={"undo-action-box"}>
                 <a className={"action-name"}>
-                     Moved to saved
+                     Job was saved
                 </a>
                 <a className={"undo-button"} onClick={removeSavedJob}>
-                    Undo
+                    Remove from saved
                 </a>
             </div>}
         </div>

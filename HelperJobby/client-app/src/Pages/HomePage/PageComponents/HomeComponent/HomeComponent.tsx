@@ -11,6 +11,7 @@ import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountServ
 import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
+import {useAuth} from "../../../../hooks/useAuth";
 
 
 interface HomeComponentProps {}
@@ -19,7 +20,6 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     const mainContentRef = useRef<HTMLDivElement | null>(null);
     const {setMainContentRef} = useHomePage();
     const [selectedTab, setSelectedTab] = useState<SelectedTabs>(1);
-    const [loading, setLoading] = useState(true);
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     
     const jobSeekerService = new JobSeekerAccountService();
@@ -27,7 +27,6 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setLoading(true);
                 if (jobSeeker === null){
                     const retrievedJobSeeker = await jobSeekerService.getCurrentJobSeekerAllInfo();
                     setJobSeeker(retrievedJobSeeker);
@@ -39,7 +38,6 @@ const HomeComponent: FC<HomeComponentProps> = () => {
                 }
             }
             finally {
-                setLoading(false);
             }
         }
         fetchData();
@@ -56,7 +54,6 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     }
 
     return (
-        loading ? <>Loading...</> :
         <PageWrapWithHeader>
             <div className={"header-and-main-content-separator"}></div>
             <div className={"main-content"}  ref={mainContentRef}>

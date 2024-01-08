@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useEffect, useState} from 'react';
+import React, {ChangeEvent, FC, useEffect, useRef, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLocationDot, faMagnifyingGlass, faXmark} from "@fortawesome/free-solid-svg-icons";
 import "./JobSearchBar.scss";
@@ -12,53 +12,86 @@ import GoogleImage from "../../../../Assets/pictures/google_on_white_hdpi.png";
 interface JobSearchBarProps {}
 
 const JobSearchBar: FC<JobSearchBarProps> = () => {
-    const [jobInput, setJobInput] = useState("");
-    const [locationInput, setLocationInput] = useState("");
-    const [jobInputFocus, setJobInputFocus] = useState(false);
-    const [locationInputFocus, setLocationInputFocus] = useState(false);
+    const [job, setJob] = useState("");
+    const [location, setLocation] = useState("");
+    const [jobFocus, setJobFocus] = useState(false);
+    const [locationFocus, setLocationFocus] = useState(false);
     const [autocompleteResults, setAutocompleteResults] = useState<string[][]>([]);
     const [showAutoComplete, setShowAutoComplete] = useState(false);
-    const [delayedInputValue, setDelayedInputValue] = useState("");
+    const [delayedLocationValue, setDelayedLocationValue] = useState("");
     const [loading, setLoading] = useState(true);
+    const [showEraseLocationBtn, setShowEraseLocationBtn] = useState(false);
+    const [showEraseJobBtn, setShowEraseJobBtn] = useState(false);
+    const locationRef = useRef<HTMLInputElement>(null);
+    const jobRef = useRef<HTMLInputElement>(null);
+    const eraseLocationButtonRef = useRef<HTMLDivElement>(null);
+    const eraseJobButtonRef = useRef<HTMLDivElement>(null);
     
     const locationAutocompleteService = new LocationAutocompleteService();
     const {jobSeeker} = useJobSeeker();
+
+
+    useEffect(() => {
+        const handleDocumentClick = (e: MouseEvent) => {
+            const clickedElement = e.target as HTMLElement;
+            if (eraseLocationButtonRef.current?.contains(clickedElement)){
+                setLocation("");
+                setShowEraseLocationBtn(false);
+            }
+            if (eraseJobButtonRef.current?.contains(clickedElement)){
+                setJob("");
+                setShowEraseLocationBtn(false);
+            }
+            if (!locationRef.current?.contains(clickedElement)) {
+                setShowAutoComplete(false);
+                setShowEraseLocationBtn(false);
+            }
+            if (!jobRef.current?.contains(clickedElement)){
+                setShowEraseJobBtn(false);
+            }
+        };
+        document.addEventListener('click', handleDocumentClick);
+        return () => {
+            document.removeEventListener('click', handleDocumentClick);
+        };
+    }, []);
     
     
     useEffect(() => {
         const timeout = setTimeout(() => {
-            setDelayedInputValue(locationInput);
+            setDelayedLocationValue(location);
         }, 300);
         return () => clearTimeout(timeout)
-    }, [locationInput]);
+    }, [location]);
 
 
     useEffect(() => {
         const fetchData = async () => {
-            if (delayedInputValue.length <= 0 || locationInput.length <= 0) {
+            if (delayedLocationValue.length <= 0 || location.length <= 0) {
+                setShowAutoComplete(false);
                 return;
             }
             try {
                 setLoading(true);
-                let response : string [];
                 let country = "CA";
                 if (jobSeeker){
                     country = jobSeeker.address.country;
                 }
-                response = await locationAutocompleteService.GetAutocompletesForCities(
-                    delayedInputValue,
+                
+                const response = await locationAutocompleteService.GetAutocompletesForCities(
+                    delayedLocationValue,
                     mapCountryWithA2Code(country)
                 );
                 
                 const separatedValues = response.map((result) => result.split(', '));
-                const autoCompleteResults = separatedValues.map((values) => values.slice(0, values.length - 1));
-                if ("remote".includes(delayedInputValue.toLowerCase())){
-                    autoCompleteResults.push(["Remote"]);
+                const autocompleteResultsSlices = separatedValues.map((values) => values.slice(0, values.length - 1));
+                if ("remote".includes(delayedLocationValue.toLowerCase())){
+                    autocompleteResultsSlices.push(["Remote"]);
                 }
-                if (autoCompleteResults.length == 0){
+                setAutocompleteResults(autocompleteResultsSlices);
+                if (autocompleteResultsSlices.length == 0){
                     setShowAutoComplete(false);
                 }
-                setAutocompleteResults(autoCompleteResults);
             } catch (error) {
                 if (error instanceof ServerError) {
                     logErrorInfo(error);
@@ -69,44 +102,99 @@ const JobSearchBar: FC<JobSearchBarProps> = () => {
             }
         }
         fetchData();
-    }, [delayedInputValue]);
+    }, [delayedLocationValue]);
+    
     
     function handleCitySelect(locationResult: string[]) {
-        setLocationInput(locationResult.join(", "))
+        setLocation(locationResult.join(", "))
         setShowAutoComplete(false);
     }
-    
-    function handleJobQueryFocus() {
-        setJobInputFocus(true);
+
+    function handleJobInput(e: ChangeEvent<HTMLInputElement>) {
+        setJob(e.target.value);
+        if (e.target.value.length > 0){
+            setShowEraseJobBtn(true);
+        }
+        else {
+            setShowEraseJobBtn(false);
+        }
     }
 
-    function handleJobQueryBlur() {
-        setJobInputFocus(false);
+    function eraseJobInput(e : React.MouseEvent<HTMLDivElement>) {
+        e.preventDefault();
+        setJob("");
+        setShowEraseJobBtn(false);
+        if (jobRef.current){
+            jobRef.current.focus();
+        }
     }
-    function handleLocationQueryFocus() {
-        setLocationInputFocus(true);
+    
+    function handleJobFocus() {
+        setJobFocus(true);
+        setShowEraseJobBtn(true);
     }
-    function handleLocationQueryBlur() {
-        setLocationInputFocus(false);
+
+    function handleJobInputBlur() {
+        setJobFocus(false);
     }
+
+    
+
+    function handleJobInputHover() {
+        if (job){
+            setShowEraseJobBtn(true)
+        }
+    }
+
+    function handleJobInputLeave() {
+        setShowEraseJobBtn(false)
+    }
+
+    
 
     function handleLocationInput(e: ChangeEvent<HTMLInputElement>) {
-        setLocationInput(e.target.value);
+        if (e.target.value.length > 0){
+          setShowEraseLocationBtn(true)  
+        }
+        else {
+            setShowEraseLocationBtn(false)
+        }
+        setLocation(e.target.value);
+        setLoading(true);
         setShowAutoComplete(true);
     }
 
-    function eraseLocationInput(e: React.MouseEvent<HTMLButtonElement>) {
+    
+
+    function eraseLocationInput(e: React.MouseEvent<HTMLDivElement>) {
         e.preventDefault();
-        setLocationInput("");
+        setLocation("");
+        setShowEraseLocationBtn(false);
+        if (locationRef.current){
+            locationRef.current.focus();
+        }
     }
 
-    function handleJobQueryInput(e: ChangeEvent<HTMLInputElement>) {
-        setJobInput(e.target.value);
+    function handleLocationFocus() {
+        if (location){
+            setShowEraseLocationBtn(true);
+        }
+        setLocationFocus(true);
+    }
+    function handleLocationBlur() {
+        setLocationFocus(false);
     }
 
-    function eraseJobInput(e: React.MouseEvent<HTMLButtonElement>) {
-        e.preventDefault();
-        setJobInput("");
+    function handleLocationInputHover() {
+        if (location){
+            setShowEraseLocationBtn(true);
+        }
+    }
+
+    function handleLocationInputLeave() {
+        if (!locationFocus){
+            setShowEraseLocationBtn(false);
+        }
     }
 
     return(
@@ -114,45 +202,52 @@ const JobSearchBar: FC<JobSearchBarProps> = () => {
             <div className={"search-boxes"}>
                 <form className={"search-form"}>
                     <div className={"input-fields-box"}>
-                        <div className={`query-box`}>
-                            <div className={`border-lining ${jobInputFocus ? "job-query-box-focus" : ""}`}/>
+                        <div className={`query-box`}
+                             onMouseEnter={handleJobInputHover}
+                             onMouseLeave={handleJobInputLeave}>
+                            <div className={`border-lining ${jobFocus ? "job-query-box-focus" : ""}`}/>
                             <div className={"icon-box"}>
                                 <FontAwesomeIcon className={"query-box-icon"} icon={faMagnifyingGlass}/>
                             </div>
                             <input className={`query-input`}
-                                   value={jobInput}
-                                   onChange={handleJobQueryInput}
+                                   value={job}
+                                   onChange={handleJobInput}
                                    placeholder={"Job title, keywords or company"}
-                                   onFocus={handleJobQueryFocus}
-                                   onBlur={handleJobQueryBlur}/>
-                            <div className={"cross-icon-box"}>
-                                <button className={"cross-outline"} onClick={eraseJobInput}>
+                                   ref={jobRef}
+                                   onFocus={handleJobFocus}
+                                   onBlur={handleJobInputBlur}/>
+                            {showEraseJobBtn &&<div className={"cross-icon-box"} onClick={eraseJobInput} ref={eraseJobButtonRef}>
+                                 <button className={"cross-outline"}>
                                     <FontAwesomeIcon className={"cross-icon"} icon={faXmark}/>
                                 </button>
-                            </div>
+                            </div>}
                         </div>
                         <div className={"separator"}></div>
-                        <div className={`query-box`}>
-                            <div className={`border-lining ${locationInputFocus ? "location-query-box-focus" : ""}`}/>
+                        <div className={`query-box`} 
+                             onMouseEnter={handleLocationInputHover}
+                             onMouseLeave={handleLocationInputLeave}>
+                            <div className={`border-lining ${locationFocus ? "location-query-box-focus" : ""}`}/>
                             <div className={"icon-box"}>
                                 <FontAwesomeIcon className={"query-box-icon"} icon={faLocationDot} />
                             </div>
                             <div style={{position: "relative", display: "flex", flexGrow: 1}}>
                                 <input className={"query-input"}
-                                         value={locationInput}
-                                         onChange={handleLocationInput}
-                                         placeholder={`City, province, or "remote"`}
-                                         onFocus={handleLocationQueryFocus}
-                                         onBlur={handleLocationQueryBlur}/>
+                                       value={location}
+                                       onChange={handleLocationInput}
+                                       placeholder={`City, province, or "remote"`}
+                                       onFocus={handleLocationFocus}
+                                       onBlur={handleLocationBlur}
+                                       ref = {locationRef}/>
                                 <img className={"google-logo"} src={GoogleImage} alt={""}></img>
                             </div>
-                            <div className={"cross-icon-box"} >
-                                <button className={"cross-outline"} onClick={eraseLocationInput}>
+                            {showEraseLocationBtn && <div className={"cross-icon-box"} onClick={eraseLocationInput} ref={eraseLocationButtonRef} >
+                                <button className={"cross-outline"}>
                                     <FontAwesomeIcon className={"cross-icon"} icon={faXmark}/>
                                 </button>
-                            </div>
-                            {loading ? null : (
-                                showAutoComplete ? (
+                            </div>}
+                            
+                            {!showAutoComplete ? null : (
+                                !loading ? (
                                     <div className={"location-search-autocomplete-window"}>
                                         {autocompleteResults.map((locationResult, index) => (
                                             <div

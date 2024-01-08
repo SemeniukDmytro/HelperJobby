@@ -10,9 +10,10 @@ const AuthContext = createContext<AuthContextProps>({authUser : null,
 export function AuthProvider({children} : {children: ReactNode; }) 
 {
     const [authUser, setAuthUser] = useState<AuthUserDTO | null>(null);
+    const [loading, setLoading] = useState(true);
     
      async function refreshAuthUser() {
-         
+         setLoading(true);
         const authService = new AuthService();
         let refreshedAuthUser : AuthUserDTO | null = null;
         try {
@@ -29,6 +30,7 @@ export function AuthProvider({children} : {children: ReactNode; })
                 setAuthUser(refreshedAuthUser);
                 setAuthToken(refreshedAuthUser.token);
             }
+            setLoading(false);
         }
         
     }   
@@ -38,6 +40,7 @@ export function AuthProvider({children} : {children: ReactNode; })
         },[]);
         
     return (
+        loading ? <></> :
         <AuthContext.Provider value={{authUser, setAuthUser }}>
             {children}
         </AuthContext.Provider>

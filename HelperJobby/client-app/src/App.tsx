@@ -12,8 +12,6 @@ function App() {
   return (
       <AuthProvider>
         <Routes>
-            
-            
             {/* auth routes*/}
             <Route element={<RequireAuth/>}>
                 <Route path={"/"} element={<HomePage/>}/>
@@ -22,7 +20,7 @@ function App() {
             </Route>
 
             {/*public routes */}
-            <Route path="/" element={<HomePage/>}/>
+            <Route path="/das" element={<HomePage/>}/>
             <Route path={"auth-page"} element={<AuthPage/>}></Route>
         </Routes>
       </AuthProvider>
