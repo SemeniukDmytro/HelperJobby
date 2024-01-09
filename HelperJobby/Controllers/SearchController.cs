@@ -3,12 +3,9 @@ using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Abstraction.SearchRelatedIServices;
 using ApplicationDomain.Enums;
-using ApplicationDomain.IndexedModels;
-using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.Resume;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers;
@@ -35,8 +32,8 @@ public class SearchController : ExtendedBaseController
     
     [HttpGet("jobs")]
     public async Task<IEnumerable<JobDTO>> SearchJobs(
-        [FromQuery] string query,
-        [FromQuery] string location,
+        [FromQuery] string q,
+        [FromQuery] string location = "",
         [FromQuery] int start = 0,
         [FromQuery] bool isRemote = false,
         [FromQuery] decimal pay = 0,
@@ -51,21 +48,21 @@ public class SearchController : ExtendedBaseController
         catch (Exception e)
         {
         }
-        var jobIdsToLoad = await _searchService.FindJobIds(query, location, start, isRemote, pay, jobType, language);
+        var jobIdsToLoad = await _searchService.FindJobIds(q, location, start, isRemote, pay, jobType, language);
         if (userId != 0)
         {
             await _enqueuingTaskHelper.EnqueueAddingRecentSearchTask(async recentUserSearchService =>
             {
-                await recentUserSearchService.AddRecentSearch(query, location, userId);
+                await recentUserSearchService.AddRecentSearch(q, location, userId);
             });
         }
         return _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByJobIds(jobIdsToLoad));
     }
     
     [HttpGet("resumes")]
-    public async Task<IEnumerable<ResumeDTO>> SearchResumes(string query, [FromQuery] int start)
+    public async Task<IEnumerable<ResumeDTO>> SearchResumes(string q, [FromQuery] int start)
     {
-        var resumesToLoad = await _searchService.FindResumeIds(start, query);
+        var resumesToLoad = await _searchService.FindResumeIds(start, q);
         return _mapper.Map<IEnumerable<ResumeDTO>>(await _resumeQueryRepository.GetResumesByResumeIds(resumesToLoad));
     }
 }

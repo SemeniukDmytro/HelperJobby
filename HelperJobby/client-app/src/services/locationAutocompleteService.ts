@@ -15,4 +15,8 @@ export class LocationAutocompleteService{
     public async GetAutocompletesForCities(input: string, countryA2code : string): Promise<string[]> {
         return await this.customFetchService.get<string[]>(`${this.baseURI}/cities?input=${input}&countryA2code=${countryA2code}`);
     }
+
+    public async GetAutocompletesForJobLocation(input: string): Promise<string[]> {
+        return await this.customFetchService.get<string[]>(`${this.baseURI}/job-location?input=${input}`);
+    }
 }

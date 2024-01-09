@@ -11,36 +11,32 @@ export function AuthProvider({children} : {children: ReactNode; })
 {
     const [authUser, setAuthUser] = useState<AuthUserDTO | null>(null);
     const [loading, setLoading] = useState(true);
-    
-     async function refreshAuthUser() {
-         setLoading(true);
-        const authService = new AuthService();
-        let refreshedAuthUser : AuthUserDTO | null = null;
-        try {
-            const authToken = getAuthToken();
-            if (authToken !== null && authToken !== "undefined"){
-                refreshedAuthUser = await authService.refreshToken();
-            }
-        }
-        catch (e){
-            
-        }
-        finally {
-            if (refreshedAuthUser?.user){
-                setAuthUser(refreshedAuthUser);
-                setAuthToken(refreshedAuthUser.token);
-            }
-            setLoading(false);
-        }
-        
-    }   
+    const authService = new AuthService();
 
-    useEffect(  () => {
-        refreshAuthUser();
-        },[]);
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const authToken = getAuthToken();
+                if (authToken !== null && authToken !== "undefined") {
+                    const refreshedAuthUser = await authService.refreshToken();
+                    if (refreshedAuthUser?.user) {
+                        setAuthUser(refreshedAuthUser);
+                        setAuthToken(refreshedAuthUser.token);
+                    }
+                }
+            } catch (e) {
+            } finally {
+                setLoading(false);
+            }
+
+        };
+
+        fetchData();
+    }, []);
         
     return (
-        loading ? <></> :
+        loading ? <>Loading...</> :
         <AuthContext.Provider value={{authUser, setAuthUser }}>
             {children}
         </AuthContext.Provider>

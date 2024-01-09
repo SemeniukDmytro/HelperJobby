@@ -5,6 +5,7 @@ import {JobSeekerAccountService} from "../services/jobSeekerAccountService";
 import {RecommendationService} from "../services/recommendationService";
 import {RecentUserSearchDTO} from "../DTOs/userRelatedDTOs/RecentUserSearchDTO";
 import {UserService} from "../services/userService";
+import {useAuth} from "../hooks/useAuth";
 
 const HomePageContext = createContext<HomePageContextProps>(
     {
@@ -33,6 +34,8 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
     const [recommendedJobs, setRecommendedJobs] = useState<JobDTO[]>([]);
     const [recentUserSearches, setRecentUserSearches] = useState<RecentUserSearchDTO[]>([]);
     
+    const {authUser} = useAuth();
+    
     const recommendationService = new RecommendationService();
     const [loading, setLoading] = useState(true);
     
@@ -44,8 +47,10 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
             setLoading(true);
             try {
                 await loadRecommendationJobs();
-                await checkIsJobSaved();
-                await loadRecentUserSearches();
+                if (authUser){
+                    await loadUserSavedJobs();
+                    await loadRecentUserSearches();
+                }
             }
             catch (error){
                 console.log(error)
@@ -62,14 +67,18 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
         setRecommendedJobs(retrievedJobs);
     }
 
-    async function checkIsJobSaved() {
-        const response = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
-        setUserSavedJobs(response);
+    async function loadUserSavedJobs() {
+        if (!userSavedJobs){
+            const response = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
+            setUserSavedJobs(response);
+        }
     }
     
     async function loadRecentUserSearches(){
-        const response = await userService.getUserRecentSearches();
-        setRecentUserSearches(response);
+        if (!recentUserSearches){
+            const response = await userService.getUserRecentSearches();
+            setRecentUserSearches(response);
+        }
     }
     
     return(

@@ -16,16 +16,16 @@ import {setAuthToken} from "../../../../utils/authTokenInteraction";
 import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
 
-interface SignInFormProps {}
+interface SignInFormProps {
+}
 
-const SignInForm: FC<SignInFormProps> = () =>
-{
+const SignInForm: FC<SignInFormProps> = () => {
     const {email, setEmail} = useEmail();
     const {setAuthUser} = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from.pathname || "/";
-    
+
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
@@ -34,9 +34,9 @@ const SignInForm: FC<SignInFormProps> = () =>
     const [showPopup, setShowPopup] = useState(false);
     
     const [renderEmailForm, setRenderEmailForm] = useState(false);
-    
+
     const isEmptyPassword = password.trim() == "";
-    const authService : AuthService = new AuthService();
+    const authService: AuthService = new AuthService();
 
     useEffect(() => {
         if (showPopup) {
@@ -47,32 +47,32 @@ const SignInForm: FC<SignInFormProps> = () =>
             return () => clearTimeout(timer);
         }
     }, [showPopup]);
-    
-    async function  AuthUser(e: React.FormEvent<HTMLFormElement>) {
+
+    async function AuthUser(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        if (!IsValidPasswordMaximalLength(password)){
+        if (!IsValidPasswordMaximalLength(password)) {
             setIsPasswordInvalid(true);
             setError("Please enter password less than 25 characters long")
             return;
-        }
-        else if (!IsValidPasswordMinimalLength(password)) {
+        } else if (!IsValidPasswordMinimalLength(password)) {
             setIsPasswordInvalid(true);
             setError("Please enter a password at least 8 characters long")
             return;
         }
-        
-        const loginUserDTO : LoginUserDTO = 
-            {email : email,
-            password : password}
-        
+
+        const loginUserDTO: LoginUserDTO =
+            {
+                email: email,
+                password: password
+            }
+
         try {
             const authUser = await authService.login(loginUserDTO);
             setAuthToken(authUser.token);
             setAuthUser(authUser);
             navigate(from);
-        }
-        catch (error) {
-            if (error instanceof ServerError){
+        } catch (error) {
+            if (error instanceof ServerError) {
                 setIsSuccessfulNotify(false);
                 setNotifyMessage(error.ServerErrorDTO.detail);
                 setShowPopup(true);
@@ -107,20 +107,22 @@ const SignInForm: FC<SignInFormProps> = () =>
                             </div>
                             <form className="auth-input-box" onSubmit={AuthUser}>
                                 <div className="input-label-box">
-                                    <label className={`input-label ${isPasswordInvalid ? 'error-text' : ''}`}>Enter your password
+                                    <label className={`input-label ${isPasswordInvalid ? 'error-text' : ''}`}>Enter your
+                                        password
                                         <span className="required-mark"> *</span>
                                     </label>
                                 </div>
                                 <div className={`input-box`}>
                                     <input className={`input-field ${isPasswordInvalid ? 'invalid-input-border' : ''}`}
-                                           type="password" value={password} 
+                                           type="password" value={password}
                                            onChange={e => {
                                                setPassword(e.target.value)
                                                setIsPasswordInvalid(false);
                                            }}/>
                                     {isPasswordInvalid &&
                                         <div className={"error-box"}>
-                                            <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
+                                            <FontAwesomeIcon className={`error-text error-svg`}
+                                                             icon={faCircleExclamation}/>
                                             <span className={`error-text`}>Error : {error}</span>
                                         </div>
                                     }
@@ -136,6 +138,6 @@ const SignInForm: FC<SignInFormProps> = () =>
             )
     )
 };
-    
+
 
 export default SignInForm;

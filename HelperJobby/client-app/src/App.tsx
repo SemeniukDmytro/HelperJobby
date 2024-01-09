@@ -7,6 +7,7 @@ import HomePage from "./Pages/HomePage/HomePage";
 import {AuthProvider} from "./contexts/AuthContext";
 import JobSeekerProfilePage from "./Pages/JobSeekerProfilePage/JobSeekerProfilePage";
 import EditContactInfoPage from "./Pages/EditContactInfoPage/EditContactInfoPage";
+import SearchJobResultsPage from "./Pages/SearchJobResultsPage/SearchJobResultsPage";
 
 function App() {
   return (
@@ -20,8 +21,9 @@ function App() {
             </Route>
 
             {/*public routes */}
-            <Route path="/das" element={<HomePage/>}/>
-            <Route path={"auth-page"} element={<AuthPage/>}></Route>
+            <Route path="/home" element={<HomePage/>}/>
+            <Route path={"auth-page"} element={<AuthPage/>}/>
+            <Route path={"jobs"} element={<SearchJobResultsPage/>}/>
         </Routes>
       </AuthProvider>
   )

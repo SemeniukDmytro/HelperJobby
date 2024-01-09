@@ -1,35 +1,56 @@
-export function descriptionSplitter(description : string) : string[]{
-    let lines = description.split('\n');
-    let filteredLines: string[] = [];
-    for(let line of lines){
-        if(line.includes("shift") || line.includes("hour")  || line.includes("?") || line.length < 30 || line.includes(':')) continue;
-        const subStrings = line.split(".");
-        filteredLines.push(subStrings[0]);
-    }
-    let index : number = Math.floor(filteredLines.length/2);
-    let result : string[] = [];
-    const firstSentence = filteredLines[index];
-    const secondSentence = filteredLines[(index+1)%filteredLines.length];
-    if (firstSentence == secondSentence){
-        return [firstSentence];
-    }
-    result.push(firstSentence);
-    result.push(secondSentence);
-    if (firstSentence.length + secondSentence.length < 120){
-        const thirdSentence = filteredLines[index*3%filteredLines.length];
-        if (thirdSentence !== firstSentence && thirdSentence !== secondSentence)
-        result.push(thirdSentence);
-    }
-    const totalLength = result.reduce((acc, sentence) => acc + sentence.length, 0);
-    const elementsCount = result.length;
-    if (totalLength > 200){
-        if (elementsCount === 2){
-            result[elementsCount-1]=result[elementsCount - 1].slice(0, 200 - result[0].length)+"...";
+function filterLines(lines: string[]): string[] {
+    return lines.filter(line => !line.includes("?") && line.length >= 30 && !line.includes(':'));
+}
+
+function generateSentences(filteredLines: string[]): string[] {
+    const sentences: string[] = [];
+    const index: number = Math.floor(filteredLines.length / 2);
+
+    const addSentence = (sentence: string) => {
+        if (sentence && !sentences.includes(sentence)) {
+            sentences.push(sentence);
         }
-        else {
-            result[elementsCount-1]=result[elementsCount-1].slice(0, 200-result[0].length - result[1].length)+"...";
-        }
+    };
+
+    addSentence(filteredLines[index]);
+    addSentence(filteredLines[(index + 1) % filteredLines.length]);
+    if (sentences.length === 2 && sentences[0].length + sentences[1].length > 140) {
+        return sentences;
+    }
+
+    let thirdSentenceIndex = index * 3 % filteredLines.length;
+    let thirdSentence = filteredLines[thirdSentenceIndex];
+    
+    let sentencesLeft = filteredLines.length - thirdSentenceIndex - 1;
+    while (thirdSentence === sentences[0] || thirdSentence === sentences[1] || sentencesLeft > 0) {
+        sentencesLeft--;
+        thirdSentence = filteredLines[++thirdSentenceIndex];
     }
     
+    if (thirdSentence){
+        addSentence(thirdSentence);
+    }
+
+    return sentences;
+}
+
+function handleLengthConstraint(sentences: string[]): string[] {
+    const totalLength = sentences.reduce((acc, sentence) => acc + sentence.length, 0);
+    const elementsCount = sentences.length;
+
+    if (totalLength > 200) {
+        const remainingLength = 200 - sentences[0].length - sentences[1].length;
+        sentences[elementsCount - 1] = sentences[elementsCount - 1].slice(0, remainingLength) + "...";
+    }
+
+    return sentences;
+}
+
+export function descriptionSplitter(description: string): string[] {
+    const lines = description.split('\n');
+    const filteredLines = filterLines(lines);
+    const sentences = generateSentences(filteredLines);
+    const result = handleLengthConstraint(sentences);
+
     return result;
 }

@@ -26,7 +26,7 @@ public class SearchService : ISearchService
     
 
     public async Task<List<int>> FindJobIds(string query, string location, int numberOfResultsToSkip,
-        bool isRemote, decimal pay, JobTypes jobType, string language)
+        bool isRemote, decimal payPerHour, JobTypes jobType, string language)
     {
         if (string.IsNullOrEmpty(query) || string.IsNullOrEmpty(location))
         {
@@ -39,8 +39,17 @@ public class SearchService : ISearchService
 
         foreach (var word in processedQuery)
         {
-            var rankedIdsMatches = (await _searchQueryRepository.GetProcessedJobWordsByWord(word, 
-                location ,numberOfResultsToSkip, isRemote, pay, jobType, language)).ToList();
+            var rankedIdsMatches = (await _searchQueryRepository.GetProcessedJobWordsByWord(word,
+                location,
+                numberOfResultsToSkip, 
+                isRemote, 
+                payPerHour,
+                SalaryRateHelper.GetSalaryPerDayFromPerHourRate(payPerHour),
+                SalaryRateHelper.GetSalaryPerWeekFromPerHourRate(payPerHour),
+                SalaryRateHelper.GetSalaryPerMonthFromPerHourRate(payPerHour),
+                SalaryRateHelper.GetSalaryPerYearFromPerHourRate(payPerHour),
+                jobType, 
+                language)).ToList();
 
             foreach (var match in rankedIdsMatches)
             {

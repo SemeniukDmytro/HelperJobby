@@ -8,12 +8,16 @@ import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {LocationAutocompleteService} from "../../../../services/locationAutocompleteService";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import GoogleImage from "../../../../Assets/pictures/google_on_white_hdpi.png";
+import {useNavigate} from "react-router-dom";
 
-interface JobSearchBarProps {}
+interface JobSearchBarProps {
+    jobInitial : string;
+    locationInitial : string;
+}
 
-const JobSearchBar: FC<JobSearchBarProps> = () => {
-    const [job, setJob] = useState("");
-    const [location, setLocation] = useState("");
+const JobSearchBar: FC<JobSearchBarProps> = (props) => {
+    const [job, setJob] = useState(props.jobInitial);
+    const [location, setLocation] = useState(props.locationInitial);
     const [jobFocus, setJobFocus] = useState(false);
     const [locationFocus, setLocationFocus] = useState(false);
     const [autocompleteResults, setAutocompleteResults] = useState<string[][]>([]);
@@ -29,6 +33,7 @@ const JobSearchBar: FC<JobSearchBarProps> = () => {
     
     const locationAutocompleteService = new LocationAutocompleteService();
     const {jobSeeker} = useJobSeeker();
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -55,6 +60,12 @@ const JobSearchBar: FC<JobSearchBarProps> = () => {
             document.removeEventListener('click', handleDocumentClick);
         };
     }, []);
+
+    useEffect(() => {
+        if (!props.locationInitial && jobSeeker?.address.city){
+            setLocation(jobSeeker?.address.city)
+        }
+    }, [jobSeeker]);
     
     
     useEffect(() => {
@@ -73,14 +84,8 @@ const JobSearchBar: FC<JobSearchBarProps> = () => {
             }
             try {
                 setLoading(true);
-                let country = "CA";
-                if (jobSeeker){
-                    country = jobSeeker.address.country;
-                }
-                
-                const response = await locationAutocompleteService.GetAutocompletesForCities(
-                    delayedLocationValue,
-                    mapCountryWithA2Code(country)
+                const response = await locationAutocompleteService.GetAutocompletesForJobLocation(
+                    delayedLocationValue
                 );
                 
                 const separatedValues = response.map((result) => result.split(', '));
@@ -197,6 +202,12 @@ const JobSearchBar: FC<JobSearchBarProps> = () => {
         }
     }
 
+    function navigateToSearchResultsPage(e: React.MouseEvent<HTMLButtonElement>) {
+        e.preventDefault();
+        const locationParams = location ? `&location=${location}` : "";
+        navigate(`/jobs?q=${job}${locationParams}`);
+    }
+
     return(
         <div className={"search-container"}>
             <div className={"search-boxes"}>
@@ -264,7 +275,7 @@ const JobSearchBar: FC<JobSearchBarProps> = () => {
                         </div>
                     </div>
                     <div className={"search-button-box"}>
-                        <button className={"search-button"}>
+                        <button className={"search-button"} onClick={navigateToSearchResultsPage}>
                             <span>Find jobs</span>
                         </button>
                     </div>

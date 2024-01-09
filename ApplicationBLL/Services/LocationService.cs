@@ -19,7 +19,12 @@ public class LocationService : ILocationService
     {
         return await GetLocationsResults(input, countryCode, CityAddressType);
     }
-    
+
+    public async Task<List<string>> GetJobLocationAutocomplete(string input)
+    {
+        return await GetLocationsResults(input, "", CityAddressType);
+    }
+
     private async Task<List<string>> GetLocationsResults(string input, string countryCode, string resultType)
     {
         string apiKey = "AIzaSyCmQgLmZERug-nZ_7wd019pjoLOfg7J2LY";

@@ -14,8 +14,9 @@ import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
 import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
-import {jobTypesConverter, schedulesEnumConverter} from "../../../../utils/enumToStringConverter";
+import {schedulesEnumToStringMap} from "../../../../utils/enumToStringConverter";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import {jobTypesEnumToStringMap} from "../../../../utils/enumToStringConverter";
 
 interface ShortJobDescriptionBlockProps {
     job : JobDTO;
@@ -93,10 +94,9 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
         const currentDate = new Date();
         const postedDate = new Date(job.datePosted);
         const timeDifference = currentDate.getTime() - postedDate.getTime();
-
-        setJobPostDaysDifference(Math.floor(timeDifference / (1000 * 60 * 60 * 24)));
-
-        if (jobPostDaysDifference < 7) {
+        const daysDifference = timeDifference / (1000 * 60 * 60 * 24)
+        setJobPostDaysDifference(Math.floor(daysDifference));
+        if (daysDifference < 7) {
             setIsNewJob(true);
         }
     }
@@ -195,8 +195,8 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
 
                    <div className={"job-features-info"}>
                        <JobFeatureBox featureName={`$${thousandsDisplayHelper(job.salary)} ${job.salaryRate}`} moreFeaturesAmount={0}/>
-                       <JobFeatureBox featureName={`${jobTypesConverter(job.jobType[0])}`} moreFeaturesAmount={job.jobType.length - 1}/>
-                       {job.schedule.length != 0 && <JobFeatureBox featureName={`${schedulesEnumConverter(job.schedule[0])}`} moreFeaturesAmount={job.schedule.length - 1}/>}
+                       <JobFeatureBox featureName={`${jobTypesEnumToStringMap(job.jobType[0])}`} moreFeaturesAmount={job.jobType.length - 1}/>
+                       {job.schedule.length != 0 && <JobFeatureBox featureName={`${schedulesEnumToStringMap(job.schedule[0])}`} moreFeaturesAmount={job.schedule.length - 1}/>}
                    </div>
                    <div className={"short-description-content"}>
                        <ul className={"short-description-list"}>

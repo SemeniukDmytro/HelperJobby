@@ -4,33 +4,13 @@ import JobDescriptionHeader from "../JobDescriptionHeader/JobDescriptionHeader";
 import JobDetailsScrollWindow from "../JobDetailsScrollWindow/JobDetailsScrollWindow";
 import "./RecommendedJobs.scss";
 import {useHomePage} from "../../../../hooks/useHomePage";
+import DetailedDescriptionColumn from "../DetailedDescriptionColumn/DetailedDescriptionColumn";
 
 interface RecommendedJobsProps {}
 
 const RecommendedJobs: FC<RecommendedJobsProps> = () => {
-    const [stickyHeight, setStickyHeight] = useState(361.2);
     const {recommendedJobs} = useHomePage();
 
-    useEffect(() => {
-        updateStickyHeight();
-        const handleScroll = () => {
-            updateStickyHeight();
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [stickyHeight]);
-
-    const updateStickyHeight = () => {
-        let newHeight = 361.2 + window.scrollY;
-        if (newHeight > 698){
-            setStickyHeight(698)
-        }
-        else{
-            setStickyHeight(newHeight);
-        }
-    };
     
   return  (
       <div className={"jobs-container"}>
@@ -42,14 +22,7 @@ const RecommendedJobs: FC<RecommendedJobsProps> = () => {
                   <ShortJobDescriptionBlock key={index} job={job}></ShortJobDescriptionBlock>
               ))}
           </div>
-          <div className={"detailed-description-column"}>
-              <div style={{height : `${stickyHeight}px`}} className={"detailed-description-sticky"}>
-                  <div className={"detailed-description-content-box"}>
-                      <JobDescriptionHeader></JobDescriptionHeader>
-                      <JobDetailsScrollWindow></JobDetailsScrollWindow>
-                  </div>
-              </div>
-          </div>
+          <DetailedDescriptionColumn/>
       </div>
 )};
 

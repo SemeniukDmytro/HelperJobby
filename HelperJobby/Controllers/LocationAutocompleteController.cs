@@ -8,7 +8,6 @@ namespace HelperJobby.Controllers
     [ApiController]
     public class LocationAutocompleteController : ControllerBase
     {
-        private const string GoogleMapsApiUrl = "https://maps.googleapis.com/maps/api/";
         private readonly ILocationService _locationService;
 
         public LocationAutocompleteController(ILocationService locationService)
@@ -32,6 +31,14 @@ namespace HelperJobby.Controllers
             [FromQuery] string countryA2code)
         {
             return await _locationService.GetCityAutocomplete(input, countryA2code);
+        }
+        
+        [HttpGet]
+        [Route("job-location")]
+        public async Task<List<string>> GetAutocompletesForJobLocation(
+            [FromQuery] string input)
+        {
+            return await _locationService.GetJobLocationAutocomplete(input);
         }
     }
 

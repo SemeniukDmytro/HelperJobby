@@ -6,7 +6,10 @@ import {faBriefcase, faChevronDown, faChevronUp, faClock} from "@fortawesome/fre
 import JobDetailsFeatureBox from "../JobDetailsFeatureBox/JobDetailsFeatureBox";
 import {useHomePage} from "../../../../hooks/useHomePage";
 import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
-import {jobTypesConverter, schedulesEnumConverter} from "../../../../utils/enumToStringConverter";
+import {
+    benefitsEnumToStringMap, jobTypesEnumToStringMap,
+    schedulesEnumToStringMap
+} from "../../../../utils/enumToStringConverter";
 
 interface JobDetailsScrollWindowProps {
 }
@@ -114,7 +117,7 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
                             </div>
                             <div className={"detailed-job-features"}>
                                 {selectedJob?.jobType.map((jobType, index) => (
-                                    <JobDetailsFeatureBox  key={index} featureText={jobTypesConverter(jobType)}></JobDetailsFeatureBox>
+                                    <JobDetailsFeatureBox  key={index} featureText={jobTypesEnumToStringMap(jobType)}></JobDetailsFeatureBox>
                                 ))}
                             </div>
                         </div>
@@ -129,7 +132,7 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
                             </div>
                             <div className={"detailed-job-features"}>
                                 {selectedJob?.schedule.map((schedule, index) => (
-                                    <JobDetailsFeatureBox  key={index} featureText={schedulesEnumConverter(schedule)}></JobDetailsFeatureBox>
+                                    <JobDetailsFeatureBox  key={index} featureText={schedulesEnumToStringMap(schedule)}></JobDetailsFeatureBox>
                                 ))}
                             </div>
                         </div>
@@ -145,7 +148,7 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
                     <div className={"benefits-box"}>
                         <ul className={"benefits"}>
                             {displayedBenefits.map((benefit, index) => (
-                                <li key={index}>{benefit}</li>
+                                <li key={index}>{benefitsEnumToStringMap(benefit)}</li>
                             ))}
                         </ul>
                         { (!showAllBenefits && selectedJob!.benefits.length > 6)&& <div className={"background-fade"}></div> }

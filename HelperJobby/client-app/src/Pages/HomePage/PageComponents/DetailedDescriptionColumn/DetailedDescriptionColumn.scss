@@ -1,0 +1,27 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.detailed-description-column{
+  display: flex;
+  flex-direction: column;
+  flex-basis: 53%;
+  padding-top: 20px;
+}
+
+.detailed-description-sticky{
+  margin-top: 1rem;
+  position: sticky;
+  top: 1rem;
+  height: 698px;
+  min-height: 600px;
+  display: flex;
+  border: 1px solid global-variables.$neutral-color-500;
+  border-radius: 0.5rem;
+}
+
+.detailed-description-content-box{
+  margin-top: 0.5rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

@@ -12,12 +12,12 @@ const RequireAuth: FC<RequireAuthProps> = () => {
     const {authUser} = useAuth();
 
     return (
-    authUser ? (
+        authUser ? (
         <JobSeekerProvider>
             <Outlet />
         </JobSeekerProvider>
     ) : (
-        <Navigate to="/" state={{ from: location }} replace />
+        <Navigate to="/home" state={{ from: location }} replace />
     ));
 };
 
