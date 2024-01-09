@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import SearchResults from "./SearchResults/SearchResults";
+import SearchResults from "./PageComponents/SearchResults/SearchResults";
 interface SearchResultsPageProps {}
 
 const SearchJobResultsPage: FC<SearchResultsPageProps> = () => (

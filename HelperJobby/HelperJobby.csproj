@@ -48,6 +48,7 @@
       <Folder Include="client-app\src\Pages\EditContactInfoPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\HomePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\JobSeekerProfilePage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\SearchJobResultsPage\PageComponents\" />
     </ItemGroup>
     
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
