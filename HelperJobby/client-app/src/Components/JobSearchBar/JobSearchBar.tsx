@@ -1,22 +1,24 @@
 import React, {ChangeEvent, FC, useEffect, useRef, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLocationDot, faMagnifyingGlass, faXmark} from "@fortawesome/free-solid-svg-icons";
-import "./JobSearchBar.scss";
-import {mapCountryWithA2Code} from "../../../../utils/countryWithTldMapper";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
-import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import {LocationAutocompleteService} from "../../../../services/locationAutocompleteService";
-import {useJobSeeker} from "../../../../hooks/useJobSeeker";
-import GoogleImage from "../../../../Assets/pictures/google_on_white_hdpi.png";
+import "./JobSearchBar.scss"
+import GoogleImage from "../../Assets/pictures/google_on_white_hdpi.png";
 import {useNavigate} from "react-router-dom";
+import {LocationAutocompleteService} from "../../services/locationAutocompleteService";
+import {useJobSeeker} from "../../hooks/useJobSeeker";
+import {ServerError} from "../../ErrorDTOs/ServerErrorDTO";
+import {logErrorInfo} from "../../utils/logErrorInfo";
+import useJobQueryParams from "../../hooks/useQueryParams";
 
 interface JobSearchBarProps {
     jobInitial : string;
     locationInitial : string;
+    findJobsClick? : (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const JobSearchBar: FC<JobSearchBarProps> = (props) => {
-    const [job, setJob] = useState(props.jobInitial);
+    
+    const [job, setJob]= useState(props.jobInitial);
     const [location, setLocation] = useState(props.locationInitial);
     const [jobFocus, setJobFocus] = useState(false);
     const [locationFocus, setLocationFocus] = useState(false);
@@ -33,6 +35,10 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
     
     const locationAutocompleteService = new LocationAutocompleteService();
     const {jobSeeker} = useJobSeeker();
+    const {query,
+        setQuery,
+        jobLocation,
+        setJobLocation} = useJobQueryParams();
     const navigate = useNavigate();
 
 
@@ -117,6 +123,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
 
     function handleJobInput(e: ChangeEvent<HTMLInputElement>) {
         setJob(e.target.value);
+        setQuery(e.target.value);
         if (e.target.value.length > 0){
             setShowEraseJobBtn(true);
         }
@@ -128,6 +135,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
     function eraseJobInput(e : React.MouseEvent<HTMLDivElement>) {
         e.preventDefault();
         setJob("");
+        setQuery("");
         setShowEraseJobBtn(false);
         if (jobRef.current){
             jobRef.current.focus();
@@ -165,6 +173,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
             setShowEraseLocationBtn(false)
         }
         setLocation(e.target.value);
+        setJobLocation(e.target.value);
         setLoading(true);
         setShowAutoComplete(true);
     }
@@ -174,6 +183,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
     function eraseLocationInput(e: React.MouseEvent<HTMLDivElement>) {
         e.preventDefault();
         setLocation("");
+        setJobLocation("");
         setShowEraseLocationBtn(false);
         if (locationRef.current){
             locationRef.current.focus();
@@ -204,8 +214,8 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
 
     function navigateToSearchResultsPage(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
-        const locationParams = location ? `&location=${location}` : "";
-        navigate(`/jobs?q=${job}${locationParams}`);
+        const locationParam = location ? `&location=${location}` : "";
+        navigate(`/jobs?q=${job}${locationParam}`);
     }
 
     return(
@@ -275,7 +285,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
                         </div>
                     </div>
                     <div className={"search-button-box"}>
-                        <button className={"search-button"} onClick={navigateToSearchResultsPage}>
+                        <button className={"search-button"} onClick={props.findJobsClick ? props.findJobsClick : navigateToSearchResultsPage}>
                             <span>Find jobs</span>
                         </button>
                     </div>

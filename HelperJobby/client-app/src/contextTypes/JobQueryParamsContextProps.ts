@@ -1,7 +1,11 @@
 import {Dispatch, SetStateAction, useState} from "react";
 import JobTypes from "../enums/JobTypes";
 
-export interface QueryParamsContextProps {
+export interface JobQueryParamsContextProps {
+    query: string;
+    setQuery: Dispatch<SetStateAction<string>>;
+    jobLocation : string;
+    setJobLocation : Dispatch<SetStateAction<string>>;
     start : number;
     setStart : Dispatch<SetStateAction<number>>;
     isRemote : boolean;

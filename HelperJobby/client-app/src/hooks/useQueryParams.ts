@@ -1,6 +1,6 @@
 import {useContext} from "react";
-import QueryParamsContext from "../contexts/QueryParamsContext";
+import JobQueryParamsContext from "../contexts/JobQueryParamsContext";
 
 export default function useQueryParams(){
-    return useContext(QueryParamsContext);
+    return useContext(JobQueryParamsContext);
 } 

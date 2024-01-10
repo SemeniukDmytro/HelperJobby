@@ -3,6 +3,7 @@ using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Abstraction.SearchIQueryRepositories;
 using ApplicationDomain.Abstraction.SearchRelatedIServices;
 using ApplicationDomain.Enums;
+using ApplicationDomain.Exceptions;
 
 namespace ApplicationBLL.SearchRelatedServices;
 
@@ -28,9 +29,9 @@ public class SearchService : ISearchService
     public async Task<List<int>> FindJobIds(string query, string location, int numberOfResultsToSkip,
         bool isRemote, decimal payPerHour, JobTypes jobType, string language)
     {
-        if (string.IsNullOrEmpty(query) || string.IsNullOrEmpty(location))
+        if (string.IsNullOrEmpty(query) || payPerHour < 0 || jobType < 0 || (jobType & (jobType - 1)) != 0)
         {
-            return null;
+            throw new InvalidSearchException();
         }
         
         var processedQuery = ProcessQuery(query);

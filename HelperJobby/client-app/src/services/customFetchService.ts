@@ -33,7 +33,7 @@ class CustomFetchService {
         };
         const response = await fetch(url, options);
         if (!response.ok){
-            throw new ServerError("dasda", await response.json());
+            throw new ServerError("response is not ok", await response.json());
         }
         return response;
     }

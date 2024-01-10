@@ -1,11 +1,11 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useState} from 'react';
 import "./HomeComponent.scss";
-import JobSearchBar from "../JobSearchBar/JobSearchBar";
 import JobSearchPromoContainer from "../JobSearchPromoContainer/JobSearchPromoContainer";
 import RecommendedJobs from "../RecommendedJobs/RecommendedJobs";
 import RecentSearches from "../RecentSearches/RecentSearches";
 import {SelectedTabs} from "../../../../enums/SelectedTabs";
 import HomePageMainContentWrap from "../HomePageMainContentWrap/HomePageMainContentWrap";
+import JobSearchBar from "../../../../Components/JobSearchBar/JobSearchBar";
 
 
 interface HomeComponentProps {

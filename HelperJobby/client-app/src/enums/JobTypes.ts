@@ -1,4 +1,5 @@
 enum JobTypes {
+    None = 0,
     FullTime = 1,
     PartTime = 1 << 1,
     Permanent = 1 << 2,

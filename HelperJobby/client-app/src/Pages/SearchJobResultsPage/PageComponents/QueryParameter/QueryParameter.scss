@@ -3,9 +3,11 @@
 .query-param-box{
   display: flex;
   flex-direction: row;
+  justify-content: center;
   margin-right: 1rem;
   margin-bottom: 0.5rem;
   border: none;
+  min-width: 100px;
   border-radius: 0.5rem;
   background-color: global-variables.$neutral-color-300;
   box-sizing: border-box;
@@ -13,21 +15,24 @@
   min-height: 21px;
   cursor: pointer;
   transition: 0.2s;
-  color: global-variables.$neutral-color-1000;
+  color: global-variables.$neutral-color-900;
   &:hover{
     box-shadow: global-variables.$button-inner-shadow;
     background-color: global-variables.$neutral-color-400;
+  }
+  &:focus-visible{
+    outline: 1px auto global-variables.$dark-blue;
   }
 }
 
 .param-name{
   line-height: 1.5;
   font-size: 0.75rem;
-  margin-right: 0.5rem;
 }
 
 .select-query-param{
   display: flex;
+  margin-left: 0.5rem;
   padding-bottom: 0.375rem;
   font-weight: 400;
 }
@@ -42,5 +47,6 @@
 }
 
 .remove-query-param{
+  margin-left: 0.5rem;
   padding-top: 0.125rem;
 }

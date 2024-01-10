@@ -1,8 +1,12 @@
 import {createContext, ReactNode, useState} from "react";
-import {QueryParamsContextProps} from "../contextTypes/QueryParamsContextProps";
+import {JobQueryParamsContextProps} from "../contextTypes/JobQueryParamsContextProps";
 import JobTypes from "../enums/JobTypes";
 
-export const QueryParamsContext = createContext<QueryParamsContextProps>({
+export const JobQueryParamsContext = createContext<JobQueryParamsContextProps>({
+    query: "",
+    setQuery : () => {},
+    jobLocation : "",
+    setJobLocation: () => {},
     start : 0,
     setStart : () => {},
     isRemote: false,
@@ -16,14 +20,20 @@ export const QueryParamsContext = createContext<QueryParamsContextProps>({
     
 });
 
-export function QueryParamsProvider({children} : {children : ReactNode}) {
+export function JobQueryParamsProvider({children} : {children : ReactNode}) {
+    const [job, setJob] = useState("");
+    const [location, setLocation] = useState("");
     const [start, setStart] = useState(0);
     const [isRemote, setIsRemote] = useState(false);
     const [pay, setPay] = useState(0);
     const [jobType, setJobType] = useState<JobTypes>(0);
     const [language, setLanguage] = useState("");
 
-    const contextValue: QueryParamsContextProps = {
+    const contextValue: JobQueryParamsContextProps = {
+        query: job,
+        setQuery: setJob,
+        jobLocation: location,
+        setJobLocation: setLocation,
         start,
         setStart,
         isRemote,
@@ -37,10 +47,10 @@ export function QueryParamsProvider({children} : {children : ReactNode}) {
     };
 
     return (
-        <QueryParamsContext.Provider value={contextValue}>
+        <JobQueryParamsContext.Provider value={contextValue}>
             {children}
-        </QueryParamsContext.Provider>
+        </JobQueryParamsContext.Provider>
     );
 }
 
-export default QueryParamsContext;
+export default JobQueryParamsContext;
