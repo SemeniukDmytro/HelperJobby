@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction, useState} from "react";
+import {Dispatch, MutableRefObject, SetStateAction, useState} from "react";
 import JobTypes from "../enums/JobTypes";
 
 export interface JobQueryParamsContextProps {
@@ -16,4 +16,6 @@ export interface JobQueryParamsContextProps {
     setJobType : Dispatch<SetStateAction<JobTypes>>;
     language : string;
     setLanguage : Dispatch<SetStateAction<string>>;
+    mainContentReferenceForSearch : MutableRefObject<HTMLDivElement | null> | null;
+    setMainContentRefForSearch : Dispatch<SetStateAction<MutableRefObject<HTMLDivElement | null> | null>>;
 }

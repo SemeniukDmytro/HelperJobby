@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHeart as regularHeart} from "@fortawesome/free-regular-svg-icons";
 import "./JobDescriptionHeader.scss";
@@ -8,19 +8,26 @@ import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountServ
 import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
+import {useJobSeeker} from "../../../../hooks/useJobSeeker";
+import {useAuth} from "../../../../hooks/useAuth";
+import {useNavigate} from "react-router-dom";
+import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 
-interface JobDescriptionHeaderProps {}
+interface JobDescriptionHeaderProps {
+    selectedJob : JobDTO | null;
+    isFullHeaderGridTemplate : number | null;
+    setIsFullHeaderGridTemplate : Dispatch<SetStateAction<number | null>>;
+    isShortHeaderGridTemplate : number | null;
+    setIsShortHeaderGridTemplate : Dispatch<SetStateAction<number | null>>;
+}
 
-const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = () => {
-
-    const {
-        fullHeaderGridTemplate,
-        setFullHeaderGridTemplate,
-        shortHeaderGridTemplate,
-        setShortHeaderGridTemplate,
-        userSavedJobs,
-        setUserSavedJobs,
-        selectedJob} = useHomePage();
+const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
+                                                             isFullHeaderGridTemplate, setIsFullHeaderGridTemplate,
+                                                             isShortHeaderGridTemplate, setIsShortHeaderGridTemplate}) => {
+    
+    const {jobSeekerSavedJobs, setJobSeekerSavedJobs} = useJobSeeker();
+    const {authUser} = useAuth();
+    const navigate = useNavigate();
     
     const [isJobSaved, setIsJobSaved] = useState(false);
     const [showRemoveFromSaved, setShowRemoveFromSaved] = useState(false);
@@ -30,25 +37,28 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = () => {
     const jobSeekerService = new JobSeekerAccountService();
     
     useEffect(() => {
-        setFullHeaderGridTemplate(1);
-        setShortHeaderGridTemplate(0);
+        setIsFullHeaderGridTemplate(1);
+        setIsShortHeaderGridTemplate(0);
     },[])
 
 
     useEffect(() => {
-        if (userSavedJobs.some(j => j.id == selectedJob?.id)){
+        if (jobSeekerSavedJobs.some(j => j.id == selectedJob?.id)){
             setIsJobSaved(true)
         }
         else {
             setIsJobSaved(false)
         }
-    }, [userSavedJobs, []]);
+    }, [jobSeekerSavedJobs, []]);
 
     async function removeSavedJob() {
         try {
+            if (!authUser){
+                navigate("/auth-page");
+            }
            await jobSeekerService.deleteSavedJob(selectedJob!.id);
            setIsJobSaved(false);
-            setUserSavedJobs((prevSavedJobs) => prevSavedJobs.filter(savedJob => savedJob.id !== selectedJob?.id));
+            setJobSeekerSavedJobs((prevSavedJobs) => prevSavedJobs.filter(savedJob => savedJob.id !== selectedJob?.id));
             setShowRemoveFromSaved(false);
         }
         catch (error){
@@ -60,9 +70,12 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = () => {
 
     async function saveJob() {
         try {
+            if (!authUser){
+                navigate("/auth-page");
+            }
             await jobSeekerService.saveJob(selectedJob!.id);
             setIsJobSaved(true);
-            setUserSavedJobs((prevSavedJobs) => [...prevSavedJobs, selectedJob!]);
+            setJobSeekerSavedJobs((prevSavedJobs) => [...prevSavedJobs, selectedJob!]);
         }
         catch (error){
             if (error instanceof ServerError){
@@ -76,7 +89,7 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = () => {
             <div className={"job-header-title"}>
                 <span className={"title-text"}>{selectedJob?.jobTitle}</span>
             </div>
-            <div className={"full-header-info"} style={{gridTemplateRows : `${fullHeaderGridTemplate}fr`}}>
+            <div className={"full-header-info"} style={{gridTemplateRows : `${isFullHeaderGridTemplate}fr`}}>
                 <div className={"inner-content-wrapper"}>
                     <a className={"header-company-name"}>
                         <span>{selectedJob?.employerAccount.organization.name}</span>
@@ -89,7 +102,7 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = () => {
                     </div>
                 </div>
             </div>
-            <div className={"short-header-info" } style={{gridTemplateRows : `${shortHeaderGridTemplate}fr`}}>
+            <div className={"short-header-info" } style={{gridTemplateRows : `${isShortHeaderGridTemplate}fr`}}>
                 <div className={"inner-content-wrapper"}>
                     <a className={"short-company-name"}>{selectedJob?.employerAccount.organization.name}</a>
                     <span>&nbsp; | {selectedJob?.location}</span>

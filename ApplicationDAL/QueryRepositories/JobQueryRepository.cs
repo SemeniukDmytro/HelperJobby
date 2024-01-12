@@ -74,7 +74,33 @@ public class JobQueryRepository : IJobQueryRepository
     public async Task<IEnumerable<Job>> GetJobsByJobIds(List<int> jobIds)
     {
         var jobs = await _applicationContext
-            .Jobs.Where(j => jobIds.Contains(j.Id))
+            .Jobs.Where(j => jobIds.Contains(j.Id)).
+            Select(j => new Job()
+            {
+                Id = j.Id,
+                JobTitle = j.JobTitle,
+                NumberOfOpenings = j.NumberOfOpenings,
+                Language = j.Language,
+                Location = j.Location,
+                JobTypes = j.JobTypes,
+                Salary = j.Salary,
+                SalaryRate = j.SalaryRate,
+                ShowPayBy = j.ShowPayBy,
+                Schedule = j.Schedule,
+                Benefits = j.Benefits,
+                ContactEmail = j.ContactEmail,
+                ResumeRequired = j.ResumeRequired,
+                Description = j.Description,
+                DatePosted = j.DatePosted,
+                EmployerAccount = new EmployerAccount()
+                {
+                    Organization = new Organization()
+                    {
+                        Id = j.EmployerAccount.OrganizationId,
+                        Name = j.EmployerAccount.Organization.Name
+                    }
+                }
+            })
             .ToListAsync();
         return jobs;
     }

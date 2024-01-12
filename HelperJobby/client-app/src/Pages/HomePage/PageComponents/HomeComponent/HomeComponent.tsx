@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import "./HomeComponent.scss";
 import JobSearchPromoContainer from "../JobSearchPromoContainer/JobSearchPromoContainer";
 import RecommendedJobs from "../RecommendedJobs/RecommendedJobs";
@@ -6,6 +6,11 @@ import RecentSearches from "../RecentSearches/RecentSearches";
 import {SelectedTabs} from "../../../../enums/SelectedTabs";
 import HomePageMainContentWrap from "../HomePageMainContentWrap/HomePageMainContentWrap";
 import JobSearchBar from "../../../../Components/JobSearchBar/JobSearchBar";
+import {useJobSeeker} from "../../../../hooks/useJobSeeker";
+import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
+import {logErrorInfo} from "../../../../utils/logErrorInfo";
+import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
+import {useAuth} from "../../../../hooks/useAuth";
 
 
 interface HomeComponentProps {
@@ -13,12 +18,36 @@ interface HomeComponentProps {
 
 const HomeComponent: FC<HomeComponentProps> = () => {
     const [selectedTab, setSelectedTab] = useState<SelectedTabs>(1);
+    const {jobSeekerSavedJobs, setJobSeekerSavedJobs} = useJobSeeker();
+    const {authUser} = useAuth();
+    
+    const jobSeekerService = new JobSeekerAccountService();
+    
+    
+    useEffect(() => {
+        loadJobSeekerSavedJobs();
+    }, []);
     function showJobFeed() {
         setSelectedTab(1);
     }
 
     function showRecentSearches() {
         setSelectedTab(2);
+    }
+    
+    async function loadJobSeekerSavedJobs(){
+        if (jobSeekerSavedJobs || !authUser){
+            return;
+        }
+        try {
+            const response = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
+            setJobSeekerSavedJobs(response);
+        }
+        catch (err){
+            if (err instanceof ServerError){
+                logErrorInfo(err);
+            }
+        }
     }
 
     return (

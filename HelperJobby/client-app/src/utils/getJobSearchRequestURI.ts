@@ -5,5 +5,5 @@ export default function createRequestURI(query: string, jobLocation: string, sta
     const payParam = pay === 0 ? "" : `&pay=${pay}`;
     const jobTypeParam = jobType === 0 ? "" : `&jobType=${jobType}`;
     const languageParam = language ? `&language=${language}` : "";
-    return `/jobs?q=${query}${locationParam}${startParam}${payParam}${jobTypeParam}${languageParam}`;
+    return `/jobs?q=${query}${locationParam}${remoteParam}${startParam}${payParam}${jobTypeParam}${languageParam}`;
 }

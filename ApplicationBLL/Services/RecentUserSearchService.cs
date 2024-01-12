@@ -21,7 +21,7 @@ public class RecentUserSearchService : IRecentUserSearchService
 
     public async Task AddRecentSearch(string query, string location, int userId)
     {
-        if (string.IsNullOrEmpty(query) || string.IsNullOrEmpty(location))
+        if (string.IsNullOrEmpty(query))
         {
             throw new InvalidSearchException();
         }
@@ -35,7 +35,7 @@ public class RecentUserSearchService : IRecentUserSearchService
         var recentSearches = (await _recentUserSearchQueryRepository.GetRecentUserSearches(userId)).ToArray();
         if (recentSearches.Length >= 10)
         {
-            await _recentUserSearchCommandRepository.DeleteRecentUserSearch(recentSearches.Last());
+            await _recentUserSearchCommandRepository.DeleteRecentUserSearch(recentSearches.First());
         }
         await _recentUserSearchCommandRepository.CreateRecentUserSearch(recentUserSearch);
     }

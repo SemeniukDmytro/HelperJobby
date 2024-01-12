@@ -9,14 +9,12 @@ import {useAuth} from "../hooks/useAuth";
 
 const HomePageContext = createContext<HomePageContextProps>(
     {
-        mainContentReference : null,
-        setMainContentRef : () => {},
-        fullHeaderGridTemplate : null,
-        setFullHeaderGridTemplate : () => {},
-        shortHeaderGridTemplate : null,
-        setShortHeaderGridTemplate : () => {},
-        userSavedJobs : [],
-        setUserSavedJobs : () => {},
+        mainContentReferenceForHome : null,
+        setMainContentReferenceForHome : () => {},
+        isFullHeaderGridTemplate : null,
+        setIsFullHeaderGridTemplate : () => {},
+        isShortHeaderGridTemplate : null,
+        setIsShortHeaderGridTemplate : () => {},
         selectedJob : null,
         setSelectedJob : () => {},
         recommendedJobs : [],
@@ -29,7 +27,6 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
     const [mainContentRef, setMainContentRef] = useState<MutableRefObject<HTMLDivElement | null> | null>(null);
     const [fullHeaderGridTemplate, setFullHeaderGridTemplate] = useState<number | null>(null);
     const [shortHeaderGridTemplate, setShortHeaderGridTemplate] = useState<number | null>(null);
-    const [userSavedJobs, setUserSavedJobs] = useState<JobDTO[]>([]);
     const [selectedJob, setSelectedJob] = useState<JobDTO | null>(null);
     const [recommendedJobs, setRecommendedJobs] = useState<JobDTO[]>([]);
     const [recentUserSearches, setRecentUserSearches] = useState<RecentUserSearchDTO[]>([]);
@@ -48,7 +45,6 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
             try {
                 await loadRecommendationJobs();
                 if (authUser){
-                    await loadUserSavedJobs();
                     await loadRecentUserSearches();
                 }
             }
@@ -66,16 +62,9 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
         setSelectedJob(retrievedJobs[0]);
         setRecommendedJobs(retrievedJobs);
     }
-
-    async function loadUserSavedJobs() {
-        if (!userSavedJobs){
-            const response = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
-            setUserSavedJobs(response);
-        }
-    }
     
     async function loadRecentUserSearches(){
-        if (!recentUserSearches){
+        if (recentUserSearches.length == 0){
             const response = await userService.getUserRecentSearches();
             setRecentUserSearches(response);
         }
@@ -85,14 +74,12 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
         loading ? <>Loading...</> :
         <HomePageContext.Provider
             value={{
-                mainContentReference: mainContentRef,
-                setMainContentRef,
-                fullHeaderGridTemplate,
-                setFullHeaderGridTemplate,
-                shortHeaderGridTemplate,
-                setShortHeaderGridTemplate,
-                userSavedJobs,
-                setUserSavedJobs,
+                mainContentReferenceForHome: mainContentRef,
+                setMainContentReferenceForHome: setMainContentRef,
+                isFullHeaderGridTemplate: fullHeaderGridTemplate,
+                setIsFullHeaderGridTemplate: setFullHeaderGridTemplate,
+                isShortHeaderGridTemplate: shortHeaderGridTemplate,
+                setIsShortHeaderGridTemplate: setShortHeaderGridTemplate,
                 selectedJob,
                 setSelectedJob,
                 recommendedJobs,

@@ -6,6 +6,7 @@ using ApplicationDomain.Enums;
 using AutoMapper;
 using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.Resume;
+using HelperJobby.DTOs.SearchDTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers;
@@ -31,7 +32,7 @@ public class SearchController : ExtendedBaseController
     }
     
     [HttpGet("jobs")]
-    public async Task<IEnumerable<JobDTO>> SearchJobs(
+    public async Task<JobSearchResultDTO> SearchJobs(
         [FromQuery] string q,
         [FromQuery] string location = "",
         [FromQuery] int start = 0,
@@ -56,13 +57,25 @@ public class SearchController : ExtendedBaseController
                 await recentUserSearchService.AddRecentSearch(q, location, userId);
             });
         }
-        return _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByJobIds(jobIdsToLoad));
+
+        JobSearchResultDTO searchResultDTO = new JobSearchResultDTO()
+        {
+            jobs = _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByJobIds(jobIdsToLoad.jobIds)),
+            HasMore = jobIdsToLoad.hasMoreResults
+        };
+        return searchResultDTO;
     }
     
     [HttpGet("resumes")]
-    public async Task<IEnumerable<ResumeDTO>> SearchResumes(string q, [FromQuery] int start)
+    public async Task<ResumeSearchResultDTO> SearchResumes(string q, [FromQuery] int start)
     {
         var resumesToLoad = await _searchService.FindResumeIds(start, q);
-        return _mapper.Map<IEnumerable<ResumeDTO>>(await _resumeQueryRepository.GetResumesByResumeIds(resumesToLoad));
+        ResumeSearchResultDTO resumeSearchResultDTO = new ResumeSearchResultDTO()
+        {
+            Resumes = _mapper.Map<IEnumerable<ResumeDTO>>(
+                await _resumeQueryRepository.GetResumesByResumeIds(resumesToLoad.resumeIds)),
+            HasMore = resumesToLoad.hasMoreResults
+        };
+        return resumeSearchResultDTO;
     }
 }

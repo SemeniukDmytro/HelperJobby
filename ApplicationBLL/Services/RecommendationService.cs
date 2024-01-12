@@ -37,6 +37,6 @@ public class RecommendationService : IRecommendationService
         }
 
         var jobIds = await _searchService.FindJobIds(query, location, 0, false, 0, 0, "");
-        return jobIds;
+        return jobIds.jobIds;
     }
 }

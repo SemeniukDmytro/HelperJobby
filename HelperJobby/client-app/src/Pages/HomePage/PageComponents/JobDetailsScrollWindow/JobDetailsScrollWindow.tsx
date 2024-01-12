@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {Dispatch, FC, MutableRefObject, SetStateAction, useEffect, useRef, useState} from 'react';
 import "./JobDetailScrollWindow.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMoneyBillAlt} from "@fortawesome/free-regular-svg-icons";
@@ -10,27 +10,29 @@ import {
     benefitsEnumToStringMap, jobTypesEnumToStringMap,
     schedulesEnumToStringMap
 } from "../../../../utils/enumToStringConverter";
+import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 
 interface JobDetailsScrollWindowProps {
+    selectedJob: JobDTO | null;
+    setIsFullHeaderGridTemplate: Dispatch<SetStateAction<number | null>>;
+    setIsShortHeaderGridTemplate: Dispatch<SetStateAction<number | null>>;
+    mainContentReference : MutableRefObject<HTMLDivElement | null> | null;
 }
 
-const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
+const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = ({
+                                                                     selectedJob, setIsFullHeaderGridTemplate
+                                                                     , setIsShortHeaderGridTemplate, mainContentReference
+                                                                 }) => {
 
-    const {selectedJob} = useHomePage();
-    
-    const {mainContentReference,
-        setFullHeaderGridTemplate,
-        setShortHeaderGridTemplate} = useHomePage();
-    
     const [showAllBenefits, setShowAllBenefits] = useState(false);
     const [benefitsButtonText, setBenefitsButtonText] = useState("Show more");
     const [displayedBenefits, setDisplayedBenefits] = useState<string[]>([]);
-    
+
     const jobDetailsScrollWindowRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const handleScroll = () => {
-            if(mainContentReference){
+            if (mainContentReference) {
                 const mainContentY = mainContentReference.current!.getBoundingClientRect().top + window.scrollY;
                 if (mainContentY > window.scrollY && jobDetailsScrollWindowRef.current!.scrollTop <= 10) {
                     window.scrollTo(0, mainContentY);
@@ -38,7 +40,7 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
                 focusOnInnerContent()
             }
         };
-        
+
         if (jobDetailsScrollWindowRef.current) {
             jobDetailsScrollWindowRef.current.addEventListener('scroll', handleScroll);
         }
@@ -51,36 +53,33 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
     }, [mainContentReference]);
 
     useEffect(() => {
-        if (selectedJob!.benefits.length < 6){
+        if (selectedJob!.benefits.length < 6) {
             setDisplayedBenefits(selectedJob!.benefits);
-        }
-        else {
-            setDisplayedBenefits(selectedJob!.benefits.slice(0, 6));    
+        } else {
+            setDisplayedBenefits(selectedJob!.benefits.slice(0, 6));
             setShowAllBenefits(false);
             setBenefitsButtonText("Show more")
         }
     }, [selectedJob]);
-    
+
     function focusOnInnerContent() {
 
         const scrollTop = jobDetailsScrollWindowRef.current?.scrollTop;
-        if (scrollTop! !== 0){
-            setFullHeaderGridTemplate(0);
-            setShortHeaderGridTemplate(1);
-        }
-        else {
-            setFullHeaderGridTemplate(1);
-            setShortHeaderGridTemplate(0);
+        if (scrollTop! !== 0) {
+            setIsFullHeaderGridTemplate(0);
+            setIsShortHeaderGridTemplate(1);
+        } else {
+            setIsFullHeaderGridTemplate(1);
+            setIsShortHeaderGridTemplate(0);
         }
     }
 
-   async function displayAllBenefits() {
-        if (!showAllBenefits){
+    async function displayAllBenefits() {
+        if (!showAllBenefits) {
             setBenefitsButtonText("Show less")
-            setDisplayedBenefits(selectedJob!.benefits);    
+            setDisplayedBenefits(selectedJob!.benefits);
             setShowAllBenefits(true);
-        }
-        else {
+        } else {
             setBenefitsButtonText("Show more")
             setDisplayedBenefits(selectedJob!.benefits.slice(0, 6));
             setShowAllBenefits(false);
@@ -90,26 +89,27 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
     return (
         <div className={"job-details-scroll-window"} ref={jobDetailsScrollWindowRef}>
             <div className={"job-details-container"}>
-                <div className={"job-details-header"}>  
+                <div className={"job-details-header"}>
                     <div className={"job-title-info"}>
                         <span>Job details</span>
                     </div>
                     <div className={"short-main-info"}>
                         <div className={"job-details-icon-box"}>
-                            <FontAwesomeIcon icon={faMoneyBillAlt} />
+                            <FontAwesomeIcon icon={faMoneyBillAlt}/>
                         </div>
                         <div className={"job-details-header-info-box"}>
                             <div className={"job-details-info"}>
                                 <span>Pay</span>
                             </div>
                             <div className={"detailed-job-features"}>
-                                <JobDetailsFeatureBox featureText={`$${thousandsDisplayHelper(selectedJob!.salary)} ${selectedJob?.salaryRate}`}/>
+                                <JobDetailsFeatureBox
+                                    featureText={`$${thousandsDisplayHelper(selectedJob!.salary)} ${selectedJob?.salaryRate}`}/>
                             </div>
                         </div>
                     </div>
                     {selectedJob!.jobType.length > 0 && <div className={"short-main-info"}>
                         <div className={"job-details-icon-box"}>
-                            <FontAwesomeIcon icon={faBriefcase} />
+                            <FontAwesomeIcon icon={faBriefcase}/>
                         </div>
                         <div className={"job-details-header-info-box"}>
                             <div className={"job-details-info"}>
@@ -117,14 +117,15 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
                             </div>
                             <div className={"detailed-job-features"}>
                                 {selectedJob?.jobType.map((jobType, index) => (
-                                    <JobDetailsFeatureBox  key={index} featureText={jobTypesEnumToStringMap(jobType)}></JobDetailsFeatureBox>
+                                    <JobDetailsFeatureBox key={index}
+                                                          featureText={jobTypesEnumToStringMap(jobType)}></JobDetailsFeatureBox>
                                 ))}
                             </div>
                         </div>
                     </div>}
                     {selectedJob!.schedule.length > 0 && <div className={"short-main-info"}>
                         <div className={"job-details-icon-box"}>
-                            <FontAwesomeIcon icon={faClock} />
+                            <FontAwesomeIcon icon={faClock}/>
                         </div>
                         <div className={"job-details-header-info-box"}>
                             <div className={"job-details-info"}>
@@ -132,7 +133,8 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
                             </div>
                             <div className={"detailed-job-features"}>
                                 {selectedJob?.schedule.map((schedule, index) => (
-                                    <JobDetailsFeatureBox  key={index} featureText={schedulesEnumToStringMap(schedule)}></JobDetailsFeatureBox>
+                                    <JobDetailsFeatureBox key={index}
+                                                          featureText={schedulesEnumToStringMap(schedule)}></JobDetailsFeatureBox>
                                 ))}
                             </div>
                         </div>
@@ -151,20 +153,22 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = () => {
                                 <li key={index}>{benefitsEnumToStringMap(benefit)}</li>
                             ))}
                         </ul>
-                        { (!showAllBenefits && selectedJob!.benefits.length > 6)&& <div className={"background-fade"}></div> }
+                        {(!showAllBenefits && selectedJob!.benefits.length > 6) &&
+                            <div className={"background-fade"}></div>}
                     </div>
-                    {selectedJob!.benefits.length > 6 && <button className={"show-more-benefits-button"} onClick={displayAllBenefits}>
-                        <span>{benefitsButtonText}</span>
-                        {!showAllBenefits &&<FontAwesomeIcon className={"show-more-arrow"} icon={faChevronDown} />}
-                        {showAllBenefits &&<FontAwesomeIcon className={"show-more-arrow"} icon={faChevronUp} />}
-                    </button>}
+                    {selectedJob!.benefits.length > 6 &&
+                        <button className={"show-more-benefits-button"} onClick={displayAllBenefits}>
+                            <span>{benefitsButtonText}</span>
+                            {!showAllBenefits && <FontAwesomeIcon className={"show-more-arrow"} icon={faChevronDown}/>}
+                            {showAllBenefits && <FontAwesomeIcon className={"show-more-arrow"} icon={faChevronUp}/>}
+                        </button>}
                 </div>}
                 <div className={"full-description-box"}>
                     <div style={{whiteSpace: "pre-wrap"}}>
                         {selectedJob?.description}
                     </div>
                 </div>
-                
+
             </div>
         </div>
     )

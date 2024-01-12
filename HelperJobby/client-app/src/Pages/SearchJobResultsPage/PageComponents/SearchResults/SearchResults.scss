@@ -56,3 +56,42 @@
     background-color: global-variables.$light-blue;
   }
 }
+
+.filters-results-separator{
+  height: 1px;
+  margin-top: 2rem;
+  background-color: global-variables.$neutral-color-400;
+  width: 100%;
+}
+
+.pages-navigation-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.navigation-button{
+  padding: 0.75rem 1rem;
+  background-color: global-variables.$neutral-color-300;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: global-variables.$neutral-color-900;
+  border: none;
+  margin-bottom: 1.5rem;
+  transition: 0.2s;
+  &:hover{
+    background-color: global-variables.$neutral-color-400;
+  }
+  &:active{
+    box-shadow: global-variables.$button-inner-shadow;
+  }
+}
+
+.previous-button{
+  margin-right: 1.5rem;
+}
+
+.smaller-margin-before-navigation{
+  margin-bottom: 1rem;
+}

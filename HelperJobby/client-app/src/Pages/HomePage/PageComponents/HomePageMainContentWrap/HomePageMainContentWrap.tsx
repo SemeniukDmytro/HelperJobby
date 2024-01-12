@@ -2,6 +2,7 @@ import React, {FC, ReactNode, useEffect, useRef} from 'react';
 import './HomePageMainContentWrap.scss';
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import {useHomePage} from "../../../../hooks/useHomePage";
+import useQueryParams from "../../../../hooks/useQueryParams";
 
 interface HomePageMainContentWrapProps {
     children: ReactNode
@@ -9,10 +10,12 @@ interface HomePageMainContentWrapProps {
 
 const HomePageMainContentWrap: FC<HomePageMainContentWrapProps> = ({children}: { children: ReactNode }) => {
     const mainContentRef = useRef<HTMLDivElement | null>(null);
-    const {setMainContentRef} = useHomePage();
+    const {setMainContentReferenceForHome} = useHomePage();
+    const {setMainContentRefForSearch} = useQueryParams();
 
     useEffect(() => {
-        setMainContentRef(mainContentRef);
+        setMainContentReferenceForHome(mainContentRef);
+        setMainContentRefForSearch(mainContentRef);
     }, []);
     
     return (

@@ -1,4 +1,4 @@
-import {createContext, ReactNode, useState} from "react";
+import {createContext, MutableRefObject, ReactNode, useRef, useState} from "react";
 import {JobQueryParamsContextProps} from "../contextTypes/JobQueryParamsContextProps";
 import JobTypes from "../enums/JobTypes";
 
@@ -16,8 +16,9 @@ export const JobQueryParamsContext = createContext<JobQueryParamsContextProps>({
     jobType : 0,
     setJobType : () => {},
     language : "",
-    setLanguage : () => {}
-    
+    setLanguage : () => {},
+    mainContentReferenceForSearch : null,
+    setMainContentRefForSearch : () => {}
 });
 
 export function JobQueryParamsProvider({children} : {children : ReactNode}) {
@@ -28,6 +29,7 @@ export function JobQueryParamsProvider({children} : {children : ReactNode}) {
     const [pay, setPay] = useState(0);
     const [jobType, setJobType] = useState<JobTypes>(0);
     const [language, setLanguage] = useState("");
+    const [mainContentReference, setMainContentRef] = useState<MutableRefObject<HTMLDivElement | null> | null>(null);
 
     const contextValue: JobQueryParamsContextProps = {
         query: job,
@@ -43,7 +45,9 @@ export function JobQueryParamsProvider({children} : {children : ReactNode}) {
         jobType,
         setJobType,
         language,
-        setLanguage
+        setLanguage,
+        mainContentReferenceForSearch: mainContentReference,
+        setMainContentRefForSearch: setMainContentRef
     };
 
     return (

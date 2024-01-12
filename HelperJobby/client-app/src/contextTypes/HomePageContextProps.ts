@@ -3,14 +3,12 @@ import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
 import {RecentUserSearchDTO} from "../DTOs/userRelatedDTOs/RecentUserSearchDTO";
 
 export interface HomePageContextProps{
-    mainContentReference : MutableRefObject<HTMLDivElement | null> | null;
-    setMainContentRef : Dispatch<SetStateAction<MutableRefObject<HTMLDivElement | null> | null>>;
-    fullHeaderGridTemplate: number | null;
-    setFullHeaderGridTemplate : Dispatch<SetStateAction<number | null>>;
-    shortHeaderGridTemplate : number | null;
-    setShortHeaderGridTemplate : Dispatch<SetStateAction<number | null>>;
-    userSavedJobs : JobDTO[];
-    setUserSavedJobs : Dispatch<SetStateAction<JobDTO[]>>;
+    mainContentReferenceForHome : MutableRefObject<HTMLDivElement | null> | null;
+    setMainContentReferenceForHome : Dispatch<SetStateAction<MutableRefObject<HTMLDivElement | null> | null>>;
+    isFullHeaderGridTemplate: number | null;
+    setIsFullHeaderGridTemplate : Dispatch<SetStateAction<number | null>>;
+    isShortHeaderGridTemplate : number | null;
+    setIsShortHeaderGridTemplate : Dispatch<SetStateAction<number | null>>;
     selectedJob : JobDTO | null;
     setSelectedJob : Dispatch<SetStateAction<JobDTO | null>>;
     recommendedJobs : JobDTO[];

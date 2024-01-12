@@ -24,16 +24,17 @@ public class SearchService : ISearchService
         _searchQueryRepository = searchQueryRepository;
         _rankingService = rankingService;
     }
-    
 
-    public async Task<List<int>> FindJobIds(string query, string location, int numberOfResultsToSkip,
+
+    public async Task<(List<int> jobIds, bool hasMoreResults)> FindJobIds(string query, string location, int numberOfResultsToSkip, 
         bool isRemote, decimal payPerHour, JobTypes jobType, string language)
     {
         if (string.IsNullOrEmpty(query) || payPerHour < 0 || jobType < 0 || (jobType & (jobType - 1)) != 0)
         {
             throw new InvalidSearchException();
         }
-        
+
+        var hasMoreResults = false;
         var processedQuery = ProcessQuery(query);
         
         Dictionary<int, (int Frequency, decimal TotalRank)> jobFrequencyAndRank = new();
@@ -52,12 +53,17 @@ public class SearchService : ISearchService
                 jobType, 
                 language)).ToList();
 
-            foreach (var match in rankedIdsMatches)
-            {
-                jobFrequencyAndRank.TryAdd(match.JobId, (0, 0.0m));
+            if (rankedIdsMatches.Count > 10)
+                hasMoreResults = true;
 
-                var (frequency, totalRank) = jobFrequencyAndRank[match.JobId];
-                jobFrequencyAndRank[match.JobId] = (++frequency, totalRank + match.Rating);
+            var rankedIdsMatchesReturnCount = hasMoreResults ? rankedIdsMatches.Count - 1 : rankedIdsMatches.Count;
+
+            for(int i = 0; i < rankedIdsMatchesReturnCount; i++)
+            {
+                jobFrequencyAndRank.TryAdd(rankedIdsMatches[i].JobId, (0, 0.0m));
+
+                var (frequency, totalRank) = jobFrequencyAndRank[rankedIdsMatches[i].JobId];
+                jobFrequencyAndRank[rankedIdsMatches[i].JobId] = (++frequency, totalRank + rankedIdsMatches[i].Rating);
             }
         }
         
@@ -65,30 +71,35 @@ public class SearchService : ISearchService
             .Select(kv => kv.Key)
             .ToList();
 
-        return sortedJobIds;
+        return (sortedJobIds, hasMoreResults);
     }
-    
 
-    public async Task<List<int>> FindResumeIds(int numberOfResultsToSkip, string query)
+    public async Task<(List<int> resumeIds, bool hasMoreResults)> FindResumeIds(int numberOfResultsToSkip, string query)
     {
         if (string.IsNullOrEmpty(query))
         {
-            return null;
+            throw new InvalidSearchException();
         }
 
+        var hasMoreResults = false;
         var processedQuery = ProcessQuery(query);
         Dictionary<int, (int Frequency, decimal TotalRank)> resumeFrequencyAndRank = new();
         foreach (var word in processedQuery)
         {
             var rankedIdsMatches = (await _searchQueryRepository
                 .GetProcessedResumeWordsByWord(numberOfResultsToSkip, word)).ToList();
+            
+            if (rankedIdsMatches.Count > 10)
+                hasMoreResults = true;
 
-            foreach (var match in rankedIdsMatches)
+            var rankedIdsMatchesReturnCount = hasMoreResults ? rankedIdsMatches.Count - 1 : rankedIdsMatches.Count;
+            
+            for (int i = 0; i < rankedIdsMatchesReturnCount; i++)
             {
-                resumeFrequencyAndRank.TryAdd(match.ResumeId, (0, 0.0m));
+                resumeFrequencyAndRank.TryAdd(rankedIdsMatches[i].ResumeId, (0, 0.0m));
 
-                var (frequency, totalRank) = resumeFrequencyAndRank[match.ResumeId];
-                resumeFrequencyAndRank[match.ResumeId] = (++frequency, totalRank + match.Rating);
+                var (frequency, totalRank) = resumeFrequencyAndRank[rankedIdsMatches[i].ResumeId];
+                resumeFrequencyAndRank[rankedIdsMatches[i].ResumeId] = (++frequency, totalRank + rankedIdsMatches[i].Rating);
             }
         }
         var sortedResumeIds = resumeFrequencyAndRank.OrderByDescending(kv => 
@@ -96,7 +107,7 @@ public class SearchService : ISearchService
             .Select(kv => kv.Key)
             .ToList();
 
-        return sortedResumeIds;
+        return (sortedResumeIds, hasMoreResults);
     }
 
     private List<string> ProcessQuery(string query)

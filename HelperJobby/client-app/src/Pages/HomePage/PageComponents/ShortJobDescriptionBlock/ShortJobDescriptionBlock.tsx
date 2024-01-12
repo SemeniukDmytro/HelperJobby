@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons";
 import {faBookmark as regularBookmark} from "@fortawesome/free-regular-svg-icons";
@@ -7,7 +7,6 @@ import "./ShortJobDescriptionBlock.scss";
 import JobFeatureBox from "../JobFeatureBox/JobFeatureBox";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../../hooks/useAuth";
-import {useHomePage} from "../../../../hooks/useHomePage";
 import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
 import {descriptionSplitter} from "../../../../utils/descriptionSplitter";
 import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
@@ -17,17 +16,20 @@ import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
 import {schedulesEnumToStringMap} from "../../../../utils/enumToStringConverter";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {jobTypesEnumToStringMap} from "../../../../utils/enumToStringConverter";
+import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 
 interface ShortJobDescriptionBlockProps {
     job : JobDTO;
+    selectedJob : JobDTO | null;
+    setSelectedJob : Dispatch<SetStateAction<JobDTO | null>>;
 }
 
 const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : ShortJobDescriptionBlockProps) => {
-    const {job} = props;
+    const {job, selectedJob, setSelectedJob} = props;
     const currentComponentRef = useRef<HTMLDivElement | null>(null);
 
     const {authUser} = useAuth();
-    const {userSavedJobs, setUserSavedJobs, selectedJob, setSelectedJob} = useHomePage();
+    const {jobSeekerSavedJobs, setJobSeekerSavedJobs} = useJobSeeker();
     const navigate = useNavigate();
 
     const [shortDescription, setShortDescription] = useState<string[]>([]);
@@ -63,7 +65,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
         setShortDescription(descriptionSplitter(job.description));
         checkIsNewJob();
         checkIsJobSaved();
-    }, [job, userSavedJobs]);
+    }, [job, jobSeekerSavedJobs]);
     
 
     useEffect(() => {
@@ -102,8 +104,8 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
     }
 
     function checkIsJobSaved() {
-        if (userSavedJobs && userSavedJobs) {
-            const isSaved = userSavedJobs.some(savedJob => savedJob.id === props.job.id);
+        if (jobSeekerSavedJobs) {
+            const isSaved = jobSeekerSavedJobs.some(savedJob => savedJob.id === props.job.id);
             setIsJobSaved(isSaved);
             if (isSaved){
                 setSaveJobButtonText("Remove from saved");
@@ -124,7 +126,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
                 await jobSeekerService.deleteSavedJob(job.id);
                 setSaveJobButtonText("Save job");
                 setIsJobSaved(!isJobSaved);
-                setUserSavedJobs((prevSavedJobs) => prevSavedJobs.filter(savedJob => savedJob.id !== job.id));
+                setJobSeekerSavedJobs((prevSavedJobs) => prevSavedJobs.filter(savedJob => savedJob.id !== job.id));
             }
             else {
                 await jobSeekerService.saveJob(job.id);
@@ -133,7 +135,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
                 setIsSuccessfulPopup(true);
                 setPopUpText("Job successfully saved!");
                 setShowPopup(true);
-                setUserSavedJobs((prevSavedJobs) => [...prevSavedJobs, job]);
+                setJobSeekerSavedJobs((prevSavedJobs) => [...prevSavedJobs, job]);
             }
         }
         catch (error){

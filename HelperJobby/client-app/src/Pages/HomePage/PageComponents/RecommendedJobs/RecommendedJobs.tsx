@@ -9,7 +9,9 @@ import DetailedDescriptionColumn from "../DetailedDescriptionColumn/DetailedDesc
 interface RecommendedJobsProps {}
 
 const RecommendedJobs: FC<RecommendedJobsProps> = () => {
-    const {recommendedJobs} = useHomePage();
+    const {recommendedJobs, selectedJob, setSelectedJob,
+    isShortHeaderGridTemplate, setIsShortHeaderGridTemplate,
+        isFullHeaderGridTemplate, setIsFullHeaderGridTemplate, mainContentReferenceForHome} = useHomePage();
 
     
   return  (
@@ -19,10 +21,16 @@ const RecommendedJobs: FC<RecommendedJobsProps> = () => {
                   <span>Jobs based on your activity on indeed</span>
               </div>
               {recommendedJobs.map((job, index) => (
-                  <ShortJobDescriptionBlock key={index} job={job}></ShortJobDescriptionBlock>
+                  <ShortJobDescriptionBlock key={index} job={job}
+                  selectedJob={selectedJob} setSelectedJob={setSelectedJob}></ShortJobDescriptionBlock>
               ))}
           </div>
-          <DetailedDescriptionColumn/>
+          <DetailedDescriptionColumn isFullHeaderGridTemplate={isFullHeaderGridTemplate}
+                                     setIsFullHeaderGridTemplate={setIsFullHeaderGridTemplate}
+                                     isShortHeaderGridTemplate={isShortHeaderGridTemplate} 
+                                     setIsShortHeaderGridTemplate={setIsShortHeaderGridTemplate} 
+                                     mainContentReference={mainContentReferenceForHome}
+                                     selectedJob={selectedJob}/>
       </div>
 )};
 

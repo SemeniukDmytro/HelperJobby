@@ -8,7 +8,8 @@ enum JobTypes {
     Seasonal = 1 << 5,
     Freelance = 1 << 6,
     Apprenticeship = 1 << 7,
-    InternshipCoop = 1 << 8
+    InternshipCoop = 1 << 8,
+    Contract = 1 << 9
 }
 
 export default JobTypes;
