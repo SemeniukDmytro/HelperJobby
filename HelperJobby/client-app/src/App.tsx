@@ -8,6 +8,9 @@ import {AuthProvider} from "./contexts/AuthContext";
 import JobSeekerProfilePage from "./Pages/JobSeekerProfilePage/JobSeekerProfilePage";
 import EditContactInfoPage from "./Pages/EditContactInfoPage/EditContactInfoPage";
 import SearchJobResultsPage from "./Pages/SearchJobResultsPage/SearchJobResultsPage";
+import ResumeNamePage from "./Pages/BuildResumePages/ResumeNamePage/ResumeNamePage";
+import ResumePhonePage from "./Pages/BuildResumePages/ResumePhoneNumberPage/ResumePhonePage";
+import BuildResumePage from "./Pages/BuildResumePages/BuildResumePage/BuildResumePage";
 
 function App() {
   return (
@@ -16,14 +19,19 @@ function App() {
             {/* auth routes*/}
             <Route element={<RequireAuth/>}>
                 <Route path={"/"} element={<HomePage/>}/>
-                <Route path={"my-profile"} element={<JobSeekerProfilePage/>}/>
-                <Route path={"edit-contact"} element={<EditContactInfoPage/>}/>
+                <Route path={"/my-profile"} element={<JobSeekerProfilePage/>}/>
+                <Route path={"/edit-contact"} element={<EditContactInfoPage/>}/>
+                <Route path={"/build"} element={<BuildResumePage/>}>
+                    <Route path={"name"} element={<ResumeNamePage/>}></Route>
+                    <Route path={"phone"} element={<ResumePhonePage/>}/>
+                </Route>
             </Route>
 
             {/*public routes */}
             <Route path="/home" element={<HomePage/>}/>
-            <Route path={"auth-page"} element={<AuthPage/>}/>
-            <Route path={"jobs"} element={<SearchJobResultsPage/>}/>
+            <Route path={"/auth-page"} element={<AuthPage/>}/>
+            <Route path={"/jobs"} element={<SearchJobResultsPage/>}/>
+            
         </Routes>
       </AuthProvider>
   )

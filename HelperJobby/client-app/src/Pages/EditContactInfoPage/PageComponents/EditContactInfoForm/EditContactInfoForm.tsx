@@ -23,7 +23,7 @@ interface EditContactInfoFormProps {}
 const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     const {authUser} = useAuth();
     const navigate = useNavigate();
-    const {jobSeeker, setJobSeeker} = useJobSeeker();
+    const {jobSeeker, setJobSeeker, fetchJobSeeker} = useJobSeeker();
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -48,26 +48,9 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     let newJobSeekerInstanceWasLoaded = false;
     
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                if (jobSeeker === null){
-                    const retrievedJobSeeker = await jobSeekerService.getCurrentJobSeekerAllInfo();
-                    setJobSeeker(retrievedJobSeeker);
-                    setJobSeekerValues(retrievedJobSeeker);
-                    newJobSeekerInstanceWasLoaded = true;
-                }
-            }
-            catch (error){
-                if (error instanceof ServerError){
-                    logErrorInfo(error);
-                }
-            }
-            finally {
-                setLoading(false);
-            }
-        }
-        fetchData();
+        setLoading(true);
+        fetchJobSeeker();
+        setLoading(false);
     }, []);
 
     

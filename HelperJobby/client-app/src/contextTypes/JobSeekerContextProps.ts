@@ -7,4 +7,5 @@ export interface JobSeekerContextProps{
     setJobSeeker : Dispatch<SetStateAction<JobSeekerAccountDTO | null>>;
     jobSeekerSavedJobs: JobDTO[];
     setJobSeekerSavedJobs: Dispatch<SetStateAction<JobDTO[]>>;
+    fetchJobSeeker: () => void;
 }

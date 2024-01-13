@@ -3,9 +3,6 @@ import "./JobSeekerProfile.scss";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {useAuth} from "../../../../hooks/useAuth";
 import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
-import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import {JobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleRight, faEnvelope, faFileLines, faLocationDot, faPhone, faUser} from "@fortawesome/free-solid-svg-icons";
@@ -14,38 +11,22 @@ import {useNavigate} from "react-router-dom";
 interface JobSeekerProfileProps {}
 
 const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
-    const {jobSeeker, setJobSeeker} = useJobSeeker();
+    const {jobSeeker, setJobSeeker, fetchJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
     const jobSeekerService = new JobSeekerAccountService();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (jobSeeker === null){
-                    setLoading(true);
-                    const jobSeeker = await getJobSeekerAccount();
-                    setJobSeeker(jobSeeker);
-                    setLoading(false);
-                }
-            }
-            catch (error){
-                if (error instanceof ServerError){
-                    logErrorInfo(error);
-                }
-            }
-        } 
-        fetchData();
+        setLoading(true);
+        fetchJobSeeker();
+        setLoading(false);
     }, []);
 
     function checkJobSeekerAddressInfo() {
         return !!(
             jobSeeker?.address.city
         );
-    }
-    async function getJobSeekerAccount() : Promise<JobSeekerAccountDTO> {
-        return  await jobSeekerService.getCurrentJobSeekerAllInfo();
     }
 
     function navigateToEditContactPage() {
