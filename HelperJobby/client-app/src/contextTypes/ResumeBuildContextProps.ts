@@ -5,8 +5,4 @@ export interface ResumeBuildContextProps{
     setProgressPercentage : Dispatch<SetStateAction<number | null>>;
     saveFunc : () => Promise<void>;
     setSaveFunc:  Dispatch<SetStateAction<() => Promise<void>>>;
-    firstName : string;
-    setFirstName : Dispatch<SetStateAction<string>>;
-    lastName : string;
-    setLastName : Dispatch<SetStateAction<string>>;
 }

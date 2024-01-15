@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import ResumePhoneComponent from "./ResumePhoneComponent/ResumePhoneComponent";
+import ResumePhoneComponent from "./PageComponents/ResumePhoneComponent/ResumePhoneComponent";
 
 interface ResumePhonePageProps {}
 
 const ResumePhonePage: FC<ResumePhonePageProps> = () => (
-   <ResumePhoneComponent></ResumePhoneComponent>
+   <ResumePhoneComponent/>
 );
 
 export default ResumePhonePage;

@@ -1,0 +1,11 @@
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+.build-page-subtitle{
+  font-size: 1rem;
+  color: global-variables.$neutral-color-600;
+  margin-bottom: 2rem;
+}
+
+.subtitle-margin{
+  margin-bottom: 1rem;
+}

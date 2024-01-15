@@ -64,4 +64,15 @@
   opacity: 0.7;
   max-height: 0.75rem;
   user-select: none;
+  z-index: 10;
+}
+
+.erase-button-box{
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  right: 0.25rem;
+  top: 0.25rem;
+  background-color: white;
 }

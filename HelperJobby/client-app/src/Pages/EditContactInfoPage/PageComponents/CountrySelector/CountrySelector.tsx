@@ -8,9 +8,10 @@ import {isNotEmpty} from "../../../../utils/commonValidators";
 interface CountrySelectorProps {
     country : string;
     setCountry : Dispatch<SetStateAction<string>>;
+    selectRef : React.RefObject<HTMLSelectElement>;
 }
 
-const CountrySelector: FC<CountrySelectorProps> = ({country, setCountry}) => {
+const CountrySelector: FC<CountrySelectorProps> = ({country, setCountry, selectRef}) => {
     const [isInvalidValue, setIsInvalidValue] = useState(false);
     const [inputFocus, setSelectFocus] = useState(false);
 
@@ -53,6 +54,7 @@ const CountrySelector: FC<CountrySelectorProps> = ({country, setCountry}) => {
                     onChange={selectAnotherCountry}
                     onFocus={handleSelectFocus}
                     onBlur={handleSelectBlur}
+                    ref={selectRef}
                 >
                     {countries.map((country) => (
                         <option key={country.name} value={country.name}>{country.name}</option>

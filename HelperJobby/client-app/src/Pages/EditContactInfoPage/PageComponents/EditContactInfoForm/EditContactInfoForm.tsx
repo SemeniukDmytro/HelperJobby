@@ -35,7 +35,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     
     const firstNameInputRef = useRef<HTMLInputElement>(null);
     const lastNameInputRef = useRef<HTMLInputElement>(null);
-    const countryInputRef = useRef<HTMLInputElement>(null);
+    const countryInputRef = useRef<HTMLSelectElement>(null);
     const cityInputRef = useRef<HTMLInputElement>(null);
     const streetAddressInputRef = useRef<HTMLInputElement>(null);
     
@@ -176,7 +176,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                               <div className={"edit-location-subtitle"}>
                                   This helps match you with nearby jobs.
                               </div>
-                              <CountrySelector country={country} setCountry={setCountry}></CountrySelector>
+                              <CountrySelector country={country} setCountry={setCountry} selectRef={countryInputRef}></CountrySelector>
                               <CustomInputField fieldLabel={"Street address"} isRequired={false} inputFieldValue={streetAddress} setInputFieldValue={setStreetAddress}
                                              setShowAutocompleteWindow={setShowStreetsAutocomplete} inputRef={streetAddressInputRef}
                                              fieldSubtitle={"Visible only to you"} displayGoogleLogo={true}/>

@@ -8,10 +8,6 @@ const ResumeBuildContext = createContext<ResumeBuildContextProps>({
     setProgressPercentage: () => {},
     saveFunc: async () => {},
     setSaveFunc: () => {},
-    firstName : "",
-    setFirstName : () => {},
-    lastName : "",
-    setLastName : () => {}
 });
 
 export function ResumeBuildContextProvider({ children }: { children: ReactNode }) {
@@ -19,8 +15,6 @@ export function ResumeBuildContextProvider({ children }: { children: ReactNode }
     const [currentSaveFunc, setCurrentSaveFunc] = useState<() => Promise<void>>(
         async () => {});
     const {jobSeeker, fetchJobSeeker } = useJobSeeker();
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -30,8 +24,6 @@ export function ResumeBuildContextProvider({ children }: { children: ReactNode }
     useEffect(() => {
         if (jobSeeker){
             setLoading(false)
-            setFirstName(jobSeeker.firstName);
-            setLastName(jobSeeker.lastName);
         }
     }, [jobSeeker]);
     
@@ -48,10 +40,6 @@ export function ResumeBuildContextProvider({ children }: { children: ReactNode }
                 setProgressPercentage,
                 saveFunc,
                 setSaveFunc: setCurrentSaveFunc,
-                firstName,
-                setFirstName,
-                lastName,
-                setLastName
             }}
         >
             {children}

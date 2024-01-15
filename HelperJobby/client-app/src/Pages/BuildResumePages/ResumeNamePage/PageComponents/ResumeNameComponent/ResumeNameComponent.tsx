@@ -8,30 +8,29 @@ import {isNotEmpty} from "../../../../../utils/commonValidators";
 import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountService";
 import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
-import {UpdateJobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/UpdateEmployerAccountDTO";
 import {useAuth} from "../../../../../hooks/useAuth";
-import {Oval} from "react-loader-spinner";
+import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
+import {createUpdateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
 
 interface ResumeNameComponentProps {}
 
 const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
     const {
-        firstName,
-        setFirstName,
-        lastName,
-        setLastName,
         setProgressPercentage,
         setSaveFunc,} = useResumeBuild();
-    const {jobSeeker, setJobSeeker} = useJobSeeker();
     const jobSeekerService = new JobSeekerAccountService();
+    const {jobSeeker, setJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
     const navigate = useNavigate();
+    
+    const [firstName, setFirstName] = useState(jobSeeker!.firstName);
+    const [lastName, setLastName] = useState(jobSeeker!.lastName)
     const [savingInfo, setSavingInfo] = useState(false);
     const firstNameInputRef = useRef<HTMLInputElement>(null);
     const lastNameInputRef = useRef<HTMLInputElement>(null);
     
     useEffect(() => {
-        setProgressPercentage(20);
+        setProgressPercentage(17);
     }, []);
 
     useEffect(() => {
@@ -62,13 +61,7 @@ const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
         }
         try {
             setSavingInfo(true);
-            const updatedJobSeeker : UpdateJobSeekerAccountDTO = {
-                firstName : firstName,
-                lastName : lastName,
-                phoneNumber : jobSeeker!.phoneNumber,
-                address : jobSeeker!.address
-            }
-            console.log(updatedJobSeeker);
+            const updatedJobSeeker = createUpdateJobSeekerDTO(firstName, lastName, jobSeeker!.phoneNumber, jobSeeker!.address);
             const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
             setJobSeeker(response);
             navigate(resultPageURI);
@@ -102,9 +95,9 @@ const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
                               inputRef={lastNameInputRef}/>
             <button className={"submit-form-button"} onClick={moveToPhonePage} disabled={savingInfo}>
                 {savingInfo ?
-                    (<Oval strokeWidth={5} color={"white"} secondaryColor={"white"} height={20} width={60}></Oval>)
+                    <WhiteLoadingSpinner/>
                         :
-                    (<span>Continue</span>)
+                    <span>Continue</span>
                 }
             </button>
         </form>

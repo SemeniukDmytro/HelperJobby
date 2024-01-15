@@ -1,6 +1,6 @@
 import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './CustomInputField.scss';
-import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
+import {faCircleExclamation, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {isNotEmpty} from "../../utils/commonValidators";
 import GoogleImage from '../../Assets/pictures/google_on_white_hdpi.png'
@@ -29,6 +29,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
     const [inputFocus, setInputFocus] = useState(false);
     const [isInvalidValue, setIsInvalidValue] = useState(false); 
     const [requiredMessage, setRequiredMessage] = useState("");
+    const [showEraseJobBtn, setShowEraseButton] = useState(inputFieldValue.length > 0);
 
     useEffect(() => {
         if (!isNotEmpty(inputFieldValue) && isRequired){
@@ -45,6 +46,12 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
         if (setShowAutocompleteWindow){
             setShowAutocompleteWindow(true);
         }
+        if (e.target.value.length == 0){
+            setShowEraseButton(false);
+        }
+        else {
+            setShowEraseButton(true)
+        }
         setInputFieldValue(e.target.value);
     }
 
@@ -54,6 +61,12 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
 
     function handleInputBlur() {
         setInputFocus(false);
+    }
+
+    function eraseInput() {
+        setInputFieldValue("");
+        inputRef?.current?.focus();
+        setShowEraseButton(false);
     }
 
     return (
@@ -77,6 +90,11 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
                    onBlur={handleInputBlur}
                    ref={inputRef}/>
             {displayGoogleLogo && <img className={"google-logo"} src={GoogleImage} alt={""}></img>}
+            {showEraseJobBtn &&<div className={"erase-button-box"} onClick={eraseInput}>
+                <button className={"cross-outline"}>
+                    <FontAwesomeIcon className={"cross-icon"} icon={faXmark}/>
+                </button>
+            </div>}
         </div>
         <div className={"input-field-spacing"}>
             {isInvalidValue && isRequired &&

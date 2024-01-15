@@ -11,6 +11,7 @@ import SearchJobResultsPage from "./Pages/SearchJobResultsPage/SearchJobResultsP
 import ResumeNamePage from "./Pages/BuildResumePages/ResumeNamePage/ResumeNamePage";
 import ResumePhonePage from "./Pages/BuildResumePages/ResumePhoneNumberPage/ResumePhonePage";
 import BuildResumePage from "./Pages/BuildResumePages/BuildResumePage/BuildResumePage";
+import ResumeAddressPage from "./Pages/BuildResumePages/ResumeAddressPage/ResumeAddressPage";
 
 function App() {
   return (
@@ -22,8 +23,9 @@ function App() {
                 <Route path={"/my-profile"} element={<JobSeekerProfilePage/>}/>
                 <Route path={"/edit-contact"} element={<EditContactInfoPage/>}/>
                 <Route path={"/build"} element={<BuildResumePage/>}>
-                    <Route path={"name"} element={<ResumeNamePage/>}></Route>
+                    <Route path={"name"} element={<ResumeNamePage/>}/>
                     <Route path={"phone"} element={<ResumePhonePage/>}/>
+                    <Route path={"address"} element={<ResumeAddressPage/>}/>
                 </Route>
             </Route>
 
