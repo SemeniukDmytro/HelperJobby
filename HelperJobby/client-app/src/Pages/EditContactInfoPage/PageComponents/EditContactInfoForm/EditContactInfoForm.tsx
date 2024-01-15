@@ -5,7 +5,6 @@ import {faArrowLeftLong} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useAuth} from "../../../../hooks/useAuth";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
-import EditFormField from "../EditFormField/EditFormField";
 import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
@@ -17,6 +16,7 @@ import EditEmail from "../EditEmail/EditEmail";
 import {useNavigate} from "react-router-dom";
 import AutocompleteResultsWindow from "../AutocompleteResultsWindow/AutocompleteResultsWindow";
 import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes";
+import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 
 interface EditContactInfoFormProps {}
 
@@ -162,11 +162,11 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                           <div className={"edit-contact-form-header"}>
                               <span>Contact information</span>
                           </div>
-                          <EditFormField fieldLabel={"First name"} isRequired={true} inputFieldValue={firstName}
+                          <CustomInputField fieldLabel={"First name"} isRequired={true} inputFieldValue={firstName}
                                          setInputFieldValue={setFirstName} inputRef={firstNameInputRef}/>
-                          <EditFormField fieldLabel={"Last name"} isRequired={true} inputFieldValue={lastName}
+                          <CustomInputField fieldLabel={"Last name"} isRequired={true} inputFieldValue={lastName}
                                          setInputFieldValue={setLastName} inputRef={lastNameInputRef}/>
-                          <EditFormField fieldLabel={"Phone"} isRequired={false} inputFieldValue={phoneNumber}
+                          <CustomInputField fieldLabel={"Phone"} isRequired={false} inputFieldValue={phoneNumber}
                                          setInputFieldValue={setPhoneNumber}/>
                           <EditEmail/>
                           <div className={"edit-location-layout"}>
@@ -177,17 +177,17 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                   This helps match you with nearby jobs.
                               </div>
                               <CountrySelector country={country} setCountry={setCountry}></CountrySelector>
-                              <EditFormField fieldLabel={"Street address"} isRequired={false} inputFieldValue={streetAddress} setInputFieldValue={setStreetAddress}
+                              <CustomInputField fieldLabel={"Street address"} isRequired={false} inputFieldValue={streetAddress} setInputFieldValue={setStreetAddress}
                                              setShowAutocompleteWindow={setShowStreetsAutocomplete} inputRef={streetAddressInputRef}
                                              fieldSubtitle={"Visible only to you"} displayGoogleLogo={true}/>
-                              <EditFormField fieldLabel={"City, Province / Territory"} isRequired={true} inputFieldValue={city} inputRef={cityInputRef}
+                              <CustomInputField fieldLabel={"City, Province / Territory"} isRequired={true} inputFieldValue={city} inputRef={cityInputRef}
                                              setInputFieldValue={setCity}
                                              setShowAutocompleteWindow={setShowCityAutoComplete} displayGoogleLogo={true}/>
-                              <EditFormField fieldLabel={"Postal code"} isRequired={false} inputFieldValue={postalCode}
+                              <CustomInputField fieldLabel={"Postal code"} isRequired={false} inputFieldValue={postalCode}
                                              setInputFieldValue={setPostalCode}/>
                           </div>
                           <div className={"edit-form-submit-button-container"}>
-                              <button className={"edit-form-submit-button"} type={"submit"}>Save</button>
+                              <button className={"submit-form-button"} type={"submit"}>Save</button>
                           </div>
                       </form>
                   </div>

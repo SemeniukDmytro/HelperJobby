@@ -2,6 +2,7 @@ using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.SearchICommandRepositories;
 using ApplicationDomain.Abstraction.SearchIQueryRepositories;
 using ApplicationDomain.IndexedModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationDAL.SearchCommandRepositories;
 
@@ -42,17 +43,19 @@ public class JobIndexingCommandRepository : IJobIndexingCommandRepository
             return;
         }
         foreach (var processedJobWord in wordsToRemove)
-        {
-            if (--processedJobWord.JobIndexedWord.JobCount <= 0)
+        {                
+            if (processedJobWord.JobIndexedWord.JobCount <= 1)
             {
                 _applicationContext.IndexedJobWords.Remove(processedJobWord.JobIndexedWord);
+                
             }
             else
             {
+                processedJobWord.JobIndexedWord.JobCount--;
                 await UpdateIndexedWordJobCount(processedJobWord.JobIndexedWord);
             }
         }
         _applicationContext.ProcessedJobsWords.RemoveRange(wordsToRemove);
         await _applicationContext.SaveChangesAsync();
-    }
+    } 
 }

@@ -10,29 +10,19 @@ import useResumeBuild from "../../../../hooks/useResumeBuild";
 interface BuildResumeLayoutProps {}
 
 const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
-    const {jobSeeker, fetchJobSeeker } = useJobSeeker();
-    const [loading, setLoading] = useState(true);
-    const {progressPercentage} = useResumeBuild();
+    const {progressPercentage, saveFunc} = useResumeBuild();
     const navigate = useNavigate();
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (!jobSeeker){
-                    setLoading(true);
-                    fetchJobSeeker();
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, [fetchJobSeeker]);
+    
 
     function goBack() {
-        navigate("/build/name")
+        navigate(-1)
     }
 
-    return (loading ? <>Loading</> : (
+    async function saveInfo() {
+        await saveFunc();
+    }
+
+    return (
          <>
              <PageWrapWithHeader>
                  <div className={"build-resume-sticky-panel"}>
@@ -41,7 +31,7 @@ const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
                              <FontAwesomeIcon icon={faArrowLeftLong}/>
                          </div>
                          <div className={"save-and-exit-link"}>
-                             <a>
+                             <a onClick={saveInfo}>
                                  Save and exit
                              </a>
                          </div>
@@ -59,7 +49,6 @@ const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
                  </div>
              </PageWrapWithHeader>
          </>
-        )
     )
 };
 

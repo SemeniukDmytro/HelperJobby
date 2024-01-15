@@ -4,7 +4,7 @@ import "./JobSearchPromoContainer.scss";
 interface JobSearchPromoContainerProps {}
 
 const JobSearchPromoContainer: FC<JobSearchPromoContainerProps> = () => {
-    
+
     return (
         <div className={"job-search-promo-container"}>
             <div className={"promo-container"}>

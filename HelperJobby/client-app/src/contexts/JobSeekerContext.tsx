@@ -23,7 +23,7 @@ export function JobSeekerProvider({children} : {children : ReactNode}){
     const jobSeekerService = new JobSeekerAccountService();
     
     const fetchJobSeeker = async  () => {
-        try {   
+        try {  
             if (jobSeeker === null && authUser){
                 const retrievedJobSeeker = await jobSeekerService.getCurrentJobSeekerAllInfo();
                 setJobSeeker(retrievedJobSeeker);

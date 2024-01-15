@@ -2,8 +2,7 @@ function filterLines(lines: string[]): string[] {
     return lines.filter(line => !line.includes("?") && line.length >= 30 && !line.includes(':'));
 }
 
-function generateSentences(filteredLines: string[]): string[] {
-    const sentences: string[] = [];
+function generateSentences(filteredLines: string[]): string[] {const sentences: string[] = [];
     const index: number = Math.floor(filteredLines.length / 2);
 
     const addSentence = (sentence: string) => {
@@ -20,18 +19,19 @@ function generateSentences(filteredLines: string[]): string[] {
 
     let thirdSentenceIndex = index * 3 % filteredLines.length;
     let thirdSentence = filteredLines[thirdSentenceIndex];
-    
+
     let sentencesLeft = filteredLines.length - thirdSentenceIndex - 1;
-    while (thirdSentence === sentences[0] || thirdSentence === sentences[1] || sentencesLeft > 0) {
+    while ((thirdSentence === sentences[0] || thirdSentence === sentences[1]) && sentencesLeft > 0) {
         sentencesLeft--;
         thirdSentence = filteredLines[++thirdSentenceIndex];
     }
-    
+
     if (thirdSentence){
         addSentence(thirdSentence);
     }
 
     return sentences;
+    return [];
 }
 
 function handleLengthConstraint(sentences: string[]): string[] {

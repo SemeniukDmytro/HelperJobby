@@ -8,7 +8,6 @@ interface AuthPageProps{
 }
 
 const AuthPage: FC<AuthPageProps> = () => {
-    
     return(
         <EmailProvider>
             <AccountTypeProvider>

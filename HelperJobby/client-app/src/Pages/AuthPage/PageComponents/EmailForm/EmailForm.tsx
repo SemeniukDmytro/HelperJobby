@@ -25,7 +25,6 @@ const EmailForm: FC<AuthComponentProps> = () => {
     
     let isFormInvalid = email.trim() === '';
     
-
     useEffect(() => { 
         if (isEmailRegistered != null){
             setRenderAuthPage(false);

@@ -1,1 +1,26 @@
-.ResumeNameComponent {}
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+.build-resume-form{
+  position: relative;
+}
+
+.saving-surface{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.build-page-header{
+  padding-top: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  font-size: 1.75rem;
+  color: global-variables.$neutral-color-1000;
+}
+
+.test{
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear;
+}

@@ -84,12 +84,6 @@ namespace HelperJobby.Controllers
         public async Task DeleteJob(int jobId)
         {
             var job = await _jobService.DeleteJob(jobId);
-
-            await _enqueuingTaskHelper.EnqueueJobIndexingTaskAsync(async indexingService =>
-            {
-                await indexingService.RemoveIndexedJobContent(job);
-            });
-
             await _jobCommandRepository.DeleteJob(job);
         }
     }

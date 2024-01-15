@@ -1,9 +1,9 @@
-import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
-import './EditFormField.scss';
+import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
+import './CustomInputField.scss';
 import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {isNotEmpty} from "../../../../utils/commonValidators";
-import GoogleImage from '../../../../Assets/pictures/google_on_white_hdpi.png'
+import {isNotEmpty} from "../../utils/commonValidators";
+import GoogleImage from '../../Assets/pictures/google_on_white_hdpi.png'
 
 
 interface EditFormFieldProps {
@@ -17,7 +17,7 @@ interface EditFormFieldProps {
     displayGoogleLogo? : boolean;
 }
 
-const EditFormField: FC<EditFormFieldProps> = ({ inputFieldValue, 
+const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue, 
                                                setInputFieldValue, 
                                                fieldLabel, 
                                                isRequired ,
@@ -88,4 +88,4 @@ const EditFormField: FC<EditFormFieldProps> = ({ inputFieldValue,
     </div>
 )};
 
-export default EditFormField;
+export default CustomInputField;

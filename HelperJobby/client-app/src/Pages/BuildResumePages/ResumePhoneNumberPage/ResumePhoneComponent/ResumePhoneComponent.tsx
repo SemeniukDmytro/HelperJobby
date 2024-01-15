@@ -7,13 +7,16 @@ interface ResumePhoneComponentProps {}
 
 const ResumePhoneComponent: FC<ResumePhoneComponentProps> = () => {
     
-    const {setProgressPercentage} = useResumeBuild()
+    const {setProgressPercentage, saveFunc} = useResumeBuild()
     useEffect(() => {
         setProgressPercentage(40);
     }, []);
 
     return (
-        <div>phone</div>
+        <div>phone
+        <button>
+            dsa
+        </button></div>
     )
 }
 

@@ -16,7 +16,8 @@ interface JobSearchBarProps {
 }
 
 const JobSearchBar: FC<JobSearchBarProps> = (props) => {
-    
+    console.log("homecomp search")
+
     const [job, setJob]= useState(props.jobInitial);
     const [location, setLocation] = useState(props.locationInitial);
     const [jobFocus, setJobFocus] = useState(false);

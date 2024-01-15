@@ -13,6 +13,9 @@ const HomePageMainContentWrap: FC<HomePageMainContentWrapProps> = ({children}: {
     const {setMainContentReferenceForHome} = useHomePage();
     const {setMainContentRefForSearch} = useQueryParams();
 
+    console.log("homecomp wrap")
+
+
     useEffect(() => {
         setMainContentReferenceForHome(mainContentRef);
         setMainContentRefForSearch(mainContentRef);

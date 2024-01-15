@@ -13,40 +13,54 @@ interface JobSeekerProfileProps {}
 const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
     const {jobSeeker, setJobSeeker, fetchJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
-    const jobSeekerService = new JobSeekerAccountService();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setLoading(true);
+
+        const timeoutId = setTimeout(() => {
+            if (loading) {
+                navigate("/");
+            }
+        }, 10000);
         fetchJobSeeker();
-        setLoading(false);
-    }, []);
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [loading]);
+
+    useEffect(() => {
+        if (jobSeeker){
+            setLoading(false)
+        }
+    }, [jobSeeker]);
 
     function checkJobSeekerAddressInfo() {
-        return !!(
-            jobSeeker?.address.city
-        );
+        return jobSeeker?.address.city == "";
     }
 
     function navigateToEditContactPage() {
         navigate("/edit-contact")
     }
 
+    function navigateToResumeBuild() {
+        navigate("/build/name")
+    }
+
     return (
-        loading ? (<span>Loading...</span>) :
+        loading ? (<span>Loading</span>) :
         <PageWrapWithHeader>
             <div className={"profile-info-layout"}>
                 <div className={"profile-info-container"}>
                     <div className={"profile-header-info"}>
-                        {!jobSeeker?.firstName || !jobSeeker.lastName ?  
-                            (<a className={"job-seeker-add-name"} onClick={navigateToEditContactPage}>
-                                Add name 
-                            </a>)
-                            :
+                        {jobSeeker?.firstName && jobSeeker.lastName ?
                             (<div className={"job-seeker-full-name"}>
                                 <span>{jobSeeker?.firstName} {jobSeeker?.lastName}</span>
                             </div>)
+                                :
+                            (<a className={"job-seeker-add-name"} onClick={navigateToEditContactPage}>
+                                Add name 
+                            </a>)
                         }
                         <div className={"job-seeker-avatar"}>
                             {!jobSeeker?.firstName || !jobSeeker.lastName ? 
@@ -72,13 +86,13 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
                             </div>
                             <div className={"job-seeker-info-line last-of-type"}>
                                 <FontAwesomeIcon className={"start-of-line-icon"} icon={faLocationDot} />
-                                {!checkJobSeekerAddressInfo() ? 
+                                {checkJobSeekerAddressInfo() ? 
                                     (<span className={"job-seeker-info-underline"}>Add location</span>)
                                     :
                                     (<>
-                                        <span>{jobSeeker?.address.city},&nbsp;</span>
-                                        {jobSeeker?.address.postalCode && <span>{jobSeeker.address.postalCode},&nbsp;</span>}
-                                        {jobSeeker?.address.country && <span>{jobSeeker.address.country}</span>}
+                                        {jobSeeker?.address.city && <span>{jobSeeker?.address?.city},&nbsp;</span>}
+                                        {jobSeeker?.address?.postalCode && <span>{jobSeeker.address.postalCode},&nbsp;</span>}
+                                        {jobSeeker?.address?.country && <span>{jobSeeker.address.country}</span>}
                                     </>)
                                 }
                             </div>
@@ -96,7 +110,7 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
                                 <button className={"add-resume-button"}>
                                     Upload Resume
                                 </button>
-                                <button className={"add-resume-button last-button-of-type"}>
+                                <button className={"add-resume-button last-button-of-type"} onClick={navigateToResumeBuild}>
                                     Build a HelperJobby Resume
                                 </button>
                             </div>)

@@ -7,6 +7,7 @@ interface HomePageProps{
 }
 
 const HomePage: FC<HomePageProps> = () => {
+    console.log("dsa")
     return(
         <HomePageContextProvider>
             <HomeComponent/>
