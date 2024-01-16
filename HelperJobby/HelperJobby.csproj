@@ -48,7 +48,7 @@
       <Folder Include="client-app\src\Pages\BuildResumePages\AddEducationPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\ResumeAddressPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\ResumeAddWorkExperiencePage\" />
-      <Folder Include="client-app\src\Pages\BuildResumePages\ResumeEducationPage\" />
+      <Folder Include="client-app\src\Pages\BuildResumePages\ResumeEducationPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\ResumeNamePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\ResumePage\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\ResumePhoneNumberPage\PageComponents\" />

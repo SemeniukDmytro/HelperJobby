@@ -13,6 +13,7 @@ import ResumePhonePage from "./Pages/BuildResumePages/ResumePhoneNumberPage/Resu
 import BuildResumePage from "./Pages/BuildResumePages/BuildResumePage/BuildResumePage";
 import ResumeAddressPage from "./Pages/BuildResumePages/ResumeAddressPage/ResumeAddressPage";
 import AddEducationPage from "./Pages/BuildResumePages/AddEducationPage/AddEducationPage";
+import ResumeEducationPage from "./Pages/BuildResumePages/ResumeEducationPage/ResumeEducationPage";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
                     <Route path={"name"} element={<ResumeNamePage/>}/>
                     <Route path={"phone"} element={<ResumePhonePage/>}/>
                     <Route path={"address"} element={<ResumeAddressPage/>}/>
+                    <Route path={"education"} element={<ResumeEducationPage/>}/>
                     <Route path={"education/add"} element={<AddEducationPage/>}/>
                 </Route>
             </Route>

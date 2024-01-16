@@ -18,6 +18,11 @@ import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {CreateResumeDTO} from "../../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
 import dateToStringConverter from "../../../../../utils/dateToStringConverter";
+import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
+import {isNotEmpty} from "../../../../../utils/commonValidators";
+import TimePeriod from "../../../SharedComponents/TimePeriod/TimePeriod";
+import {isNanAfterIntParse} from "../../../../../utils/isNanAfterIntParse";
+import {isValidDateSelected} from "../../../../../utils/isValidDateSelected";
 
 interface AddEducationComponentProps {}
 
@@ -38,10 +43,10 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = () => {
     const countryInputRef = useRef<HTMLSelectElement>(null);
     const [city, setCity] = useState('');
     const cityInputRef = useRef<HTMLInputElement>(null);
-    const [startMonth, setStartMonth] = useState('');
-    const [startYear, setStartYear] = useState('');
-    const [endMonth, setEndMonth] = useState('');
-    const [endYear, setEndYear] = useState('');
+    const [fromMonth, setFromMonth] = useState('');
+    const [fromYear, setFromYear] = useState('');
+    const [toMonth, setToMonth] = useState('');
+    const [toYear, setToYear] = useState('');
     const [showCityAutoComplete, setShowCityAutoComplete] = useState(false);
     
     
@@ -52,7 +57,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = () => {
     useEffect(() => {
         setSaveFunc(() => CustomSaveFunc);
     }, [levelOfEducation, fieldOfStudy, schoolName,
-    country, city, startMonth, startYear, endMonth, endYear]);
+    country, city, fromMonth, fromYear, toMonth, toYear]);
 
     async function CustomSaveFunc(){
         await handleEducationCreation("/my-profile")
@@ -66,6 +71,16 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = () => {
     }
     
     async function handleEducationCreation(nextPageRoute : string){
+        if (!isNotEmpty(levelOfEducation)){
+            if(levelOfEducationInputRef.current){
+                levelOfEducationInputRef.current.focus();
+                return;
+            }
+        }
+        if (!isValidDateSelected(fromMonth, fromYear, toMonth, toYear)){
+            return;
+        }
+        
         if (jobSeeker?.resume){
             await addToExistingResume()
         }
@@ -118,8 +133,8 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = () => {
     }
     
     function fillCreateEducationDTO(){
-        let fromDate = dateToStringConverter(startMonth, startYear);
-        let toDate = dateToStringConverter(endMonth, endYear);
+        let fromDate = dateToStringConverter(fromMonth, fromYear);
+        let toDate = dateToStringConverter(toMonth, toYear);
         
         const createdEducation : CreateUpdateEducationDTO = {
             levelOfEducation,
@@ -184,24 +199,22 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = () => {
                 displayGoogleLogo={true}
                 inputRef={cityInputRef}
                 setShowAutocompleteWindow={setShowCityAutoComplete}/>
-            
-            <div className={"time-stamp-container"}>
-                <div className={"double-select-label"}>From</div>
-                <div className={"double-select-container"}>
-                    <DateSelector selectValue={startMonth} setSelectValue={setStartMonth} timeStamp={TimeStamps.Month}/>
-                    <DateSelector selectValue={startYear} setSelectValue={setStartYear} timeStamp={TimeStamps.Year}/>
-                </div>
-            </div>
-            <div className={"time-stamp-container"}>
-                <div className={"double-select-label"}>To</div>
-                <div className={"double-select-container"}>
-                    <DateSelector selectValue={endMonth} setSelectValue={setEndMonth} timeStamp={TimeStamps.Month}/>
-                    <DateSelector selectValue={endYear} setSelectValue={setEndYear} timeStamp={TimeStamps.Year}/>
-                </div>
-            </div>
+            <TimePeriod
+                fromMonth={fromMonth} 
+                setFromMonth={setFromMonth} 
+                fromYear={fromYear} 
+                setFromYear={setFromYear}
+                toMonth={toMonth} 
+                setToMonth={setToMonth}
+                toYear={toYear}
+                setToYear={setToYear}/>
             <div className={"form-buttons-row-container"}>
                 <button className={"submit-form-button"} onClick={addEducation}>
-                    Save
+                    {savingProcess ? 
+                        <WhiteLoadingSpinner/>
+                    :
+                        <span>Save</span>
+                    }
                 </button>
                 <button className={"skip-form-button"} onClick={fillCreateEducationDTO}>
                     Skip

@@ -9,16 +9,23 @@ interface DateSelectorProps {
     selectValue: string;
     setSelectValue: Dispatch<SetStateAction<string>>;
     timeStamp: TimeStamps;
+    firstYear? : number;
+    lastYear? : number;
 }
 
 const DateSelector: FC<DateSelectorProps> = ({
                                                  selectValue,
                                                  setSelectValue,
-                                                 timeStamp
+                                                 timeStamp,
+                                                 lastYear,
+                                                 firstYear
                                              }) => {
     const [inputFocus, setSelectFocus] = useState(false);
-    const currentYear = new Date().getFullYear();
-    const last100Years = Array.from({length: 100}, (_, index) => currentYear - index);
+    let years : number[] = [];
+    if (firstYear && lastYear){
+        const yearsRange = lastYear - firstYear + 1;
+        years = Array.from({length: yearsRange}, (_, index) => lastYear - index);
+    }
 
 
     function handleSelectFocus() {
@@ -30,7 +37,7 @@ const DateSelector: FC<DateSelectorProps> = ({
     }
 
     function selectAnotherValue(e: ChangeEvent<HTMLSelectElement>) {
-        setSelectValue(e.target.value)
+        setSelectValue(e.target.value);
     }
 
     return (
@@ -54,7 +61,7 @@ const DateSelector: FC<DateSelectorProps> = ({
                 }
                 :
                 {timeStamp == TimeStamps.Year && 
-                    last100Years.map((year, index) => (
+                    years.map((year, index) => (
                     <option key={index} value={year}>{year}</option>))
                 }
             </select>
