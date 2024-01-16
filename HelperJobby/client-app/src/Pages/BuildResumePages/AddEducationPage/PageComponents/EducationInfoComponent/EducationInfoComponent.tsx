@@ -9,8 +9,6 @@ import CountrySelector from "../../../../EditContactInfoPage/PageComponents/Coun
 import AutocompleteResultsWindow
     from "../../../../EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
 import {AutocompleteWindowTypes} from "../../../../../enums/AutocompleteWindowTypes";
-import DateSelector from "../../../../../Components/DateSelector/DateSelector";
-import {TimeStamps} from "../../../../../enums/TimeStamps";
 import {ResumeService} from "../../../../../services/resumeService";
 import {EducationService} from "../../../../../services/educationService";
 import {CreateUpdateEducationDTO} from "../../../../../DTOs/resumeRelatedDTOs/CreateUpdateEducationDTO";
@@ -21,12 +19,15 @@ import dateToStringConverter from "../../../../../utils/dateToStringConverter";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {isNotEmpty} from "../../../../../utils/commonValidators";
 import TimePeriod from "../../../SharedComponents/TimePeriod/TimePeriod";
-import {isNanAfterIntParse} from "../../../../../utils/isNanAfterIntParse";
 import {isValidDateSelected} from "../../../../../utils/isValidDateSelected";
+import {EducationDTO} from "../../../../../DTOs/resumeRelatedDTOs/EducationDTO";
+import {months} from "../../../../../AppConstData/Months";
 
-interface AddEducationComponentProps {}
+interface AddEducationComponentProps {
+    education? : EducationDTO;
+}
 
-const EducationInfoComponent: FC<AddEducationComponentProps> = () => {
+const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => {
     const {setProgressPercentage, setSaveFunc} = useResumeBuild();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const navigate = useNavigate();
@@ -52,6 +53,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = () => {
     
     useEffect(() => {
         setProgressPercentage(ProgressPercentPerPage * 4)
+        setPassedEducationValues();
     }, []);
 
     useEffect(() => {
@@ -80,8 +82,10 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = () => {
         if (!isValidDateSelected(fromMonth, fromYear, toMonth, toYear)){
             return;
         }
-        
-        if (jobSeeker?.resume){
+        if (education){
+            await updateEducation();
+        }
+        else if (jobSeeker?.resume){
             await addToExistingResume()
         }
         else {
@@ -123,7 +127,24 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = () => {
         }
         catch (err){
             if (err instanceof ServerError){
-                console.log(err.ServerErrorDTO)
+                logErrorInfo(err)
+            }
+        }
+        finally {
+            setSavingProcess(false);
+        }
+    }
+    
+    async function updateEducation(){
+        try {
+            setSavingProcess(true);
+            const retrievedEducation =  await educationService.updateEducation(education!.id, fillCreateEducationDTO());
+            const updatedJobSeeker = jobSeeker;
+            updatedJobSeeker?.resume.educations.push(retrievedEducation);
+            setJobSeeker(updatedJobSeeker);
+        }
+        catch (err){
+            if (err instanceof ServerError){
                 logErrorInfo(err)
             }
         }
@@ -145,6 +166,32 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = () => {
             from : fromDate,
             to : toDate}
         return createdEducation;
+    }
+    
+    function setPassedEducationValues(){
+        if (!education){
+            return;
+        }
+        const educationFormattedFromDate = education.from?.toString().split("-");
+        const educationFormattedToDate = education.to?.toString().split("-");
+
+        setLevelOfEducation(education.levelOfEducation)
+        setFieldOfStudy(education.fieldOfStudy || "");
+        setSchoolName(education.schoolName || "");
+        setCountry(education.country || "");
+        setCity(education.city || "");
+        if (educationFormattedFromDate && educationFormattedToDate)
+        {
+            const convertedFromMonth = months
+                .find((m) => m.monthNumber == Number.parseInt(educationFormattedFromDate[1]))?.name;
+            const convertedToMonth = months
+                .find((m) => m.monthNumber == Number.parseInt(educationFormattedToDate[1]))?.name;
+            
+            setFromMonth(convertedFromMonth || "");
+            setFromYear(educationFormattedFromDate[0]);
+            setToMonth(convertedToMonth || "");
+            setToYear(educationFormattedToDate[0]);
+        }
     }
 
     return (

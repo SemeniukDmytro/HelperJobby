@@ -117,8 +117,23 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
         };
         
         try {
-            const updatedJobSeeker = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updateJobSeekerInfo);
-            setJobSeeker(updatedJobSeeker);
+            const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updateJobSeekerInfo);
+            setJobSeeker((prevState) => {
+                if (prevState){
+
+                    const updatedJobSeeker : JobSeekerAccountDTO = {
+                        ...prevState,
+                        firstName : response.firstName,
+                        lastName : response.lastName,
+                        phoneNumber : response.phoneNumber,
+                        address : response.address
+                    }
+                    return updatedJobSeeker;
+                }
+                return prevState;
+            })
+            
+            
         }
         catch (error){
             if (error instanceof ServerError){

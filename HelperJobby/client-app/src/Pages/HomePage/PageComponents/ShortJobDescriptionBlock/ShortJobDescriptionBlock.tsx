@@ -197,7 +197,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
 
                    <div className={"job-features-info"}>
                        <JobFeatureBox featureName={`$${thousandsDisplayHelper(job.salary)} ${job.salaryRate}`} moreFeaturesAmount={0}/>
-                       <JobFeatureBox featureName={`${jobTypesEnumToStringMap(job.jobType[0])}`} moreFeaturesAmount={job.jobType.length - 1}/>
+                       {job.jobType.length != 0 && <JobFeatureBox featureName={`${jobTypesEnumToStringMap(job.jobType[0])}`} moreFeaturesAmount={job.jobType.length - 1}/>}
                        {job.schedule.length != 0 && <JobFeatureBox featureName={`${schedulesEnumToStringMap(job.schedule[0])}`} moreFeaturesAmount={job.schedule.length - 1}/>}
                    </div>
                    <div className={"short-description-content"}>

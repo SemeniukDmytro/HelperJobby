@@ -14,6 +14,7 @@ import BuildResumePage from "./Pages/BuildResumePages/BuildResumePage/BuildResum
 import ResumeAddressPage from "./Pages/BuildResumePages/ResumeAddressPage/ResumeAddressPage";
 import AddEducationPage from "./Pages/BuildResumePages/AddEducationPage/AddEducationPage";
 import ResumeEducationPage from "./Pages/BuildResumePages/ResumeEducationPage/ResumeEducationPage";
+import EditEducationPage from "./Pages/BuildResumePages/EditEducationPage/EditEducationPage";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
                     <Route path={"address"} element={<ResumeAddressPage/>}/>
                     <Route path={"education"} element={<ResumeEducationPage/>}/>
                     <Route path={"education/add"} element={<AddEducationPage/>}/>
+                    <Route path={"education/:id"} element={<EditEducationPage/>}/>
                 </Route>
             </Route>
 

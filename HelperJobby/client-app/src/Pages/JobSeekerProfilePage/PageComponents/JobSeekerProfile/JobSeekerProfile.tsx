@@ -15,7 +15,7 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
     const {authUser} = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-
+    console.log(jobSeeker)
     useEffect(() => {
 
         const timeoutId = setTimeout(() => {
