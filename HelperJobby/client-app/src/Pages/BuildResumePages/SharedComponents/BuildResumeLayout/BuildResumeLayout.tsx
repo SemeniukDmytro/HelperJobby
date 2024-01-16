@@ -30,7 +30,7 @@ const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
                          <div className={"back-button"} onClick={goBack}>
                              <FontAwesomeIcon icon={faArrowLeftLong}/>
                          </div>
-                         <div className={"save-and-exit-link"}>
+                         <div className={"bold-navigation-link"}>
                              <a onClick={saveInfo}>
                                  Save and exit
                              </a>

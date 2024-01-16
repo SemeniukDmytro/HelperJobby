@@ -11,6 +11,7 @@ import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {useAuth} from "../../../../../hooks/useAuth";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {createUpdateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
+import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
 
 interface ResumeNameComponentProps {}
 
@@ -30,7 +31,7 @@ const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
     const lastNameInputRef = useRef<HTMLInputElement>(null);
     
     useEffect(() => {
-        setProgressPercentage(17);
+        setProgressPercentage(ProgressPercentPerPage);
     }, []);
 
     useEffect(() => {
@@ -79,7 +80,7 @@ const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
 
     return (
         <form className={"build-resume-form"}>
-            {savingInfo && <div className={"saving-surface"}></div>}
+            {savingInfo && <div className={"saving-in-progress-surface"}></div>}
             <div className={"build-page-header"}>
                 What is your name?
             </div>

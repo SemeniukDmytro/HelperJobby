@@ -16,6 +16,7 @@ import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {useNavigate} from "react-router-dom";
 import {UpdateAddressDTO} from "../../../../../DTOs/addressDTOs/UpdateAddressDTO";
+import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
 
 interface ResumeAddressComponentProps {}
 
@@ -40,7 +41,7 @@ const ResumeAddressComponent: FC<ResumeAddressComponentProps> = () => {
 
 
     useEffect(() => {
-        setProgressPercentage(51);
+        setProgressPercentage(ProgressPercentPerPage * 3);
     }, []);
 
     async function updateAddress(e: React.MouseEvent<HTMLButtonElement>) {
@@ -117,7 +118,7 @@ const ResumeAddressComponent: FC<ResumeAddressComponentProps> = () => {
                                                                 setShowResult={setShowCityAutoComplete}
                                                                 autocompleteWindowType={AutocompleteWindowTypes.city}/>}
             <div className={"build-resume-form"}>
-                {savingInfo && <div className={"saving-surface"}></div>}
+                {savingInfo && <div className={"saving-in-progress-surface"}></div>}
                 <div className={"build-page-header subtitle-margin"}>
                     Where are you located?
                 </div>

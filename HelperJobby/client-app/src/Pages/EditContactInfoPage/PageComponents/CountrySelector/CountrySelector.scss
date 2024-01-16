@@ -5,12 +5,15 @@
   display: flex;
   flex-grow: 1;
   border-radius: 0.5rem;
-  border: 1px solid global-variables.$neutral-color-800;
+  border: 1px solid global-variables.$neutral-color-600;
   padding: 0.75rem;
   background-color: transparent;
   font-size: 1rem;
   &:focus{
     outline: none;
+    border-color: global-variables.$dark-blue;
+  }
+  &:hover{
     border-color: global-variables.$dark-blue;
   }
 }
@@ -20,4 +23,11 @@
   top: 0.875rem;
   right: 1rem;
   font-size: 0.875rem;
+}
+
+.default-country-container{
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

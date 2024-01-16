@@ -4,6 +4,6 @@ export interface CreateUpdateEducationDTO {
     schoolName?: string;
     country?: string;
     city?: string;
-    from?: Date;
-    to?: Date;
+    from?: string;
+    to?: string;
 }

@@ -15,6 +15,7 @@ interface EditFormFieldProps {
     setShowAutocompleteWindow? : Dispatch<SetStateAction<boolean>>;
     fieldSubtitle? : string;
     displayGoogleLogo? : boolean;
+    showErrorInitially? : boolean;
 }
 
 const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue, 
@@ -24,7 +25,8 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
                                                inputRef,
                                                setShowAutocompleteWindow,
                                                fieldSubtitle,
-                                               displayGoogleLogo}) => {
+                                               displayGoogleLogo, 
+                                               showErrorInitially}) => {
     
     const [inputFocus, setInputFocus] = useState(false);
     const [isInvalidValue, setIsInvalidValue] = useState(false); 
@@ -40,6 +42,12 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
             setIsInvalidValue(false)
         }
     }, [inputFieldValue]);
+
+    useEffect(() => {
+        if (showErrorInitially){
+            setIsInvalidValue(false);
+        }
+    }, []);
 
     function changeInputFieldValue(e: ChangeEvent<HTMLInputElement>) {
         setIsInvalidValue(false);

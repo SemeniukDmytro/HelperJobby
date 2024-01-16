@@ -10,6 +10,7 @@ import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountService";
 import {useAuth} from "../../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
+import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
 
 interface ResumePhoneComponentProps {}
 
@@ -25,7 +26,7 @@ const ResumePhoneComponent: FC<ResumePhoneComponentProps> = () => {
 
 
     useEffect(() => {
-        setProgressPercentage(34);
+        setProgressPercentage(ProgressPercentPerPage * 2);
     }, []);
 
     useEffect(() => {
@@ -63,7 +64,7 @@ const ResumePhoneComponent: FC<ResumePhoneComponentProps> = () => {
 
     return (
         <form className={"build-resume-form"}>
-            {savingInfo && <div className={"saving-surface"}></div>}
+            {savingInfo && <div className={"saving-in-progress-surface"}></div>}
             <div className={"build-page-header"}>
                 Would you like to add a phone number to your resume?
             </div>

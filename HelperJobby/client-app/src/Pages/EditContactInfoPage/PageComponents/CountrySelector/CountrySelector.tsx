@@ -9,11 +9,16 @@ interface CountrySelectorProps {
     country : string;
     setCountry : Dispatch<SetStateAction<string>>;
     selectRef : React.RefObject<HTMLSelectElement>;
+    isNotRequired? : boolean;
 }
 
-const CountrySelector: FC<CountrySelectorProps> = ({country, setCountry, selectRef}) => {
+const CountrySelector: FC<CountrySelectorProps> = ({country,
+                                                       setCountry,
+                                                       selectRef,
+                                                       isNotRequired}) => {
     const [isInvalidValue, setIsInvalidValue] = useState(false);
     const [inputFocus, setSelectFocus] = useState(false);
+    const [showCountrySelector, setShowCountrySelector] = useState(false);
 
     useEffect(() => {
         if (!isNotEmpty(country)){
@@ -23,6 +28,12 @@ const CountrySelector: FC<CountrySelectorProps> = ({country, setCountry, selectR
             setIsInvalidValue(false)
         }
     }, [country]);
+
+    useEffect(() => {
+        if (isNotRequired){
+            setIsInvalidValue(false);
+        }
+    }, []);
 
     function selectAnotherCountry(e : ChangeEvent<HTMLSelectElement>) {
         setCountry(e.target.value);
@@ -36,13 +47,29 @@ const CountrySelector: FC<CountrySelectorProps> = ({country, setCountry, selectR
         setSelectFocus(false);
     }
 
+    function showChangeCountrySelector() {
+        setShowCountrySelector(true);
+        if (country == ""){
+            setCountry("Canada");
+        }
+    }
+
     return(
         <div className={"edit-form-field"}>
             <div className={`field-label ${isInvalidValue ? "error-text" : ""}`}>
-                <span>County&nbsp;</span>
-                <span className={"required-mark"}>*</span>
+                <span>Country&nbsp;</span>
+                {!isNotRequired && <span className={"required-mark"}>*</span>}
             </div>
-            <div className={"field-input-container"}>
+            {!showCountrySelector ?  (<div className={"default-country-container"}>
+                <div className={""}>
+                    <span>{country || "Canada"}</span>
+                </div>
+                <a className={"bold-navigation-link"} onClick={showChangeCountrySelector}>
+                    Change
+                </a>
+            </div>)
+                :
+            (<div className={"field-input-container"}>
                 <div className={`border-lining ${inputFocus ? "field-focus" : ""} ${isInvalidValue ? "red-field-focus" : ""}`}>
 
                 </div>
@@ -56,6 +83,7 @@ const CountrySelector: FC<CountrySelectorProps> = ({country, setCountry, selectR
                     onBlur={handleSelectBlur}
                     ref={selectRef}
                 >
+                    <option placeholder={"Select country"} disabled={true}>Select country</option>
                     {countries.map((country) => (
                         <option key={country.name} value={country.name}>{country.name}</option>
                     ))}
@@ -63,7 +91,7 @@ const CountrySelector: FC<CountrySelectorProps> = ({country, setCountry, selectR
                 <div className={"selectArrow"}>
                     <FontAwesomeIcon icon={faChevronDown} />
                 </div>
-            </div>
+            </div>) }
             <div className={"input-field-spacing"}>
                 {isInvalidValue &&
                     <div className={"error-box"}>
