@@ -4,13 +4,13 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMoneyBillAlt} from "@fortawesome/free-regular-svg-icons";
 import {faBriefcase, faChevronDown, faChevronUp, faClock} from "@fortawesome/free-solid-svg-icons";
 import JobDetailsFeatureBox from "../JobDetailsFeatureBox/JobDetailsFeatureBox";
-import {useHomePage} from "../../../../hooks/useHomePage";
 import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
-import {
-    benefitsEnumToStringMap, jobTypesEnumToStringMap,
-    schedulesEnumToStringMap
-} from "../../../../utils/enumToStringConverter";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import {
+    benefitsEnumToStringMap,
+    jobTypesEnumToStringMap,
+    schedulesEnumToStringMap
+} from "../../../../utils/convertLogic/enumToStringConverter";
 
 interface JobDetailsScrollWindowProps {
     selectedJob: JobDTO | null;

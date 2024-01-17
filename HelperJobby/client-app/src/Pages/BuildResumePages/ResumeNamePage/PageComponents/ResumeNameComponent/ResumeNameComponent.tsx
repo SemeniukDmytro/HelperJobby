@@ -4,7 +4,6 @@ import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import useResumeBuild from "../../../../../hooks/useResumeBuild";
 import {useNavigate} from "react-router-dom";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
-import {isNotEmpty} from "../../../../../utils/commonValidators";
 import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountService";
 import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
@@ -12,6 +11,8 @@ import {useAuth} from "../../../../../hooks/useAuth";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {createUpdateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
+import {isNotEmpty} from "../../../../../utils/validationLogic/isNotEmptyString";
+import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
 
 interface ResumeNameComponentProps {}
 
@@ -45,7 +46,6 @@ const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
         e.preventDefault();
         await updateJobSeekerCredentials("/build/phone");
     }
-    
     async function updateJobSeekerCredentials(resultPageURI : string){
         if(!isNotEmpty(firstName)){
             if (firstNameInputRef.current) {
@@ -64,7 +64,18 @@ const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
             setSavingInfo(true);
             const updatedJobSeeker = createUpdateJobSeekerDTO(firstName, lastName, jobSeeker!.phoneNumber, jobSeeker!.address);
             const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
-            setJobSeeker(response);
+            setJobSeeker((prevState) => {
+                if (prevState){
+
+                    const updatedJobSeeker : JobSeekerAccountDTO = {
+                        ...prevState,
+                        firstName : response.firstName,
+                        lastName : response.lastName,
+                    }
+                    return updatedJobSeeker;
+                }
+                return prevState;
+            })
             navigate(resultPageURI);
 
         }

@@ -2,8 +2,8 @@ import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState} f
 import './CustomInputField.scss';
 import {faCircleExclamation, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {isNotEmpty} from "../../utils/commonValidators";
 import GoogleImage from '../../Assets/pictures/google_on_white_hdpi.png'
+import {isNotEmpty} from "../../utils/validationLogic/isNotEmptyString";
 
 
 interface EditFormFieldProps {

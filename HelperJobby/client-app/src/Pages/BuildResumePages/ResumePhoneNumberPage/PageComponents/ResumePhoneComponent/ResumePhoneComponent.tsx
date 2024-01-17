@@ -11,6 +11,7 @@ import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountS
 import {useAuth} from "../../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
+import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
 
 interface ResumePhoneComponentProps {}
 
@@ -48,7 +49,17 @@ const ResumePhoneComponent: FC<ResumePhoneComponentProps> = () => {
             const updatedJobSeeker = createUpdateJobSeekerDTO(jobSeeker!.firstName,
                 jobSeeker!.lastName, phoneNumber, jobSeeker!.address);
             const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
-            setJobSeeker(response);
+            setJobSeeker((prevState) => {
+                if (prevState){
+
+                    const updatedJobSeeker : JobSeekerAccountDTO = {
+                        ...prevState,
+                        phoneNumber : response.phoneNumber
+                    }
+                    return updatedJobSeeker;
+                }
+                return prevState;
+            })
             navigate(resultPageURI);
 
         }

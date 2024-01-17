@@ -10,28 +10,33 @@
 
 .education-review-block{
   width: 100%;
-}
-
-.education-main-info{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex: 1 1 0%;
 }
 
 .level-of-education{
+  margin-top: 0.5rem;
   font-weight: 700;
   color: global-variables.$neutral-color-1000;
+  margin-bottom: 0.25rem;
+}
+.small-buttons-container{
+  box-sizing: border-box;
+  margin-block: 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
+  float: right;
+  margin-top: -0.25rem;
+  margin-right: -0.5rem;
 }
 
 .small-interaction-button{
-  padding: 0.75rem;  
   border: none;
   background-color: transparent;
   cursor: pointer;
+  padding: 0.75rem;
   transition: 0.2s;
   color: global-variables.$neutral-color-1000;
-  font-size: 1.25rem;
+  font-size: 1rem;
   border-radius: 0.25rem;
   &:hover{
     background-color: global-variables.$light-blue;
@@ -45,6 +50,7 @@
 }
 
 .add-info-button{
+  margin-top: 0.5rem;
   padding: 0.5rem 0.75rem;
   min-width: 2.25rem;
   border-radius: 0.5rem;
@@ -66,4 +72,19 @@
     background-color: global-variables.$light-blue-active;
     border-color: global-variables.$dark-blue-active;
   }
+}
+
+.light-dark-default-text{
+  color: global-variables.$neutral-color-700;
+  font-size: 0.9375rem;
+}
+
+.semi-dark-default-text{
+  color: global-variables.$neutral-color-800;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.between-lines-spacing{
+  margin-bottom: 0.25rem;
 }

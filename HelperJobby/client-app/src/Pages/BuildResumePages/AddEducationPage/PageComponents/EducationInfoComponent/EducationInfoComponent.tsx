@@ -15,13 +15,14 @@ import {CreateUpdateEducationDTO} from "../../../../../DTOs/resumeRelatedDTOs/Cr
 import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {CreateResumeDTO} from "../../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
-import dateToStringConverter from "../../../../../utils/dateToStringConverter";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
-import {isNotEmpty} from "../../../../../utils/commonValidators";
 import TimePeriod from "../../../SharedComponents/TimePeriod/TimePeriod";
-import {isValidDateSelected} from "../../../../../utils/isValidDateSelected";
 import {EducationDTO} from "../../../../../DTOs/resumeRelatedDTOs/EducationDTO";
 import {months} from "../../../../../AppConstData/Months";
+import {isNotEmpty} from "../../../../../utils/validationLogic/isNotEmptyString";
+import {isValidDateSelected} from "../../../../../utils/validationLogic/isValidDateSelected";
+import dateToStringConverter from "../../../../../utils/convertLogic/dateToStringConverter";
+import DialogWindow from "../../../../../Components/DialogWindow/DialogWindow";
 
 interface AddEducationComponentProps {
     education? : EducationDTO;
@@ -140,8 +141,12 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
             setSavingProcess(true);
             const retrievedEducation =  await educationService.updateEducation(education!.id, fillCreateEducationDTO());
             const updatedJobSeeker = jobSeeker;
-            updatedJobSeeker?.resume.educations.push(retrievedEducation);
-            setJobSeeker(updatedJobSeeker);
+            const educationIndex = updatedJobSeeker!.resume.educations.findIndex(e => e.id === retrievedEducation.id);
+
+            if (educationIndex !== -1) {
+                updatedJobSeeker!.resume.educations[educationIndex] = retrievedEducation;
+                setJobSeeker(updatedJobSeeker);
+            }
         }
         catch (err){
             if (err instanceof ServerError){
@@ -196,7 +201,6 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
 
     return (
         <>
-        
         {showCityAutoComplete && <AutocompleteResultsWindow inputFieldRef={cityInputRef}
                                                             inputValue={city}
                                                             setInputValue={setCity}

@@ -1,10 +1,10 @@
-import JobTypes from "../enums/JobTypes";
-import Schedules from "../enums/Schedules";
-import EmployeeBenefits from "../enums/EmployeeBenefits";
-import {countries} from "../AppConstData/CountriesData";
-import {EmployeeBenefitsMapData} from "../AppConstData/EmployeeBenefitsMapData";
-import {JobTypesMapData} from "../AppConstData/JobTypesMapData";
-import {SchedulesMapData} from "../AppConstData/SchedulesMapData";
+import JobTypes from "../../enums/JobTypes";
+import {JobTypesMapData} from "../../AppConstData/JobTypesMapData";
+import Schedules from "../../enums/Schedules";
+import {SchedulesMapData} from "../../AppConstData/SchedulesMapData";
+import EmployeeBenefits from "../../enums/EmployeeBenefits";
+import {EmployeeBenefitsMapData} from "../../AppConstData/EmployeeBenefitsMapData";
+
 
 export const jobTypesEnumToStringMap = (jobType: string): string => {
     let jobTypeEnumValue: JobTypes = JobTypes[jobType as keyof typeof JobTypes];

@@ -3,7 +3,7 @@ import './CountrySelector.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronDown, faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {countries} from "../../../../AppConstData/CountriesData";
-import {isNotEmpty} from "../../../../utils/commonValidators";
+import {isNotEmpty} from "../../../../utils/validationLogic/isNotEmptyString";
 
 interface CountrySelectorProps {
     country : string;

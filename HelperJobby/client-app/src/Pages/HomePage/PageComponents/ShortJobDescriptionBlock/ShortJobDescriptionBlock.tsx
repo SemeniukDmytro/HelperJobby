@@ -13,10 +13,9 @@ import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
 import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
-import {schedulesEnumToStringMap} from "../../../../utils/enumToStringConverter";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {jobTypesEnumToStringMap} from "../../../../utils/enumToStringConverter";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
+import {jobTypesEnumToStringMap, schedulesEnumToStringMap} from "../../../../utils/convertLogic/enumToStringConverter";
 
 interface ShortJobDescriptionBlockProps {
     job : JobDTO;

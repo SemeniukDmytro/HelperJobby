@@ -10,11 +10,14 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {useEmail} from "../../../../hooks/useEmail";
 import {useAuth} from "../../../../hooks/useAuth";
 import AuthService from "../../../../services/authService";
-import {IsValidPasswordMaximalLength, IsValidPasswordMinimalLength} from "../../../../utils/authFormValidators";
 import {LoginUserDTO} from "../../../../DTOs/userRelatedDTOs/LoginUserDTO";
 import {setAuthToken} from "../../../../utils/authTokenInteraction";
 import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
+import {
+    IsValidPasswordMaximalLength,
+    IsValidPasswordMinimalLength
+} from "../../../../utils/validationLogic/authFormValidators";
 
 interface SignInFormProps {
 }

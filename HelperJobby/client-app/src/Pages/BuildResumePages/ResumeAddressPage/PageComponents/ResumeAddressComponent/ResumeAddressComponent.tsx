@@ -10,13 +10,14 @@ import AutocompleteResultsWindow
     from "../../../../EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
 import {AutocompleteWindowTypes} from "../../../../../enums/AutocompleteWindowTypes";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
-import {isNotEmpty} from "../../../../../utils/commonValidators";
 import {createUpdateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
 import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {useNavigate} from "react-router-dom";
 import {UpdateAddressDTO} from "../../../../../DTOs/addressDTOs/UpdateAddressDTO";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
+import {isNotEmpty} from "../../../../../utils/validationLogic/isNotEmptyString";
+import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
 
 interface ResumeAddressComponentProps {}
 
@@ -83,7 +84,17 @@ const ResumeAddressComponent: FC<ResumeAddressComponentProps> = () => {
             const updatedJobSeeker = createUpdateJobSeekerDTO(jobSeeker!.firstName,
                 jobSeeker!.lastName, jobSeeker!.phoneNumber, updatedAddress);
             const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
-            setJobSeeker(response);
+            setJobSeeker((prevState) => {
+                if (prevState){
+
+                    const updatedJobSeeker : JobSeekerAccountDTO = {
+                        ...prevState,
+                        address : response.address
+                    }
+                    return updatedJobSeeker;
+                }
+                return prevState;
+            })
             navigate(resultPageURI);
 
         }

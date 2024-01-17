@@ -1,0 +1,50 @@
+@use "./global-variables";
+
+.light-button{
+  padding: 0.5rem 0.75rem;
+  min-width: 2.25rem;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  margin-right: 1rem;
+  border : 1px solid global-variables.$neutral-color-400;
+  cursor: pointer;
+  color: global-variables.$dark-blue;
+  font-weight: 600;
+  line-height: 1.5;
+  font-size: 1rem;
+  &:hover{
+    background-color: global-variables.$light-blue;
+    border-color: global-variables.$dark-blue;
+  }
+  &:active{
+    box-shadow: global-variables.$button-inner-shadow;
+    background-color: global-variables.$light-blue-active;
+    border-color: global-variables.$dark-blue-active;
+  }
+}
+
+.blue-button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: global-variables.$dark-blue;
+  cursor: pointer;
+  font-weight: 700;
+  color: white;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: background-color, border 0.2s;
+  &:hover{
+    background-color: global-variables.$dark-blue-hover;
+  }
+  &:active{
+    background-color: global-variables.$dark-blue-active;
+  }
+  &:disabled{
+    opacity: 0.7;
+  }
+}

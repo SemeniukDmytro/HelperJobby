@@ -10,9 +10,12 @@ import EmailForm from "../EmailForm/EmailForm";
 import {useEmail} from "../../../../hooks/useEmail";
 import {useAccountType} from "../../../../hooks/useAccountType";
 import {useAuth} from "../../../../hooks/useAuth";
-import {IsValidPasswordMaximalLength, IsValidPasswordMinimalLength} from "../../../../utils/authFormValidators";
 import AuthService from "../../../../services/authService";
 import {CreateUpdateUserDTO} from "../../../../DTOs/userRelatedDTOs/CreateUpdateUserDTO";
+import {
+    IsValidPasswordMaximalLength,
+    IsValidPasswordMinimalLength
+} from "../../../../utils/validationLogic/authFormValidators";
 
 
 interface CreatePasswordFormProps {}

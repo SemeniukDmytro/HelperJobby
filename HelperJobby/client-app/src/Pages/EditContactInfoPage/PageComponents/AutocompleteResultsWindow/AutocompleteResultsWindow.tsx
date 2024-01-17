@@ -1,10 +1,10 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react';
 import './AutocompleteResultsWindow.scss';
-import {mapCountryWithA2Code} from "../../../../utils/countryWithTldMapper";
 import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {LocationAutocompleteService} from "../../../../services/locationAutocompleteService";
 import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes";
+import {mapCountryWithA2Code} from "../../../../utils/convertLogic/countryWithA2CodeMapper";
 
 interface AutocompleteResultsWindowProps {
     inputFieldRef : RefObject<HTMLInputElement>;

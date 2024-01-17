@@ -8,7 +8,6 @@ import {faChevronLeft, faChevronRight, faXmark} from "@fortawesome/free-solid-sv
 import {JobQueryParams} from "../../../../enums/JobQueryParams";
 import useQueryParams from "../../../../hooks/useQueryParams";
 import JobSearchBar from "../../../../Components/JobSearchBar/JobSearchBar";
-import createSearchRequestURI from "../../../../utils/getJobSearchRequestURI";
 import {JobTypesMapData} from "../../../../AppConstData/JobTypesMapData";
 import {mostSpokenLanguages} from "../../../../AppConstData/Languages";
 import JobTypes from "../../../../enums/JobTypes";
@@ -20,6 +19,7 @@ import ShortJobDescriptionBlock
 import DetailedDescriptionColumn
     from "../../../HomePage/PageComponents/DetailedDescriptionColumn/DetailedDescriptionColumn";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import getJobSearchRequestURI from "../../../../utils/getJobSearchRequestURI";
 
 interface SearchResultsProps {
 }
@@ -114,35 +114,35 @@ const SearchResults: FC<SearchResultsProps> = () => {
 
     function remoteOptionHandler() {
         console.log(!isRemote)
-        const requestUri = createSearchRequestURI(queryParams.query, queryParams.location, queryParams.start, !isRemote, queryParams.pay
+        const requestUri = getJobSearchRequestURI(queryParams.query, queryParams.location, queryParams.start, !isRemote, queryParams.pay
             , queryParams.jobType, queryParams.language);
         navigate(requestUri);
     }
     
     function selectPay(selectedPay : number){
         setPay(selectedPay);
-        const requestUri = createSearchRequestURI(queryParams.query, queryParams.location, queryParams.start, queryParams.isRemote, selectedPay
+        const requestUri = getJobSearchRequestURI(queryParams.query, queryParams.location, queryParams.start, queryParams.isRemote, selectedPay
             , queryParams.jobType, queryParams.language);
         navigate(requestUri);
     }
     
     function selectJobType(selectedJobType : JobTypes){
         setJobType(selectedJobType);
-        const requestUri = createSearchRequestURI(queryParams.query, queryParams.location, queryParams.start, queryParams.isRemote, 
+        const requestUri = getJobSearchRequestURI(queryParams.query, queryParams.location, queryParams.start, queryParams.isRemote, 
             queryParams.pay, selectedJobType, queryParams.language);
         navigate(requestUri);
     }
     
     function selectLanguage(selectedLanguage : string){
         setLanguage(selectedLanguage);
-        const requestUri = createSearchRequestURI(queryParams.query, queryParams.location, queryParams.start, queryParams.isRemote, 
+        const requestUri = getJobSearchRequestURI(queryParams.query, queryParams.location, queryParams.start, queryParams.isRemote, 
             queryParams.pay, queryParams.jobType, selectedLanguage);
         navigate(requestUri);
     }
     
     function changeStart(changedStart : number){
         setStart(changedStart);
-        const requestUri = createSearchRequestURI(query, jobLocation, changedStart, isRemote, pay, jobType, language);
+        const requestUri = getJobSearchRequestURI(query, jobLocation, changedStart, isRemote, pay, jobType, language);
         navigate(requestUri);
     }
     

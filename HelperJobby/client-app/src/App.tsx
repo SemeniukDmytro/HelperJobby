@@ -15,6 +15,7 @@ import ResumeAddressPage from "./Pages/BuildResumePages/ResumeAddressPage/Resume
 import AddEducationPage from "./Pages/BuildResumePages/AddEducationPage/AddEducationPage";
 import ResumeEducationPage from "./Pages/BuildResumePages/ResumeEducationPage/ResumeEducationPage";
 import EditEducationPage from "./Pages/BuildResumePages/EditEducationPage/EditEducationPage";
+import DialogWindow from "./Components/DialogWindow/DialogWindow";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             </Route>
 
             {/*public routes */}
+            <Route path={"/test"} element={<DialogWindow/>}></Route>
             <Route path="/home" element={<HomePage/>}/>
             <Route path={"/auth-page"} element={<AuthPage/>}/>
             <Route path={"/jobs"} element={<SearchJobResultsPage/>}/>

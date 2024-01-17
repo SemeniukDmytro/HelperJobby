@@ -8,7 +8,6 @@ import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
-import {isNotEmpty} from "../../../../utils/commonValidators";
 import {JobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
 import {UpdateJobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/UpdateEmployerAccountDTO";
 import CountrySelector from "../CountrySelector/CountrySelector";
@@ -17,6 +16,7 @@ import {useNavigate} from "react-router-dom";
 import AutocompleteResultsWindow from "../AutocompleteResultsWindow/AutocompleteResultsWindow";
 import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
+import {isNotEmpty} from "../../../../utils/validationLogic/isNotEmptyString";
 
 interface EditContactInfoFormProps {}
 

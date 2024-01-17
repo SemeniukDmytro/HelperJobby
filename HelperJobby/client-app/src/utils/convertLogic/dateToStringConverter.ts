@@ -1,4 +1,4 @@
-import {months} from "../AppConstData/Months";
+import {months} from "../../AppConstData/Months";
 
 export default function dateToStringConverter(month : string, year : string) : string | undefined{
     const monthNumberValue = months.find(m => m.name === month)?.monthNumber || 1;

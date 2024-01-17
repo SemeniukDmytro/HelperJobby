@@ -6,6 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeftLong} from "@fortawesome/free-solid-svg-icons";
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import useResumeBuild from "../../../../hooks/useResumeBuild";
+import DialogWindow from "../../../../Components/DialogWindow/DialogWindow";
 
 interface BuildResumeLayoutProps {}
 
@@ -24,6 +25,7 @@ const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
 
     return (
          <>
+             <DialogWindow></DialogWindow>
              <PageWrapWithHeader>
                  <div className={"build-resume-sticky-panel"}>
                      <nav className={"build-resume-navigation"}>
