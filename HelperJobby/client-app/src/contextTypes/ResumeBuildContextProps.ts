@@ -5,4 +5,6 @@ export interface ResumeBuildContextProps{
     setProgressPercentage : Dispatch<SetStateAction<number | null>>;
     saveFunc : () => Promise<void>;
     setSaveFunc:  Dispatch<SetStateAction<() => Promise<void>>>;
+    showDialogWindow : boolean;
+    setShowDialogWindow : Dispatch<SetStateAction<boolean>>;
 }

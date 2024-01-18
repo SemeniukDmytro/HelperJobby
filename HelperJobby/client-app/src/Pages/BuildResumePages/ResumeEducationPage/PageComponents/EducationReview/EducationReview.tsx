@@ -6,6 +6,11 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {months} from "../../../../../AppConstData/Months";
 import {convertNumericMonthToStringValue} from "../../../../../utils/convertLogic/convertNumericMonthToStringValue";
 import {useNavigate} from "react-router-dom";
+import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
+import {logErrorInfo} from "../../../../../utils/logErrorInfo";
+import {EducationService} from "../../../../../services/educationService";
+import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
+import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
 
 interface EducationReviewProps {
     education: EducationDTO;
@@ -19,6 +24,9 @@ const EducationReview: FC<EducationReviewProps> = ({education}) => {
     const convertedFrom = education.from?.toString().split("-");
     const convertedTo = education.to?.toString().split("-");
     const navigate = useNavigate();
+    const [savingInfo, setSavingInfo] = useState(false);
+    const educationService = new EducationService();
+    const {jobSeeker, setJobSeeker} = useJobSeeker();
 
     useEffect(() => {
         if (convertedFrom && convertedTo) {
@@ -33,8 +41,31 @@ const EducationReview: FC<EducationReviewProps> = ({education}) => {
         navigate(`/build/education/${education.id}`);
     }
 
+    async function deleteEducation() {
+        try {
+            setSavingInfo(true);
+            await educationService.deleteEducation(education.id);
+            if (jobSeeker) {
+                const updatedJobSeeker = {...jobSeeker};
+                if (updatedJobSeeker.resume){
+                    updatedJobSeeker.resume.educations = updatedJobSeeker.resume.educations.filter(edu => edu.id !== education.id);
+                    if (updatedJobSeeker.resume.educations.length < 0 && updatedJobSeeker.resume.workExperiences.length < 0
+                        && updatedJobSeeker.resume.skills.length < 0){
+                        updatedJobSeeker.resume = null;
+                    }
+                }
+                setJobSeeker(updatedJobSeeker);
+            }
+        } catch (err) {
+            logErrorInfo(err)
+        } finally {
+            setSavingInfo(false);
+        }
+    }
+
     return (
         <div className={"short-education-info-container"}>
+
             <div className={"education-review-block"}>
                 <div className={"level-of-education"}>
                     <span>{education.levelOfEducation} </span>
@@ -46,10 +77,13 @@ const EducationReview: FC<EducationReviewProps> = ({education}) => {
                     <span>{education.city}</span>
                 </div>
                 <div className={"between-lines-spacing"}/>
-                <div className={"light-dark-default-text"}>
-                    <span >{fromMonth} {fromYear} to {toMonth} {toYear}</span>
-                </div>
-                <div className={"between-lines-spacing"}/>
+                {fromYear && 
+                <div>
+                    <div className={"light-dark-default-text"}>
+                        <span>{fromMonth} {fromYear} to {toMonth} {toYear}</span>
+                    </div>
+                    <div className={"between-lines-spacing"}></div>
+                </div>}
                 <div>
                     {!education.fieldOfStudy &&
                         <button className={"add-info-button"} onClick={navigateToEditEducationPage}>
@@ -73,7 +107,7 @@ const EducationReview: FC<EducationReviewProps> = ({education}) => {
                 <button className={"small-interaction-button"} onClick={navigateToEditEducationPage}>
                     <FontAwesomeIcon icon={faPen}/>
                 </button>
-                <button className={"small-interaction-button"}>
+                <button className={"small-interaction-button"} onClick={deleteEducation}>
                     <FontAwesomeIcon icon={faTrash}/>
                 </button>
             </div>

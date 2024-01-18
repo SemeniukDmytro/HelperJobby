@@ -1,7 +1,7 @@
 import CustomFetchService from "./customFetchService";
 import { JobSeekerAccountDTO } from "../DTOs/accountDTOs/JobSeekerAccountDTO";
 import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
-import {UpdateJobSeekerAccountDTO} from "../DTOs/accountDTOs/UpdateEmployerAccountDTO";
+import {UpdateJobSeekerAccountDTO} from "../DTOs/accountDTOs/UpdateJobSeekerAccountDTO";
 import {SavedJobDTO} from "../DTOs/userJobInteractionsDTOs/SavedJobDTO";
 
 export class JobSeekerAccountService {

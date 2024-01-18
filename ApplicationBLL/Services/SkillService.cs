@@ -38,8 +38,9 @@ public class SkillService : ISkillService
         return skill;
     }
 
-    public async Task<Skill> DeleteSkill(int skillId)
+    public async Task<(Skill skill, bool isResumeNeedToBeDeleted)> DeleteSkill(int skillId)
     {
+        var isInvalidResume = false;
         var currentUserId = _userService.GetCurrentUserId();
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
         var skillEntity = await _skillQueryRepository.GetSkillById(skillId);
@@ -47,6 +48,13 @@ public class SkillService : ISkillService
         {
             throw new ForbiddenException();
         }
-        return skillEntity;
+        if (jobSeekerAccount.Resume.Educations.Count == 0 && jobSeekerAccount.Resume.WorkExperiences.Count == 0
+                                                          && jobSeekerAccount.Resume.Skills.Count <= 1)
+        {
+            isInvalidResume = true;
+        }
+        skillEntity.Resume = jobSeekerAccount.Resume;
+
+        return (skillEntity, isInvalidResume);
     }
 }

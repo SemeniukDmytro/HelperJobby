@@ -36,7 +36,7 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
     }, [jobSeeker]);
 
     function checkJobSeekerAddressInfo() {
-        return jobSeeker?.address.city == "";
+        return jobSeeker?.address?.city == "";
     }
 
     function navigateToEditContactPage() {
@@ -90,7 +90,7 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
                                     (<span className={"job-seeker-info-underline"}>Add location</span>)
                                     :
                                     (<>
-                                        {jobSeeker?.address.city && <span>{jobSeeker?.address?.city},&nbsp;</span>}
+                                        {jobSeeker?.address?.city && <span>{jobSeeker?.address?.city},&nbsp;</span>}
                                         {jobSeeker?.address?.postalCode && <span>{jobSeeker.address.postalCode},&nbsp;</span>}
                                         {jobSeeker?.address?.country && <span>{jobSeeker.address.country}</span>}
                                     </>)

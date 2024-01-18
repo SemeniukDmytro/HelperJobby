@@ -2,6 +2,10 @@
 .build-resume-sticky-panel{
   width: 602px;
   margin: 0 auto;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 5;
 }
 
 .build-resume-navigation{

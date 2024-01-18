@@ -22,20 +22,21 @@ import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAcco
 interface ResumeAddressComponentProps {}
 
 const ResumeAddressComponent: FC<ResumeAddressComponentProps> = () => {
-    const {setProgressPercentage, setSaveFunc} = useResumeBuild();
+    const {setProgressPercentage, setSaveFunc,
+        setShowDialogWindow} = useResumeBuild();
     const {authUser} = useAuth();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const jobSeekerService = new JobSeekerAccountService();
     const navigate = useNavigate();
     
     const [savingInfo, setSavingInfo] = useState(false);
-    const [country, setCountry] = useState(jobSeeker!.address.country);
+    const [country, setCountry] = useState(jobSeeker!.address?.country || "");
     const countryRef = useRef<HTMLSelectElement>(null);
-    const [streetAddress, setStreetAddress] = useState(jobSeeker!.address.streetAddress);
+    const [streetAddress, setStreetAddress] = useState(jobSeeker!.address?.streetAddress || "");
     const streetAddressInputRef = useRef<HTMLInputElement>(null);
-    const [city, setCity] = useState(jobSeeker!.address.city);
+    const [city, setCity] = useState(jobSeeker!.address?.city || "");
     const cityInputRef = useRef<HTMLInputElement>(null);
-    const [postalCode, setPostalCode] = useState(jobSeeker!.address.postalCode);
+    const [postalCode, setPostalCode] = useState(jobSeeker!.address?.postalCode || "");
     const postalCodeRef = useRef<HTMLInputElement>(null);
     const [showStreetsAutocomplete, setShowStreetsAutocomplete] = useState(false);
     const [showCityAutoComplete, setShowCityAutoComplete] = useState(false);
@@ -47,7 +48,7 @@ const ResumeAddressComponent: FC<ResumeAddressComponentProps> = () => {
 
     async function updateAddress(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
-        await updateJobSeekerAddress("/build/education/add");
+        await updateJobSeekerAddress("/build/education/add", false);
     }
 
     useEffect(() => {
@@ -55,13 +56,16 @@ const ResumeAddressComponent: FC<ResumeAddressComponentProps> = () => {
     }, [country, streetAddress, city, postalCode]);
 
     async function customSaveFunc(){
-        await updateJobSeekerAddress("/my-profile")
+        await updateJobSeekerAddress("/my-profile", true)
     }
 
-    async function updateJobSeekerAddress(resultPageURI : string){
+    async function updateJobSeekerAddress(resultPageURI : string, isSaveAndExitAction : boolean){
         if(!isNotEmpty(country)){
             if (countryRef.current) {
                 countryRef.current.focus();
+                if (isSaveAndExitAction){
+                    setShowDialogWindow(true);
+                }
                 return;
             }
         }
@@ -69,6 +73,9 @@ const ResumeAddressComponent: FC<ResumeAddressComponentProps> = () => {
         {
             if(cityInputRef.current){
                 cityInputRef.current.focus();
+                if (isSaveAndExitAction){
+                    setShowDialogWindow(true);
+                }
                 return;
             }
         }
@@ -99,9 +106,7 @@ const ResumeAddressComponent: FC<ResumeAddressComponentProps> = () => {
 
         }
         catch (e) {
-            if (e instanceof ServerError){
-                logErrorInfo(e)
-            }
+            logErrorInfo(e);
         }
         finally {
             setSavingInfo(false);

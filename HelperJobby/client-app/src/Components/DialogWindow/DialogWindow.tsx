@@ -1,27 +1,27 @@
-import React, {Dispatch, FC, SetStateAction, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './DialogWindow.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
 import '../../Assets/scssSharedStyles/DefaultButtons.scss'
 interface DialogWindowProps {
-    notCloseButtonOnClick? : () => {};
-    showDialog? : boolean;
-    setShowDialog? : Dispatch<SetStateAction<boolean>>;
+    notCloseOptionOnClick : () => void;
+    showDialog : boolean;
+    setShowDialog : Dispatch<SetStateAction<boolean>>;
 }
 
-const DialogWindow: FC<DialogWindowProps> = () => {
-    const [showDialog, setShowDialog] = useState(true);
-    
-    document.body.style.overflow = "hidden"
+const DialogWindow: FC<DialogWindowProps> = ({notCloseOptionOnClick, showDialog, setShowDialog}) => {
+
+    useEffect(() => {
+        showDialog ? document.body.style.overflow = "hidden" : document.body.style.overflow = "auto";
+    }, [showDialog]);
 
 
     function closeDialog() {
         setShowDialog(false);
-        document.body.style.overflow = ""
     }
 
     return (
-        
+        !showDialog ? null :
         <div className={"dialog-window"}>
             <div className={"dialogue-content-container"}>
                 <div className={"dialog-header-box"}>
@@ -36,15 +36,15 @@ const DialogWindow: FC<DialogWindowProps> = () => {
                 </div>
                 <div className={"dialog-separation-line"}></div>
                 <div className={"dialog-buttons"}>
-                    <button className={"light-button"}>
+                    <button className={"light-button"} onClick={notCloseOptionOnClick}>
                         Exit without saving
                     </button>
-                    <button className={"blue-button"}>
+                    <button className={"blue-button"} onClick={closeDialog}>
                         Return to page
                     </button>
                 </div>
             </div>
-            <div className={"background-overlay"}>
+            <div className={"background-overlay"} onClick={closeDialog}>
                 
             </div>
         </div>

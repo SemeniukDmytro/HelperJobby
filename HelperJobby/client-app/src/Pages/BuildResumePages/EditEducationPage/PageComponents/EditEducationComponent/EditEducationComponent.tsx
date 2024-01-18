@@ -1,10 +1,9 @@
 import React, {FC, useEffect, useState} from 'react';
 import './EditEducationComponent.scss';
 import {EducationDTO} from "../../../../../DTOs/resumeRelatedDTOs/EducationDTO";
-import {useNavigate, useParams, useSearchParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
-import EducationInfoComponent
-    from "../../../AddEducationPage/PageComponents/EducationInfoComponent/EducationInfoComponent";
+import EducationInfoComponent from "../../../SharedComponents/EducationInfoComponent/EducationInfoComponent";
 
 interface EditEducationComponentProps {}
 
@@ -21,7 +20,7 @@ const EditEducationComponent: FC<EditEducationComponentProps> = () => {
             return;
         }
         console.log(jobSeeker);
-        const education = jobSeeker?.resume.educations
+        const education = jobSeeker?.resume?.educations
             .find((ed) => ed.id == Number.parseInt(id))
         if (!education){
             navigate("/build/education")

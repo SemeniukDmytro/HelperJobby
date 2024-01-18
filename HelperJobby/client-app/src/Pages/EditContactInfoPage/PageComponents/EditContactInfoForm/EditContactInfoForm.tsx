@@ -9,7 +9,7 @@ import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
 import {JobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
-import {UpdateJobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/UpdateEmployerAccountDTO";
+import {UpdateJobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/UpdateJobSeekerAccountDTO";
 import CountrySelector from "../CountrySelector/CountrySelector";
 import EditEmail from "../EditEmail/EditEmail";
 import {useNavigate} from "react-router-dom";
@@ -70,10 +70,10 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
         setFirstName(jobSeeker.firstName);
         setLastName(jobSeeker.lastName);
         setPhoneNumber(jobSeeker.phoneNumber);
-        setCountry(jobSeeker.address.country);
-        setStreetAddress(jobSeeker.address.streetAddress);
-        setCity(jobSeeker.address.city);
-        setPostalCode(jobSeeker.address.postalCode);
+        setCountry(jobSeeker.address?.country || "");
+        setStreetAddress(jobSeeker.address?.streetAddress || "");
+        setCity(jobSeeker.address?.city || "");
+        setPostalCode(jobSeeker.address?.postalCode || "");
     }
 
     async function saveUpdatedInfo(e: React.FormEvent<HTMLFormElement>) {

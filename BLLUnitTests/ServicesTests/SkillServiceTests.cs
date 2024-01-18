@@ -72,7 +72,7 @@ public class SkillServiceTests
         //Act
         var skill = await _skillService.DeleteSkill(skillId);
         //Assert
-        Assert.Equal(skillEntity.Id, skill.Id);
+        Assert.Equal(skillEntity.Id, skill.skill.Id);
     }
     
     [Fact]

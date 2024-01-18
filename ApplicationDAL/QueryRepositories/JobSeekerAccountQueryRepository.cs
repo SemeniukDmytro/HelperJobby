@@ -26,8 +26,19 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
 
     public async Task<JobSeekerAccount> GetJobSeekerAccountWithResume(int userId)
     {
-        return await GetUserWithJobSeekerAccount(userId, q => q.Include(u => u.JobSeekerAccount)
-            .ThenInclude(a => a.Resume));
+        return await _applicationContext.JobSeekerAccounts.Where(j => j.UserId == userId)
+            .Select(js => new JobSeekerAccount()
+            {
+                Id = js.Id,
+                UserId = js.UserId,
+                Resume = js.Resume != null ? new Resume()
+                {
+                    Id = js.Resume.Id,
+                    WorkExperiences = js.Resume.WorkExperiences,
+                    Educations = js.Resume.Educations,
+                    Skills = js.Resume.Skills
+                } : null
+            }).FirstOrDefaultAsync();
     }
     
     public async Task<JobSeekerAccount> GetJobSeekerAccountWithAddress(int userId)

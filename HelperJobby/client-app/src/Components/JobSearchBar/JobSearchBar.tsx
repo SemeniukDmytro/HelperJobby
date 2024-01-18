@@ -66,7 +66,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
     }, []);
 
     useEffect(() => {
-        if (!props.locationInitial && jobSeeker?.address.city){
+        if (!props.locationInitial && jobSeeker?.address?.city){
             setLocation(jobSeeker?.address.city)
         }
     }, [jobSeeker]);

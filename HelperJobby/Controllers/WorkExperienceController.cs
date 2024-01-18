@@ -19,16 +19,18 @@ namespace HelperJobby.Controllers
         private readonly IWorkExperienceQueryRepository _workExperienceQueryRepository;
         private readonly IWorkExperienceCommandRepository _workExperienceCommandRepository;
         private readonly IWorkExperienceService _workExperienceService;
+        private readonly IResumeCommandRepository _resumeCommandRepository;
         private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
         
         public WorkExperienceController(IMapper mapper, IWorkExperienceService workExperienceService, 
             IWorkExperienceCommandRepository workExperienceCommandRepository, IWorkExperienceQueryRepository workExperienceQueryRepository,
-            IEnqueuingTaskHelper enqueuingTaskHelper) : base(mapper)
+            IEnqueuingTaskHelper enqueuingTaskHelper, IResumeCommandRepository resumeCommandRepository) : base(mapper)
         {
             _workExperienceService = workExperienceService;
             _workExperienceCommandRepository = workExperienceCommandRepository;
             _workExperienceQueryRepository = workExperienceQueryRepository;
             _enqueuingTaskHelper = enqueuingTaskHelper;
+            _resumeCommandRepository = resumeCommandRepository;
         }
 
         // GET: api/WorkExperience/5
@@ -69,12 +71,20 @@ namespace HelperJobby.Controllers
         [HttpDelete("{workExperienceId}")]
         public async Task Delete(int workExperienceId)
         {
-            var  workExperience = await _workExperienceService.Delete(workExperienceId);
+            var  workExperienceWithResumeRelateContent = await _workExperienceService.Delete(workExperienceId);
             await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
             {
-                await indexingService.RemoveIndexedResumeRelatedContent(workExperience.JobTitle, workExperience.ResumeId);
+                await indexingService.RemoveIndexedResumeRelatedContent(workExperienceWithResumeRelateContent.workExperience.JobTitle,
+                    workExperienceWithResumeRelateContent.workExperience.ResumeId);
             });
-            await _workExperienceCommandRepository.Delete(workExperience);
+            if (workExperienceWithResumeRelateContent.isResumeNeedToBeDeleted)
+            {
+                await _resumeCommandRepository.DeleteResume(workExperienceWithResumeRelateContent.workExperience.Resume);
+            }
+            else
+            {
+                await _workExperienceCommandRepository.Delete(workExperienceWithResumeRelateContent.workExperience);
+            }
         }
     }
 }

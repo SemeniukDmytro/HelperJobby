@@ -13,8 +13,8 @@ export interface JobSeekerAccountDTO {
     userId: number;
     user: UserDTO;
     addressId: number;
-    address: AddressDTO;
-    resume: ResumeDTO;
+    address: AddressDTO | null;
+    resume: ResumeDTO | null;
     interviews: InterviewDTO[];
     jobApplies: JobApplyDTO[];
     savedJobs: SavedJobDTO[];

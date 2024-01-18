@@ -1,21 +1,19 @@
 import {isNanAfterIntParse} from "./isNanAfterIntParse";
 
 export function isValidDateSelected(fromMonth : string, fromYear : string, toMonth : string, toYear : string) : boolean{
-    if ((isNanAfterIntParse(fromYear) && fromMonth !== "Month")
-        || (isNanAfterIntParse(toYear) && toMonth !== "Month")){
+    if ((isNanAfterIntParse(fromYear) && fromMonth !== "Month" && !fromMonth)
+        || (isNanAfterIntParse(toYear) && toMonth !== "Month" && !toMonth)){
+        console.log((isNanAfterIntParse(fromYear) && fromMonth !== "Month" && !fromMonth))
+        console.log(!fromMonth)
         return false;
     }
 
-    if ((!isNanAfterIntParse(toYear) && toMonth !== "Month")
-        && (isNanAfterIntParse(fromYear) && (fromMonth === "Month" || !fromMonth))){
+    if (!isNanAfterIntParse(toYear) && isNanAfterIntParse(fromYear)){
         return false;
     }
-    if ((isNanAfterIntParse(toYear) && (toMonth === "Month" || !toMonth))
-        && (!isNanAfterIntParse(fromYear) && fromMonth !== "Month")){
+    if (isNanAfterIntParse(toYear) && !isNanAfterIntParse(fromYear)){
         return false;
     }
 
     return fromYear <= toYear;
-    
-    
 }

@@ -15,46 +15,40 @@ interface TimePeriodProps {
     setToMonth : Dispatch<SetStateAction<string>>;
     toYear : string;
     setToYear : Dispatch<SetStateAction<string>>;
+    invalidValuesProvided : boolean;
+    setInvalidValuesProvided : Dispatch<SetStateAction<boolean>>;
 }
 
 const TimePeriod: FC<TimePeriodProps> = (props) => {
     const [fromYearFirstValue, setFromYearFirstValue] = useState(getCurrentYear() - 100);
     const [toYearFirstValue, setToYearFirstValue] = 
         useState(getToYearFirstValue);
-    const [fromError, setFromError] = useState("");
-    const [toError, setToError] = useState("")
-    
-    
+    const [monthWithoutYearFromError, setMonthWithoutYearFromError] = useState("");
+    const [monthWithoutYearToError, setMonthWithoutYearToError] = useState("");
+    const [invalidYearFromError, setInvalidYearFromError] = useState("");
+    const [invalidYearToError, setInvalidYearToError] = useState("");
+
     const monthWithoutYearError = "Cannot specify a month without a year.";
     const endDateNanError = "End date must be after start date";
     const startDateNanError = "Start date must be after end date";
+    
+    useEffect(() => {
+        isInvalidYearsProvided();
+    }, [ props.toYear, props.fromYear]);
+
 
     useEffect(() => {
-        if (!isNanAfterIntParse(props.toYear) && (isNanAfterIntParse(props.fromYear) && (props.fromMonth === "Month" || !props.fromMonth))){
-            setToError(endDateNanError);
-            setFromError("");
-        }
-        else if ((isNanAfterIntParse(props.toYear) && (props.toMonth === "Month" || !props.toMonth)) && !isNanAfterIntParse(props.fromYear)){
-            setFromError(startDateNanError);
-            setToError("")
-        }
-        
-        else if (props.toYear < props.fromYear){
-            setFromError(endDateNanError)
-            setToError("");
-        }
-        else if (isNanAfterIntParse(props.fromYear) && props.fromMonth !== "Month" && props.fromMonth){
-            setFromError(monthWithoutYearError)
-        }
-        else if (isNanAfterIntParse(props.toYear) && props.toMonth !== "Month" && props.toMonth){
-            setToError(monthWithoutYearError)
+        isMonthWithoutYearProvided();
+    }, [props.toMonth, props.fromYear, props.toYear, props.fromMonth]);
+
+    useEffect(() => {
+        if (monthWithoutYearFromError || monthWithoutYearToError || invalidYearFromError || invalidYearToError){
+            props.setInvalidValuesProvided(true);
         }
         else {
-            setToError("");
-            setFromError("");
+            props.setInvalidValuesProvided(false);
         }
-        
-    }, [props.toMonth, props.toYear, props.fromMonth, props.fromYear]);
+    }, [monthWithoutYearFromError, monthWithoutYearToError, invalidYearFromError, invalidYearToError]);
     
 
     useEffect(() => {
@@ -74,6 +68,52 @@ const TimePeriod: FC<TimePeriodProps> = (props) => {
         }
     }
     
+    function isInvalidYearsProvided(){
+        if ((isNanAfterIntParse(props.toYear) && !isNanAfterIntParse(props.fromYear))){
+            setInvalidYearToError(endDateNanError);
+            console.log("")
+            setMonthWithoutYearToError("");
+        }
+        else {
+            setInvalidYearToError("")
+        }
+
+        if (!isNanAfterIntParse(props.toYear) && isNanAfterIntParse(props.fromYear)){
+            setInvalidYearFromError(startDateNanError);
+            setMonthWithoutYearFromError("");
+        }
+        else {
+            setInvalidYearFromError("")
+        }
+        if (!isNanAfterIntParse(props.toYear) && !isNanAfterIntParse(props.fromYear)){
+            if (Number.parseInt(props.toYear) < Number.parseInt(props.fromYear)){
+                setInvalidYearToError(endDateNanError);
+                setMonthWithoutYearToError("");
+            }
+            else {
+                setInvalidYearToError("");
+            }
+        }
+    }
+    
+    function isMonthWithoutYearProvided(){
+        if ( isNanAfterIntParse(props.fromYear) && props.fromMonth !== "Month" && props.fromMonth){
+            setMonthWithoutYearFromError(monthWithoutYearError)
+            setInvalidYearFromError("");
+        }
+        else {
+            setMonthWithoutYearFromError("");
+
+        }
+
+        if (isNanAfterIntParse(props.toYear) && props.toMonth !== "Month" && props.toMonth){
+            setMonthWithoutYearToError(monthWithoutYearError)
+            setInvalidYearToError("");
+        }
+        else {
+            setMonthWithoutYearToError("");
+        }
+    }
     
     return (
         <>
@@ -92,9 +132,10 @@ const TimePeriod: FC<TimePeriodProps> = (props) => {
                         lastYear={getCurrentYear()}/>
                 </div>
             </div>
-            {fromError && <div className={"error-box"}>
+            {(monthWithoutYearFromError || invalidYearFromError) && <div className={"error-box"}>
                 <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
-                <span className={"error-text"}>{fromError}</span>
+                <span className={"error-text"}>{monthWithoutYearFromError}</span>
+                <span className={"error-text"}>{invalidYearFromError}</span>
             </div>}
             <div className={"input-field-spacing"}></div>
             <div className={"time-stamp-container"}>
@@ -112,9 +153,10 @@ const TimePeriod: FC<TimePeriodProps> = (props) => {
                         lastYear={getCurrentYear() + 15}/>
                 </div>
             </div>
-            {toError && <div className={"error-box"}>
+            {(monthWithoutYearToError || invalidYearToError) && <div className={"error-box"}>
                 <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
-                <span className={"error-text"}>{toError}</span>
+                <span className={"error-text"}>{monthWithoutYearToError}</span>
+                <span className={"error-text"}>{invalidYearToError}</span>
             </div>}
             <div className={"input-field-spacing"}></div>
         </>

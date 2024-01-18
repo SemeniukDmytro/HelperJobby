@@ -115,7 +115,7 @@ public class EducationServiceTests
         //Act
         var educationToDelete = await _educationService.Delete(educationId);
         //Assert
-        Assert.Equal(educationEntity.Id, educationToDelete.Id);
+        Assert.Equal(educationEntity.Id, educationToDelete.educationToDelete.Id);
     }
     
     [Fact]

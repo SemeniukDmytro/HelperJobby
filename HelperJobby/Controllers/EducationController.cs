@@ -20,16 +20,18 @@ namespace HelperJobby.Controllers
         private readonly IEducationCommandRepository _educationCommandRepository;
         private readonly IEducationService _educationService;
         private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
+        private readonly IResumeCommandRepository _resumeCommandRepository;
 
         
         public EducationController(IMapper mapper, IEducationService educationService, 
             IEducationCommandRepository educationCommandRepository, IEducationQueryRepository educationQueryRepository, 
-            IEnqueuingTaskHelper enqueuingTaskHelper) : base(mapper)
+            IEnqueuingTaskHelper enqueuingTaskHelper, IResumeCommandRepository resumeCommandRepository) : base(mapper)
         {
             _educationService = educationService;
             _educationCommandRepository = educationCommandRepository;
             _educationQueryRepository = educationQueryRepository;
             _enqueuingTaskHelper = enqueuingTaskHelper;
+            _resumeCommandRepository = resumeCommandRepository;
         }
         
         // GET: api/Education/5
@@ -70,12 +72,19 @@ namespace HelperJobby.Controllers
         [HttpDelete("{educationId}")]
         public async Task Delete(int educationId)
         {
-             var education = await _educationService.Delete(educationId);
+             var educationWithResumeInfo = await _educationService.Delete(educationId);
              await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
              {
-                 await indexingService.RemoveIndexedResumeRelatedContent(education.FieldOfStudy, education.ResumeId);
+                 await indexingService.RemoveIndexedResumeRelatedContent(educationWithResumeInfo.educationToDelete.FieldOfStudy, educationWithResumeInfo.educationToDelete.ResumeId);
              });
-             await _educationCommandRepository.Delete(education);
+             if (educationWithResumeInfo.isResumeNeedToBeDeleted)
+             {
+                 await _resumeCommandRepository.DeleteResume(educationWithResumeInfo.educationToDelete.Resume);
+             }
+             else
+             {
+                 await _educationCommandRepository.Delete(educationWithResumeInfo.educationToDelete);
+             }
         }
 
        

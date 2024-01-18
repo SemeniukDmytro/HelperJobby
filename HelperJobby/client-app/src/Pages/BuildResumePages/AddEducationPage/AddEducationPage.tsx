@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import EducationInfoComponent from "./PageComponents/EducationInfoComponent/EducationInfoComponent";
+import EducationInfoComponent from "../SharedComponents/EducationInfoComponent/EducationInfoComponent";
 
 interface AddEducationPageProps {}
 

@@ -11,7 +11,7 @@ import DialogWindow from "../../../../Components/DialogWindow/DialogWindow";
 interface BuildResumeLayoutProps {}
 
 const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
-    const {progressPercentage, saveFunc} = useResumeBuild();
+    const {progressPercentage, saveFunc, showDialogWindow, setShowDialogWindow} = useResumeBuild();
     const navigate = useNavigate();
     
 
@@ -22,10 +22,17 @@ const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
     async function saveInfo() {
         await saveFunc();
     }
+    
+    function goBackToProfilePage(){
+        navigate("/my-profile")
+    }
 
     return (
          <>
-             <DialogWindow></DialogWindow>
+             <DialogWindow 
+                 showDialog={showDialogWindow} 
+                 setShowDialog={setShowDialogWindow}
+                 notCloseOptionOnClick={goBackToProfilePage}></DialogWindow>
              <PageWrapWithHeader>
                  <div className={"build-resume-sticky-panel"}>
                      <nav className={"build-resume-navigation"}>

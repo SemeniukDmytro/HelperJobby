@@ -45,7 +45,6 @@
     <ItemGroup>
       <Folder Include="client-app\src\Components\Header\" />
       <Folder Include="client-app\src\Pages\AuthPage\PageComponents\" />
-      <Folder Include="client-app\src\Pages\BuildResumePages\AddEducationPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\EditEducationPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\ResumeAddressPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\ResumeAddWorkExperiencePage\" />

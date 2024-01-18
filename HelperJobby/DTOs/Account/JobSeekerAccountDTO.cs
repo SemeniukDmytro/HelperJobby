@@ -20,8 +20,8 @@ public class JobSeekerAccountDTO
   public UserDTO User { get; set; }
   
   public int AddressId { get; set; }
-  public AddressDTO Address { get; set; }
-  public ResumeDTO Resume { get; set; }
+  public AddressDTO? Address { get; set; }
+  public ResumeDTO? Resume { get; set; }
   public List<InterviewDTO> Interviews { get; set; }
   public List<JobApplyDTO> JobApplies { get; set; }
   public List<SavedJobDTO> SavedJobs { get; set; }

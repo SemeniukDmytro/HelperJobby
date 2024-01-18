@@ -48,7 +48,7 @@ public class JobSeekerAccountService : IJobSeekerAccountService
         {
             jobSeekerAccount.Address = updatedAccount.Address;
         }
-        else
+        else if (updatedAccount.Address != null)
         {
             jobSeekerAccount.Address.City = updatedAccount.Address.City;
             jobSeekerAccount.Address.Country = updatedAccount.Address.Country;

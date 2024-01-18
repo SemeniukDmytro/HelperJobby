@@ -11,6 +11,8 @@ const ResumeBuildContext = createContext<ResumeBuildContextProps>({
     setProgressPercentage: () => {},
     saveFunc: async () => {},
     setSaveFunc: () => {},
+    showDialogWindow: false,
+    setShowDialogWindow : () => {}
 });
 
 export function ResumeBuildContextProvider({ children }: { children: ReactNode }) {
@@ -19,6 +21,7 @@ export function ResumeBuildContextProvider({ children }: { children: ReactNode }
         async () => {});
     const {jobSeeker, setJobSeeker, fetchJobSeeker } = useJobSeeker();
     const [loading, setLoading] = useState(true);
+    const [showDialogWindow, setShowDialogWindow] = useState(false);
     const resumeService = new ResumeService();
 
     useEffect(() => {
@@ -30,7 +33,8 @@ export function ResumeBuildContextProvider({ children }: { children: ReactNode }
     }, [jobSeeker]);
     
     async function fetchResume(){
-        if (!jobSeeker?.resume.id){
+        if (!jobSeeker?.resume?.id){
+            setLoading(false);
             return;
         }
         try {
@@ -61,6 +65,8 @@ export function ResumeBuildContextProvider({ children }: { children: ReactNode }
                 setProgressPercentage,
                 saveFunc,
                 setSaveFunc: setCurrentSaveFunc,
+                showDialogWindow,
+                setShowDialogWindow
             }}
         >
             {children}

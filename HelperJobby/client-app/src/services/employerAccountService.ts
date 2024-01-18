@@ -1,7 +1,7 @@
 import CustomFetchService from "./customFetchService";
 import {EmployerAccountDTO} from "../DTOs/accountDTOs/EmployerAccountDTO";
 import {CreateEmployerAccountDTO} from "../DTOs/accountDTOs/CreateEmployerAccountDTO";
-import {UpdateEmployerAccountDTO} from "../DTOs/accountDTOs/UpdateJobSeekerAccountDTO";
+import {UpdateEmployerAccountDTO} from "../DTOs/accountDTOs/UpdateEmployerAccountDTO";
 
 export class EmployerAccountService {
     private readonly baseURI: string = "api/EmployerAccount";

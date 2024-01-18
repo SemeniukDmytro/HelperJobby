@@ -19,7 +19,8 @@ interface ResumeNameComponentProps {}
 const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
     const {
         setProgressPercentage,
-        setSaveFunc,} = useResumeBuild();
+        setSaveFunc,
+        setShowDialogWindow} = useResumeBuild();
     const jobSeekerService = new JobSeekerAccountService();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
@@ -39,17 +40,20 @@ const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
         setSaveFunc(() => customSaveFunc);
     }, [firstName, lastName]);
     async function customSaveFunc(){
-        await updateJobSeekerCredentials("/my-profile")
+        await updateJobSeekerCredentials("/my-profile", true)
     }
 
     async function moveToPhonePage(e: React.MouseEvent<HTMLButtonElement> ) {
         e.preventDefault();
-        await updateJobSeekerCredentials("/build/phone");
+        await updateJobSeekerCredentials("/build/phone", false);
     }
-    async function updateJobSeekerCredentials(resultPageURI : string){
+    async function updateJobSeekerCredentials(resultPageURI : string, isSaveAndExitAction : boolean){
         if(!isNotEmpty(firstName)){
             if (firstNameInputRef.current) {
                 firstNameInputRef.current.focus();
+                if (isSaveAndExitAction){
+                    setShowDialogWindow(true);
+                }
                 return;
             }
         }
@@ -57,12 +61,16 @@ const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
         {
             if(lastNameInputRef.current){
                 lastNameInputRef.current.focus();
+                if (isSaveAndExitAction){
+                    setShowDialogWindow(true);
+                }
                 return;
             }
         }
         try {
             setSavingInfo(true);
-            const updatedJobSeeker = createUpdateJobSeekerDTO(firstName, lastName, jobSeeker!.phoneNumber, jobSeeker!.address);
+            const updatedJobSeeker = createUpdateJobSeekerDTO(firstName, lastName, jobSeeker!.phoneNumber, 
+                jobSeeker!.address);
             const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
             setJobSeeker((prevState) => {
                 if (prevState){
