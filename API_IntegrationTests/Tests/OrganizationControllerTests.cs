@@ -103,7 +103,7 @@ public class OrganizationControllerTests : IntegrationTest
         var requestUri = $"{_baseUri}/{email.Id}/remove-employee";
         
         //Act
-        var removeEmployeeEmailResponse = await TestClient.PostAsJsonAsync(requestUri, email.Id);
+        var removeEmployeeEmailResponse = await TestClient.DeleteAsync(requestUri);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(removeEmployeeEmailResponse, TestOutputHelper);
         
         //Assert

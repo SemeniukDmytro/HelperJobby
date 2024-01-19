@@ -12,14 +12,13 @@ public class JobSeekerAccountDTO
   public string FirstName { get; set; }
   
   public string LastName { get; set; }
-  
   public string PhoneNumber { get; set; }
   
   public int UserId { get; set; }
 
   public UserDTO User { get; set; }
   
-  public int AddressId { get; set; }
+  public int? AddressId { get; set; }
   public AddressDTO? Address { get; set; }
   public ResumeDTO? Resume { get; set; }
   public List<InterviewDTO> Interviews { get; set; }

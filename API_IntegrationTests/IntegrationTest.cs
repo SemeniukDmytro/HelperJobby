@@ -50,7 +50,9 @@ public class IntegrationTest
             Password = "randomPwd",
             AccountType = "Employer"
         };
-        await RegisterNewUser(newUser);
+        var authUserDTO = await RegisterNewUser(newUser);
+        TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authUserDTO.Token);
+        return authUserDTO.User;
         var userWithToken = await LoginUser(newUser.Email, newUser.Password);
         return userWithToken.User;
     }
@@ -160,9 +162,10 @@ public class IntegrationTest
 
     }
 
-    private async Task RegisterNewUser(CreateUpdateUserDTO newUser)
+    private async Task<AuthUserDTO> RegisterNewUser(CreateUpdateUserDTO newUser) 
     {
-        await TestClient.PostAsJsonAsync("/api/auth/sign-up", newUser);
+       var response = await TestClient.PostAsJsonAsync("/api/auth/sign-up", newUser);
+       return await response.Content.ReadAsAsync<AuthUserDTO>();
     }
     
     

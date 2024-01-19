@@ -12,7 +12,7 @@ export interface JobSeekerAccountDTO {
     phoneNumber: string;
     userId: number;
     user: UserDTO;
-    addressId: number;
+    addressId: number | null;
     address: AddressDTO | null;
     resume: ResumeDTO | null;
     interviews: InterviewDTO[];

@@ -40,6 +40,7 @@ public static class ResumeFixtures
                 FieldOfStudy = "Software Engineering"
             }
         },
+        WorkExperiences = new List<WorkExperience>(),
         Skills = new List<Skill>()
         {
             new Skill()

@@ -27,7 +27,7 @@ public class LocationService : ILocationService
 
     private async Task<List<string>> GetLocationsResults(string input, string countryCode, string resultType)
     {
-        string apiKey = "AIzaSyCmQgLmZERug-nZ_7wd019pjoLOfg7J2LY";
+        string apiKey = "AIzaSyDxgbh2Mt5Ptnh1oVnPfEWbUWEOFk0cbxU";
 
         using (HttpClient client = new HttpClient())
         {

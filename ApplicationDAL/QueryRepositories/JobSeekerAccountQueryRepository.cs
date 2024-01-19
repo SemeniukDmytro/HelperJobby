@@ -36,7 +36,8 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
                     Id = js.Resume.Id,
                     WorkExperiences = js.Resume.WorkExperiences,
                     Educations = js.Resume.Educations,
-                    Skills = js.Resume.Skills
+                    Skills = js.Resume.Skills,
+                    JobSeekerAccountId = js.Resume.JobSeekerAccountId
                 } : null
             }).FirstOrDefaultAsync();
     }
@@ -59,7 +60,8 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
                     AddressId = j.AddressId,
                     Address = j.Address,
                     Resume = j.Resume,
-                    PhoneNumber = j.PhoneNumber
+                    PhoneNumber = j.PhoneNumber,
+                    UserId = j.UserId
                 }).FirstOrDefaultAsync();
         return jobSeekerAccount;
     }

@@ -30,7 +30,12 @@ public class UserService : IUserService
             throw new EmailIsNotAvailableException();
         }
         registerUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerUser.PasswordHash);
-        registerUser.JobSeekerAccount = new JobSeekerAccount();
+        registerUser.JobSeekerAccount = new JobSeekerAccount()
+        {
+            FirstName = "",
+            LastName = "",
+            PhoneNumber = ""
+        };
 
         return registerUser;
     }

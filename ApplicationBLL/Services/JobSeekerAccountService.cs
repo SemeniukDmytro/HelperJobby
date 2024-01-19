@@ -34,12 +34,12 @@ public class JobSeekerAccountService : IJobSeekerAccountService
             throw new ForbiddenException();
         }
 
-        if (updatedAccount.FirstName != "")
+        if (!string.IsNullOrEmpty(updatedAccount.FirstName))
         {
             jobSeekerAccount.FirstName = updatedAccount.FirstName;
         }
 
-        if (updatedAccount.LastName != "")
+        if (!string.IsNullOrEmpty(updatedAccount.LastName))
         {
             jobSeekerAccount.LastName = updatedAccount.LastName;
         }
@@ -50,8 +50,15 @@ public class JobSeekerAccountService : IJobSeekerAccountService
         }
         else if (updatedAccount.Address != null)
         {
-            jobSeekerAccount.Address.City = updatedAccount.Address.City;
-            jobSeekerAccount.Address.Country = updatedAccount.Address.Country;
+            if (!string.IsNullOrEmpty(updatedAccount.Address.City))
+            {
+                jobSeekerAccount.Address.City = updatedAccount.Address.City;
+            }
+
+            if (!string.IsNullOrEmpty(updatedAccount.Address.Country))
+            {
+                jobSeekerAccount.Address.Country = updatedAccount.Address.Country;
+            }
             jobSeekerAccount.Address.StreetAddress = updatedAccount.Address.StreetAddress;
             jobSeekerAccount.Address.PostalCode = updatedAccount.Address.PostalCode;
         }

@@ -9,31 +9,19 @@ interface CountrySelectorProps {
     country : string;
     setCountry : Dispatch<SetStateAction<string>>;
     selectRef : React.RefObject<HTMLSelectElement>;
-    isNotRequired? : boolean;
 }
 
 const CountrySelector: FC<CountrySelectorProps> = ({country,
                                                        setCountry,
-                                                       selectRef,
-                                                       isNotRequired}) => {
-    const [isInvalidValue, setIsInvalidValue] = useState(false);
+                                                       selectRef}) => {
     const [inputFocus, setSelectFocus] = useState(false);
     const [showCountrySelector, setShowCountrySelector] = useState(false);
 
     useEffect(() => {
         if (!isNotEmpty(country)){
-            setIsInvalidValue(true);
-        }
-        else {
-            setIsInvalidValue(false)
+            setCountry("Canada")
         }
     }, [country]);
-
-    useEffect(() => {
-        if (isNotRequired){
-            setIsInvalidValue(false);
-        }
-    }, []);
 
     function selectAnotherCountry(e : ChangeEvent<HTMLSelectElement>) {
         setCountry(e.target.value);
@@ -56,9 +44,8 @@ const CountrySelector: FC<CountrySelectorProps> = ({country,
 
     return(
         <div className={"edit-form-field"}>
-            <div className={`field-label ${isInvalidValue ? "error-text" : ""}`}>
+            <div className={`field-label`}>
                 <span>Country&nbsp;</span>
-                {!isNotRequired && <span className={"required-mark"}>*</span>}
             </div>
             {!showCountrySelector ?  (<div className={"default-country-container"}>
                 <div className={""}>
@@ -70,7 +57,7 @@ const CountrySelector: FC<CountrySelectorProps> = ({country,
             </div>)
                 :
             (<div className={"field-input-container"}>
-                <div className={`border-lining ${inputFocus ? "field-focus" : ""} ${isInvalidValue ? "red-field-focus" : ""}`}>
+                <div className={`border-lining ${inputFocus ? "field-focus" : ""}`}>
 
                 </div>
                 <select
@@ -93,11 +80,6 @@ const CountrySelector: FC<CountrySelectorProps> = ({country,
                 </div>
             </div>) }
             <div className={"input-field-spacing"}>
-                {isInvalidValue &&
-                    <div className={"error-box"}>
-                        <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
-                        <span className={"error-text"}>Country is required</span>
-                    </div>}
             </div>
         </div>
 )};

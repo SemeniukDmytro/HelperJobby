@@ -29,15 +29,17 @@ export function ResumeBuildContextProvider({ children }: { children: ReactNode }
     }, []);
 
     useEffect(() => {
-        fetchResume();
+        if (jobSeeker){
+            fetchResume();
+        }
     }, [jobSeeker]);
     
     async function fetchResume(){
-        if (!jobSeeker?.resume?.id){
-            setLoading(false);
-            return;
-        }
+        
         try {
+            if (!jobSeeker?.resume?.id){
+                return;
+            }
             const retrievedResume = await resumeService.getResume(jobSeeker.resume.id);
             const updatedJobSeeker = jobSeeker;
             updatedJobSeeker.resume = retrievedResume;
@@ -49,7 +51,7 @@ export function ResumeBuildContextProvider({ children }: { children: ReactNode }
             }
         }
         finally {
-            setLoading(false)
+            setLoading(false);
         }
     }
 

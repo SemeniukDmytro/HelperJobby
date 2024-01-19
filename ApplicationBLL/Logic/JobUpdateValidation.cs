@@ -55,6 +55,10 @@ public class JobUpdateValidation<T>
             return (int)value != 0;
         }
 
+        if (value is Enum)
+        {
+            return (int)value != 0;
+        }
         if (int.TryParse(value.ToString(), out var possibleInt))
         {
             return possibleInt != 0;

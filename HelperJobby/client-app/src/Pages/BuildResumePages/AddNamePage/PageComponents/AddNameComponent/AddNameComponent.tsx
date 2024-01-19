@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import './ResumeNameComponent.scss';
+import './AddNameComponent.scss';
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import useResumeBuild from "../../../../../hooks/useResumeBuild";
 import {useNavigate} from "react-router-dom";
@@ -9,14 +9,14 @@ import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {useAuth} from "../../../../../hooks/useAuth";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
-import {createUpdateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
+import {updateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
 import {isNotEmpty} from "../../../../../utils/validationLogic/isNotEmptyString";
 import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
 
 interface ResumeNameComponentProps {}
 
-const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
+const AddNameComponent: FC<ResumeNameComponentProps> = () => {
     const {
         setProgressPercentage,
         setSaveFunc,
@@ -25,7 +25,6 @@ const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
     const navigate = useNavigate();
-    
     const [firstName, setFirstName] = useState(jobSeeker!.firstName);
     const [lastName, setLastName] = useState(jobSeeker!.lastName)
     const [savingInfo, setSavingInfo] = useState(false);
@@ -33,6 +32,12 @@ const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
     const lastNameInputRef = useRef<HTMLInputElement>(null);
     
     useEffect(() => {
+        if (!firstName){
+            firstNameInputRef.current?.focus();
+        }
+        else if (!lastName){
+            lastNameInputRef.current?.focus();
+        }
         setProgressPercentage(ProgressPercentPerPage);
     }, []);
 
@@ -69,7 +74,7 @@ const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
         }
         try {
             setSavingInfo(true);
-            const updatedJobSeeker = createUpdateJobSeekerDTO(firstName, lastName, jobSeeker!.phoneNumber, 
+            const updatedJobSeeker = updateJobSeekerDTO(firstName, lastName, jobSeeker!.phoneNumber, 
                 jobSeeker!.address);
             const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
             setJobSeeker((prevState) => {
@@ -107,7 +112,7 @@ const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
                               isRequired={true}
                               inputFieldValue={firstName} 
                               setInputFieldValue={setFirstName}
-                              inputRef={lastNameInputRef}/>
+                              inputRef={firstNameInputRef}/>
             <CustomInputField fieldLabel={"Last name"}
                               isRequired={true}
                               inputFieldValue={lastName}
@@ -125,4 +130,4 @@ const ResumeNameComponent: FC<ResumeNameComponentProps> = () => {
     )
 };
 
-export default ResumeNameComponent;
+export default AddNameComponent;

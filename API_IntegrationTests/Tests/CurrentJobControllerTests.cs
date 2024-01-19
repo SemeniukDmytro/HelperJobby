@@ -65,6 +65,8 @@ public class CurrentJobControllerTests : IntegrationTest
         Location = "",
         JobType = new List<JobTypes> {},
         Salary = 0,
+        SalaryRate = "per hour",
+        ShowPayBy = "",
         Schedule = new List<Schedules> { },
         Benefits = new List<EmployeeBenefits> { },
         ContactEmail = "contactemail@gmail.com",

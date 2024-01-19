@@ -5,6 +5,7 @@ import {TimeStamps} from "../../../../enums/TimeStamps";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {isNanAfterIntParse} from "../../../../utils/validationLogic/isNanAfterIntParse";
+import {months} from "../../../../AppConstData/Months";
 
 interface TimePeriodProps {
     fromMonth : string;
@@ -17,6 +18,7 @@ interface TimePeriodProps {
     setToYear : Dispatch<SetStateAction<string>>;
     invalidValuesProvided : boolean;
     setInvalidValuesProvided : Dispatch<SetStateAction<boolean>>;
+    currentlyEnrolledSelected? : boolean;
 }
 
 const TimePeriod: FC<TimePeriodProps> = (props) => {
@@ -33,12 +35,17 @@ const TimePeriod: FC<TimePeriodProps> = (props) => {
     const startDateNanError = "Start date must be after end date";
     
     useEffect(() => {
-        isInvalidYearsProvided();
+        if (!props.currentlyEnrolledSelected){
+            isInvalidYearsProvided();
+        }
     }, [ props.toYear, props.fromYear]);
 
 
     useEffect(() => {
         isMonthWithoutYearProvided();
+        if (props.currentlyEnrolledSelected){
+            isInvalidFromYearProvided();
+        }
     }, [props.toMonth, props.fromYear, props.toYear, props.fromMonth]);
 
     useEffect(() => {
@@ -71,7 +78,6 @@ const TimePeriod: FC<TimePeriodProps> = (props) => {
     function isInvalidYearsProvided(){
         if ((isNanAfterIntParse(props.toYear) && !isNanAfterIntParse(props.fromYear))){
             setInvalidYearToError(endDateNanError);
-            console.log("")
             setMonthWithoutYearToError("");
         }
         else {
@@ -93,6 +99,21 @@ const TimePeriod: FC<TimePeriodProps> = (props) => {
             else {
                 setInvalidYearToError("");
             }
+        }
+    }
+    
+    function isInvalidFromYearProvided(){
+        const currentDate = new Date().toISOString().split("-");
+        const selectedMonth = months
+            .find((m) => m.name == props.fromMonth)?.monthNumber;
+        if (!isNanAfterIntParse(props.fromYear) && selectedMonth){
+            if (selectedMonth > Number.parseInt(currentDate[1]) && 
+            Number.parseInt(props.fromYear) >= Number.parseInt(currentDate[0])){
+                setInvalidYearFromError("Start date cannot be later than the current date");
+            }
+        }
+        else {
+            setInvalidYearFromError("")
         }
     }
     
@@ -138,27 +159,29 @@ const TimePeriod: FC<TimePeriodProps> = (props) => {
                 <span className={"error-text"}>{invalidYearFromError}</span>
             </div>}
             <div className={"input-field-spacing"}></div>
-            <div className={"time-stamp-container"}>
-                <div className={"double-select-label"}>To</div>
-                <div className={"double-select-container"}>
-                    <DateSelector
-                        selectValue={props.toMonth}
-                        setSelectValue={props.setToMonth}
-                        timeStamp={TimeStamps.Month}/>
-                    <DateSelector
-                        selectValue={props.toYear}
-                        setSelectValue={props.setToYear}
-                        timeStamp={TimeStamps.Year}
-                        firstYear={toYearFirstValue}
-                        lastYear={getCurrentYear() + 15}/>
+            {!props.currentlyEnrolledSelected && <>
+                <div className={"time-stamp-container"}>
+                    <div className={"double-select-label"}>To</div>
+                    <div className={"double-select-container"}>
+                        <DateSelector
+                            selectValue={props.toMonth}
+                            setSelectValue={props.setToMonth}
+                            timeStamp={TimeStamps.Month}/>
+                        <DateSelector
+                            selectValue={props.toYear}
+                            setSelectValue={props.setToYear}
+                            timeStamp={TimeStamps.Year}
+                            firstYear={toYearFirstValue}
+                            lastYear={getCurrentYear() + 15}/>
+                    </div>
                 </div>
-            </div>
-            {(monthWithoutYearToError || invalidYearToError) && <div className={"error-box"}>
-                <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
-                <span className={"error-text"}>{monthWithoutYearToError}</span>
-                <span className={"error-text"}>{invalidYearToError}</span>
-            </div>}
-            <div className={"input-field-spacing"}></div>
+                {(monthWithoutYearToError || invalidYearToError) && <div className={"error-box"}>
+                    <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
+                    <span className={"error-text"}>{monthWithoutYearToError}</span>
+                    <span className={"error-text"}>{invalidYearToError}</span>
+                </div>}
+                <div className={"input-field-spacing"}></div>
+            </>}
         </>
     )
 }

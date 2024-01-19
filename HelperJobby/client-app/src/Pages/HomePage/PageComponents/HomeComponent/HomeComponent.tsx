@@ -22,7 +22,6 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     const {authUser} = useAuth();
     
     const jobSeekerService = new JobSeekerAccountService();
-    console.log("homecomp main")
     
     useEffect(() => {
         loadJobSeekerSavedJobs();

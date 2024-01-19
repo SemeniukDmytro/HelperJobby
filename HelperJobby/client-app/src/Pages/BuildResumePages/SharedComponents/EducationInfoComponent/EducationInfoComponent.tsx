@@ -212,7 +212,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
             <form className={"build-resume-form"}>
                 {savingProcess && <div className={"saving-in-progress-surface"}></div>}
                 <div className={"build-page-header"}>
-                    Add education
+                    {education ? <span>Edit education</span> : <span>Add Education</span>}
                 </div>
                 <CustomInputField fieldLabel={"Level of education"}
                                   isRequired={true}
@@ -236,12 +236,12 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     setInputFieldValue={setSchoolName}
                     inputRef={schoolNameInputRef}
                 />
-
-                <CountrySelector
+                
+                <CountrySelector 
                     country={country}
                     setCountry={setCountry}
-                    selectRef={countryInputRef}
-                    isNotRequired={true}/>
+                    selectRef={countryInputRef}/>
+                
 
                 <CustomInputField
                     fieldLabel={"City, Province/Territory"}
@@ -251,6 +251,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     displayGoogleLogo={true}
                     inputRef={cityInputRef}
                     setShowAutocompleteWindow={setShowCityAutoComplete}/>
+                
                 <TimePeriod
                     fromMonth={fromMonth}
                     setFromMonth={setFromMonth}
@@ -270,9 +271,9 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                             <span>Save</span>
                         }
                     </button>
-                    <button className={"skip-form-button"} onClick={fillCreateEducationDTO}>
+                    {!education && <button className={"skip-form-button"} onClick={fillCreateEducationDTO}>
                         Skip
-                    </button>
+                    </button>}
                 </div>
             </form>
         </>

@@ -180,8 +180,7 @@ public class ApplicationContext : DbContext
         modelBuilder.Entity<ProcessedJobWord>()
             .HasOne(pw => pw.Job)
             .WithMany()
-            .HasForeignKey(pw => pw.JobId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .HasForeignKey(pw => pw.JobId);
 
         modelBuilder.Entity<ProcessedResumeWord>()
             .HasOne(pw => pw.Resume)

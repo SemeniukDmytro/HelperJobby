@@ -15,7 +15,6 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
     const {authUser} = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    console.log(jobSeeker)
     useEffect(() => {
 
         const timeoutId = setTimeout(() => {
@@ -35,8 +34,8 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
         }
     }, [jobSeeker]);
 
-    function checkJobSeekerAddressInfo() {
-        return jobSeeker?.address?.city == "";
+    function isAddressInfoProvided() {
+        return !!jobSeeker?.address?.city;
     }
 
     function navigateToEditContactPage() {
@@ -53,7 +52,7 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
             <div className={"profile-info-layout"}>
                 <div className={"profile-info-container"}>
                     <div className={"profile-header-info"}>
-                        {jobSeeker?.firstName && jobSeeker.lastName ?
+                        {(jobSeeker?.firstName && jobSeeker.lastName) ?
                             (<div className={"job-seeker-full-name"}>
                                 <span>{jobSeeker?.firstName} {jobSeeker?.lastName}</span>
                             </div>)
@@ -86,7 +85,7 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
                             </div>
                             <div className={"job-seeker-info-line last-of-type"}>
                                 <FontAwesomeIcon className={"start-of-line-icon"} icon={faLocationDot} />
-                                {checkJobSeekerAddressInfo() ? 
+                                {!isAddressInfoProvided() ? 
                                     (<span className={"job-seeker-info-underline"}>Add location</span>)
                                     :
                                     (<>

@@ -64,55 +64,58 @@ const EducationReview: FC<EducationReviewProps> = ({education}) => {
     }
 
     return (
-        <div className={"short-education-info-container"}>
-
-            <div className={"education-review-block"}>
-                <div className={"level-of-education"}>
-                    <span>{education.levelOfEducation} </span>
-                    {education.fieldOfStudy && <span>in {education.fieldOfStudy}</span>}
-                </div>
-                <div className={"semi-dark-default-text"}>
-                    <span>{education.schoolName}</span>
-                    {education.schoolName && education.city && <span>&nbsp;-&nbsp;</span>}
-                    <span>{education.city}</span>
-                </div>
-                <div className={"between-lines-spacing"}/>
-                {fromYear && 
-                <div>
-                    <div className={"light-dark-default-text"}>
-                        <span>{fromMonth} {fromYear} to {toMonth} {toYear}</span>
+        <div>
+            <div className={"short-education-info-container"}>
+                {savingInfo && <div className={"saving-in-progress-surface"}></div>}
+                <div className={"education-review-block"}>
+                    <div className={"level-of-education"}>
+                        <span>{education.levelOfEducation} </span>
+                        {education.fieldOfStudy && <span>in {education.fieldOfStudy}</span>}
                     </div>
-                    <div className={"between-lines-spacing"}></div>
-                </div>}
-                <div>
-                    {!education.fieldOfStudy &&
-                        <button className={"add-info-button"} onClick={navigateToEditEducationPage}>
-                            Add field of study
-                        </button>}
-                    {!education.city &&
-                        <button className={"add-info-button"} onClick={navigateToEditEducationPage}>
-                            Add location
-                        </button>}
-                    {!education.schoolName &&
-                        <button className={"add-info-button"} onClick={navigateToEditEducationPage}>
-                            Add school
-                        </button>}
-                    {!convertedFrom &&
-                        <button className={"add-info-button"} onClick={navigateToEditEducationPage}>
-                            Add dates
-                        </button>}
+                    <div className={"semi-dark-default-text"}>
+                        <span>{education.schoolName}</span>
+                        {education.schoolName && education.city && <span>&nbsp;-&nbsp;</span>}
+                        <span>{education.city}</span>
+                    </div>
+                    <div className={"between-lines-spacing"}/>
+                    {fromYear &&
+                        <div>
+                            <div className={"light-dark-default-text"}>
+                                <span>{fromMonth} {fromYear} to {toMonth} {toYear}</span>
+                            </div>
+                            <div className={"between-lines-spacing"}></div>
+                        </div>}
+                    <div>
+                        {!education.fieldOfStudy &&
+                            <button className={"add-info-button"} onClick={navigateToEditEducationPage}>
+                                Add field of study
+                            </button>}
+                        {!education.city &&
+                            <button className={"add-info-button"} onClick={navigateToEditEducationPage}>
+                                Add location
+                            </button>}
+                        {!education.schoolName &&
+                            <button className={"add-info-button"} onClick={navigateToEditEducationPage}>
+                                Add school
+                            </button>}
+                        {!convertedFrom &&
+                            <button className={"add-info-button"} onClick={navigateToEditEducationPage}>
+                                Add dates
+                            </button>}
+                    </div>
                 </div>
-            </div>
-            <div className={"small-buttons-container"}>
-                <button className={"small-interaction-button"} onClick={navigateToEditEducationPage}>
-                    <FontAwesomeIcon icon={faPen}/>
-                </button>
-                <button className={"small-interaction-button"} onClick={deleteEducation}>
-                    <FontAwesomeIcon icon={faTrash}/>
-                </button>
-            </div>
+                <div className={"small-buttons-container"}>
+                    <button className={"small-interaction-button"} onClick={navigateToEditEducationPage}>
+                        <FontAwesomeIcon icon={faPen}/>
+                    </button>
+                    <button className={"small-interaction-button"} onClick={deleteEducation}>
+                        <FontAwesomeIcon icon={faTrash}/>
+                    </button>
+                </div>
 
-        </div>)
+            </div>
+        </div>
+    )
 };
 
 export default EducationReview;

@@ -113,6 +113,8 @@ public class JobControllerTests : IntegrationTest
             Location = "New York",
             JobType = new List<JobTypes> { JobTypes.FullTime, },
             Salary = 80000.0m,
+            SalaryRate = "per year",
+            ShowPayBy = "minimal amount",
             Schedule = new List<Schedules> { Schedules.MondayToFriday },
             Benefits = new List<EmployeeBenefits> {},
             ContactEmail = "hr@gmail.com",

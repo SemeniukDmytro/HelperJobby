@@ -8,13 +8,16 @@ import {AuthProvider} from "./contexts/AuthContext";
 import JobSeekerProfilePage from "./Pages/JobSeekerProfilePage/JobSeekerProfilePage";
 import EditContactInfoPage from "./Pages/EditContactInfoPage/EditContactInfoPage";
 import SearchJobResultsPage from "./Pages/SearchJobResultsPage/SearchJobResultsPage";
-import ResumeNamePage from "./Pages/BuildResumePages/ResumeNamePage/ResumeNamePage";
-import ResumePhonePage from "./Pages/BuildResumePages/ResumePhoneNumberPage/ResumePhonePage";
 import BuildResumePage from "./Pages/BuildResumePages/BuildResumePage/BuildResumePage";
-import ResumeAddressPage from "./Pages/BuildResumePages/ResumeAddressPage/ResumeAddressPage";
 import AddEducationPage from "./Pages/BuildResumePages/AddEducationPage/AddEducationPage";
-import ResumeEducationPage from "./Pages/BuildResumePages/ResumeEducationPage/ResumeEducationPage";
 import EditEducationPage from "./Pages/BuildResumePages/EditEducationPage/EditEducationPage";
+import ResumeAddressPage from "./Pages/BuildResumePages/AddAddressPage/ResumeAddressPage";
+import WorkExperiencePage from "./Pages/BuildResumePages/WorkExperiencePage/WorkExperiencePage";
+import AddWorkExperiencePage from "./Pages/BuildResumePages/AddWorkExperiencePage/AddWorkExperiencePage";
+import AddPhonePage from "./Pages/BuildResumePages/AddPhonePage/AddPhonePage";
+import AddNamePage from "./Pages/BuildResumePages/AddNamePage/AddNamePage";
+import EducationPage from "./Pages/BuildResumePages/EducationPage/EducationPage";
+
 
 function App() {
   return (
@@ -26,12 +29,14 @@ function App() {
                 <Route path={"/my-profile"} element={<JobSeekerProfilePage/>}/>
                 <Route path={"/edit-contact"} element={<EditContactInfoPage/>}/>
                 <Route path={"/build"} element={<BuildResumePage/>}>
-                    <Route path={"name"} element={<ResumeNamePage/>}/>
-                    <Route path={"phone"} element={<ResumePhonePage/>}/>
+                    <Route path={"name"} element={<AddNamePage/>}/>
+                    <Route path={"phone"} element={<AddPhonePage/>}/>
                     <Route path={"address"} element={<ResumeAddressPage/>}/>
-                    <Route path={"education"} element={<ResumeEducationPage/>}/>
+                    <Route path={"education"} element={<EducationPage/>}/>
                     <Route path={"education/add"} element={<AddEducationPage/>}/>
                     <Route path={"education/:id"} element={<EditEducationPage/>}/>
+                    <Route path={"experience"} element={<WorkExperiencePage/>}/>
+                    <Route path={"experience/add"} element={<AddWorkExperiencePage/>}/>
                 </Route>
             </Route>
 

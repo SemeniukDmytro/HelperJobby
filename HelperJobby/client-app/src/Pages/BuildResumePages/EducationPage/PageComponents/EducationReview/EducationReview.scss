@@ -2,6 +2,7 @@
 
 .short-education-info-container{
   display: flex;
+  position: relative;
   border: 1px solid global-variables.$neutral-color-400;
   border-radius: 0.5rem;
   padding: 1rem;

@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import './ResumeAddressComponent.scss';
+import './AddAddressComponent.scss';
 import useResumeBuild from "../../../../../hooks/useResumeBuild";
 import {useAuth} from "../../../../../hooks/useAuth";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
@@ -10,8 +10,7 @@ import AutocompleteResultsWindow
     from "../../../../EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
 import {AutocompleteWindowTypes} from "../../../../../enums/AutocompleteWindowTypes";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
-import {createUpdateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
-import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
+import {updateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {useNavigate} from "react-router-dom";
 import {UpdateAddressDTO} from "../../../../../DTOs/addressDTOs/UpdateAddressDTO";
@@ -21,7 +20,7 @@ import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAcco
 
 interface ResumeAddressComponentProps {}
 
-const ResumeAddressComponent: FC<ResumeAddressComponentProps> = () => {
+const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
     const {setProgressPercentage, setSaveFunc,
         setShowDialogWindow} = useResumeBuild();
     const {authUser} = useAuth();
@@ -88,7 +87,7 @@ const ResumeAddressComponent: FC<ResumeAddressComponentProps> = () => {
                 city,
                 postalCode
             }
-            const updatedJobSeeker = createUpdateJobSeekerDTO(jobSeeker!.firstName,
+            const updatedJobSeeker = updateJobSeekerDTO(jobSeeker!.firstName,
                 jobSeeker!.lastName, jobSeeker!.phoneNumber, updatedAddress);
             const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
             setJobSeeker((prevState) => {
@@ -179,4 +178,4 @@ const ResumeAddressComponent: FC<ResumeAddressComponentProps> = () => {
     )
 }
 
-export default ResumeAddressComponent;
+export default AddAddressComponent;

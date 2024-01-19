@@ -4,8 +4,6 @@ using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.AuthRelatedModels;
 using ApplicationDomain.Models;
 using AutoMapper;
-using FluentValidation;
-using HelperJobby.DTOs.AuthModels;
 using HelperJobby.DTOs.User;
 using HelperJobby.Validators;
 using Microsoft.AspNetCore.Authorization;

@@ -21,7 +21,6 @@ export function JobSeekerProvider({children} : {children : ReactNode}){
     const {authUser} = useAuth();
     
     const jobSeekerService = new JobSeekerAccountService();
-    
     const fetchJobSeeker = async  () => {
         try {  
             if (jobSeeker === null && authUser){

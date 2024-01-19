@@ -1,5 +1,5 @@
 import React, {FC, useEffect} from 'react';
-import './ResumeEducationComponent.scss';
+import './EducationComponent.scss';
 import useResumeBuild from "../../../../../hooks/useResumeBuild";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
 import EducationReview from "../EducationReview/EducationReview";
@@ -11,23 +11,36 @@ import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
 interface ResumeEducationComponentProps {}
 
-const ResumeEducationComponent: FC<ResumeEducationComponentProps> = () => {
-    const {setProgressPercentage} = useResumeBuild();
+const EducationComponent: FC<ResumeEducationComponentProps> = () => {
+    const {setProgressPercentage, setSaveFunc} = useResumeBuild();
     const {jobSeeker} = useJobSeeker();
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (jobSeeker?.resume == null){
+            navigate("/build/education/add")
+        }
         if (jobSeeker!.resume!.educations.length == 0){
             navigate("/build/education/add")
         }
-        setProgressPercentage(ProgressPercentPerPage * 4)
+        setProgressPercentage(ProgressPercentPerPage * 4);
+        setSaveFunc(() => customSaveFunc)
     }, []);
 
     function addAnotherEducation() {
-        
+        navigate("/build/education/add")
+    }
+    
+    async function customSaveFunc(){
+        navigate("my-profile")
+    }
+
+    function navigateToWorkExperiencePage() {
+        navigate("/build/experience")
     }
 
     return (
+       jobSeeker?.resume == null ? <></> :
         <>
             <div className={"build-page-header"}>
                 Review education
@@ -45,7 +58,7 @@ const ResumeEducationComponent: FC<ResumeEducationComponentProps> = () => {
                     <span>Add another education</span>
                 </button>
             </div>
-            <div className={"reviews-and-buttons-divider"}>
+            <div className={"reviews-and-buttons-divider"} onClick={navigateToWorkExperiencePage}>
                 <button className={"blue-button"}>
                     Continue
                 </button>
@@ -54,4 +67,4 @@ const ResumeEducationComponent: FC<ResumeEducationComponentProps> = () => {
     )
 }
 
-export default ResumeEducationComponent;
+export default EducationComponent;

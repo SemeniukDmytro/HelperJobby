@@ -1,10 +1,10 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import './ResumePhoneComponent.scss';
+import './AddPhoneComponent.scss';
 import useResumeBuild from "../../../../../hooks/useResumeBuild";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
-import {createUpdateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
+import {updateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
 import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountService";
@@ -15,7 +15,7 @@ import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAcco
 
 interface ResumePhoneComponentProps {}
 
-const ResumePhoneComponent: FC<ResumePhoneComponentProps> = () => {
+const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
     const [savingInfo, setSavingInfo] = useState(false);
     const {setProgressPercentage, setSaveFunc } = useResumeBuild();
     const jobSeekerService = new  JobSeekerAccountService();
@@ -46,7 +46,7 @@ const ResumePhoneComponent: FC<ResumePhoneComponentProps> = () => {
     async function updateJobSeekerInfo(resultPageURI : string){
         try {
             setSavingInfo(true);
-            const updatedJobSeeker = createUpdateJobSeekerDTO(jobSeeker!.firstName,
+            const updatedJobSeeker = updateJobSeekerDTO(jobSeeker!.firstName,
                 jobSeeker!.lastName, phoneNumber, jobSeeker!.address);
             const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
             setJobSeeker((prevState) => {
@@ -101,4 +101,4 @@ const ResumePhoneComponent: FC<ResumePhoneComponentProps> = () => {
     )
 }
 
-export default ResumePhoneComponent;
+export default AddPhoneComponent;
