@@ -67,7 +67,6 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
 
     async function CustomSaveFunc() {
         await handleEducationCreation("/my-profile", true)
-
     }
 
     async function addEducation(e: React.MouseEvent<HTMLButtonElement>) {
@@ -157,6 +156,14 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
         } finally {
             setSavingProcess(false);
         }
+    }
+    
+    function navigateToEducationPage(){
+        navigate("/build/education")
+    }
+    
+    function navigateToWorkExperiencePage(){
+        navigate("/build/experience")
     }
 
     function fillCreateEducationDTO() {
@@ -271,9 +278,15 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                             <span>Save</span>
                         }
                     </button>
-                    {!education && <button className={"skip-form-button"} onClick={fillCreateEducationDTO}>
+                    {!education ? 
+                    <button className={"skip-form-button"} onClick={navigateToWorkExperiencePage}>
                         Skip
-                    </button>}
+                    </button>
+                        :
+                    <button className={"skip-form-button"} onClick={navigateToEducationPage}>
+                        Cancel
+                    </button>
+                    }
                 </div>
             </form>
         </>

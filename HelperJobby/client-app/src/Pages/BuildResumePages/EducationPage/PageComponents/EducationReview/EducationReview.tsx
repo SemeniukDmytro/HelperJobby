@@ -65,10 +65,10 @@ const EducationReview: FC<EducationReviewProps> = ({education}) => {
 
     return (
         <div>
-            <div className={"short-education-info-container"}>
+            <div className={"review-info-container"}>
                 {savingInfo && <div className={"saving-in-progress-surface"}></div>}
-                <div className={"education-review-block"}>
-                    <div className={"level-of-education"}>
+                <div className={"review-block"}>
+                    <div className={"required-info"}>
                         <span>{education.levelOfEducation} </span>
                         {education.fieldOfStudy && <span>in {education.fieldOfStudy}</span>}
                     </div>
@@ -77,13 +77,11 @@ const EducationReview: FC<EducationReviewProps> = ({education}) => {
                         {education.schoolName && education.city && <span>&nbsp;-&nbsp;</span>}
                         <span>{education.city}</span>
                     </div>
-                    <div className={"between-lines-spacing"}/>
                     {fromYear &&
                         <div>
                             <div className={"light-dark-default-text"}>
                                 <span>{fromMonth} {fromYear} to {toMonth} {toYear}</span>
                             </div>
-                            <div className={"between-lines-spacing"}></div>
                         </div>}
                     <div>
                         {!education.fieldOfStudy &&

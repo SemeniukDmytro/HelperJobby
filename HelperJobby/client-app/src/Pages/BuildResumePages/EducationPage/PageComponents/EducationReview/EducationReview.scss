@@ -1,20 +1,24 @@
 @use "../../../../../Assets/scssSharedStyles/global-variables";
 
-.short-education-info-container{
+.review-info-container{
   display: flex;
   position: relative;
   border: 1px solid global-variables.$neutral-color-400;
   border-radius: 0.5rem;
   padding: 1rem;
   margin-bottom: 0.5rem;
+  overflow-wrap: break-word;
 }
 
-.education-review-block{
-  width: 100%;
+.review-block{
+  box-sizing: border-box;
+  margin-block: 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
   flex: 1 1 0%;
 }
 
-.level-of-education{
+.required-info{
   margin-top: 0.5rem;
   font-weight: 700;
   color: global-variables.$neutral-color-1000;
@@ -38,6 +42,7 @@
   transition: 0.2s;
   color: global-variables.$neutral-color-1000;
   font-size: 1rem;
+  min-width: 2.75rem;
   border-radius: 0.25rem;
   &:hover{
     background-color: global-variables.$light-blue;
@@ -77,17 +82,22 @@
 
 .light-dark-default-text{
   color: global-variables.$neutral-color-700;
-  font-size: 0.9375rem;
+  line-height: 1.5;
+  font-size: 0.875rem;
 }
 
 .semi-dark-default-text{
   color: global-variables.$neutral-color-800;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   line-height: 1.5;
+  overflow-wrap: break-word;
 }
 
-.between-lines-spacing{
-  margin-bottom: 0.25rem;
+.dark-default-text{
+  color: global-variables.$neutral-color-900;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
 }
 
 .icon-right-margin{

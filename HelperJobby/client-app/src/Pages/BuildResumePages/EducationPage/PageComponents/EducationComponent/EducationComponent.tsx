@@ -46,7 +46,7 @@ const EducationComponent: FC<ResumeEducationComponentProps> = () => {
                 Review education
             </div>
             {jobSeeker!.resume!.educations.length > 0 &&
-                <div className={"education-reviews"}>
+                <div>
                     {jobSeeker!.resume!.educations.map((education, index) => (
                         <EducationReview key={index} education={education}/>
                     )) }
@@ -63,6 +63,7 @@ const EducationComponent: FC<ResumeEducationComponentProps> = () => {
                     Continue
                 </button>
             </div>
+            <div className={"bottom-page-margin"}/>
         </>
     )
 }

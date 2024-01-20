@@ -6,5 +6,5 @@ export interface CreateUpdateWorkExperienceDTO {
     from?: string;
     to?: string;
     currentlyWorkHere: boolean;
-    description: string;
+    description?: string;
 }

@@ -48,10 +48,11 @@
       <Folder Include="client-app\src\Pages\BuildResumePages\AddWorkExperiencePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\EditEducationPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\AddAddressPage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\BuildResumePages\EditWorkExperiencePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\EducationPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\AddNamePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\AddPhonePage\PageComponents\" />
-      <Folder Include="client-app\src\Pages\BuildResumePages\ResumeSkillsPage\" />
+      <Folder Include="client-app\src\Pages\BuildResumePages\SkillsPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\WorkExperiencePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\EditContactInfoPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\HomePage\PageComponents\" />

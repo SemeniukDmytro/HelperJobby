@@ -159,29 +159,33 @@ const TimePeriod: FC<TimePeriodProps> = (props) => {
                 <span className={"error-text"}>{invalidYearFromError}</span>
             </div>}
             <div className={"input-field-spacing"}></div>
-            {!props.currentlyEnrolledSelected && <>
-                <div className={"time-stamp-container"}>
-                    <div className={"double-select-label"}>To</div>
-                    <div className={"double-select-container"}>
-                        <DateSelector
-                            selectValue={props.toMonth}
-                            setSelectValue={props.setToMonth}
-                            timeStamp={TimeStamps.Month}/>
-                        <DateSelector
-                            selectValue={props.toYear}
-                            setSelectValue={props.setToYear}
-                            timeStamp={TimeStamps.Year}
-                            firstYear={toYearFirstValue}
-                            lastYear={getCurrentYear() + 15}/>
+            <div className={"double-select-label"}>To</div>
+            {!props.currentlyEnrolledSelected ?
+                (<>
+                    <div className={"time-stamp-container"}>
+                        <div className={"double-select-container"}>
+                            <DateSelector
+                                selectValue={props.toMonth}
+                                setSelectValue={props.setToMonth}
+                                timeStamp={TimeStamps.Month}/>
+                            <DateSelector
+                                selectValue={props.toYear}
+                                setSelectValue={props.setToYear}
+                                timeStamp={TimeStamps.Year}
+                                firstYear={toYearFirstValue}
+                                lastYear={getCurrentYear() + 15}/>
+                        </div>
                     </div>
-                </div>
-                {(monthWithoutYearToError || invalidYearToError) && <div className={"error-box"}>
-                    <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
-                    <span className={"error-text"}>{monthWithoutYearToError}</span>
-                    <span className={"error-text"}>{invalidYearToError}</span>
-                </div>}
-                <div className={"input-field-spacing"}></div>
-            </>}
+                    {(monthWithoutYearToError || invalidYearToError) && <div className={"error-box"}>
+                        <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
+                        <span className={"error-text"}>{monthWithoutYearToError}</span>
+                        <span className={"error-text"}>{invalidYearToError}</span>
+                    </div>}
+                </>)
+                :
+                (<span className={"light-dark-default-text"}>Present</span>)
+            }
+            <div className={"input-field-spacing"}></div>
         </>
     )
 }
