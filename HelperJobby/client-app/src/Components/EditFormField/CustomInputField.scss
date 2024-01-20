@@ -32,6 +32,9 @@
     outline: none;
     border-color: global-variables.$dark-blue;
   }
+  &:hover{
+    border-color: global-variables.$dark-blue;
+  }
 }
 
 .field-focus{

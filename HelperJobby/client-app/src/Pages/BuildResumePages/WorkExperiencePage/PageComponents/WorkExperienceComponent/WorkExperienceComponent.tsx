@@ -61,9 +61,8 @@ const WorkExperienceComponent: FC<WorkExperienceComponentProps> = () => {
                         Continue
                     </button>
                 </div>
-                <div className={"bottom-page-margin"}>
-                    
-                </div>
+                <div className={"bottom-page-margin"}/>
+                
             </>
     )
 }

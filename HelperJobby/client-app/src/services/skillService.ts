@@ -21,4 +21,13 @@ export class SkillService {
     public async deleteSkill(skillId: number): Promise<void> {
         return await this.customFetchService.delete<void>(`${this.baseURI}/${skillId}`);
     }
+
+    public async addSkillsToResume(resumeId: number, skillsDTOs: CreateSkillDTO[]): Promise<SkillDTO[]> {
+        const skills = await this.customFetchService.post<SkillDTO[]>(`${this.baseURI}/${resumeId}/add-skills`, skillsDTOs);
+        return skills;
+    }
+
+    public async removeSkillsFromResume(resumeId: number): Promise<void> {
+        await this.customFetchService.delete<void>(`${this.baseURI}/${resumeId}/remove-skills`);
+    }
 }

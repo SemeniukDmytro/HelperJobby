@@ -74,5 +74,23 @@ namespace HelperJobby.Controllers
             }
         }
 
+        [HttpPost("{resumeId}/add-skills")]
+        public async Task<IEnumerable<SkillDTO>> AddSkillsToResume(int resumeId, [FromBody] IEnumerable<CreateSkillDTO> skillsDTOs)
+        {
+            var skills = _mapper.Map<IEnumerable<Skill>>(skillsDTOs).ToList();
+            skills = await _skillService.AddSkillsToResume(skills, resumeId);
+            var savedSkills = await _skillCommandRepository.AddSkillsToResume(skills);
+            return _mapper.Map<IEnumerable<SkillDTO>>(savedSkills);
+
+        }
+        
+        [HttpDelete("{resumeId}/remove-skills")]
+        public async Task RemoveSkillsFromResume(int resumeId)
+        {
+            await _skillService.RemoveSkillsFromResume(resumeId);
+            await _skillCommandRepository.RemoveResumeSkills(resumeId);
+
+        }
+
     }
 }

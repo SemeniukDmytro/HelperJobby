@@ -57,4 +57,26 @@ public class SkillService : ISkillService
 
         return (skillEntity, isInvalidResume);
     }
+
+    public async Task<List<Skill>> AddSkillsToResume(List<Skill> skills, int resumeId)
+    {
+        var currentUserId = _userService.GetCurrentUserId();
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
+        if (resumeId != jobSeekerAccount.Resume.Id)
+        {
+            throw new ForbiddenException("You can not add skills to other person resume");
+        }
+        skills.ForEach(s => s.ResumeId = resumeId);
+        return skills;
+    }
+
+    public async Task RemoveSkillsFromResume(int resumeId)
+    {
+        var currentUserId = _userService.GetCurrentUserId();
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
+        if (resumeId != jobSeekerAccount.Resume.Id)
+        {
+            throw new ForbiddenException("You can not remove skills from other person resume");
+        }
+    }
 }
