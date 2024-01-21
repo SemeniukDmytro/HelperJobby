@@ -19,6 +19,8 @@ import AddNamePage from "./Pages/BuildResumePages/AddNamePage/AddNamePage";
 import EducationPage from "./Pages/BuildResumePages/EducationPage/EducationPage";
 import EditWorkExperiencePage from "./Pages/BuildResumePages/EditWorkExperiencePage/EditWorkExperiencePage";
 import SkillsPage from "./Pages/BuildResumePages/SkillsPage/SkillsPage";
+import PreviewPage from "./Pages/BuildResumePages/PreviewPage/PreviewPage";
+import PreviewAddSkillPage from "./Pages/BuildResumePages/PreviewAddSkillPage/PreviewAddSkillPage";
 
 
 function App() {
@@ -41,6 +43,8 @@ function App() {
                     <Route path={"experience/add"} element={<AddWorkExperiencePage/>}/>
                     <Route path={"experience/:id"} element={<EditWorkExperiencePage/>}/>
                     <Route path={"skills"} element={<SkillsPage/>}/>
+                    <Route path={"preview"} element={<PreviewPage/>}/>
+                    <Route path={"preview/skills/add"} element={<PreviewAddSkillPage/>}/>
                 </Route>
             </Route>
 

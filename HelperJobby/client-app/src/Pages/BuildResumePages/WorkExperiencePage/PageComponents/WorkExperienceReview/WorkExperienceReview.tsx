@@ -67,7 +67,7 @@ const WorkExperienceReview: FC<WorkExperienceReviewProps> = ({workExperience}) =
 
     return (
         <div>
-            <div className={"review-info-container"}>
+            <div className={"short-info-container"}>
                 {savingInfo && <div className={"saving-in-progress-surface"}></div>}
                 <div className={"review-block"}>
                     <div className={"required-info"}>

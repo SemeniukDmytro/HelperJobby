@@ -14,6 +14,8 @@ import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {ResumeService} from "../../../../../services/resumeService";
 import {CreateResumeDTO} from "../../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
 import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
+import {useNavigate} from "react-router-dom";
+import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 
 interface SkillsComponentProps {}
 
@@ -22,6 +24,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const skillService = new SkillService();
     const resumeService = new ResumeService();
+    const navigate = useNavigate();
     
     const [currentSkill, setCurrentSkill] = useState("");
     const [skills, setSkills] = useState<CreateSkillDTO[]>([]);
@@ -34,6 +37,10 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
             setSkills(jobSeeker.resume.skills);
         }
     }, []);
+
+    useEffect(() => {
+        setSaveFunc(() => customSaveFunc);
+    }, [skills]);
 
     function addSkill() {
         const skillToAdd : CreateSkillDTO = {
@@ -52,15 +59,20 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
             return updatedSkills;
         });
     }
-
+    
+    async function customSaveFunc(){
+        await handleSkillsSaving("/my-profile")
+    }
+    
     async function saveSkills() {
-        await handleSkillsSaving("/build/review")
+        handleSkillsSaving("/build/preview");   
     }
     
     async function handleSkillsSaving(nextPageUrl : string)
     {
+        setSavingProcess(true);
         if (jobSeeker?.resume){
-            await addToExistingResume();
+            await removeSkillsFromExistingResume();
         }
         else {
             await createNewResume();
@@ -70,7 +82,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
 
     useEffect(() => {
         if (skillsRemoved){
-            const retrievedSkills = skillService.addSkillsToResume(jobSeeker!.resume!.id, skills);
+            addNewSkillsResume();
         }
         
     }, [skillsRemoved]);
@@ -95,17 +107,34 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
             setSavingProcess(false);
         }
     }
-    
-    async function addToExistingResume(){
+
+    async function addNewSkillsResume(){
         try {
-            await skillService.removeSkillsFromResume(jobSeeker!.resume!.id);
+            const retrievedSkills = await skillService.addSkillsToResume(jobSeeker!.resume!.id, skills);
+            const updatedJobSeeker = jobSeeker;
+            if (updatedJobSeeker?.resume){
+                updatedJobSeeker.resume.skills = retrievedSkills;
+            }
+            setJobSeeker(updatedJobSeeker);
         }
         catch (err){
             logErrorInfo(err)
         }
         finally {
             setSavingProcess(false);
+            
+        }
+    }
+    
+    async function removeSkillsFromExistingResume(){
+        try {
+            await skillService.removeSkillsFromResume(jobSeeker!.resume!.id);
             setSkillsRemoved(true);
+        }
+        catch (err){
+            logErrorInfo(err)
+        }
+        finally {
         }
     }
 
@@ -120,7 +149,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
                         <SkillContainer key={index} skillName={skill.name} removeSkill={() => removeSkill(index)}/>
                     )))
                     :
-                    <div className={"no-skills-container"}>
+                    <div className={"no-resume-info-container"}>
                         Your skills will appear here
                     </div>
                 }
@@ -137,9 +166,13 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
                     <FontAwesomeIcon icon={faPlus} />
                 </button>
             </div>
-            <div className={"reviews-and-buttons-divider"} onClick={saveSkills}>
-                <button className={"blue-button"}>
-                    Continue
+            <div className={"reviews-and-buttons-divider"} >
+                <button className={"blue-button min-button-size-with-spinner"} onClick={saveSkills}>
+                    {savingProcess ?
+                        <WhiteLoadingSpinner/>
+                        :
+                        <span>Continue</span>
+                    }
                 </button>
             </div>
             <div className={"bottom-page-margin"}/>

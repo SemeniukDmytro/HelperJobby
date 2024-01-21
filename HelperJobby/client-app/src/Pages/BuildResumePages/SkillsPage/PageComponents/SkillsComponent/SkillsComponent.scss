@@ -1,8 +1,10 @@
 @use "../../../../../Assets/scssSharedStyles/global-variables";
 
-.no-skills-container{
+.no-resume-info-container{
   box-sizing: border-box;
   min-inline-size: 0px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -18,7 +20,8 @@
   width: 100%;
   background-color: global-variables.$neutral-color-500;
   height: 1px;
-  margin: 3rem 0;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
 }
 
 .add-skill-container{
@@ -52,4 +55,9 @@
     opacity: 0.4;
     pointer-events: none;
   }
+}
+
+.min-button-size-with-spinner{
+  min-width: 94px;
+  min-height: 40px;
 }

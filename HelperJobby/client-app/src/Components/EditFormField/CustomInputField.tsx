@@ -41,7 +41,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
         else {
             setIsInvalidValue(false)
         }
-    }, [inputFieldValue]);
+    }, [inputFieldValue, inputRef?.current?.focus()]);
 
     useEffect(() => {
         if (notShowErrorInitially){

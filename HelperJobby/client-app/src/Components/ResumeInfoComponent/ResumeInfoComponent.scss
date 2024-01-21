@@ -1,0 +1,69 @@
+@use "../../Assets/scssSharedStyles/global-variables";
+
+.resume-content-separation-line{
+  width: 100%;
+  height: 1px;
+  background-color: global-variables.$neutral-color-400;
+}
+
+.short-job-seeker-info-container{
+  display: flex;
+  flex-direction: row;
+}
+
+.short-info-content{
+  flex: 1 1 0%;
+  flex-grow: 1;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  min-width: 0px;
+}
+
+.border-remove{
+  border: none;
+  border-radius: unset;
+}
+
+.content-start-container{
+  display: flex;
+  box-sizing: border-box;
+  flex-grow: 1;
+  min-width: 0px;
+  position: relative;
+  margin: -0.25rem -1rem 0px;
+}
+
+.small-margin-top{
+  margin-top: 0.25rem;
+}
+
+.small-header-text{
+  font-size: 1.25rem;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.gray-text{
+  line-height: 1.5;
+  font-size: 0.8375rem;
+  color: global-variables.$neutral-color-700;
+}
+
+.small-margin-bottom{
+  margin-bottom: 0.25rem;
+}
+
+.resume-block-header-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.medium-margin-right{
+  margin-right: 0.5rem;
+}
+
+.resume-info-block{
+  margin-bottom: 2rem;
+}

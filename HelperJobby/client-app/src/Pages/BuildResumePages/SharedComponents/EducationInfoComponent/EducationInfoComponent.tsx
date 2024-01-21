@@ -158,8 +158,8 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
         }
     }
     
-    function navigateToEducationPage(){
-        navigate("/build/education")
+    function cancelEditing(){
+        navigate(-1)
     }
     
     function navigateToWorkExperiencePage(){
@@ -283,7 +283,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                         Skip
                     </button>
                         :
-                    <button className={"skip-form-button"} onClick={navigateToEducationPage}>
+                    <button className={"skip-form-button"} onClick={cancelEditing}>
                         Cancel
                     </button>
                     }

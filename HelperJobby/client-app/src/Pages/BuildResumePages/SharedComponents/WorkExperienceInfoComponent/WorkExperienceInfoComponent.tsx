@@ -57,6 +57,9 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             descriptionInputRef.current.innerText = description;
         }
         setProgressPercentage(ProgressPercentPerPage * 5);
+        if (workExperience){
+            setPassedWorkExperienceValues();
+        }
     }, []);
 
     useEffect(() => {
@@ -80,8 +83,8 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
         navigate("/build/skills")
     }
 
-    function navigateToWorkExperiencePage() {
-        navigate("/build/experience")
+    function cancelEditing() {
+        navigate(-1);
     }
 
     async function addWorkExperience(e: React.MouseEvent<HTMLButtonElement>) {
@@ -322,7 +325,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                             Skip
                         </button>
                         :
-                        <button className={"skip-form-button"} onClick={navigateToWorkExperiencePage}>
+                        <button className={"skip-form-button"} onClick={cancelEditing}>
                             Cancel
                         </button>
                     }
