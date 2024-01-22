@@ -51,6 +51,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     const [currentlyWorkingHere, setCurrentlyWorkingHere] = useState(false);
     const [showCityAutoComplete, setShowCityAutoComplete] = useState(false);
     const [savingProcess, setSavingProcess] = useState(false);
+    const [validateJobTitle, setValidateJobTitle] = useState(false);
 
     useEffect(() => {
         if (descriptionInputRef.current) {
@@ -94,8 +95,10 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
 
     async function handleWorkExperienceCreation(nextPageRoute: string, isSaveAndExitAction: boolean) {
         if (!isNotEmpty(jobTitle)) {
+            setValidateJobTitle(true);
             if (jobTitleInputRef.current) {
                 jobTitleInputRef.current.focus();
+                jobTitleInputRef.current.scrollIntoView({block : "end", behavior: "smooth" });
                 if (isSaveAndExitAction) {
                     setShowDialogWindow(true);
                 }
@@ -251,7 +254,9 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                     inputFieldValue={jobTitle}
                     setInputFieldValue={setJobTitle}
                     inputRef={jobTitleInputRef}
-                    notShowErrorInitially={true}/>
+                    notShowErrorInitially={true}
+                    executeValidation={validateJobTitle}
+                    setExecuteValidation={setValidateJobTitle}/>
                 
                 <CustomInputField
                     fieldLabel={"Company"}

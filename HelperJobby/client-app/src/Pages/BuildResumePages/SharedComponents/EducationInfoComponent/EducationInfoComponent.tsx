@@ -52,7 +52,8 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
     const [toMonth, setToMonth] = useState('');
     const [toYear, setToYear] = useState('');
     const [showCityAutoComplete, setShowCityAutoComplete] = useState(false);
-    const [invalidValuesProvided, setInvalidValuesProvided] = useState(false);
+    const [invalidTimeProvided, setInvalidTimeProvided] = useState(false);
+    const [executeInputsValidation, setExecuteInputValidations] = useState(false);
 
 
     useEffect(() => {
@@ -77,15 +78,18 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
 
     async function handleEducationCreation(nextPageRoute: string, isSaveAndExitAction: boolean) {
         if (!isNotEmpty(levelOfEducation)) {
+            setExecuteInputValidations(true);
             if (levelOfEducationInputRef.current) {
                 levelOfEducationInputRef.current.focus();
+                levelOfEducationInputRef.current.scrollIntoView({block: "end", behavior: "smooth"});
                 if (isSaveAndExitAction) {
                     setShowDialogWindow(true);
                 }
                 return;
             }
         }
-        if (invalidValuesProvided) {
+        if (invalidTimeProvided) {
+            setExecuteInputValidations(true);
             if (isSaveAndExitAction) {
                 setShowDialogWindow(true);
             }
@@ -226,7 +230,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                                   inputFieldValue={levelOfEducation}
                                   setInputFieldValue={setLevelOfEducation}
                                   inputRef={levelOfEducationInputRef}
-                                  notShowErrorInitially={true}/>
+                                  notShowErrorInitially={true} executeValidation={executeInputsValidation} setExecuteValidation={setExecuteInputValidations}/>
 
                 <CustomInputField
                     fieldLabel={'Field of study'}
@@ -268,8 +272,8 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     setToMonth={setToMonth}
                     toYear={toYear}
                     setToYear={setToYear}
-                    invalidValuesProvided={invalidValuesProvided}
-                    setInvalidValuesProvided={setInvalidValuesProvided}/>
+                    invalidValuesProvided={invalidTimeProvided}
+                    setInvalidValuesProvided={setInvalidTimeProvided}/>
                 <div className={"form-buttons-row-container"}>
                     <button className={"submit-form-button"} onClick={addEducation}>
                         {savingProcess ?

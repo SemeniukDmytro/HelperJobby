@@ -166,8 +166,8 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
                     <FontAwesomeIcon icon={faPlus} />
                 </button>
             </div>
-            <div className={"reviews-and-buttons-divider"} >
-                <button className={"blue-button min-button-size-with-spinner"} onClick={saveSkills}>
+            <div className={"form-and-buttons-divider"} >
+                <button className={"blue-button min-continue-button-size"} onClick={saveSkills}>
                     {savingProcess ?
                         <WhiteLoadingSpinner/>
                         :

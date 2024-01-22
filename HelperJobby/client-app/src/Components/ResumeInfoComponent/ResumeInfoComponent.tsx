@@ -105,8 +105,8 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                 }
             </div>
             <div className={"resume-content-separation-line"}></div>
-            <div className={"reviews-and-buttons-divider"}>
-                <button className={"blue-button min-button-size-with-spinner"}>
+            <div className={"form-and-buttons-divider"}>
+                <button className={"blue-button min-continue-button-size"}>
                     <span>Continue</span>
                 </button>
             </div>

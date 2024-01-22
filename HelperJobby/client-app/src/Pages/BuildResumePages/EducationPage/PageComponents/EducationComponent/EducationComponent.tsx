@@ -52,13 +52,13 @@ const EducationComponent: FC<ResumeEducationComponentProps> = () => {
                     )) }
                 </div>
             }
-            <div className={"reviews-and-buttons-divider"}>
+            <div className={"form-and-buttons-divider"}>
                 <button className={"light-button"} onClick={addAnotherEducation}>
                     <FontAwesomeIcon className={"icon-right-margin"} icon={faPlus}/>
                     <span>Add another education</span>
                 </button>
             </div>
-            <div className={"reviews-and-buttons-divider"} onClick={navigateToWorkExperiencePage}>
+            <div className={"form-and-buttons-divider"} onClick={navigateToWorkExperiencePage}>
                 <button className={"blue-button"}>
                     Continue
                 </button>

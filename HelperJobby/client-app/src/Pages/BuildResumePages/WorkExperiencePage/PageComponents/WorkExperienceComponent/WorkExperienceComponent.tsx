@@ -50,13 +50,13 @@ const WorkExperienceComponent: FC<WorkExperienceComponentProps> = () => {
                         )) }
                     </div>
                 }
-                <div className={"reviews-and-buttons-divider"}>
+                <div className={"form-and-buttons-divider"}>
                     <button className={"light-button"} onClick={addAnotherWorkExperience}>
                         <FontAwesomeIcon className={"icon-right-margin"} icon={faPlus}/>
                         <span>Add another education</span>
                     </button>
                 </div>
-                <div className={"reviews-and-buttons-divider"} onClick={navigateSkillsPage}>
+                <div className={"form-and-buttons-divider"} onClick={navigateSkillsPage}>
                     <button className={"blue-button"}>
                         Continue
                     </button>

@@ -16,6 +16,8 @@ interface EditFormFieldProps {
     fieldSubtitle? : string;
     displayGoogleLogo? : boolean;
     notShowErrorInitially? : boolean;
+    executeValidation? : boolean;
+    setExecuteValidation? : Dispatch<SetStateAction<boolean>>;
 }
 
 const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue, 
@@ -26,7 +28,9 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
                                                setShowAutocompleteWindow,
                                                fieldSubtitle,
                                                displayGoogleLogo, 
-                                               notShowErrorInitially}) => {
+                                               notShowErrorInitially, 
+                                               executeValidation,
+                                               setExecuteValidation}) => {
     
     const [inputFocus, setInputFocus] = useState(false);
     const [isInvalidValue, setIsInvalidValue] = useState(false); 
@@ -34,20 +38,34 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
     const [showEraseJobBtn, setShowEraseButton] = useState(inputFieldValue.length > 0);
 
     useEffect(() => {
-        if (!isNotEmpty(inputFieldValue) && isRequired){
-            setIsInvalidValue(true);
-            setRequiredMessage(`${fieldLabel} is required`);
+        validateInputValue();
+        if (inputFieldValue.length>0){
+            setShowEraseButton(true);
         }
-        else {
-            setIsInvalidValue(false)
-        }
-    }, [inputFieldValue, inputRef?.current?.focus()]);
+    }, [inputFieldValue]);
 
     useEffect(() => {
         if (notShowErrorInitially){
             setIsInvalidValue(false);
         }
     }, []);
+
+    useEffect(() => {
+        if (executeValidation && setExecuteValidation){
+            validateInputValue();
+            setExecuteValidation(false);
+        }
+    }, [executeValidation]);
+    
+    function validateInputValue(){
+        if (!isNotEmpty(inputFieldValue) && isRequired){
+            setIsInvalidValue(true);
+            setRequiredMessage(`${fieldLabel} is required`);
+        }
+        else {
+            setIsInvalidValue(false);
+        }
+    }
 
     function changeInputFieldValue(e: ChangeEvent<HTMLInputElement>) {
         setIsInvalidValue(false);

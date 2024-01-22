@@ -17,6 +17,7 @@ import AutocompleteResultsWindow from "../AutocompleteResultsWindow/Autocomplete
 import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 import {isNotEmpty} from "../../../../utils/validationLogic/isNotEmptyString";
+import NavigateBackHeader from "../../../../Components/NavigateBackHeader/NavigateBackHeader";
 
 interface EditContactInfoFormProps {}
 
@@ -60,7 +61,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
             setJobSeekerValues(jobSeeker);
         }
     }, [jobSeeker]);
-    function goBackToJobSeekerProfile() {
+    function navigateToProfilePage() {
         navigate("/my-profile");
     }
 
@@ -141,7 +142,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
             }
         }
         finally {
-            goBackToJobSeekerProfile();
+            navigateToProfilePage();
         }
     }
 
@@ -165,14 +166,10 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                                                     showResult={showCityAutoComplete}
                                                                     setShowResult={setShowCityAutoComplete}
                                                                     autocompleteWindowType={AutocompleteWindowTypes.city}/>}
-                <div className={"edit-contact-layout"}>
+                <div className={"page-with-centered-content-layout"}>
                   
-                  <div className={"back-button-header"}>
-                      <button className={"back-button"} onClick={goBackToJobSeekerProfile}>
-                          <FontAwesomeIcon icon={faArrowLeftLong}/>
-                      </button>
-                  </div>
-                  <div className={"edit-form-layout"}>
+                  <NavigateBackHeader onBackButtonClick={navigateToProfilePage}/>
+                  <div className={"form-layout"}>
                       <form className={"edit-contact-form"} onSubmit={saveUpdatedInfo}>
                           <div className={"edit-contact-form-header"}>
                               <span>Contact information</span>

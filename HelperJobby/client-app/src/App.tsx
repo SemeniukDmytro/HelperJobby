@@ -44,8 +44,8 @@ function App() {
                     <Route path={"experience/:id"} element={<EditWorkExperiencePage/>}/>
                     <Route path={"skills"} element={<SkillsPage/>}/>
                     <Route path={"preview"} element={<PreviewPage/>}/>
-                    <Route path={"preview/skills/add"} element={<PreviewAddSkillPage/>}/>
                 </Route>
+                <Route path={"build/preview/skills/add"} element={<PreviewAddSkillPage/>}/>
             </Route>
 
             {/*public routes */}
