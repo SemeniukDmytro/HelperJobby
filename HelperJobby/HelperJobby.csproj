@@ -56,6 +56,11 @@
       <Folder Include="client-app\src\Pages\EditContactInfoPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\HomePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\JobSeekerProfilePage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\ResumePreviewPages\PreviewAddEducationPage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\ResumePreviewPages\PreviewAddWorkExperiencePage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\ResumePreviewPages\PreviewEditEducationPage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\ResumePreviewPages\PreviewEditWorkExperiencePage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\ResumePreviewPages\SharedComponents\" />
       <Folder Include="client-app\src\Pages\SearchJobResultsPage\PageComponents\" />
     </ItemGroup>
     

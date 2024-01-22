@@ -9,7 +9,7 @@ interface SkillContainerProps {
 }
 
 const SkillContainer: FC<SkillContainerProps> = ({skillName, removeSkill}) => (
-  
+    
     <div className={"skill-container"}>
         <div className={"skill-name"}>
             {skillName}

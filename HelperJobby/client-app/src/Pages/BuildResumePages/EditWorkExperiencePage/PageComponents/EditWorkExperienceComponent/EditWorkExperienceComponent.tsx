@@ -6,9 +6,11 @@ import {WorkExperienceDTO} from "../../../../../DTOs/resumeRelatedDTOs/WorkExper
 import WorkExperienceInfoComponent
     from "../../../SharedComponents/WorkExperienceInfoComponent/WorkExperienceInfoComponent";
 
-interface EditWorkExperienceComponentProps {}
+interface EditWorkExperienceComponentProps {
+    nextPagePath : string
+}
 
-const EditWorkExperienceComponent: FC<EditWorkExperienceComponentProps> = () => {
+const EditWorkExperienceComponent: FC<EditWorkExperienceComponentProps> = ({nextPagePath}) => {
     const [workExperience, setWorkExperience] = useState<WorkExperienceDTO | null>(null);
     const {id} = useParams();
     const navigate = useNavigate();
@@ -17,13 +19,13 @@ const EditWorkExperienceComponent: FC<EditWorkExperienceComponentProps> = () => 
 
     useEffect(() => {
         if (!id){
-            navigate("/build/experience")
+            navigate(nextPagePath)
             return;
         }
         const workExperience = jobSeeker?.resume?.workExperiences
             .find((we) => we.workExperienceId == Number.parseInt(id))
         if (!workExperience){
-            navigate("/build/experience")
+            navigate(nextPagePath)
             return;
         }
         setWorkExperience(workExperience);
@@ -34,7 +36,7 @@ const EditWorkExperienceComponent: FC<EditWorkExperienceComponentProps> = () => 
     return(
         loading ? <></>
             :
-            <WorkExperienceInfoComponent workExperience={workExperience!}/>
+            <WorkExperienceInfoComponent workExperience={workExperience!} nextPagePath={nextPagePath}/>
     )
 }
 

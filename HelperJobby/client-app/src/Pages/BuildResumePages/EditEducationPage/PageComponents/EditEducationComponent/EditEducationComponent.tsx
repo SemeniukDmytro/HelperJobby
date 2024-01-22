@@ -5,9 +5,11 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import EducationInfoComponent from "../../../SharedComponents/EducationInfoComponent/EducationInfoComponent";
 
-interface EditEducationComponentProps {}
+interface EditEducationComponentProps {
+    nextPagePath : string
+}
 
-const EditEducationComponent: FC<EditEducationComponentProps> = () => {
+const EditEducationComponent: FC<EditEducationComponentProps> = ({nextPagePath}) => {
     const [education, setEducation] = useState<EducationDTO | null>(null);
     const {id} = useParams();
     const navigate = useNavigate();
@@ -16,14 +18,14 @@ const EditEducationComponent: FC<EditEducationComponentProps> = () => {
     
     useEffect(() => {
         if (!id){
-            navigate("/build/education")
+            navigate(nextPagePath)
             return;
         }
         console.log(jobSeeker);
         const education = jobSeeker?.resume?.educations
             .find((ed) => ed.id == Number.parseInt(id))
         if (!education){
-            navigate("/build/education")
+            navigate(nextPagePath)
             return;
         }
         setEducation(education);
@@ -34,7 +36,7 @@ const EditEducationComponent: FC<EditEducationComponentProps> = () => {
     return(
         loading ? <></>
             :
-            <EducationInfoComponent education={education!}></EducationInfoComponent>
+            <EducationInfoComponent education={education!} nextPagePath={nextPagePath}></EducationInfoComponent>
     )
 }
 

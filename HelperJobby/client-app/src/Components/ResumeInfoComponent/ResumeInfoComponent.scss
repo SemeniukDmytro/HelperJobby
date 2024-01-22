@@ -58,6 +58,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 0.5rem;
 }
 
 .medium-margin-right{
@@ -66,4 +67,8 @@
 
 .resume-info-block{
   margin-bottom: 2rem;
+}
+
+.small-header-font-size{
+  font-size: 1.25rem;
 }

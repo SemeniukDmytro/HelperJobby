@@ -14,9 +14,10 @@ import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAcco
 
 interface EducationReviewProps {
     education: EducationDTO;
+    editPagePath? : string;
 }
 
-const EducationReview: FC<EducationReviewProps> = ({education}) => {
+const EducationReview: FC<EducationReviewProps> = ({education, editPagePath}) => {
     const [fromMonth, setFromMonth] = useState("");
     const [fromYear, setFromYear] = useState("");
     const [toMonth, setToMonth] = useState("");
@@ -38,7 +39,12 @@ const EducationReview: FC<EducationReviewProps> = ({education}) => {
     }, []);
 
     function navigateToEditEducationPage() {
-        navigate(`/build/education/${education.id}`);
+        if (editPagePath){
+            navigate(editPagePath);
+        }
+        else {
+            navigate(`/build/education/${education.id}`);
+        }
     }
 
     async function deleteEducation() {

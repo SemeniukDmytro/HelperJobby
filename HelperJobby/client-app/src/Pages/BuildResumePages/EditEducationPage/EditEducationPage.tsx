@@ -4,7 +4,7 @@ import EditEducationComponent from "./PageComponents/EditEducationComponent/Edit
 interface EditEducationPageProps {}
 
 const EditEducationPage: FC<EditEducationPageProps> = () => (
-  <EditEducationComponent/>
+  <EditEducationComponent nextPagePath={"/build/education"}/>
 );
 
 export default EditEducationPage;

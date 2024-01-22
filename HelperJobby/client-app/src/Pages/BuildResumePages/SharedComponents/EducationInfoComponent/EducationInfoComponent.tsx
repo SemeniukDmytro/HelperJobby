@@ -25,9 +25,10 @@ import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/Whit
 
 interface AddEducationComponentProps {
     education?: EducationDTO;
+    nextPagePath : string;
 }
 
-const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => {
+const EducationInfoComponent: FC<AddEducationComponentProps> = ({education, nextPagePath}) => {
     const {
         setProgressPercentage, setSaveFunc
         , setShowDialogWindow
@@ -72,7 +73,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
 
     async function addEducation(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
-        await handleEducationCreation("/build/education", false)
+        await handleEducationCreation(nextPagePath, false)
 
     }
 
@@ -163,7 +164,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
     }
     
     function cancelEditing(){
-        navigate(-1)
+        navigate(nextPagePath)
     }
     
     function navigateToWorkExperiencePage(){

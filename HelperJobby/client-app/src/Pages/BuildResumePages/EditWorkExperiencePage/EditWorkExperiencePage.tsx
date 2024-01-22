@@ -4,7 +4,7 @@ import EditWorkExperienceComponent from "./PageComponents/EditWorkExperienceComp
 interface EditWorkExperiencePageProps {}
 
 const EditWorkExperiencePage: FC<EditWorkExperiencePageProps> = () => (
-  <EditWorkExperienceComponent/>
+  <EditWorkExperienceComponent nextPagePath={"/build/experience"}/>
 );
 
 export default EditWorkExperiencePage;

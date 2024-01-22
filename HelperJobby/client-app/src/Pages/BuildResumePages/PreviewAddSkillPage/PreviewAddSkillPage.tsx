@@ -5,9 +5,7 @@ import {ResumeBuildContextProvider} from "../../../contexts/ResumeBuildContext";
 interface AddSkillPageProps {}
 
 const PreviewAddSkillPage: FC<AddSkillPageProps> = () => (
-    <ResumeBuildContextProvider>
-        <AddSkillComponent/>
-    </ResumeBuildContextProvider>
+    <AddSkillComponent/>
 );
 
 export default PreviewAddSkillPage;

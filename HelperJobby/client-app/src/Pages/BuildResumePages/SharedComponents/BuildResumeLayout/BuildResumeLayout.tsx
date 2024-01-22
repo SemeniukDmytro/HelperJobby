@@ -1,7 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC} from 'react';
 import './BuildResumeLayout.scss';
-import {Outlet, useNavigate} from 'react-router-dom';
-import { useJobSeeker } from '../../../../hooks/useJobSeeker';
+import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeftLong} from "@fortawesome/free-solid-svg-icons";
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
@@ -13,7 +12,7 @@ interface BuildResumeLayoutProps {}
 const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
     const {progressPercentage, saveFunc, showDialogWindow, setShowDialogWindow} = useResumeBuild();
     const navigate = useNavigate();
-    
+    const location = useLocation();
 
     function goBack() {
         navigate(-1)
@@ -27,7 +26,10 @@ const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
         navigate("/my-profile")
     }
 
+    const hasSomethingAfterPreview = location.pathname.match(/\/build\/preview\/(.+)/);
+
     return (
+         hasSomethingAfterPreview ? <Outlet/> :
          <>
              <DialogWindow 
                  showDialog={showDialogWindow} 
@@ -53,6 +55,7 @@ const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
                          </div>
                      </div>
                  </div>
+                 <div className={"header-with-content-spacing"}></div>
                  <div className={"resume-info-container"}>
                      <Outlet/>
                  </div>

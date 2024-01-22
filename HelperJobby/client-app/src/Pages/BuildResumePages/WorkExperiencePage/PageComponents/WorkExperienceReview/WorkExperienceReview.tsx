@@ -12,9 +12,10 @@ import {WorkExperienceService} from "../../../../../services/workExperienceServi
 
 interface WorkExperienceReviewProps {
     workExperience : WorkExperienceDTO;
+    editPagePath? : string;
 }
 
-const WorkExperienceReview: FC<WorkExperienceReviewProps> = ({workExperience}) => {
+const WorkExperienceReview: FC<WorkExperienceReviewProps> = ({workExperience, editPagePath}) => {
     const [fromMonth, setFromMonth] = useState("");
     const [fromYear, setFromYear] = useState("");
     const [toMonth, setToMonth] = useState("");
@@ -39,7 +40,12 @@ const WorkExperienceReview: FC<WorkExperienceReviewProps> = ({workExperience}) =
     }, []);
 
     function navigateToEditWorkExperiencePage() {
-        navigate(`/build/experience/${workExperience.workExperienceId}`)
+        if (editPagePath){
+            navigate(editPagePath)
+        }
+        else {
+            navigate(`/build/experience/${workExperience.workExperienceId}`)
+        }
     }
 
     async function deleteWorkExperience() {

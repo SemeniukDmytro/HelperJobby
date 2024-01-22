@@ -12,7 +12,7 @@ import {JobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/JobSeekerAccount
 import {UpdateJobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/UpdateJobSeekerAccountDTO";
 import CountrySelector from "../CountrySelector/CountrySelector";
 import EditEmail from "../EditEmail/EditEmail";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import AutocompleteResultsWindow from "../AutocompleteResultsWindow/AutocompleteResultsWindow";
 import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
@@ -33,6 +33,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     const [city, setCity] = useState("");
     const [postalCode, setPostalCode] = useState("");
     const [loading, setLoading] = useState(true);
+    const location = useLocation();
     
     const firstNameInputRef = useRef<HTMLInputElement>(null);
     const lastNameInputRef = useRef<HTMLInputElement>(null);
@@ -49,20 +50,28 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     let newJobSeekerInstanceWasLoaded = false;
     
     useEffect(() => {
-        setLoading(true);
         fetchJobSeeker();
-        setLoading(false);
     }, []);
 
     
 
     useEffect(() => {
+        if (jobSeeker){
+            setLoading(false);
+        }
         if (jobSeeker && !newJobSeekerInstanceWasLoaded){
             setJobSeekerValues(jobSeeker);
         }
     }, [jobSeeker]);
-    function navigateToProfilePage() {
-        navigate("/my-profile");
+    function navigateToNextPage() {
+        if (location.pathname.includes("/edit")){
+            navigate("/my-profile");
+            return;
+        }
+        else if (location.pathname.includes("/resume")){
+            navigate("/resume");
+            return;
+        }
     }
 
     
@@ -142,7 +151,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
             }
         }
         finally {
-            navigateToProfilePage();
+            navigateToNextPage();
         }
     }
 
@@ -168,7 +177,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                                                     autocompleteWindowType={AutocompleteWindowTypes.city}/>}
                 <div className={"page-with-centered-content-layout"}>
                   
-                  <NavigateBackHeader onBackButtonClick={navigateToProfilePage}/>
+                  <NavigateBackHeader onBackButtonClick={navigateToNextPage}/>
                   <div className={"form-layout"}>
                       <form className={"edit-contact-form"} onSubmit={saveUpdatedInfo}>
                           <div className={"edit-contact-form-header"}>

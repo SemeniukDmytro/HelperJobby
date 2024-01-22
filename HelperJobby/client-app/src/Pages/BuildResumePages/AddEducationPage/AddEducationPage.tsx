@@ -4,7 +4,7 @@ import EducationInfoComponent from "../SharedComponents/EducationInfoComponent/E
 interface AddEducationPageProps {}
 
 const AddEducationPage: FC<AddEducationPageProps> = () => (
-  <EducationInfoComponent/>
+  <EducationInfoComponent nextPagePath={"build/education"}/>
 );
 
 export default AddEducationPage;

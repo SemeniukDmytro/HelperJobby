@@ -15,7 +15,7 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
     const {authUser} = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    console.log(jobSeeker);
+
     useEffect(() => {
 
         const timeoutId = setTimeout(() => {
@@ -40,7 +40,7 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
     }
 
     function navigateToEditContactPage() {
-        navigate("/edit-contact")
+        navigate("/edit/contact")
     }
 
     function navigateToResumeBuild() {

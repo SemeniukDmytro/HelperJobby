@@ -1,23 +1,70 @@
-import React, { FC } from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import './ResumeInfoComponent.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPen, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faPen, faPlus, faTrashCan} from "@fortawesome/free-solid-svg-icons";
 import {useJobSeeker} from "../../hooks/useJobSeeker";
 import {useAuth} from "../../hooks/useAuth";
 import WorkExperienceReview
     from "../../Pages/BuildResumePages/WorkExperiencePage/PageComponents/WorkExperienceReview/WorkExperienceReview";
 import EducationReview from "../../Pages/BuildResumePages/EducationPage/PageComponents/EducationReview/EducationReview";
 import SkillContainer from "../../Pages/BuildResumePages/SkillsPage/PageComponents/SkillContainer/SkillContainer";
-import WhiteLoadingSpinner from "../WhiteLoadingSpinner/WhiteLoadingSpinner";
+import {useNavigate} from "react-router-dom";
+import {SkillDTO} from "../../DTOs/resumeRelatedDTOs/SkillDTO";
+import {SkillService} from "../../services/skillService";
+import {logErrorInfo} from "../../utils/logErrorInfo";
+import useResumeBuild from "../../hooks/useResumeBuild";
+import {ProgressPercentPerPage} from "../../Pages/BuildResumePages/SharedComponents/ProgressPercentPerPage";
 
 interface ResumeInfoComponentProps {}
 
 const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
-    const {jobSeeker} = useJobSeeker();
+    const {setProgressPercentage, setSaveFunc} = useResumeBuild();
+    const {jobSeeker, setJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
+    const skillService = new SkillService();
+    const navigate = useNavigate();
+    const [numberOfSkillToRemove, setNumberOfSkillToRemove] = useState<number | null>(null);
 
-    function removeResumeSkill() {
-        
+    useEffect(() => {
+        setProgressPercentage(ProgressPercentPerPage*7);
+        setSaveFunc(() => navigateToProfilePage)
+    }, []);
+    
+    async function navigateToProfilePage(){
+        navigate("/my-profile")
+    }
+    
+    async function removeResumeSkill(skill : SkillDTO, index : number) {
+        try {
+            setNumberOfSkillToRemove(index);
+            await skillService.deleteSkill(skill.id);
+            if (jobSeeker?.resume){
+                const updatedResume = { ...jobSeeker.resume };
+                updatedResume.skills = updatedResume.skills.filter(
+                    (currentSkill) => currentSkill.id !== skill.id
+                );
+                setJobSeeker((prev)=>{
+                    return  prev ? 
+                        {...prev,
+                        resume : updatedResume }
+                        : null
+                })
+            }
+        }
+        catch (err){
+            logErrorInfo(err)
+        }
+        finally {
+            setNumberOfSkillToRemove(null);
+        }
+    }
+
+    function navigateToEditContactInfoPage() {
+        navigate("/resume/contact")
+    }
+    
+    function addResumeInfo(infoType : string){
+        navigate(`/build/preview/${infoType}/add`)
     }
 
     return (
@@ -33,9 +80,15 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                 <div className={"content-start-container"}>
                     <div className={"short-info-content"}>
                         <div className={"small-margin-top"}></div>
-                        <div className={"small-header-text"}>
-                            {jobSeeker?.firstName} {jobSeeker?.lastName}
-                        </div>
+                        {(jobSeeker?.firstName && jobSeeker?.lastName) ?
+                            <div className={"small-header-text"}>
+                                {jobSeeker?.firstName} {jobSeeker?.lastName}
+                            </div>
+                            :
+                            <a className={"job-seeker-add-name small-header-font-size"} onClick={navigateToEditContactInfoPage}> Add name  
+                            </a>
+                        }
+                        
                         <div className={"gray-text small-margin-bottom"}>
                             {authUser?.user.email}
                         </div>
@@ -44,7 +97,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                         </div>
                     </div>
                     <div className={"small-buttons-container"}>
-                        <button className={"small-interaction-button medium-margin-right"}>
+                        <button className={"small-interaction-button medium-margin-right"} onClick={navigateToEditContactInfoPage}>
                             <FontAwesomeIcon icon={faPen}/>
                         </button>
                     </div>
@@ -55,17 +108,19 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                     <div className={"small-header-text"}>
                         Work experience
                     </div>
-                    <div className={"small-interaction-button"}>
+                    <button className={"small-interaction-button"} onClick={() => addResumeInfo("experience")}>
                         <FontAwesomeIcon icon={faPlus}/>
-                    </div>
+                    </button>
                 </div>
-                {jobSeeker?.resume?.educations.length == 0 ?
+                {jobSeeker?.resume?.workExperiences.length == 0 ?
                     (<div className={"no-resume-info-container"}>
                         Your work experience will appear here
                     </div>)
                     :
                     (jobSeeker?.resume?.workExperiences.map((experience, index) => (
-                        <WorkExperienceReview workExperience={experience}/>)))
+                        <WorkExperienceReview key={index}
+                                              workExperience={experience}
+                                              editPagePath={`/build/preview/experience/${experience.workExperienceId}`} />)))
                 }
             </div>
             <div className={"resume-info-block"}>
@@ -73,9 +128,9 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                     <div className={"small-header-text"}>
                         Education
                     </div>
-                    <div className={"small-interaction-button"}>
+                    <button className={"small-interaction-button"} onClick={() => addResumeInfo("education")}>
                         <FontAwesomeIcon icon={faPlus}/>
-                    </div>
+                    </button>
                 </div>
                 {jobSeeker?.resume?.educations.length == 0 ?
                     (<div className={"no-resume-info-container"}>
@@ -83,7 +138,9 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                     </div>)
                     :
                     (jobSeeker?.resume?.educations.map((education, index) => (
-                        <EducationReview education={education}/>)))
+                        <EducationReview key={index}
+                                         education={education}
+                                         editPagePath={`/build/preview/education/${education.id}`}/>)))
                 }
             </div>
             <div className={"resume-info-block"}>
@@ -91,9 +148,9 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                     <div className={"small-header-text"}>
                         Skills
                     </div>
-                    <div className={"small-interaction-button"}>
+                    <button className={"small-interaction-button"} onClick={() => addResumeInfo("skills")}>
                         <FontAwesomeIcon icon={faPlus}/>
-                    </div>
+                    </button>
                 </div>
                 {jobSeeker?.resume?.skills.length == 0 ?
                     (<div className={"no-resume-info-container"}>
@@ -101,14 +158,25 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                     </div>)
                     :
                     (jobSeeker?.resume?.skills.map((skill, index) => (
-                        <SkillContainer skillName={skill.name} removeSkill={removeResumeSkill}/>)))
+                        <div key={index} className={"skill-container"}>
+                            {numberOfSkillToRemove === index && <div   className={"saving-in-progress-surface"}></div>}
+                            <div className={"skill-name"}>
+                                {skill.name}
+                            </div>
+                            <button className={"remove-skill-button"} onClick={() => removeResumeSkill(skill, index)}>
+                                <FontAwesomeIcon icon={faTrashCan} />
+                            </button>
+                        </div>)))
                 }
             </div>
-            <div className={"resume-content-separation-line"}></div>
+            <div style={{marginBottom : "1rem"}} className={"resume-content-separation-line"}></div>
             <div className={"form-and-buttons-divider"}>
-                <button className={"blue-button min-continue-button-size"}>
+                <button className={"blue-button min-continue-button-size"} onClick={navigateToProfilePage}>
                     <span>Continue</span>
                 </button>
+            </div>
+            <div className={"bottom-page-margin"}>
+                
             </div>
         </>
     )

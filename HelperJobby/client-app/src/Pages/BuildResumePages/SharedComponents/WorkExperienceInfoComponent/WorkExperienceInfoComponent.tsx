@@ -25,9 +25,10 @@ import {months} from "../../../../AppConstData/Months";
 
 interface WorkExperienceInfoComponentProps {
     workExperience? : WorkExperienceDTO
+    nextPagePath : string;
 }
 
-const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({workExperience}) => {
+const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({workExperience, nextPagePath}) => {
     const {setProgressPercentage, setShowDialogWindow, setSaveFunc} = useResumeBuild();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const workExperienceService = new WorkExperienceService();
@@ -85,12 +86,12 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     }
 
     function cancelEditing() {
-        navigate(-1);
+        navigate(nextPagePath);
     }
 
     async function addWorkExperience(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
-        await handleWorkExperienceCreation("/build/experience", false)
+        await handleWorkExperienceCreation(nextPagePath, false)
     }
 
     async function handleWorkExperienceCreation(nextPageRoute: string, isSaveAndExitAction: boolean) {
