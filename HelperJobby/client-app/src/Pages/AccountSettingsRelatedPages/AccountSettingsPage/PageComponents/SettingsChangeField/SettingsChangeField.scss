@@ -1,0 +1,32 @@
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+.settings-field-layout{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.dark-default-text{
+  color: global-variables.$neutral-color-900;
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  align-self: center;
+}
+
+.semi-dark-default-text{
+  color: global-variables.$neutral-color-800;
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  align-self: center;
+}
+
+.light-dark-default-text{
+  color: global-variables.$neutral-color-700;
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  align-self: center;
+}

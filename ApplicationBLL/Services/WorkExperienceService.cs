@@ -62,8 +62,13 @@ public class WorkExperienceService : IWorkExperienceService
         var isInvalidResume = false;
         var currentUserId = _userService.GetCurrentUserId();
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        var workExperience = await _workExperienceQueryRepository.GetWorkExperienceById(workExperienceId);
-        if (workExperience.ResumeId != jobSeekerAccount.Resume.Id)
+        if (jobSeekerAccount.Resume == null)
+        {
+            throw new ResumeNotFoundException();
+        }
+        var workExperience = jobSeekerAccount.Resume.WorkExperiences.FirstOrDefault(we => we.WorkExperienceId == workExperienceId);
+
+        if (workExperience == null)
         {
             throw new ForbiddenException();
         }

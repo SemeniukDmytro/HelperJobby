@@ -4,39 +4,50 @@ import {EducationDTO} from "../../../../../DTOs/resumeRelatedDTOs/EducationDTO";
 import {useNavigate, useParams} from "react-router-dom";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import EducationInfoComponent from "../../../SharedComponents/EducationInfoComponent/EducationInfoComponent";
+import {getResumeInfoPageParentPath} from "../../../../../utils/getResumeInfoPageParentPath";
 
 interface EditEducationComponentProps {
-    nextPagePath : string
 }
 
-const EditEducationComponent: FC<EditEducationComponentProps> = ({nextPagePath}) => {
+const EditEducationComponent: FC<EditEducationComponentProps> = () => {
     const [education, setEducation] = useState<EducationDTO | null>(null);
     const {id} = useParams();
     const navigate = useNavigate();
     const {jobSeeker} = useJobSeeker();
     const [loading, setLoading] = useState(true);
+    const [parentPagePath, setParentPagePath] = useState("");
     
     useEffect(() => {
-        if (!id){
-            navigate(nextPagePath)
-            return;
+        const currentPath = window.location.pathname;
+        let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
+        if (parentPathFirstPart == "/build"){
+            parentPathFirstPart = "/build/education"
         }
-        console.log(jobSeeker);
-        const education = jobSeeker?.resume?.educations
-            .find((ed) => ed.id == Number.parseInt(id))
-        if (!education){
-            navigate(nextPagePath)
-            return;
-        }
-        setEducation(education);
-        setLoading(false);
+        setParentPagePath(parentPathFirstPart);
     }, []);
+    
+    useEffect(() => {
+        if (parentPagePath){
+            if (!id){
+                navigate(parentPagePath)
+                return;
+            }
+            const education = jobSeeker?.resume?.educations
+                .find((ed) => ed.id == Number.parseInt(id))
+            if (!education){
+                navigate(parentPagePath)
+                return;
+            }
+            setEducation(education);
+            setLoading(false);
+        }
+    }, [parentPagePath]);
     
     
     return(
         loading ? <></>
             :
-            <EducationInfoComponent education={education!} nextPagePath={nextPagePath}></EducationInfoComponent>
+            <EducationInfoComponent education={education!}></EducationInfoComponent>
     )
 }
 

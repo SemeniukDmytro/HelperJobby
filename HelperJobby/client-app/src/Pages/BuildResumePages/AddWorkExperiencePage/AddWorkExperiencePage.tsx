@@ -5,7 +5,7 @@ interface AddWorkExperiencePageProps {}
 
 
 const AddWorkExperiencePage: FC<AddWorkExperiencePageProps> = () => (
-  <WorkExperienceInfoComponent nextPagePath={"build/experience"}/>
+  <WorkExperienceInfoComponent/>
 );
 
 export default AddWorkExperiencePage;

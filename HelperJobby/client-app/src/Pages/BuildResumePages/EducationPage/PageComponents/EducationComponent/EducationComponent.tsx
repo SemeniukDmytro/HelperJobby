@@ -53,7 +53,7 @@ const EducationComponent: FC<ResumeEducationComponentProps> = () => {
                 </div>
             }
             <div className={"form-and-buttons-divider"}>
-                <button className={"light-button"} onClick={addAnotherEducation}>
+                <button className={"light-button-with-margin"} onClick={addAnotherEducation}>
                     <FontAwesomeIcon className={"icon-right-margin"} icon={faPlus}/>
                     <span>Add another education</span>
                 </button>

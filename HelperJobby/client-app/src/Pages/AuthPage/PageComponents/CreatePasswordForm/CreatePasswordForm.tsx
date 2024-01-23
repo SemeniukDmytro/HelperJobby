@@ -103,12 +103,12 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
     return (
         !renderEmailForm ? (
             <AppLogo>
-            <div className="form-box">
-                <div className="auth-form-container">
-                    <div className="auth-form-title-box">
+            <div className="passpage-form-layout">
+                <div className="passpage-form-box">
+                    <div className="passpage-form-title-box">
                         <span className="form-title">{formTitle}</span>
                     </div>
-                    <div className="auth-form-subtitle-box subtitle-font-size">
+                    <div className="passpage-form-subtitle-box subtitle-font-size">
                         <span className="form-subtitle">Signing up as&nbsp;</span>
                         <span className={"user-email"}>{email}</span>
                         <button className={"return-button"} onClick={goToInitialAuthPage}>

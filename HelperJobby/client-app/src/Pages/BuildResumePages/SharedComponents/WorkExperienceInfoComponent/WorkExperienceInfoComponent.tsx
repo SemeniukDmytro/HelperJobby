@@ -22,13 +22,13 @@ import {JobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/JobSeekerAccount
 import {isNotEmpty} from "../../../../utils/validationLogic/isNotEmptyString";
 import {useNavigate} from "react-router-dom";
 import {months} from "../../../../AppConstData/Months";
+import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
 
 interface WorkExperienceInfoComponentProps {
     workExperience? : WorkExperienceDTO
-    nextPagePath : string;
 }
 
-const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({workExperience, nextPagePath}) => {
+const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({workExperience}) => {
     const {setProgressPercentage, setShowDialogWindow, setSaveFunc} = useResumeBuild();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const workExperienceService = new WorkExperienceService();
@@ -53,15 +53,24 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     const [showCityAutoComplete, setShowCityAutoComplete] = useState(false);
     const [savingProcess, setSavingProcess] = useState(false);
     const [validateJobTitle, setValidateJobTitle] = useState(false);
+    const [parentPagePath, setParentPagePath] = useState("");
+
 
     useEffect(() => {
         if (descriptionInputRef.current) {
-            descriptionInputRef.current.innerText = description;
+            descriptionInputRef.current.innerText = workExperience?.description || "";
         }
         setProgressPercentage(ProgressPercentPerPage * 5);
         if (workExperience){
             setPassedWorkExperienceValues();
         }
+        
+        const currentPath = window.location.pathname;
+        let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
+        if (parentPathFirstPart == "/build"){
+            parentPathFirstPart = "/build/experience"
+        }
+        setParentPagePath(parentPathFirstPart);
     }, []);
 
     useEffect(() => {
@@ -86,12 +95,12 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     }
 
     function cancelEditing() {
-        navigate(nextPagePath);
+        navigate(parentPagePath);
     }
 
     async function addWorkExperience(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
-        await handleWorkExperienceCreation(nextPagePath, false)
+        await handleWorkExperienceCreation(parentPagePath, false)
     }
 
     async function handleWorkExperienceCreation(nextPageRoute: string, isSaveAndExitAction: boolean) {
@@ -326,7 +335,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                             <span>Save</span>
                         }
                     </button>
-                    {!workExperience ?
+                    {parentPagePath == "/build/experience" ?
                         <button className={"skip-form-button"} onClick={navigateToSkillsPage}>
                             Skip
                         </button>

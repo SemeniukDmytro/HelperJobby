@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 import ResumeInfoComponent from "../../../Components/ResumeInfoComponent/ResumeInfoComponent";
+import PreviewResumeComponent from "./PageComponents/PreviewResumeComponent/PreviewResumeComponent";
 
 interface PreviewPageProps {}
 
 const PreviewPage: FC<PreviewPageProps> = () => (
-    <ResumeInfoComponent/>
+    <PreviewResumeComponent/>
 );
 
 export default PreviewPage;

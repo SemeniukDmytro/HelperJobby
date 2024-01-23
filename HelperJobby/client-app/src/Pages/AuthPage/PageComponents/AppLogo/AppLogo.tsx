@@ -13,7 +13,7 @@ const AppLogo: FC<AppLogoProps> = ({ children }) => {
     }
 
     return (
-        <div className="container">
+        <div className="form-page-background">
             <div className="passpage-container">
                 <div className="logo-container" onClick={GoToDefaultPage}>
                     <span className="logo">HelperJobby</span>

@@ -76,8 +76,12 @@ public class EducationService : IEducationService
         var isInvalidResume = false;
         var currentUserId = _userService.GetCurrentUserId();
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        var educationEntity = await _educationQueryRepository.GetEducationById(educationId);
-        if (educationEntity.ResumeId != jobSeekerAccount.Resume.Id)
+        if (jobSeekerAccount.Resume == null)
+        {
+            throw new ResumeNotFoundException();
+        }
+        var educationEntity = jobSeekerAccount.Resume.Educations.FirstOrDefault(e => e.Id == educationId);
+        if (educationEntity == null)
         {
             throw new ForbiddenException();
         }

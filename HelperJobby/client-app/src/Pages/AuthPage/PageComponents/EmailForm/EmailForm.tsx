@@ -64,12 +64,12 @@ const EmailForm: FC<AuthComponentProps> = () => {
         <>
             {renderAuthPage && (
                 <AppLogo>
-                    <div className="form-box">
-                        <div className="auth-form-container">
-                            <div className="auth-form-title-box">
+                    <div className="passpage-form-layout">
+                        <div className="passpage-form-box">
+                            <div className="passpage-form-title-box">
                                 <span className="form-title">Ready to take next step?</span>
                             </div>
-                            <div className="auth-form-subtitle-box">
+                            <div className="passpage-form-subtitle-box">
                                 <span className="form-subtitle">Create an account or sign in.</span>
                             </div>
                             <form className="auth-input-box" onSubmit={onFormSubmit}>
@@ -79,7 +79,11 @@ const EmailForm: FC<AuthComponentProps> = () => {
                                     </label>
                                 </div>
                                 <div className={`input-box`}>
-                                    <input className={`input-field ${isEmailInvalid ? 'invalid-input-border' : ''}`} value={email} type="text"
+                                    <input 
+                                        className={`input-field ${isEmailInvalid ? 'invalid-input-border' : ''}`}
+                                        value={email}
+                                        type="email"
+                                        autoComplete={"email"}
                                            onChange={(e) => {setEmail(e.target.value);
                                                setError("");
                                                setIsEmailInvalid(false)}}/>

@@ -12,6 +12,7 @@ import {useAuth} from "../../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
 import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
+import NotifyPopupWindow from "../../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
 
 interface ResumePhoneComponentProps {}
 
@@ -24,6 +25,7 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
     const navigate = useNavigate();
     const [phoneNumber, setPhoneNumber] = useState(jobSeeker!.phoneNumber);
     const phoneNumberRef = useRef<HTMLInputElement>(null);
+    const [showErrorNotify, setShowErrorNotify] = useState(false);
 
 
     useEffect(() => {
@@ -66,6 +68,7 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
         catch (e) {
             if (e instanceof ServerError){
                 logErrorInfo(e)
+                setShowErrorNotify(true);
             }
         }
         finally {
@@ -75,6 +78,10 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
 
     return (
         <form className={"build-resume-form"}>
+            <NotifyPopupWindow isSuccessful={false}
+                               text={"Please enter a valid phone number"}
+                               showNotify={showErrorNotify}
+                               setShowNotify={setShowErrorNotify}/>
             {savingInfo && <div className={"saving-in-progress-surface"}></div>}
             <div className={"build-page-header"}>
                 Would you like to add a phone number to your resume?
@@ -85,7 +92,7 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
             <CustomInputField fieldLabel={"Phone number"}
                               isRequired={false}
                               inputFieldValue={phoneNumber}
-                              setInputFieldValue={setPhoneNumber}
+                              setInputFieldValue={setPhoneNumber} fieldSubtitle={"starts with +"}
                               inputRef={phoneNumberRef}/>
             <div className={"phone-page-disclaimer"}>
                 By submitting the form with this box checked, you confirm that you are the primary user and subscriber to the telephone number provided, and you agree to receive calls (including using artificial or pre-recorded voice), texts, and WhatsApp messages from employers who use HelperJobby at the telephone number provided above.

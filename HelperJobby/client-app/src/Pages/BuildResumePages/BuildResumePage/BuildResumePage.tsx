@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
-import {ResumeBuildContextProvider} from "../../../contexts/ResumeBuildContext";
+import {ResumeContextProvider} from "../../../contexts/ResumeContext";
 import BuildResumeLayout from "../SharedComponents/BuildResumeLayout/BuildResumeLayout";
 
 interface BuildResumePageProps {}
 
 const BuildResumePage: FC<BuildResumePageProps> = () => (
-  <ResumeBuildContextProvider>
+  <ResumeContextProvider>
       <BuildResumeLayout/>
-  </ResumeBuildContextProvider>
+  </ResumeContextProvider>
 );
 
 export default BuildResumePage;

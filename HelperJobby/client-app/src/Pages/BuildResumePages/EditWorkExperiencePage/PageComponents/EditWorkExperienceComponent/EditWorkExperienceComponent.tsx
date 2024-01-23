@@ -5,38 +5,50 @@ import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import {WorkExperienceDTO} from "../../../../../DTOs/resumeRelatedDTOs/WorkExperienceDTO";
 import WorkExperienceInfoComponent
     from "../../../SharedComponents/WorkExperienceInfoComponent/WorkExperienceInfoComponent";
+import {getResumeInfoPageParentPath} from "../../../../../utils/getResumeInfoPageParentPath";
 
 interface EditWorkExperienceComponentProps {
-    nextPagePath : string
 }
 
-const EditWorkExperienceComponent: FC<EditWorkExperienceComponentProps> = ({nextPagePath}) => {
+const EditWorkExperienceComponent: FC<EditWorkExperienceComponentProps> = () => {
     const [workExperience, setWorkExperience] = useState<WorkExperienceDTO | null>(null);
     const {id} = useParams();
     const navigate = useNavigate();
     const {jobSeeker} = useJobSeeker();
     const [loading, setLoading] = useState(true);
+    const [parentPagePath, setParentPagePath] = useState("");
 
     useEffect(() => {
-        if (!id){
-            navigate(nextPagePath)
-            return;
+        const currentPath = window.location.pathname;
+        let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
+        if (parentPathFirstPart == "/build"){
+            parentPathFirstPart = "/build/experience"
         }
-        const workExperience = jobSeeker?.resume?.workExperiences
-            .find((we) => we.workExperienceId == Number.parseInt(id))
-        if (!workExperience){
-            navigate(nextPagePath)
-            return;
-        }
-        setWorkExperience(workExperience);
-        setLoading(false);
+        setParentPagePath(parentPathFirstPart);
     }, []);
+
+    useEffect(() => {
+        if (parentPagePath){
+            if (!id){
+                navigate(parentPagePath)
+                return;
+            }
+            const workExperience = jobSeeker?.resume?.workExperiences
+                .find((we) => we.workExperienceId == Number.parseInt(id))
+            if (!workExperience){
+                navigate(parentPagePath)
+                return;
+            }
+            setWorkExperience(workExperience);
+            setLoading(false);
+        }
+    }, [parentPagePath]);
 
 
     return(
         loading ? <></>
             :
-            <WorkExperienceInfoComponent workExperience={workExperience!} nextPagePath={nextPagePath}/>
+            <WorkExperienceInfoComponent workExperience={workExperience!}/>
     )
 }
 

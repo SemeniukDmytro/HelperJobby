@@ -25,15 +25,15 @@ const AccountTypeForm: FC<AccountTypeFormProps> = () =>
     return (
             !renderCreatePasswordForm ? (
                 <AppLogo>
-                    <div className="form-box">
-                        <div className="auth-form-container">
+                    <div className="passpage-form-layout">
+                        <div className="passpage-form-box">
                             <div className="greeting-box">
                                 <span className="greeting">Welcome!</span>
                             </div>
-                            <div className="auth-form-title-box type-form-title-box">
+                            <div className="passpage-form-title-box type-form-title-box">
                                 <span className="form-title type-form-title">Ready for the next step?</span>
                             </div>
-                            <div className="auth-form-subtitle-box type-form-subtitle-subtitle-box">
+                            <div className="passpage-form-subtitle-box type-form-subtitle-subtitle-box">
                                 <span className="form-subtitle type-form-subtitle">Create an account for tools to help you</span>
                             </div>
                             <div className={"employer-button-box"}>

@@ -20,13 +20,19 @@ import EducationPage from "./Pages/BuildResumePages/EducationPage/EducationPage"
 import EditWorkExperiencePage from "./Pages/BuildResumePages/EditWorkExperiencePage/EditWorkExperiencePage";
 import SkillsPage from "./Pages/BuildResumePages/SkillsPage/SkillsPage";
 import PreviewPage from "./Pages/BuildResumePages/PreviewPage/PreviewPage";
-import PreviewAddSkillPage from "./Pages/BuildResumePages/PreviewAddSkillPage/PreviewAddSkillPage";
-import PreviewAddEducationPage from "./Pages/ResumePreviewPages/PreviewAddEducationPage/PreviewAddEducationPage";
-import PreviewEditEducationPage from "./Pages/ResumePreviewPages/PreviewEditEducationPage/PreviewEditEducationPage";
-import PreviewAddWorkExperiencePage
-    from "./Pages/ResumePreviewPages/PreviewAddWorkExperiencePage/PreviewAddWorkExperiencePage";
-import PreviewEditWorkExperiencePage
-    from "./Pages/ResumePreviewPages/PreviewEditWorkExperiencePage/PreviewEditWorkExperiencePage";
+import ResumePage from "./Pages/ResumePage/ResumePage";
+import ResumeAddEducationPage from "./Pages/AddResumeInfoPages/ResumeAddEducationPage/ResumeAddEducationPage";
+import ResumeAddWorkExperiencePage
+    from "./Pages/AddResumeInfoPages/ResumeAddWorkExperiencePage/ResumeAddWorkExperiencePage";
+import ResumeEditEducationPage from "./Pages/AddResumeInfoPages/ResumeEditEducationPage/ResumeEditEducationPage";
+import ResumeEditWorkExperiencePage
+    from "./Pages/AddResumeInfoPages/ResumeEditWorkExperiencePage/ResumeEditWorkExperiencePage";
+import ResumeAddSkillPage from "./Pages/BuildResumePages/ResumeAddSkillPage/ResumeAddSkillPage";
+import AccountSettingsPage from "./Pages/AccountSettingsRelatedPages/AccountSettingsPage/AccountSettingsPage";
+import ChangeAccountTypePage from "./Pages/AccountSettingsRelatedPages/ChangeAccountTypePage/ChangeAccountTypePage";
+import ChangeEmailPage from "./Pages/AccountSettingsRelatedPages/ChangeEmailPage/ChangeEmailPage";
+import ChangePasswordPage from "./Pages/AccountSettingsRelatedPages/ChangePasswordPage/ChangePasswordPage";
+import ChangePhonePage from "./Pages/AccountSettingsRelatedPages/ChangePhonePage/ChangePhonePage";
 
 
 function App() {
@@ -55,14 +61,30 @@ function App() {
                     <Route path={"skills"} element={<SkillsPage/>}/>
                     <Route path={"preview"} element={<Outlet/>}>
                         <Route index element={<PreviewPage />} />
-                        <Route path={"skills/add"} element={<PreviewAddSkillPage/>}/>
-                        <Route path={"education/add"} element={<PreviewAddEducationPage/>}/>
-                        <Route path={"education/:id"} element={<PreviewEditEducationPage/>}/>
-                        <Route path={"experience/add"} element={<PreviewAddWorkExperiencePage/>}/>
-                        <Route path={"experience/:id"} element={<PreviewEditWorkExperiencePage/>}/>
+                        <Route path={"skills/add"} element={<ResumeAddSkillPage/>}/>
+                        <Route path={"education/add"} element={<ResumeAddEducationPage/>}/>
+                        <Route path={"education/:id"} element={<ResumeEditEducationPage/>}/>
+                        <Route path={"experience/add"} element={<ResumeAddWorkExperiencePage/>}/>
+                        <Route path={"experience/:id"} element={<ResumeEditWorkExperiencePage/>}/>
                     </Route>
                 </Route>
-                <Route path={"/resume/contact"} element={<EditContactInfoPage/>}/>
+                <Route path={"/resume"} element={<Outlet/>}>
+                    <Route index element={<ResumePage/>} />
+                    <Route path={"contact"} element={<EditContactInfoPage/>}/>
+                    <Route path={"education/add"} element={<ResumeAddEducationPage/>}/>
+                    <Route path={"education/:id"} element={<ResumeEditEducationPage/>}/>
+                    <Route path={"experience/add"} element={<ResumeAddWorkExperiencePage/>}/>
+                    <Route path={"experience/:id"} element={<ResumeEditWorkExperiencePage/>}/>
+                    <Route path={"skills/add"} element={<ResumeAddSkillPage/>}/>
+                </Route>
+                <Route path={"/settings"} element={<AccountSettingsPage/>}/>
+                <Route path={"/account"} element={<Outlet/>}>
+                    <Route index element={<AccountSettingsPage/>}/>
+                    <Route path={"change-type"} element={<ChangeAccountTypePage/>}/>
+                    <Route path={"change-email"} element={<ChangeEmailPage/>}/>
+                    <Route path={"change-password"} element={<ChangePasswordPage/>}/>
+                    <Route path={"change-phone"} element={<ChangePhonePage/>}/>
+                </Route>
                 
             </Route>
 

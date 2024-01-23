@@ -15,7 +15,7 @@ const HomePageHeaderLeftSide: FC<HomePageHeaderLeftSideProps> = () => {
         <div className={"header-left-side"}>
             <div className={"logo-block"}>
                 <button className={"logo-button"}>
-                    <span className={"logo-text"}>HelperJobby</span>
+                   HelperJobby
                 </button>
             </div>
             <div className={"logo-content-divider"}/>

@@ -48,12 +48,15 @@ const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
             if (error instanceof ServerError){
                 logErrorInfo(error);
             }
-            console.log(error);
         }
     }
 
     function navigateToJobSeekerProfile() {
         navigate("/my-profile");
+    }
+    
+    function navigateToSettingsPage() {
+        navigate("/settings")
     }
 
     return (
@@ -82,7 +85,7 @@ const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
                             <FontAwesomeIcon className={"icon-box big-icon"} icon={faBookmark}/>
                             <div>My jobs</div>
                         </button>
-                        <button className={"more-profile-option-button"}>
+                        <button className={"more-profile-option-button"} onClick={navigateToSettingsPage}>
                             <FontAwesomeIcon className={"icon-box big-icon"} icon={faGear}/>
                             <div>Settings</div>
                         </button>

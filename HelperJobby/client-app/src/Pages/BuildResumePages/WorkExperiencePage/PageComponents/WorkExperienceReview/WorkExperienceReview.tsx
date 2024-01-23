@@ -9,13 +9,13 @@ import {WorkExperienceDTO} from "../../../../../DTOs/resumeRelatedDTOs/WorkExper
 import {convertNumericMonthToStringValue} from "../../../../../utils/convertLogic/convertNumericMonthToStringValue";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {WorkExperienceService} from "../../../../../services/workExperienceService";
+import {getResumeInfoPageParentPath} from "../../../../../utils/getResumeInfoPageParentPath";
 
 interface WorkExperienceReviewProps {
     workExperience : WorkExperienceDTO;
-    editPagePath? : string;
 }
 
-const WorkExperienceReview: FC<WorkExperienceReviewProps> = ({workExperience, editPagePath}) => {
+const WorkExperienceReview: FC<WorkExperienceReviewProps> = ({workExperience}) => {
     const [fromMonth, setFromMonth] = useState("");
     const [fromYear, setFromYear] = useState("");
     const [toMonth, setToMonth] = useState("");
@@ -26,7 +26,15 @@ const WorkExperienceReview: FC<WorkExperienceReviewProps> = ({workExperience, ed
     const [savingInfo, setSavingInfo] = useState(false);
     const workExperienceService = new WorkExperienceService();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
+    const [editWorkExperiencePath, setEditWorkExperiencePath] = useState("");
 
+    useEffect(() => {
+        const currentPath = window.location.pathname;
+        let parentPath = getResumeInfoPageParentPath(currentPath);
+        parentPath = `${parentPath}/experience/${workExperience.workExperienceId}`
+        setEditWorkExperiencePath(parentPath);
+    }, []);
+    
     useEffect(() => {
         if (convertedFrom) {
             setFromMonth(convertNumericMonthToStringValue(convertedFrom[1]));
@@ -40,12 +48,7 @@ const WorkExperienceReview: FC<WorkExperienceReviewProps> = ({workExperience, ed
     }, []);
 
     function navigateToEditWorkExperiencePage() {
-        if (editPagePath){
-            navigate(editPagePath)
-        }
-        else {
-            navigate(`/build/experience/${workExperience.workExperienceId}`)
-        }
+        navigate(editWorkExperiencePath);
     }
 
     async function deleteWorkExperience() {
@@ -79,19 +82,19 @@ const WorkExperienceReview: FC<WorkExperienceReviewProps> = ({workExperience, ed
                     <div className={"required-info"}>
                         <span>{workExperience.jobTitle} </span>
                     </div>
-                    <div className={"semi-dark-default-text"}>
+                    <div className={"semi-dark-small-text"}>
                         <span>{workExperience.company}</span>
                         {workExperience.company && workExperience.cityOrProvince && <span>&nbsp;-&nbsp;</span>}
                         <span>{workExperience.cityOrProvince}</span>
                     </div>
                     {(fromYear || workExperience.currentlyWorkHere) &&
                         <div>
-                            <div className={"light-dark-default-text"}>
+                            <div className={"light-dark-small-text"}>
                                 <span>{workExperience.from ? `${fromMonth} ${fromYear} to ` : ""} {workExperience.currentlyWorkHere ? "Present" : `${toMonth} ${toYear}`}</span>
                             </div>
                         </div>}
                     {workExperience.description && 
-                        <div className={"dark-default-text"}>
+                        <div className={"dark-small-text"}>
                             {workExperience.description}
                             <div className={"between-lines-spacing"}></div>
                         </div>}

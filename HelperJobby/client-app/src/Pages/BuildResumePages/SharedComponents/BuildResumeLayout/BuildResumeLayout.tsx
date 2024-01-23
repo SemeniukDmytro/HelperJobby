@@ -13,7 +13,11 @@ const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
     const {progressPercentage, saveFunc, showDialogWindow, setShowDialogWindow} = useResumeBuild();
     const navigate = useNavigate();
     const location = useLocation();
-
+    const dialogTitle = "Are you sure you want to exit?";
+    const dialogMainText = "We found an error on this page. You might be missing required information. Please review, or exit without saving.";
+    const firstDialogButtonText = "Exit without saving";
+    const secondDialogButtonText = "Return to page";
+    const isPositiveDialog = true;
     function goBack() {
         navigate(-1)
     }
@@ -34,7 +38,13 @@ const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
              <DialogWindow 
                  showDialog={showDialogWindow} 
                  setShowDialog={setShowDialogWindow}
-                 notCloseOptionOnClick={goBackToProfilePage}></DialogWindow>
+                 firstButtonOnClick={goBackToProfilePage}
+                 titleText={dialogTitle}
+                 mainText={dialogMainText}
+                 firstButtonText={firstDialogButtonText} 
+                 secondButtonText={secondDialogButtonText}
+                 positiveDialog={isPositiveDialog}
+                ></DialogWindow>
              <PageWrapWithHeader>
                  <div className={"build-resume-sticky-panel"}>
                      <nav className={"build-resume-navigation"}>

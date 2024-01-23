@@ -80,16 +80,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
             document.removeEventListener('click', handleClickOutside);
         };
     }, [currentComponentRef]);
-
-    useEffect(() => {
-        if (showPopup) {
-            const timer = setTimeout(() => {
-                setShowPopup(false);
-            }, 3000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [showPopup]);
+    
     
     function checkIsNewJob() : void {
         const currentDate = new Date();
@@ -152,7 +143,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
     function handleJobClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         const isMoreOptionsClick =
             event.target instanceof Element &&
-            (event.target.classList.contains("more-options-box") || event.target.closest(".more-options-box"));
+            (event.target.classList.contains("more-options-box") || event.target.closest(".more-options-button"));
         if (isMoreOptionsClick) {
             return;
         }
@@ -161,9 +152,13 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
 
     return (
        <div ref={currentComponentRef} className={`short-job-description-component-box ${isSelected ? "job-selected-border" : ""}`} onClick={handleJobClick}>
-           {showPopup && <NotifyPopupWindow isSuccessful={isSuccessfulPopup} text={popUpText}/>}
+           {showPopup && <NotifyPopupWindow
+               isSuccessful={isSuccessfulPopup}
+               text={popUpText}
+               showNotify={showPopup}
+               setShowNotify={setShowPopup}/>}
            <div className={"more-options-absolute-container"}>
-               <button className={"more-options-box"} onClick={showMoreOptions}>
+               <button className={"more-options-button"} onClick={showMoreOptions}>
                    <FontAwesomeIcon icon={faEllipsisVertical}/>
                </button>
                {moreOptionsVisible && <div className={"more-options-bar"}>

@@ -51,7 +51,7 @@ const WorkExperienceComponent: FC<WorkExperienceComponentProps> = () => {
                     </div>
                 }
                 <div className={"form-and-buttons-divider"}>
-                    <button className={"light-button"} onClick={addAnotherWorkExperience}>
+                    <button className={"light-button-with-margin"} onClick={addAnotherWorkExperience}>
                         <FontAwesomeIcon className={"icon-right-margin"} icon={faPlus}/>
                         <span>Add another education</span>
                     </button>
