@@ -1,6 +1,6 @@
 import {useContext} from "react";
-import ResumeBuildContext from "../contexts/ResumeBuildContext";
+import ResumeContext from "../contexts/ResumeContext";
 
 export default function useResumeBuild (){
-    return useContext(ResumeBuildContext);
+    return useContext(ResumeContext);
 }

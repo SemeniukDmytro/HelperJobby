@@ -41,16 +41,6 @@ const SignInForm: FC<SignInFormProps> = () => {
     const isEmptyPassword = password.trim() == "";
     const authService: AuthService = new AuthService();
 
-    useEffect(() => {
-        if (showPopup) {
-            const timer = setTimeout(() => {
-                setShowPopup(false);
-            }, 3000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [showPopup]);
-
     async function AuthUser(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         if (!IsValidPasswordMaximalLength(password)) {
@@ -92,7 +82,11 @@ const SignInForm: FC<SignInFormProps> = () => {
         renderEmailForm ? (<EmailForm/>) :
             (
                 <AppLogo>
-                    {showPopup && <NotifyPopupWindow isSuccessful={isSuccessfulNotify} text={notifyMessage}/>}
+                    {showPopup && <NotifyPopupWindow
+                        isSuccessful={isSuccessfulNotify}
+                        text={notifyMessage}
+                        showNotify={showPopup}
+                        setShowNotify={setShowPopup}/>}
                     <div className="form-box">
                         <div className="auth-form-container">
                             <div className="auth-form-title-box">

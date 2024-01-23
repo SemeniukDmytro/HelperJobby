@@ -21,14 +21,14 @@ import CustomInputField from "../../../../Components/EditFormField/CustomInputFi
 import CountrySelector from "../../../EditContactInfoPage/PageComponents/CountrySelector/CountrySelector";
 import TimePeriod from "../TimePeriod/TimePeriod";
 import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
+import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
 
 
 interface AddEducationComponentProps {
     education?: EducationDTO;
-    nextPagePath : string;
 }
 
-const EducationInfoComponent: FC<AddEducationComponentProps> = ({education, nextPagePath}) => {
+const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => {
     const {
         setProgressPercentage, setSaveFunc
         , setShowDialogWindow
@@ -55,6 +55,16 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education, next
     const [showCityAutoComplete, setShowCityAutoComplete] = useState(false);
     const [invalidTimeProvided, setInvalidTimeProvided] = useState(false);
     const [executeInputsValidation, setExecuteInputValidations] = useState(false);
+    const [parentPagePath, setParentPagePath] = useState("");
+
+    useEffect(() => {
+        const currentPath = window.location.pathname;
+        let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
+        if (parentPathFirstPart == "/build"){
+            parentPathFirstPart = "/build/education"
+        }
+        setParentPagePath(parentPathFirstPart);
+    }, []);
 
 
     useEffect(() => {
@@ -73,7 +83,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education, next
 
     async function addEducation(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
-        await handleEducationCreation(nextPagePath, false)
+        await handleEducationCreation(parentPagePath, false)
 
     }
 
@@ -164,7 +174,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education, next
     }
     
     function cancelEditing(){
-        navigate(nextPagePath)
+        navigate(parentPagePath)
     }
     
     function navigateToWorkExperiencePage(){
@@ -283,7 +293,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education, next
                             <span>Save</span>
                         }
                     </button>
-                    {!education ? 
+                    {parentPagePath == "/build/education" ? 
                     <button className={"skip-form-button"} onClick={navigateToWorkExperiencePage}>
                         Skip
                     </button>

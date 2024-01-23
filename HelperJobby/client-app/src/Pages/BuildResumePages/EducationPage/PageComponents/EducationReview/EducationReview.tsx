@@ -3,21 +3,18 @@ import './EducationReview.scss';
 import {EducationDTO} from "../../../../../DTOs/resumeRelatedDTOs/EducationDTO";
 import {faPen, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {months} from "../../../../../AppConstData/Months";
 import {convertNumericMonthToStringValue} from "../../../../../utils/convertLogic/convertNumericMonthToStringValue";
-import {useNavigate} from "react-router-dom";
-import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
+import {useLocation, useNavigate} from "react-router-dom";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {EducationService} from "../../../../../services/educationService";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
-import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
+import {getResumeInfoPageParentPath} from "../../../../../utils/getResumeInfoPageParentPath";
 
 interface EducationReviewProps {
     education: EducationDTO;
-    editPagePath? : string;
 }
 
-const EducationReview: FC<EducationReviewProps> = ({education, editPagePath}) => {
+const EducationReview: FC<EducationReviewProps> = ({education}) => {
     const [fromMonth, setFromMonth] = useState("");
     const [fromYear, setFromYear] = useState("");
     const [toMonth, setToMonth] = useState("");
@@ -28,6 +25,14 @@ const EducationReview: FC<EducationReviewProps> = ({education, editPagePath}) =>
     const [savingInfo, setSavingInfo] = useState(false);
     const educationService = new EducationService();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
+    const [editEducationPath, setEditEducationPath] = useState("");
+    
+    useEffect(() => {
+        const currentPath = window.location.pathname;
+        let parentPath = getResumeInfoPageParentPath(currentPath);
+        parentPath = `${parentPath}/education/${education.id}`
+        setEditEducationPath(parentPath);
+    }, []);
 
     useEffect(() => {
         if (convertedFrom && convertedTo) {
@@ -39,12 +44,7 @@ const EducationReview: FC<EducationReviewProps> = ({education, editPagePath}) =>
     }, []);
 
     function navigateToEditEducationPage() {
-        if (editPagePath){
-            navigate(editPagePath);
-        }
-        else {
-            navigate(`/build/education/${education.id}`);
-        }
+        navigate(editEducationPath)
     }
 
     async function deleteEducation() {

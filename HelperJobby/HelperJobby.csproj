@@ -51,16 +51,18 @@
       <Folder Include="client-app\src\Pages\BuildResumePages\EducationPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\AddNamePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\AddPhonePage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\BuildResumePages\PreviewPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\SkillsPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\BuildResumePages\WorkExperiencePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\EditContactInfoPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\HomePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\JobSeekerProfilePage\PageComponents\" />
-      <Folder Include="client-app\src\Pages\ResumePreviewPages\PreviewAddEducationPage\PageComponents\" />
-      <Folder Include="client-app\src\Pages\ResumePreviewPages\PreviewAddWorkExperiencePage\PageComponents\" />
-      <Folder Include="client-app\src\Pages\ResumePreviewPages\PreviewEditEducationPage\PageComponents\" />
-      <Folder Include="client-app\src\Pages\ResumePreviewPages\PreviewEditWorkExperiencePage\PageComponents\" />
-      <Folder Include="client-app\src\Pages\ResumePreviewPages\SharedComponents\" />
+      <Folder Include="client-app\src\Pages\ResumePage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\AddResumeInfoPages\ResumeAddEducationPage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\AddResumeInfoPages\ResumeAddWorkExperiencePage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\AddResumeInfoPages\ResumeEditEducationPage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\AddResumeInfoPages\ResumeEditWorkExperiencePage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\AddResumeInfoPages\SharedComponents\" />
       <Folder Include="client-app\src\Pages\SearchJobResultsPage\PageComponents\" />
     </ItemGroup>
     

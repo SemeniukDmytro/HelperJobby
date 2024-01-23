@@ -43,8 +43,12 @@ public class SkillService : ISkillService
         var isInvalidResume = false;
         var currentUserId = _userService.GetCurrentUserId();
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        var skillEntity = await _skillQueryRepository.GetSkillById(skillId);
-        if (jobSeekerAccount.Resume.Id != skillEntity.ResumeId)
+        if (jobSeekerAccount.Resume == null)
+        {
+            throw new ResumeNotFoundException();
+        }
+        var skillEntity = jobSeekerAccount.Resume.Skills.FirstOrDefault(s => s.Id == skillId);
+        if (skillEntity == null)
         {
             throw new ForbiddenException();
         }

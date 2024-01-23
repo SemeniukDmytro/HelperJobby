@@ -65,7 +65,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
     }
     
     async function saveSkills() {
-        handleSkillsSaving("/build/preview");   
+       await handleSkillsSaving("/build/preview");   
     }
     
     async function handleSkillsSaving(nextPageUrl : string)
@@ -77,6 +77,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
         else {
             await createNewResume();
         }
+        navigate(nextPageUrl);
         
     }
 

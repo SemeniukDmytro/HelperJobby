@@ -55,7 +55,7 @@
   border-radius: 0.5rem;
   position: relative;
   background-color: transparent;
-  
+  line-height: 1.5;
   &:focus{
     outline: none;
     border-color: global-variables.$dark-blue;

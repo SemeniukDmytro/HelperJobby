@@ -47,6 +47,10 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
         navigate("/build/name")
     }
 
+    function navigateToResume() {
+        navigate("/resume");
+    }
+
     return (
         loading ? (<span>Loading</span>) :
         <PageWrapWithHeader>
@@ -116,8 +120,7 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
                             </div>)
                             :
                             (
-                                <div className={"resume-container"}>
-                                    
+                                <div className={"resume-container"} onClick={navigateToResume}>
                                     <div className={"resume-container-info"}>
                                         <div className={"resume-icon"}>
                                             <FontAwesomeIcon icon={faFileLines} />

@@ -7,15 +7,17 @@ import {useAuth} from "../../hooks/useAuth";
 import WorkExperienceReview
     from "../../Pages/BuildResumePages/WorkExperiencePage/PageComponents/WorkExperienceReview/WorkExperienceReview";
 import EducationReview from "../../Pages/BuildResumePages/EducationPage/PageComponents/EducationReview/EducationReview";
-import SkillContainer from "../../Pages/BuildResumePages/SkillsPage/PageComponents/SkillContainer/SkillContainer";
 import {useNavigate} from "react-router-dom";
 import {SkillDTO} from "../../DTOs/resumeRelatedDTOs/SkillDTO";
 import {SkillService} from "../../services/skillService";
 import {logErrorInfo} from "../../utils/logErrorInfo";
 import useResumeBuild from "../../hooks/useResumeBuild";
 import {ProgressPercentPerPage} from "../../Pages/BuildResumePages/SharedComponents/ProgressPercentPerPage";
+import ResumePreviewHeader
+    from "../../Pages/BuildResumePages/PreviewPage/PageComponents/ResumePreviewHeader/ResumePreviewHeader";
 
-interface ResumeInfoComponentProps {}
+interface ResumeInfoComponentProps {
+}
 
 const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
     const {setProgressPercentage, setSaveFunc} = useResumeBuild();
@@ -24,8 +26,10 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
     const skillService = new SkillService();
     const navigate = useNavigate();
     const [numberOfSkillToRemove, setNumberOfSkillToRemove] = useState<number | null>(null);
+    const currentPath = window.location.pathname;
 
     useEffect(() => {
+        
         setProgressPercentage(ProgressPercentPerPage*7);
         setSaveFunc(() => navigateToProfilePage)
     }, []);
@@ -64,18 +68,11 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
     }
     
     function addResumeInfo(infoType : string){
-        navigate(`/build/preview/${infoType}/add`)
+        navigate(`${currentPath}/${infoType}/add`)
     }
 
     return (
         <>
-            <div className={"build-page-header subtitle-margin"}>
-                Is your resume ready?
-            </div>
-            <div className={"build-page-subtitle"}>
-                Review and make any changes below.
-            </div>
-            <div className={"resume-content-separation-line"}/>
             <div className={"short-info-container border-remove"}>
                 <div className={"content-start-container"}>
                     <div className={"short-info-content"}>
@@ -119,8 +116,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                     :
                     (jobSeeker?.resume?.workExperiences.map((experience, index) => (
                         <WorkExperienceReview key={index}
-                                              workExperience={experience}
-                                              editPagePath={`/build/preview/experience/${experience.workExperienceId}`} />)))
+                                              workExperience={experience} />)))
                 }
             </div>
             <div className={"resume-info-block"}>
@@ -139,8 +135,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                     :
                     (jobSeeker?.resume?.educations.map((education, index) => (
                         <EducationReview key={index}
-                                         education={education}
-                                         editPagePath={`/build/preview/education/${education.id}`}/>)))
+                                         education={education}/>)))
                 }
             </div>
             <div className={"resume-info-block"}>
@@ -169,12 +164,16 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                         </div>)))
                 }
             </div>
-            <div style={{marginBottom : "1rem"}} className={"resume-content-separation-line"}></div>
-            <div className={"form-and-buttons-divider"}>
-                <button className={"blue-button min-continue-button-size"} onClick={navigateToProfilePage}>
-                    <span>Continue</span>
-                </button>
-            </div>
+            {currentPath != "/resume" && 
+                <>
+                    <div style={{marginBottom : "1rem"}} className={"resume-content-separation-line"}></div>
+                    <div className={"form-and-buttons-divider"}>
+                        <button className={"blue-button min-continue-button-size"} onClick={navigateToProfilePage}>
+                            <span>Continue</span>
+                        </button>
+                    </div>
+                </> 
+            }
             <div className={"bottom-page-margin"}>
                 
             </div>
