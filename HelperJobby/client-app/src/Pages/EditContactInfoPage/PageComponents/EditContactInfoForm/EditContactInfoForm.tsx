@@ -18,6 +18,7 @@ import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 import {isNotEmpty} from "../../../../utils/validationLogic/isNotEmptyString";
 import NavigateBackHeader from "../../../../Components/NavigateBackHeader/NavigateBackHeader";
+import {validatePhoneNumber} from "../../../../utils/validationLogic/authFormValidators";
 
 interface EditContactInfoFormProps {}
 
@@ -28,6 +29,8 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [phoneNumberError, setPhoneNumberError] = useState("");
+    const phoneNumberInputRef = useRef<HTMLInputElement>(null);
     const [country, setCountry] = useState("");
     const [streetAddress, setStreetAddress] = useState("");
     const [city, setCity] = useState("");
@@ -114,6 +117,14 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                 return;
             }
         }
+        if (phoneNumber){
+            const isValidPhoneNumber = validatePhoneNumber(phoneNumber);
+            if (isValidPhoneNumber){
+                setPhoneNumberError(isValidPhoneNumber);
+                phoneNumberInputRef.current?.focus();
+                return;
+            }
+        }
         const updateJobSeekerInfo : UpdateJobSeekerAccountDTO = {
             firstName : firstName,
             lastName : lastName,
@@ -187,8 +198,15 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                          setInputFieldValue={setFirstName} inputRef={firstNameInputRef}/>
                           <CustomInputField fieldLabel={"Last name"} isRequired={true} inputFieldValue={lastName}
                                          setInputFieldValue={setLastName} inputRef={lastNameInputRef}/>
-                          <CustomInputField fieldLabel={"Phone"} isRequired={false} inputFieldValue={phoneNumber}
-                                         setInputFieldValue={setPhoneNumber}/>
+                          <CustomInputField 
+                                         fieldLabel={"Phone"}
+                                         fieldSubtitle={"Include country code (start with +). Phone number must contain only numbers without spaces or dashes"}
+                                         isRequired={false}
+                                         inputFieldValue={phoneNumber}
+                                         setInputFieldValue={setPhoneNumber}
+                                         customErrorMessage={phoneNumberError}
+                                         setCustomErrorMessage={setPhoneNumberError}
+                                         inputRef={phoneNumberInputRef}/>
                           <EditEmail/>
                           <div className={"edit-location-layout"}>
                               <div className={"edit-location-label"}>

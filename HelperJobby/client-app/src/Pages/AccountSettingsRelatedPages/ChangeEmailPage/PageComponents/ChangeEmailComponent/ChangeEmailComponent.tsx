@@ -78,7 +78,7 @@ const ChangeEmailComponent: FC<ChangeEmailComponentProps> = () => {
     }
 
     function backToSettingsPage() {
-        navigate("/settings");
+        navigate(`/settings?msg=${ChangedInfoTypes.nothingchanged}`)
     }
 
     return (

@@ -71,6 +71,9 @@ const AccountSettingsComponent: FC<AccountSettingsComponentProps> = () => {
             case ChangedInfoTypes.changedphone :
                 setChangedInfoMsg("Your phone has been saved.");
                 break;
+            case ChangedInfoTypes.nothingchanged : 
+                setChangedInfoMsg("No changes were made to your account.");
+                break;
             default :
                 return;
         }

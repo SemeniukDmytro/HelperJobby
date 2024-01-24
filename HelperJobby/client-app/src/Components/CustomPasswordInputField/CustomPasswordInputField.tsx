@@ -55,6 +55,9 @@ const CustomPasswordInputField: FC<CustomPasswordInputFieldProps> = ({
 
     function changeInputFieldValue(e: ChangeEvent<HTMLInputElement>) {
         setPassword(e.target.value);
+        if(showLengthError && e.target.value.length >= 8 ){
+            setFieldError("");
+        }
     }
 
     function handleInputFocus() {
@@ -65,11 +68,8 @@ const CustomPasswordInputField: FC<CustomPasswordInputFieldProps> = ({
         if (password.length > 0 && !showLengthError) {
             setFieldError("");
         }
-        else if (showLengthError && password.length < 8){
-            setFieldError(`Password must be at least 8 characters long`);
-        }
-        else if (showLengthError && password.length > 25) {
-            setFieldError(`Password must be at most 25 characters long`);
+        else{
+            validateInputValue();
         }
         setInputFocus(false);
     }
@@ -97,7 +97,7 @@ const CustomPasswordInputField: FC<CustomPasswordInputFieldProps> = ({
                        onBlur={handleInputBlur}
                        ref={inputRef}/>
                 <div className={"input-button-box"} onClick={toggleShowPassword}>
-                    <button className={"input-field-button"}>
+                    <button className={"input-field-button right-margin-remove"} style={{minWidth: "40px"}}>
                         {showPassword ? <FontAwesomeIcon icon={faEyeSlash}/> :
                                 <FontAwesomeIcon icon={faEye}/>}
                     </button>

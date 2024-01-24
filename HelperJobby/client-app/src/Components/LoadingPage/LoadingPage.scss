@@ -1,3 +1,7 @@
 .loading-page-layout{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
   margin: 2rem auto;
 }

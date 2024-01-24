@@ -18,6 +18,8 @@ interface EditFormFieldProps {
     notShowErrorInitially? : boolean;
     executeValidation? : boolean;
     setExecuteValidation? : Dispatch<SetStateAction<boolean>>;
+    customErrorMessage? : string;
+    setCustomErrorMessage ? : Dispatch<SetStateAction<string>>;
 }
 
 const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue, 
@@ -30,7 +32,9 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
                                                displayGoogleLogo, 
                                                notShowErrorInitially, 
                                                executeValidation,
-                                               setExecuteValidation}) => {
+                                               setExecuteValidation,
+                                               customErrorMessage,
+                                               setCustomErrorMessage}) => {
     
     const [inputFocus, setInputFocus] = useState(false);
     const [isInvalidValue, setIsInvalidValue] = useState(false); 
@@ -43,6 +47,15 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
             setShowEraseButton(true);
         }
     }, [inputFieldValue]);
+
+    useEffect(() => {
+        if (customErrorMessage){
+            setIsInvalidValue(true);
+        }
+        else {
+            setIsInvalidValue(false);
+        }
+    }, [customErrorMessage]);
 
     useEffect(() => {
         if (notShowErrorInitially){
@@ -69,6 +82,9 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
 
     function changeInputFieldValue(e: ChangeEvent<HTMLInputElement>) {
         setIsInvalidValue(false);
+        if (setCustomErrorMessage){
+            setCustomErrorMessage("");
+        }
         if (setShowAutocompleteWindow){
             setShowAutocompleteWindow(true);
         }
@@ -91,6 +107,9 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
 
     function eraseInput() {
         setInputFieldValue("");
+        if (setCustomErrorMessage){
+            setCustomErrorMessage("");
+        }
         inputRef?.current?.focus();
         setShowEraseButton(false);
     }
@@ -123,10 +142,15 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
             </div>}
         </div>
         <div className={"input-field-spacing"}>
-            {isInvalidValue && isRequired &&
+            {(isInvalidValue && isRequired) &&
                 <div className={"error-box"}>
                     <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
                     <span className={"error-text"}>{requiredMessage}</span>
+                </div>}
+            {customErrorMessage &&
+                <div className={"error-box"}>
+                    <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
+                    <span className={"error-text"}>{customErrorMessage}</span>
                 </div>}
         </div>
     </div>

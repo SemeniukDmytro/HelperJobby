@@ -56,7 +56,7 @@ const ChangeAccountTypeComponent: FC<ChangeAccountTypeComponentProps> = () => {
     }
 
     function backToSettingsPage() {
-        navigate("/settings")
+        navigate(`/settings?msg=${ChangedInfoTypes.nothingchanged}`)
     }
 
     return (
