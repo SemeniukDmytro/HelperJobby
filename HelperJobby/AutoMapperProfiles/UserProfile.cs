@@ -16,5 +16,7 @@ public class UserProfile : Profile
             opt.MapFrom(src => src.Password));
         CreateMap<LoginUserDTO, User>().ForMember(dest => dest.PasswordHash, opt =>
             opt.MapFrom(src => src.Password));
+        CreateMap<UpdatedUserWithCurrentPasswordDTO, CreateUpdateUserDTO>().ReverseMap();
+
     }
 }

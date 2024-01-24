@@ -57,6 +57,16 @@ namespace HelperJobby.Controllers
             updatedUserModel = await _userCommandRepository.UpdateUser(updatedUserModel);
             return _mapper.Map<UserDTO>(updatedUserModel);
         }
+        
+        [HttpPut("vulnerable-info/{id}")]
+        public async Task<UserDTO> PutUserVulnerableInfo(int id, [FromBody] UpdatedUserWithCurrentPasswordDTO updatedUserWithCurrentPasswordDto)
+        {
+            var updatedUserDTO = _mapper.Map<CreateUpdateUserDTO>(updatedUserWithCurrentPasswordDto);
+            UpdateUserDTOValidator.ValidateUser(updatedUserDTO);
+            var updatedUserModel = await _userService.UpdateUserVulnerableInfo(id,_mapper.Map<User>(updatedUserDTO), updatedUserWithCurrentPasswordDto.CurrentPassword);
+            updatedUserModel = await _userCommandRepository.UpdateUser(updatedUserModel);
+            return _mapper.Map<UserDTO>(updatedUserModel);
+        }
 
         [HttpGet("recent-searches")]
         public async Task<IEnumerable<RecentUserSearchDTO>> GetUserRecentSearches()

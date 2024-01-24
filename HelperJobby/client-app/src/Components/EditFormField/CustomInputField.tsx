@@ -104,11 +104,11 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
         {fieldSubtitle && <div className={"field-label-subtitle"}>
             {fieldSubtitle}
         </div>}
-        <div className={"field-input-container"}>
+        <div className={`field-input-container ${isInvalidValue ? "red-field-focus" : ""}`}>
             <div className={`border-lining ${inputFocus ? "field-focus" : ""} ${isInvalidValue ? "red-field-focus" : ""}`}>
 
             </div>
-            <input className={`field-input ${isInvalidValue ? "red-field-focus" : ""}`}
+            <input className={`field-input`}
                    value={inputFieldValue}
                    type={"text"}
                    onChange={changeInputFieldValue}
@@ -116,9 +116,9 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
                    onBlur={handleInputBlur}
                    ref={inputRef}/>
             {displayGoogleLogo && <img className={"google-logo"} src={GoogleImage} alt={""}></img>}
-            {showEraseJobBtn &&<div className={"erase-button-box"} onClick={eraseInput}>
-                <button className={"cross-outline"}>
-                    <FontAwesomeIcon className={"cross-icon"} icon={faXmark}/>
+            {showEraseJobBtn &&<div className={"input-button-box"} onClick={eraseInput}>
+                <button className={"input-field-button"}>
+                    <FontAwesomeIcon icon={faXmark}/>
                 </button>
             </div>}
         </div>
