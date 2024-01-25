@@ -33,12 +33,11 @@ namespace HelperJobby.Controllers
         }
         // GET: api/Interview/my-interviews
         [HttpGet("my-interviews")]
-        public async Task<IEnumerable<JobDTO>> GetCurrentJobSeekerInterviews()
+        public async Task<IEnumerable<InterviewDTO>> GetCurrentJobSeekerInterviews()
         {
             var currentJobSeeker = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithInterviews(
                 _userService.GetCurrentUserId());
-            return _mapper.Map<IEnumerable<JobDTO>>(currentJobSeeker);
-
+            return _mapper.Map<IEnumerable<InterviewDTO>>(currentJobSeeker);
         }
         
         // GET: api/Interview/{jobId}/interviews

@@ -12,6 +12,7 @@ import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {useAuth} from "../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import {SavedJobDTO} from "../../../../DTOs/userJobInteractionsDTOs/SavedJobDTO";
 
 interface JobDescriptionHeaderProps {
     selectedJob : JobDTO | null;
@@ -43,7 +44,7 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
 
 
     useEffect(() => {
-        if (jobSeekerSavedJobs.some(j => j.id == selectedJob?.id)){
+        if (jobSeekerSavedJobs.some(j => j.jobId == selectedJob?.id)){
             setIsJobSaved(true)
         }
         else {
@@ -58,7 +59,7 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
             }
            await jobSeekerService.deleteSavedJob(selectedJob!.id);
            setIsJobSaved(false);
-            setJobSeekerSavedJobs((prevSavedJobs) => prevSavedJobs.filter(savedJob => savedJob.id !== selectedJob?.id));
+            setJobSeekerSavedJobs((prevSavedJobs) => prevSavedJobs.filter(savedJob => savedJob.jobId !== selectedJob?.id));
             setShowRemoveFromSaved(false);
         }
         catch (error){
@@ -73,9 +74,10 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
             if (!authUser){
                 navigate("/auth-page");
             }
-            await jobSeekerService.saveJob(selectedJob!.id);
+            var retrievedSavedJob = await jobSeekerService.saveJob(selectedJob!.id);
             setIsJobSaved(true);
-            setJobSeekerSavedJobs((prevSavedJobs) => [...prevSavedJobs, selectedJob!]);
+            retrievedSavedJob.job = selectedJob!;
+            setJobSeekerSavedJobs((prevSavedJobs) => [...prevSavedJobs, retrievedSavedJob!]);
         }
         catch (error){
             if (error instanceof ServerError){
@@ -117,7 +119,7 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
                 <button className={"save-job-button margin-left1rem"} onClick={saveJob}>
                     <FontAwesomeIcon icon={regularHeart} />
                 </button>) : (
-                <button className={"saved-job-button"} ref={moreActionsButtonRef} onClick={() => setShowRemoveFromSaved(!showRemoveFromSaved)}>
+                <button className={"saved-job-button margin-left1rem"} ref={moreActionsButtonRef} onClick={() => setShowRemoveFromSaved(!showRemoveFromSaved)}>
                     <FontAwesomeIcon className={"saved-job-heart"} icon={solidHeart} />
                     <FontAwesomeIcon className={"drop-down-more-options"} icon={faCaretDown} />
                 </button>)}

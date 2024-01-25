@@ -58,6 +58,10 @@ const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
     function navigateToSettingsPage() {
         navigate("/settings")
     }
+    
+    function navigateToSavedJobsPage(){
+        navigate("/saved")
+    }
 
     return (
         <div className={"nav-buttons-block"}>
@@ -81,7 +85,7 @@ const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
                             <FontAwesomeIcon className={"icon-box big-icon"} icon={faFileLines}/>
                             <div>Profile</div>
                         </button>
-                        <button className={"more-profile-option-button"}>
+                        <button className={"more-profile-option-button"} onClick={navigateToSavedJobsPage}>
                             <FontAwesomeIcon className={"icon-box big-icon"} icon={faBookmark}/>
                             <div>My jobs</div>
                         </button>

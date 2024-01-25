@@ -65,54 +65,88 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
                 }).FirstOrDefaultAsync();
         return jobSeekerAccount;
     }
-
-
-    public async Task<IEnumerable<Job>> GetJobSeekerAccountWithJobApplies(int userId)
+    
+    public async Task<IEnumerable<SavedJob>> GetJobSeekerSavedJobs(int userId)
     {
-        var jobApplies = await _applicationContext.Users
-            .Where(u => u.Id == userId)
-            .SelectMany(u => u.JobSeekerAccount.JobApplies
-                .Select(sj => sj.Job)
-                .Select(sj => new Job
+        var savedJobs = await _applicationContext.SavedJobs
+            .Where(sj => sj.JobSeekerAccount.UserId == userId)
+            .Select(sj => new SavedJob()
+            {
+                JobId = sj.JobId,
+                JobSeekerAccountId = sj.JobSeekerAccountId,
+                Job = new Job()
                 {
-                    Id = sj.Id,
-                    JobTitle = sj.JobTitle,
-                    Salary = sj.Salary,
-                    Schedule = sj.Schedule,
-                    Location = sj.Location,
-                    JobApplies = sj.JobApplies
-                        .Select(j => new JobApply()
+                    Id = sj.JobId,
+                    JobTitle = sj.Job.JobTitle,
+                    EmployerAccount = new EmployerAccount()
+                    {
+                        Id = sj.Job.EmployerAccountId,
+                        Organization = new Organization()
                         {
-                            DateTime = j.DateTime
-                        })
-                        .ToList()
-                }))
-            .ToListAsync();
+                            Id = sj.Job.EmployerAccount.OrganizationId,
+                            Name = sj.Job.EmployerAccount.Organization.Name
+                        }
+                    },
+                    Location = sj.Job.Location
+                },
+                DateSaved = sj.DateSaved
+            }).ToListAsync();
+        return savedJobs;
+    }
+
+
+    public async Task<IEnumerable<JobApply>> GetJobSeekerAccountWithJobApplies(int userId)
+    {
+        var jobApplies = await _applicationContext.JobApplies.Where(i => i.JobSeekerAccount.UserId == userId)
+            .Select(ja => new JobApply()
+            {
+                JobId = ja.JobId,
+                JobSeekerAccountId = ja.JobSeekerAccountId,
+                DateApplied = ja.DateApplied,
+                Job = new Job()
+                {
+                    Id = ja.JobId,
+                    JobTitle = ja.Job.JobTitle,
+                    EmployerAccount = new EmployerAccount()
+                    {
+                        Id = ja.Job.EmployerAccountId,
+                        Organization = new Organization()
+                        {
+                            Id = ja.Job.EmployerAccount.OrganizationId,
+                            Name = ja.Job.EmployerAccount.Organization.Name
+                        }
+                    },
+                    Location = ja.Job.Location
+                }
+            }).ToListAsync();
         return jobApplies;
     }
 
-    public async Task<IEnumerable<Job>> GetJobSeekerAccountWithInterviews(int userId)
+    public async Task<IEnumerable<Interview>> GetJobSeekerAccountWithInterviews(int userId)
     {
-       var interviews = await _applicationContext.Users
-            .Where(u => u.Id == userId)
-            .SelectMany(u => u.JobSeekerAccount.Interviews
-                .Select(sj => sj.Job)
-                .Select(sj => new Job
-                {
-                    Id = sj.Id,
-                    JobTitle = sj.JobTitle,
-                    Salary = sj.Salary,
-                    Schedule = sj.Schedule,
-                    Location = sj.Location,
-                    Interviews = sj.Interviews
-                        .Select(i => new Interview
-                        {
-                            DateTime = i.DateTime
-                        })
-                        .ToList()
-                }))
-            .ToListAsync();
-    return interviews;
+       var interviews = await _applicationContext.Interviews.Where(i => i.JobSeekerAccount.UserId == userId)
+           .Select(i => new Interview()
+           {
+               JobId = i.JobId,
+               JobSeekerAccountId = i.JobSeekerAccountId,
+               InterviewDate = i.InterviewDate,
+               Job = new Job()
+               {
+                   Id = i.JobId,
+                   JobTitle = i.Job.JobTitle,
+                   EmployerAccount = new EmployerAccount()
+                   {
+                       Id = i.Job.EmployerAccountId,
+                       Organization = new Organization()
+                       {
+                           Id = i.Job.EmployerAccount.OrganizationId,
+                           Name = i.Job.EmployerAccount.Organization.Name
+                       }
+                   },
+                   Location = i.Job.Location
+               },
+           }).ToListAsync();
+       return interviews;
     }
     
 

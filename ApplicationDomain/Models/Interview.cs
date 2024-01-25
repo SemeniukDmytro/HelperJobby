@@ -16,6 +16,6 @@ public class Interview
     public Job Job { get; set; }
     
     public JobSeekerAccount JobSeekerAccount { get; set; }
-    
-    public DateTime DateTime { get; set; }
+    [Required]
+    public DateOnly InterviewDate { get; set; }
 }

@@ -13,5 +13,5 @@ public class InterviewDTO
     
     public JobSeekerAccountDTO JobSeekerAccount { get; set; }
     
-    public DateTime DateTime { get; set; }
+    public DateOnly InterviewDate { get; set; }
 }

@@ -16,7 +16,7 @@ public class JobApply
     public Job Job { get; set; }
 
     public JobSeekerAccount JobSeekerAccount { get; set; }
-
-    public DateTime DateTime { get; set; }
+    [Required]
+    public DateOnly DateApplied { get; set; }
     
 }

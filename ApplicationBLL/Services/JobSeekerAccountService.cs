@@ -82,11 +82,12 @@ public class JobSeekerAccountService : IJobSeekerAccountService
         {
             throw new JobSavingException("This job is already saved");
         }
-
+        
         var newSavedJob = new SavedJob()
         {
             JobId = jobId,
-            JobSeekerAccountId = jobSeekerAccount.Id
+            JobSeekerAccountId = jobSeekerAccount.Id,
+            DateSaved = DateOnly.FromDateTime(DateTime.UtcNow)
         };
 
         return newSavedJob;

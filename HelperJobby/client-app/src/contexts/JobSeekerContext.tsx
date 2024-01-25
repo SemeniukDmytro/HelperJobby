@@ -1,11 +1,11 @@
 import {createContext, ReactNode, useState} from "react";
 import {JobSeekerContextProps} from "../contextTypes/JobSeekerContextProps";
 import {JobSeekerAccountDTO} from "../DTOs/accountDTOs/JobSeekerAccountDTO";
-import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
 import {ServerError} from "../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../utils/logErrorInfo";
 import {JobSeekerAccountService} from "../services/jobSeekerAccountService";
 import {useAuth} from "../hooks/useAuth";
+import {SavedJobDTO} from "../DTOs/userJobInteractionsDTOs/SavedJobDTO";
 
 const JobSeekerContext = createContext<JobSeekerContextProps>({
     jobSeeker : null,
@@ -17,7 +17,7 @@ const JobSeekerContext = createContext<JobSeekerContextProps>({
 
 export function JobSeekerProvider({children} : {children : ReactNode}){
     const [jobSeeker, setJobSeeker] = useState<JobSeekerAccountDTO | null>(null);
-    const [jobSeekerSavedJobs, setJobSeekerSavedJobs] = useState<JobDTO[]>([]);
+    const [jobSeekerSavedJobs, setJobSeekerSavedJobs] = useState<SavedJobDTO[]>([]);
     const {authUser} = useAuth();
     
     const jobSeekerService = new JobSeekerAccountService();

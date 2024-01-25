@@ -61,7 +61,7 @@ public class InterviewService : IInterviewService
         {
             JobId = jobId,
             JobSeekerAccountId = jobSeekerId,
-            DateTime = DateTime.UtcNow
+            InterviewDate = DateOnly.FromDateTime(DateTime.UtcNow)
         };
         return newInterview;
     }

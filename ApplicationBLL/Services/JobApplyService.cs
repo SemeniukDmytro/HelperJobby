@@ -58,7 +58,7 @@ public class JobApplyService : IJobApplyService
         {
             JobId = jobId,
             JobSeekerAccountId = currentJobSeeker.Id,
-            DateTime = DateTime.UtcNow
+            DateApplied = DateOnly.FromDateTime(DateTime.UtcNow)
         };
         return createdJobApply;
     }

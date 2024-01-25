@@ -10,17 +10,12 @@ namespace ApplicationDAL.QueryRepositories;
 public class JobQueryRepository : IJobQueryRepository
 {
     private readonly ApplicationContext _applicationContext;
-    private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
-    private readonly IOrganizationQueryRepository _organizationQueryRepository;
 
     private const int RandomJobsToTake = 10;
 
-    public JobQueryRepository(ApplicationContext applicationContext, IEmployerAccountQueryRepository employerAccountQueryRepository, 
-        IOrganizationQueryRepository organizationQueryRepository)
+    public JobQueryRepository(ApplicationContext applicationContext)
     {
         _applicationContext = applicationContext;
-        _employerAccountQueryRepository = employerAccountQueryRepository;
-        _organizationQueryRepository = organizationQueryRepository;
     }
 
     public async Task<Job> GetJobById(int jobId)
@@ -36,39 +31,17 @@ public class JobQueryRepository : IJobQueryRepository
 
     public async Task<IEnumerable<Job>> GetJobsByUserId(int userId)
     {
-        var employerAccount = await _employerAccountQueryRepository.GetEmployerAccount(userId);
-        await _applicationContext.Entry(employerAccount).Collection(e => e.Jobs).LoadAsync();
-        return employerAccount.Jobs;
+        var jobs = await _applicationContext.Jobs.Where(j => j.EmployerAccount.UserId == userId).ToListAsync();
+        return jobs;
     }
     
-    public async Task<IEnumerable<Job>> GetJobSeekerSavedJobs(int userId)
-    {
-        var savedJobs = await _applicationContext.Users
-            .Include(u => u.JobSeekerAccount)
-            .ThenInclude(j => j.SavedJobs)
-            .ThenInclude(s => s.Job)
-            .Where(u => u.Id == userId)
-            .SelectMany(u => u.JobSeekerAccount.SavedJobs.Select(sj => sj.Job).Select(sj => new Job()
-            {
-                Id = sj.Id,
-                JobTitle = sj.JobTitle,
-                Salary = sj.Salary,
-                Schedule = sj.Schedule,
-                Location = sj.Location
-            }))
-            .ToListAsync();
-        return savedJobs;
-    }
+    
     public async Task<IEnumerable<Job>> GetJobsByOrganizationId(int organizationId)
     {
-        var organization = await _organizationQueryRepository.GetOrganizationWithEmployees(organizationId);
-        List<Job> result = new List<Job>();
-        foreach (var employerAccount in organization.EmployeeAccounts)
-        {
-            result.AddRange(await GetJobsByUserId(employerAccount.UserId));
-        }
+        var jobs = await _applicationContext.Jobs.Where(j => j.EmployerAccount.OrganizationId == organizationId)
+            .ToListAsync();
 
-        return result;
+        return jobs;
     }
 
     public async Task<IEnumerable<Job>> GetJobsByJobIds(List<int> jobIds)
@@ -149,6 +122,5 @@ public class JobQueryRepository : IJobQueryRepository
                 }
             })
             .ToListAsync();
-
     }
 }

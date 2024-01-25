@@ -35,11 +35,12 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     }
     
     async function loadJobSeekerSavedJobs(){
-        if (jobSeekerSavedJobs || !authUser){
+        if (jobSeekerSavedJobs.length > 0 || !authUser){
             return;
         }
         try {
             const response = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
+            console.log(response);
             setJobSeekerSavedJobs(response);
         }
         catch (err){

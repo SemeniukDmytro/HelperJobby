@@ -33,6 +33,9 @@ import ChangeAccountTypePage from "./Pages/AccountSettingsRelatedPages/ChangeAcc
 import ChangeEmailPage from "./Pages/AccountSettingsRelatedPages/ChangeEmailPage/ChangeEmailPage";
 import ChangePasswordPage from "./Pages/AccountSettingsRelatedPages/ChangePasswordPage/ChangePasswordPage";
 import ChangePhonePage from "./Pages/AccountSettingsRelatedPages/ChangePhonePage/ChangePhonePage";
+import SavedJobsPage from "./Pages/UserJobInteractionPages/SavedJobsPage/SavedJobsPage";
+import AppliedJobsPage from "./Pages/UserJobInteractionPages/AppliedJobsPage/AppliedJobsPage";
+import InterviewsPage from "./Pages/UserJobInteractionPages/InterviewsPage/InterviewsPage";
 
 
 function App() {
@@ -42,12 +45,16 @@ function App() {
             {/* auth routes*/}
             <Route element={<RequireAuth/>}>
                 <Route path={"/"} element={<HomePage/>}/>
+                
                 <Route path={"/my-profile"} element={<JobSeekerProfilePage/>}/>
+                
                 <Route path={"/edit/contact"} element={<EditContactInfoPage/>}/>
+                
                 <Route path={"/build"} element={<BuildResumePage/>}>
                     <Route path={"name"} element={<AddNamePage/>}/>
                     <Route path={"phone"} element={<AddPhonePage/>}/>
                     <Route path={"address"} element={<ResumeAddressPage/>}/>
+                    
                     <Route path="education" element={<Outlet/>}>
                         <Route index element={<EducationPage />} />
                         <Route path="add" element={<AddEducationPage />} />
@@ -58,7 +65,9 @@ function App() {
                         <Route path="add" element={<AddWorkExperiencePage />} />
                         <Route path=":id" element={<EditWorkExperiencePage />} />
                     </Route>
+                    
                     <Route path={"skills"} element={<SkillsPage/>}/>
+                    
                     <Route path={"preview"} element={<Outlet/>}>
                         <Route index element={<PreviewPage />} />
                         <Route path={"skills/add"} element={<ResumeAddSkillPage/>}/>
@@ -68,6 +77,7 @@ function App() {
                         <Route path={"experience/:id"} element={<ResumeEditWorkExperiencePage/>}/>
                     </Route>
                 </Route>
+                
                 <Route path={"/resume"} element={<Outlet/>}>
                     <Route index element={<ResumePage/>} />
                     <Route path={"contact"} element={<EditContactInfoPage/>}/>
@@ -77,6 +87,7 @@ function App() {
                     <Route path={"experience/:id"} element={<ResumeEditWorkExperiencePage/>}/>
                     <Route path={"skills/add"} element={<ResumeAddSkillPage/>}/>
                 </Route>
+                
                 <Route path={"/settings"} element={<AccountSettingsPage/>}/>
                 <Route path={"/account"} element={<Outlet/>}>
                     <Route index element={<AccountSettingsPage/>}/>
@@ -86,6 +97,10 @@ function App() {
                     <Route path={"change-phone"} element={<ChangePhonePage/>}/>
                 </Route>
                 
+                <Route path={"saved"} element={<SavedJobsPage/>}/>
+                <Route path={"applied"} element={<AppliedJobsPage/>}/>
+                <Route path={"interviews"} element={<InterviewsPage/>}/>
+                    
             </Route>
 
             {/*public routes */}
