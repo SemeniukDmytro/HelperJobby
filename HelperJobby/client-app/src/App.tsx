@@ -89,7 +89,7 @@ function App() {
             </Route>
 
             {/*public routes */}
-            <Route path="/home" element={<HomePage/>}/>
+            <Route path="/" element={<HomePage/>}/>
             <Route path={"/auth-page"} element={<AuthPage/>}/>
             <Route path={"/jobs"} element={<SearchJobResultsPage/>}/>
             

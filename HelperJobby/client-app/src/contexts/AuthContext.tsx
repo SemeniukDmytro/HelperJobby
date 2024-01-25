@@ -3,6 +3,7 @@ import AuthService from "../services/authService";
 import {AuthContextProps} from "../contextTypes/AuthContextProps";
 import {AuthUserDTO} from "../DTOs/userRelatedDTOs/AuthUserDTO";
 import {getAuthToken, setAuthToken} from "../utils/authTokenInteraction";
+import LoadingPage from "../Components/LoadingPage/LoadingPage";
 
 const AuthContext = createContext<AuthContextProps>({authUser : null, 
     setAuthUser : () => {}});
@@ -36,7 +37,7 @@ export function AuthProvider({children} : {children: ReactNode; })
     }, []);
         
     return (
-        loading ? <>Loading...</> :
+        loading ? <LoadingPage></LoadingPage> :
         <AuthContext.Provider value={{authUser, setAuthUser }}>
             {children}
         </AuthContext.Provider>

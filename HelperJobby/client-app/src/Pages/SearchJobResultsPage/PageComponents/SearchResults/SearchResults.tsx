@@ -20,6 +20,7 @@ import DetailedDescriptionColumn
     from "../../../HomePage/PageComponents/DetailedDescriptionColumn/DetailedDescriptionColumn";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import getJobSearchRequestURI from "../../../../utils/getJobSearchRequestURI";
+import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 
 interface SearchResultsProps {
 }
@@ -237,7 +238,7 @@ const SearchResults: FC<SearchResultsProps> = () => {
             </div>
             <div className={"filters-results-separator"}>
             </div>
-            {loading ? <>Loading...</> :
+            {loading ? <LoadingPage/> :
                 (searchResults.length > 0 ?  (<div className={"jobs-container"}>
                     <div className={"job-descriptions"}>
                         <div className={"short-job-descriptions-column smaller-margin-before-navigation"}>

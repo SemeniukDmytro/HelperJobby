@@ -20,12 +20,12 @@ const HomePageMainContentWrap: FC<HomePageMainContentWrapProps> = ({children}: {
     }, []);
     
     return (
-        <PageWrapWithHeader>
+        <>
             <div className={"content-separation-margin"}></div>
             <div className={"main-content"} ref={mainContentRef}>
                 {children}
             </div>
-        </PageWrapWithHeader>
+        </>
     )
 };
 

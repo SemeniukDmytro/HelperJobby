@@ -4,6 +4,8 @@ import {useJobSeeker} from "../hooks/useJobSeeker";
 import {ResumeService} from "../services/resumeService";
 import {ServerError} from "../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../utils/logErrorInfo";
+import LoadingPage from "../Components/LoadingPage/LoadingPage";
+import PageWrapWithHeader from "../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 
 
 const ResumeContext = createContext<ResumeBuildContextProps>({
@@ -16,7 +18,7 @@ const ResumeContext = createContext<ResumeBuildContextProps>({
 });
 
 export function ResumeContextProvider({ children }: { children: ReactNode }) {
-    const [progressPercentage, setProgressPercentage] = useState<number | null>(20);
+    const [progressPercentage, setProgressPercentage] = useState<number | null>(12.5);
     const [currentSaveFunc, setCurrentSaveFunc] = useState<() => Promise<void>>(
         async () => {});
     const {jobSeeker, setJobSeeker, fetchJobSeeker } = useJobSeeker();
@@ -63,19 +65,22 @@ export function ResumeContextProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        loading ? <>Loading...</> :
-        <ResumeContext.Provider
-            value={{
-                progressPercentage,
-                setProgressPercentage,
-                saveFunc,
-                setSaveFunc: setCurrentSaveFunc,
-                showDialogWindow,
-                setShowDialogWindow
-            }}
-        >
-            {children}
-        </ResumeContext.Provider>
+        
+            <PageWrapWithHeader>
+                {loading ? <LoadingPage/> :
+                    <ResumeContext.Provider
+                        value={{
+                            progressPercentage,
+                            setProgressPercentage,
+                            saveFunc,
+                            setSaveFunc: setCurrentSaveFunc,
+                            showDialogWindow,
+                            setShowDialogWindow
+                        }}
+                    >
+                        {children}
+                    </ResumeContext.Provider>}
+            </PageWrapWithHeader>
     );
 }
 

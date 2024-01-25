@@ -19,6 +19,7 @@ import CustomInputField from "../../../../Components/EditFormField/CustomInputFi
 import {isNotEmpty} from "../../../../utils/validationLogic/isNotEmptyString";
 import NavigateBackHeader from "../../../../Components/NavigateBackHeader/NavigateBackHeader";
 import {validatePhoneNumber} from "../../../../utils/validationLogic/authFormValidators";
+import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 
 interface EditContactInfoFormProps {}
 
@@ -167,8 +168,9 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     }
 
     return (
-        loading ? (<span>Loading...</span>) :
-            (<PageWrapWithHeader>
+        <PageWrapWithHeader>
+            {loading ? <LoadingPage/> :
+            <>
                 {showStreetsAutocomplete && <AutocompleteResultsWindow inputFieldRef={streetAddressInputRef}
                                                                        inputValue={streetAddress}
                                                                        setInputValue={setStreetAddress}
@@ -178,7 +180,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                                                        showResult={showStreetsAutocomplete}
                                                                        setShowResult={setShowStreetsAutocomplete}
                                                                        autocompleteWindowType={AutocompleteWindowTypes.streetAddress}/>}
-                
+
                 {showCityAutoComplete && <AutocompleteResultsWindow inputFieldRef={cityInputRef}
                                                                     inputValue={city}
                                                                     setInputValue={setCity}
@@ -187,51 +189,52 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                                                     setShowResult={setShowCityAutoComplete}
                                                                     autocompleteWindowType={AutocompleteWindowTypes.city}/>}
                 <div className={"page-with-centered-content-layout"}>
-                  
-                  <NavigateBackHeader onBackButtonClick={navigateToNextPage}/>
-                  <div className={"form-layout"}>
-                      <form className={"edit-contact-form"} onSubmit={saveUpdatedInfo}>
-                          <div className={"edit-contact-form-header"}>
-                              <span>Contact information</span>
-                          </div>
-                          <CustomInputField fieldLabel={"First name"} isRequired={true} inputFieldValue={firstName}
-                                         setInputFieldValue={setFirstName} inputRef={firstNameInputRef}/>
-                          <CustomInputField fieldLabel={"Last name"} isRequired={true} inputFieldValue={lastName}
-                                         setInputFieldValue={setLastName} inputRef={lastNameInputRef}/>
-                          <CustomInputField 
-                                         fieldLabel={"Phone"}
-                                         fieldSubtitle={"Include country code (start with +). Phone number must contain only numbers without spaces or dashes"}
-                                         isRequired={false}
-                                         inputFieldValue={phoneNumber}
-                                         setInputFieldValue={setPhoneNumber}
-                                         customErrorMessage={phoneNumberError}
-                                         setCustomErrorMessage={setPhoneNumberError}
-                                         inputRef={phoneNumberInputRef}/>
-                          <EditEmail/>
-                          <div className={"edit-location-layout"}>
-                              <div className={"edit-location-label"}>
-                                  Location
-                              </div>
-                              <div className={"edit-location-subtitle"}>
-                                  This helps match you with nearby jobs.
-                              </div>
-                              <CountrySelector country={country} setCountry={setCountry} selectRef={countryInputRef}></CountrySelector>
-                              <CustomInputField fieldLabel={"Street address"} isRequired={false} inputFieldValue={streetAddress} setInputFieldValue={setStreetAddress}
-                                             setShowAutocompleteWindow={setShowStreetsAutocomplete} inputRef={streetAddressInputRef}
-                                             fieldSubtitle={"Visible only to you"} displayGoogleLogo={true}/>
-                              <CustomInputField fieldLabel={"City, Province / Territory"} isRequired={true} inputFieldValue={city} inputRef={cityInputRef}
-                                             setInputFieldValue={setCity}
-                                             setShowAutocompleteWindow={setShowCityAutoComplete} displayGoogleLogo={true}/>
-                              <CustomInputField fieldLabel={"Postal code"} isRequired={false} inputFieldValue={postalCode}
-                                             setInputFieldValue={setPostalCode}/>
-                          </div>
-                          <div className={"edit-form-submit-button-container"}>
-                              <button className={"submit-form-button"} type={"submit"}>Save</button>
-                          </div>
-                      </form>
-                  </div>
-              </div>
-        </PageWrapWithHeader>)
+
+                    <NavigateBackHeader onBackButtonClick={navigateToNextPage}/>
+                    <div className={"form-layout"}>
+                        <form className={"edit-contact-form"} onSubmit={saveUpdatedInfo}>
+                            <div className={"edit-contact-form-header"}>
+                                <span>Contact information</span>
+                            </div>
+                            <CustomInputField fieldLabel={"First name"} isRequired={true} inputFieldValue={firstName}
+                                              setInputFieldValue={setFirstName} inputRef={firstNameInputRef}/>
+                            <CustomInputField fieldLabel={"Last name"} isRequired={true} inputFieldValue={lastName}
+                                              setInputFieldValue={setLastName} inputRef={lastNameInputRef}/>
+                            <CustomInputField
+                                fieldLabel={"Phone"}
+                                fieldSubtitle={"Include country code (start with +). Phone number must contain only numbers without spaces or dashes"}
+                                isRequired={false}
+                                inputFieldValue={phoneNumber}
+                                setInputFieldValue={setPhoneNumber}
+                                customErrorMessage={phoneNumberError}
+                                setCustomErrorMessage={setPhoneNumberError}
+                                inputRef={phoneNumberInputRef}/>
+                            <EditEmail/>
+                            <div className={"edit-location-layout"}>
+                                <div className={"edit-location-label"}>
+                                    Location
+                                </div>
+                                <div className={"edit-location-subtitle"}>
+                                    This helps match you with nearby jobs.
+                                </div>
+                                <CountrySelector country={country} setCountry={setCountry} selectRef={countryInputRef}></CountrySelector>
+                                <CustomInputField fieldLabel={"Street address"} isRequired={false} inputFieldValue={streetAddress} setInputFieldValue={setStreetAddress}
+                                                  setShowAutocompleteWindow={setShowStreetsAutocomplete} inputRef={streetAddressInputRef}
+                                                  fieldSubtitle={"Visible only to you"} displayGoogleLogo={true}/>
+                                <CustomInputField fieldLabel={"City, Province / Territory"} isRequired={true} inputFieldValue={city} inputRef={cityInputRef}
+                                                  setInputFieldValue={setCity}
+                                                  setShowAutocompleteWindow={setShowCityAutoComplete} displayGoogleLogo={true}/>
+                                <CustomInputField fieldLabel={"Postal code"} isRequired={false} inputFieldValue={postalCode}
+                                                  setInputFieldValue={setPostalCode}/>
+                            </div>
+                            <div className={"edit-form-submit-button-container"}>
+                                <button className={"submit-form-button"} type={"submit"}>Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </>}
+    </PageWrapWithHeader>
 )
 };
 

@@ -106,43 +106,41 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
                 firstButtonText={firstDialogButtonText}
                 secondButtonText={secondDialogButtonText}
                 positiveDialog={isPositiveDialog}/>
-            <PageWrapWithHeader>
-                {deleteProcess ? 
-                    <LoadingPage/>
-                    :
-                
-                    <div className={"page-with-centered-content-layout"}>
-                        <div className={"resume-component-header"}>
-                            <button className={"back-button"} onClick={onBackButtonClick}>
-                                <FontAwesomeIcon icon={faArrowLeftLong}/>
+            {deleteProcess ? 
+                <LoadingPage/>
+                :
+            
+                <div className={"page-with-centered-content-layout"}>
+                    <div className={"resume-component-header"}>
+                        <button className={"back-button"} onClick={onBackButtonClick}>
+                            <FontAwesomeIcon icon={faArrowLeftLong}/>
+                        </button>
+                        <div className={"more-options-container"}>
+                            <button className={"small-interaction-button additional-button-size"}
+                                    onClick={handleMoreOptionsClick} ref={moreOptionsButtonRef}>
+                                <FontAwesomeIcon icon={faEllipsisVertical}/>
                             </button>
-                            <div className={"more-options-container"}>
-                                <button className={"small-interaction-button additional-button-size"}
-                                        onClick={handleMoreOptionsClick} ref={moreOptionsButtonRef}>
-                                    <FontAwesomeIcon icon={faEllipsisVertical}/>
-                                </button>
-                                {showMoreOptions && <div className={"more-resume-options-bar"}>
-                                    <div className={"resume-options-container"} ref={moreOptionsRef}>
-                                        <button className={"more-profile-option-button"}>
-                                            <FontAwesomeIcon className={"icon-right-margin margin-left1rem"} icon={faUpload}/>
-                                            <span
-                                                className={"additional-text-margin-for-big-icon"}>Upload to replace resume</span>
-                                        </button>
-                                        <button className={"more-profile-option-button delete-button-color"} onClick={() => setShowDialogWindow(true)}>
-                                            <FontAwesomeIcon className={"icon-right-margin margin-left1rem"} icon={faTrashCan}/>
-                                            <span className={"additional-text-margin-for-big-icon"}>Delete</span>
-                                        </button>
-                                    </div>
-                                </div>}
-                            </div>
-                        </div>
-                        <div className={"form-layout"}>
-                            <ResumeInfoComponent/>
+                            {showMoreOptions && <div className={"more-resume-options-bar"}>
+                                <div className={"resume-options-container"} ref={moreOptionsRef}>
+                                    <button className={"more-profile-option-button"}>
+                                        <FontAwesomeIcon className={"icon-right-margin margin-left1rem"} icon={faUpload}/>
+                                        <span
+                                            className={"additional-text-margin-for-big-icon"}>Upload to replace resume</span>
+                                    </button>
+                                    <button className={"more-profile-option-button delete-button-color"} onClick={() => setShowDialogWindow(true)}>
+                                        <FontAwesomeIcon className={"icon-right-margin margin-left1rem"} icon={faTrashCan}/>
+                                        <span className={"additional-text-margin-for-big-icon"}>Delete</span>
+                                    </button>
+                                </div>
+                            </div>}
                         </div>
                     </div>
-                }
-
-        </PageWrapWithHeader></>
+                    <div className={"form-layout"}>
+                        <ResumeInfoComponent/>
+                    </div>
+                </div>
+            }
+        </>
     )
 }
 

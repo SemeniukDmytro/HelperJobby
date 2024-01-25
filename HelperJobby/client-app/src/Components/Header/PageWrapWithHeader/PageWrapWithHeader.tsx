@@ -1,24 +1,25 @@
-import React, {FC, ReactNode} from 'react';
+import React, { FC, ReactNode } from 'react';
 import "./PageWrapWithHeader.scss";
 import HomePageHeaderLeftSide from "../HomePageHeaderLeftSide/HomePageHeaderLeftSide";
 import AuthUserHomePageHeader from "../AuthUserHomePageHeader/AuthUserHomePageHeader";
 import PublicHomePageHeader from "../PublicHomePageHeader/PublicHomePageHeader";
-import {useAuth} from "../../../hooks/useAuth";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface HomePageHeaderProps {
-    children : ReactNode;
+    children: ReactNode;
+    onHomeClick?: () => Promise<void>;
 }
 
-const PageWrapWithHeader: FC<HomePageHeaderProps> = (props) => {
-    const {authUser} = useAuth();
-    
+const PageWrapWithHeader: FC<HomePageHeaderProps> = ({ children, onHomeClick }) => {
+    const { authUser } = useAuth();
+
     return (
         <div className={"page-layout"}>
             <div className={"header-container"}>
                 <nav className={"header-block"}>
-                    <HomePageHeaderLeftSide></HomePageHeaderLeftSide>
+                    <HomePageHeaderLeftSide onHomeClick={onHomeClick}></HomePageHeaderLeftSide>
                     <div className={"header-right-side"}>
-                        {authUser ? (<AuthUserHomePageHeader/>) : (<PublicHomePageHeader/>)}
+                        {authUser ? (<AuthUserHomePageHeader />) : (<PublicHomePageHeader />)}
                         <div className={"right-side-divider"}></div>
                         <div className={"employers-link-block"}>
                             <button className={"employers-page-button"}>
@@ -29,7 +30,7 @@ const PageWrapWithHeader: FC<HomePageHeaderProps> = (props) => {
                     </div>
                 </nav>
             </div>
-            {props.children}
+            {children}
         </div>
     )
 }

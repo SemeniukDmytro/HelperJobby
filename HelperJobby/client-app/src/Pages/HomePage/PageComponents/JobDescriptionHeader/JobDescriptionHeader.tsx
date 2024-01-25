@@ -110,11 +110,11 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
                 </div>
             </div>
             <div className={"header-job-interactions-box"}>
-                <button className={"apply-button"}>
+                <button className={"blue-button"}>
                     Apply now
                 </button>
                 {!isJobSaved ?  (
-                <button className={"save-job-button"} onClick={saveJob}>
+                <button className={"save-job-button margin-left1rem"} onClick={saveJob}>
                     <FontAwesomeIcon icon={regularHeart} />
                 </button>) : (
                 <button className={"saved-job-button"} ref={moreActionsButtonRef} onClick={() => setShowRemoveFromSaved(!showRemoveFromSaved)}>

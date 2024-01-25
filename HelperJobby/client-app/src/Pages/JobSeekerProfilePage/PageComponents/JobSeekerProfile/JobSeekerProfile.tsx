@@ -7,6 +7,7 @@ import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleRight, faEnvelope, faFileLines, faLocationDot, faPhone, faUser} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
+import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 
 interface JobSeekerProfileProps {}
 
@@ -52,8 +53,8 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
     }
 
     return (
-        loading ? (<span>Loading</span>) :
         <PageWrapWithHeader>
+            {loading ? (<LoadingPage/>) :
             <div className={"profile-info-layout"}>
                 <div className={"profile-info-container"}>
                     <div className={"profile-header-info"}>
@@ -136,6 +137,7 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
                     </div>
                 </div>
             </div>
+            }
         </PageWrapWithHeader>
     )
 }

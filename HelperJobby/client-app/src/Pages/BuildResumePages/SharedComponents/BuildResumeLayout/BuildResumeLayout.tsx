@@ -1,4 +1,4 @@
-import React, { FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import './BuildResumeLayout.scss';
 import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -18,6 +18,12 @@ const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
     const firstDialogButtonText = "Exit without saving";
     const secondDialogButtonText = "Return to page";
     const isPositiveDialog = true;
+    
+    useEffect(() => {
+        if (window.location.pathname == "/build"){
+            navigate("/build/name")
+        }
+    }, []);
     function goBack() {
         navigate(-1)
     }
@@ -45,31 +51,29 @@ const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
                  secondButtonText={secondDialogButtonText}
                  positiveDialog={isPositiveDialog}
                 ></DialogWindow>
-             <PageWrapWithHeader>
-                 <div className={"build-resume-sticky-panel"}>
-                     <nav className={"build-resume-navigation"}>
-                         <div className={"back-button"} onClick={goBack}>
-                             <FontAwesomeIcon icon={faArrowLeftLong}/>
-                         </div>
-                         <div className={"bold-navigation-link"}>
-                             <a onClick={saveInfo}>
-                                 Save and exit
-                             </a>
-                         </div>
-                     </nav>
-                     <div className={"progress-bar"}>
-                         <div className={"current-progress"} style={{
-                            width : `${progressPercentage}%`
-                         }}>
-                            
-                         </div>
+             <div className={"build-resume-sticky-panel"}>
+                 <nav className={"build-resume-navigation"}>
+                     <div className={"back-button"} onClick={goBack}>
+                         <FontAwesomeIcon icon={faArrowLeftLong}/>
+                     </div>
+                     <div className={"bold-navigation-link"}>
+                         <a onClick={saveInfo}>
+                             Save and exit
+                         </a>
+                     </div>
+                 </nav>
+                 <div className={"progress-bar"}>
+                     <div className={"current-progress"} style={{
+                        width : `${progressPercentage}%`
+                     }}>
+                        
                      </div>
                  </div>
-                 <div className={"header-with-content-spacing"}></div>
-                 <div className={"resume-info-container"}>
-                     <Outlet/>
-                 </div>
-             </PageWrapWithHeader>
+             </div>
+             <div className={"header-with-content-spacing"}></div>
+             <div className={"resume-info-container"}>
+                 <Outlet/>
+             </div>
          </>
     )
 };

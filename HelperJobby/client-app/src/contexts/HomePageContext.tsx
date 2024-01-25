@@ -6,6 +6,9 @@ import {RecommendationService} from "../services/recommendationService";
 import {RecentUserSearchDTO} from "../DTOs/userRelatedDTOs/RecentUserSearchDTO";
 import {UserService} from "../services/userService";
 import {useAuth} from "../hooks/useAuth";
+import PageWrapWithHeader from "../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
+import LoadingPage from "../Components/LoadingPage/LoadingPage";
+import {logErrorInfo} from "../utils/logErrorInfo";
 
 const HomePageContext = createContext<HomePageContextProps>(
     {
@@ -35,8 +38,8 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
     
     const recommendationService = new RecommendationService();
     const [loading, setLoading] = useState(true);
+    const [recommendedJobsLoading, setRecommendedJobsLoading] = useState(false);
     
-    const jobSeekerService : JobSeekerAccountService = new JobSeekerAccountService();
     const userService = new UserService();
 
     useEffect(() => {
@@ -49,7 +52,7 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
                 }
             }
             catch (error){
-                console.log(error)
+                logErrorInfo(error)
             }
             setLoading(false);
         };
@@ -58,9 +61,22 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
     }, []);
 
     async function loadRecommendationJobs(){
-        const retrievedJobs = await recommendationService.getRandomJobs();
-        setSelectedJob(retrievedJobs[0]);
-        setRecommendedJobs(retrievedJobs);
+        try {
+            if (recommendedJobsLoading){
+                return;
+            }
+            setRecommendedJobsLoading(true);
+            const retrievedJobs = await recommendationService.getRandomJobs();
+            setSelectedJob(retrievedJobs[0]);
+            setRecommendedJobs(retrievedJobs);
+        }
+        catch (err){
+            logErrorInfo(err)
+        }
+        finally {
+            setRecommendedJobsLoading(false);
+        }
+        
     }
     
     async function loadRecentUserSearches(){
@@ -71,24 +87,27 @@ export function HomePageContextProvider({ children } : {children: ReactNode}){
     }
     
     return(
-        loading ? <>Loading...</> :
-        <HomePageContext.Provider
-            value={{
-                mainContentReferenceForHome: mainContentRef,
-                setMainContentReferenceForHome: setMainContentRef,
-                isFullHeaderGridTemplate: fullHeaderGridTemplate,
-                setIsFullHeaderGridTemplate: setFullHeaderGridTemplate,
-                isShortHeaderGridTemplate: shortHeaderGridTemplate,
-                setIsShortHeaderGridTemplate: setShortHeaderGridTemplate,
-                selectedJob,
-                setSelectedJob,
-                recommendedJobs,
-                setRecommendedJobs,
-                recentUserSearches,
-                setRecentUserSearches
-            }}>
-            {children}
-        </HomePageContext.Provider>
+        <PageWrapWithHeader onHomeClick={() => loadRecommendationJobs()}>
+            {(loading || recommendedJobsLoading) ? <LoadingPage></LoadingPage> :
+            <HomePageContext.Provider
+                value={{
+                    mainContentReferenceForHome: mainContentRef,
+                    setMainContentReferenceForHome: setMainContentRef,
+                    isFullHeaderGridTemplate: fullHeaderGridTemplate,
+                    setIsFullHeaderGridTemplate: setFullHeaderGridTemplate,
+                    isShortHeaderGridTemplate: shortHeaderGridTemplate,
+                    setIsShortHeaderGridTemplate: setShortHeaderGridTemplate,
+                    selectedJob,
+                    setSelectedJob,
+                    recommendedJobs,
+                    setRecommendedJobs,
+                    recentUserSearches,
+                    setRecentUserSearches
+                }}>
+                {children}
+            </HomePageContext.Provider>}
+        </PageWrapWithHeader>
+        
     )
 }
 
