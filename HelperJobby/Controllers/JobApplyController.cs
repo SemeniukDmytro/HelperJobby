@@ -35,10 +35,10 @@ namespace HelperJobby.Controllers
         }
         // GET: api/JobApply
         [HttpGet("my-job-applies")]
-        public async Task<IEnumerable<JobDTO>> GetUserJobApplies()
+        public async Task<IEnumerable<JobApplyDTO>> GetUserJobApplies()
         {
             var jobApplies = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithJobApplies(_userService.GetCurrentUserId());
-            return _mapper.Map<IEnumerable<JobDTO>>(jobApplies);
+            return _mapper.Map<IEnumerable<JobApplyDTO>>(jobApplies);
         }
         
         [HttpGet("{jobId}/job-applies")]

@@ -1,12 +1,14 @@
 import React, { FC } from 'react';
 import './SavedJobsComponent.scss';
+import UserJobInteractionPagesHeader
+    from "../../../SharedComponents/UserJobInteractionPagesHeader/UserJobInteractionPagesHeader";
 
 interface SavedJobsComponentProps {}
 
 const SavedJobsComponent: FC<SavedJobsComponentProps> = () => (
-  <div className="SavedJobsComponent">
-    SavedJobsComponent Component
-  </div>
+    <UserJobInteractionPagesHeader>
+        
+    </UserJobInteractionPagesHeader>
 );
 
 export default SavedJobsComponent;

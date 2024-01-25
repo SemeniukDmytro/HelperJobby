@@ -10,8 +10,8 @@ export class JobApplyService {
         this.customFetchService = new CustomFetchService();
     }
 
-    public async getUserJobApplies(): Promise<JobDTO[]> {
-        return await this.customFetchService.get<JobDTO[]>(`${this.baseURI}/my-job-applies`);
+    public async getUserJobApplies(): Promise<JobApplyDTO[]> {
+        return await this.customFetchService.get<JobApplyDTO[]>(`${this.baseURI}/my-job-applies`);
     }
 
     public async getJobAppliesByJobId(jobId: number): Promise<JobApplyDTO[]> {

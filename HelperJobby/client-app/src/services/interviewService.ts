@@ -10,8 +10,8 @@ export class InterviewService {
         this.customFetchService = new CustomFetchService();
     }
 
-    public async getCurrentJobSeekerInterviews(): Promise<JobDTO[]> {
-        return await this.customFetchService.get<JobDTO[]>(`${this.baseURI}/my-interviews`);
+    public async getCurrentJobSeekerInterviews(): Promise<InterviewDTO[]> {
+        return await this.customFetchService.get<InterviewDTO[]>(`${this.baseURI}/my-interviews`);
     }
 
     public async getInterviewsByJobId(jobId: number): Promise<InterviewDTO[]> {
