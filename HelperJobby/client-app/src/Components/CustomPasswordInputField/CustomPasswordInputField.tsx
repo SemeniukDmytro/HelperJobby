@@ -1,4 +1,4 @@
-import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
+    import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './CustomPasswordInputField.scss';
 import {isNotEmpty} from "../../utils/validationLogic/isNotEmptyString";
 import GoogleImage from "../../Assets/pictures/google_on_white_hdpi.png";
@@ -98,8 +98,8 @@ const CustomPasswordInputField: FC<CustomPasswordInputFieldProps> = ({
                        ref={inputRef}/>
                 <div className={"input-button-box"} onClick={toggleShowPassword}>
                     <button className={"input-field-button right-margin-remove"} style={{minWidth: "40px"}}>
-                        {showPassword ? <FontAwesomeIcon icon={faEyeSlash}/> :
-                                <FontAwesomeIcon icon={faEye}/>}
+                        {showPassword ? <FontAwesomeIcon className={"medium-svg"} icon={faEyeSlash}/> :
+                                <FontAwesomeIcon className={"medium-svg"} icon={faEye}/>}
                     </button>
                 </div>
             </div>

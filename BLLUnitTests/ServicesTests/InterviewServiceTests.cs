@@ -71,6 +71,10 @@ public class InterviewServiceTests
         var currentUserId = 1;
         var jobSeekerId = 1;
         var jobId = 1;
+        var createdInterviewInfo = new Interview()
+        {
+            InterviewStart = DateTime.UtcNow
+        };
         _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, jobSeekerId))
             .ThrowsAsync(new InterviewOperatingException("Interview not found"));
         _userServiceMock.Setup(u => u.GetCurrentUserId()).Returns(currentUserId);
@@ -78,7 +82,7 @@ public class InterviewServiceTests
             .ReturnsAsync(EmployerAccountFixtures.EmployerAccountEntity);
         _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(JobFixtures.FirstJobEntity);
         //Act
-        var createdInterview = await _interviewService.PostInterview(jobId, jobSeekerId);
+        var createdInterview = await _interviewService.PostInterview(jobId, jobSeekerId, createdInterviewInfo);
         //Assert
         Assert.Equal(jobSeekerId, createdInterview.JobSeekerAccountId);
         Assert.Equal(jobId, createdInterview.JobId);
@@ -92,6 +96,10 @@ public class InterviewServiceTests
         var currentUserId = 1;
         var jobSeekerId = 1;
         var jobId = 2;
+        var createdInterviewInfo = new Interview()
+        {
+            InterviewStart = DateTime.UtcNow
+        };
         _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, jobSeekerId))
             .ThrowsAsync(new InterviewOperatingException("Interview not found"));
         _userServiceMock.Setup(u => u.GetCurrentUserId()).Returns(currentUserId);
@@ -100,7 +108,7 @@ public class InterviewServiceTests
         _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(JobFixtures.SecondJobEntity);
         //Act & Assert
         await Assert.ThrowsAsync 
-        <ForbiddenException>(async () => await _interviewService.PostInterview(jobId, jobSeekerId));
+        <ForbiddenException>(async () => await _interviewService.PostInterview(jobId, jobSeekerId, createdInterviewInfo));
     }
     
     [Fact]
@@ -109,11 +117,15 @@ public class InterviewServiceTests
         //Arrange
         var jobSeekerId = 1;
         var jobId = 2;
+        var createdInterviewInfo = new Interview()
+        {
+            InterviewStart = DateTime.UtcNow
+        };
         _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, jobSeekerId))
             .ReturnsAsync(new Interview()); 
         //Act & Assert
         await Assert.ThrowsAsync 
-            <InterviewOperatingException>(async () => await _interviewService.PostInterview(jobId, jobSeekerId));
+            <InterviewOperatingException>(async () => await _interviewService.PostInterview(jobId, jobSeekerId, createdInterviewInfo));
     }
 
     [Fact]

@@ -15,7 +15,9 @@ const JobSeekerJobInteractionsContext = createContext<JobSeekerJobInteractionsCo
     setJobApplies : () => {},
     interviews : [],
     setInterviews : () => {},
-    fetchJobSeekerJobInteractions : () => {}
+    fetchJobSeekerJobInteractions : () => {},
+    jobInteractionsLoaded : false,
+    setJobInteractionsLoaded : () => {}
 });
 
 export function JobSeekerJobInteractionsProvider({children} : {children : ReactNode}){
@@ -25,11 +27,19 @@ export function JobSeekerJobInteractionsProvider({children} : {children : ReactN
     const jobSeekerService = new JobSeekerAccountService();
     const jobAppliesService = new JobApplyService();
     const interviewsService = new InterviewService();
-    
+    const [jobInteractionsLoaded, setJobInteractionsLoaded] = useState(false);
     const fetchJobSeekerJobInteractions = async () => {
         try {
+            if (jobInteractionsLoaded){
+                return;
+            }
             const retrievedSavedJobs = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
             setSavedJobs(retrievedSavedJobs);
+            const retrievedJobApplies = await jobAppliesService.getUserJobApplies();
+            setJobApplies(retrievedJobApplies);
+            const retrievedInterviews = await interviewsService.getCurrentJobSeekerInterviews();
+            setInterviews(retrievedInterviews);
+            setJobInteractionsLoaded(true)
         }
         catch (err){
             logErrorInfo(err)
@@ -44,7 +54,9 @@ export function JobSeekerJobInteractionsProvider({children} : {children : ReactN
              setJobApplies,
              interviews,
              setInterviews,
-             fetchJobSeekerJobInteractions}
+             fetchJobSeekerJobInteractions,
+             jobInteractionsLoaded, 
+             setJobInteractionsLoaded}
         }>
             {children}
         </JobSeekerJobInteractionsContext.Provider>

@@ -10,5 +10,7 @@ export interface JobSeekerJobInteractionsContextProps {
     setJobApplies : Dispatch<SetStateAction<JobApplyDTO[]>>;
     interviews : InterviewDTO[];
     setInterviews : Dispatch<SetStateAction<InterviewDTO[]>>;
-    fetchJobSeekerJobInteractions : () => void
+    fetchJobSeekerJobInteractions : () => void;
+    jobInteractionsLoaded : boolean;
+    setJobInteractionsLoaded : Dispatch<SetStateAction<boolean>>;
 }

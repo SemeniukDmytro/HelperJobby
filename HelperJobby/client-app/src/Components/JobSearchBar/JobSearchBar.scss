@@ -101,17 +101,12 @@
 
 .cross-icon-box{
   position: absolute;
-  top: 0.75rem;
+  top: 0.5rem;
   background-color: white;
   right: 0.5rem;
-  display: flex;
   z-index: 1;
-  justify-content: center;
-  align-items: center;
   max-width: 44px;
   max-height: 44px;
-  width: 100%;
-  flex-direction: column;
 }
 
 .cross-outline {
@@ -119,7 +114,7 @@
   position: relative;
   line-height: 1.5rem;
   border-radius: 0.5rem;
-  padding: 0.625rem;
+  padding: 0.875rem;
   margin-right: 0.5rem;
   cursor: pointer;
   background: transparent;
@@ -133,23 +128,6 @@
   display: flex;
   margin: 0.5rem;
 }
-
-.search-button{
-  display: flex;
-  padding: 0.75rem 1rem;
-  border: 0px;
-  align-items: center;
-  background-color: global-variables.$dark-blue;
-  color: white;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: 0.1s;
-  &:hover{
-    background-color: global-variables.$dark-blue-hover;
-  }
-}
-
 
 .cross-outline:hover .cross-icon {
   color: global-variables.$dark-blue ;

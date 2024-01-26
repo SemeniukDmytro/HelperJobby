@@ -6,7 +6,7 @@ interface LoadingPageProps {}
 
 const LoadingPage: FC<LoadingPageProps> = () => (
   <div className="loading-page-layout">
-      <Oval strokeWidth={5} color={"#2557a7"} secondaryColor={"#767676"} height={30} width={30}></Oval>
+      <Oval strokeWidth={5} color={"#2557a7"} secondaryColor={"#767676"} height={"40px !important"}></Oval>
   </div>
 );
 

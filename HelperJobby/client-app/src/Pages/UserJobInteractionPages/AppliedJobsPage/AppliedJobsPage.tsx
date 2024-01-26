@@ -5,9 +5,7 @@ import {JobSeekerJobInteractionsProvider} from "../../../contexts/JobSeekerJobIn
 interface AppliedJobsPageProps {}
 
 const AppliedJobsPage: FC<AppliedJobsPageProps> = () => (
-    <JobSeekerJobInteractionsProvider>
-        <AppliedJobsComponent/>
-    </JobSeekerJobInteractionsProvider>
+    <AppliedJobsComponent/>
 );
 
 export default AppliedJobsPage;

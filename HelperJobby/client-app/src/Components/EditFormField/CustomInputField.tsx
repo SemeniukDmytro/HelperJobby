@@ -137,7 +137,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
             {displayGoogleLogo && <img className={"google-logo"} src={GoogleImage} alt={""}></img>}
             {showEraseJobBtn &&<div className={"input-button-box"} onClick={eraseInput}>
                 <button className={"input-field-button"}>
-                    <FontAwesomeIcon icon={faXmark}/>
+                    <FontAwesomeIcon className={"small-svg"} icon={faXmark}/>
                 </button>
             </div>}
         </div>
@@ -149,7 +149,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
                 </div>}
             {customErrorMessage &&
                 <div className={"error-box"}>
-                    <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
+                    <FontAwesomeIcon className={`error-svg error-svg`} icon={faCircleExclamation}/>
                     <span className={"error-text"}>{customErrorMessage}</span>
                 </div>}
         </div>

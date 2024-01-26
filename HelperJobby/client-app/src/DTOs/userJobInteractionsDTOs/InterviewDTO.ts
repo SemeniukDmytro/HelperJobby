@@ -6,5 +6,8 @@ export interface InterviewDTO {
     jobSeekerAccountId: number;
     job: JobDTO;
     jobSeekerAccount: JobSeekerAccountDTO;
-    dateTime: Date;
+    interviewStart: Date;
+    interviewEnd : Date;
+    interviewType : string;
+    appointmentInfo : string;
 }

@@ -1,12 +1,17 @@
 import React, { FC } from 'react';
 import './InterviewsComponent.scss';
+import {UserJobInteractionsTypes} from "../../../../../enums/UserJobInteractionsTypes";
+import UserJobInteractionPagesHeader
+    from "../../../SharedComponents/UserJobInteractionPagesHeader/UserJobInteractionPagesHeader";
 
 interface InterviewsComponentProps {}
 
 const InterviewsComponent: FC<InterviewsComponentProps> = () => (
-  <div className="InterviewsComponent">
-    InterviewsComponent Component
-  </div>
+    <UserJobInteractionPagesHeader userJobInteractionType={UserJobInteractionsTypes.interviewing}>
+        <div>
+
+        </div>
+    </UserJobInteractionPagesHeader>
 );
 
 export default InterviewsComponent;

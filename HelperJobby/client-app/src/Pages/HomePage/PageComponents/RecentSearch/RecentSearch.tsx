@@ -45,7 +45,7 @@ const RecentSearch: FC<RecentSearchProps> = (props) => {
                 </div>}
             </div>
             <button className={"delete-search-button"} onClick={deleteRecentUserSearch}>
-                <FontAwesomeIcon className={"delete-search-svg"} icon={faXmark}/>
+                <FontAwesomeIcon className={"medium-svg"} icon={faXmark}/>
             </button>
         </div>
     )

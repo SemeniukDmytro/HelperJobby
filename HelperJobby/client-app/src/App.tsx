@@ -36,6 +36,7 @@ import ChangePhonePage from "./Pages/AccountSettingsRelatedPages/ChangePhonePage
 import SavedJobsPage from "./Pages/UserJobInteractionPages/SavedJobsPage/SavedJobsPage";
 import AppliedJobsPage from "./Pages/UserJobInteractionPages/AppliedJobsPage/AppliedJobsPage";
 import InterviewsPage from "./Pages/UserJobInteractionPages/InterviewsPage/InterviewsPage";
+import MyJobsPagesWrap from "./Components/MyJobsPagesWrap/MyJobsPagesWrap";
 
 
 function App() {
@@ -97,9 +98,11 @@ function App() {
                     <Route path={"change-phone"} element={<ChangePhonePage/>}/>
                 </Route>
                 
-                <Route path={"saved"} element={<SavedJobsPage/>}/>
-                <Route path={"applied"} element={<AppliedJobsPage/>}/>
-                <Route path={"interviews"} element={<InterviewsPage/>}/>
+                <Route element={<MyJobsPagesWrap/>}>
+                    <Route path={"saved"} element={<SavedJobsPage/>}/>
+                    <Route path={"applied"} element={<AppliedJobsPage/>}/>
+                    <Route path={"interviews"} element={<InterviewsPage/>}/>
+                </Route>
                     
             </Route>
 

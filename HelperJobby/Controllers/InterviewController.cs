@@ -1,6 +1,7 @@
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
+using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.UserJobInteractions;
@@ -59,9 +60,10 @@ namespace HelperJobby.Controllers
 
         // POST: api/Interview/{jobId}/job-seeker/{jobSeekerId}
         [HttpPost("{jobId}/job-seeker/{jobSeekerId}")]
-        public async Task<InterviewDTO> CreateInterview(int jobId, int jobSeekerId)
+        public async Task<InterviewDTO> CreateInterview(int jobId, int jobSeekerId, [FromBody] CreateInterviewDTO createInterviewDTO)
         {
-            var interview = await _interviewService.PostInterview(jobId, jobSeekerId);
+            var createdInterviewInfo = _mapper.Map<Interview>(createInterviewDTO);
+            var interview = await _interviewService.PostInterview(jobId, jobSeekerId, createdInterviewInfo);
             interview = await _interviewCommandRepository.CreateInterview(interview);
             return _mapper.Map<InterviewDTO>(interview);
         }

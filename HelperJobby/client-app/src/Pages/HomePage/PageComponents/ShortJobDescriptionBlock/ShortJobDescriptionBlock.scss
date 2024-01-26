@@ -117,7 +117,6 @@
   &:active{
     box-shadow: global-variables.$button-inner-shadow;
   }
-  font-size: 1.25rem;
   font-weight: 100;
   color: global-variables.$neutral-color-900;
 }
@@ -148,7 +147,7 @@
 
 .first-option{
   display: flex;
-  flex-grow: 1;
+  align-items: center;
   width: 100%;
   border: none;
   background-color: transparent;
@@ -159,18 +158,12 @@
   margin-left: 0.125rem;
   margin-right: 0.125rem;
   border-radius: 0.25rem;
+  color: global-variables.$neutral-color-900;
   &:hover{
     background-color: #eef1fe;
     color: #0d2d5e;
     cursor: pointer;
   }
-}
-
-.bookmark-icon{
-  display: flex;
-  color: global-variables.$neutral-color-900;
-  font-size: 1.125rem;
-  padding-right: 0.75rem;
 }
 
 .save-job-text{

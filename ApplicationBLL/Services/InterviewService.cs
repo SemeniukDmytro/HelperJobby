@@ -34,7 +34,7 @@ public class InterviewService : IInterviewService
         return job;
     }
 
-    public async Task<Interview> PostInterview(int jobId, int jobSeekerId)
+    public async Task<Interview> PostInterview(int jobId, int jobSeekerId, Interview interviewInfo)
     {
         Interview interview = null;
         try
@@ -57,11 +57,19 @@ public class InterviewService : IInterviewService
             throw new ForbiddenException("You can't create interview for this job. Job was created by another employer");
         }
 
+        if (interviewInfo.InterviewStart.TimeOfDay > interviewInfo.InterviewEnd.ToTimeSpan())
+        {
+            throw new InterviewOperatingException("Invalid interview time provided");
+        }
+
         var newInterview = new Interview()
         {
             JobId = jobId,
             JobSeekerAccountId = jobSeekerId,
-            InterviewDate = DateOnly.FromDateTime(DateTime.UtcNow)
+            InterviewStart = interviewInfo.InterviewStart,
+            InterviewEnd = interviewInfo.InterviewEnd,
+            InterviewType = interviewInfo.InterviewType,
+            AppointmentInfo = interviewInfo.AppointmentInfo
         };
         return newInterview;
     }

@@ -1,3 +1,4 @@
+using ApplicationDomain.Enums;
 using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Job;
 
@@ -13,5 +14,8 @@ public class InterviewDTO
     
     public JobSeekerAccountDTO JobSeekerAccount { get; set; }
     
-    public DateOnly InterviewDate { get; set; }
+    public DateTime InterviewStart { get; set; }
+    public TimeOnly InterviewEnd { get; set; }
+    public string InterviewType { get; set; }
+    public string AppointmentInfo { get; set; }
 }

@@ -103,7 +103,7 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
                             </div>
                         </button>
                         <div className={"change-info-button-arrow"}>
-                            <FontAwesomeIcon icon={faAngleRight} />
+                            <FontAwesomeIcon className={"small-svg"} icon={faAngleRight} />
                         </div>
                     </div>
                     <div className={"resume-section"}>
@@ -124,12 +124,12 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
                                 <div className={"resume-container"} onClick={navigateToResume}>
                                     <div className={"resume-container-info"}>
                                         <div className={"resume-icon"}>
-                                            <FontAwesomeIcon icon={faFileLines} />
+                                            <FontAwesomeIcon className={"resume-icon"} icon={faFileLines} />
                                         </div>
                                         <span>HelperJobby Resume</span>
                                     </div>
                                     <div className={"change-info-button-arrow right-margin-remove"}>
-                                        <FontAwesomeIcon icon={faAngleRight} />
+                                        <FontAwesomeIcon className={"small-svg"} icon={faAngleRight} />
                                     </div>
                                 </div>                                
                             )

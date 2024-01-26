@@ -1,3 +1,4 @@
+using ApplicationBLL.Logic;
 using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Account;
@@ -10,7 +11,10 @@ public class InterviewProfile : Profile
 {
     public InterviewProfile()
     {
-        CreateMap<Interview, InterviewDTO>().AfterMap((src, dest, context) =>
+        CreateMap<Interview, InterviewDTO>().ForMember(dest => dest.InterviewType,
+                opt => opt
+                    .MapFrom(src => InterviewTypesToStringConverter.InterviewTypeToStringConverter(src.InterviewType)))
+            .AfterMap((src, dest, context) =>
         {
             dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccount, JobSeekerAccountDTO>(src.JobSeekerAccount);
             dest.Job = context.Mapper.Map<Job, JobDTO>(src.Job);
@@ -21,5 +25,7 @@ public class InterviewProfile : Profile
             dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccountDTO, JobSeekerAccount>(src.JobSeekerAccount);
             dest.Job = context.Mapper.Map<JobDTO, Job>(src.Job);
         });
+
+        CreateMap<CreateInterviewDTO, Interview>();
     }
 }

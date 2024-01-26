@@ -58,11 +58,11 @@ const HomeComponent: FC<HomeComponentProps> = () => {
                 <nav className={"search-results-navbar"}>
                     <button className={"tab-container"} onClick={showJobFeed}>
                         <span
-                            className={`tab-name ${selectedTab === 1 ? "selected-tab-font-weight" : ""}`}>Job feed</span>
+                            className={`home-page-tab-name ${selectedTab === 1 ? "selected-tab-font-weight" : ""}`}>Job feed</span>
                         {selectedTab === 1 && <div className={"search-underline"}></div>}
                     </button>
                     <button className={"tab-container"} onClick={showRecentSearches}>
-                        <span className={`tab-name ${selectedTab === 2 ? "selected-tab-font-weight" : ""}`}>New results for recent searches</span>
+                        <span className={`home-page-tab-name ${selectedTab === 2 ? "selected-tab-font-weight" : ""}`}>New results for recent searches</span>
                         {selectedTab === 2 && <div className={"search-underline"}></div>}
                     </button>
                 </nav>

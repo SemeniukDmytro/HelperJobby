@@ -1,6 +1,7 @@
 import {InterviewDTO} from "../DTOs/userJobInteractionsDTOs/InterviewDTO";
 import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
 import CustomFetchService from "./customFetchService";
+import {CreateInterviewDTO} from "../DTOs/userJobInteractionsDTOs/CreateInterviewDTO";
 
 export class InterviewService {
     private readonly baseURI: string = "api/Interview";
@@ -22,8 +23,8 @@ export class InterviewService {
         return await this.customFetchService.get<InterviewDTO>(`${this.baseURI}/${jobId}/job-seeker/${jobSeekerId}`);
     }
 
-    public async createInterview(jobId: number, jobSeekerId: number): Promise<InterviewDTO> {
-        return await this.customFetchService.post<InterviewDTO>(`${this.baseURI}/${jobId}/job-seeker/${jobSeekerId}`, {});
+    public async createInterview(jobId: number, jobSeekerId: number, createInterviewDTO : CreateInterviewDTO): Promise<InterviewDTO> {
+        return await this.customFetchService.post<InterviewDTO>(`${this.baseURI}/${jobId}/job-seeker/${jobSeekerId}`, createInterviewDTO);
     }
 
     public async deleteInterview(jobId: number, jobSeekerId: number): Promise<void> {

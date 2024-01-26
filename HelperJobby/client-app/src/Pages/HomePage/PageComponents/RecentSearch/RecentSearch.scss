@@ -36,6 +36,7 @@
   background-color: transparent;
   z-index: 2;
   transition: 0.2s;
+  color: global-variables.$neutral-color-800;
   cursor: pointer;
   &:hover{
     background-color: global-variables.$light-blue;
@@ -46,5 +47,4 @@
   height: 1.5rem;
   width: 100%;
   font-weight: 100;
-  color: global-variables.$neutral-color-800;
 }

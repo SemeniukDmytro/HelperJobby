@@ -129,7 +129,10 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
            {
                JobId = i.JobId,
                JobSeekerAccountId = i.JobSeekerAccountId,
-               InterviewDate = i.InterviewDate,
+               InterviewStart = i.InterviewStart,
+               InterviewEnd = i.InterviewEnd,
+               InterviewType = i.InterviewType,
+               AppointmentInfo = i.AppointmentInfo,
                Job = new Job()
                {
                    Id = i.JobId,

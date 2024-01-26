@@ -74,8 +74,9 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
             if (!authUser){
                 navigate("/auth-page");
             }
-            var retrievedSavedJob = await jobSeekerService.saveJob(selectedJob!.id);
+            const retrievedSavedJob = await jobSeekerService.saveJob(selectedJob!.id);
             setIsJobSaved(true);
+            setShowRemoveFromSaved(true);
             retrievedSavedJob.job = selectedJob!;
             setJobSeekerSavedJobs((prevSavedJobs) => [...prevSavedJobs, retrievedSavedJob!]);
         }
@@ -117,11 +118,10 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
                 </button>
                 {!isJobSaved ?  (
                 <button className={"save-job-button margin-left1rem"} onClick={saveJob}>
-                    <FontAwesomeIcon icon={regularHeart} />
+                    <FontAwesomeIcon className={"medium-svg"} icon={regularHeart} />
                 </button>) : (
-                <button className={"saved-job-button margin-left1rem"} ref={moreActionsButtonRef} onClick={() => setShowRemoveFromSaved(!showRemoveFromSaved)}>
-                    <FontAwesomeIcon className={"saved-job-heart"} icon={solidHeart} />
-                    <FontAwesomeIcon className={"drop-down-more-options"} icon={faCaretDown} />
+                <button className={"save-job-button saved-job-button margin-left1rem"} ref={moreActionsButtonRef} onClick={removeSavedJob}>
+                    <FontAwesomeIcon className={"medium-svg"} icon={solidHeart} />
                 </button>)}
             </div>
             {showRemoveFromSaved && <div className={"undo-action-box"}>

@@ -240,7 +240,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
                              onMouseLeave={handleJobInputLeave}>
                             <div className={`border-lining ${jobFocus ? "job-query-box-focus" : ""}`}/>
                             <div className={"icon-box"}>
-                                <FontAwesomeIcon className={"query-box-icon"} icon={faMagnifyingGlass}/>
+                                <FontAwesomeIcon className={"medium-svg"} icon={faMagnifyingGlass}/>
                             </div>
                             <input className={`query-input`}
                                    value={job}
@@ -252,7 +252,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
                                    onKeyDown={handleEnterKeyPress}/>
                             {showEraseJobBtn &&<div className={"cross-icon-box"} onClick={eraseJobInput} ref={eraseJobButtonRef}>
                                  <button className={"cross-outline"}>
-                                    <FontAwesomeIcon className={"cross-icon"} icon={faXmark}/>
+                                    <FontAwesomeIcon className={"cross-icon small-svg"} icon={faXmark}/>
                                 </button>
                             </div>}
                         </div>
@@ -262,7 +262,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
                              onMouseLeave={handleLocationInputLeave}>
                             <div className={`border-lining ${locationFocus ? "location-query-box-focus" : ""}`}/>
                             <div className={"icon-box"}>
-                                <FontAwesomeIcon className={"query-box-icon"} icon={faLocationDot} />
+                                <FontAwesomeIcon className={"query-box-icon medium-svg"} icon={faLocationDot} />
                             </div>
                             <div style={{position: "relative", display: "flex", flexGrow: 1}}>
                                 <input className={"query-input"}
@@ -277,7 +277,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
                             </div>
                             {showEraseLocationBtn && <div className={"cross-icon-box"} onClick={eraseLocationInput} ref={eraseLocationButtonRef} >
                                 <button className={"cross-outline"}>
-                                    <FontAwesomeIcon className={"cross-icon"} icon={faXmark}/>
+                                    <FontAwesomeIcon className={"cross-icon small-svg"} icon={faXmark}/>
                                 </button>
                             </div>}
                             
@@ -299,7 +299,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
                         </div>
                     </div>
                     <div className={"search-button-box"}>
-                        <button className={"search-button"} onClick={navigateToSearchResultsPage}>
+                        <button className={"blue-button"} onClick={navigateToSearchResultsPage}>
                             <span>Find jobs</span>
                         </button>
                     </div>
