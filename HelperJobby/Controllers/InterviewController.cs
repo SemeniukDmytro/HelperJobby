@@ -3,7 +3,6 @@ using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Models;
 using AutoMapper;
-using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.UserJobInteractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -70,9 +69,17 @@ namespace HelperJobby.Controllers
 
         // DELETE: api/Interview/{jobId}/job-seeker/{jobSeekerId}
         [HttpDelete("{jobId}/job-seeker/{jobSeekerId}")]
-        public async Task Delete(int jobId, int jobSeekerId)
+        public async Task EmployerCancelInterview(int jobId, int jobSeekerId)
         {
-            var interview = await _interviewService.DeleteInterview(jobId, jobSeekerId);
+            var interview = await _interviewService.CancelInterviewFromEmployerAccount(jobId, jobSeekerId);
+            await _interviewCommandRepository.DeleteInterview(interview);
+        }
+        
+        // DELETE: api/Interview/{jobId}/
+        [HttpDelete("{jobId}")]
+        public async Task JobSeekerCancelInterview(int jobId)
+        {
+            var interview = await _interviewService.CancelInterviewFromJobSeekerAccount(jobId);
             await _interviewCommandRepository.DeleteInterview(interview);
         }
 

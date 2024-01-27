@@ -27,7 +27,11 @@ export class InterviewService {
         return await this.customFetchService.post<InterviewDTO>(`${this.baseURI}/${jobId}/job-seeker/${jobSeekerId}`, createInterviewDTO);
     }
 
-    public async deleteInterview(jobId: number, jobSeekerId: number): Promise<void> {
+    public async employerCancelInterview(jobId: number, jobSeekerId: number): Promise<void> {
         return await this.customFetchService.delete<void>(`${this.baseURI}/${jobId}/job-seeker/${jobSeekerId}`);
+    }
+
+    public async jobSeekerCancelInterview(jobId: number): Promise<void> {
+        return await this.customFetchService.delete<void>(`${this.baseURI}/${jobId}`);
     }
 }

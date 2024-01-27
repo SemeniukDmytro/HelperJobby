@@ -15,11 +15,13 @@ public class InterviewServiceTests
     private readonly Mock<IInterviewQueryRepository> _interviewQueryRepositoryMock = new();
     private readonly Mock<IJobQueryRepository> _jobQueryRepositoryMock = new();
     private readonly Mock<IEmployerAccountQueryRepository> _employerAccountQueryRepository = new();
+    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerQueryRepositoryMock = new();
 
     public InterviewServiceTests()
     {
         _interviewService = new InterviewService(_userServiceMock.Object,
-            _jobQueryRepositoryMock.Object, _employerAccountQueryRepository.Object, _interviewQueryRepositoryMock.Object);
+            _jobQueryRepositoryMock.Object, _employerAccountQueryRepository.Object, _interviewQueryRepositoryMock.Object,
+            _jobSeekerQueryRepositoryMock.Object);
     }
     
     
@@ -146,7 +148,7 @@ public class InterviewServiceTests
         _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId))
             .ReturnsAsync(EmployerAccountFixtures.EmployerAccountEntity);
         //Act
-        var interview = await  _interviewService.DeleteInterview(jobId, jobSeekerId);
+        var interview = await  _interviewService.CancelInterviewFromEmployerAccount(jobId, jobSeekerId);
         //Assert
         Assert.Equal(jobSeekerId, interview.JobSeekerAccountId);
         Assert.Equal(jobId, interview.JobId);
@@ -170,6 +172,6 @@ public class InterviewServiceTests
         _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId))
             .ReturnsAsync(EmployerAccountFixtures.EmployerAccountEntity);
         //Act & Assert
-        await Assert.ThrowsAsync<ForbiddenException>(async () => await _interviewService.DeleteInterview(jobId, jobSeekerId));
+        await Assert.ThrowsAsync<ForbiddenException>(async () => await _interviewService.CancelInterviewFromEmployerAccount(jobId, jobSeekerId));
     }
 }

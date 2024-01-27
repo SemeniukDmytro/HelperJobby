@@ -11,14 +11,17 @@ public class InterviewService : IInterviewService
     private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
     private readonly IInterviewQueryRepository _interviewQueryRepository;
+    private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
 
     public InterviewService(IUserService userService, IJobQueryRepository jobQueryRepository, 
-        IEmployerAccountQueryRepository employerAccountQueryRepository, IInterviewQueryRepository interviewQueryRepository)
+        IEmployerAccountQueryRepository employerAccountQueryRepository, IInterviewQueryRepository interviewQueryRepository,
+        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository)
     {
         _userService = userService;
         _jobQueryRepository = jobQueryRepository;
         _employerAccountQueryRepository = employerAccountQueryRepository;
         _interviewQueryRepository = interviewQueryRepository;
+        _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
     }
 
     public async Task<Job> GetInterviewsForSpecificJob(int jobId)
@@ -74,7 +77,7 @@ public class InterviewService : IInterviewService
         return newInterview;
     }
 
-    public async Task<Interview> DeleteInterview(int jobId, int jobSeekerId)
+    public async Task<Interview> CancelInterviewFromEmployerAccount(int jobId, int jobSeekerId)
     {
         var interview = await _interviewQueryRepository.GetInterviewWithJob(jobId, jobSeekerId);
         var currentUserId = _userService.GetCurrentUserId();
@@ -84,6 +87,15 @@ public class InterviewService : IInterviewService
             throw new ForbiddenException("You can't delete interview. Because it was created by another employer");
         }
         
+        return interview;
+    }
+
+    public async Task<Interview> CancelInterviewFromJobSeekerAccount(int jobId)
+    {
+        var currentUserId = _userService.GetCurrentUserId();
+        var currentJobSeeker = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountByUserId(currentUserId);
+        var interview =
+            await _interviewQueryRepository.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, currentJobSeeker.Id);
         return interview;
     }
 }

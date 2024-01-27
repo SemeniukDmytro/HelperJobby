@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-import JobAppliesComponent from "./PageComponents/AppliedJobsComponent/JobAppliesComponent";
-import {JobSeekerJobInteractionsProvider} from "../../../contexts/JobSeekerJobInteractionsContext";
+import JobAppliesComponent from "./PageComponents/JobAppliesComponent/JobAppliesComponent";
 
 interface AppliedJobsPageProps {}
 
