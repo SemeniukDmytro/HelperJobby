@@ -6,18 +6,22 @@ import {logErrorInfo} from "../utils/logErrorInfo";
 import {JobSeekerAccountService} from "../services/jobSeekerAccountService";
 import {useAuth} from "../hooks/useAuth";
 import {SavedJobDTO} from "../DTOs/userJobInteractionsDTOs/SavedJobDTO";
+import {JobApplyDTO} from "../DTOs/userJobInteractionsDTOs/JobApplyDTO";
 
 const JobSeekerContext = createContext<JobSeekerContextProps>({
     jobSeeker : null,
     setJobSeeker : () => {}, 
     jobSeekerSavedJobs : [],
     setJobSeekerSavedJobs: () => {},
+    jobSeekerJobApplies : [],
+    setJobSeekerJobApplies : () => {},
     fetchJobSeeker : () => {}
 });
 
 export function JobSeekerProvider({children} : {children : ReactNode}){
     const [jobSeeker, setJobSeeker] = useState<JobSeekerAccountDTO | null>(null);
     const [jobSeekerSavedJobs, setJobSeekerSavedJobs] = useState<SavedJobDTO[]>([]);
+    const [jobSeekerJobApplies, setJobSeekerJobApplies] = useState<JobApplyDTO[]>([]);
     const {authUser} = useAuth();
     
     const jobSeekerService = new JobSeekerAccountService();
@@ -41,6 +45,8 @@ export function JobSeekerProvider({children} : {children : ReactNode}){
             setJobSeeker,
             jobSeekerSavedJobs,
             setJobSeekerSavedJobs,
+            jobSeekerJobApplies,
+            setJobSeekerJobApplies,
             fetchJobSeeker}
         }>
             {children}

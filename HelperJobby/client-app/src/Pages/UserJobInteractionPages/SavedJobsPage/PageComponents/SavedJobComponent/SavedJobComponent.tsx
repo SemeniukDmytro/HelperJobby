@@ -9,6 +9,7 @@ import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountService";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {useJobSeekerJobInteractions} from "../../../../../hooks/useJobSeekerJobInteractions";
+import {UserJobInteractionsTypes} from "../../../../../enums/UserJobInteractionsTypes";
 
 interface SavedJobComponentProps {
     job : JobDTO;
@@ -71,7 +72,8 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
             {!showRemoveFromSaved ?
                 (<div className={"ji-job-layout"}>
                     <UserJobInteractionShortJobInfo job={job}
-                                                    interactionTime={interactionTime}/>
+                                                    interactionTime={interactionTime}
+                                                    jobInteractionType={UserJobInteractionsTypes.saved}/>
                     <div className={"ji-apply-fb"}>
                         <div>
                             <button className={"blue-button"}>
@@ -87,7 +89,7 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
                 </div>)
                 :
                 (
-                    <div className={"job-removed-from-saved"}>
+                    <div className={"job-interaction-deleted-box"}>
                         <div>
                             <span className={"semi-dark-default-text bold-text"}>{job.jobTitle}&nbsp;</span>
                             <span className={"light-dark-default-text"}>has been unsaved.&nbsp;</span>

@@ -3,20 +3,37 @@ import './UserJobInteractionShortJobInfo.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBuilding} from "@fortawesome/free-solid-svg-icons";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import {UserJobInteractionsTypes} from "../../../../enums/UserJobInteractionsTypes";
 
 interface UserJobInteractionShortJobInfoProps {
     job: JobDTO;
-    interactionTime : Date
+    interactionTime : Date;
+    jobInteractionType : UserJobInteractionsTypes;
 }
 
-const UserJobInteractionShortJobInfo: FC<UserJobInteractionShortJobInfoProps> = ({job, interactionTime}) => {
+const UserJobInteractionShortJobInfo: FC<UserJobInteractionShortJobInfoProps> = ({job, interactionTime, jobInteractionType}) => {
     const [interactionInfo, setInteractionInfo] = useState("");
+    const [jobInteractionTimePretext, setJobInteractionTimePretext] = useState("");
 
+    useEffect(() => {
+        setJobInteractionText();
+    }, []);
+    
     useEffect(() => {
         setInteractionInfo(getInteractionInfo());
     }, [interactionTime]);
 
-
+    function setJobInteractionText() {
+        switch (jobInteractionType){
+            case UserJobInteractionsTypes.saved:
+                setJobInteractionTimePretext("Saved");
+                return;
+            case UserJobInteractionsTypes.applied:
+                setJobInteractionTimePretext("Applied")
+                return;
+        }
+        
+    }
     function getInteractionInfo() {
         const interactionDate = new Date(interactionTime);
         const now = new Date();
@@ -53,7 +70,7 @@ const UserJobInteractionShortJobInfo: FC<UserJobInteractionShortJobInfoProps> = 
                 <span className={"dark-default-text"}>{job.employerAccount.organization.name}</span>
                 <span className={"dark-default-text"}>{job.location}</span>
                 <span
-                    className={"semi-dark-small-text"}>{interactionInfo == "Today" ? `Saved ${interactionInfo}` : `Saved on ${interactionInfo}`}</span>
+                    className={"semi-dark-small-text"}>{interactionInfo == "Today" ? `${jobInteractionTimePretext} ${interactionInfo}` : `${jobInteractionTimePretext} on ${interactionInfo}`}</span>
             </div>
         </div>
     )
