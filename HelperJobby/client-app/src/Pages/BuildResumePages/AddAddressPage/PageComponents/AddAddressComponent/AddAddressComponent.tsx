@@ -133,7 +133,7 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
                                                                 setShowResult={setShowCityAutoComplete}
                                                                 autocompleteWindowType={AutocompleteWindowTypes.city}/>}
             <div className={"build-resume-form"}>
-                {savingInfo && <div className={"saving-in-progress-surface"}></div>}
+                {savingInfo && <div className={"request-in-process-surface"}></div>}
                 <div className={"build-page-header subtitle-margin"}>
                     Where are you located?
                 </div>

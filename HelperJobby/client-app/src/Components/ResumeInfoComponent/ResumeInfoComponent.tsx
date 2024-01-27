@@ -154,7 +154,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                     :
                     (jobSeeker?.resume?.skills.map((skill, index) => (
                         <div key={index} className={"skill-container"}>
-                            {numberOfSkillToRemove === index && <div   className={"saving-in-progress-surface"}></div>}
+                            {numberOfSkillToRemove === index && <div   className={"request-in-process-surface"}></div>}
                             <div className={"skill-name"}>
                                 {skill.name}
                             </div>

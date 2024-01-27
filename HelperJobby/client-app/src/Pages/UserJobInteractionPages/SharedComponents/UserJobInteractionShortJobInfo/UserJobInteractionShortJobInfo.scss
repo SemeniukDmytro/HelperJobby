@@ -1,0 +1,26 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.ji-job-icon-box{
+  padding: 1rem 1.5rem;
+  color: global-variables.$neutral-color-700;
+}
+
+.ji-job-info-box{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  cursor: pointer;
+  flex-grow: 1;
+  &:hover{
+    .ji-job-title{
+      text-decoration: underline;
+    }
+  }
+}
+
+.ji-job-title{
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: global-variables.$neutral-color-1000;
+  font-weight: 700;
+}

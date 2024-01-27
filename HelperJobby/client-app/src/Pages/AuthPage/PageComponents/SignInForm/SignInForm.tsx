@@ -1,9 +1,7 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowRightLong, faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
+import {faArrowRightLong} from "@fortawesome/free-solid-svg-icons";
 import AppLogo from "../AppLogo/AppLogo";
-import "../../../../Assets/scssSharedStyles/AuthFormBox.scss";
-import "../../../../Assets/scssSharedStyles/InputFieldWithError.scss";
 import EmailForm from "../EmailForm/EmailForm";
 import "./SignInForm.scss";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -18,6 +16,7 @@ import {
     IsValidPasswordMaximalLength,
     IsValidPasswordMinimalLength
 } from "../../../../utils/validationLogic/authFormValidators";
+import CustomPasswordInputField from "../../../../Components/CustomPasswordInputField/CustomPasswordInputField";
 
 interface SignInFormProps {
 }
@@ -102,31 +101,18 @@ const SignInForm: FC<SignInFormProps> = () => {
                                     <span className={"return-button-text"}>(not you?)</span>
                                 </button>
                             </div>
-                            <form className="auth-input-box" onSubmit={AuthUser}>
-                                <div className="input-label-box">
-                                    <label className={`input-label ${isPasswordInvalid ? 'error-text' : ''}`}>Enter your
-                                        password
-                                        <span className="required-mark"> *</span>
-                                    </label>
-                                </div>
-                                <div className={`input-box`}>
-                                    <input className={`input-field ${isPasswordInvalid ? 'invalid-input-border' : ''}`}
-                                           type="password" value={password}
-                                           onChange={e => {
-                                               setPassword(e.target.value)
-                                               setIsPasswordInvalid(false);
-                                           }}/>
-                                    {isPasswordInvalid &&
-                                        <div className={"error-box"}>
-                                            <FontAwesomeIcon className={`error-text error-svg`}
-                                                             icon={faCircleExclamation}/>
-                                            <span className={`error-text`}>Error : {error}</span>
-                                        </div>
-                                    }
-                                </div>
-                                <button className="submit-button" disabled={isEmptyPassword}>
-                                    <span className="submit-button-text">Sign in</span>
-                                    <FontAwesomeIcon className="continue-arrow" icon={faArrowRightLong}/>
+                            <div className={"content-separation-margin"}></div>
+                            <form className="passpage-form" onSubmit={AuthUser}>
+                                <CustomPasswordInputField
+                                    password={password} 
+                                    setPassword={setPassword}
+                                    fieldLabel={"Enter your password"}
+                                    fieldError={error}
+                                    setFieldError={setError}
+                                    showRequiredMark={true}/>
+                                <button className="blue-button" disabled={isEmptyPassword}>
+                                    <span>Sign in</span>
+                                    <FontAwesomeIcon className="continue-arrow medium-svg" icon={faArrowRightLong}/>
                                 </button>
                             </form>
                         </div>

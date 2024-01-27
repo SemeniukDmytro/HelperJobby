@@ -1,4 +1,4 @@
-    import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
+import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './CustomPasswordInputField.scss';
 import {isNotEmpty} from "../../utils/validationLogic/isNotEmptyString";
 import GoogleImage from "../../Assets/pictures/google_on_white_hdpi.png";
@@ -15,6 +15,7 @@ interface CustomPasswordInputFieldProps {
     inputRef?: React.RefObject<HTMLInputElement>;
     executeValidation?: boolean;
     setExecuteValidation?: Dispatch<SetStateAction<boolean>>;
+    showRequiredMark?: boolean;
 }
 
 const CustomPasswordInputField: FC<CustomPasswordInputFieldProps> = ({
@@ -26,7 +27,8 @@ const CustomPasswordInputField: FC<CustomPasswordInputFieldProps> = ({
                                                                          setFieldError,
                                                                          showLengthError,
                                                                          executeValidation,
-                                                                         setExecuteValidation
+                                                                         setExecuteValidation,
+                                                                         showRequiredMark
                                                                      }) => {
 
     const [inputFocus, setInputFocus] = useState(false);
@@ -41,21 +43,19 @@ const CustomPasswordInputField: FC<CustomPasswordInputFieldProps> = ({
 
     function validateInputValue() {
         if (showLengthError) {
-            if (password.length < 8){
+            if (password.length < 8) {
                 setFieldError(`Password must be at least 8 characters long`);
-            }
-            else if (password.length > 25) {
+            } else if (password.length > 25) {
                 setFieldError(`Password must be at most 25 characters long`);
             }
-        }
-        else {
+        } else {
             setFieldError("");
         }
     }
 
     function changeInputFieldValue(e: ChangeEvent<HTMLInputElement>) {
         setPassword(e.target.value);
-        if(showLengthError && e.target.value.length >= 8 ){
+        if (showLengthError && e.target.value.length >= 8) {
             setFieldError("");
         }
     }
@@ -67,8 +67,7 @@ const CustomPasswordInputField: FC<CustomPasswordInputFieldProps> = ({
     function handleInputBlur() {
         if (password.length > 0 && !showLengthError) {
             setFieldError("");
-        }
-        else{
+        } else {
             validateInputValue();
         }
         setInputFocus(false);
@@ -82,6 +81,7 @@ const CustomPasswordInputField: FC<CustomPasswordInputFieldProps> = ({
         <div className={"edit-form-field"}>
             <div className={`field-label ${fieldError ? "error-text" : ""}`}>
                 <span>{fieldLabel}&nbsp;</span>
+                {showRequiredMark && <span className={"error-text"}>*</span>}
             </div>
             <div className={`field-input-container ${fieldError ? "red-field-focus" : ""}`}>
                 <div
@@ -97,9 +97,10 @@ const CustomPasswordInputField: FC<CustomPasswordInputFieldProps> = ({
                        onBlur={handleInputBlur}
                        ref={inputRef}/>
                 <div className={"input-button-box"} onClick={toggleShowPassword}>
-                    <button className={"input-field-button right-margin-remove"} style={{minWidth: "40px"}}>
+                    <button type={"button"} className={"input-field-button right-margin-remove"}
+                            style={{minWidth: "40px"}}>
                         {showPassword ? <FontAwesomeIcon className={"medium-svg"} icon={faEyeSlash}/> :
-                                <FontAwesomeIcon className={"medium-svg"} icon={faEye}/>}
+                            <FontAwesomeIcon className={"medium-svg"} icon={faEye}/>}
                     </button>
                 </div>
             </div>

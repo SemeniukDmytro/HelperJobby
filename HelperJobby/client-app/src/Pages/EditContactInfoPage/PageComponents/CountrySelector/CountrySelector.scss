@@ -5,7 +5,8 @@
   display: flex;
   flex-grow: 1;
   border-radius: 0.5rem;
-  border: 1px solid global-variables.$neutral-color-600;
+  border: none;
+  z-index: 2;
   padding: 0.75rem;
   background-color: transparent;
   font-size: 1rem;

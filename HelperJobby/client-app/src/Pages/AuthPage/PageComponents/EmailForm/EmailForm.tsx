@@ -5,11 +5,10 @@ import {faArrowRightLong, faCircleExclamation} from '@fortawesome/free-solid-svg
 import SignInForm from "../SignInForm/SignInForm";
 import AccountTypeForm from "../AccountTypeForm/AccountTypeForm";
 import AppLogo from "../AppLogo/AppLogo";
-import "../../../../Assets/scssSharedStyles/AuthFormBox.scss";
-import "../../../../Assets/scssSharedStyles/InputFieldWithError.scss";
 import {useEmail} from "../../../../hooks/useEmail";
 import AuthService from "../../../../services/authService";
 import {IsValidEmail} from "../../../../utils/validationLogic/authFormValidators";
+import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 
 interface AuthComponentProps {}
 
@@ -22,8 +21,17 @@ const EmailForm: FC<AuthComponentProps> = () => {
     const [renderAuthPage, setRenderAuthPage] = useState(true);
     const [renderSignInPage, setRenderSignInPage] = useState(false);
     const [renderAccountTypeForm, setRenderAccountTypeForm] = useState(false);
+    const [isFormInvalid, setIsFormInvalid] = useState(true);
+
+    useEffect(() => {
+        if (email.trim().length == 0){
+            setIsFormInvalid(true);
+        }
+        else {
+            setIsFormInvalid(false);
+        }
+    }, [email]);
     
-    let isFormInvalid = email.trim() === '';
     
     useEffect(() => { 
         if (isEmailRegistered != null){
@@ -42,7 +50,7 @@ const EmailForm: FC<AuthComponentProps> = () => {
         if (!IsValidEmail(email)) {
             setError("Error: Invalid email address\n");
             setIsEmailInvalid(true);
-            isFormInvalid = true;
+            setIsFormInvalid(true);
             return;
         } else {
             setError("");
@@ -72,33 +80,17 @@ const EmailForm: FC<AuthComponentProps> = () => {
                             <div className="passpage-form-subtitle-box">
                                 <span className="form-subtitle">Create an account or sign in.</span>
                             </div>
-                            <form className="auth-input-box" onSubmit={onFormSubmit}>
-                                <div className="input-label-box">
-                                    <label className={`input-label ${isEmailInvalid ? 'error-text' : ''}`}>Email address
-                                        <span className="required-mark"> *</span>
-                                    </label>
-                                </div>
-                                <div className={`input-box`}>
-                                    <input 
-                                        className={`input-field ${isEmailInvalid ? 'invalid-input-border' : ''}`}
-                                        value={email}
-                                        type="email"
-                                        autoComplete={"email"}
-                                           onChange={(e) => {setEmail(e.target.value);
-                                               setError("");
-                                               setIsEmailInvalid(false)}}/>
-                                    <div className={"error-box"}>
-                                        {isEmailInvalid &&
-                                            <>
-                                                <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation} />
-                                                <span className={`error-text`}>{error}</span>
-                                            </>
-                                        }
-                                    </div>
-                                </div>
-                                <button className="submit-button" type={"submit"} disabled={isFormInvalid}>
-                                    <span className="submit-button-text">Continue</span>
-                                    <FontAwesomeIcon className="continue-arrow" icon={faArrowRightLong} />
+                            <div className={"content-separation-margin"}></div>
+                            <form className="passpage-form" onSubmit={onFormSubmit}>
+                                <CustomInputField fieldLabel={"Email address"}
+                                                  isRequired={true}
+                                                  inputFieldValue={email}
+                                                  setInputFieldValue={setEmail} 
+                                                  customErrorMessage={error}
+                                                  setCustomErrorMessage={setError}/>
+                                <button className="blue-button" type={"submit"} disabled={isFormInvalid}>
+                                    <span>Continue</span>
+                                    <FontAwesomeIcon className="continue-arrow medium-svg" icon={faArrowRightLong} />
                                 </button>
                             </form>
                         </div>

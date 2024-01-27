@@ -1,0 +1,47 @@
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+.ji-job-block{
+  display: block;
+  width: 100%;
+  padding: 1rem 0;
+  transition: 1s;
+  animation: ji-job-fadeIn 0.8s ease-in-out 1 forwards;
+}
+
+@keyframes ji-job-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ji-job-layout{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.ji-job-fb{
+  flex-basis: 50%;
+  display: flex;
+  flex-direction: row;
+}
+
+.ji-apply-fb{
+  display: flex;
+  flex-basis: 40%;
+  justify-content: end;
+}
+
+.job-removed-from-saved{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background-color: global-variables.$neutral-color-200;
+  border: 1px solid global-variables.$neutral-color-400;
+}

@@ -51,6 +51,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
     useEffect(() => {
         if (customErrorMessage){
             setIsInvalidValue(true);
+            setRequiredMessage("");
         }
         else {
             setIsInvalidValue(false);
@@ -71,7 +72,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
     }, [executeValidation]);
     
     function validateInputValue(){
-        if (!isNotEmpty(inputFieldValue) && isRequired){
+        if (!isNotEmpty(inputFieldValue) && isRequired && !setCustomErrorMessage){
             setIsInvalidValue(true);
             setRequiredMessage(`${fieldLabel} is required`);
         }
@@ -118,7 +119,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
     <div className={"edit-form-field"}>
         <div className={`field-label ${isInvalidValue ? "error-text" : ""}`}>
             <span>{fieldLabel}&nbsp;</span>
-            {isRequired && <span className={"required-mark"}>*</span>}
+            {isRequired && <span className={"error-text"}>*</span>}
         </div>
         {fieldSubtitle && <div className={"field-label-subtitle"}>
             {fieldSubtitle}
@@ -136,20 +137,20 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
                    ref={inputRef}/>
             {displayGoogleLogo && <img className={"google-logo"} src={GoogleImage} alt={""}></img>}
             {showEraseJobBtn &&<div className={"input-button-box"} onClick={eraseInput}>
-                <button className={"input-field-button"}>
+                <button type={"button"} className={"input-field-button"}>
                     <FontAwesomeIcon className={"small-svg"} icon={faXmark}/>
                 </button>
             </div>}
         </div>
         <div className={"input-field-spacing"}>
-            {(isInvalidValue && isRequired) &&
+            {(isInvalidValue && isRequired && requiredMessage) &&
                 <div className={"error-box"}>
                     <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
                     <span className={"error-text"}>{requiredMessage}</span>
                 </div>}
             {customErrorMessage &&
                 <div className={"error-box"}>
-                    <FontAwesomeIcon className={`error-svg error-svg`} icon={faCircleExclamation}/>
+                    <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
                     <span className={"error-text"}>{customErrorMessage}</span>
                 </div>}
         </div>

@@ -21,6 +21,7 @@ import DetailedDescriptionColumn
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import getJobSearchRequestURI from "../../../../utils/getJobSearchRequestURI";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
+import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 
 interface SearchResultsProps {
 }
@@ -184,14 +185,15 @@ const SearchResults: FC<SearchResultsProps> = () => {
     }
 
     return (
-        <HomePageMainContentWrap>
+        <PageWrapWithHeader>
+            <div className={"content-separation-margin"}></div>
             <JobSearchBar jobInitial={searchParams.get("q")!} locationInitial={searchParams.get("location") || ""}/>
             <div className={"search-filters-containers"}>
                 <button className={`query-param-box ${isRemote ? "selected-query-box" : ""}`} onClick={remoteOptionHandler}>
                     <span className={"param-name"}>
                         Remote
                     </span>
-                    {isRemote && <FontAwesomeIcon className={"remove-query-param"} icon={faXmark} />}
+                    {isRemote && <FontAwesomeIcon className={"remove-query-param small-svg"} icon={faXmark} />}
                 </button>
                 <div className={"param-options-box"}>
                     <QueryParameter queryParam={JobQueryParams.Pay} isSelected={pay != 0}
@@ -267,7 +269,7 @@ const SearchResults: FC<SearchResultsProps> = () => {
                                            setIsShortHeaderGridTemplate={setIsShortHeaderGridTemplate} 
                                            mainContentReference={mainContentReferenceForSearch} />
             </div>) : (<></>))}
-        </HomePageMainContentWrap>
+        </PageWrapWithHeader>
     )
 };
 

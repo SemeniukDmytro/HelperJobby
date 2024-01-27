@@ -141,7 +141,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
 
     return (
         <>
-            {savingProcess && <div className={"saving-in-progress-surface"}></div>}
+            {savingProcess && <div className={"request-in-process-surface"}></div>}
             <div className={"build-page-header subtitle-margin"}>What are some of your skills?</div>
             <div className={"build-page-subtitle"}>We recommend adding at least 6 skills</div>
             <div>

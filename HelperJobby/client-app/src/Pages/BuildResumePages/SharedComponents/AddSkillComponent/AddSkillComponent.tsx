@@ -118,7 +118,7 @@ const AddSkillComponent: FC<AddSkillComponentProps> = () => {
             <div className={"page-with-centered-content-layout"}>
                 <NavigateBackHeader onBackButtonClick={navigateBack}></NavigateBackHeader>
                 <form className={"form-layout"}>
-                    {savingProcess && <div className={"saving-in-progress-surface"}></div>}
+                    {savingProcess && <div className={"request-in-process-surface"}></div>}
                     <div className={"edit-contact-form-header"}>
                         <span>Add skill</span>
                     </div>

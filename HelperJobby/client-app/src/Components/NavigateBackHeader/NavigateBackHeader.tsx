@@ -10,7 +10,7 @@ interface NavigateBackHeaderProps {
 const NavigateBackHeader: FC<NavigateBackHeaderProps> = ({onBackButtonClick}) => (
     <div className={"back-button-header"}>
         <button className={"back-button"} onClick={onBackButtonClick}>
-            <FontAwesomeIcon icon={faArrowLeftLong}/>
+            <FontAwesomeIcon className={"medium-svg"} icon={faArrowLeftLong}/>
         </button>
     </div>
 );

@@ -51,6 +51,7 @@
   }
   &:disabled{
     opacity: 0.7;
+    pointer-events: none;
   }
 }
 
@@ -78,6 +79,7 @@
   }
   &:disabled{
     opacity: 0.7;
+    pointer-events: none;
   }
 }
 
@@ -104,6 +106,20 @@
 }
 
 .medium-tr-btn-with-icon{
-  padding: 0.5625rem;
-  font-size: 1rem;
+  padding: 0.625rem;
+  color: global-variables.$neutral-color-1000;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  cursor: pointer;
+  transition: 0.2s;
+  &:hover{
+    background-color: global-variables.$light-blue;
+    color: global-variables.$dark-blue-hover;
+  }
+  &:active{
+    color: global-variables.$dark-blue-active;
+    background-color: global-variables.$light-blue-active;
+    box-shadow: global-variables.$button-inner-shadow;
+  }
 }

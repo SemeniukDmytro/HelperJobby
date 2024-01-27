@@ -70,7 +70,6 @@
       <Folder Include="client-app\src\Pages\AddResumeInfoPages\ResumeEditWorkExperiencePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\AddResumeInfoPages\SharedComponents\" />
       <Folder Include="client-app\src\Pages\SearchJobResultsPage\PageComponents\" />
-      <Folder Include="client-app\src\Pages\UserJobInteractionPages\AppliedJobsPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\UserJobInteractionPages\InterviewsPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\UserJobInteractionPages\SavedJobsPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\UserJobInteractionPages\SharedComponents\" />

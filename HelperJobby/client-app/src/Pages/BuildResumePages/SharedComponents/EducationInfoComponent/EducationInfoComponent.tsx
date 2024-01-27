@@ -232,7 +232,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                                                                 setShowResult={setShowCityAutoComplete}
                                                                 autocompleteWindowType={AutocompleteWindowTypes.city}/>}
             <form className={"build-resume-form"}>
-                {savingProcess && <div className={"saving-in-progress-surface"}></div>}
+                {savingProcess && <div className={"request-in-process-surface"}></div>}
                 <div className={"build-page-header"}>
                     {education ? <span>Edit education</span> : <span>Add Education</span>}
                 </div>

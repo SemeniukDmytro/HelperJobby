@@ -72,7 +72,7 @@ const EducationReview: FC<EducationReviewProps> = ({education}) => {
     return (
         <div>
             <div className={"short-info-container"}>
-                {savingInfo && <div className={"saving-in-progress-surface"}></div>}
+                {savingInfo && <div className={"request-in-process-surface"}></div>}
                 <div className={"review-block"}>
                     <div className={"required-info"}>
                         <span>{education.levelOfEducation} </span>

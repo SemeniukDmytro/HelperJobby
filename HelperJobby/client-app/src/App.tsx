@@ -34,7 +34,7 @@ import ChangeEmailPage from "./Pages/AccountSettingsRelatedPages/ChangeEmailPage
 import ChangePasswordPage from "./Pages/AccountSettingsRelatedPages/ChangePasswordPage/ChangePasswordPage";
 import ChangePhonePage from "./Pages/AccountSettingsRelatedPages/ChangePhonePage/ChangePhonePage";
 import SavedJobsPage from "./Pages/UserJobInteractionPages/SavedJobsPage/SavedJobsPage";
-import AppliedJobsPage from "./Pages/UserJobInteractionPages/AppliedJobsPage/AppliedJobsPage";
+import JobAppliesPage from "./Pages/UserJobInteractionPages/JobAppliesPage/JobAppliesPage";
 import InterviewsPage from "./Pages/UserJobInteractionPages/InterviewsPage/InterviewsPage";
 import MyJobsPagesWrap from "./Components/MyJobsPagesWrap/MyJobsPagesWrap";
 
@@ -100,14 +100,14 @@ function App() {
                 
                 <Route element={<MyJobsPagesWrap/>}>
                     <Route path={"saved"} element={<SavedJobsPage/>}/>
-                    <Route path={"applied"} element={<AppliedJobsPage/>}/>
+                    <Route path={"applied"} element={<JobAppliesPage/>}/>
                     <Route path={"interviews"} element={<InterviewsPage/>}/>
                 </Route>
                     
             </Route>
 
             {/*public routes */}
-            <Route path="/" element={<HomePage/>}/>
+            <Route path="/home" element={<HomePage/>}/>
             <Route path={"/auth-page"} element={<AuthPage/>}/>
             <Route path={"/jobs"} element={<SearchJobResultsPage/>}/>
             

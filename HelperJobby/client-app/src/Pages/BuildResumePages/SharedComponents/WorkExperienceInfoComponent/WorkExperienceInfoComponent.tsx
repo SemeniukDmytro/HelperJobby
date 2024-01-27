@@ -254,7 +254,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                                                                 autocompleteWindowType={AutocompleteWindowTypes.city}/>}
 
             <form className={"build-resume-form"}>
-                {savingProcess && <div className={"saving-in-progress-surface"}></div>}
+                {savingProcess && <div className={"request-in-process-surface"}></div>}
                 <div className={"build-page-header"}>
                     {workExperience ? <span>Edit work experience</span> : <span>Add work experience</span>}
                 </div>

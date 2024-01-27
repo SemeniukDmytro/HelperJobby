@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
-import './AppliedJobsComponent.scss';
+import './JobAppliesComponent.scss';
 import {UserJobInteractionsTypes} from "../../../../../enums/UserJobInteractionsTypes";
 import UserJobInteractionPagesHeader
     from "../../../SharedComponents/UserJobInteractionPagesHeader/UserJobInteractionPagesHeader";
 
-interface AppliedJobsComponentProps {}
+interface JobAppliesComponentProps {}
 
-const AppliedJobsComponent: FC<AppliedJobsComponentProps> = () => (
+const JobAppliesComponent: FC<JobAppliesComponentProps> = () => (
     <UserJobInteractionPagesHeader userJobInteractionType={UserJobInteractionsTypes.applied}>
         <div>
 
@@ -14,4 +14,4 @@ const AppliedJobsComponent: FC<AppliedJobsComponentProps> = () => (
     </UserJobInteractionPagesHeader>
 );
 
-export default AppliedJobsComponent;
+export default JobAppliesComponent;

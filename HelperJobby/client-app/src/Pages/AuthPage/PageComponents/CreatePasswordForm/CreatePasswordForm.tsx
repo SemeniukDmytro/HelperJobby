@@ -3,8 +3,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong, faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import "./CreatePasswordForm.scss"
 import AppLogo from "../AppLogo/AppLogo";
-import "../../../../Assets/scssSharedStyles/AuthFormBox.scss";
-import "../../../../Assets/scssSharedStyles/InputFieldWithError.scss";
 import {useLocation, useNavigate} from "react-router-dom";
 import EmailForm from "../EmailForm/EmailForm";
 import {useEmail} from "../../../../hooks/useEmail";
@@ -16,6 +14,7 @@ import {
     IsValidPasswordMaximalLength,
     IsValidPasswordMinimalLength
 } from "../../../../utils/validationLogic/authFormValidators";
+import CustomPasswordInputField from "../../../../Components/CustomPasswordInputField/CustomPasswordInputField";
 
 
 interface CreatePasswordFormProps {}
@@ -115,34 +114,23 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
                             <span className={"return-button-text"}>(not you?)</span>
                         </button>
                     </div>
-                    <form className="auth-input-box" onSubmit={HandleAccountCreation}>
-                        <div className="input-label-box">
-                            <label className={`input-label ${isPasswordInvalid ? 'error-text' : ''}`}>Password
-                                <span className="required-mark"> *</span>
-                            </label>
-                            <span className={"password-subtitle"}>Use at least 8 characters</span>
-                        </div>
-                        <div className={`input-box`}>
-                            <input className={`input-field ${isPasswordInvalid ? 'invalid-input-border' : ''}`} type="password" onChange={e => {
-                                setPassword(e.target.value);
-                                setError("");
-                                setIsPasswordInvalid(false);
-                            }}/>
-                            {isPasswordInvalid &&
-                                <div className={"error-box"}>
-                                    <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
-                                    <span className={`error-text`}>Error : {error}</span>
-                                </div>
-                            }
-                        </div>
-                        <button className="submit-button" type={"submit"}>
-                            <span className="submit-button-text">Create account</span>
+                    <div className={"content-separation-margin"}/>
+                    <form className="passpage-form" onSubmit={HandleAccountCreation}>
+                        <CustomPasswordInputField
+                            password={password}
+                            setPassword={setPassword}
+                            fieldLabel={"Enter your password"}
+                            fieldError={error}
+                            setFieldError={setError}
+                            showRequiredMark={true}/>
+                        <button className="blue-button" type={"submit"}>
+                            <span>Create account</span>
                         </button>
                     </form>
                     <div>
                         <a className={"type-change-button"} onClick={ChangeAccountType}>
                             <span className={"type-change-text"}>Wait, I am {accountTypeChanger}</span>
-                            <FontAwesomeIcon className="type-continue-arrow" icon={faArrowRightLong}/>
+                            <FontAwesomeIcon className="type-continue-arrow medium-svg" icon={faArrowRightLong}/>
                         </a>
                     </div>
                 </div>

@@ -8,6 +8,7 @@ import {InterviewService} from "../../../../services/interviewService";
 import {useJobSeekerJobInteractions} from "../../../../hooks/useJobSeekerJobInteractions";
 import {UserJobInteractionsTypes} from "../../../../enums/UserJobInteractionsTypes";
 import {useNavigate} from "react-router-dom";
+import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 
 interface UserJobInteractionPagesHeaderProps {
     children: ReactNode;
@@ -18,7 +19,7 @@ const UserJobInteractionPagesHeader: FC<UserJobInteractionPagesHeaderProps> = ({
                                                                                    userJobInteractionType}) => {
     const [loading, setLoading] = useState(true);
     const {savedJobs, jobApplies, interviews, fetchJobSeekerJobInteractions} = useJobSeekerJobInteractions();
-    const navigate = useNavigate();    
+    const navigate = useNavigate();
     
     useEffect(() => {
         const fetchData = async () => {

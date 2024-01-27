@@ -104,7 +104,7 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
 
     return (
         <form className={"build-resume-form"}>
-            {savingInfo && <div className={"saving-in-progress-surface"}></div>}
+            {savingInfo && <div className={"request-in-process-surface"}></div>}
             <div className={"build-page-header"}>
                 What is your name?
             </div>

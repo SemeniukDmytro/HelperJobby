@@ -30,9 +30,6 @@
 }
 
 .bold-navigation-link{
-  display: flex;
-  flex-direction: column;
-  height: inherit;
   user-select: none;
   cursor: pointer;
   color: global-variables.$dark-blue;

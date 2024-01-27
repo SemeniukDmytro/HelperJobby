@@ -82,7 +82,7 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
                                text={"Please enter a valid phone number"}
                                showNotify={showErrorNotify}
                                setShowNotify={setShowErrorNotify}/>
-            {savingInfo && <div className={"saving-in-progress-surface"}></div>}
+            {savingInfo && <div className={"request-in-process-surface"}></div>}
             <div className={"build-page-header"}>
                 Would you like to add a phone number to your resume?
             </div>
