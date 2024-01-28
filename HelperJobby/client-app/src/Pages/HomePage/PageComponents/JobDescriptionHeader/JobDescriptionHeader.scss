@@ -76,32 +76,6 @@
   margin-bottom: 0.5rem;
 }
 
-.save-job-button{
-  border: none;
-  border-radius: 0.25rem;
-  font-size: 1.25rem;
-  padding: 0.75rem;
-  cursor: pointer;
-  transition: 0.2s;
-  color: global-variables.$neutral-color-900;
-  min-height: 2.75rem;
-  &:hover{
-    background-color: global-variables.$neutral-color-400;
-  }
-  &:active{
-    background-color: global-variables.$neutral-color-500;
-    box-shadow: global-variables.$button-inner-shadow;
-  }
-}
-
-.saved-job-button{
-  background-color: global-variables.$neutral-color-800;
-  color: white;
-  &:hover{
-    background-color: global-variables.$neutral-color-400;
-  }
-}
-
 
 .undo-action-box{
   display: flex;

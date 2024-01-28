@@ -1,8 +1,15 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
 .fji-layout{
   display: block;
   max-width: 1280px;
   min-width: 0px;
   margin: 0px;
+}
+
+.fji-job-title{
+  font-size: 1.5rem;
+  padding-bottom: 1rem;
 }
 
 .fji-fb{
@@ -20,6 +27,16 @@
   position: sticky;
   top: 0;
   padding-bottom: 2rem;
+  padding-top: 2rem;
   background-color: white;
   z-index: 1;
+}
+
+.fji-organization-name{
+  color: global-variables.$dark-blue;
+  text-decoration: underline;
+  cursor: pointer;
+  &:hover{
+    color: global-variables.$dark-blue-hover;
+  }
 }

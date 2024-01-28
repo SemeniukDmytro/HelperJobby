@@ -2,17 +2,14 @@ import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from '
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHeart as regularHeart} from "@fortawesome/free-regular-svg-icons";
 import "./JobDescriptionHeader.scss";
-import {faCaretDown, faHeart as solidHeart} from "@fortawesome/free-solid-svg-icons";
-import {useHomePage} from "../../../../hooks/useHomePage";
+import {faBookmark, faHeart as solidHeart} from "@fortawesome/free-solid-svg-icons";
 import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {useAuth} from "../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {SavedJobDTO} from "../../../../DTOs/userJobInteractionsDTOs/SavedJobDTO";
 import {useJobActions} from "../../../../hooks/useJobActions";
 import {JobActionFunction, ShowRemoveFromSavedSetter} from "../../../../hooks/customHooksTypes/UseJobActionsHookTypes";
 
@@ -79,17 +76,17 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
             }
 
             await actionFunction(selectedJob!.id);
-            setShowRemoveFromSavedValue(actionFunction === removeSavedJob ? false : true);
+            setShowRemoveFromSavedValue(actionFunction !== removeSavedJob);
         } catch (err) {
             logErrorInfo(err);
         }
     }
 
-    async function removeSavedJob1() {
+    async function handleRemoveSavedJobClick() {
         await handleJobInteraction(removeSavedJob, setShowRemoveFromSaved);
     }
 
-    async function saveJob1() {
+    async function handleSaveJobClick() {
         await handleJobInteraction(saveJob, setShowRemoveFromSaved);
     }
 
@@ -119,22 +116,22 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
                 </div>
             </div>
             <div className={"header-job-interactions-box"}>
-                <button className={"blue-button"} disabled={isApplied}>
+                <button className={"blue-button mr1rem"} disabled={isApplied}>
                     {isApplied ? "Applied" : "Apply now"}
                 </button>
                 {!isJobSaved ?  (
-                <button className={"save-job-button margin-left1rem"} onClick={saveJob1}>
-                    <FontAwesomeIcon className={"medium-svg"} icon={regularHeart} />
+                <button className={"light-neutral-button-with-icon"} style={{padding : "0.75rem"}} onClick={handleSaveJobClick}>
+                    <FontAwesomeIcon className={"medium-svg"} icon={faBookmark} />
                 </button>) : (
-                <button className={"save-job-button saved-job-button margin-left1rem"} ref={moreActionsButtonRef} onClick={removeSavedJob1}>
-                    <FontAwesomeIcon className={"medium-svg"} icon={solidHeart} />
+                <button className={"dark-neutral-button-with-icon"} style={{padding : "0.75rem"}} ref={moreActionsButtonRef} onClick={handleRemoveSavedJobClick}>
+                    <FontAwesomeIcon className={"medium-svg"} icon={faBookmark} />
                 </button>)}
             </div>
             {showRemoveFromSaved && <div className={"undo-action-box"}>
                 <a className={"action-name"}>
                      Job was saved
                 </a>
-                <a className={"undo-button"} onClick={removeSavedJob1}>
+                <a className={"undo-button"} onClick={handleRemoveSavedJobClick}>
                     Remove from saved
                 </a>
             </div>}

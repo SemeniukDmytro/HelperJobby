@@ -10,6 +10,13 @@ import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountS
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {useJobSeekerJobInteractions} from "../../../../../hooks/useJobSeekerJobInteractions";
 import {UserJobInteractionsTypes} from "../../../../../enums/UserJobInteractionsTypes";
+import {
+    JobActionFunction,
+    ShowRemoveFromSavedSetter
+} from "../../../../../hooks/customHooksTypes/UseJobActionsHookTypes";
+import {useAuth} from "../../../../../hooks/useAuth";
+import {useNavigate} from "react-router-dom";
+import {useJobActions} from "../../../../../hooks/useJobActions";
 
 interface SavedJobComponentProps {
     job : JobDTO;
@@ -18,46 +25,34 @@ interface SavedJobComponentProps {
 
 const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) => {
     const {setSavedJobs} = useJobSeekerJobInteractions();
-    const {setJobSeekerSavedJobs, jobSeekerSavedJobs} = useJobSeeker();
+    const {setJobSeekerSavedJobs} = useJobSeeker();
     const jobSeekerService = new JobSeekerAccountService();
     const [showRemoveFromSaved, setShowRemoveFromSaved] = useState(false);
     const [showUndoRemoveWindow, setShowUndoRemoveWindow] = useState(true);
-    const [requestInProcess, setRequestInProcess] = useState(false);
-    async function removeSavedJob() {
+    const {authUser} = useAuth();
+    const navigate = useNavigate();
+    const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeekerSavedJobs, job);
+
+    async function handleJobInteraction(actionFunction : JobActionFunction, setShowRemoveFromSavedValue : ShowRemoveFromSavedSetter) {
         try {
-            if (requestInProcess){
+            if (!authUser) {
+                navigate("/auth-page");
                 return;
             }
-            setRequestInProcess(true);
-            await jobSeekerService.deleteSavedJob(job.id);
-            setJobSeekerSavedJobs((prevSavedJobs) => prevSavedJobs!
-                .filter(savedJob => savedJob.jobId !== job.id));
-            
-            setShowRemoveFromSaved(true);
-        } catch (error) {
-            logErrorInfo(error)
-        }
-        finally {
-            setRequestInProcess(false);
+
+            await actionFunction(job.id);
+            setShowRemoveFromSavedValue(actionFunction === removeSavedJob);
+        } catch (err) {
+            logErrorInfo(err);
         }
     }
 
-    async function saveJob() {
-        try {
-            if (requestInProcess){
-                return;
-            }
-            setRequestInProcess(true);
-            const retrievedSavedJob = await jobSeekerService.saveJob(job.id);
-            retrievedSavedJob.job = job;
-            setJobSeekerSavedJobs((prevSavedJobs) => [...prevSavedJobs!, retrievedSavedJob!]);
-            setShowRemoveFromSaved(false);
-        } catch (error) {
-            logErrorInfo(error);
-        }
-        finally {
-            setRequestInProcess(false);
-        }
+    async function handleRemoveSavedJobClick() {
+        await handleJobInteraction(removeSavedJob, setShowRemoveFromSaved);
+    }
+
+    async function handleSaveJobClick() {
+        await handleJobInteraction(saveJob, setShowRemoveFromSaved);
     }
     
     function closeUndoActionWindow(){
@@ -82,7 +77,7 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
                         </div>
                     </div>
                     <div className={"ml1rem"}>
-                        <button className={"medium-tr-btn-with-icon"} onClick={removeSavedJob}>
+                        <button className={"medium-tr-btn-with-icon"} onClick={handleRemoveSavedJobClick}>
                             <FontAwesomeIcon icon={faBookmark}/>
                         </button>
                     </div>
@@ -93,7 +88,7 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
                         <div>
                             <span className={"semi-dark-default-text bold-text"}>{job.jobTitle}&nbsp;</span>
                             <span className={"light-dark-default-text"}>has been unsaved.&nbsp;</span>
-                            <a className={"bold-navigation-link"} onClick={saveJob}>Undo</a>
+                            <a className={"bold-navigation-link"} onClick={handleSaveJobClick}>Undo</a>
                         </div>
                         <div>
                             <button className={"medium-tr-btn-with-icon"} onClick={closeUndoActionWindow}>

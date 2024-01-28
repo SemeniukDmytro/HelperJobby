@@ -7,6 +7,7 @@ import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobService} from "../../../../services/jobService";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import JobFullInfoComponent from "../JobFullInfoComponent/JobFullInfoComponent";
+import SearchBarForJobPage from "../SearchBarForJobPage/SearchBarForJobPage";
 
 interface JobComponentProps {}
 
@@ -47,6 +48,7 @@ const ViewJobComponent: FC<JobComponentProps> = () => {
     return (
         <PageWrapWithHeader>
             <div className={"job-page-layout"}>
+                <SearchBarForJobPage/>
                 {loading ? <LoadingPage/> : 
                 <JobFullInfoComponent job={job!}/>}
             </div>

@@ -103,6 +103,10 @@
     box-shadow: global-variables.$button-inner-shadow;
     background-color: global-variables.$light-blue-active;
   }
+  &:disabled{
+    opacity: 0.7;
+    pointer-events: none;
+  }
 }
 
 .medium-tr-btn-with-icon{
@@ -121,5 +125,94 @@
     color: global-variables.$dark-blue-active;
     background-color: global-variables.$light-blue-active;
     box-shadow: global-variables.$button-inner-shadow;
+  }
+  &:disabled{
+    opacity: 0.7;
+    pointer-events: none;
+  }
+}
+
+.light-neutral-button{
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: 0.2s;
+  color: global-variables.$neutral-color-900;
+  background-color: global-variables.$neutral-color-300;
+  &:hover{
+    background-color: global-variables.$neutral-color-400;
+  }
+  &:active{
+    background-color: global-variables.$neutral-color-500;
+    box-shadow: global-variables.$button-inner-shadow;
+  }
+  &:disabled{
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  
+}
+
+.light-neutral-button-with-icon{
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: 0.2s;
+  color: global-variables.$neutral-color-900;
+  background-color: global-variables.$neutral-color-300;
+  &:hover{
+    background-color: global-variables.$neutral-color-400;
+  }
+  &:active{
+    background-color: global-variables.$neutral-color-500;
+    box-shadow: global-variables.$button-inner-shadow;
+  }
+  &:disabled{
+    opacity: 0.7;
+    pointer-events: none;
+  }
+}
+
+.dark-neutral-button{
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: 0.2s;
+  background-color: global-variables.$neutral-color-800;
+  color: white;
+  &:hover{
+    background-color: global-variables.$neutral-color-400;
+  }
+  &:disabled{
+    opacity: 0.7;
+    pointer-events: none;
+  }
+}
+
+.dark-neutral-button-with-icon{
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: 0.2s;
+  background-color: global-variables.$neutral-color-800;
+  color: white;
+  &:hover{
+    background-color: global-variables.$neutral-color-400;
+  }
+  &:disabled{
+    opacity: 0.7;
+    pointer-events: none;
   }
 }

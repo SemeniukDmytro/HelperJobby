@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './JobFullInfoComponent.scss';
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
@@ -8,17 +8,28 @@ import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHeart as regularHeart} from "@fortawesome/free-regular-svg-icons";
-import {faHeart as solidHeart} from "@fortawesome/free-solid-svg-icons";
+import {faBookmark, faHeart as solidHeart} from "@fortawesome/free-solid-svg-icons";
+import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
+import {useJobActions} from "../../../../hooks/useJobActions";
+import {JobActionFunction, ShowRemoveFromSavedSetter} from "../../../../hooks/customHooksTypes/UseJobActionsHookTypes";
+import {logErrorInfo} from "../../../../utils/logErrorInfo";
+import {useAuth} from "../../../../hooks/useAuth";
+import {useNavigate} from "react-router-dom";
 
 interface JobFullInfoComponentProps {
     job : JobDTO
 }
 
 const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
-    const {jobSeekerSavedJobs, jobSeekerJobApplies,
+    const {jobSeekerSavedJobs, setJobSeekerSavedJobs, jobSeekerJobApplies,
         fetchJobSeekerJobApplies, fetchJobSeekerSavedJobs} = useJobSeeker();
     const [isApplied, setIsApplied] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
+    const jobSeekerService = new JobSeekerAccountService();
+    const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeekerSavedJobs, job);
+    const {authUser} = useAuth();
+    const navigate = useNavigate();
+    
     
     
     
@@ -58,13 +69,28 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
         }
     }
 
-    function handleSaveJobClick() {
-        
+    async function handleJobInteraction(actionFunction : JobActionFunction, setIsSaved : Dispatch<SetStateAction<boolean>>) {
+        try {
+            if (!authUser) {
+                navigate("/auth-page");
+                return;
+            }
+
+            await actionFunction(job.id);
+            setIsSaved(actionFunction !== removeSavedJob);
+        } catch (err) {
+            logErrorInfo(err);
+        }
     }
 
-    function handleRemoveSavedJobClick() {
-        
+    async function handleRemoveSavedJobClick() {
+        await handleJobInteraction(removeSavedJob, setIsSaved);
     }
+
+    async function handleSaveJobClick() {
+        await handleJobInteraction(saveJob, setIsSaved);
+    }
+    
 
     return (
        (!jobSeekerSavedJobs || !jobSeekerJobApplies) ? <LoadingPage/> :
@@ -74,24 +100,31 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
                   <div className={"fji-job-header-block"}>
                       <div className={"fji-job-title bold-text"}>{job.jobTitle}</div>
                       <div className={"fji-organization-name"}>{job.employerAccount.organization.name}</div>
-                      <div className={"light-dark-default-text"}>{job.location}</div>
-                      <div className={"dark-default-text mb1rem"}>${thousandsDisplayHelper(job.salary)} {job.salaryRate}</div>
+                      <div className={"dark-default-text mb25rem"}>{job.location}</div>
+                      <div
+                          className={"dark-default-text mb1rem"}>${thousandsDisplayHelper(job.salary)} {job.salaryRate}</div>
                       <div className={"header-job-interactions-box"}>
-                          <button className={"blue-button mr1rem"} disabled={isApplied}>{isApplied ? "Applied" : "Apply now"}</button>
-                          {!isApplied ?  
-                              (!isJobSaved ?  (
-                                  <button className={"save-job-button"} onClick={handleSaveJobClick}>
-                                      <FontAwesomeIcon className={"medium-svg ml1rem"} icon={regularHeart} />
-                                  </button>) : (
-                                  <button className={"save-job-button saved-job-button margin-left1rem"} onClick={handleRemoveSavedJobClick}>
-                                      <FontAwesomeIcon className={"medium-svg"} icon={solidHeart} />
-                                  </button>)
+                          <button className={"blue-button mr1rem"}
+                                  disabled={isApplied}>{isApplied ? "Applied" : "Apply now"}</button>
+                          {!isApplied ?
+                              (!isSaved ? (
+                                      <button className={"light-neutral-button-with-icon"}
+                                              onClick={handleSaveJobClick}>
+                                          <FontAwesomeIcon className={"medium-svg"} icon={faBookmark}/>
+                                      </button>) : (
+                                      <button className={"light-neutral-button"}
+                                              onClick={handleRemoveSavedJobClick}>
+                                          <FontAwesomeIcon className={"medium-svg"} icon={faBookmark}/>
+                                          <span className={"dark-default-text bold-text ml05rem"}>Saved</span>
+                                      </button>)
                               ) :
-                              (<button className={"save-job-button margin-left1rem"} disabled={isApplied} onClick={handleSaveJobClick}>
-                                  <FontAwesomeIcon className={"medium-svg mr05rem"} icon={regularHeart} />
-                                  {isApplied && <span className={"dark-default-text"}>Applied</span>}
+                              (<button className={"light-neutral-button"} disabled={isApplied}
+                                       onClick={handleSaveJobClick}>
+                                  <FontAwesomeIcon className={"medium-svg mr05rem"} icon={faBookmark}/>
+                                  {isApplied && <span className={"dark-default-text bold-text"}>Applied</span>}
                               </button>)
                           }
+                          
                       </div>
                   </div>
                   <DetailedJobInfo job={job}/>
