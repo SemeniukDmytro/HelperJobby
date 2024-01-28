@@ -13,6 +13,8 @@ import {useAuth} from "../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {SavedJobDTO} from "../../../../DTOs/userJobInteractionsDTOs/SavedJobDTO";
+import {useJobActions} from "../../../../hooks/useJobActions";
+import {JobActionFunction, ShowRemoveFromSavedSetter} from "../../../../hooks/customHooksTypes/UseJobActionsHookTypes";
 
 interface JobDescriptionHeaderProps {
     selectedJob : JobDTO | null;
@@ -26,65 +28,69 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
                                                              isFullHeaderGridTemplate, setIsFullHeaderGridTemplate,
                                                              isShortHeaderGridTemplate, setIsShortHeaderGridTemplate}) => {
     
-    const {jobSeekerSavedJobs, setJobSeekerSavedJobs} = useJobSeeker();
+    const {jobSeekerSavedJobs, setJobSeekerSavedJobs, jobSeekerJobApplies} = useJobSeeker();
     const {authUser} = useAuth();
     const navigate = useNavigate();
-    
     const [isJobSaved, setIsJobSaved] = useState(false);
+    const [isApplied, setIsApplied] = useState(false);
     const [showRemoveFromSaved, setShowRemoveFromSaved] = useState(false);
     
     const moreActionsButtonRef = useRef<HTMLButtonElement | null>(null);
     
     const jobSeekerService = new JobSeekerAccountService();
+    const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeekerSavedJobs, selectedJob!);
     
     useEffect(() => {
         setIsFullHeaderGridTemplate(1);
         setIsShortHeaderGridTemplate(0);
+        
     },[])
 
+    useEffect(() => {
+        if (!jobSeekerJobApplies){
+            return;
+        }
+        if (jobSeekerJobApplies.some(j => j.jobId == selectedJob?.id)){
+            setIsApplied(true);
+        }
+        else {
+            setIsApplied(false);
+        }
+    }, [selectedJob, []]);
 
     useEffect(() => {
+        if (!jobSeekerSavedJobs){
+            return;
+        }
         if (jobSeekerSavedJobs.some(j => j.jobId == selectedJob?.id)){
             setIsJobSaved(true)
         }
         else {
             setIsJobSaved(false)
         }
+        
     }, [jobSeekerSavedJobs, []]);
 
-    async function removeSavedJob() {
+    async function handleJobInteraction(actionFunction : JobActionFunction, setShowRemoveFromSavedValue : ShowRemoveFromSavedSetter) {
         try {
-            if (!authUser){
+            if (!authUser) {
                 navigate("/auth-page");
+                return;
             }
-           await jobSeekerService.deleteSavedJob(selectedJob!.id);
-           setIsJobSaved(false);
-            setJobSeekerSavedJobs((prevSavedJobs) => prevSavedJobs.filter(savedJob => savedJob.jobId !== selectedJob?.id));
-            setShowRemoveFromSaved(false);
-        }
-        catch (error){
-            if (error instanceof ServerError){
-                logErrorInfo(error)
-            }
+
+            await actionFunction(selectedJob!.id);
+            setShowRemoveFromSavedValue(actionFunction === removeSavedJob ? false : true);
+        } catch (err) {
+            logErrorInfo(err);
         }
     }
 
-    async function saveJob() {
-        try {
-            if (!authUser){
-                navigate("/auth-page");
-            }
-            const retrievedSavedJob = await jobSeekerService.saveJob(selectedJob!.id);
-            setIsJobSaved(true);
-            setShowRemoveFromSaved(true);
-            retrievedSavedJob.job = selectedJob!;
-            setJobSeekerSavedJobs((prevSavedJobs) => [...prevSavedJobs, retrievedSavedJob!]);
-        }
-        catch (error){
-            if (error instanceof ServerError){
-                logErrorInfo(error)
-            }
-        }
+    async function removeSavedJob1() {
+        await handleJobInteraction(removeSavedJob, setShowRemoveFromSaved);
+    }
+
+    async function saveJob1() {
+        await handleJobInteraction(saveJob, setShowRemoveFromSaved);
     }
 
     return (
@@ -113,14 +119,14 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
                 </div>
             </div>
             <div className={"header-job-interactions-box"}>
-                <button className={"blue-button"}>
-                    Apply now
+                <button className={"blue-button"} disabled={isApplied}>
+                    {isApplied ? "Applied" : "Apply now"}
                 </button>
                 {!isJobSaved ?  (
-                <button className={"save-job-button margin-left1rem"} onClick={saveJob}>
+                <button className={"save-job-button margin-left1rem"} onClick={saveJob1}>
                     <FontAwesomeIcon className={"medium-svg"} icon={regularHeart} />
                 </button>) : (
-                <button className={"save-job-button saved-job-button margin-left1rem"} ref={moreActionsButtonRef} onClick={removeSavedJob}>
+                <button className={"save-job-button saved-job-button margin-left1rem"} ref={moreActionsButtonRef} onClick={removeSavedJob1}>
                     <FontAwesomeIcon className={"medium-svg"} icon={solidHeart} />
                 </button>)}
             </div>
@@ -128,7 +134,7 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
                 <a className={"action-name"}>
                      Job was saved
                 </a>
-                <a className={"undo-button"} onClick={removeSavedJob}>
+                <a className={"undo-button"} onClick={removeSavedJob1}>
                     Remove from saved
                 </a>
             </div>}

@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBuilding} from "@fortawesome/free-solid-svg-icons";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {UserJobInteractionsTypes} from "../../../../enums/UserJobInteractionsTypes";
+import {useNavigate} from "react-router-dom";
 
 interface UserJobInteractionShortJobInfoProps {
     job: JobDTO;
@@ -14,6 +15,7 @@ interface UserJobInteractionShortJobInfoProps {
 const UserJobInteractionShortJobInfo: FC<UserJobInteractionShortJobInfoProps> = ({job, interactionTime, jobInteractionType}) => {
     const [interactionInfo, setInteractionInfo] = useState("");
     const [jobInteractionTimePretext, setJobInteractionTimePretext] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         setJobInteractionText();
@@ -60,12 +62,16 @@ const UserJobInteractionShortJobInfo: FC<UserJobInteractionShortJobInfoProps> = 
         }
     }
 
+    function navigateToJobPage(){
+        navigate(`/viewjob/${job.id}`);
+    }
+
     return (
         <div className={"ji-job-fb"}>
             <div className={"ji-job-icon-box"}>
                 <FontAwesomeIcon icon={faBuilding}/>
             </div>
-            <div className={"ji-job-info-box"}>
+            <div className={"ji-job-info-box"} onClick={navigateToJobPage}>
                 <span className={"ji-job-title"}>{job.jobTitle}</span>
                 <span className={"dark-default-text"}>{job.employerAccount.organization.name}</span>
                 <span className={"dark-default-text"}>{job.location}</span>

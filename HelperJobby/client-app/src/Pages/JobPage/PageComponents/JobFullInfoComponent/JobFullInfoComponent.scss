@@ -1,0 +1,25 @@
+.fji-layout{
+  display: block;
+  max-width: 1280px;
+  min-width: 0px;
+  margin: 0px;
+}
+
+.fji-fb{
+  display: flex;
+  box-sizing: border-box;
+  min-width: 0px;
+}
+
+.fji-job-container{
+  margin-left: 16.67%;
+  width: 53.33%;
+}
+
+.fji-job-header-block{
+  position: sticky;
+  top: 0;
+  padding-bottom: 2rem;
+  background-color: white;
+  z-index: 1;
+}

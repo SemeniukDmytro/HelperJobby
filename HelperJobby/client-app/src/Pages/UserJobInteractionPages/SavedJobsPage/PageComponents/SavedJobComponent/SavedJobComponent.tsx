@@ -30,7 +30,7 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
             }
             setRequestInProcess(true);
             await jobSeekerService.deleteSavedJob(job.id);
-            setJobSeekerSavedJobs((prevSavedJobs) => prevSavedJobs
+            setJobSeekerSavedJobs((prevSavedJobs) => prevSavedJobs!
                 .filter(savedJob => savedJob.jobId !== job.id));
             
             setShowRemoveFromSaved(true);
@@ -50,7 +50,7 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
             setRequestInProcess(true);
             const retrievedSavedJob = await jobSeekerService.saveJob(job.id);
             retrievedSavedJob.job = job;
-            setJobSeekerSavedJobs((prevSavedJobs) => [...prevSavedJobs, retrievedSavedJob!]);
+            setJobSeekerSavedJobs((prevSavedJobs) => [...prevSavedJobs!, retrievedSavedJob!]);
             setShowRemoveFromSaved(false);
         } catch (error) {
             logErrorInfo(error);
@@ -62,7 +62,7 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
     
     function closeUndoActionWindow(){
         setShowUndoRemoveWindow(false);
-        setSavedJobs((prevSavedJobs) => prevSavedJobs
+        setSavedJobs((prevSavedJobs) => prevSavedJobs!
             .filter(savedJob => savedJob.jobId !== job.id));
     }
     
@@ -81,7 +81,7 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
                             </button>
                         </div>
                     </div>
-                    <div className={"ji-remove-from-saved-fb"}>
+                    <div className={"ml1rem"}>
                         <button className={"medium-tr-btn-with-icon"} onClick={removeSavedJob}>
                             <FontAwesomeIcon icon={faBookmark}/>
                         </button>

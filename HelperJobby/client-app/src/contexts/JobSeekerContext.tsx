@@ -7,24 +7,28 @@ import {JobSeekerAccountService} from "../services/jobSeekerAccountService";
 import {useAuth} from "../hooks/useAuth";
 import {SavedJobDTO} from "../DTOs/userJobInteractionsDTOs/SavedJobDTO";
 import {JobApplyDTO} from "../DTOs/userJobInteractionsDTOs/JobApplyDTO";
+import {JobApplyService} from "../services/jobApplyService";
 
 const JobSeekerContext = createContext<JobSeekerContextProps>({
     jobSeeker : null,
     setJobSeeker : () => {}, 
-    jobSeekerSavedJobs : [],
+    jobSeekerSavedJobs : null,
     setJobSeekerSavedJobs: () => {},
-    jobSeekerJobApplies : [],
+    jobSeekerJobApplies : null,
     setJobSeekerJobApplies : () => {},
-    fetchJobSeeker : () => {}
+    fetchJobSeeker : () => {},
+    fetchJobSeekerSavedJobs : () => {},
+    fetchJobSeekerJobApplies : () => {}
 });
 
 export function JobSeekerProvider({children} : {children : ReactNode}){
     const [jobSeeker, setJobSeeker] = useState<JobSeekerAccountDTO | null>(null);
-    const [jobSeekerSavedJobs, setJobSeekerSavedJobs] = useState<SavedJobDTO[]>([]);
-    const [jobSeekerJobApplies, setJobSeekerJobApplies] = useState<JobApplyDTO[]>([]);
+    const [jobSeekerSavedJobs, setJobSeekerSavedJobs] = useState<SavedJobDTO[] | null>(null);
+    const [jobSeekerJobApplies, setJobSeekerJobApplies] = useState<JobApplyDTO[] | null>(null);
     const {authUser} = useAuth();
     
     const jobSeekerService = new JobSeekerAccountService();
+    const jobApplyService = new JobApplyService();
     const fetchJobSeeker = async  () => {
         try {  
             if (jobSeeker === null && authUser){
@@ -39,6 +43,32 @@ export function JobSeekerProvider({children} : {children : ReactNode}){
         }
     }
     
+    const fetchJobSeekerSavedJobs = async () => {
+        try {
+            if (jobSeekerSavedJobs !== null || !authUser){
+                return;
+            }
+            const retrievedSavedJobs = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
+            setJobSeekerSavedJobs(retrievedSavedJobs);
+        }
+        catch (err){
+            logErrorInfo(err)
+        }
+    }
+
+    const fetchJobSeekerJobApplies = async () => {
+        try {
+            if (jobSeekerJobApplies !== null || !authUser){
+                return;
+            }
+            const retrievedJobApplies = await jobApplyService.getUserJobApplies();
+            setJobSeekerJobApplies(retrievedJobApplies);
+        }
+        catch (err){
+            logErrorInfo(err)
+        }
+    }
+    
     return (
         <JobSeekerContext.Provider value={{
             jobSeeker,
@@ -47,7 +77,9 @@ export function JobSeekerProvider({children} : {children : ReactNode}){
             setJobSeekerSavedJobs,
             jobSeekerJobApplies,
             setJobSeekerJobApplies,
-            fetchJobSeeker}
+            fetchJobSeeker,
+            fetchJobSeekerSavedJobs,
+            fetchJobSeekerJobApplies}
         }>
             {children}
         </JobSeekerContext.Provider>

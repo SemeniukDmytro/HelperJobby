@@ -37,6 +37,8 @@ import SavedJobsPage from "./Pages/UserJobInteractionPages/SavedJobsPage/SavedJo
 import JobAppliesPage from "./Pages/UserJobInteractionPages/JobAppliesPage/JobAppliesPage";
 import InterviewsPage from "./Pages/UserJobInteractionPages/InterviewsPage/InterviewsPage";
 import MyJobsPagesWrap from "./Components/MyJobsPagesWrap/MyJobsPagesWrap";
+import JobPage from "./Pages/JobPage/JobPage";
+import NotFoundPage from "./Pages/NotFoundPage/NotFoundPage";
 
 
 function App() {
@@ -103,13 +105,16 @@ function App() {
                     <Route path={"applied"} element={<JobAppliesPage/>}/>
                     <Route path={"interviews"} element={<InterviewsPage/>}/>
                 </Route>
-                    
+                <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
             </Route>
 
             {/*public routes */}
             <Route path="/home" element={<HomePage/>}/>
             <Route path={"/auth-page"} element={<AuthPage/>}/>
             <Route path={"/jobs"} element={<SearchJobResultsPage/>}/>
+            <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
+            
+            <Route path={"*"} element={<NotFoundPage/>}/>
             
         </Routes>
       </AuthProvider>

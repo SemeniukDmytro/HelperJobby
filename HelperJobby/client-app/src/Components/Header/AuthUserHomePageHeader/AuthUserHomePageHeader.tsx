@@ -12,7 +12,7 @@ import {ServerError} from "../../../ErrorDTOs/ServerErrorDTO";
 interface AuthUserHomePageHeaderProps {}
 
 const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
-    const {authUser} = useAuth();
+    const {authUser, setAuthUser} = useAuth();
     const [displayMoreOptions, setDisplayMoreOptions] = useState(false);
     const profileButtonRef = useRef<HTMLButtonElement | null>(null);
     const moreOptionsComponentRef = useRef<HTMLDivElement | null>(null);
@@ -43,6 +43,8 @@ const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
             await authService.revokeToken();
             removeAuthToken();
             window.location.reload();
+            setAuthUser(null);
+            
         }
         catch (error){
             if (error instanceof ServerError){

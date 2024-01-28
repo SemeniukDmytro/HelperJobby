@@ -11,6 +11,7 @@ import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
 import {useAuth} from "../../../../hooks/useAuth";
+import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 
 
 interface HomeComponentProps {
@@ -18,14 +19,21 @@ interface HomeComponentProps {
 
 const HomeComponent: FC<HomeComponentProps> = () => {
     const [selectedTab, setSelectedTab] = useState<SelectedTabs>(1);
-    const {jobSeekerSavedJobs, setJobSeekerSavedJobs} = useJobSeeker();
-    const {authUser} = useAuth();
+    const {fetchJobSeekerSavedJobs, fetchJobSeekerJobApplies} = useJobSeeker();
+    const [loading, setLoading] = useState(true);
     
     const jobSeekerService = new JobSeekerAccountService();
     
     useEffect(() => {
-        loadJobSeekerSavedJobs();
+        fetchData()
     }, []);
+    
+    async function fetchData(){
+        await fetchJobSeekerSavedJobs();
+        await fetchJobSeekerJobApplies();
+        setLoading(false);
+    }
+    
     function showJobFeed() {
         setSelectedTab(1);
     }
@@ -33,42 +41,30 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     function showRecentSearches() {
         setSelectedTab(2);
     }
-    
-    async function loadJobSeekerSavedJobs(){
-        if (jobSeekerSavedJobs.length > 0 || !authUser){
-            return;
-        }
-        try {
-            const response = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
-            console.log(response);
-            setJobSeekerSavedJobs(response);
-        }
-        catch (err){
-            if (err instanceof ServerError){
-                logErrorInfo(err);
-            }
-        }
-    }
 
     return (
         <HomePageMainContentWrap>
-            <JobSearchBar jobInitial={""} locationInitial={""}/>
-            <JobSearchPromoContainer/>
-            <div className={"search-results-container"}>
-                <nav className={"search-results-navbar"}>
-                    <button className={"tab-container"} onClick={showJobFeed}>
-                        <span
-                            className={`home-page-tab-name ${selectedTab === 1 ? "selected-tab-font-weight" : ""}`}>Job feed</span>
-                        {selectedTab === 1 && <div className={"search-underline"}></div>}
-                    </button>
-                    <button className={"tab-container"} onClick={showRecentSearches}>
-                        <span className={`home-page-tab-name ${selectedTab === 2 ? "selected-tab-font-weight" : ""}`}>New results for recent searches</span>
-                        {selectedTab === 2 && <div className={"search-underline"}></div>}
-                    </button>
-                </nav>
-                {selectedTab === 1 && <RecommendedJobs/>}
-                {selectedTab === 2 && <RecentSearches/>}
-            </div>
+
+            {loading ? <LoadingPage/> : <>
+                <JobSearchBar jobInitial={""} locationInitial={""}/>
+                <JobSearchPromoContainer/>
+                <div className={"search-results-container"}>
+                    <nav className={"search-results-navbar"}>
+                        <button className={"tab-container"} onClick={showJobFeed}>
+                                    <span
+                                        className={`home-page-tab-name ${selectedTab === 1 ? "selected-tab-font-weight" : ""}`}>Job feed</span>
+                            {selectedTab === 1 && <div className={"search-underline"}></div>}
+                        </button>
+                        <button className={"tab-container"} onClick={showRecentSearches}>
+                            <span
+                                className={`home-page-tab-name ${selectedTab === 2 ? "selected-tab-font-weight" : ""}`}>New results for recent searches</span>
+                            {selectedTab === 2 && <div className={"search-underline"}></div>}
+                        </button>
+                    </nav>
+                    {selectedTab === 1 && <RecommendedJobs/>}
+                    {selectedTab === 2 && <RecentSearches/>}
+                </div>
+            </>}
         </HomePageMainContentWrap>
     )
 };

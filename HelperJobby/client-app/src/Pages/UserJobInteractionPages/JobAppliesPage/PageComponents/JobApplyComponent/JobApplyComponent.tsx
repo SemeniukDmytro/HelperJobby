@@ -31,7 +31,7 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
             }
             setRequestInProcess(true);
             await jobApplyService.deleteJobApply(job.id);
-            setJobSeekerJobApplies((prevJobApplies) => prevJobApplies
+            setJobSeekerJobApplies((prevJobApplies) => prevJobApplies!
                 .filter(jobApply => jobApply.jobId !== job.id));
 
             setShowApplyRemoved(true);
@@ -51,7 +51,7 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
             setRequestInProcess(true);
             const retrievedJobApply = await  jobApplyService.postJobApply(job.id);
             retrievedJobApply.job = job;
-            setJobSeekerJobApplies((prevJobApplies) => [...prevJobApplies, retrievedJobApply!]);
+            setJobSeekerJobApplies((prevJobApplies) => [...prevJobApplies!, retrievedJobApply!]);
             setShowApplyRemoved(false);
         } catch (error) {
             logErrorInfo(error);
@@ -63,7 +63,7 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
 
     function closeUndoActionWindow(){
         setShowUndoRemoveWindow(false);
-        setJobApplies((prevJobApplies) => prevJobApplies
+        setJobApplies((prevJobApplies) => prevJobApplies!
             .filter(jobApply => jobApply.jobId !== job.id));
     }
 

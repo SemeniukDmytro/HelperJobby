@@ -46,9 +46,10 @@ namespace HelperJobby.Controllers
         }
         
         [HttpGet("{jobId}")]
+        [AllowAnonymous]
         public async Task<JobDTO> GetJobById(int jobId)
         {
-            return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobById(jobId));
+            return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobWithOrganizationInfo(jobId));
         }
 
         [HttpPost("{jobCreationId}")]

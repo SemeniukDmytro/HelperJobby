@@ -4,13 +4,12 @@ import {JobApplyDTO} from "../DTOs/userJobInteractionsDTOs/JobApplyDTO";
 import {InterviewDTO} from "../DTOs/userJobInteractionsDTOs/InterviewDTO";
 
 export interface JobSeekerJobInteractionsContextProps {
-    savedJobs : SavedJobDTO[];
-    setSavedJobs : Dispatch<SetStateAction<SavedJobDTO[]>>;
-    jobApplies : JobApplyDTO[];
-    setJobApplies : Dispatch<SetStateAction<JobApplyDTO[]>>;
-    interviews : InterviewDTO[];
-    setInterviews : Dispatch<SetStateAction<InterviewDTO[]>>;
+    savedJobs : SavedJobDTO[] | null;
+    setSavedJobs : Dispatch<SetStateAction<SavedJobDTO[] | null>>;
+    jobApplies : JobApplyDTO[] | null;
+    setJobApplies : Dispatch<SetStateAction<JobApplyDTO[] | null>>;
+    interviews : InterviewDTO[] | null;
+    setInterviews : Dispatch<SetStateAction<InterviewDTO[] | null>>;
     fetchJobSeekerJobInteractions : () => void;
-    jobInteractionsLoaded : boolean;
-    setJobInteractionsLoaded : Dispatch<SetStateAction<boolean>>;
+    requestInProgress : boolean;
 }

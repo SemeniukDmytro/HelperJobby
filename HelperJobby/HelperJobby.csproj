@@ -62,7 +62,9 @@
       <Folder Include="client-app\src\Pages\BuildResumePages\WorkExperiencePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\EditContactInfoPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\HomePage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\JobPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\JobSeekerProfilePage\PageComponents\" />
+      <Folder Include="client-app\src\Pages\NotFoundPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\ResumePage\PageComponents\" />
       <Folder Include="client-app\src\Pages\AddResumeInfoPages\ResumeAddEducationPage\PageComponents\" />
       <Folder Include="client-app\src\Pages\AddResumeInfoPages\ResumeAddWorkExperiencePage\PageComponents\" />

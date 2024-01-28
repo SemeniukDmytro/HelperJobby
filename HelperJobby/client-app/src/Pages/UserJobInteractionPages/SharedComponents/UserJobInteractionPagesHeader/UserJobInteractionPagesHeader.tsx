@@ -20,17 +20,6 @@ const UserJobInteractionPagesHeader: FC<UserJobInteractionPagesHeaderProps> = ({
     const [loading, setLoading] = useState(true);
     const {savedJobs, jobApplies, interviews, fetchJobSeekerJobInteractions} = useJobSeekerJobInteractions();
     const navigate = useNavigate();
-    
-    useEffect(() => {
-        const fetchData = async () => {
-            await fetchJobSeekerJobInteractions();
-            setLoading(false);
-        };
-
-        fetchData();
-    }, []);
-
-
     function navigateToSavedJobsPage() {
         navigate("/saved")
     }
@@ -45,7 +34,6 @@ const UserJobInteractionPagesHeader: FC<UserJobInteractionPagesHeaderProps> = ({
 
     return (
         <PageWrapWithHeader>
-            {loading ? <LoadingPage/> :
                 <div className={"my-jobs-container"}>
                     <div>
                         <h1 className={"my-jobs-header"}>My jobs</h1>
@@ -54,7 +42,7 @@ const UserJobInteractionPagesHeader: FC<UserJobInteractionPagesHeaderProps> = ({
                         <button className={"job-interaction-tab"} onClick={navigateToSavedJobsPage}>
                             <span className={`job-interaction-info ${userJobInteractionType == UserJobInteractionsTypes.saved ? "selected-job-interaction-tab" : ""}`}>
                                 <div className={"small-text"}>
-                                    <span>{savedJobs.length}</span>
+                                    <span>{savedJobs?.length}</span>
                                 </div>
                                 <div className={"job-interaction-tab-name"}>
                                     <span>Saved</span>
@@ -65,7 +53,7 @@ const UserJobInteractionPagesHeader: FC<UserJobInteractionPagesHeaderProps> = ({
                             <span className={`job-interaction-info
                              ${userJobInteractionType == UserJobInteractionsTypes.applied ? "selected-job-interaction-tab" : ""}`}>
                                 <div className={"small-text"}>
-                                    <span>{jobApplies.length}</span>
+                                    <span>{jobApplies?.length}</span>
                                 </div>
                                 <div className={"job-interaction-tab-name"}>
                                     <span>Applied</span>
@@ -76,7 +64,7 @@ const UserJobInteractionPagesHeader: FC<UserJobInteractionPagesHeaderProps> = ({
                             <span className={`job-interaction-info
                              ${userJobInteractionType == UserJobInteractionsTypes.interviewing ? "selected-job-interaction-tab" : ""}`}>
                                 <div className={"small-text"}>
-                                    <span>{interviews.length}</span>
+                                    <span>{interviews?.length}</span>
                                 </div>
                                 <div className={"job-interaction-tab-name"}>
                                     <span>Interviews</span>
@@ -88,7 +76,6 @@ const UserJobInteractionPagesHeader: FC<UserJobInteractionPagesHeaderProps> = ({
                         {children}
                     </div>
                 </div>
-            }
         </PageWrapWithHeader>
     )
 

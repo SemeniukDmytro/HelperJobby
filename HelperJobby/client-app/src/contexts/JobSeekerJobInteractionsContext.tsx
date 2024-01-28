@@ -7,42 +7,60 @@ import {JobSeekerAccountService} from "../services/jobSeekerAccountService";
 import {JobApplyService} from "../services/jobApplyService";
 import {InterviewService} from "../services/interviewService";
 import {logErrorInfo} from "../utils/logErrorInfo";
+import {useJobSeeker} from "../hooks/useJobSeeker";
 
 const JobSeekerJobInteractionsContext = createContext<JobSeekerJobInteractionsContextProps>({
-    savedJobs : [],
+    savedJobs : null,
     setSavedJobs: () => {},
-    jobApplies : [],
+    jobApplies : null,
     setJobApplies : () => {},
-    interviews : [],
+    interviews : null,
     setInterviews : () => {},
     fetchJobSeekerJobInteractions : () => {},
-    jobInteractionsLoaded : false,
-    setJobInteractionsLoaded : () => {}
+    requestInProgress : true
 });
 
 export function JobSeekerJobInteractionsProvider({children} : {children : ReactNode}){
-    const [savedJobs, setSavedJobs] = useState<SavedJobDTO[]>([]);
-    const [jobApplies, setJobApplies] = useState<JobApplyDTO[]>([]);
-    const [interviews, setInterviews] = useState<InterviewDTO[]>([]);
+    const [savedJobs, setSavedJobs] = useState<SavedJobDTO[] | null>(null);
+    const [jobApplies, setJobApplies] = useState<JobApplyDTO[] | null>(null);
+    const [interviews, setInterviews] = useState<InterviewDTO[] | null>(null);
+    const {setJobSeekerJobApplies, setJobSeekerSavedJobs} = useJobSeeker();
     const jobSeekerService = new JobSeekerAccountService();
     const jobAppliesService = new JobApplyService();
     const interviewsService = new InterviewService();
-    const [jobInteractionsLoaded, setJobInteractionsLoaded] = useState(false);
+    const [requestInProgress, setRequestInProgress] = useState(true);
+    const {jobSeekerSavedJobs,
+        jobSeekerJobApplies} = useJobSeeker();
+    
     const fetchJobSeekerJobInteractions = async () => {
         try {
-            if (jobInteractionsLoaded){
-                return;
+            if (jobSeekerSavedJobs){
+                setSavedJobs(jobSeekerSavedJobs);
             }
-            const retrievedSavedJobs = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
-            setSavedJobs(retrievedSavedJobs);
-            const retrievedJobApplies = await jobAppliesService.getUserJobApplies();
-            setJobApplies(retrievedJobApplies);
+            else {
+                console.log("2")
+                const retrievedSavedJobs = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
+                setSavedJobs(retrievedSavedJobs);
+                setJobSeekerSavedJobs(retrievedSavedJobs);
+            }
+            
+            if (jobSeekerJobApplies){
+                setJobApplies(jobSeekerJobApplies)
+            }
+            else {
+                const retrievedJobApplies = await jobAppliesService.getUserJobApplies();
+                setJobApplies(retrievedJobApplies);
+                setJobSeekerJobApplies(retrievedJobApplies);
+            }
+            
             const retrievedInterviews = await interviewsService.getCurrentJobSeekerInterviews();
             setInterviews(retrievedInterviews);
-            setJobInteractionsLoaded(true)
         }
         catch (err){
             logErrorInfo(err)
+        }
+        finally {
+            setRequestInProgress(false);
         }
     }
     
@@ -55,8 +73,7 @@ export function JobSeekerJobInteractionsProvider({children} : {children : ReactN
              interviews,
              setInterviews,
              fetchJobSeekerJobInteractions,
-             jobInteractionsLoaded, 
-             setJobInteractionsLoaded}
+             requestInProgress}
         }>
             {children}
         </JobSeekerJobInteractionsContext.Provider>

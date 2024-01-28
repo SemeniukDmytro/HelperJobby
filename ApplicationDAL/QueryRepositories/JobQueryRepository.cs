@@ -48,32 +48,7 @@ public class JobQueryRepository : IJobQueryRepository
     {
         var jobs = await _applicationContext
             .Jobs.Where(j => jobIds.Contains(j.Id)).
-            Select(j => new Job()
-            {
-                Id = j.Id,
-                JobTitle = j.JobTitle,
-                NumberOfOpenings = j.NumberOfOpenings,
-                Language = j.Language,
-                Location = j.Location,
-                JobTypes = j.JobTypes,
-                Salary = j.Salary,
-                SalaryRate = j.SalaryRate,
-                ShowPayBy = j.ShowPayBy,
-                Schedule = j.Schedule,
-                Benefits = j.Benefits,
-                ContactEmail = j.ContactEmail,
-                ResumeRequired = j.ResumeRequired,
-                Description = j.Description,
-                DatePosted = j.DatePosted,
-                EmployerAccount = new EmployerAccount()
-                {
-                    Organization = new Organization()
-                    {
-                        Id = j.EmployerAccount.OrganizationId,
-                        Name = j.EmployerAccount.Organization.Name
-                    }
-                }
-            })
+            Select(JobProjections.JobWithOrganizationName())
             .ToListAsync();
         return jobs;
     }
@@ -95,32 +70,16 @@ public class JobQueryRepository : IJobQueryRepository
         var jobsCount = _applicationContext.Jobs.Count();
         var startingPoint = Math.Max(new Random().Next(jobsCount) - 10, 0);
         return await _applicationContext.Jobs.Skip(startingPoint).Take(RandomJobsToTake).
-            Select(j => new Job()
-            {
-                Id = j.Id,
-                JobTitle = j.JobTitle,
-                NumberOfOpenings = j.NumberOfOpenings,
-                Language = j.Language,
-                Location = j.Location,
-                JobTypes = j.JobTypes,
-                Salary = j.Salary,
-                SalaryRate = j.SalaryRate,
-                ShowPayBy = j.ShowPayBy,
-                Schedule = j.Schedule,
-                Benefits = j.Benefits,
-                ContactEmail = j.ContactEmail,
-                ResumeRequired = j.ResumeRequired,
-                Description = j.Description,
-                DatePosted = j.DatePosted,
-                EmployerAccount = new EmployerAccount()
-                {
-                    Organization = new Organization()
-                    {
-                        Id = j.EmployerAccount.OrganizationId,
-                        Name = j.EmployerAccount.Organization.Name
-                    }
-                }
-            })
+            Select(JobProjections.JobWithOrganizationName())
             .ToListAsync();
+    }
+
+    public async Task<Job> GetJobWithOrganizationInfo(int jobId)
+    {
+        var jobs = await _applicationContext
+            .Jobs.Where(j => j.Id == jobId)
+            .Select(JobProjections.JobWithOrganizationName())
+            .FirstOrDefaultAsync();
+        return jobs;
     }
 }

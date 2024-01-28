@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, {FC, useEffect} from 'react';
 import './JobAppliesComponent.scss';
 import {UserJobInteractionsTypes} from "../../../../../enums/UserJobInteractionsTypes";
 import UserJobInteractionPagesHeader
@@ -6,15 +6,23 @@ import UserJobInteractionPagesHeader
 import SavedJobComponent from "../../../SavedJobsPage/PageComponents/SavedJobComponent/SavedJobComponent";
 import {useJobSeekerJobInteractions} from "../../../../../hooks/useJobSeekerJobInteractions";
 import JobApplyComponent from "../JobApplyComponent/JobApplyComponent";
+import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 
 interface JobAppliesComponentProps {}
 
 const JobAppliesComponent: FC<JobAppliesComponentProps> = () => {
-    const {jobApplies} = useJobSeekerJobInteractions();
+    const {jobApplies, fetchJobSeekerJobInteractions, requestInProgress} = useJobSeekerJobInteractions();
+
+    useEffect(() => {
+        if (!jobApplies){
+            fetchJobSeekerJobInteractions();
+        }
+    }, []);
     
     return (
+    requestInProgress ? <LoadingPage/> :
     <UserJobInteractionPagesHeader userJobInteractionType={UserJobInteractionsTypes.applied}>
-        {jobApplies.map((jobApply, index) => (
+        {jobApplies!.map((jobApply, index) => (
                 <JobApplyComponent job={jobApply.job} key={index} dateApplied={jobApply.dateApplied}/>
             )
         )}

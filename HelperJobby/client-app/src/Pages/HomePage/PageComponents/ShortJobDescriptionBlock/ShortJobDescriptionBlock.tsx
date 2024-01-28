@@ -116,7 +116,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
                 await jobSeekerService.deleteSavedJob(job.id);
                 setSaveJobButtonText("Save job");
                 setIsJobSaved(!isJobSaved);
-                setJobSeekerSavedJobs((prevSavedJobs) => prevSavedJobs.filter(savedJob => savedJob.jobId !== job.id));
+                setJobSeekerSavedJobs((prevSavedJobs) => prevSavedJobs!.filter(savedJob => savedJob.jobId !== job.id));
             }
             else {
                 const retrievedSavedJob =  await jobSeekerService.saveJob(job.id);
@@ -125,7 +125,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
                 setIsSuccessfulPopup(true);
                 setPopUpText("Job successfully saved!");
                 setShowPopup(true);
-                setJobSeekerSavedJobs((prevSavedJobs) => [...prevSavedJobs, retrievedSavedJob]);
+                setJobSeekerSavedJobs((prevSavedJobs) => [...prevSavedJobs!, retrievedSavedJob]);
             }
         }
         catch (error){
