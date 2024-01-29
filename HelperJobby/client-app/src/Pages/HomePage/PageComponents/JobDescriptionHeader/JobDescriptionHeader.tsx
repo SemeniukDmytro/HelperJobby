@@ -25,7 +25,7 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
                                                              isFullHeaderGridTemplate, setIsFullHeaderGridTemplate,
                                                              isShortHeaderGridTemplate, setIsShortHeaderGridTemplate}) => {
     
-    const {jobSeekerSavedJobs, setJobSeekerSavedJobs, jobSeekerJobApplies} = useJobSeeker();
+    const {jobSeeker, setJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
     const navigate = useNavigate();
     const [isJobSaved, setIsJobSaved] = useState(false);
@@ -35,7 +35,7 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
     const moreActionsButtonRef = useRef<HTMLButtonElement | null>(null);
     
     const jobSeekerService = new JobSeekerAccountService();
-    const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeekerSavedJobs, selectedJob!);
+    const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeeker, selectedJob!);
     
     useEffect(() => {
         setIsFullHeaderGridTemplate(1);
@@ -44,10 +44,10 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
     },[])
 
     useEffect(() => {
-        if (!jobSeekerJobApplies){
+        if (!jobSeeker?.jobApplies){
             return;
         }
-        if (jobSeekerJobApplies.some(j => j.jobId == selectedJob?.id)){
+        if (jobSeeker.jobApplies.some(j => j.jobId == selectedJob?.id)){
             setIsApplied(true);
         }
         else {
@@ -56,17 +56,18 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
     }, [selectedJob, []]);
 
     useEffect(() => {
-        if (!jobSeekerSavedJobs){
+        if (!jobSeeker?.savedJobs){
+            console.log("das")
             return;
         }
-        if (jobSeekerSavedJobs.some(j => j.jobId == selectedJob?.id)){
+        if (jobSeeker.savedJobs.some(j => j.jobId == selectedJob?.id)){
             setIsJobSaved(true)
         }
         else {
             setIsJobSaved(false)
         }
         
-    }, [jobSeekerSavedJobs, []]);
+    }, [jobSeeker?.savedJobs, []]);
 
     async function handleJobInteraction(actionFunction : JobActionFunction, setShowRemoveFromSavedValue : ShowRemoveFromSavedSetter) {
         try {

@@ -73,7 +73,7 @@ const SearchBarForJobPage: FC<SearchBarForJobPageProps> = () => {
                        ref={jobRef}
                        onKeyDown={handleEnterKeyPress}/>
             </div>
-            <div className={"field-input-container mr1rem"} onClick={handleLocationFocus}>
+            <div className={"field-input-container mr1rem"} style={{flexGrow : "1"}} onClick={handleLocationFocus}>
                 <div className={`border-lining ${locationFocus ? "field-focus" : ""}`}>
 
                 </div>

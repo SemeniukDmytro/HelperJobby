@@ -51,6 +51,14 @@ namespace HelperJobby.Controllers
                 await  _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithAddressAndResume(_userService.GetCurrentUserId());
             return _mapper.Map<JobSeekerAccountDTO>(jobSeekerAccount);
         }
+        
+        [HttpGet("job-seeker-with-job-interactions")]
+        public async Task<JobSeekerAccountDTO> GetCurrentJobSeekerWithHisJobInteractions()
+        {
+            var jobSeekerAccount =
+                await  _jobSeekerAccountQueryRepository.GetJobSeekerWithJobInteractions(_userService.GetCurrentUserId());
+            return _mapper.Map<JobSeekerAccountDTO>(jobSeekerAccount);
+        }
 
         [HttpGet("my-saved-jobs")]
         public async Task<IEnumerable<SavedJobDTO>> GetSavedJobsOfCurrentJobSeeker()

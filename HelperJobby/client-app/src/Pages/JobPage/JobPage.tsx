@@ -6,5 +6,4 @@ interface JobPageProps {}
 const JobPage: FC<JobPageProps> = () => (
   <JobComponent/>
 );
-
 export default JobPage;

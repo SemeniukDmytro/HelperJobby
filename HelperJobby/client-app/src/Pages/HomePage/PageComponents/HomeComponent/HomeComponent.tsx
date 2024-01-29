@@ -19,7 +19,7 @@ interface HomeComponentProps {
 
 const HomeComponent: FC<HomeComponentProps> = () => {
     const [selectedTab, setSelectedTab] = useState<SelectedTabs>(1);
-    const {fetchJobSeekerSavedJobs, fetchJobSeekerJobApplies} = useJobSeeker();
+    const {fetchJobSeekerJobInteractions} = useJobSeeker();
     const [loading, setLoading] = useState(true);
     
     const jobSeekerService = new JobSeekerAccountService();
@@ -29,8 +29,7 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     }, []);
     
     async function fetchData(){
-        await fetchJobSeekerSavedJobs();
-        await fetchJobSeekerJobApplies();
+        await fetchJobSeekerJobInteractions();
         setLoading(false);
     }
     

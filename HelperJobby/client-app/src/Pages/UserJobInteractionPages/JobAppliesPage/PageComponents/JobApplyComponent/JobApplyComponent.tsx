@@ -19,7 +19,7 @@ interface JobApplyComponentProps {
 
 const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
     const {setJobApplies} = useJobSeekerJobInteractions();
-    const {setJobSeekerJobApplies} = useJobSeeker();
+    const {setJobSeeker} = useJobSeeker();
     const jobApplyService = new JobApplyService();
     const [showApplyRemoved, setShowApplyRemoved] = useState(false);
     const [showUndoRemoveWindow, setShowUndoRemoveWindow] = useState(true);
@@ -31,8 +31,12 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
             }
             setRequestInProcess(true);
             await jobApplyService.deleteJobApply(job.id);
-            setJobSeekerJobApplies((prevJobApplies) => prevJobApplies!
-                .filter(jobApply => jobApply.jobId !== job.id));
+            setJobSeeker(prevJobSeeker => {
+                return prevJobSeeker && {
+                    ...prevJobSeeker,
+                    jobApplies: prevJobSeeker.jobApplies.filter(jobApply => jobApply.jobId !== job.id)
+                }
+            });
 
             setShowApplyRemoved(true);
         } catch (error) {
@@ -51,7 +55,12 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
             setRequestInProcess(true);
             const retrievedJobApply = await  jobApplyService.postJobApply(job.id);
             retrievedJobApply.job = job;
-            setJobSeekerJobApplies((prevJobApplies) => [...prevJobApplies!, retrievedJobApply!]);
+            setJobSeeker(prevJobSeeker => {
+                return prevJobSeeker && {
+                    ...prevJobSeeker,
+                    jobApplies: [...prevJobSeeker.jobApplies, retrievedJobApply]
+                };
+            });
             setShowApplyRemoved(false);
         } catch (error) {
             logErrorInfo(error);

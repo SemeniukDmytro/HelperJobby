@@ -8,33 +8,48 @@ import {useAuth} from "../hooks/useAuth";
 import {SavedJobDTO} from "../DTOs/userJobInteractionsDTOs/SavedJobDTO";
 import {JobApplyDTO} from "../DTOs/userJobInteractionsDTOs/JobApplyDTO";
 import {JobApplyService} from "../services/jobApplyService";
+import {ResumeDTO} from "../DTOs/resumeRelatedDTOs/ResumeDTO";
 
 const JobSeekerContext = createContext<JobSeekerContextProps>({
     jobSeeker : null,
-    setJobSeeker : () => {}, 
-    jobSeekerSavedJobs : null,
-    setJobSeekerSavedJobs: () => {},
-    jobSeekerJobApplies : null,
-    setJobSeekerJobApplies : () => {},
+    setJobSeeker : () => {},
     fetchJobSeeker : () => {},
     fetchJobSeekerSavedJobs : () => {},
-    fetchJobSeekerJobApplies : () => {}
+    fetchJobSeekerJobApplies : () => {},
+    fetchJobSeekerJobInteractions : () => {}
 });
 
 export function JobSeekerProvider({children} : {children : ReactNode}){
     const [jobSeeker, setJobSeeker] = useState<JobSeekerAccountDTO | null>(null);
-    const [jobSeekerSavedJobs, setJobSeekerSavedJobs] = useState<SavedJobDTO[] | null>(null);
-    const [jobSeekerJobApplies, setJobSeekerJobApplies] = useState<JobApplyDTO[] | null>(null);
     const {authUser} = useAuth();
-    
+    const [savedJobsWereLoaded, setSavedJobsWereLoaded] = useState(false);
+    const [jobAppliesWereLoaded, setJobAppliesWereLoaded] = useState(false);
+    const [jobSeekerWasLoaded, setJobSeekerWasLoaded] = useState(false);
     const jobSeekerService = new JobSeekerAccountService();
     const jobApplyService = new JobApplyService();
     const fetchJobSeeker = async  () => {
         try {  
-            if (jobSeeker === null && authUser){
-                const retrievedJobSeeker = await jobSeekerService.getCurrentJobSeekerAllInfo();
-                setJobSeeker(retrievedJobSeeker);
+            if (jobSeekerWasLoaded || !authUser){
+                return;
             }
+            const retrievedJobSeeker = await jobSeekerService.getCurrentJobSeekerAllInfo();
+            setJobSeeker(prev => {
+                if (!prev){
+                    return retrievedJobSeeker;
+                }
+                
+                return {
+                    ...prev,
+                    firstName : retrievedJobSeeker.firstName,
+                    lastName : retrievedJobSeeker.lastName,
+                    address : retrievedJobSeeker.address,
+                    addressId : retrievedJobSeeker.addressId,
+                    resume : retrievedJobSeeker.resume,
+                    userId : retrievedJobSeeker.userId
+                }
+            });
+            setJobSeekerWasLoaded(true);
+            
         }
         catch (error){
             if (error instanceof ServerError){
@@ -45,11 +60,19 @@ export function JobSeekerProvider({children} : {children : ReactNode}){
     
     const fetchJobSeekerSavedJobs = async () => {
         try {
-            if (jobSeekerSavedJobs !== null || !authUser){
+            if (savedJobsWereLoaded || !authUser){
                 return;
             }
             const retrievedSavedJobs = await jobSeekerService.getSavedJobsOfCurrentJobSeeker();
-            setJobSeekerSavedJobs(retrievedSavedJobs);
+            setJobSeeker((prev) => {
+                return prev ? {
+                    ...prev,
+                    savedJobs : retrievedSavedJobs
+                }
+                : 
+                null;
+            });
+            setSavedJobsWereLoaded(true);
         }
         catch (err){
             logErrorInfo(err)
@@ -58,11 +81,50 @@ export function JobSeekerProvider({children} : {children : ReactNode}){
 
     const fetchJobSeekerJobApplies = async () => {
         try {
-            if (jobSeekerJobApplies !== null || !authUser){
+            if (savedJobsWereLoaded || !authUser){
                 return;
             }
             const retrievedJobApplies = await jobApplyService.getUserJobApplies();
-            setJobSeekerJobApplies(retrievedJobApplies);
+            setJobSeeker((prev) => {
+                return prev && {
+                        ...prev,
+                        jobApplies : retrievedJobApplies
+                    }
+            })
+            setJobAppliesWereLoaded(true);
+        }
+        catch (err){
+            logErrorInfo(err)
+        }
+    }
+    
+    const fetchJobSeekerJobInteractions = async () =>{
+        try {
+            if ((savedJobsWereLoaded && jobAppliesWereLoaded) || !authUser ||
+                (jobSeeker!.savedJobs.length > 0 || jobSeeker!.jobApplies.length > 0 || jobSeeker!.interviews.length > 0)){
+                return;
+            }
+            const retrievedJobSeeker = await jobSeekerService.getCurrentJobSeekerJobInteractions();
+            setJobSeeker(prev => {
+                if (!prev) {
+                    return retrievedJobSeeker;
+                }
+
+                let updatedResume : ResumeDTO | null = prev.resume;
+                if (!prev.resume){
+                    updatedResume = retrievedJobSeeker.resume;
+                }
+
+                return {
+                    ...prev,
+                    id: retrievedJobSeeker.id,
+                    resume: updatedResume,
+                    jobApplies : retrievedJobSeeker.jobApplies,
+                    savedJobs : retrievedJobSeeker.savedJobs
+                };
+            });
+            setJobAppliesWereLoaded(true);
+            setSavedJobsWereLoaded(true);
         }
         catch (err){
             logErrorInfo(err)
@@ -73,13 +135,10 @@ export function JobSeekerProvider({children} : {children : ReactNode}){
         <JobSeekerContext.Provider value={{
             jobSeeker,
             setJobSeeker,
-            jobSeekerSavedJobs,
-            setJobSeekerSavedJobs,
-            jobSeekerJobApplies,
-            setJobSeekerJobApplies,
             fetchJobSeeker,
             fetchJobSeekerSavedJobs,
-            fetchJobSeekerJobApplies}
+            fetchJobSeekerJobApplies,
+            fetchJobSeekerJobInteractions}
         }>
             {children}
         </JobSeekerContext.Provider>

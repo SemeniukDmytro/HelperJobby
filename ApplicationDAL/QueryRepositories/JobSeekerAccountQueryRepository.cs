@@ -1,6 +1,7 @@
 using ApplicationDAL.Context;
 using ApplicationDAL.DALHelpers;
 using ApplicationDomain.Abstraction.IQueryRepositories;
+using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,7 +42,26 @@ public class JobSeekerAccountQueryRepository : IJobSeekerAccountQueryRepository
                 } : null
             }).FirstOrDefaultAsync();
     }
-    
+
+    public async Task<JobSeekerAccount> GetJobSeekerWithJobInteractions(int userId)
+    {
+        var retrievedJobSeeker = await _applicationContext.JobSeekerAccounts.Where(j => j.UserId == userId)
+            .Select(js => new JobSeekerAccount()
+            {
+                Id = js.Id,
+                Resume = js.Resume,
+                JobApplies = js.JobApplies,
+                SavedJobs = js.SavedJobs
+            }).FirstOrDefaultAsync();
+
+        if (retrievedJobSeeker == null)
+        {
+            throw new UserNotFoundException("User with specified id wasn't found");
+        }
+
+        return retrievedJobSeeker;
+    }
+
     public async Task<JobSeekerAccount> GetJobSeekerAccountWithAddress(int userId)
     {
         return await GetUserWithJobSeekerAccount(userId, q => q.Include(u => u.JobSeekerAccount)

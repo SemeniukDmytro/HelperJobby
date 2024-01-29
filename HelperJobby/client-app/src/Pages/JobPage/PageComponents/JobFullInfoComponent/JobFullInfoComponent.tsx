@@ -21,35 +21,38 @@ interface JobFullInfoComponentProps {
 }
 
 const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
-    const {jobSeekerSavedJobs, setJobSeekerSavedJobs, jobSeekerJobApplies,
+    const {jobSeeker, setJobSeeker,
         fetchJobSeekerJobApplies, fetchJobSeekerSavedJobs} = useJobSeeker();
     const [isApplied, setIsApplied] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const jobSeekerService = new JobSeekerAccountService();
-    const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeekerSavedJobs, job);
+    const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeeker, job);
     const {authUser} = useAuth();
     const navigate = useNavigate();
-    
+    const [loading, setLoading] = useState(true);
     
     
     
     useEffect(() => {
-        if (!jobSeekerSavedJobs || !jobSeekerJobApplies){
-            fetchJobSeekerSavedJobs();
-            fetchJobSeekerJobApplies();
-        }
+        fetchJobSeekerJobInteractions();
     }, []);
 
     useEffect(() => {
         isApplicationCreated();
         isJobSaved();
-    }, [jobSeekerSavedJobs, jobSeekerJobApplies]);
+    }, [jobSeeker?.savedJobs, jobSeeker?.jobApplies]);
+    
+    async function fetchJobSeekerJobInteractions(){
+        await fetchJobSeekerSavedJobs();
+        await fetchJobSeekerJobApplies();
+        setLoading(false);
+    }
     
     function isApplicationCreated(){
-        if (!jobSeekerJobApplies){
+        if (!jobSeeker?.jobApplies){
             return;
         }
-        if (jobSeekerJobApplies.some(j => j.jobId === job.id)){
+        if (jobSeeker?.jobApplies.some(j => j.jobId === job.id)){
             setIsApplied(true);
         }
         else {
@@ -58,10 +61,10 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
     }
     
     function isJobSaved(){
-        if (!jobSeekerSavedJobs){
+        if (!jobSeeker?.savedJobs){
             return;
         }
-        if (jobSeekerSavedJobs.some(j => j.jobId === job.id)){
+        if (jobSeeker?.savedJobs.some(j => j.jobId === job.id)){
             setIsSaved(true);
         }
         else {
@@ -93,7 +96,7 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
     
 
     return (
-       (!jobSeekerSavedJobs || !jobSeekerJobApplies) ? <LoadingPage/> :
+       (loading) ? <LoadingPage/> :
         <div className={"fji-layout"}>
             <div className={"fji-fb"}>
               <div className={"fji-job-container"}>

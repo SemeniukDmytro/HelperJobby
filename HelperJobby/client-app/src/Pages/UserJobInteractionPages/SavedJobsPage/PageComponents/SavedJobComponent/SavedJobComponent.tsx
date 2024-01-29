@@ -25,13 +25,13 @@ interface SavedJobComponentProps {
 
 const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) => {
     const {setSavedJobs} = useJobSeekerJobInteractions();
-    const {setJobSeekerSavedJobs} = useJobSeeker();
+    const {setJobSeeker} = useJobSeeker();
     const jobSeekerService = new JobSeekerAccountService();
     const [showRemoveFromSaved, setShowRemoveFromSaved] = useState(false);
     const [showUndoRemoveWindow, setShowUndoRemoveWindow] = useState(true);
     const {authUser} = useAuth();
     const navigate = useNavigate();
-    const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeekerSavedJobs, job);
+    const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeeker, job);
 
     async function handleJobInteraction(actionFunction : JobActionFunction, setShowRemoveFromSavedValue : ShowRemoveFromSavedSetter) {
         try {
