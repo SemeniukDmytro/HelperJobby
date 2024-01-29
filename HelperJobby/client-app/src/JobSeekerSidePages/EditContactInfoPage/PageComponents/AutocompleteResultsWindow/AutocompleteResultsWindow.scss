@@ -1,0 +1,37 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.autocomplete-results{
+  position: absolute;
+  background-color: white;
+  z-index: 4;
+  border-radius: 0.5rem;
+  border: 1px solid global-variables.$neutral-color-800;
+  max-width: calc(602px - 4rem);
+  width: 100%;
+  max-height: 230px;
+  overflow-y: auto;
+  margin: 0 auto;
+  box-shadow: global-variables.$field-box-shadow;
+  .autocomplete-result:first-child {
+    border-top-right-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
+  }
+
+  .autocomplete-result:last-child {
+    border-bottom-right-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+  }
+
+}
+
+.autocomplete-result{
+  box-sizing: border-box;
+  padding: 0.875rem 0.5rem;
+  font-size: 0.9375rem;
+  overflow: hidden auto;
+  cursor: pointer;
+  display: flex;
+  &:hover{
+    background-color: global-variables.$light-blue;
+  }
+}

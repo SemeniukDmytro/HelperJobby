@@ -4,7 +4,7 @@ using HelperJobby.DTOs.Resume;
 
 namespace HelperJobby.Validators;
 
-public class CreateUpdateWorkExperienceDTOValidator : AbstractValidator<CreateWorkExperienceDTO>
+public class CreateUpdateWorkExperienceDTOValidator : AbstractValidator<CreateUpdateWorkExperienceDTO>
 {
     public CreateUpdateWorkExperienceDTOValidator()
     {
@@ -13,10 +13,10 @@ public class CreateUpdateWorkExperienceDTOValidator : AbstractValidator<CreateWo
             .MaximumLength(100).WithMessage("Maximum length of job title field exceeded");
     }
     
-    public static void ValidateCreatedWorkExperience(CreateWorkExperienceDTO workExperience)
+    public static void ValidateCreatedWorkExperience(CreateUpdateWorkExperienceDTO updateWorkExperience)
     {
         var validator = new CreateUpdateWorkExperienceDTOValidator();
-        var validationResult = validator.Validate(workExperience);
+        var validationResult = validator.Validate(updateWorkExperience);
 
         if (!validationResult.IsValid)
         {

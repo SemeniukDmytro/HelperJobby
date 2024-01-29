@@ -1,0 +1,42 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.edit-email-layout{
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid global-variables.$neutral-color-400;
+  margin-bottom: 2rem;
+}
+
+.edit-email-label{
+  display: flex;
+  cursor: default;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: global-variables.$neutral-color-1000;
+}
+
+.change-email-box{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.current-email{
+  color: global-variables.$neutral-color-1000;
+}
+
+.change-email-link{
+  font-weight: 700;
+  user-select: none;
+  cursor: pointer;
+  color: global-variables.$dark-blue;
+  &:hover{
+    color: global-variables.$dark-blue-hover;
+  }
+}
+
+.edit-link{
+  margin-right: 0.5rem;
+}

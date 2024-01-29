@@ -11,10 +11,10 @@ public class ResumeFixtures
                 EducationFixtures.FirstEducation,
                 EducationFixtures.SecondEducation
             },
-            WorkExperiences = new List<CreateWorkExperienceDTO>
+            WorkExperiences = new List<CreateUpdateWorkExperienceDTO>
             {
-               WorkExperienceFixtures.FirstWorkExperience,
-               WorkExperienceFixtures.SecondWorkExperience
+               WorkExperienceFixtures.FirstUpdateWorkExperience,
+               WorkExperienceFixtures.SecondUpdateWorkExperience
             },
             Skills = new List<CreateSkillDTO>
             {

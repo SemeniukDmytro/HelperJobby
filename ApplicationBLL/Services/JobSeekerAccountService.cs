@@ -34,12 +34,12 @@ public class JobSeekerAccountService : IJobSeekerAccountService
             throw new ForbiddenException();
         }
 
-        if (updatedAccount.FirstName != "")
+        if (!string.IsNullOrEmpty(updatedAccount.FirstName))
         {
             jobSeekerAccount.FirstName = updatedAccount.FirstName;
         }
 
-        if (updatedAccount.LastName != "")
+        if (!string.IsNullOrEmpty(updatedAccount.LastName))
         {
             jobSeekerAccount.LastName = updatedAccount.LastName;
         }
@@ -48,10 +48,17 @@ public class JobSeekerAccountService : IJobSeekerAccountService
         {
             jobSeekerAccount.Address = updatedAccount.Address;
         }
-        else
+        else if (updatedAccount.Address != null)
         {
-            jobSeekerAccount.Address.City = updatedAccount.Address.City;
-            jobSeekerAccount.Address.Country = updatedAccount.Address.Country;
+            if (!string.IsNullOrEmpty(updatedAccount.Address.City))
+            {
+                jobSeekerAccount.Address.City = updatedAccount.Address.City;
+            }
+
+            if (!string.IsNullOrEmpty(updatedAccount.Address.Country))
+            {
+                jobSeekerAccount.Address.Country = updatedAccount.Address.Country;
+            }
             jobSeekerAccount.Address.StreetAddress = updatedAccount.Address.StreetAddress;
             jobSeekerAccount.Address.PostalCode = updatedAccount.Address.PostalCode;
         }
@@ -75,11 +82,12 @@ public class JobSeekerAccountService : IJobSeekerAccountService
         {
             throw new JobSavingException("This job is already saved");
         }
-
+        
         var newSavedJob = new SavedJob()
         {
             JobId = jobId,
-            JobSeekerAccountId = jobSeekerAccount.Id
+            JobSeekerAccountId = jobSeekerAccount.Id,
+            DateSaved = DateOnly.FromDateTime(DateTime.UtcNow)
         };
 
         return newSavedJob;

@@ -21,19 +21,19 @@ namespace HelperJobby.Controllers
         private readonly IJobSeekerAccountService _jobSeekerAccountService;
         private readonly IJobSeekerAccountCommandRepository _jobSeekerAccountCommandRepository;
         private readonly ISavedJobCommandRepository _savedJobCommandRepository;
-        private readonly IJobQueryRepository _jobQueryRepository;
         private readonly IUserService _userService;
         private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
         
         public JobSeekerAccountController(IJobSeekerAccountService jobSeekerAccountService,
-            IJobSeekerAccountCommandRepository jobSeekerAccountCommandRepository, IMapper mapper, ISavedJobCommandRepository savedJobCommandRepository, IUserService userService, IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IJobQueryRepository jobQueryRepository) : base(mapper)
+            IJobSeekerAccountCommandRepository jobSeekerAccountCommandRepository, IMapper mapper,
+            ISavedJobCommandRepository savedJobCommandRepository, IUserService userService,
+            IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository) : base(mapper)
         {
             _jobSeekerAccountService = jobSeekerAccountService;
             _jobSeekerAccountCommandRepository = jobSeekerAccountCommandRepository;
             _savedJobCommandRepository = savedJobCommandRepository;
             _userService = userService;
             _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
-            _jobQueryRepository = jobQueryRepository;
         }
         
         [HttpGet("current-job-seeker")]
@@ -43,13 +43,29 @@ namespace HelperJobby.Controllers
               await  _jobSeekerAccountQueryRepository.GetJobSeekerAccountByUserId(_userService.GetCurrentUserId());
             return _mapper.Map<JobSeekerAccountDTO>(jobSeekerAccount);
         }
+        
+        [HttpGet("current-job-seeker-all-info")]
+        public async Task<JobSeekerAccountDTO> GetCurrentJobSeekerAllInfo()
+        {
+            var jobSeekerAccount =
+                await  _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithAddressAndResume(_userService.GetCurrentUserId());
+            return _mapper.Map<JobSeekerAccountDTO>(jobSeekerAccount);
+        }
+        
+        [HttpGet("job-seeker-with-job-interactions")]
+        public async Task<JobSeekerAccountDTO> GetCurrentJobSeekerWithHisJobInteractions()
+        {
+            var jobSeekerAccount =
+                await  _jobSeekerAccountQueryRepository.GetJobSeekerWithJobInteractions(_userService.GetCurrentUserId());
+            return _mapper.Map<JobSeekerAccountDTO>(jobSeekerAccount);
+        }
 
         [HttpGet("my-saved-jobs")]
-        public async Task<IEnumerable<JobDTO>> GetSavedJobsOfCurrentJobSeeker()
+        public async Task<IEnumerable<SavedJobDTO>> GetSavedJobsOfCurrentJobSeeker()
         {
             var savedJobs =
-                (await _jobQueryRepository.GetJobSeekerSavedJobs(_userService.GetCurrentUserId()));
-            return _mapper.Map<IEnumerable<JobDTO>>(savedJobs);
+                (await _jobSeekerAccountQueryRepository.GetJobSeekerSavedJobs(_userService.GetCurrentUserId()));
+            return _mapper.Map<IEnumerable<SavedJobDTO>>(savedJobs);
         }
 
         [HttpPut("{userId}")]

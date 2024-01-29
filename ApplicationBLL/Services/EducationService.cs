@@ -71,16 +71,29 @@ public class EducationService : IEducationService
         return educationEntity;
     }
     
-    public async Task<Education> Delete(int educationId)
+    public async Task<(Education educationToDelete, bool isResumeNeedToBeDeleted)> Delete(int educationId)
     {
-        
+        var isInvalidResume = false;
         var currentUserId = _userService.GetCurrentUserId();
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        var educationEntity = await _educationQueryRepository.GetEducationById(educationId);
-        if (educationEntity.ResumeId != jobSeekerAccount.Resume.Id)
+        if (jobSeekerAccount.Resume == null)
+        {
+            throw new ResumeNotFoundException();
+        }
+        var educationEntity = jobSeekerAccount.Resume.Educations.FirstOrDefault(e => e.Id == educationId);
+        if (educationEntity == null)
         {
             throw new ForbiddenException();
         }
-        return educationEntity;
+
+        if (jobSeekerAccount.Resume.Educations.Count <= 1 && jobSeekerAccount.Resume.WorkExperiences.Count == 0
+                                                          && jobSeekerAccount.Resume.Skills.Count == 0)
+        {
+            isInvalidResume = true;
+        }
+
+        educationEntity.Resume = jobSeekerAccount.Resume;
+
+        return (educationEntity, isInvalidResume);
     }
 }

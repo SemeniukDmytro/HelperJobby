@@ -13,11 +13,14 @@ namespace HelperJobby.DTOs.Job
         public string Location { get; set; }
         public List<string> JobType { get; set; }
         public decimal Salary { get; set; }
+        public string SalaryRate { get; set; }
+        public string ShowPayBy { get; set; }
         public List<string> Schedule { get; set; }
         public List<string> Benefits { get; set; }
         public string ContactEmail { get; set; }
         public bool ResumeRequired { get; set; }
         public string Description { get; set; }
+        public DateOnly DatePosted { get; set; }
         public int EmployerAccountId { get; set; }
         public EmployerAccountDTO EmployerAccount { get; set; }
         public List<InterviewDTO> Interviews { get; set; }

@@ -1,3 +1,4 @@
+using ApplicationDomain.AuthRelatedModels;
 using ApplicationDomain.IndexedModels;
 using ApplicationDomain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -16,25 +17,27 @@ public class ApplicationContext : DbContext
         
     }
     
-    public virtual DbSet<Address> Addresses { get; set; }
-    public virtual DbSet<Education> Educations { get; set; }
-    public virtual DbSet<EmployerAccount> EmployerAccounts { get; set; }
-    public virtual DbSet<CurrentJobCreation> CurrentJobCreations { get; set; }
-    public virtual DbSet<Interview> Interviews { get; set; }
-    public virtual DbSet<Job> Jobs { get; set; }
-    public virtual DbSet<JobApply> JobApplies { get; set; }
-    public virtual DbSet<JobSeekerAccount> JobSeekerAccounts { get; set; }
-    public virtual DbSet<Organization> Organizations { get; set; }
-    public virtual DbSet<Resume> Resumes { get; set; }
-    public virtual DbSet<SavedJob> SavedJobs { get; set; }
-    public virtual DbSet<Skill> Skills { get; set; }
-    public virtual DbSet<OrganizationEmployeeEmail> OrganizationEmployeeEmails { get; set; }
-    public virtual DbSet<User> Users { get; set; }
-    public virtual DbSet<WorkExperience> WorkExperiences { get; set; }
+    public DbSet<Address> Addresses { get; set; }
+    public DbSet<Education> Educations { get; set; }
+    public DbSet<EmployerAccount> EmployerAccounts { get; set; }
+    public DbSet<CurrentJobCreation> CurrentJobCreations { get; set; }
+    public DbSet<Interview> Interviews { get; set; }
+    public DbSet<Job> Jobs { get; set; }
+    public DbSet<JobApply> JobApplies { get; set; }
+    public DbSet<JobSeekerAccount> JobSeekerAccounts { get; set; }
+    public DbSet<Organization> Organizations { get; set; }
+    public DbSet<Resume> Resumes { get; set; }
+    public DbSet<SavedJob> SavedJobs { get; set; }
+    public DbSet<Skill> Skills { get; set; }
+    public DbSet<OrganizationEmployeeEmail> OrganizationEmployeeEmails { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<WorkExperience> WorkExperiences { get; set; }
     public DbSet<ResumeIndexedWord> IndexedResumeWords { get; set; }
     public DbSet<JobIndexedWord> IndexedJobWords { get; set; }
     public DbSet<ProcessedResumeWord> ProcessedResumesWords { get; set; }
     public DbSet<ProcessedJobWord> ProcessedJobsWords { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<RecentUserSearch> RecentUserSearches { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -184,6 +187,15 @@ public class ApplicationContext : DbContext
             .WithMany()
             .HasForeignKey(pw => pw.ResumeId);
 
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.RefreshToken)
+            .WithOne(t => t.User)
+            .HasForeignKey<RefreshToken>(t => t.UserId);
+
+        modelBuilder.Entity<RecentUserSearch>()
+            .HasOne(rs => rs.User)
+            .WithMany(u => u.RecentUserSearches)
+            .HasForeignKey(rs => rs.UserId);
     }
     
 }

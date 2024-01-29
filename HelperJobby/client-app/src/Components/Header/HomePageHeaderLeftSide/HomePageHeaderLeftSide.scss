@@ -1,0 +1,59 @@
+.header-left-side{
+  display: flex;
+}
+
+.logo-block{
+  display: flex;
+  height: 1rem;
+  line-height: 1.25rem;
+  padding: 1.375rem 3rem 1.375rem 1.5rem;
+  user-select: none;
+  cursor: pointer;
+}
+
+.logo-button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0px solid;
+  background-color: white;
+  cursor: pointer;
+  height: auto;
+  font-weight: 1000;
+  font-size: 1.5rem;
+  color: #2557a7;
+}
+
+.logo-text{
+}
+
+.logo-content-divider{
+  width: 2rem;
+}
+
+.home-link-block{
+  position: relative;
+  display: flex;
+}
+
+.home-link{
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1rem;
+  min-height: 3rem;
+  user-select: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #2d2d2d;
+}
+
+.underline{
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background-color: #2557a7;
+  left: 0;
+  bottom: 0;
+}

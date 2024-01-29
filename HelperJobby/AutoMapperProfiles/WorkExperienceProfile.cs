@@ -16,6 +16,6 @@ public class WorkExperienceProfile : Profile
         {
             dest.Resume = context.Mapper.Map<ResumeDTO, Resume>(src.Resume);
         });
-        CreateMap<CreateWorkExperienceDTO, WorkExperience>();
+        CreateMap<CreateUpdateWorkExperienceDTO, WorkExperience>();
     }
 }

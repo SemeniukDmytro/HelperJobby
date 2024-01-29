@@ -19,16 +19,18 @@ namespace HelperJobby.Controllers
         private readonly IWorkExperienceQueryRepository _workExperienceQueryRepository;
         private readonly IWorkExperienceCommandRepository _workExperienceCommandRepository;
         private readonly IWorkExperienceService _workExperienceService;
+        private readonly IResumeCommandRepository _resumeCommandRepository;
         private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
         
         public WorkExperienceController(IMapper mapper, IWorkExperienceService workExperienceService, 
             IWorkExperienceCommandRepository workExperienceCommandRepository, IWorkExperienceQueryRepository workExperienceQueryRepository,
-            IEnqueuingTaskHelper enqueuingTaskHelper) : base(mapper)
+            IEnqueuingTaskHelper enqueuingTaskHelper, IResumeCommandRepository resumeCommandRepository) : base(mapper)
         {
             _workExperienceService = workExperienceService;
             _workExperienceCommandRepository = workExperienceCommandRepository;
             _workExperienceQueryRepository = workExperienceQueryRepository;
             _enqueuingTaskHelper = enqueuingTaskHelper;
+            _resumeCommandRepository = resumeCommandRepository;
         }
 
         // GET: api/WorkExperience/5
@@ -41,10 +43,10 @@ namespace HelperJobby.Controllers
 
         // POST: api/WorkExperience/{resumeId}
         [HttpPost("{resumeId}")]
-        public async Task<WorkExperienceDTO> Post(int resumeId, [FromBody] CreateWorkExperienceDTO createWorkExperienceDTO)
+        public async Task<WorkExperienceDTO> Post(int resumeId, [FromBody] CreateUpdateWorkExperienceDTO createUpdateWorkExperienceDto)
         {
-            CreateUpdateWorkExperienceDTOValidator.ValidateCreatedWorkExperience(createWorkExperienceDTO);
-            var workExperience = _mapper.Map<WorkExperience>(createWorkExperienceDTO);
+            CreateUpdateWorkExperienceDTOValidator.ValidateCreatedWorkExperience(createUpdateWorkExperienceDto);
+            var workExperience = _mapper.Map<WorkExperience>(createUpdateWorkExperienceDto);
             workExperience = await _workExperienceService.AddWorkExperience(resumeId, workExperience);
             workExperience = await _workExperienceCommandRepository.Create(workExperience);
             await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
@@ -56,10 +58,10 @@ namespace HelperJobby.Controllers
 
         // PUT: api/WorkExperience/{workExperienceId}/user/{userId}
         [HttpPut("{workExperienceId}")]
-        public async Task<WorkExperienceDTO> Put(int workExperienceId, [FromBody] CreateWorkExperienceDTO updateWorkExperienceDTO)
+        public async Task<WorkExperienceDTO> Put(int workExperienceId, [FromBody] CreateUpdateWorkExperienceDTO updateUpdateWorkExperienceDto)
         {
-            CreateUpdateWorkExperienceDTOValidator.ValidateCreatedWorkExperience(updateWorkExperienceDTO);
-            var workExperience = _mapper.Map<WorkExperience>(updateWorkExperienceDTO);
+            CreateUpdateWorkExperienceDTOValidator.ValidateCreatedWorkExperience(updateUpdateWorkExperienceDto);
+            var workExperience = _mapper.Map<WorkExperience>(updateUpdateWorkExperienceDto);
             workExperience = await _workExperienceService.UpdateWorkExperience(workExperienceId, workExperience);
             workExperience = await _workExperienceCommandRepository.Update(workExperience);
             return _mapper.Map<WorkExperienceDTO>(workExperience);
@@ -69,12 +71,20 @@ namespace HelperJobby.Controllers
         [HttpDelete("{workExperienceId}")]
         public async Task Delete(int workExperienceId)
         {
-            var  workExperience = await _workExperienceService.Delete(workExperienceId);
+            var  workExperienceWithResumeRelateContent = await _workExperienceService.Delete(workExperienceId);
             await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
             {
-                await indexingService.RemoveIndexedResumeRelatedContent(workExperience.JobTitle, workExperience.ResumeId);
+                await indexingService.RemoveIndexedResumeRelatedContent(workExperienceWithResumeRelateContent.workExperience.JobTitle,
+                    workExperienceWithResumeRelateContent.workExperience.ResumeId);
             });
-            await _workExperienceCommandRepository.Delete(workExperience);
+            if (workExperienceWithResumeRelateContent.isResumeNeedToBeDeleted)
+            {
+                await _resumeCommandRepository.DeleteResume(workExperienceWithResumeRelateContent.workExperience.Resume);
+            }
+            else
+            {
+                await _workExperienceCommandRepository.Delete(workExperienceWithResumeRelateContent.workExperience);
+            }
         }
     }
 }

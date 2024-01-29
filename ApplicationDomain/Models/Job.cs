@@ -32,6 +32,15 @@ public class Job
     [Required]
     [Column(TypeName = "decimal(10,2)")]
     public decimal Salary { get; set; }
+    
+    [Required]
+    [MaxLength(9)]
+    public string SalaryRate { get; set; }
+    
+    [Required]
+    [MaxLength(15)]
+    public string ShowPayBy { get; set; }
+    
     [Required]
     public Schedules Schedule { get; set; }
     public EmployeeBenefits Benefits { get; set; }
@@ -45,6 +54,10 @@ public class Job
     [Required]
     [Column(TypeName = "text")]
     public string Description { get; set; }
+    
+    [Required]
+    public DateOnly DatePosted { get; set; }
+    
     [ExcludeFromUpdate]
     [Required]
     [ForeignKey("EmployerAccount")]

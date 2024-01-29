@@ -2,6 +2,7 @@ using System.Diagnostics;
 using ApplicationDAL.Context;
 using ApplicationDAL.DALHelpers;
 using ApplicationDomain.Abstraction.IQueryRepositories;
+using ApplicationDomain.AuthRelatedModels;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,11 @@ public class UserQueryRepository :  IUserQueryRepository
     public async Task<User> GetUserByIdPlain(int userId)
     {
         return await _entityInclusionHandler.GetUser(userId);
+    }
+
+    public async Task<User> GetUserByIdWithRefreshToken(int userId)
+    {
+        return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.RefreshToken));
     }
 
     public async Task<User> GetUserWithEmployerAccount(int userId)
@@ -57,4 +63,24 @@ public class UserQueryRepository :  IUserQueryRepository
         return user;
     }
 
+    public async Task<User> GetUserByEmailWithRefreshToken(string email)
+    {
+        var user = await _applicationContext.Users.Include(u => u.RefreshToken).FirstOrDefaultAsync(u => u.Email == email);
+        if (user == null)
+        {
+            throw new UserNotFoundException("User with provided email is not found");
+        }
+        return user;
+    }
+
+    public async Task<RefreshToken> GetRefreshTokenByUserId(int userId)
+    {
+        var token = await _applicationContext.RefreshTokens.FirstOrDefaultAsync(t => t.UserId == userId);
+        if (token == null)
+        {
+            throw new UnauthorizedException();
+        }
+
+        return token;
+    }
 }

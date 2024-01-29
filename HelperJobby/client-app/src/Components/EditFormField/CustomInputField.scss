@@ -1,0 +1,123 @@
+@use "../../Assets/scssSharedStyles/global-variables";
+
+.edit-form-field{
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.field-label{
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+  cursor: default;
+  color: global-variables.$neutral-color-1000;
+}
+
+.field-input-container{
+  display: flex;
+  position: relative;
+  border-radius: 0.5rem;
+  border: 1px solid global-variables.$neutral-color-800;
+  transition: border-bottom 0.2s;
+  &:focus-within{
+    border-color: global-variables.$dark-blue;
+  }
+  &:hover{
+    border-color: global-variables.$dark-blue;
+  }
+}
+
+.field-input{
+  display: flex;
+  flex-grow: 1;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  z-index: 1;
+  &:focus{
+    outline: none;
+    }
+}
+
+
+.field-focus{
+  border-radius: 0.5rem;
+  border-bottom: 4px solid global-variables.$dark-blue;
+}
+
+.red-field-focus{
+  border-color: global-variables.$error-color;
+  &:focus-within{
+    border-color: global-variables.$error-color;
+  }
+  &:hover{
+    border-color: global-variables.$error-color;
+  }
+}
+
+.field-label-subtitle{
+  display: flex;
+  margin-bottom:0.25rem;
+  font-size: 0.9375rem;
+  color: global-variables.$neutral-color-700;
+}
+
+.input-field-spacing{
+  margin-bottom: 1.5rem;
+}
+
+.google-logo{
+  position: absolute;
+  bottom: 0.1625rem;
+  right: 0.1625rem;
+  opacity: 0.7;
+  max-height: 0.75rem;
+  user-select: none;
+  z-index: 3;
+}
+
+.input-button-box{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  z-index: 1;
+  border-radius: 0.5rem;
+}
+
+.input-field-button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem;
+  margin-bottom: 0.125rem;
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  border: none;
+  background-color: transparent;
+  border-radius: 0.5rem;
+  transition: 0.2s;
+  cursor: pointer;
+  color: global-variables.$neutral-color-600;
+  &:hover{
+    background-color: global-variables.$light-blue;
+    color: global-variables.$dark-blue;
+  }
+}
+
+.error-svg{
+  width: 1rem;
+  height: 1rem;
+  padding-right: 0.25rem;
+}
+
+.error-box{
+  margin-top: 0.5rem;
+  font-size: 0.825rem;
+}
+
+.error-text{
+  color: rgb(169, 37, 43) !important;
+}

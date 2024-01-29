@@ -46,9 +46,10 @@ namespace HelperJobby.Controllers
         }
         
         [HttpGet("{jobId}")]
+        [AllowAnonymous]
         public async Task<JobDTO> GetJobById(int jobId)
         {
-            return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobById(jobId));
+            return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobWithOrganizationInfo(jobId));
         }
 
         [HttpPost("{jobCreationId}")]
@@ -84,12 +85,6 @@ namespace HelperJobby.Controllers
         public async Task DeleteJob(int jobId)
         {
             var job = await _jobService.DeleteJob(jobId);
-
-            await _enqueuingTaskHelper.EnqueueJobIndexingTaskAsync(async indexingService =>
-            {
-                await indexingService.RemoveIndexedJobContent(job);
-            });
-
             await _jobCommandRepository.DeleteJob(job);
         }
     }

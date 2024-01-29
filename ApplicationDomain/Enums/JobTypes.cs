@@ -3,6 +3,7 @@ namespace ApplicationDomain.Enums;
 [Flags]
 public enum JobTypes
 {
+    None = 0,
     FullTime = 1,
     PartTime = 1 << 1,
     Permanent = 1 << 2,
@@ -11,5 +12,6 @@ public enum JobTypes
     Seasonal = 1 << 5,
     Freelance = 1 << 6,
     Apprenticeship = 1 << 7,
-    InternshipCoop = 1 << 8
+    InternshipCoop = 1 << 8,
+    Contract = 1 << 9
 }

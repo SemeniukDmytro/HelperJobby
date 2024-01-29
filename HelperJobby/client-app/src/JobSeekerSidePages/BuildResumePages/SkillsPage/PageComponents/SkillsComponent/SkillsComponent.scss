@@ -1,0 +1,63 @@
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+.no-resume-info-container{
+  box-sizing: border-box;
+  min-inline-size: 0px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border: 1px dashed global-variables.$neutral-color-400;
+  border-radius: 0.5rem;
+  color: global-variables.$neutral-color-700;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.add-skills-separation-line{
+  width: 100%;
+  background-color: global-variables.$neutral-color-500;
+  height: 1px;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.add-skill-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.add-skill-button{
+  height: 44px;
+  min-width: 2.75rem;
+  margin-left: 0.5rem;
+  background-color: transparent;
+  border: 1px solid global-variables.$neutral-color-400;
+  border-radius: 0.25rem;
+  padding: 0.5625rem 0.9325rem;
+  font-size: 1.25rem;
+  color: global-variables.$dark-blue;
+  cursor: pointer;
+  transition: 0.2s;
+  &:hover{
+    background-color: global-variables.$light-blue;
+    border-color: global-variables.$dark-blue;
+  }
+  &:active{
+    background-color: global-variables.$light-blue-active;
+    border-color: global-variables.$dark-blue-active;
+    box-shadow: global-variables.$button-inner-shadow;
+  }
+  &:disabled{
+    opacity: 0.4;
+    pointer-events: none;
+  }
+}
+
+.min-continue-button-size{
+  min-width: 101px;
+  min-height: 40px;
+}

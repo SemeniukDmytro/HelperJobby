@@ -1,0 +1,14 @@
+.loading-page-layout{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  margin: 2rem auto;
+}
+
+.loading-page-layout {
+  svg {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}

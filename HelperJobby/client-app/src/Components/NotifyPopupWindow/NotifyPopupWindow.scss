@@ -1,0 +1,74 @@
+@use "../../Assets/scssSharedStyles/global-variables";
+$successful-color: rgb(42,134,59);
+$negative-color : rgb(134, 46, 40);
+
+.popup-bar{
+  box-sizing: border-box;
+  margin: 0px;
+  min-width: 0px;
+  position: fixed;
+  width: 100%;
+  padding: 0px 1rem;
+  bottom: 10px;
+  transition: 0.2s;
+  z-index: 5;  
+  animation: fadeIn 0.5s ease;
+
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+.pop-up-box{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: 440px;
+  background-color: white;
+  border-radius: 0.5rem;
+  color: global-variables.$neutral-color-900;
+  box-shadow: global-variables.$field-box-shadow;
+  padding: 0.75rem;
+}
+
+.successful-pop-up{
+  border: 1px solid;
+  border-top-color: $successful-color;
+  border-left: 0.5rem solid $successful-color;
+  border-right-color: $successful-color;
+  border-bottom-color: $successful-color;
+}
+
+.successful-pop-up{
+  border: 1px solid $successful-color;
+  border-left: 0.5rem solid $successful-color;
+}
+
+.negative-pop-up{
+  border: 1px solid $negative-color;
+  border-left: 0.5rem solid $negative-color;
+}
+
+.successful-pop-up-icon{
+  color: $successful-color;
+  font-size: 1.25rem;
+  margin-right: 1rem;
+}
+
+.negative-pop-up-icon{
+  color: $negative-color;
+  font-size: 1.25rem;
+  margin-right: 1rem;
+}
+
+.pop-up-text{
+  font-weight: 600;
+  font-size: 0.875rem;
+}

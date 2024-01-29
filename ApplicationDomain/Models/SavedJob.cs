@@ -16,4 +16,6 @@ public class SavedJob
     public Job Job { get; set; }
     
     public JobSeekerAccount JobSeekerAccount { get; set; }
+    [Required]
+    public DateOnly DateSaved { get; set; }
 }

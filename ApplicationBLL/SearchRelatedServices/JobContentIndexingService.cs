@@ -80,10 +80,4 @@ public class JobContentIndexingService : IJobContentIndexingService
         await IndexJobContent(job);
     }
 
-    public async Task RemoveIndexedJobContent(Job job)
-    {
-        await _jobIndexingCommandRepository.RemoveProcessedJobWords(job.Id);
-    }
-    
-
 }

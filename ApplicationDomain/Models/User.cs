@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using ApplicationDomain.AuthRelatedModels;
 
 namespace ApplicationDomain.Models;
 
@@ -21,4 +22,7 @@ public class User
     public JobSeekerAccount JobSeekerAccount { get; set; }
     
     public EmployerAccount EmployerAccount { get; set; }
+    
+    public RefreshToken RefreshToken { get; set; }
+    public List<RecentUserSearch> RecentUserSearches;
 }

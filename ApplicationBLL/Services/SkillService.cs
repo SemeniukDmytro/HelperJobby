@@ -38,15 +38,49 @@ public class SkillService : ISkillService
         return skill;
     }
 
-    public async Task<Skill> DeleteSkill(int skillId)
+    public async Task<(Skill skill, bool isResumeNeedToBeDeleted)> DeleteSkill(int skillId)
     {
+        var isInvalidResume = false;
         var currentUserId = _userService.GetCurrentUserId();
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        var skillEntity = await _skillQueryRepository.GetSkillById(skillId);
-        if (jobSeekerAccount.Resume.Id != skillEntity.ResumeId)
+        if (jobSeekerAccount.Resume == null)
+        {
+            throw new ResumeNotFoundException();
+        }
+        var skillEntity = jobSeekerAccount.Resume.Skills.FirstOrDefault(s => s.Id == skillId);
+        if (skillEntity == null)
         {
             throw new ForbiddenException();
         }
-        return skillEntity;
+        if (jobSeekerAccount.Resume.Educations.Count == 0 && jobSeekerAccount.Resume.WorkExperiences.Count == 0
+                                                          && jobSeekerAccount.Resume.Skills.Count <= 1)
+        {
+            isInvalidResume = true;
+        }
+        skillEntity.Resume = jobSeekerAccount.Resume;
+
+        return (skillEntity, isInvalidResume);
+    }
+
+    public async Task<List<Skill>> AddSkillsToResume(List<Skill> skills, int resumeId)
+    {
+        var currentUserId = _userService.GetCurrentUserId();
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
+        if (resumeId != jobSeekerAccount.Resume.Id)
+        {
+            throw new ForbiddenException("You can not add skills to other person resume");
+        }
+        skills.ForEach(s => s.ResumeId = resumeId);
+        return skills;
+    }
+
+    public async Task RemoveSkillsFromResume(int resumeId)
+    {
+        var currentUserId = _userService.GetCurrentUserId();
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
+        if (resumeId != jobSeekerAccount.Resume.Id)
+        {
+            throw new ForbiddenException("You can not remove skills from other person resume");
+        }
     }
 }

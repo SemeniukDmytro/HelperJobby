@@ -1,9 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
+using ApplicationBLL.Interfaces;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
+using ApplicationDomain.AuthRelatedModels;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Microsoft.Extensions.Configuration;
@@ -15,15 +18,17 @@ public class AuthService : IAuthService
 {
     private readonly IConfiguration _configuration;
     private readonly IUserQueryRepository _userQueryRepository;
+    private readonly IPasswordHandler _passwordHandler;
 
-    public AuthService(IConfiguration configuration, IUserQueryRepository userQueryRepository)
+    public AuthService(IConfiguration configuration, IUserQueryRepository userQueryRepository, IPasswordHandler passwordHandler)
     {
         _configuration = configuration;
         _userQueryRepository = userQueryRepository;
+        _passwordHandler = passwordHandler;
     }
+    
 
-
-    public string CreateToken(int userId, string userEmail)
+    public string CreateAuthToken(int userId, string userEmail)
     {
         var identity = new ClaimsIdentity(new GenericIdentity(userEmail, "Token"), new[]
         {
@@ -43,27 +48,86 @@ public class AuthService : IAuthService
 
         var token = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.Now.AddDays(7),
+            expires: DateTime.Now.AddHours(15),
             signingCredentials: creds);
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
         return jwt;
     }
-
-    public async Task<string> AuthUser(User loginUser)
+    
+    
+    
+    public RefreshToken GenerateRefreshToken()
     {
-        var userEntity = await _userQueryRepository.GetUserByEmail(loginUser.Email);
-        if (userEntity == null)
+        var refreshToken = new RefreshToken()
         {
-            throw new UserNotFoundException("User with provided email is not found");
+            Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+            CreatedAt = DateTime.UtcNow,
+            Expires = DateTime.Now.AddDays(30)
+        };
+
+        return refreshToken;
+    }
+    
+    public async Task<User> RefreshToken(string accessToken, string refreshToken)
+    {
+        var principal = GetPrincipalFromExpiredToken(accessToken);
+        if (principal.FindFirst("id")?.Value is null)
+        {
+            throw new UnauthorizedException();
+        }
+        string userId = principal.FindFirst("id")?.Value;
+        var user = await _userQueryRepository.GetUserByIdWithRefreshToken(int.Parse(userId));
+        if (user == null || user.RefreshToken.Token != refreshToken ||
+            user.RefreshToken.Expires < DateTime.UtcNow)
+        {
+            throw new UnauthorizedException();
         }
 
-        if (!loginUser.PasswordHash.Equals(userEntity.PasswordHash))
+        return user;
+    }
+
+    private ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
+    {
+        var validation = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            ValidateAudience = false,
+            ValidateIssuer = false,
+            ValidateLifetime = false,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]!))
+        };
+        return new JwtSecurityTokenHandler().ValidateToken(token, validation, out _);
+    }
+
+    public async Task<(User user, string authToken)> AuthUser(User loginUser)
+    {
+        var userEntity = await _userQueryRepository.GetUserByEmailWithRefreshToken(loginUser.Email);
+
+        if (!_passwordHandler.Verify(loginUser.PasswordHash, userEntity.PasswordHash))
         {
             throw new UserNotFoundException("Password provided for specified email is wrong");
         }
         
-        var token = CreateToken(userEntity.Id, userEntity.Email);
-        return token;
+        var token = CreateAuthToken(userEntity.Id, userEntity.Email);
+        return (userEntity, token);
     }
+
+    
+    
+    public async Task<bool> IsUserRegistered(string email)
+    {
+        User userEntity = null;
+        try
+        {
+            userEntity = await _userQueryRepository.GetUserByEmail(email);
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
+
+        return userEntity != null;
+    }
+
     
 }

@@ -1,0 +1,37 @@
+.sign-in-block{
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1rem;
+  min-height: 3rem;
+  user-select: none;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+.sign-in-button{
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  border: 0px solid;
+  background-color: white;
+  cursor: pointer;
+}
+
+.sign-in-text{
+  font-weight: 600;
+  color: #2557a7;
+  position: relative;
+  font-size: 1rem;
+}
+
+.underline{
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background-color: #2557a7;
+  left: 0;
+  bottom: 0;
+}

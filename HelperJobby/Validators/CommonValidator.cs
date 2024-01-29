@@ -18,7 +18,7 @@ public class CommonValidator
         }
         int atSymbolIndex = email.LastIndexOf('@');
         if (!(atSymbolIndex >= 0 && email.LastIndexOf('.') >= atSymbolIndex && atSymbolIndex == email.IndexOf('@') &&
-              email.Length - atSymbolIndex > 4))
+              email.Length - atSymbolIndex > 2))
         {
             throw new ValidationException("Please enter a valid email");
         }

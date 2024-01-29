@@ -1,0 +1,27 @@
+.form-page-background{
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background-color: #f3f2f1;
+}
+
+.passpage-container{
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5rem;
+}
+
+.logo-container{
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  margin-bottom: 2rem;
+}
+
+.logo{
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(0, 58, 155);
+}

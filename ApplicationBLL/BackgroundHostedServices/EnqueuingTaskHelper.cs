@@ -41,4 +41,17 @@ public class EnqueuingTaskHelper : IEnqueuingTaskHelper
             }
         });
     }
+
+    public async Task EnqueueAddingRecentSearchTask(Func<IRecentUserSearchService, Task> addingRecentSearchAction)
+    {
+        _backgroundTaskQueue.QueueBackgroundWorkItem(async token =>
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
+                var resumeContentIndexingService = serviceProvider.GetRequiredService<IRecentUserSearchService>();
+                await addingRecentSearchAction(resumeContentIndexingService);
+            }
+        });
+    }
 }

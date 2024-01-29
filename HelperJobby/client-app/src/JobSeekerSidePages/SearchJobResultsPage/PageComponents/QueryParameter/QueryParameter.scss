@@ -1,0 +1,52 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.query-param-box{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+  border: none;
+  min-width: 100px;
+  border-radius: 0.5rem;
+  background-color: global-variables.$neutral-color-300;
+  box-sizing: border-box;
+  padding: 0.75rem 1rem;
+  min-height: 21px;
+  cursor: pointer;
+  transition: 0.2s;
+  color: global-variables.$neutral-color-900;
+  &:hover{
+    box-shadow: global-variables.$button-inner-shadow;
+    background-color: global-variables.$neutral-color-400;
+  }
+  &:focus-visible{
+    outline: 1px auto global-variables.$dark-blue;
+  }
+}
+
+.param-name{
+  line-height: 1.5;
+  font-size: 0.75rem;
+}
+
+.select-query-param{
+  display: flex;
+  margin-left: 0.5rem;
+  margin-top: -0.5rem;
+  font-weight: 400;
+}
+
+.selected-query-box{
+  background-color: global-variables.$neutral-color-800;
+  color: #fff;
+  &:hover{
+    background-color: global-variables.$neutral-color-800;
+    box-shadow: none;
+  }
+}
+
+.remove-query-param{
+  margin-left: 0.5rem;
+}

@@ -30,6 +30,25 @@ public class ResumeQueryRepository : IResumeQueryRepository
         return resume;
     }
 
+    public async Task<Resume> GetResumeByJobSeekerId(int jobSeekerId)
+    {
+        var resume = await _applicationContext.Resumes.Where(r => r.JobSeekerAccountId == jobSeekerId)
+            .Select(r => new Resume()
+            {
+                Id = r.Id,
+                Educations = r.Educations,
+                WorkExperiences = r.WorkExperiences,
+                Skills = r.Skills
+            }).FirstOrDefaultAsync();
+        if (resume == null)
+        {
+            throw new ResumeNotFoundException();
+        }
+
+        resume.JobSeekerAccountId = jobSeekerId;
+        return resume;
+    }
+
     public async Task<IEnumerable<Resume>> GetResumesByResumeIds(List<int> resumeIds)
     {
         var resumes = await _applicationContext.Resumes

@@ -115,7 +115,7 @@ public class WorkExperienceServiceTests
         //Act
         var educationToDelete = await _workExperienceService.Delete(workExperienceId);
         //Assert
-        Assert.Equal(workExperienceEntity.WorkExperienceId, educationToDelete.WorkExperienceId);
+        Assert.Equal(workExperienceEntity.WorkExperienceId, educationToDelete.workExperience.WorkExperienceId);
     }
     
     [Fact]

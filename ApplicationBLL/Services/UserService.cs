@@ -30,7 +30,12 @@ public class UserService : IUserService
             throw new EmailIsNotAvailableException();
         }
         registerUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerUser.PasswordHash);
-        registerUser.JobSeekerAccount = new JobSeekerAccount();
+        registerUser.JobSeekerAccount = new JobSeekerAccount()
+        {
+            FirstName = "",
+            LastName = "",
+            PhoneNumber = ""
+        };
 
         return registerUser;
     }
@@ -42,6 +47,32 @@ public class UserService : IUserService
             throw new Exception("Invalid user");
         }
         var userEntity = await _userQueryRepository.GetUserByIdPlain(id);
+
+        if (!string.IsNullOrEmpty(updatedUser.AccountType) && userEntity.AccountType != updatedUser.AccountType)
+        {
+            userEntity.AccountType = updatedUser.AccountType;
+        }
+        return userEntity;
+    }
+
+    public async Task<User> UpdateUserVulnerableInfo(int userId, User updatedUser, string userPassword)
+    {
+        if (GetCurrentUserId() != userId)
+        {
+            throw new Exception("Invalid user");
+        }
+        var userEntity = await _userQueryRepository.GetUserByIdPlain(userId);
+        if (!_passwordHandler.Verify(userPassword, userEntity.PasswordHash))
+        {
+            throw new UserNotFoundException("Password provided for specified email is wrong");
+        }
+        
+        var updatedUserEntity = await UpdateUserInfo(updatedUser, userEntity);
+        return updatedUserEntity;
+    }
+
+    private async Task<User> UpdateUserInfo(User updatedUser, User userEntity)
+    {
         if (!string.IsNullOrEmpty(updatedUser.Email) && updatedUser.Email != userEntity.Email)
         {
             if ( !await _userQueryRepository.IsEmailAvailable(updatedUser.Email))
@@ -51,14 +82,9 @@ public class UserService : IUserService
             userEntity.Email = updatedUser.Email;
         }
 
-        if (!string.IsNullOrEmpty(updatedUser.PasswordHash))
+        if (!string.IsNullOrEmpty(updatedUser.PasswordHash) && userEntity.PasswordHash != updatedUser.PasswordHash)
         {
             userEntity.PasswordHash = _passwordHandler.ChangePassword(updatedUser.PasswordHash);
-        }
-
-        if (!string.IsNullOrEmpty(updatedUser.AccountType) && userEntity.AccountType != updatedUser.AccountType)
-        {
-            userEntity.AccountType = updatedUser.AccountType;
         }
         return userEntity;
     }

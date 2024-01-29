@@ -16,7 +16,7 @@ public class JobSeekerAccountCommandRepository : IJobSeekerAccountCommandReposit
 
     public async Task<JobSeekerAccount> UpdateJobSeekerAccount(JobSeekerAccount jobSeekerAccount)
     {
-        if (jobSeekerAccount.Address.Id != 0)
+        if (jobSeekerAccount.Address != null && jobSeekerAccount.Address.Id != 0)
         {
             _applicationContext.Entry(jobSeekerAccount.Address).State = EntityState.Modified;
         }

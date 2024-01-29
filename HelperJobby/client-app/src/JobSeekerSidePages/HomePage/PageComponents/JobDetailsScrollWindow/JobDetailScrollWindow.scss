@@ -1,0 +1,136 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+
+.job-details-scroll-window{
+  flex: 1 1;
+  height: calc(100vh - 12px);
+  overflow-y: auto;
+  flex-direction: column;
+  overscroll-behavior-y: auto;
+}
+
+.job-details-container{
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding-top: 1rem;
+}
+
+.job-details-header{
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  box-sizing: border-box;
+  padding-left: 1rem;
+  border-bottom: 1px solid global-variables.$neutral-color-400;
+  
+}
+
+.small-title{
+  display: flex;
+  flex-direction: column;
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: global-variables.$neutral-color-1000;
+}
+
+.short-main-info{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1rem;
+}
+
+.job-details-icon-box{
+  display: flex;
+  color: global-variables.$neutral-color-700;
+  padding-right: 1rem;
+}
+
+.job-details-header-info-box{
+  display: flex;
+  flex-direction: column;
+}
+
+.job-details-info{
+  display: flex;
+  color: global-variables.$neutral-color-900;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  margin-bottom: 0.25rem;
+}
+
+.detailed-job-features{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.title-additional-spacing{
+  margin-top: 1.5rem;
+}
+
+.job-details-subtitle{
+  margin-top: 0.5rem;
+  display: flex;
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: global-variables.$neutral-color-800;
+}
+
+.benefits-box{
+  position: relative;
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.benefits{
+  position: relative;
+  box-sizing: border-box;
+  margin: 0px;
+  min-width: 0px;
+  padding-left: 1.25rem;
+  font-size: .875rem;
+  color: global-variables.$neutral-color-800;
+  line-height: 1.5;
+}
+
+.background-fade{
+  background: linear-gradient(180deg,#fff0,#fff);
+  bottom: 0;
+  height: 3.75rem;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.show-more-benefits-button{
+  display: flex;
+  color: global-variables.$dark-blue;
+  width: fit-content;
+  margin-bottom: 1.5rem;
+  padding: 0.25rem;
+  transition: 0.2s;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  &:hover{
+    color: global-variables.$dark-blue-hover;
+  }
+}
+
+.show-more-arrow{
+  margin-left: 0.5rem;
+}
+
+.full-description-box{
+  display: flex;
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: global-variables.$neutral-color-900;
+  font-size: 0.9375rem;
+  margin-bottom: 1rem;
+}

@@ -1,5 +1,5 @@
 namespace ApplicationDomain.Enums;
-
+[Flags]
 public enum Schedules
 {
     MondayToFriday = 1,

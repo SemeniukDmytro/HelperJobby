@@ -57,6 +57,30 @@ public class WorkExperienceService : IWorkExperienceService
         return workExperienceEntity;
     }
 
+    public async Task<(WorkExperience workExperience, bool isResumeNeedToBeDeleted)> Delete(int workExperienceId)
+    {
+        var isInvalidResume = false;
+        var currentUserId = _userService.GetCurrentUserId();
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
+        if (jobSeekerAccount.Resume == null)
+        {
+            throw new ResumeNotFoundException();
+        }
+        var workExperience = jobSeekerAccount.Resume.WorkExperiences.FirstOrDefault(we => we.WorkExperienceId == workExperienceId);
+
+        if (workExperience == null)
+        {
+            throw new ForbiddenException();
+        }
+        if (jobSeekerAccount.Resume.Educations.Count == 0 && jobSeekerAccount.Resume.WorkExperiences.Count <= 1
+                                                          && jobSeekerAccount.Resume.Skills.Count == 0)
+        {
+            isInvalidResume = true;
+        }
+        workExperience.Resume = jobSeekerAccount.Resume;
+        return (workExperience, isInvalidResume);
+    }
+
     private WorkExperience UpdateWorkExperience(WorkExperience workExperienceEntity, WorkExperience updatedWorkExperience)
     {
         if (string.IsNullOrEmpty(workExperienceEntity.JobTitle))
@@ -75,15 +99,5 @@ public class WorkExperienceService : IWorkExperienceService
         return workExperienceEntity;
     }
     
-    public async Task<WorkExperience> Delete(int workExperienceId)
-    {
-        var currentUserId = _userService.GetCurrentUserId();
-        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        var workExperience = await _workExperienceQueryRepository.GetWorkExperienceById(workExperienceId);
-        if (workExperience.ResumeId != jobSeekerAccount.Resume.Id)
-        {
-            throw new ForbiddenException();
-        }
-        return workExperience;
-    }
+   
 }

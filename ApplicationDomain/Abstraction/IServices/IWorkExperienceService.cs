@@ -6,5 +6,5 @@ public interface IWorkExperienceService
 {
     public Task<WorkExperience> AddWorkExperience(int resumeId, WorkExperience workExperience);
     public Task<WorkExperience> UpdateWorkExperience(int workExperienceId, WorkExperience updatedWorkExperience);
-    public Task<WorkExperience> Delete(int workExperienceId);
+    public Task<(WorkExperience workExperience, bool isResumeNeedToBeDeleted)> Delete(int workExperienceId);
 }

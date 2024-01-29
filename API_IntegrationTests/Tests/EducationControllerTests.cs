@@ -96,6 +96,6 @@ public class EducationControllerTests : IntegrationTest
         //Assert
         Assert.Equal(HttpStatusCode.OK, deleteEducationResponse.StatusCode);
         var getEducationResponse = await TestClient.GetAsync(requestUri);
-        Assert.Equal(HttpStatusCode.InternalServerError, getEducationResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, getEducationResponse.StatusCode);
     }
 }

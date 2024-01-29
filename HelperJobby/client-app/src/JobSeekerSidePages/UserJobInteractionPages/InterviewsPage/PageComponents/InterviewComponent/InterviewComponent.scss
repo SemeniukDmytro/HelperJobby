@@ -1,0 +1,14 @@
+.ji-interview-info-fb{
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  width: 0px;
+}
+
+.appointment-info {
+  animation: ji-job-fadeIn 0.5s ease-in-out 1 forwards;
+}
+
+.appointment-info-container{
+  overflow-wrap: break-word;
+}

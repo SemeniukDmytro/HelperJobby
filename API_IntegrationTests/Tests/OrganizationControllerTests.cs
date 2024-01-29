@@ -103,13 +103,13 @@ public class OrganizationControllerTests : IntegrationTest
         var requestUri = $"{_baseUri}/{email.Id}/remove-employee";
         
         //Act
-        var removeEmployeeEmailResponse = await TestClient.PostAsJsonAsync(requestUri, email.Id);
+        var removeEmployeeEmailResponse = await TestClient.DeleteAsync(requestUri);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(removeEmployeeEmailResponse, TestOutputHelper);
         
         //Assert
         Assert.Equal(HttpStatusCode.OK, removeEmployeeEmailResponse.StatusCode);
         var getRemovedEmployeeResponse = await TestClient.GetAsync($"/api/EmployerAccount/{employerToRemove.UserId}");
         await ExceptionsLogHelper.LogNotSuccessfulResponse(getRemovedEmployeeResponse, TestOutputHelper);
-        Assert.Equal(HttpStatusCode.InternalServerError, getRemovedEmployeeResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, getRemovedEmployeeResponse.StatusCode);
     }
 }

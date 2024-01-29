@@ -1,0 +1,16 @@
+.changed-info-notify-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: rgb(228, 247, 230);
+  border: 1px solid rgb(173, 223, 179);
+  border-radius: 0.5rem;
+}
+
+.changed-type-message{
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: row;
+}

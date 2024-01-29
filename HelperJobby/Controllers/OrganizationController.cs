@@ -58,7 +58,7 @@ namespace HelperJobby.Controllers
             return _mapper.Map<OrganizationEmployeeEmailDTO>(employeeEmail);
         }
         
-        [HttpPost("{employeeEmailId}/remove-employee")]
+        [HttpDelete("{employeeEmailId}/remove-employee")]
         public async Task RemoveEmployeeEmail(int employeeEmailId)
         {
             var employeeEmail =

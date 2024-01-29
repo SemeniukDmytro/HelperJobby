@@ -1,0 +1,20 @@
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+.build-resume-form{
+  position: relative;
+}
+
+.request-in-process-surface{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.build-page-header{
+  margin-bottom: 2rem;
+  font-weight: 700;
+  font-size: 1.75rem;
+  color: global-variables.$neutral-color-1000;
+}

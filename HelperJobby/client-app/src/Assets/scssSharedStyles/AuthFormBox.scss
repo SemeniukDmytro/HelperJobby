@@ -1,0 +1,49 @@
+.passpage-form-layout{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 90%;
+  width: 30rem;
+}
+
+.passpage-form-box{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 0.5rem;
+  background-color: white;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(212, 210, 208);
+  padding: 1.5rem;
+}
+
+.passpage-form{
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.passpage-form-title-box{
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.form-title{
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgb(45, 45, 45);
+}
+
+.passpage-form-subtitle-box{
+  margin-top: 0.5rem;
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.form-subtitle{
+  font-size: 1rem;
+  font-weight: 400;
+  color: rgb(89, 89, 89);
+}
+

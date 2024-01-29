@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,14 +8,17 @@ public class JobSeekerAccount
 {
     public int Id { get; set; }
     
+    [DefaultValue("")]
     [MaxLength(30)]
-    public string? FirstName { get; set; }
+    public string FirstName { get; set; }
     
+    [DefaultValue("")]
     [MaxLength(30)]
-    public string? LastName { get; set; }
+    public string LastName { get; set; }
     
+    [DefaultValue("")]
     [MaxLength(15)]
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
     
     [Required]
     [ForeignKey("User")]

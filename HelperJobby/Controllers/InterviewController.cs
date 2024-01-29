@@ -1,8 +1,8 @@
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
+using ApplicationDomain.Models;
 using AutoMapper;
-using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.UserJobInteractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,12 +33,11 @@ namespace HelperJobby.Controllers
         }
         // GET: api/Interview/my-interviews
         [HttpGet("my-interviews")]
-        public async Task<IEnumerable<JobDTO>> GetCurrentJobSeekerInterviews()
+        public async Task<IEnumerable<InterviewDTO>> GetCurrentJobSeekerInterviews()
         {
             var currentJobSeeker = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithInterviews(
                 _userService.GetCurrentUserId());
-            return _mapper.Map<IEnumerable<JobDTO>>(currentJobSeeker);
-
+            return _mapper.Map<IEnumerable<InterviewDTO>>(currentJobSeeker);
         }
         
         // GET: api/Interview/{jobId}/interviews
@@ -60,18 +59,27 @@ namespace HelperJobby.Controllers
 
         // POST: api/Interview/{jobId}/job-seeker/{jobSeekerId}
         [HttpPost("{jobId}/job-seeker/{jobSeekerId}")]
-        public async Task<InterviewDTO> CreateInterview(int jobId, int jobSeekerId)
+        public async Task<InterviewDTO> CreateInterview(int jobId, int jobSeekerId, [FromBody] CreateInterviewDTO createInterviewDTO)
         {
-            var interview = await _interviewService.PostInterview(jobId, jobSeekerId);
+            var createdInterviewInfo = _mapper.Map<Interview>(createInterviewDTO);
+            var interview = await _interviewService.PostInterview(jobId, jobSeekerId, createdInterviewInfo);
             interview = await _interviewCommandRepository.CreateInterview(interview);
             return _mapper.Map<InterviewDTO>(interview);
         }
 
         // DELETE: api/Interview/{jobId}/job-seeker/{jobSeekerId}
         [HttpDelete("{jobId}/job-seeker/{jobSeekerId}")]
-        public async Task Delete(int jobId, int jobSeekerId)
+        public async Task EmployerCancelInterview(int jobId, int jobSeekerId)
         {
-            var interview = await _interviewService.DeleteInterview(jobId, jobSeekerId);
+            var interview = await _interviewService.CancelInterviewFromEmployerAccount(jobId, jobSeekerId);
+            await _interviewCommandRepository.DeleteInterview(interview);
+        }
+        
+        // DELETE: api/Interview/{jobId}/
+        [HttpDelete("{jobId}")]
+        public async Task JobSeekerCancelInterview(int jobId)
+        {
+            var interview = await _interviewService.CancelInterviewFromJobSeekerAccount(jobId);
             await _interviewCommandRepository.DeleteInterview(interview);
         }
 

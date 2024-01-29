@@ -65,6 +65,8 @@ public class CurrentJobControllerTests : IntegrationTest
         Location = "",
         JobType = new List<JobTypes> {},
         Salary = 0,
+        SalaryRate = "per hour",
+        ShowPayBy = "",
         Schedule = new List<Schedules> { },
         Benefits = new List<EmployeeBenefits> { },
         ContactEmail = "contactemail@gmail.com",
@@ -102,7 +104,7 @@ public class CurrentJobControllerTests : IntegrationTest
         Assert.Equal(HttpStatusCode.OK, jobDeleteResponse.StatusCode);
         var jobGetResponse = await TestClient.GetAsync($"{_baseUri}/{employer.Id}/current-job-creation");
         await ExceptionsLogHelper.LogNotSuccessfulResponse(jobGetResponse, TestOutputHelper);
-        Assert.Equal(HttpStatusCode.InternalServerError, jobGetResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, jobGetResponse.StatusCode);
     }
     
 }

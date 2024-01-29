@@ -19,6 +19,34 @@ namespace ApplicationDAL.Migrations
                 .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("ApplicationDomain.AuthRelatedModels.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("ApplicationDomain.IndexedModels.JobIndexedWord", b =>
                 {
                     b.Property<int>("Id")
@@ -190,8 +218,18 @@ namespace ApplicationDAL.Migrations
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(10,2)");
 
+                    b.Property<string>("SalaryRate")
+                        .IsRequired()
+                        .HasMaxLength(9)
+                        .HasColumnType("varchar(9)");
+
                     b.Property<int>("Schedule")
                         .HasColumnType("int");
+
+                    b.Property<string>("ShowPayBy")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
 
                     b.HasKey("Id");
 
@@ -294,8 +332,19 @@ namespace ApplicationDAL.Migrations
                         .HasColumnType("int")
                         .HasColumnOrder(1);
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<string>("AppointmentInfo")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<TimeOnly>("InterviewEnd")
+                        .HasColumnType("time(6)");
+
+                    b.Property<DateTime>("InterviewStart")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int>("InterviewType")
+                        .HasColumnType("int");
 
                     b.HasKey("JobId", "JobSeekerAccountId");
 
@@ -317,6 +366,9 @@ namespace ApplicationDAL.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
+
+                    b.Property<DateOnly>("DatePosted")
+                        .HasColumnType("date");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -352,8 +404,18 @@ namespace ApplicationDAL.Migrations
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(10,2)");
 
+                    b.Property<string>("SalaryRate")
+                        .IsRequired()
+                        .HasMaxLength(9)
+                        .HasColumnType("varchar(9)");
+
                     b.Property<int>("Schedule")
                         .HasColumnType("int");
+
+                    b.Property<string>("ShowPayBy")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
 
                     b.HasKey("Id");
 
@@ -372,8 +434,8 @@ namespace ApplicationDAL.Migrations
                         .HasColumnType("int")
                         .HasColumnOrder(1);
 
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateOnly>("DateApplied")
+                        .HasColumnType("date");
 
                     b.HasKey("JobId", "JobSeekerAccountId");
 
@@ -392,14 +454,17 @@ namespace ApplicationDAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
 
@@ -473,6 +538,32 @@ namespace ApplicationDAL.Migrations
                     b.ToTable("OrganizationEmployeeEmails");
                 });
 
+            modelBuilder.Entity("ApplicationDomain.Models.RecentUserSearch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Query")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RecentUserSearches");
+                });
+
             modelBuilder.Entity("ApplicationDomain.Models.Resume", b =>
                 {
                     b.Property<int>("Id")
@@ -499,6 +590,9 @@ namespace ApplicationDAL.Migrations
                     b.Property<int>("JobSeekerAccountId")
                         .HasColumnType("int")
                         .HasColumnOrder(1);
+
+                    b.Property<DateOnly>("DateSaved")
+                        .HasColumnType("date");
 
                     b.HasKey("JobId", "JobSeekerAccountId");
 
@@ -601,6 +695,17 @@ namespace ApplicationDAL.Migrations
                     b.HasIndex("ResumeId");
 
                     b.ToTable("WorkExperiences");
+                });
+
+            modelBuilder.Entity("ApplicationDomain.AuthRelatedModels.RefreshToken", b =>
+                {
+                    b.HasOne("ApplicationDomain.Models.User", "User")
+                        .WithOne("RefreshToken")
+                        .HasForeignKey("ApplicationDomain.AuthRelatedModels.RefreshToken", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ApplicationDomain.IndexedModels.ProcessedJobWord", b =>
@@ -759,6 +864,17 @@ namespace ApplicationDAL.Migrations
                     b.Navigation("Organization");
                 });
 
+            modelBuilder.Entity("ApplicationDomain.Models.RecentUserSearch", b =>
+                {
+                    b.HasOne("ApplicationDomain.Models.User", "User")
+                        .WithMany("RecentUserSearches")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ApplicationDomain.Models.Resume", b =>
                 {
                     b.HasOne("ApplicationDomain.Models.JobSeekerAccount", "JobSeekerAccount")
@@ -869,6 +985,11 @@ namespace ApplicationDAL.Migrations
                         .IsRequired();
 
                     b.Navigation("JobSeekerAccount")
+                        .IsRequired();
+
+                    b.Navigation("RecentUserSearches");
+
+                    b.Navigation("RefreshToken")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

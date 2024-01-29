@@ -9,7 +9,7 @@ public class UpdateUserDTOValidator : AbstractValidator<CreateUpdateUserDTO>
     public UpdateUserDTOValidator()
     {
         RuleFor(u => u.Password)
-            .Length(8, 25).WithMessage("Length of your number is invalid")
+            .Length(8, 25).WithMessage("Length of your password is invalid")
             .When(u => !string.IsNullOrEmpty(u.Password));
 
         RuleFor(u => u.AccountType)

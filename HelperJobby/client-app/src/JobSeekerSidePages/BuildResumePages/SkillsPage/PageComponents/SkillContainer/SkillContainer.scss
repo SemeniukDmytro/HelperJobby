@@ -1,0 +1,39 @@
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+.skill-container{
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  padding: 0.25rem 0.25rem 0.25rem 0.5rem;
+  border: 1px solid global-variables.$neutral-color-400;
+  border-radius: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.skill-name{
+  flex-grow: 1;
+  color: global-variables.$neutral-color-1000;
+  font-weight: 700;
+  margin: 0 0.5rem;
+}
+
+.remove-skill-button{
+  background-color: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 0.25rem 0.75rem;
+  transition: 0.2s;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  margin-right: 0.25rem;
+  &:hover{
+    background-color: global-variables.$light-blue;
+  }
+  &:active{
+    background-color: global-variables.$light-blue-active;
+    box-shadow: global-variables.$button-inner-shadow;
+  }
+}

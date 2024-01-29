@@ -9,4 +9,6 @@ public interface IUserService
     public Task<User> CreateUser(User registerUser);
 
     public Task<User> UpdateUser(int id, User updatedUser);
+
+    public Task<User> UpdateUserVulnerableInfo(int userId, User updatedUser, string userPassword);
 }

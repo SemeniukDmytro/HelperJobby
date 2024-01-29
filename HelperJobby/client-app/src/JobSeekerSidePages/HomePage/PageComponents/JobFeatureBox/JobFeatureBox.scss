@@ -1,0 +1,17 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.job-feature{
+  background-color: global-variables.$neutral-color-200;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  padding: 0.25rem 0.5rem;
+  color: global-variables.$neutral-color-800;
+  font-weight: 700;
+  font-size: 0.875rem;
+  margin-right: 0.25rem;
+}
+.more-features-identifier{
+  font-weight: 400;
+  padding-left: 0.5rem;
+  font-size: 0.75rem;
+}

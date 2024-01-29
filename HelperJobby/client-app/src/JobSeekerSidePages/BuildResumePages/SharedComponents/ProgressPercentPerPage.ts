@@ -1,0 +1,1 @@
+export const ProgressPercentPerPage = 12.5;
