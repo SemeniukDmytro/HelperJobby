@@ -24,17 +24,16 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
                 navigate("/");
             }
         }, 10000);
-        fetchJobSeeker();
+        fetchComponentInitialData();
         return () => {
             clearTimeout(timeoutId);
         };
-    }, [loading]);
-
-    useEffect(() => {
-        if (jobSeeker){
-            setLoading(false)
-        }
-    }, [jobSeeker]);
+    }, []);
+    
+    async function fetchComponentInitialData(){
+        await fetchJobSeeker();
+        setLoading(false);
+    }
 
     function isAddressInfoProvided() {
         return !!jobSeeker?.address?.city;

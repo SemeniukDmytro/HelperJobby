@@ -13,6 +13,10 @@ import {ResumeDTO} from "../DTOs/resumeRelatedDTOs/ResumeDTO";
 const JobSeekerContext = createContext<JobSeekerContextProps>({
     jobSeeker : null,
     setJobSeeker : () => {},
+    savedJobsWereLoaded : false,
+    setSavedJobsWereLoaded : () => {},
+    jobAppliesWereLoaded : false,
+    setJobAppliesWereLoaded : () => {},
     fetchJobSeeker : () => {},
     fetchJobSeekerSavedJobs : () => {},
     fetchJobSeekerJobApplies : () => {},
@@ -42,6 +46,7 @@ export function JobSeekerProvider({children} : {children : ReactNode}){
                     ...prev,
                     firstName : retrievedJobSeeker.firstName,
                     lastName : retrievedJobSeeker.lastName,
+                    phoneNumber : retrievedJobSeeker.phoneNumber,
                     address : retrievedJobSeeker.address,
                     addressId : retrievedJobSeeker.addressId,
                     resume : retrievedJobSeeker.resume,
@@ -100,8 +105,7 @@ export function JobSeekerProvider({children} : {children : ReactNode}){
     
     const fetchJobSeekerJobInteractions = async () =>{
         try {
-            if ((savedJobsWereLoaded && jobAppliesWereLoaded) || !authUser ||
-                (jobSeeker!.savedJobs.length > 0 || jobSeeker!.jobApplies.length > 0 || jobSeeker!.interviews.length > 0)){
+            if ((savedJobsWereLoaded && jobAppliesWereLoaded) || !authUser){
                 return;
             }
             const retrievedJobSeeker = await jobSeekerService.getCurrentJobSeekerJobInteractions();
@@ -135,6 +139,10 @@ export function JobSeekerProvider({children} : {children : ReactNode}){
         <JobSeekerContext.Provider value={{
             jobSeeker,
             setJobSeeker,
+            savedJobsWereLoaded,
+            setSavedJobsWereLoaded,
+            jobAppliesWereLoaded,
+            setJobAppliesWereLoaded,
             fetchJobSeeker,
             fetchJobSeekerSavedJobs,
             fetchJobSeekerJobApplies,

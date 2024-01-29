@@ -24,7 +24,7 @@ export function JobSeekerJobInteractionsProvider({children} : {children : ReactN
     const [savedJobs, setSavedJobs] = useState<SavedJobDTO[] | null>(null);
     const [jobApplies, setJobApplies] = useState<JobApplyDTO[] | null>(null);
     const [interviews, setInterviews] = useState<InterviewDTO[] | null>(null);
-    const {setJobSeeker} = useJobSeeker();
+    const {setJobSeeker, setJobAppliesWereLoaded, setSavedJobsWereLoaded} = useJobSeeker();
     const jobSeekerService = new JobSeekerAccountService();
     const jobAppliesService = new JobApplyService();
     const interviewsService = new InterviewService();
@@ -66,6 +66,8 @@ export function JobSeekerJobInteractionsProvider({children} : {children : ReactN
             })
             
             setJobInteractionsWasLoaded(true);
+            setSavedJobsWereLoaded(true);
+            setJobAppliesWereLoaded(true);
         }
         catch (err){
             logErrorInfo(err)
