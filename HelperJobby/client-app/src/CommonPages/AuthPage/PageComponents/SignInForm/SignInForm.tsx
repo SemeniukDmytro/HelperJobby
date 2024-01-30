@@ -112,7 +112,7 @@ const SignInForm: FC<SignInFormProps> = () => {
                                     showRequiredMark={true}/>
                                 <button className="blue-button" disabled={isEmptyPassword}>
                                     <span>Sign in</span>
-                                    <FontAwesomeIcon className="continue-arrow medium-svg" icon={faArrowRightLong}/>
+                                    <FontAwesomeIcon className="continue-arrow svg125rem" icon={faArrowRightLong}/>
                                 </button>
                             </form>
                         </div>

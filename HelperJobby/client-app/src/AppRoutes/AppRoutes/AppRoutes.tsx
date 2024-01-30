@@ -10,6 +10,9 @@ import SearchJobResultsPage from "../../JobSeekerSidePages/SearchJobResultsPage/
 import JobPage from "../../JobSeekerSidePages/JobPage/JobPage";
 import NotFoundPage from "../../CommonPages/NotFoundPage/NotFoundPage";
 import {AuthProvider} from "../../contexts/AuthContext";
+import EmployerSideRoutes from "../EmployerSideRoutes/EmployerSideRoutes";
+import {EmployerProvider} from "../../contexts/EmployerContext";
+import EmployersPagesHeader from "../../EmployersSideComponents/EmployersPagesHeader/EmployersPagesHeader";
 
 interface AppRoutesProps {
 }
@@ -22,6 +25,13 @@ const AppRoutes: FC<AppRoutesProps> = () => (
                     {<JobSeekerProvider>
                         <JobSeekerSideRoutes/>
                     </JobSeekerProvider>}>
+                </Route>
+                <Route path={"/employers/*"} element=
+                    {<EmployerProvider>
+                        <EmployersPagesHeader/>
+                        <EmployerSideRoutes/>
+                    </EmployerProvider>
+                    }>
                 </Route>
             </Route>
 

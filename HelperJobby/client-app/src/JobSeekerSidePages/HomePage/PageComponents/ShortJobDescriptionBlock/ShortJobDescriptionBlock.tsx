@@ -169,14 +169,14 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
                setShowNotify={setShowPopup}/>}
            <div className={"more-options-absolute-container"}>
                <button className={"more-options-button"} onClick={showMoreOptions}>
-                   <FontAwesomeIcon className={"medium-svg"} icon={faEllipsisVertical}/>
+                   <FontAwesomeIcon className={"svg125rem"} icon={faEllipsisVertical}/>
                </button>
                {moreOptionsVisible && <div className={"more-options-bar"}>
                    <div className={"more-options-window-absolute-container"}>
                        <div className={"more-options-window"}>
                            <button className={"first-option"} onClick={saveJob}>
-                               {!isJobSaved ? (<FontAwesomeIcon className={"medium-svg icon-right-margin"} icon={regularBookmark} />) :
-                                   (<FontAwesomeIcon className={"medium-svg icon-right-margin"} icon={solidBookmark} />)}
+                               {!isJobSaved ? (<FontAwesomeIcon className={"svg125rem icon-right-margin"} icon={regularBookmark} />) :
+                                   (<FontAwesomeIcon className={"svg125rem icon-right-margin"} icon={solidBookmark} />)}
                                <span className={"save-job-text"}>{saveJobButtonText}</span>
                            </button>
                        </div>

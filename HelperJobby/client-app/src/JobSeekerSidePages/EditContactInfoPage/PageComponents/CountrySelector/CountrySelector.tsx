@@ -76,7 +76,7 @@ const CountrySelector: FC<CountrySelectorProps> = ({country,
                     ))}
                 </select>
                 <div className={"selectArrow"}>
-                    <FontAwesomeIcon className={"small-svg"} icon={faChevronDown} />
+                    <FontAwesomeIcon className={"svg1rem"} icon={faChevronDown} />
                 </div>
             </div>) }
             <div className={"input-field-spacing"}>

@@ -55,9 +55,9 @@ const QueryParameter: FC<QueryParameterProps> = ({
             <span className={"param-name"}>
                 {paramName}
             </span>
-            {!isSelected ? (<FontAwesomeIcon className={"select-query-param small-svg"} icon={faSortDown}/>)
+            {!isSelected ? (<FontAwesomeIcon className={"select-query-param svg1rem"} icon={faSortDown}/>)
                 :
-                (<FontAwesomeIcon className={"remove-query-param small-svg"} icon={faXmark}/>)}
+                (<FontAwesomeIcon className={"remove-query-param svg1rem"} icon={faXmark}/>)}
         </button>
     )
 };

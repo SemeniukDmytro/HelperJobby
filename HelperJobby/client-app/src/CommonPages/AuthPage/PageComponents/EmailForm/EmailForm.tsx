@@ -90,7 +90,7 @@ const EmailForm: FC<AuthComponentProps> = () => {
                                                   setCustomErrorMessage={setError}/>
                                 <button className="blue-button" type={"submit"} disabled={isFormInvalid}>
                                     <span>Continue</span>
-                                    <FontAwesomeIcon className="continue-arrow medium-svg" icon={faArrowRightLong} />
+                                    <FontAwesomeIcon className="continue-arrow svg125rem" icon={faArrowRightLong} />
                                 </button>
                             </form>
                         </div>

@@ -138,7 +138,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({ inputFieldValue,
             {displayGoogleLogo && <img className={"google-logo"} src={GoogleImage} alt={""}></img>}
             {showEraseJobBtn &&<div className={"input-button-box"} onClick={eraseInput}>
                 <button type={"button"} className={"input-field-button"}>
-                    <FontAwesomeIcon className={"small-svg"} icon={faXmark}/>
+                    <FontAwesomeIcon className={"svg1rem"} icon={faXmark}/>
                 </button>
             </div>}
         </div>

@@ -122,10 +122,10 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({selectedJob,
                 </button>
                 {!isJobSaved ?  (
                 <button className={"light-neutral-button-with-icon"} style={{padding : "0.75rem"}} onClick={handleSaveJobClick}>
-                    <FontAwesomeIcon className={"medium-svg"} icon={faBookmark} />
+                    <FontAwesomeIcon className={"svg125rem"} icon={faBookmark} />
                 </button>) : (
                 <button className={"dark-neutral-button-with-icon"} style={{padding : "0.75rem"}} ref={moreActionsButtonRef} onClick={handleRemoveSavedJobClick}>
-                    <FontAwesomeIcon className={"medium-svg"} icon={faBookmark} />
+                    <FontAwesomeIcon className={"svg125rem"} icon={faBookmark} />
                 </button>)}
             </div>
             {showRemoveFromSaved && <div className={"undo-action-box"}>

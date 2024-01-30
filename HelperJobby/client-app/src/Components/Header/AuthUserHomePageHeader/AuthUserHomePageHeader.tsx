@@ -69,13 +69,13 @@ const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
         <div className={"nav-buttons-block"}>
             <div className={"nav-button-box"}>
                 <button className={"nav-button"}>
-                    <FontAwesomeIcon className={"medium-svg"} icon={faMessage} />
+                    <FontAwesomeIcon className={"svg125rem"} icon={faMessage} />
                 </button>
                 <div className={"underline"}></div>
             </div>
             <div className={"nav-button-box"}>
                 <button className={"nav-button"} onClick={showProfileOptions} ref={profileButtonRef}>
-                    <FontAwesomeIcon className={"medium-svg"} icon={faUser} />
+                    <FontAwesomeIcon className={"svg125rem"} icon={faUser} />
                 </button>
                 <div className={"underline"}></div>
                 {displayMoreOptions && <div className={"profile-more-options-line"}>

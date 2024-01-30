@@ -130,7 +130,7 @@ const CreatePasswordForm: FC<CreatePasswordFormProps> = () => {
                     <div>
                         <a className={"type-change-button"} onClick={ChangeAccountType}>
                             <span className={"type-change-text"}>Wait, I am {accountTypeChanger}</span>
-                            <FontAwesomeIcon className="type-continue-arrow medium-svg" icon={faArrowRightLong}/>
+                            <FontAwesomeIcon className="type-continue-arrow svg125rem" icon={faArrowRightLong}/>
                         </a>
                     </div>
                 </div>

@@ -113,17 +113,17 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
                               (!isSaved ? (
                                       <button className={"light-neutral-button-with-icon"}
                                               onClick={handleSaveJobClick}>
-                                          <FontAwesomeIcon className={"medium-svg"} icon={faBookmark}/>
+                                          <FontAwesomeIcon className={"svg125rem"} icon={faBookmark}/>
                                       </button>) : (
                                       <button className={"light-neutral-button"}
                                               onClick={handleRemoveSavedJobClick}>
-                                          <FontAwesomeIcon className={"medium-svg"} icon={faBookmark}/>
+                                          <FontAwesomeIcon className={"svg125rem"} icon={faBookmark}/>
                                           <span className={"dark-default-text bold-text ml05rem"}>Saved</span>
                                       </button>)
                               ) :
                               (<button className={"light-neutral-button"} disabled={isApplied}
                                        onClick={handleSaveJobClick}>
-                                  <FontAwesomeIcon className={"medium-svg mr05rem"} icon={faBookmark}/>
+                                  <FontAwesomeIcon className={"svg125rem mr05rem"} icon={faBookmark}/>
                                   {isApplied && <span className={"dark-default-text bold-text"}>Applied</span>}
                               </button>)
                           }

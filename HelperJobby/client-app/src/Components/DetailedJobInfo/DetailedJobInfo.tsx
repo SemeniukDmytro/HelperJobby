@@ -52,7 +52,7 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                 </div>
                 <div className={"short-main-info"}>
                     <div className={"job-details-icon-box"}>
-                        <FontAwesomeIcon className={"medium-svg"} icon={faMoneyBillAlt}/>
+                        <FontAwesomeIcon className={"svg125rem"} icon={faMoneyBillAlt}/>
                     </div>
                     <div className={"job-details-header-info-box"}>
                         <div className={"job-details-info"}>
@@ -66,7 +66,7 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                 </div>
                 {job.jobType.length > 0 && <div className={"short-main-info"}>
                     <div className={"job-details-icon-box"}>
-                        <FontAwesomeIcon className={"medium-svg"} icon={faBriefcase}/>
+                        <FontAwesomeIcon className={"svg125rem"} icon={faBriefcase}/>
                     </div>
                     <div className={"job-details-header-info-box"}>
                         <div className={"job-details-info"}>
@@ -82,7 +82,7 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                 </div>}
                 {job.schedule.length > 0 && <div className={"short-main-info"}>
                     <div className={"job-details-icon-box"}>
-                        <FontAwesomeIcon className={"small-svg"} icon={faClock}/>
+                        <FontAwesomeIcon className={"svg1rem"} icon={faClock}/>
                     </div>
                     <div className={"job-details-header-info-box"}>
                         <div className={"job-details-info"}>
@@ -116,8 +116,8 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                 {job.benefits.length > 6 &&
                     <button className={"show-more-benefits-button"} onClick={displayAllBenefits}>
                         <span>{benefitsButtonText}</span>
-                        {!showAllBenefits && <FontAwesomeIcon className={"show-more-arrow small-svg"} icon={faChevronDown}/>}
-                        {showAllBenefits && <FontAwesomeIcon className={"show-more-arrow small-svg"} icon={faChevronUp}/>}
+                        {!showAllBenefits && <FontAwesomeIcon className={"show-more-arrow svg1rem"} icon={faChevronDown}/>}
+                        {showAllBenefits && <FontAwesomeIcon className={"show-more-arrow svg1rem"} icon={faChevronUp}/>}
                     </button>}
             </div>}
             <div className={"full-description-box"}>

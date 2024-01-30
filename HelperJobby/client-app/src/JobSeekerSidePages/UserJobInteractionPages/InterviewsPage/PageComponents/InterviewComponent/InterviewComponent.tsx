@@ -119,8 +119,8 @@ const InterviewComponent: FC<InterviewComponentProps> = ({interview}) => {
                                 <div className={"small-margin-bottom small-margin-top"}></div>
                                 <div className={"bold-navigation-link"} onClick={toggleShowAppointmentInfo}>
                                     <span className={"icon-right-margin"}>{appointmentInfoText}</span>
-                                    {!showAppointmentInfo ?  <FontAwesomeIcon className={"small-svg"} icon={faChevronDown}/> :
-                                    <FontAwesomeIcon className={"small-svg"} icon={faChevronUp}/>}
+                                    {!showAppointmentInfo ?  <FontAwesomeIcon className={"svg1rem"} icon={faChevronDown}/> :
+                                    <FontAwesomeIcon className={"svg1rem"} icon={faChevronUp}/>}
                                 </div>
                                 {showAppointmentInfo && <div className={"appointment-info"}>
                                     <div className={"small-margin-bottom small-margin-top"}></div>

@@ -99,8 +99,8 @@ const CustomPasswordInputField: FC<CustomPasswordInputFieldProps> = ({
                 <div className={"input-button-box"} onClick={toggleShowPassword}>
                     <button type={"button"} className={"input-field-button right-margin-remove"}
                             style={{minWidth: "40px"}}>
-                        {showPassword ? <FontAwesomeIcon className={"medium-svg"} icon={faEyeSlash}/> :
-                            <FontAwesomeIcon className={"medium-svg"} icon={faEye}/>}
+                        {showPassword ? <FontAwesomeIcon className={"svg125rem"} icon={faEyeSlash}/> :
+                            <FontAwesomeIcon className={"svg125rem"} icon={faEye}/>}
                     </button>
                 </div>
             </div>

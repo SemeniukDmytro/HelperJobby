@@ -4,6 +4,7 @@ import HomePageHeaderLeftSide from "../HomePageHeaderLeftSide/HomePageHeaderLeft
 import AuthUserHomePageHeader from "../AuthUserHomePageHeader/AuthUserHomePageHeader";
 import PublicHomePageHeader from "../PublicHomePageHeader/PublicHomePageHeader";
 import { useAuth } from "../../../hooks/useAuth";
+import {useNavigate} from "react-router-dom";
 
 interface HomePageHeaderProps {
     children: ReactNode;
@@ -12,6 +13,10 @@ interface HomePageHeaderProps {
 
 const PageWrapWithHeader: FC<HomePageHeaderProps> = ({ children, onHomeClick }) => {
     const { authUser } = useAuth();
+    const navigate = useNavigate();
+    function navigateToHelperJobbyEmployers() {
+        navigate("/employers/posting")
+    }
 
     return (
         <div className={"page-layout"}>
@@ -22,7 +27,7 @@ const PageWrapWithHeader: FC<HomePageHeaderProps> = ({ children, onHomeClick }) 
                         {authUser ? (<AuthUserHomePageHeader />) : (<PublicHomePageHeader />)}
                         <div className={"right-side-divider"}></div>
                         <div className={"employers-link-block"}>
-                            <button className={"employers-page-button"}>
+                            <button className={"employers-page-button"} onClick={navigateToHelperJobbyEmployers}>
                                 <span className={"employers-page-text"}>Employers/Post Job</span>
                             </button>
                             <div className={"underline"}></div>

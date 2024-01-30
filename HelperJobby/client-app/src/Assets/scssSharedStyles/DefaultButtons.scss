@@ -216,3 +216,26 @@
     pointer-events: none;
   }
 }
+
+.neutral-transparent-button{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  color: global-variables.$neutral-color-1000;
+  transition: 0.2s;
+  user-select: none;
+  &:hover{
+    background-color: global-variables.$neutral-color-200 !important;
+    color: global-variables.$neutral-color-1000 !important;
+    cursor: pointer;
+  }
+  &:active{
+    background-color: global-variables.$light-blue-active;
+    box-shadow: global-variables.$button-inner-shadow;
+    color: global-variables.$dark-blue-active;
+  }
+}

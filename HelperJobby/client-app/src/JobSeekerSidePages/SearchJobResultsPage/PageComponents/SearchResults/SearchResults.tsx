@@ -193,7 +193,7 @@ const SearchResults: FC<SearchResultsProps> = () => {
                     <span className={"param-name"}>
                         Remote
                     </span>
-                    {isRemote && <FontAwesomeIcon className={"remove-query-param small-svg"} icon={faXmark} />}
+                    {isRemote && <FontAwesomeIcon className={"remove-query-param svg1rem"} icon={faXmark} />}
                 </button>
                 <div className={"param-options-box"}>
                     <QueryParameter queryParam={JobQueryParams.Pay} isSelected={pay != 0}

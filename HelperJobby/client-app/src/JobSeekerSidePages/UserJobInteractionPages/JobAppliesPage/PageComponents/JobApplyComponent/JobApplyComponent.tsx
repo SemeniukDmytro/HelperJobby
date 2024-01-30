@@ -102,7 +102,7 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
                             </div>
                             <div>
                                 <button className={"medium-tr-btn-with-icon"} onClick={closeUndoActionWindow}>
-                                    <FontAwesomeIcon className={"medium-svg"} icon={faXmark}/>
+                                    <FontAwesomeIcon className={"svg125rem"} icon={faXmark}/>
                                 </button>
                             </div>
                         </div>

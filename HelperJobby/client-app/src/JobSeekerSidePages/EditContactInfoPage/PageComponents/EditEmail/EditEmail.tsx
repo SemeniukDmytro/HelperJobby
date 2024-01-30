@@ -26,7 +26,7 @@ const EditEmail: FC<EditEmailProps> = () => {
             </div>
             <a className={"change-email-link"} onClick={navigateToChangeEmailPage}>
                 <span className={"edit-link"}>Edit</span>
-                <FontAwesomeIcon className={"small-svg"} icon={faArrowRight}/>
+                <FontAwesomeIcon className={"svg1rem"} icon={faArrowRight}/>
             </a>
         </div>
     </div>
