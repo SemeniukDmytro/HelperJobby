@@ -116,7 +116,6 @@ const CustomInputField: FC<EditFormFieldProps> = ({
             </div>}
             <div className={`field-input-container ${isInvalidValue ? "red-field-focus" : ""}`}>
                 <div className={`border-lining ${isInvalidValue ? "red-field-focus" : ""}`}>
-
                 </div>
                 <input
                     className={`field-input`}

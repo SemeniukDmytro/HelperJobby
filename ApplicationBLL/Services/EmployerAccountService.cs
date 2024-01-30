@@ -40,7 +40,7 @@ public class EmployerAccountService : IEmployerAccountService
         {
             var employeeEmail =
                 await _organizationQueryRepository.GetEmployeeEmailByOrganizationId(organization.Id, account.Email);
-            if (employeeEmail == null) throw new ForbiddenException();
+            if (employeeEmail == null) throw new ForbiddenException("Your email was not found in employees email list");
         }
 
         if (organization == null)

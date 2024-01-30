@@ -9,5 +9,5 @@ public class CreateEmployerAccountDTO
 
     public string OrganizationName { get; set; }
 
-    public int NumberOfEmployees { get; set; }
+    public int? NumberOfEmployees { get; set; }
 }

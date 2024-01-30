@@ -12,7 +12,7 @@ public class Organization
 
     [Required] public int OrganizationOwnerId { get; set; }
 
-    public int NumberOfEmployees { get; set; }
+    public int? NumberOfEmployees { get; set; }
 
     public List<OrganizationEmployeeEmail> EmployeeEmails { get; set; }
     public List<EmployerAccount> EmployeeAccounts { get; set; }

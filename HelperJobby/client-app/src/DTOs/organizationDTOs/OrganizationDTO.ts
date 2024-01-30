@@ -5,7 +5,7 @@ export interface OrganizationDTO {
     id: number;
     name: string;
     phoneNumber: string;
-    numberOfEmployees: number;
+    numberOfEmployees: number | null;
     organizationOwnerId: number;
     employeeAccounts: EmployerAccountDTO[];
     employeeEmails: CreateOrganizationEmployeeEmailDTO[];

@@ -1,4 +1,4 @@
 export interface UpdateOrganizationDTO {
     phoneNumber: string;
-    numberOfEmployees: number;
+    numberOfEmployees: number | null;
 }

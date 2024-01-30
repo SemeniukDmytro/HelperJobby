@@ -3,5 +3,5 @@ export interface CreateEmployerAccountDTO {
     fullName: string;
     contactNumber: string;
     organizationName: string;
-    numberOfEmployees: number;
+    numberOfEmployees: number | null;
 }
