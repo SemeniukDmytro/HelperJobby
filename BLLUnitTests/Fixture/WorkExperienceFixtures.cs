@@ -4,7 +4,7 @@ namespace BLLUnitTests.Fixture;
 
 public static class WorkExperienceFixtures
 {
-    public static WorkExperience CreatedWorkExperience = new WorkExperience()
+    public static WorkExperience CreatedWorkExperience = new()
     {
         JobTitle = "Software Developer",
         Company = "ABC Inc.",
@@ -15,8 +15,8 @@ public static class WorkExperienceFixtures
         CurrentlyWorkHere = false,
         Description = "Worked as a software developer on various projects."
     };
-    
-    public static WorkExperience UpdatedWorkExperience = new WorkExperience()
+
+    public static WorkExperience UpdatedWorkExperience = new()
     {
         JobTitle = "Software Developer",
         Company = "ABC Inc.",
@@ -27,8 +27,8 @@ public static class WorkExperienceFixtures
         CurrentlyWorkHere = false,
         Description = "Worked as a software developer on various projects."
     };
-    
-    public static WorkExperience FirstWorkExperienceEntity = new WorkExperience()
+
+    public static WorkExperience FirstWorkExperienceEntity = new()
     {
         WorkExperienceId = 1,
         JobTitle = "Software Developer",
@@ -41,8 +41,8 @@ public static class WorkExperienceFixtures
         Description = "Worked as a software developer on various projects.",
         ResumeId = 1
     };
-    
-    public static WorkExperience SecondWorkExperienceEntity = new WorkExperience()
+
+    public static WorkExperience SecondWorkExperienceEntity = new()
     {
         WorkExperienceId = 2,
         JobTitle = "Software Developer",
@@ -55,5 +55,4 @@ public static class WorkExperienceFixtures
         Description = "Worked as a software developer on various projects.",
         ResumeId = 2
     };
-    
 }

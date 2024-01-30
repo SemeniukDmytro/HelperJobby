@@ -1,30 +1,31 @@
 @use "../../../Assets/scssSharedStyles/global-variables";
 
-.nav-buttons-block{
+.nav-buttons-block {
   display: flex;
   flex-direction: row;
 }
 
-.nav-button-box{
+.nav-button-box {
   margin: 0 0.5rem;
   display: flex;
   position: relative;
 }
 
-.nav-button{
+.nav-button {
   box-sizing: border-box;
   border: none;
   padding: 1rem 1rem 0;
   background-color: transparent;
   transition: 0.2s;
-  font-size: 1.25rem;  
+  font-size: 1.25rem;
   cursor: pointer;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
   }
 }
 
-.underline{
+.underline {
   position: absolute;
   width: 0%;
   height: 2px;
@@ -33,17 +34,17 @@
   bottom: 0;
 }
 
-.nav-button-box:hover .underline{
+.nav-button-box:hover .underline {
   width: 100%;
 }
 
-.profile-more-options-line{
+.profile-more-options-line {
   position: absolute;
   left: 0;
   bottom: 0;
 }
 
-.profile-more-options{
+.profile-more-options {
   right: -1.875rem;
   position: absolute;
   top: calc(100% - 0.25rem);
@@ -57,14 +58,14 @@
   flex-direction: column;
 }
 
-.user-email-info{
+.user-email-info {
   display: flex;
   font-weight: 700;
   padding: 1.5rem;
   color: global-variables.$neutral-color-900;
 }
 
-.more-profile-option-button{
+.more-profile-option-button {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -78,32 +79,34 @@
   transition: 0.2s;
   font-size: 1rem;
   color: global-variables.$neutral-color-1000;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
   }
-  &:active{
+
+  &:active {
     background-color: global-variables.$light-blue-active;
     box-shadow: global-variables.$button-inner-shadow;
   }
 }
 
-.big-icon{
+.big-icon {
   font-size: 1.5rem;
   transition: 0.2s;
 }
 
-.more-profile-option-button:hover .big-icon{
+.more-profile-option-button:hover .big-icon {
   color: global-variables.$dark-blue-hover;
 }
 
-.more-options-dividing-line{
+.more-options-dividing-line {
   display: flex;
   flex-grow: 1;
   margin-top: 1rem;
   border-bottom: 2px solid global-variables.$neutral-color-300;
 }
 
-.sign-out-button{
+.sign-out-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -119,7 +122,8 @@
   font-weight: 700;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
   }
 }

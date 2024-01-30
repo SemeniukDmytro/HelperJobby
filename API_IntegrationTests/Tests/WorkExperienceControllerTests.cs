@@ -8,11 +8,11 @@ namespace API_IntegrationTests.Tests;
 public class WorkExperienceControllerTests : IntegrationTest
 {
     private readonly string _baseUri = "/api/WorkExperience";
-    
+
     public WorkExperienceControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {
     }
-    
+
     [Fact]
     public async Task GetWorkExperience_ShouldReturnWorkExperience()
     {
@@ -58,13 +58,13 @@ public class WorkExperienceControllerTests : IntegrationTest
         await AuthenticateAsync();
         var createdWorkExperience = await CreateWorkExperience();
         var requestUri = $"{_baseUri}/{createdWorkExperience.WorkExperienceId}";
-        var updatedWorkExperienceDTO = new CreateUpdateWorkExperienceDTO()
+        var updatedWorkExperienceDTO = new CreateUpdateWorkExperienceDTO
         {
             JobTitle = "Product Manager",
             Company = "NewCompany Inc.",
             Country = "USA",
             CityOrProvince = "San Francisco",
-            From = null, 
+            From = null,
             To = new DateOnly(2022, 12, 31),
             CurrentlyWorkHere = true,
             Description = "Managed product development and strategy."

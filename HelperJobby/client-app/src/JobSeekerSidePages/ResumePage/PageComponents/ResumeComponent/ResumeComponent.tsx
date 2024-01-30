@@ -1,6 +1,5 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import './ResumeComponent.scss';
-import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeftLong, faEllipsisVertical, faTrashCan, faUpload} from "@fortawesome/free-solid-svg-icons";
 import ResumeInfoComponent from "../../../../Components/ResumeInfoComponent/ResumeInfoComponent";
@@ -11,7 +10,8 @@ import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {ResumeService} from "../../../../services/resumeService";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 
-interface ResumeComponentProps {}
+interface ResumeComponentProps {
+}
 
 const ResumeComponent: FC<ResumeComponentProps> = () => {
     const {jobSeeker, setJobSeeker} = useJobSeeker();
@@ -20,10 +20,10 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
     const [deleteProcess, setDeleteProcess] = useState(false);
     const moreOptionsRef = useRef<HTMLDivElement>(null);
     const moreOptionsButtonRef = useRef<HTMLButtonElement>(null);
-    
+
     const resumeService = new ResumeService();
     const navigate = useNavigate();
-    
+
     const dialogTitle = "Delete your HelperJobby Resume?";
     const dialogMainText = "This resume will no longer be available when you apply for jobs. This affects jobs you applied for previously.";
     const firstDialogButtonText = "Cancel";
@@ -31,10 +31,10 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
     const isPositiveDialog = false;
 
     useEffect(() => {
-        if (!jobSeeker?.resume){
+        if (!jobSeeker?.resume) {
             navigate("/my-profile");
         }
-        const handleOutsideShowMoreOptionsClick = (event : MouseEvent) => {
+        const handleOutsideShowMoreOptionsClick = (event: MouseEvent) => {
             if (moreOptionsButtonRef.current && !moreOptionsButtonRef.current.contains(event.target as Node)) {
                 setShowMoreOptions(false);
             }
@@ -44,7 +44,7 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
             document.removeEventListener('click', handleOutsideShowMoreOptionsClick);
         };
     }, []);
-    
+
     useEffect(() => {
         const handleResize = () => {
             if (moreOptionsRef.current && moreOptionsButtonRef.current) {
@@ -68,7 +68,7 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
             window.removeEventListener('resize', handleResize);
         };
     }, [showMoreOptions]);
-    
+
     function onBackButtonClick() {
         navigate("/my-profile")
     }
@@ -76,26 +76,24 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
     function handleMoreOptionsClick() {
         setShowMoreOptions(!showMoreOptions);
     }
-    
-    async function deleteResume(){
+
+    async function deleteResume() {
         try {
             setShowDialogWindow(false);
             setDeleteProcess(true);
             await resumeService.deleteResume(jobSeeker!.resume!.id);
             setJobSeeker((prev) => {
-                return prev ?  {...prev, resume: null} : null;
+                return prev ? {...prev, resume: null} : null;
             })
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setDeleteProcess(false);
             navigate("/my-profile")
         }
     }
 
-    return(
+    return (
         <>
             <DialogWindow
                 secondButtonOnClick={deleteResume}
@@ -105,30 +103,43 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
                 mainText={dialogMainText}
                 firstButtonText={firstDialogButtonText}
                 secondButtonText={secondDialogButtonText}
-                positiveDialog={isPositiveDialog}/>
-            {deleteProcess ? 
+                positiveDialog={isPositiveDialog}
+            />
+            {deleteProcess ?
                 <LoadingPage/>
                 :
-            
+
                 <div className={"page-with-centered-content-layout"}>
                     <div className={"resume-component-header"}>
                         <button className={"back-button"} onClick={onBackButtonClick}>
                             <FontAwesomeIcon icon={faArrowLeftLong}/>
                         </button>
                         <div className={"more-options-container"}>
-                            <button className={"small-interaction-button additional-button-size"}
-                                    onClick={handleMoreOptionsClick} ref={moreOptionsButtonRef}>
+                            <button
+                                className={"small-interaction-button additional-button-size"}
+                                onClick={handleMoreOptionsClick} ref={moreOptionsButtonRef}
+                            >
                                 <FontAwesomeIcon icon={faEllipsisVertical}/>
                             </button>
                             {showMoreOptions && <div className={"more-resume-options-bar"}>
                                 <div className={"resume-options-container"} ref={moreOptionsRef}>
                                     <button className={"more-profile-option-button"}>
-                                        <FontAwesomeIcon className={"icon-right-margin margin-left1rem"} icon={faUpload}/>
+                                        <FontAwesomeIcon
+                                            className={"icon-right-margin margin-left1rem"}
+                                            icon={faUpload}
+                                        />
                                         <span
-                                            className={"additional-text-margin-for-big-icon"}>Upload to replace resume</span>
+                                            className={"additional-text-margin-for-big-icon"}
+                                        >Upload to replace resume</span>
                                     </button>
-                                    <button className={"more-profile-option-button delete-button-color"} onClick={() => setShowDialogWindow(true)}>
-                                        <FontAwesomeIcon className={"icon-right-margin margin-left1rem"} icon={faTrashCan}/>
+                                    <button
+                                        className={"more-profile-option-button delete-button-color"}
+                                        onClick={() => setShowDialogWindow(true)}
+                                    >
+                                        <FontAwesomeIcon
+                                            className={"icon-right-margin margin-left1rem"}
+                                            icon={faTrashCan}
+                                        />
                                         <span className={"additional-text-margin-for-big-icon"}>Delete</span>
                                     </button>
                                 </div>

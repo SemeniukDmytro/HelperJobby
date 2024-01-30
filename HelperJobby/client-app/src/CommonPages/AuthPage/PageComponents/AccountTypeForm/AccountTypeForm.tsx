@@ -5,12 +5,13 @@ import AppLogo from "../AppLogo/AppLogo";
 import "../../../../Assets/scssSharedStyles/AuthFormBox.scss";
 import {useAccountType} from "../../../../hooks/useAccountType";
 
-interface AccountTypeFormProps {}
+interface AccountTypeFormProps {
+}
 
-const AccountTypeForm: FC<AccountTypeFormProps> = () =>
-{
+const AccountTypeForm: FC<AccountTypeFormProps> = () => {
     const [renderCreatePasswordForm, setRenderCreatePasswordForm] = useState(false);
     const {accountType, setAccountType} = useAccountType();
+
     function HandleEmployerTypeSelection() {
         setAccountType("Employer");
         setRenderCreatePasswordForm(true);
@@ -21,9 +22,9 @@ const AccountTypeForm: FC<AccountTypeFormProps> = () =>
         setRenderCreatePasswordForm(true);
     }
 
-    
+
     return (
-            !renderCreatePasswordForm ? (
+        !renderCreatePasswordForm ? (
                 <AppLogo>
                     <div className="passpage-form-layout">
                         <div className="passpage-form-box">
@@ -50,13 +51,13 @@ const AccountTypeForm: FC<AccountTypeFormProps> = () =>
                         </div>
                     </div>
                 </AppLogo>
-             ) :
-             (
-                 <CreatePasswordForm>
-                 </CreatePasswordForm>
-             )
+            ) :
+            (
+                <CreatePasswordForm>
+                </CreatePasswordForm>
+            )
     )
-        
+
 };
 
 export default AccountTypeForm;

@@ -9,7 +9,7 @@ namespace API_IntegrationTests.Tests;
 public class ResumeControllerTests : IntegrationTest
 {
     private readonly string _baseUri = "/api/resume";
-    
+
     public ResumeControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {
     }
@@ -21,7 +21,7 @@ public class ResumeControllerTests : IntegrationTest
         await AuthenticateAsync();
         var createdResume = await CreateResume();
         var requestUri = $"{_baseUri}/{createdResume.Id}";
-        
+
         //Act
         var getResumeResponse = await TestClient.GetAsync(requestUri);
 
@@ -42,7 +42,7 @@ public class ResumeControllerTests : IntegrationTest
         var jobSeeker = await getCurrentJobSeekerResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
         var createdResumeDTO = ResumeFixtures.Resume;
         var requestUri = _baseUri;
-        
+
         //Act
         var createResumeResponse = await TestClient.PostAsJsonAsync(requestUri, createdResumeDTO);
 
@@ -53,9 +53,8 @@ public class ResumeControllerTests : IntegrationTest
         Assert.NotEqual(0, createdResume.Id);
         Assert.Equal(createdResume.JobSeekerAccountId, jobSeeker.Id);
         Assert.Equal(createdResumeDTO.Educations[0].LevelOfEducation, createdResume.Educations[0].LevelOfEducation);
-
     }
-    
+
     [Fact]
     public async Task DeleteResume_ShouldDeleteResume()
     {
@@ -63,7 +62,7 @@ public class ResumeControllerTests : IntegrationTest
         await AuthenticateAsync();
         var createdResume = await CreateResume();
         var requestUri = $"{_baseUri}/{createdResume.Id}";
-        
+
         //Act
         var deleteResumeResponse = await TestClient.DeleteAsync(requestUri);
 

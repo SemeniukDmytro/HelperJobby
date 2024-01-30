@@ -1,70 +1,69 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#nullable disable
 
-#nullable disable
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ApplicationDAL.AppContextMigrations
+namespace ApplicationDAL.AppContextMigrations;
+
+/// <inheritdoc />
+public partial class SalaryRateAndShowPayByAttributesAddedToJobEntities : Migration
 {
     /// <inheritdoc />
-    public partial class SalaryRateAndShowPayByAttributesAddedToJobEntities : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<string>(
-                name: "SalaryRate",
-                table: "Jobs",
-                type: "varchar(9)",
+        migrationBuilder.AddColumn<string>(
+                "SalaryRate",
+                "Jobs",
+                "varchar(9)",
                 maxLength: 9,
                 nullable: false,
                 defaultValue: "")
-                .Annotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AddColumn<string>(
-                name: "ShowPayBy",
-                table: "Jobs",
-                type: "varchar(14)",
+        migrationBuilder.AddColumn<string>(
+                "ShowPayBy",
+                "Jobs",
+                "varchar(14)",
                 maxLength: 14,
                 nullable: false,
                 defaultValue: "")
-                .Annotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AddColumn<string>(
-                name: "SalaryRate",
-                table: "CurrentJobCreations",
-                type: "varchar(9)",
+        migrationBuilder.AddColumn<string>(
+                "SalaryRate",
+                "CurrentJobCreations",
+                "varchar(9)",
                 maxLength: 9,
                 nullable: false,
                 defaultValue: "")
-                .Annotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AddColumn<string>(
-                name: "ShowPayBy",
-                table: "CurrentJobCreations",
-                type: "varchar(14)",
+        migrationBuilder.AddColumn<string>(
+                "ShowPayBy",
+                "CurrentJobCreations",
+                "varchar(14)",
                 maxLength: 14,
                 nullable: false,
                 defaultValue: "")
-                .Annotation("MySql:CharSet", "utf8mb4");
-        }
+            .Annotation("MySql:CharSet", "utf8mb4");
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "SalaryRate",
-                table: "Jobs");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropColumn(
+            "SalaryRate",
+            "Jobs");
 
-            migrationBuilder.DropColumn(
-                name: "ShowPayBy",
-                table: "Jobs");
+        migrationBuilder.DropColumn(
+            "ShowPayBy",
+            "Jobs");
 
-            migrationBuilder.DropColumn(
-                name: "SalaryRate",
-                table: "CurrentJobCreations");
+        migrationBuilder.DropColumn(
+            "SalaryRate",
+            "CurrentJobCreations");
 
-            migrationBuilder.DropColumn(
-                name: "ShowPayBy",
-                table: "CurrentJobCreations");
-        }
+        migrationBuilder.DropColumn(
+            "ShowPayBy",
+            "CurrentJobCreations");
     }
 }

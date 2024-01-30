@@ -12,17 +12,13 @@ public class LoginUserDTOValidator : AbstractValidator<LoginUserDTO>
             .NotEmpty().WithMessage("Password can not be empty")
             .Length(8, 25).WithMessage("Length of your password is invalid");
     }
-    
+
     public static void ValidateUser(LoginUserDTO user)
     {
         CommonValidator.BeValidEmail(user.Email);
         var validator = new LoginUserDTOValidator();
         var validationResult = validator.Validate(user);
 
-        if (!validationResult.IsValid)
-        {
-            throw new InvalidUserException(validationResult.ToString());
-        }
+        if (!validationResult.IsValid) throw new InvalidUserException(validationResult.ToString());
     }
-    
 }

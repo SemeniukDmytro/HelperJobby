@@ -7,14 +7,15 @@ namespace ApplicationBLL.Services;
 
 public class JobApplyService : IJobApplyService
 {
-    private readonly IUserService _userService;
-    private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
-    private readonly IJobApplyQueryRepository _jobApplyQueryRepository;
     private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
+    private readonly IJobApplyQueryRepository _jobApplyQueryRepository;
     private readonly IJobQueryRepository _jobQueryRepository;
+    private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+    private readonly IUserService _userService;
 
     public JobApplyService(IUserService userService, IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository,
-        IJobApplyQueryRepository jobApplyQueryRepository, IEmployerAccountQueryRepository employerAccountQueryRepository, IJobQueryRepository jobQueryRepository)
+        IJobApplyQueryRepository jobApplyQueryRepository,
+        IEmployerAccountQueryRepository employerAccountQueryRepository, IJobQueryRepository jobQueryRepository)
     {
         _userService = userService;
         _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
@@ -29,9 +30,7 @@ public class JobApplyService : IJobApplyService
         var currentEmployer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
         var job = await _jobQueryRepository.GetJobById(jobId);
         if (job.EmployerAccountId != currentEmployer.Id)
-        {
             throw new ForbiddenException("You can not have access to this information");
-        }
 
         return job;
     }
@@ -49,12 +48,9 @@ public class JobApplyService : IJobApplyService
         {
         }
 
-        if (jobApply != null)
-        {
-            throw new JobApplyingException("You have already applied");
-        }
-        
-        var createdJobApply = new JobApply()
+        if (jobApply != null) throw new JobApplyingException("You have already applied");
+
+        var createdJobApply = new JobApply
         {
             JobId = jobId,
             JobSeekerAccountId = currentJobSeeker.Id,

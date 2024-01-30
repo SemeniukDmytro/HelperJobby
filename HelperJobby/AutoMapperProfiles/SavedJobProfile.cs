@@ -15,7 +15,7 @@ public class SavedJobProfile : Profile
             dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccount, JobSeekerAccountDTO>(src.JobSeekerAccount);
             dest.Job = context.Mapper.Map<Job, JobDTO>(src.Job);
         });
-        
+
         CreateMap<SavedJobDTO, SavedJob>().AfterMap((src, dest, context) =>
         {
             dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccountDTO, JobSeekerAccount>(src.JobSeekerAccount);

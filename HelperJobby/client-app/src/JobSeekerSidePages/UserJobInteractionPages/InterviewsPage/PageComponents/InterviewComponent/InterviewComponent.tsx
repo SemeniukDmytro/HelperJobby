@@ -2,7 +2,7 @@ import React, {FC, useState} from 'react';
 import './InterviewComponent.scss';
 import {InterviewDTO} from "../../../../../DTOs/userJobInteractionsDTOs/InterviewDTO";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faBuilding, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import {faBuilding, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import DialogWindow from "../../../../../Components/DialogWindow/DialogWindow";
 import {useJobSeekerJobInteractions} from "../../../../../hooks/useJobSeekerJobInteractions";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
@@ -26,12 +26,13 @@ const InterviewComponent: FC<InterviewComponentProps> = ({interview}) => {
     const interviewService = new InterviewService();
     const navigate = useNavigate();
 
-    function navigateToJobPage(){
+    function navigateToJobPage() {
         navigate(`/viewjob/${interview.job.id}`);
     }
+
     const formatTimeRange = (start: string, end: string): string => {
-        const dateOptions: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long' };
-        const timeOptions: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+        const dateOptions: Intl.DateTimeFormatOptions = {day: 'numeric', month: 'long'};
+        const timeOptions: Intl.DateTimeFormatOptions = {hour: 'numeric', minute: 'numeric', hour12: true};
 
         const startDate = new Date(start);
         const endDate = new Date(start);
@@ -47,25 +48,24 @@ const InterviewComponent: FC<InterviewComponentProps> = ({interview}) => {
 
         return `${dateFormatted}, from ${startTimeFormatted} to ${endTimeFormatted}.`;
     };
-    
-    function toggleShowAppointmentInfo(){
-        if (showAppointmentInfo){
+
+    function toggleShowAppointmentInfo() {
+        if (showAppointmentInfo) {
             setAppointmentInfoText("Show appointment info");
             setShowAppointmentInfo(false);
-        }
-        else {
+        } else {
             setAppointmentInfoText("Hide appointment info");
             setShowAppointmentInfo(true);
         }
     }
-    
-    function showCancelInterviewDialog(){
+
+    function showCancelInterviewDialog() {
         setShowDialog(true);
     }
-    
-    async function cancelInterview(){
+
+    async function cancelInterview() {
         try {
-            if (requestInProcess){
+            if (requestInProcess) {
                 return;
             }
             setRequestInProcess(true);
@@ -74,12 +74,10 @@ const InterviewComponent: FC<InterviewComponentProps> = ({interview}) => {
                 .filter(i => i.jobId !== interview.jobId));
         } catch (error) {
             logErrorInfo(error)
-        }
-        finally {
+        } finally {
             setRequestInProcess(false);
         }
     }
-    
 
 
     return (
@@ -92,63 +90,77 @@ const InterviewComponent: FC<InterviewComponentProps> = ({interview}) => {
                 firstButtonText={firstDialogButtonText}
                 secondButtonText={secondDialogButtonText}
                 positiveDialog={false}
-                secondButtonOnClick={cancelInterview}/>
+                secondButtonOnClick={cancelInterview}
+            />
             <div className={"ji-job-block"}>
                 <div className={"ji-job-layout"}>
-                        <div className={"ji-job-fb"}>
-                            <div className={"ji-job-icon-box"}>
-                                <FontAwesomeIcon icon={faBuilding}/>
-                            </div>
-    
-                            <div className={"ji-interview-info-fb"}>
-                                <div className={"ji-job-info-box"} onClick={navigateToJobPage}>
-                                    <span className={"ji-job-title"}>{interview.job.jobTitle}</span>
+                    <div className={"ji-job-fb"}>
+                        <div className={"ji-job-icon-box"}>
+                            <FontAwesomeIcon icon={faBuilding}/>
+                        </div>
+
+                        <div className={"ji-interview-info-fb"}>
+                            <div className={"ji-job-info-box"} onClick={navigateToJobPage}>
+                                <span className={"ji-job-title"}>{interview.job.jobTitle}</span>
+                                <span
+                                    className={"dark-default-text"}
+                                >{interview.job.employerAccount.organization.name}</span>
+                                <span className={"dark-default-text"}>{interview.job.location}</span>
+                                <div>
+                                    <span className={"dark-default-text"}>Interview format:&nbsp;</span>
+                                    <span className={"dark-default-text bold-text"}>{interview.interviewType}</span>
+                                </div>
+                                <div>
+                                    <span className={"light-dark-small-text"}>Interview scheduled for&nbsp;</span>
                                     <span
-                                        className={"dark-default-text"}>{interview.job.employerAccount.organization.name}</span>
-                                    <span className={"dark-default-text"}>{interview.job.location}</span>
-                                    <div>
-                                        <span className={"dark-default-text"}>Interview format:&nbsp;</span>
-                                        <span className={"dark-default-text bold-text"}>{interview.interviewType}</span>
-                                    </div>
-                                    <div>
-                                        <span className={"light-dark-small-text"}>Interview scheduled for&nbsp;</span>
-                                        <span
-                                            className={"light-dark-small-text bold-text"}>{formatTimeRange(interview.interviewStart, interview.interviewEnd)}</span>
-                                    </div>
+                                        className={"light-dark-small-text bold-text"}
+                                    >{formatTimeRange(interview.interviewStart, interview.interviewEnd)}</span>
                                 </div>
-                                <div className={"small-margin-bottom small-margin-top"}></div>
-                                <div className={"bold-navigation-link"} onClick={toggleShowAppointmentInfo}>
-                                    <span className={"icon-right-margin"}>{appointmentInfoText}</span>
-                                    {!showAppointmentInfo ?  <FontAwesomeIcon className={"svg1rem"} icon={faChevronDown}/> :
+                            </div>
+                            <div className={"small-margin-bottom small-margin-top"}></div>
+                            <div className={"bold-navigation-link"} onClick={toggleShowAppointmentInfo}>
+                                <span className={"icon-right-margin"}>{appointmentInfoText}</span>
+                                {!showAppointmentInfo ? <FontAwesomeIcon className={"svg1rem"} icon={faChevronDown}/> :
                                     <FontAwesomeIcon className={"svg1rem"} icon={faChevronUp}/>}
-                                </div>
-                                {showAppointmentInfo && <div className={"appointment-info"}>
-                                    <div className={"small-margin-bottom small-margin-top"}></div>
-                                    <div>
-                                        {interview.interviewType === "Video" && 
+                            </div>
+                            {showAppointmentInfo && <div className={"appointment-info"}>
+                                <div className={"small-margin-bottom small-margin-top"}></div>
+                                <div>
+                                    {interview.interviewType === "Video" &&
                                         <div className={"appointment-info-container"}>
                                             <span className={"dark-default-text"}>Video conference link:&nbsp;</span>
-                                            <a style={{maxWidth : "100%"}} href={`${interview.appointmentInfo}`}>{interview.appointmentInfo}</a>
+                                            <a
+                                                style={{maxWidth: "100%"}}
+                                                href={`${interview.appointmentInfo}`}
+                                            >{interview.appointmentInfo}</a>
                                         </div>}
-                                        {interview.interviewType === "Phone" &&
-                                            <div className={"appointment-info-container"}>
-                                                <span className={"dark-default-text"}>Contact phone number:&nbsp;</span>
-                                                <span className={"dark-default-text bold-text"}>{interview.appointmentInfo}</span>
-                                            </div>}
-                                        {interview.interviewType === "In-person" &&
-                                            <div className={"appointment-info-container"}>
-                                                <span className={"dark-default-text"}>Address:&nbsp;</span>
-                                                <a style={{maxWidth : "100%"}} href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(interview.appointmentInfo)}`} target="_blank" rel="noopener noreferrer">
-                                                    {interview.appointmentInfo}
-                                                </a>                                            
-                                            </div>}
-                                    </div>
-                                </div>}
-                            </div>
+                                    {interview.interviewType === "Phone" &&
+                                        <div className={"appointment-info-container"}>
+                                            <span className={"dark-default-text"}>Contact phone number:&nbsp;</span>
+                                            <span className={"dark-default-text bold-text"}>{interview.appointmentInfo}</span>
+                                        </div>}
+                                    {interview.interviewType === "In-person" &&
+                                        <div className={"appointment-info-container"}>
+                                            <span className={"dark-default-text"}>Address:&nbsp;</span>
+                                            <a
+                                                style={{maxWidth: "100%"}}
+                                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(interview.appointmentInfo)}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                {interview.appointmentInfo}
+                                            </a>
+                                        </div>}
+                                </div>
+                            </div>}
+                        </div>
                     </div>
                     <div className={"ji-apply-fb"}>
                         <div>
-                            <button className={"light-button-with-margin button-without-margin"} onClick={showCancelInterviewDialog}>
+                            <button
+                                className={"light-button-with-margin button-without-margin"}
+                                onClick={showCancelInterviewDialog}
+                            >
                                 Cancel interview
                             </button>
                         </div>

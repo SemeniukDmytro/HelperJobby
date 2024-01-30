@@ -10,10 +10,11 @@ namespace API_IntegrationTests.Tests;
 public class JobControllerTests : IntegrationTest
 {
     private readonly string _baseUri = "/api/job";
+
     public JobControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {
     }
-    
+
     [Fact]
     public async Task GetJobsByOrganizationId_ShouldReturnIEnumerableOfJobs()
     {
@@ -22,11 +23,11 @@ public class JobControllerTests : IntegrationTest
         var firstCreatedJob = await CreateJob();
         var secondCreatedJob = await CreateJob();
         var requestUri = $"{_baseUri}/organization-jobs/{employer.OrganizationId}";
-        
+
         //Act
         var getJobsResponse = await TestClient.GetAsync(requestUri);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(getJobsResponse, TestOutputHelper);
-        
+
         //Assert
         Assert.Equal(HttpStatusCode.OK, getJobsResponse.StatusCode);
         var jobs = (await getJobsResponse.Content.ReadAsAsync<IEnumerable<JobDTO>>()).ToList();
@@ -43,11 +44,11 @@ public class JobControllerTests : IntegrationTest
         var firstCreatedJob = await CreateJob();
         var secondCreatedJob = await CreateJob();
         var requestUri = $"{_baseUri}/jobs/{employer.UserId}";
-        
+
         //Act
         var getJobsResponse = await TestClient.GetAsync(requestUri);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(getJobsResponse, TestOutputHelper);
-        
+
         //Assert
         Assert.Equal(HttpStatusCode.OK, getJobsResponse.StatusCode);
         var jobs = (await getJobsResponse.Content.ReadAsAsync<IEnumerable<JobDTO>>()).ToList();
@@ -55,7 +56,7 @@ public class JobControllerTests : IntegrationTest
         Assert.Equal(jobs[0].Id, firstCreatedJob.Id);
         Assert.Equal(jobs[1].Id, secondCreatedJob.Id);
     }
-    
+
     [Fact]
     public async Task GetJob_ShouldReturnJob()
     {
@@ -63,11 +64,11 @@ public class JobControllerTests : IntegrationTest
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
         var createdJob = await CreateJob();
         var requestUri = $"{_baseUri}/{createdJob.Id}";
-        
+
         //Act
         var getJobResponse = await TestClient.GetAsync(requestUri);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(getJobResponse, TestOutputHelper);
-        
+
         //Assert
         Assert.Equal(HttpStatusCode.OK, getJobResponse.StatusCode);
         var job = await getJobResponse.Content.ReadAsAsync<JobDTO>();
@@ -82,7 +83,7 @@ public class JobControllerTests : IntegrationTest
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
         var currentJobCreation = await CreateNewCurrentJob(CurrentJobFixtures.CompletedJobCreation);
         var requestUri = $"/api/job/{currentJobCreation.Id}";
-        
+
         //Act
         var jobCreateResponse = await TestClient.PostAsJsonAsync(requestUri, currentJobCreation.Id);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(jobCreateResponse, TestOutputHelper);
@@ -105,27 +106,27 @@ public class JobControllerTests : IntegrationTest
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
         var createdJob = await CreateJob();
         var requestUri = $"{_baseUri}/{createdJob.Id}";
-        UpdatedJobDTO updatedJobDTO = new UpdatedJobDTO()
+        var updatedJobDTO = new UpdatedJobDTO
         {
             JobTitle = "Software Engineer",
             NumberOfOpenings = 3,
             Language = "C#",
             Location = "New York",
-            JobType = new List<JobTypes> { JobTypes.FullTime, },
+            JobType = new List<JobTypes> { JobTypes.FullTime },
             Salary = 80000.0m,
             SalaryRate = "per year",
             ShowPayBy = "minimal amount",
             Schedule = new List<Schedules> { Schedules.MondayToFriday },
-            Benefits = new List<EmployeeBenefits> {},
+            Benefits = new List<EmployeeBenefits>(),
             ContactEmail = "hr@gmail.com",
             ResumeRequired = true,
             Description = "We are looking for experienced software engineers to join our team."
         };
-        
+
         //Act
         var updateJobResponse = await TestClient.PutAsJsonAsync(requestUri, updatedJobDTO);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(updateJobResponse, TestOutputHelper);
-        
+
         //Assert
         Assert.Equal(HttpStatusCode.OK, updateJobResponse.StatusCode);
         var updatedJob = await updateJobResponse.Content.ReadAsAsync<JobDTO>();
@@ -150,15 +151,14 @@ public class JobControllerTests : IntegrationTest
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
         var createdJob = await CreateJob();
         var requestUri = $"{_baseUri}/{createdJob.Id}";
-        
+
         //Act
         var deleteJobResponse = await TestClient.DeleteAsync(requestUri);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(deleteJobResponse, TestOutputHelper);
         var getJobResponse = await TestClient.GetAsync(requestUri);
-        
+
         //Assert
         Assert.Equal(HttpStatusCode.OK, deleteJobResponse.StatusCode);
         Assert.Equal(HttpStatusCode.NotFound, getJobResponse.StatusCode);
-
     }
 }

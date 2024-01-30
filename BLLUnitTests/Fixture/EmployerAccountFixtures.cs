@@ -4,33 +4,33 @@ namespace BLLUnitTests.Fixture;
 
 public static class EmployerAccountFixtures
 {
-    public static EmployerAccount EmployerAccountEntity = new EmployerAccount()
+    public static EmployerAccount EmployerAccountEntity = new()
     {
         Id = 1,
         FullName = "test name",
         Email = "test@gmail.com",
         UserId = 1,
-        Jobs = new List<Job>()
+        Jobs = new List<Job>
         {
             JobFixtures.FirstJobEntity
         },
-        Organization = new Organization()
+        Organization = new Organization
         {
             Name = "newOrganization"
         }
     };
-    
-    public static EmployerAccount SecondEmployerAccountEntity = new EmployerAccount()
+
+    public static EmployerAccount SecondEmployerAccountEntity = new()
     {
         Id = 2,
         FullName = "test name",
         Email = "secondEmployer@gmail.com",
         UserId = 2,
-        Jobs = new List<Job>()
+        Jobs = new List<Job>
         {
             JobFixtures.FirstJobEntity
         },
-        Organization = new Organization()
+        Organization = new Organization
         {
             Name = "newOrganization"
         }

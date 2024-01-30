@@ -1,7 +1,6 @@
 using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
-using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +11,8 @@ public class EmployerAccountCommandRepository : IEmployerAccountCommandRepositor
     private readonly ApplicationContext _applicationContext;
     private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
 
-    public EmployerAccountCommandRepository(ApplicationContext applicationContext, IEmployerAccountQueryRepository employerAccountQueryRepository)
+    public EmployerAccountCommandRepository(ApplicationContext applicationContext,
+        IEmployerAccountQueryRepository employerAccountQueryRepository)
     {
         _applicationContext = applicationContext;
         _employerAccountQueryRepository = employerAccountQueryRepository;
@@ -20,10 +20,7 @@ public class EmployerAccountCommandRepository : IEmployerAccountCommandRepositor
 
     public async Task<EmployerAccount> Create(EmployerAccount account)
     {
-        if (account.OrganizationId != 0)
-        {
-            _applicationContext.Attach(account.Organization);
-        }
+        if (account.OrganizationId != 0) _applicationContext.Attach(account.Organization);
         _applicationContext.EmployerAccounts.Add(account);
         await _applicationContext.SaveChangesAsync();
         return account;

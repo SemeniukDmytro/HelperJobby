@@ -9,53 +9,52 @@ import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import JobFullInfoComponent from "../JobFullInfoComponent/JobFullInfoComponent";
 import SearchBarForJobPage from "../SearchBarForJobPage/SearchBarForJobPage";
 
-interface JobComponentProps {}
+interface JobComponentProps {
+}
 
 const ViewJobComponent: FC<JobComponentProps> = () => {
     const [job, setJob] = useState<JobDTO | null>(null);
-    const { jid} = useParams<{ jid: string }>();
+    const {jid} = useParams<{ jid: string }>();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const jobService = new JobService();
-    
+
     useEffect(() => {
-        if (!jid){
+        if (!jid) {
             navigate("*");
             return;
         }
         fetchJob();
-        
+
     }, []);
-    
-    
-    async function fetchJob(){
+
+
+    async function fetchJob() {
         try {
             setLoading(true);
             const jobId = Number.parseInt(jid!);
             const retrievedJob = await jobService.getJobById(jobId);
             setJob(retrievedJob);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
             navigate("*")
-        }
-        finally {
+        } finally {
             setLoading(false);
         }
     }
-    
-    
+
+
     return (
         <PageWrapWithHeader>
             <div className={"job-page-layout"}>
                 <SearchBarForJobPage/>
-                {loading ? <LoadingPage/> : 
-                <JobFullInfoComponent job={job!}/>}
+                {loading ? <LoadingPage/> :
+                    <JobFullInfoComponent job={job!}/>}
             </div>
         </PageWrapWithHeader>
     )
-    
-    
+
+
 }
 
 export default ViewJobComponent;

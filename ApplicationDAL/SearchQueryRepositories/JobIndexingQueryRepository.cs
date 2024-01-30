@@ -13,7 +13,7 @@ public class JobIndexingQueryRepository : IJobIndexingQueryRepository
     {
         _applicationContext = applicationContext;
     }
-    
+
     public async Task<IEnumerable<JobIndexedWord>> GetJobIndexedWords(List<string> words)
     {
         var results = await _applicationContext.IndexedJobWords
@@ -28,5 +28,4 @@ public class JobIndexingQueryRepository : IJobIndexingQueryRepository
             .Where(w => w.JobId == jobId).ToListAsync();
         return receivedWords;
     }
-
 }

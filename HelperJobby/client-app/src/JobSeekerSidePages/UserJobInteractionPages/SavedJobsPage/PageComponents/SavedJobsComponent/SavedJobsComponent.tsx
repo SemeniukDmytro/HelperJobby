@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import './SavedJobsComponent.scss';
 import UserJobInteractionPagesHeader
     from "../../../SharedComponents/UserJobInteractionPagesHeader/UserJobInteractionPagesHeader";
@@ -12,19 +12,19 @@ interface SavedJobsComponentProps {
 
 const SavedJobsComponent: FC<SavedJobsComponentProps> = () => {
     const {savedJobs, fetchJobSeekerJobInteractions, requestInProgress} = useJobSeekerJobInteractions();
-    
+
     useEffect(() => {
-        if (!savedJobs){
+        if (!savedJobs) {
             fetchJobSeekerJobInteractions();
         }
     }, [savedJobs]);
-    
+
     return (
-       requestInProgress ? <LoadingPage/> :
-           (<UserJobInteractionPagesHeader userJobInteractionType={UserJobInteractionsTypes.saved}>
-               {savedJobs!.map((savedJob, index) => (
-                        <SavedJobComponent job={savedJob.job} key={index} interactionTime={savedJob.dateSaved}/>))
-               }
+        requestInProgress ? <LoadingPage/> :
+            (<UserJobInteractionPagesHeader userJobInteractionType={UserJobInteractionsTypes.saved}>
+                {savedJobs!.map((savedJob, index) => (
+                    <SavedJobComponent job={savedJob.job} key={index} interactionTime={savedJob.dateSaved}/>))
+                }
             </UserJobInteractionPagesHeader>)
     );
 }

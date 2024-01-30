@@ -14,13 +14,15 @@ import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentP
 import {isNotEmpty} from "../../../../../utils/validationLogic/isNotEmptyString";
 import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
 
-interface ResumeNameComponentProps {}
+interface ResumeNameComponentProps {
+}
 
 const AddNameComponent: FC<ResumeNameComponentProps> = () => {
     const {
         setProgressPercentage,
         setSaveFunc,
-        setShowDialogWindow} = useResumeBuild();
+        setShowDialogWindow
+    } = useResumeBuild();
     const jobSeekerService = new JobSeekerAccountService();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
@@ -30,12 +32,11 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
     const [savingInfo, setSavingInfo] = useState(false);
     const firstNameInputRef = useRef<HTMLInputElement>(null);
     const lastNameInputRef = useRef<HTMLInputElement>(null);
-    
+
     useEffect(() => {
-        if (!firstName){
+        if (!firstName) {
             firstNameInputRef.current?.focus();
-        }
-        else if (!lastName){
+        } else if (!lastName) {
             lastNameInputRef.current?.focus();
         }
         setProgressPercentage(ProgressPercentPerPage);
@@ -44,29 +45,30 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
     useEffect(() => {
         setSaveFunc(() => customSaveFunc);
     }, [firstName, lastName]);
-    async function customSaveFunc(){
+
+    async function customSaveFunc() {
         await updateJobSeekerCredentials("/my-profile", true)
     }
 
-    async function moveToPhonePage(e: React.MouseEvent<HTMLButtonElement> ) {
+    async function moveToPhonePage(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
         await updateJobSeekerCredentials("/build/phone", false);
     }
-    async function updateJobSeekerCredentials(resultPageURI : string, isSaveAndExitAction : boolean){
-        if(!isNotEmpty(firstName)){
+
+    async function updateJobSeekerCredentials(resultPageURI: string, isSaveAndExitAction: boolean) {
+        if (!isNotEmpty(firstName)) {
             if (firstNameInputRef.current) {
                 firstNameInputRef.current.focus();
-                if (isSaveAndExitAction){
+                if (isSaveAndExitAction) {
                     setShowDialogWindow(true);
                 }
                 return;
             }
         }
-        if (!isNotEmpty(lastName))
-        {
-            if(lastNameInputRef.current){
+        if (!isNotEmpty(lastName)) {
+            if (lastNameInputRef.current) {
                 lastNameInputRef.current.focus();
-                if (isSaveAndExitAction){
+                if (isSaveAndExitAction) {
                     setShowDialogWindow(true);
                 }
                 return;
@@ -74,16 +76,16 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
         }
         try {
             setSavingInfo(true);
-            const updatedJobSeeker = updateJobSeekerDTO(firstName, lastName, jobSeeker!.phoneNumber, 
+            const updatedJobSeeker = updateJobSeekerDTO(firstName, lastName, jobSeeker!.phoneNumber,
                 jobSeeker!.address);
             const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
             setJobSeeker((prevState) => {
-                if (prevState){
+                if (prevState) {
 
-                    const updatedJobSeeker : JobSeekerAccountDTO = {
+                    const updatedJobSeeker: JobSeekerAccountDTO = {
                         ...prevState,
-                        firstName : response.firstName,
-                        lastName : response.lastName,
+                        firstName: response.firstName,
+                        lastName: response.lastName,
                     }
                     return updatedJobSeeker;
                 }
@@ -91,13 +93,11 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
             })
             navigate(resultPageURI);
 
-        }
-        catch (e) {
-            if (e instanceof ServerError){
+        } catch (e) {
+            if (e instanceof ServerError) {
                 logErrorInfo(e)
             }
-        }
-        finally {
+        } finally {
             setSavingInfo(false);
         }
     }
@@ -108,25 +108,29 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
             <div className={"build-page-header"}>
                 What is your name?
             </div>
-            <CustomInputField fieldLabel={"First name"}
-                              isRequired={true}
-                              inputFieldValue={firstName} 
-                              setInputFieldValue={setFirstName}
-                              inputRef={firstNameInputRef}/>
-            <CustomInputField fieldLabel={"Last name"}
-                              isRequired={true}
-                              inputFieldValue={lastName}
-                              setInputFieldValue={setLastName}
-                              inputRef={lastNameInputRef}/>
+            <CustomInputField
+                fieldLabel={"First name"}
+                isRequired={true}
+                inputFieldValue={firstName}
+                setInputFieldValue={setFirstName}
+                inputRef={firstNameInputRef}
+            />
+            <CustomInputField
+                fieldLabel={"Last name"}
+                isRequired={true}
+                inputFieldValue={lastName}
+                setInputFieldValue={setLastName}
+                inputRef={lastNameInputRef}
+            />
             <button className={"submit-form-button"} onClick={moveToPhonePage} disabled={savingInfo}>
                 {savingInfo ?
                     <WhiteLoadingSpinner/>
-                        :
+                    :
                     <span>Continue</span>
                 }
             </button>
         </form>
-        
+
     )
 };
 

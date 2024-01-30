@@ -1,15 +1,16 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import './PreviewResumeComponent.scss';
 import ResumePreviewHeader from "../ResumePreviewHeader/ResumePreviewHeader";
 import ResumeInfoComponent from "../../../../../Components/ResumeInfoComponent/ResumeInfoComponent";
 
-interface PreviewResumeComponentProps {}
+interface PreviewResumeComponentProps {
+}
 
 const PreviewResumeComponent: FC<PreviewResumeComponentProps> = () => (
-  <>
-      <ResumePreviewHeader/>
-      <ResumeInfoComponent/>
-  </>
+    <>
+        <ResumePreviewHeader/>
+        <ResumeInfoComponent/>
+    </>
 );
 
 export default PreviewResumeComponent;

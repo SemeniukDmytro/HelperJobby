@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import AddPhoneComponent from "./PageComponents/AddPhoneComponent/AddPhoneComponent";
 
-interface ResumePhonePageProps {}
+interface ResumePhonePageProps {
+}
 
 const AddPhonePage: FC<ResumePhonePageProps> = () => (
-   <AddPhoneComponent/>
+    <AddPhoneComponent/>
 );
 
 export default AddPhonePage;

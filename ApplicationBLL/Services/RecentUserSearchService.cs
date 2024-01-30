@@ -8,11 +8,13 @@ namespace ApplicationBLL.Services;
 
 public class RecentUserSearchService : IRecentUserSearchService
 {
-    private readonly IUserService _userService;
     private readonly IRecentUserSearchCommandRepository _recentUserSearchCommandRepository;
     private readonly IRecentUserSearchQueryRepository _recentUserSearchQueryRepository;
+    private readonly IUserService _userService;
 
-    public RecentUserSearchService(IUserService userService, IRecentUserSearchCommandRepository recentUserSearchCommandRepository, IRecentUserSearchQueryRepository recentUserSearchQueryRepository)
+    public RecentUserSearchService(IUserService userService,
+        IRecentUserSearchCommandRepository recentUserSearchCommandRepository,
+        IRecentUserSearchQueryRepository recentUserSearchQueryRepository)
     {
         _userService = userService;
         _recentUserSearchCommandRepository = recentUserSearchCommandRepository;
@@ -21,12 +23,9 @@ public class RecentUserSearchService : IRecentUserSearchService
 
     public async Task AddRecentSearch(string query, string location, int userId)
     {
-        if (string.IsNullOrEmpty(query))
-        {
-            throw new InvalidSearchException();
-        }
+        if (string.IsNullOrEmpty(query)) throw new InvalidSearchException();
 
-        var recentUserSearch = new RecentUserSearch()
+        var recentUserSearch = new RecentUserSearch
         {
             Location = location,
             Query = query,
@@ -34,9 +33,7 @@ public class RecentUserSearchService : IRecentUserSearchService
         };
         var recentSearches = (await _recentUserSearchQueryRepository.GetRecentUserSearches(userId)).ToArray();
         if (recentSearches.Length >= 10)
-        {
             await _recentUserSearchCommandRepository.DeleteRecentUserSearch(recentSearches.First());
-        }
         await _recentUserSearchCommandRepository.CreateRecentUserSearch(recentUserSearch);
     }
 
@@ -44,10 +41,7 @@ public class RecentUserSearchService : IRecentUserSearchService
     {
         var searchEntity = await _recentUserSearchQueryRepository.GetRecentUserSearchById(searchId);
         var currentUserId = _userService.GetCurrentUserId();
-        if (searchEntity.UserId != currentUserId)
-        {
-            throw new ForbiddenException();
-        }
+        if (searchEntity.UserId != currentUserId) throw new ForbiddenException();
 
         return searchEntity;
     }

@@ -1,4 +1,4 @@
-export enum JobQueryParams{
+export enum JobQueryParams {
     Pay,
     JobType,
     Language

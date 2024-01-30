@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import "./JobDetailsFeatureBox.scss"
 
 interface JobDetailsFeatureBoxProps {
-    featureText : string;
+    featureText: string;
 }
 
 const JobDetailsFeatureBox: FC<JobDetailsFeatureBoxProps> = (props) => (

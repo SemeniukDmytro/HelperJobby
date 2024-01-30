@@ -34,7 +34,7 @@ const SignInForm: FC<SignInFormProps> = () => {
     const [isSuccessfulNotify, setIsSuccessfulNotify] = useState(false);
     const [notifyMessage, setNotifyMessage] = useState("");
     const [showPopup, setShowPopup] = useState(false);
-    
+
     const [renderEmailForm, setRenderEmailForm] = useState(false);
 
     const isEmptyPassword = password.trim() == "";
@@ -85,7 +85,8 @@ const SignInForm: FC<SignInFormProps> = () => {
                         isSuccessful={isSuccessfulNotify}
                         text={notifyMessage}
                         showNotify={showPopup}
-                        setShowNotify={setShowPopup}/>}
+                        setShowNotify={setShowPopup}
+                    />}
                     <div className="passpage-form-layout">
                         <div className="passpage-form-box">
                             <div className="passpage-form-title-box">
@@ -104,12 +105,13 @@ const SignInForm: FC<SignInFormProps> = () => {
                             <div className={"content-separation-margin"}></div>
                             <form className="passpage-form" onSubmit={AuthUser}>
                                 <CustomPasswordInputField
-                                    password={password} 
+                                    password={password}
                                     setPassword={setPassword}
                                     fieldLabel={"Enter your password"}
                                     fieldError={error}
                                     setFieldError={setError}
-                                    showRequiredMark={true}/>
+                                    showRequiredMark={true}
+                                />
                                 <button className="blue-button" disabled={isEmptyPassword}>
                                     <span>Sign in</span>
                                     <FontAwesomeIcon className="continue-arrow svg125rem" icon={faArrowRightLong}/>

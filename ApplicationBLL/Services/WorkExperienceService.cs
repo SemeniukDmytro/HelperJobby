@@ -8,13 +8,14 @@ namespace ApplicationBLL.Services;
 
 public class WorkExperienceService : IWorkExperienceService
 {
+    private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
+    private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
     private readonly IUserService _userService;
     private readonly IWorkExperienceQueryRepository _workExperienceQueryRepository;
-    private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
-    private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
 
-    public WorkExperienceService(IUserService userService, 
-        IWorkExperienceQueryRepository workExperienceQueryRepository, IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository,
+    public WorkExperienceService(IUserService userService,
+        IWorkExperienceQueryRepository workExperienceQueryRepository,
+        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository,
         IEnqueuingTaskHelper enqueuingTaskHelper)
     {
         _userService = userService;
@@ -28,9 +29,7 @@ public class WorkExperienceService : IWorkExperienceService
         var currentUserId = _userService.GetCurrentUserId();
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
         if (jobSeekerAccount.Resume.Id != resumeId)
-        {
             throw new ForbiddenException("You can not add work experience to this resume");
-        }
 
         workExperience.ResumeId = resumeId;
         return workExperience;
@@ -41,10 +40,7 @@ public class WorkExperienceService : IWorkExperienceService
         var currentUserId = _userService.GetCurrentUserId();
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
         var workExperienceEntity = await _workExperienceQueryRepository.GetWorkExperienceById(workExperienceId);
-        if (workExperienceEntity.ResumeId != jobSeekerAccount.Resume.Id)
-        {
-            throw new ForbiddenException();
-        }
+        if (workExperienceEntity.ResumeId != jobSeekerAccount.Resume.Id) throw new ForbiddenException();
 
         var oldWorkExperienceJobTitle = workExperienceEntity.JobTitle;
         workExperienceEntity = UpdateWorkExperience(workExperienceEntity, updatedWorkExperience);
@@ -62,32 +58,24 @@ public class WorkExperienceService : IWorkExperienceService
         var isInvalidResume = false;
         var currentUserId = _userService.GetCurrentUserId();
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        if (jobSeekerAccount.Resume == null)
-        {
-            throw new ResumeNotFoundException();
-        }
-        var workExperience = jobSeekerAccount.Resume.WorkExperiences.FirstOrDefault(we => we.WorkExperienceId == workExperienceId);
+        if (jobSeekerAccount.Resume == null) throw new ResumeNotFoundException();
+        var workExperience =
+            jobSeekerAccount.Resume.WorkExperiences.FirstOrDefault(we => we.WorkExperienceId == workExperienceId);
 
-        if (workExperience == null)
-        {
-            throw new ForbiddenException();
-        }
+        if (workExperience == null) throw new ForbiddenException();
         if (jobSeekerAccount.Resume.Educations.Count == 0 && jobSeekerAccount.Resume.WorkExperiences.Count <= 1
                                                           && jobSeekerAccount.Resume.Skills.Count == 0)
-        {
             isInvalidResume = true;
-        }
         workExperience.Resume = jobSeekerAccount.Resume;
         return (workExperience, isInvalidResume);
     }
 
-    private WorkExperience UpdateWorkExperience(WorkExperience workExperienceEntity, WorkExperience updatedWorkExperience)
+    private WorkExperience UpdateWorkExperience(WorkExperience workExperienceEntity,
+        WorkExperience updatedWorkExperience)
     {
         if (string.IsNullOrEmpty(workExperienceEntity.JobTitle))
-        {
             throw new InvalidWorkExperienceException("You can not pass the empty job title");
-        }
-        
+
         workExperienceEntity.From = updatedWorkExperience.From;
         workExperienceEntity.To = updatedWorkExperience.To;
         workExperienceEntity.Country = updatedWorkExperience.Country;
@@ -98,6 +86,4 @@ public class WorkExperienceService : IWorkExperienceService
         workExperienceEntity.CurrentlyWorkHere = updatedWorkExperience.CurrentlyWorkHere;
         return workExperienceEntity;
     }
-    
-   
 }

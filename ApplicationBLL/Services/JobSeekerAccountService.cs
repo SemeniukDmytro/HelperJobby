@@ -1,5 +1,3 @@
-using ApplicationBLL.Interfaces;
-using ApplicationBLL.Logic;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
@@ -10,10 +8,11 @@ namespace ApplicationBLL.Services;
 public class JobSeekerAccountService : IJobSeekerAccountService
 {
     private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
-    private readonly IUserService _userService;
     private readonly ISavedJobQueryRepository _savedJobQueryRepository;
-    
-    public JobSeekerAccountService(IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IUserService userService,
+    private readonly IUserService _userService;
+
+    public JobSeekerAccountService(IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository,
+        IUserService userService,
         ISavedJobQueryRepository savedJobQueryRepository)
     {
         _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
@@ -24,25 +23,13 @@ public class JobSeekerAccountService : IJobSeekerAccountService
     public async Task<JobSeekerAccount> UpdateJobSeekerAccount(int userId, JobSeekerAccount updatedAccount)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        if (userId != currentUserId)
-        {
-            throw new ForbiddenException();
-        }
+        if (userId != currentUserId) throw new ForbiddenException();
         var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithAddress(userId);
-        if (jobSeekerAccount.UserId != userId)
-        {
-            throw new ForbiddenException();
-        }
+        if (jobSeekerAccount.UserId != userId) throw new ForbiddenException();
 
-        if (!string.IsNullOrEmpty(updatedAccount.FirstName))
-        {
-            jobSeekerAccount.FirstName = updatedAccount.FirstName;
-        }
+        if (!string.IsNullOrEmpty(updatedAccount.FirstName)) jobSeekerAccount.FirstName = updatedAccount.FirstName;
 
-        if (!string.IsNullOrEmpty(updatedAccount.LastName))
-        {
-            jobSeekerAccount.LastName = updatedAccount.LastName;
-        }
+        if (!string.IsNullOrEmpty(updatedAccount.LastName)) jobSeekerAccount.LastName = updatedAccount.LastName;
         jobSeekerAccount.PhoneNumber = updatedAccount.PhoneNumber;
         if (jobSeekerAccount.Address == null)
         {
@@ -51,17 +38,14 @@ public class JobSeekerAccountService : IJobSeekerAccountService
         else if (updatedAccount.Address != null)
         {
             if (!string.IsNullOrEmpty(updatedAccount.Address.City))
-            {
                 jobSeekerAccount.Address.City = updatedAccount.Address.City;
-            }
 
             if (!string.IsNullOrEmpty(updatedAccount.Address.Country))
-            {
                 jobSeekerAccount.Address.Country = updatedAccount.Address.Country;
-            }
             jobSeekerAccount.Address.StreetAddress = updatedAccount.Address.StreetAddress;
             jobSeekerAccount.Address.PostalCode = updatedAccount.Address.PostalCode;
         }
+
         return jobSeekerAccount;
     }
 
@@ -78,12 +62,9 @@ public class JobSeekerAccountService : IJobSeekerAccountService
         {
         }
 
-        if (savedJob != null)
-        {
-            throw new JobSavingException("This job is already saved");
-        }
-        
-        var newSavedJob = new SavedJob()
+        if (savedJob != null) throw new JobSavingException("This job is already saved");
+
+        var newSavedJob = new SavedJob
         {
             JobId = jobId,
             JobSeekerAccountId = jobSeekerAccount.Id,

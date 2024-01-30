@@ -4,17 +4,19 @@ import {CreateUpdateUserDTO} from "../DTOs/userRelatedDTOs/CreateUpdateUserDTO";
 import {RecentUserSearchDTO} from "../DTOs/userRelatedDTOs/RecentUserSearchDTO";
 import {UpdateUserWIthCurrentPasswordDTO} from "../DTOs/userRelatedDTOs/UpdateUserWIthCurrentPasswordDTO";
 
-export class UserService{
-    private readonly baseURI : string = "api/user";
-    private readonly customFetchService : CustomFetchService;
+export class UserService {
+    private readonly baseURI: string = "api/user";
+    private readonly customFetchService: CustomFetchService;
+
     constructor() {
         this.customFetchService = new CustomFetchService()
     }
 
-    public async getUser(userId : number) : Promise<UserDTO>{
+    public async getUser(userId: number): Promise<UserDTO> {
         return (await this.customFetchService.get<UserDTO>(`${this.baseURI}/${userId}`));
     }
-    public async getCurrentUser() : Promise<UserDTO>{
+
+    public async getCurrentUser(): Promise<UserDTO> {
         return (await this.customFetchService.get<UserDTO>(`${this.baseURI}/current-user`));
     }
 

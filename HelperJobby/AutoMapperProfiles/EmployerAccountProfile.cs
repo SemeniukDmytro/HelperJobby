@@ -1,9 +1,8 @@
 using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Account;
-using EmployerAccountDTO = HelperJobby.DTOs.Account.EmployerAccountDTO;
-using OrganizationDTO = HelperJobby.DTOs.Organization.OrganizationDTO;
-using UserDTO = HelperJobby.DTOs.User.UserDTO;
+using HelperJobby.DTOs.Organization;
+using HelperJobby.DTOs.User;
 
 namespace HelperJobby.AutoMapperProfiles;
 
@@ -23,7 +22,7 @@ public class EmployerAccountProfile : Profile
         });
         CreateMap<CreateEmployerAccountDTO, EmployerAccount>().AfterMap((src, dest, context) =>
         {
-            dest.Organization = new Organization()
+            dest.Organization = new Organization
             {
                 Name = src.OrganizationName,
                 NumberOfEmployees = src.NumberOfEmployees,

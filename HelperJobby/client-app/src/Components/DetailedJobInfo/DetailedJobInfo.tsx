@@ -14,7 +14,7 @@ import JobDetailsFeatureBox
     from "../../JobSeekerSidePages/HomePage/PageComponents/JobDetailsFeatureBox/JobDetailsFeatureBox";
 
 interface DetailedJobInfoProps {
-    job : JobDTO
+    job: JobDTO
 }
 
 const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
@@ -31,6 +31,7 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
             setBenefitsButtonText("Show more")
         }
     }, [job]);
+
     function displayAllBenefits() {
         if (!showAllBenefits) {
             setBenefitsButtonText("Show less")
@@ -42,8 +43,8 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
             setShowAllBenefits(false);
         }
     }
-    
-    
+
+
     return (
         <div>
             <div className={"job-details-header"}>
@@ -60,7 +61,8 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                         </div>
                         <div className={"detailed-job-features"}>
                             <JobDetailsFeatureBox
-                                featureText={`$${thousandsDisplayHelper(job.salary)} ${job.salaryRate}`}/>
+                                featureText={`$${thousandsDisplayHelper(job.salary)} ${job.salaryRate}`}
+                            />
                         </div>
                     </div>
                 </div>
@@ -74,8 +76,10 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                         </div>
                         <div className={"detailed-job-features"}>
                             {job.jobType.map((jobType, index) => (
-                                <JobDetailsFeatureBox key={index}
-                                                      featureText={jobTypesEnumToStringMap(jobType)}></JobDetailsFeatureBox>
+                                <JobDetailsFeatureBox
+                                    key={index}
+                                    featureText={jobTypesEnumToStringMap(jobType)}
+                                ></JobDetailsFeatureBox>
                             ))}
                         </div>
                     </div>
@@ -90,8 +94,10 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                         </div>
                         <div className={"detailed-job-features"}>
                             {job.schedule.map((schedule, index) => (
-                                <JobDetailsFeatureBox key={index}
-                                                      featureText={schedulesEnumToStringMap(schedule)}></JobDetailsFeatureBox>
+                                <JobDetailsFeatureBox
+                                    key={index}
+                                    featureText={schedulesEnumToStringMap(schedule)}
+                                ></JobDetailsFeatureBox>
                             ))}
                         </div>
                     </div>
@@ -116,7 +122,8 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                 {job.benefits.length > 6 &&
                     <button className={"show-more-benefits-button"} onClick={displayAllBenefits}>
                         <span>{benefitsButtonText}</span>
-                        {!showAllBenefits && <FontAwesomeIcon className={"show-more-arrow svg1rem"} icon={faChevronDown}/>}
+                        {!showAllBenefits &&
+                            <FontAwesomeIcon className={"show-more-arrow svg1rem"} icon={faChevronDown}/>}
                         {showAllBenefits && <FontAwesomeIcon className={"show-more-arrow svg1rem"} icon={faChevronUp}/>}
                     </button>}
             </div>}

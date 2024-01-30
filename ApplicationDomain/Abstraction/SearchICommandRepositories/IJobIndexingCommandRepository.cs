@@ -8,5 +8,4 @@ public interface IJobIndexingCommandRepository
     public Task UpdateIndexedWordJobCount(JobIndexedWord indexedWord);
     public Task SaveProcessedJobWords(List<ProcessedJobWord> processedJobWords);
     public Task RemoveProcessedJobWords(int jobId);
-
 }

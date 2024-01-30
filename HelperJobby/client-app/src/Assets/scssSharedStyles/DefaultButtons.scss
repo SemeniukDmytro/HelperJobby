@@ -1,34 +1,36 @@
 @use "./global-variables";
 
-.light-button-with-margin{
+.light-button-with-margin {
   padding: 0.5rem 1rem;
   min-width: 2.25rem;
   border-radius: 0.5rem;
   background-color: transparent;
   margin-right: 1rem;
-  border : 1px solid global-variables.$neutral-color-400;
+  border: 1px solid global-variables.$neutral-color-400;
   cursor: pointer;
   color: global-variables.$dark-blue;
   font-weight: 600;
   line-height: 1.5;
   font-size: 1rem;
   transition: 0.2s;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
     border-color: global-variables.$dark-blue;
   }
-  &:active{
+
+  &:active {
     box-shadow: global-variables.$button-inner-shadow;
     background-color: global-variables.$light-blue-active;
     border-color: global-variables.$dark-blue-active;
   }
 }
 
-.button-without-margin{
+.button-without-margin {
   margin: 0;
 }
 
-.blue-button{
+.blue-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,19 +45,22 @@
   font-size: 1rem;
   line-height: 1.5;
   transition: 0.2s;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$dark-blue-hover;
   }
-  &:active{
+
+  &:active {
     background-color: global-variables.$dark-blue-active;
   }
-  &:disabled{
+
+  &:disabled {
     opacity: 0.7;
     pointer-events: none;
   }
 }
 
-.red-button{
+.red-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -70,46 +75,52 @@
   font-size: 1rem;
   line-height: 1.5;
   transition: 0.2s;
-  &:hover{
+
+  &:hover {
     background-color: rgb(131, 22, 27);;
   }
-  &:active{
+
+  &:active {
     background-color: rgb(95, 12, 16);
     box-shadow: global-variables.$button-inner-shadow;
   }
-  &:disabled{
+
+  &:disabled {
     opacity: 0.7;
     pointer-events: none;
   }
 }
 
-.transparent-button{
+.transparent-button {
   padding: 0.5rem 1rem;
   min-width: 2.25rem;
   border-radius: 0.5rem;
   background-color: transparent;
   margin-right: 1rem;
-  border : none;
+  border: none;
   cursor: pointer;
   color: global-variables.$dark-blue;
   font-weight: 600;
   line-height: 1.5;
   font-size: 1rem;
   transition: 0.2s;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
   }
-  &:active{
+
+  &:active {
     box-shadow: global-variables.$button-inner-shadow;
     background-color: global-variables.$light-blue-active;
   }
-  &:disabled{
+
+  &:disabled {
     opacity: 0.7;
     pointer-events: none;
   }
 }
 
-.medium-tr-btn-with-icon{
+.medium-tr-btn-with-icon {
   padding: 0.625rem;
   color: global-variables.$neutral-color-1000;
   border: none;
@@ -117,22 +128,25 @@
   background-color: transparent;
   cursor: pointer;
   transition: 0.2s;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
     color: global-variables.$dark-blue-hover;
   }
-  &:active{
+
+  &:active {
     color: global-variables.$dark-blue-active;
     background-color: global-variables.$light-blue-active;
     box-shadow: global-variables.$button-inner-shadow;
   }
-  &:disabled{
+
+  &:disabled {
     opacity: 0.7;
     pointer-events: none;
   }
 }
 
-.light-neutral-button{
+.light-neutral-button {
   display: flex;
   align-items: center;
   border: none;
@@ -142,21 +156,24 @@
   transition: 0.2s;
   color: global-variables.$neutral-color-900;
   background-color: global-variables.$neutral-color-300;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$neutral-color-400;
   }
-  &:active{
+
+  &:active {
     background-color: global-variables.$neutral-color-500;
     box-shadow: global-variables.$button-inner-shadow;
   }
-  &:disabled{
+
+  &:disabled {
     opacity: 0.7;
     pointer-events: none;
   }
-  
+
 }
 
-.light-neutral-button-with-icon{
+.light-neutral-button-with-icon {
   display: flex;
   align-items: center;
   border: none;
@@ -166,20 +183,23 @@
   transition: 0.2s;
   color: global-variables.$neutral-color-900;
   background-color: global-variables.$neutral-color-300;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$neutral-color-400;
   }
-  &:active{
+
+  &:active {
     background-color: global-variables.$neutral-color-500;
     box-shadow: global-variables.$button-inner-shadow;
   }
-  &:disabled{
+
+  &:disabled {
     opacity: 0.7;
     pointer-events: none;
   }
 }
 
-.dark-neutral-button{
+.dark-neutral-button {
   display: flex;
   align-items: center;
   border: none;
@@ -189,16 +209,18 @@
   transition: 0.2s;
   background-color: global-variables.$neutral-color-800;
   color: white;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$neutral-color-400;
   }
-  &:disabled{
+
+  &:disabled {
     opacity: 0.7;
     pointer-events: none;
   }
 }
 
-.dark-neutral-button-with-icon{
+.dark-neutral-button-with-icon {
   display: flex;
   align-items: center;
   border: none;
@@ -208,16 +230,18 @@
   transition: 0.2s;
   background-color: global-variables.$neutral-color-800;
   color: white;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$neutral-color-400;
   }
-  &:disabled{
+
+  &:disabled {
     opacity: 0.7;
     pointer-events: none;
   }
 }
 
-.neutral-transparent-button{
+.neutral-transparent-button {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -228,12 +252,14 @@
   color: global-variables.$neutral-color-1000;
   transition: 0.2s;
   user-select: none;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$neutral-color-200 !important;
     color: global-variables.$neutral-color-1000 !important;
     cursor: pointer;
   }
-  &:active{
+
+  &:active {
     background-color: global-variables.$light-blue-active;
     box-shadow: global-variables.$button-inner-shadow;
     color: global-variables.$dark-blue-active;

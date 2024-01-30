@@ -11,27 +11,20 @@ public class EntityInclusionHandler
 
     public EntityInclusionHandler(ApplicationContext applicationContext)
     {
-         _applicationContext = applicationContext;
+        _applicationContext = applicationContext;
     }
 
 
-    internal  async Task<User> GetUser(int userId, Func<IQueryable<User>, IQueryable<User>> includeQuery=null)
+    internal async Task<User> GetUser(int userId, Func<IQueryable<User>, IQueryable<User>> includeQuery = null)
     {
         var query = _applicationContext.Users.AsQueryable();
 
-        if (includeQuery != null)
-        {
-            query = includeQuery(query);
-        }
+        if (includeQuery != null) query = includeQuery(query);
 
         var userEntity = await query.FirstOrDefaultAsync(u => u.Id == userId);
 
-        if (userEntity == null)
-        {
-            throw new UserNotFoundException("User with specified id doesn't exist");
-        }
+        if (userEntity == null) throw new UserNotFoundException("User with specified id doesn't exist");
 
         return userEntity;
     }
-    
 }

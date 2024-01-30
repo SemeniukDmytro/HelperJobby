@@ -1,6 +1,5 @@
 import React, {FC, ReactNode, useEffect, useRef} from 'react';
 import './HomePageMainContentWrap.scss';
-import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import {useHomePage} from "../../../../hooks/useHomePage";
 import useQueryParams from "../../../../hooks/useQueryParams";
 
@@ -12,13 +11,13 @@ const HomePageMainContentWrap: FC<HomePageMainContentWrapProps> = ({children}: {
     const mainContentRef = useRef<HTMLDivElement | null>(null);
     const {setMainContentReferenceForHome} = useHomePage();
     const {setMainContentRefForSearch} = useQueryParams();
-    
+
 
     useEffect(() => {
         setMainContentReferenceForHome(mainContentRef);
         setMainContentRefForSearch(mainContentRef);
     }, []);
-    
+
     return (
         <>
             <div className={"content-separation-margin"}></div>

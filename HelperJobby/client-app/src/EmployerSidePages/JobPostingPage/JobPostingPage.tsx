@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import JobPostingComponent from "./PageComponents/JobPostingComponent/JobPostingComponent";
 
-interface JobPostingPageProps {}
+interface JobPostingPageProps {
+}
 
 const JobPostingPage: FC<JobPostingPageProps> = () => (
-  <JobPostingComponent/>
+    <JobPostingComponent/>
 );
 
 export default JobPostingPage;

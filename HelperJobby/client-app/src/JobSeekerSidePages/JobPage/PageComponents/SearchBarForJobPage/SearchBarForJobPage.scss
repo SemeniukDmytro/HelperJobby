@@ -1,6 +1,6 @@
 @use "../../../../Assets/scssSharedStyles/global-variables";
 
-.jsb-layout{
+.jsb-layout {
   margin: 0 0 36px;
   max-width: 1280px;
   box-sizing: border-box;
@@ -8,20 +8,20 @@
 }
 
 
-.jsb-block{
+.jsb-block {
   width: 66%;
   margin-left: 16.66%;
   box-sizing: border-box;
   min-width: 0px;
 }
 
-.jsb-form{
+.jsb-form {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.jsb-input-label{
+.jsb-input-label {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   color: global-variables.$neutral-color-1000;
@@ -31,7 +31,7 @@
   justify-content: center;
 }
 
-.jsb-input{
+.jsb-input {
   min-width: 0px;
   font-size: 0.875rem;
   display: flex;

@@ -3,18 +3,17 @@ import './JobApplyComponent.scss';
 import {JobDTO} from "../../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {useJobSeekerJobInteractions} from "../../../../../hooks/useJobSeekerJobInteractions";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
-import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountService";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import UserJobInteractionShortJobInfo
     from "../../../SharedComponents/UserJobInteractionShortJobInfo/UserJobInteractionShortJobInfo";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBookmark, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faXmark} from "@fortawesome/free-solid-svg-icons";
 import {JobApplyService} from "../../../../../services/jobApplyService";
 import {UserJobInteractionsTypes} from "../../../../../enums/UserJobInteractionsTypes";
 
 interface JobApplyComponentProps {
-    job : JobDTO;
-    dateApplied : Date;
+    job: JobDTO;
+    dateApplied: Date;
 }
 
 const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
@@ -24,9 +23,10 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
     const [showApplyRemoved, setShowApplyRemoved] = useState(false);
     const [showUndoRemoveWindow, setShowUndoRemoveWindow] = useState(true);
     const [requestInProcess, setRequestInProcess] = useState(false);
+
     async function removeJobApply() {
         try {
-            if (requestInProcess){
+            if (requestInProcess) {
                 return;
             }
             setRequestInProcess(true);
@@ -41,19 +41,18 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
             setShowApplyRemoved(true);
         } catch (error) {
             logErrorInfo(error)
-        }
-        finally {
+        } finally {
             setRequestInProcess(false);
         }
     }
 
     async function reApply() {
         try {
-            if (requestInProcess){
+            if (requestInProcess) {
                 return;
             }
             setRequestInProcess(true);
-            const retrievedJobApply = await  jobApplyService.postJobApply(job.id);
+            const retrievedJobApply = await jobApplyService.postJobApply(job.id);
             retrievedJobApply.job = job;
             setJobSeeker(prevJobSeeker => {
                 return prevJobSeeker && {
@@ -64,13 +63,12 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
             setShowApplyRemoved(false);
         } catch (error) {
             logErrorInfo(error);
-        }
-        finally {
+        } finally {
             setRequestInProcess(false);
         }
     }
 
-    function closeUndoActionWindow(){
+    function closeUndoActionWindow() {
         setShowUndoRemoveWindow(false);
         setJobApplies((prevJobApplies) => prevJobApplies!
             .filter(jobApply => jobApply.jobId !== job.id));
@@ -81,12 +79,17 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
             <div className={"ji-job-block"}>
                 {!showApplyRemoved ?
                     (<div className={"ji-job-layout"}>
-                        <UserJobInteractionShortJobInfo job={job}
-                                                        interactionTime={dateApplied}
-                                                        jobInteractionType={UserJobInteractionsTypes.applied}/>
+                        <UserJobInteractionShortJobInfo
+                            job={job}
+                            interactionTime={dateApplied}
+                            jobInteractionType={UserJobInteractionsTypes.applied}
+                        />
                         <div className={"ji-remove-apply-fb"}>
                             <div>
-                                <button className={"light-button-with-margin button-without-margin"} onClick={removeJobApply}>
+                                <button
+                                    className={"light-button-with-margin button-without-margin"}
+                                    onClick={removeJobApply}
+                                >
                                     Remove apply
                                 </button>
                             </div>

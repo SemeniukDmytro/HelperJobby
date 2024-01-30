@@ -1,32 +1,33 @@
 @use "../../Assets/scssSharedStyles/global-variables";
 
-.emh-layout{
+.emh-layout {
   margin: 0;
   min-width: 0px;
   width: 100%;
   border-bottom: 1px solid global-variables.$neutral-color-400;
 }
 
-.emh-fb{
+.emh-fb {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.emh-logo-block{
+.emh-logo-block {
   padding: 1rem 2rem;
   font-size: 1.25rem;
   color: global-variables.$neutral-color-1000;
   font-weight: 700;
+  user-select: none;
 }
 
-.emh-right-side{
+.emh-right-side {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.emh-separator{
+.emh-separator {
   width: 1px;
   background-color: global-variables.$neutral-color-400;
   margin-left: 1rem;
@@ -34,27 +35,27 @@
   height: 2.5rem;
 }
 
-.emh-email-block{
-  display: flex;  
+.emh-email-block {
+  display: flex;
   height: 100%;
   flex-grow: 1;
   align-items: center;
   justify-content: center;
 }
 
-.emh-user-email{
+.emh-user-email {
   max-width: 10rem;
   overflow: hidden;
   text-align: start;
   text-overflow: ellipsis;
 }
 
-.emh-more-options-bar{
+.emh-more-options-bar {
   position: relative;
   align-self: end;
 }
 
-.emh-more-options-block{
+.emh-more-options-block {
   margin: 0rem;
   padding: 0rem;
   position: absolute;
@@ -70,10 +71,12 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  background-color: white;
+  z-index: 5;
 }
 
 
-.emh-option-container{
+.emh-option-container {
   display: flex;
   min-width: 0rem;
   box-sizing: border-box;
@@ -81,7 +84,7 @@
   padding-left: 1.5rem;
 }
 
-.emh-option{
+.emh-option {
   display: flex;
   flex-grow: 1;
   padding: 0.5rem;
@@ -97,7 +100,8 @@
   line-height: 1.5rem;
   cursor: pointer;
   color: global-variables.$neutral-color-1000;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$neutral-color-200;
   }
 }

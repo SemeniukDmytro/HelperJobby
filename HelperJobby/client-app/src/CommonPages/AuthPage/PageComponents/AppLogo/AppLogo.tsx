@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {FC} from 'react';
+import {useNavigate} from 'react-router-dom';
 import "./AppLogo.scss";
+
 interface AppLogoProps {
     children?: React.ReactNode;
 }
 
-const AppLogo: FC<AppLogoProps> = ({ children }) => {
+const AppLogo: FC<AppLogoProps> = ({children}) => {
     const navigate = useNavigate();
 
     function GoToDefaultPage() {
@@ -18,7 +19,7 @@ const AppLogo: FC<AppLogoProps> = ({ children }) => {
                 <div className="logo-container" onClick={GoToDefaultPage}>
                     <span className="logo">HelperJobby</span>
                 </div>
-                {children} 
+                {children}
             </div>
         </div>
     );

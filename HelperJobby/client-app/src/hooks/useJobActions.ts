@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
-import { JobSeekerAccountService } from "../services/jobSeekerAccountService";
-import { JobDTO } from "../DTOs/jobRelatetedDTOs/JobDTO";
+import {Dispatch, SetStateAction, useCallback, useState} from "react";
+import {JobSeekerAccountService} from "../services/jobSeekerAccountService";
+import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
 import {JobSeekerAccountDTO} from "../DTOs/accountDTOs/JobSeekerAccountDTO";
 
 export const useJobActions = (
@@ -9,7 +9,7 @@ export const useJobActions = (
     job: JobDTO
 ) => {
     const [requestInProcess, setRequestInProcess] = useState(false);
-    
+
     const removeSavedJob = useCallback(async (jobId: number) => {
         try {
             if (requestInProcess) {
@@ -44,14 +44,13 @@ export const useJobActions = (
                     ...prevJobSeeker,
                     savedJobs: [...prevJobSeeker.savedJobs, retrievedSavedJob]
                 };
-            });        
-        } 
-        catch (error) {
+            });
+        } catch (error) {
             throw error
         } finally {
             setRequestInProcess(false);
         }
     }, [requestInProcess, jobSeekerService, job, setJobSeeker]);
 
-    return { removeSavedJob, saveJob };
+    return {removeSavedJob, saveJob};
 };

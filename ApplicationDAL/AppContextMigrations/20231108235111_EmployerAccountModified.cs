@@ -2,85 +2,84 @@
 
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ApplicationDAL.AppContextMigrations
+namespace ApplicationDAL.AppContextMigrations;
+
+/// <inheritdoc />
+public partial class EmployerAccountModified : Migration
 {
     /// <inheritdoc />
-    public partial class EmployerAccountModified : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.UpdateData(
-                table: "Organizations",
-                keyColumn: "PhoneNumber",
-                keyValue: null,
-                column: "PhoneNumber",
-                value: "");
+        migrationBuilder.UpdateData(
+            "Organizations",
+            "PhoneNumber",
+            null,
+            "PhoneNumber",
+            "");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "PhoneNumber",
-                table: "Organizations",
-                type: "varchar(15)",
+        migrationBuilder.AlterColumn<string>(
+                "PhoneNumber",
+                "Organizations",
+                "varchar(15)",
                 maxLength: 15,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "varchar(15)",
                 oldMaxLength: 15,
                 oldNullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4")
+            .OldAnnotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AddColumn<string>(
-                name: "Email",
-                table: "EmployerAccounts",
-                type: "varchar(50)",
+        migrationBuilder.AddColumn<string>(
+                "Email",
+                "EmployerAccounts",
+                "varchar(50)",
                 maxLength: 50,
                 nullable: false,
                 defaultValue: "")
-                .Annotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AddColumn<string>(
-                name: "FullName",
-                table: "EmployerAccounts",
-                type: "varchar(60)",
+        migrationBuilder.AddColumn<string>(
+                "FullName",
+                "EmployerAccounts",
+                "varchar(60)",
                 maxLength: 60,
                 nullable: false,
                 defaultValue: "")
-                .Annotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_EmployerAccounts_ContactEmail",
-                table: "EmployerAccounts",
-                column: "Email",
-                unique: true);
-        }
+        migrationBuilder.CreateIndex(
+            "IX_EmployerAccounts_ContactEmail",
+            "EmployerAccounts",
+            "Email",
+            unique: true);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropIndex(
-                name: "IX_EmployerAccounts_ContactEmail",
-                table: "EmployerAccounts");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropIndex(
+            "IX_EmployerAccounts_ContactEmail",
+            "EmployerAccounts");
 
-            migrationBuilder.DropColumn(
-                name: "Email",
-                table: "EmployerAccounts");
+        migrationBuilder.DropColumn(
+            "Email",
+            "EmployerAccounts");
 
-            migrationBuilder.DropColumn(
-                name: "FullName",
-                table: "EmployerAccounts");
+        migrationBuilder.DropColumn(
+            "FullName",
+            "EmployerAccounts");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "PhoneNumber",
-                table: "Organizations",
-                type: "varchar(15)",
+        migrationBuilder.AlterColumn<string>(
+                "PhoneNumber",
+                "Organizations",
+                "varchar(15)",
                 maxLength: 15,
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "varchar(15)",
                 oldMaxLength: 15)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
-        }
+            .Annotation("MySql:CharSet", "utf8mb4")
+            .OldAnnotation("MySql:CharSet", "utf8mb4");
     }
 }

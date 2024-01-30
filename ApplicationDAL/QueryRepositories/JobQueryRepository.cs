@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Exceptions;
@@ -9,9 +8,8 @@ namespace ApplicationDAL.QueryRepositories;
 
 public class JobQueryRepository : IJobQueryRepository
 {
-    private readonly ApplicationContext _applicationContext;
-
     private const int RandomJobsToTake = 10;
+    private readonly ApplicationContext _applicationContext;
 
     public JobQueryRepository(ApplicationContext applicationContext)
     {
@@ -21,10 +19,7 @@ public class JobQueryRepository : IJobQueryRepository
     public async Task<Job> GetJobById(int jobId)
     {
         var job = await _applicationContext.Jobs.FirstOrDefaultAsync(j => j.Id == jobId);
-        if (job == null)
-        {
-            throw new JobNotFoundException();
-        }
+        if (job == null) throw new JobNotFoundException();
 
         return job;
     }
@@ -34,8 +29,8 @@ public class JobQueryRepository : IJobQueryRepository
         var jobs = await _applicationContext.Jobs.Where(j => j.EmployerAccount.UserId == userId).ToListAsync();
         return jobs;
     }
-    
-    
+
+
     public async Task<IEnumerable<Job>> GetJobsByOrganizationId(int organizationId)
     {
         var jobs = await _applicationContext.Jobs.Where(j => j.EmployerAccount.OrganizationId == organizationId)
@@ -47,8 +42,7 @@ public class JobQueryRepository : IJobQueryRepository
     public async Task<IEnumerable<Job>> GetJobsByJobIds(List<int> jobIds)
     {
         var jobs = await _applicationContext
-            .Jobs.Where(j => jobIds.Contains(j.Id)).
-            Select(JobProjections.JobWithOrganizationName())
+            .Jobs.Where(j => jobIds.Contains(j.Id)).Select(JobProjections.JobWithOrganizationName())
             .ToListAsync();
         return jobs;
     }
@@ -69,8 +63,8 @@ public class JobQueryRepository : IJobQueryRepository
     {
         var jobsCount = _applicationContext.Jobs.Count();
         var startingPoint = Math.Max(new Random().Next(jobsCount) - 10, 0);
-        return await _applicationContext.Jobs.Skip(startingPoint).Take(RandomJobsToTake).
-            Select(JobProjections.JobWithOrganizationName())
+        return await _applicationContext.Jobs.Skip(startingPoint).Take(RandomJobsToTake)
+            .Select(JobProjections.JobWithOrganizationName())
             .ToListAsync();
     }
 

@@ -14,7 +14,8 @@ import {ChangedInfoTypes} from "../../../../../enums/ChangedInfoTypes";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 
-interface AccountSettingsComponentProps {}
+interface AccountSettingsComponentProps {
+}
 
 const AccountSettingsComponent: FC<AccountSettingsComponentProps> = () => {
     const {authUser, setAuthUser} = useAuth();
@@ -24,14 +25,14 @@ const AccountSettingsComponent: FC<AccountSettingsComponentProps> = () => {
     const [changedInfoMsg, setChangedInfoMsg] = useState("");
     const [searchParams] = useSearchParams();
     const [showChangeInfoMsg, setShowChangeInfoMsg] = useState(false);
-    
+
     useEffect(() => {
         fetchJobSeeker();
         setInformationAboutChange();
     }, []);
 
     useEffect(() => {
-        if (jobSeeker){
+        if (jobSeeker) {
             setLoading(false);
         }
     }, [jobSeeker]);
@@ -42,23 +43,21 @@ const AccountSettingsComponent: FC<AccountSettingsComponentProps> = () => {
             await authService.revokeToken();
             removeAuthToken();
             setAuthUser(null);
-        }
-        catch (error){
-            if (error instanceof ServerError){
+        } catch (error) {
+            if (error instanceof ServerError) {
                 logErrorInfo(error);
             }
-        }
-        finally {
+        } finally {
             setLoading(false);
         }
     }
-    
+
     function setInformationAboutChange() {
         const changedInfoType = searchParams.get("msg");
-        if (!changedInfoType){
+        if (!changedInfoType) {
             return;
         }
-        switch (changedInfoType){
+        switch (changedInfoType) {
             case ChangedInfoTypes.changedusertype :
                 setChangedInfoMsg("Your account type has been saved.");
                 break;
@@ -71,7 +70,7 @@ const AccountSettingsComponent: FC<AccountSettingsComponentProps> = () => {
             case ChangedInfoTypes.changedphone :
                 setChangedInfoMsg("Your phone has been saved.");
                 break;
-            case ChangedInfoTypes.nothingchanged : 
+            case ChangedInfoTypes.nothingchanged :
                 setChangedInfoMsg("No changes were made to your account.");
                 break;
             default :
@@ -79,66 +78,74 @@ const AccountSettingsComponent: FC<AccountSettingsComponentProps> = () => {
         }
         setShowChangeInfoMsg(true);
     }
-    
+
     return (
         <PageWrapWithHeader>
-          <div className={"page-with-centered-content-layout"}>
-              {loading ? <LoadingPage/> :
-                  <div className={"form-layout"}>
-                      {showChangeInfoMsg &&  
-                      <>
-                          <div className={"content-separation-margin"}></div>
-                          <div className={"changed-info-notify-container"}>
-                              <div className={"changed-type-message"}>
-                                  <div className={"successful-pop-up-icon"}>
-                                      <FontAwesomeIcon icon={faCircleCheck}/>
-                                  </div>
-                                  <div className={"field-label"}>
-                                      {changedInfoMsg}
-                                  </div>
-                              </div>
-                              <button className={"small-interaction-button"} onClick={() => setShowChangeInfoMsg(false)}>
-                                  <FontAwesomeIcon icon={faXmark}/>
-                              </button>
-                          </div>
-                      </>
-                      }
-                      <div className={"content-separation-margin"}></div>
-                      <div className={"build-page-header"}>Account Settings</div>
-                      <div className={"content-separation-line"}></div>
-                      <SettingsChangeField
-                          fieldLabel={"Account type:"}
-                          fieldValue={authUser!.user.accountType}
-                          fieldButtonText={"Change account type"}
-                          changeFieldPagePath={"/account/change-type"}/>
-                      <SettingsChangeField
-                          fieldLabel={"Email"}
-                          fieldValue={authUser!.user.email} 
-                          fieldButtonText={"Change email"} 
-                          changeFieldPagePath={"/account/change-email"}/>
-                      <SettingsChangeField
-                          fieldLabel={"Password"}
-                          fieldValue={"••••••••"}
-                          fieldButtonText={"Change password"}
-                          changeFieldPagePath={"/account/change-password"}/>
-                      <SettingsChangeField
-                          fieldLabel={"Phone number"}
-                          fieldValue={jobSeeker!.phoneNumber} 
-                          fieldButtonText={"Change phone number"}
-                          changeFieldPagePath={"/account/change-phone"}/>
-                      <div className={"content-separation-margin"}/>
-                      <div className={"settings-field-layout"}>
-                          <div className={"semi-dark-default-text"}>
-                              {authUser?.user.email}
-                          </div>
-                          <button className={"light-button-with-margin button-without-margin"} onClick={signOut}>
-                              Sign out
-                          </button>
-                      </div>  
-                      <div className={"content-separation-line"}></div>
-                  </div>}
-          </div>
+            <div className={"page-with-centered-content-layout"}>
+                {loading ? <LoadingPage/> :
+                    <div className={"form-layout"}>
+                        {showChangeInfoMsg &&
+                            <>
+                                <div className={"content-separation-margin"}></div>
+                                <div className={"changed-info-notify-container"}>
+                                    <div className={"changed-type-message"}>
+                                        <div className={"successful-pop-up-icon"}>
+                                            <FontAwesomeIcon icon={faCircleCheck}/>
+                                        </div>
+                                        <div className={"field-label"}>
+                                            {changedInfoMsg}
+                                        </div>
+                                    </div>
+                                    <button
+                                        className={"small-interaction-button"}
+                                        onClick={() => setShowChangeInfoMsg(false)}
+                                    >
+                                        <FontAwesomeIcon icon={faXmark}/>
+                                    </button>
+                                </div>
+                            </>
+                        }
+                        <div className={"content-separation-margin"}></div>
+                        <div className={"build-page-header"}>Account Settings</div>
+                        <div className={"content-separation-line"}></div>
+                        <SettingsChangeField
+                            fieldLabel={"Account type:"}
+                            fieldValue={authUser!.user.accountType}
+                            fieldButtonText={"Change account type"}
+                            changeFieldPagePath={"/account/change-type"}
+                        />
+                        <SettingsChangeField
+                            fieldLabel={"Email"}
+                            fieldValue={authUser!.user.email}
+                            fieldButtonText={"Change email"}
+                            changeFieldPagePath={"/account/change-email"}
+                        />
+                        <SettingsChangeField
+                            fieldLabel={"Password"}
+                            fieldValue={"••••••••"}
+                            fieldButtonText={"Change password"}
+                            changeFieldPagePath={"/account/change-password"}
+                        />
+                        <SettingsChangeField
+                            fieldLabel={"Phone number"}
+                            fieldValue={jobSeeker!.phoneNumber}
+                            fieldButtonText={"Change phone number"}
+                            changeFieldPagePath={"/account/change-phone"}
+                        />
+                        <div className={"content-separation-margin"}/>
+                        <div className={"settings-field-layout"}>
+                            <div className={"semi-dark-default-text"}>
+                                {authUser?.user.email}
+                            </div>
+                            <button className={"light-button-with-margin button-without-margin"} onClick={signOut}>
+                                Sign out
+                            </button>
+                        </div>
+                        <div className={"content-separation-line"}></div>
+                    </div>}
+            </div>
         </PageWrapWithHeader>
-)};
+    )
+};
 
 export default AccountSettingsComponent;

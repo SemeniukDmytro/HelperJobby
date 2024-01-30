@@ -4,7 +4,7 @@ namespace API_IntegrationTests.Fixtures;
 
 public class EducationFixtures
 {
-    public static readonly CreateUpdateEducationDTO FirstEducation = new CreateUpdateEducationDTO
+    public static readonly CreateUpdateEducationDTO FirstEducation = new()
     {
         LevelOfEducation = "Bachelor's",
         FieldOfStudy = "Computer Science",
@@ -15,7 +15,7 @@ public class EducationFixtures
         To = new DateOnly(2014, 5, 30)
     };
 
-    public static readonly CreateUpdateEducationDTO SecondEducation = new CreateUpdateEducationDTO
+    public static readonly CreateUpdateEducationDTO SecondEducation = new()
     {
         LevelOfEducation = "Master's",
         FieldOfStudy = "Business Administration",

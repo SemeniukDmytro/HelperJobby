@@ -15,11 +15,11 @@ public class InterviewProfile : Profile
                 opt => opt
                     .MapFrom(src => InterviewTypesToStringConverter.InterviewTypeToStringConverter(src.InterviewType)))
             .AfterMap((src, dest, context) =>
-        {
-            dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccount, JobSeekerAccountDTO>(src.JobSeekerAccount);
-            dest.Job = context.Mapper.Map<Job, JobDTO>(src.Job);
-        });
-        
+            {
+                dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccount, JobSeekerAccountDTO>(src.JobSeekerAccount);
+                dest.Job = context.Mapper.Map<Job, JobDTO>(src.Job);
+            });
+
         CreateMap<InterviewDTO, Interview>().AfterMap((src, dest, context) =>
         {
             dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccountDTO, JobSeekerAccount>(src.JobSeekerAccount);

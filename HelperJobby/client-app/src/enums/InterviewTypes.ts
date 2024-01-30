@@ -1,4 +1,4 @@
-export enum InterviewTypes{
+export enum InterviewTypes {
     Video,
     Phone,
     InPerson

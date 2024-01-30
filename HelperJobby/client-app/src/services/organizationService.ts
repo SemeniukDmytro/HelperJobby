@@ -1,8 +1,8 @@
 import CustomFetchService from "./customFetchService";
-import { OrganizationDTO } from "../DTOs/organizationDTOs/OrganizationDTO";
-import { UpdateOrganizationDTO } from "../DTOs/organizationDTOs/UpdateOrganizationDTO";
-import { OrganizationEmployeeEmailDTO } from "../DTOs/organizationDTOs/OrganizationEmployeeEmailDTO";
-import { CreateOrganizationEmployeeEmailDTO } from "../DTOs/organizationDTOs/CreateOrganizationEmployeeEmailDTO";
+import {OrganizationDTO} from "../DTOs/organizationDTOs/OrganizationDTO";
+import {UpdateOrganizationDTO} from "../DTOs/organizationDTOs/UpdateOrganizationDTO";
+import {OrganizationEmployeeEmailDTO} from "../DTOs/organizationDTOs/OrganizationEmployeeEmailDTO";
+import {CreateOrganizationEmployeeEmailDTO} from "../DTOs/organizationDTOs/CreateOrganizationEmployeeEmailDTO";
 
 export class OrganizationService {
     private readonly baseURI: string = "api/Organization";

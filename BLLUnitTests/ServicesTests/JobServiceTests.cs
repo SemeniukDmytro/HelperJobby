@@ -9,17 +9,17 @@ namespace BLLUnitTests.ServicesTests;
 
 public class JobServiceTests
 {
-    private readonly IJobService _jobService;
-    private readonly Mock<IJobQueryRepository> _jobQueryRepository = new();
-    private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<IEmployerAccountQueryRepository> _employerAccountQueryRepository = new();
+    private readonly Mock<IJobQueryRepository> _jobQueryRepository = new();
+    private readonly IJobService _jobService;
+    private readonly Mock<IUserService> _userServiceMock = new();
 
     public JobServiceTests()
     {
-        _jobService = new JobService( _jobQueryRepository.Object, _userServiceMock.Object,
+        _jobService = new JobService(_jobQueryRepository.Object, _userServiceMock.Object,
             _employerAccountQueryRepository.Object);
     }
-    
+
     [Fact]
     public async Task CreateJobShouldReturnCreatedJob()
     {
@@ -85,14 +85,14 @@ public class JobServiceTests
     {
         //Arrange
         var jobEntity = JobFixtures.FirstJobEntity;
-        int jobId = 1;
+        var jobId = 1;
         var employerAccount = EmployerAccountFixtures.EmployerAccountEntity;
         var currentUserId = 1;
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(currentUserId);
         _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId)).ReturnsAsync(employerAccount);
         _jobQueryRepository.Setup(r => r.GetJobById(jobId))
             .ReturnsAsync(jobEntity);
-        
+
         //Act
         var job = await _jobService.DeleteJob(jobId);
         //Assert
@@ -100,7 +100,7 @@ public class JobServiceTests
         Assert.Equal(jobEntity.Id, job.Id);
         Assert.Equal(jobEntity.EmployerAccountId, job.EmployerAccountId);
     }
-    
+
     [Fact]
     public async Task DeleteJobShouldThrowForbiddenExceptionIfOtherEmployerTriesToDeleteJob()
     {
@@ -113,7 +113,7 @@ public class JobServiceTests
         _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId)).ReturnsAsync(employerAccount);
         _jobQueryRepository.Setup(r => r.GetJobById(jobId))
             .ReturnsAsync(jobEntity);
-        
+
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () => await _jobService.DeleteJob(jobId));
     }

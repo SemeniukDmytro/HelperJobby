@@ -25,17 +25,17 @@ public static class SalaryRateHelper
     {
         return salaryPerHour * 8;
     }
-    
+
     public static decimal GetSalaryPerWeekFromPerHourRate(decimal salaryPerHour)
     {
         return salaryPerHour * 8 * 5;
     }
-    
+
     public static decimal GetSalaryPerMonthFromPerHourRate(decimal salaryPerHour)
     {
         return salaryPerHour * 8 * 22;
     }
-    
+
     public static decimal GetSalaryPerYearFromPerHourRate(decimal salaryPerHour)
     {
         return salaryPerHour * 8 * 250;

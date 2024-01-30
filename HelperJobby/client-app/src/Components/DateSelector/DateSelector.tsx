@@ -9,8 +9,8 @@ interface DateSelectorProps {
     selectValue: string;
     setSelectValue: Dispatch<SetStateAction<string>>;
     timeStamp: TimeStamps;
-    firstYear? : number;
-    lastYear? : number;
+    firstYear?: number;
+    lastYear?: number;
 }
 
 const DateSelector: FC<DateSelectorProps> = ({
@@ -21,8 +21,8 @@ const DateSelector: FC<DateSelectorProps> = ({
                                                  firstYear
                                              }) => {
     const [inputFocus, setSelectFocus] = useState(false);
-    let years : number[] = [];
-    if (firstYear && lastYear){
+    let years: number[] = [];
+    if (firstYear && lastYear) {
         const yearsRange = lastYear - firstYear + 1;
         years = Array.from({length: yearsRange}, (_, index) => lastYear - index);
     }
@@ -54,15 +54,15 @@ const DateSelector: FC<DateSelectorProps> = ({
                 onFocus={handleSelectFocus}
                 onBlur={handleSelectBlur}
             >
-                <option>{timeStamp==TimeStamps.Month ? "Month" : "Year"}</option>
+                <option>{timeStamp == TimeStamps.Month ? "Month" : "Year"}</option>
                 {timeStamp == TimeStamps.Month &&
                     months.map((month, index) => (
-                    <option key={index} value={month.name}>{month.name}</option>))
+                        <option key={index} value={month.name}>{month.name}</option>))
                 }
                 :
-                {timeStamp == TimeStamps.Year && 
+                {timeStamp == TimeStamps.Year &&
                     years.map((year, index) => (
-                    <option key={index} value={year}>{year}</option>))
+                        <option key={index} value={year}>{year}</option>))
                 }
             </select>
             <div className={"selectArrow"}>

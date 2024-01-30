@@ -17,24 +17,15 @@ public class EmployerAccountDTOValidator : AbstractValidator<CreateEmployerAccou
             .NotEmpty().WithMessage("Provide a name of your organization")
             .Length(1, 100).WithMessage("Length of your organizationName is invalid");
     }
-    
+
     public static void ValidateAccount(CreateEmployerAccountDTO account)
     {
-        if (!string.IsNullOrEmpty(account.Email))
-        {
-            CommonValidator.BeValidEmail(account.Email);
-        }
+        if (!string.IsNullOrEmpty(account.Email)) CommonValidator.BeValidEmail(account.Email);
 
-        if (!string.IsNullOrEmpty(account.ContactNumber))
-        {
-            CommonValidator.BeValidPhoneNumber(account.ContactNumber);
-        }
+        if (!string.IsNullOrEmpty(account.ContactNumber)) CommonValidator.BeValidPhoneNumber(account.ContactNumber);
         var validator = new EmployerAccountDTOValidator();
         var validationResult = validator.Validate(account);
 
-        if (!validationResult.IsValid)
-        {
-            throw new InvalidEmployerAccountException(validationResult.ToString());
-        }
+        if (!validationResult.IsValid) throw new InvalidEmployerAccountException(validationResult.ToString());
     }
 }

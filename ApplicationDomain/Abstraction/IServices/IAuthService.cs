@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using ApplicationDomain.AuthRelatedModels;
 using ApplicationDomain.Models;
 

@@ -17,9 +17,7 @@ using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Abstraction.SearchICommandRepositories;
 using ApplicationDomain.Abstraction.SearchIQueryRepositories;
 using ApplicationDomain.Abstraction.SearchRelatedIServices;
-using ApplicationDomain.Models;
 using FluentValidation;
-using HelperJobby.DTOs.Resume;
 using HelperJobby.DTOs.User;
 using HelperJobby.Validators;
 
@@ -85,9 +83,9 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IRecentUserSearchService, RecentUserSearchService>();
         serviceProvider.AddScoped<IRecommendationService, RecommendationService>();
         serviceProvider.AddScoped<ILocationService, LocationService>();
-        
+
         //background related
-        serviceProvider.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>(); 
+        serviceProvider.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
         serviceProvider.AddHostedService<QueuedHostedService>();
         serviceProvider.AddScoped<IEnqueuingTaskHelper, EnqueuingTaskHelper>();
 

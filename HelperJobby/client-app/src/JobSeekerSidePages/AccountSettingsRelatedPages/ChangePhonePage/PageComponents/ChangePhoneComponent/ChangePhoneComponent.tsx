@@ -11,7 +11,8 @@ import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountS
 import {useNavigate} from "react-router-dom";
 import {ChangedInfoTypes} from "../../../../../enums/ChangedInfoTypes";
 
-interface ChangePhoneComponentProps {}
+interface ChangePhoneComponentProps {
+}
 
 const ChangePhoneComponent: FC<ChangePhoneComponentProps> = () => {
     const [phone, setPhone] = useState("");
@@ -20,39 +21,39 @@ const ChangePhoneComponent: FC<ChangePhoneComponentProps> = () => {
     const [loading, setLoading] = useState(true);
     const jobSeekerService = new JobSeekerAccountService();
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         fetchJobSeeker();
     }, []);
 
     useEffect(() => {
-        if (jobSeeker){
+        if (jobSeeker) {
             setLoading(false);
         }
     }, [jobSeeker]);
+
     async function changePhoneNumber() {
         const validationMessage = validatePhoneNumber(phone);
-        if (validationMessage){
+        if (validationMessage) {
             setPhoneError(validationMessage);
             return;
         }
         try {
-            const updatedJobSeeker : UpdateJobSeekerAccountDTO = {
-                phoneNumber : phone,
-                firstName : jobSeeker!.firstName,
-                lastName : jobSeeker!.lastName,
-                address : jobSeeker!.address
+            const updatedJobSeeker: UpdateJobSeekerAccountDTO = {
+                phoneNumber: phone,
+                firstName: jobSeeker!.firstName,
+                lastName: jobSeeker!.lastName,
+                address: jobSeeker!.address
             }
             const retrievedJobSeeker = await jobSeekerService.putJobSeekerAccount(jobSeeker!.userId, updatedJobSeeker);
             setJobSeeker((prev) => {
                 return prev ? {
                     ...prev,
-                    phoneNumber : retrievedJobSeeker.phoneNumber
+                    phoneNumber: retrievedJobSeeker.phoneNumber
                 } : null;
             });
             navigate(`/settings?msg=${ChangedInfoTypes.changedphone}`)
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
         }
     }
@@ -76,8 +77,9 @@ const ChangePhoneComponent: FC<ChangePhoneComponentProps> = () => {
                         inputFieldValue={phone}
                         setInputFieldValue={setPhone}
                         fieldSubtitle={"Include country code (start with +). Phone number must contain only numbers without spaces or dashes"}
-                        customErrorMessage={phoneError} 
-                        setCustomErrorMessage={setPhoneError}/>
+                        customErrorMessage={phoneError}
+                        setCustomErrorMessage={setPhoneError}
+                    />
                     <div className={"passpage-button-container"}>
                         <button className={"blue-button"} onClick={changePhoneNumber}>
                             Save phone number

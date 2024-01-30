@@ -1,19 +1,19 @@
 @use "../../../../Assets/scssSharedStyles/global-variables";
 
-.my-jobs-container{
+.my-jobs-container {
   display: block;
   max-width: 960px;
   margin: 0 auto 2rem;
   min-width: 62rem;
 }
 
-.my-jobs-header{
+.my-jobs-header {
   font-size: 2.25rem;
   line-height: 1.25;
   color: global-variables.$neutral-color-1000;
 }
 
-.job-interaction-types-tablist{
+.job-interaction-types-tablist {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -21,7 +21,7 @@
   border-bottom: 1.5px solid global-variables.$neutral-color-700;
 }
 
-.job-interaction-tab{
+.job-interaction-tab {
   display: flex;
   flex-direction: column;
   padding: 1rem 1rem;
@@ -31,17 +31,19 @@
   border: none;
   background-color: white;
   color: global-variables.$neutral-color-700;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
-    
+
     .selected-job-interaction-tab {
       border-color: global-variables.$dark-blue;
       color: global-variables.$dark-blue-hover;
-      }
     }
-  &:active{
+  }
+
+  &:active {
     background-color: global-variables.$light-blue-active;
-    
+
     .selected-job-interaction-tab {
       border-color: global-variables.$dark-blue-active;
       color: global-variables.$dark-blue-active;
@@ -49,18 +51,18 @@
   }
 }
 
-.small-text{
+.small-text {
   margin-bottom: 0.5rem;
   font-size: 0.875rem;
 }
 
-.job-interaction-tab-name{
+.job-interaction-tab-name {
   font-size: 1.0625rem;
   position: relative;
   height: 100%;
 }
 
-.job-interaction-info{
+.job-interaction-info {
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -70,7 +72,7 @@
   margin-bottom: -1rem;
 }
 
-.selected-job-interaction-tab{
+.selected-job-interaction-tab {
   font-weight: 700;
   border-bottom: 3px solid global-variables.$neutral-color-1000;
   color: global-variables.$neutral-color-1000;

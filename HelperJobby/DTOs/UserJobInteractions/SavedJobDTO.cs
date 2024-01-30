@@ -12,6 +12,6 @@ public class SavedJobDTO
     public JobDTO Job { get; set; }
 
     public JobSeekerAccountDTO JobSeekerAccount { get; set; }
-    
+
     public DateOnly DateSaved { get; set; }
 }

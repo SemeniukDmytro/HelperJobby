@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import './NavigateBackHeader.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeftLong} from "@fortawesome/free-solid-svg-icons";
 
 interface NavigateBackHeaderProps {
-    onBackButtonClick : () => void;
+    onBackButtonClick: () => void;
 }
 
 const NavigateBackHeader: FC<NavigateBackHeaderProps> = ({onBackButtonClick}) => (

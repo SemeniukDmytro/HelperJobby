@@ -16,25 +16,25 @@ const EditEducationComponent: FC<EditEducationComponentProps> = () => {
     const {jobSeeker} = useJobSeeker();
     const [loading, setLoading] = useState(true);
     const [parentPagePath, setParentPagePath] = useState("");
-    
+
     useEffect(() => {
         const currentPath = window.location.pathname;
         let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
-        if (parentPathFirstPart == "/build"){
+        if (parentPathFirstPart == "/build") {
             parentPathFirstPart = "/build/education"
         }
         setParentPagePath(parentPathFirstPart);
     }, []);
-    
+
     useEffect(() => {
-        if (parentPagePath){
-            if (!id){
+        if (parentPagePath) {
+            if (!id) {
                 navigate(parentPagePath)
                 return;
             }
             const education = jobSeeker?.resume?.educations
                 .find((ed) => ed.id == Number.parseInt(id))
-            if (!education){
+            if (!education) {
                 navigate(parentPagePath)
                 return;
             }
@@ -42,9 +42,9 @@ const EditEducationComponent: FC<EditEducationComponentProps> = () => {
             setLoading(false);
         }
     }, [parentPagePath]);
-    
-    
-    return(
+
+
+    return (
         loading ? <></>
             :
             <EducationInfoComponent education={education!}></EducationInfoComponent>

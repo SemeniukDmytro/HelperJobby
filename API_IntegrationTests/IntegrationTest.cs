@@ -1,6 +1,4 @@
-using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using API_IntegrationTests.Fixtures;
 using API_IntegrationTests.TestHelpers;
 using ApplicationDAL.Context;
@@ -13,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Xunit.Abstractions;
 
 namespace API_IntegrationTests;
@@ -36,15 +33,15 @@ public class IntegrationTest
                     services.RemoveAll(typeof(ApplicationContext));
                     services.RemoveAll(typeof(DbContextOptions<ApplicationContext>));
                     services.AddDbContext<ApplicationContext>(options =>
-                    options.UseInMemoryDatabase("TestDb"));
+                        options.UseInMemoryDatabase("TestDb"));
                 });
             });
         TestClient = appFactory.CreateClient();
     }
-    
+
     protected async Task<UserDTO> AuthenticateAsync()
     {
-        CreateUpdateUserDTO newUser = new CreateUpdateUserDTO()
+        var newUser = new CreateUpdateUserDTO
         {
             Email = RandomStringGenerator.GenerateRandomEmail(),
             Password = "randomPwd",
@@ -61,7 +58,7 @@ public class IntegrationTest
     {
         await AuthenticateAsync();
         var requestUri = "/api/employerAccount";
-        var createdEmployer = new CreateEmployerAccountDTO()
+        var createdEmployer = new CreateEmployerAccountDTO
         {
             FullName = "test name",
             Email = RandomStringGenerator.GenerateRandomEmail(),
@@ -81,10 +78,10 @@ public class IntegrationTest
         var jobSeekerResponse = await TestClient.GetAsync(getJobSeekerRequestUri);
         return await jobSeekerResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
     }
-    
+
     protected async Task<AuthUserDTO> LoginUser(string email, string password)
     {
-        var response = await TestClient.PostAsJsonAsync("/api/auth/sign-in", new LoginUserDTO()
+        var response = await TestClient.PostAsJsonAsync("/api/auth/sign-in", new LoginUserDTO
         {
             Email = email,
             Password = password
@@ -93,14 +90,14 @@ public class IntegrationTest
         TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authUserDTO.Token);
         return authUserDTO;
     }
-    
+
     protected async Task<CurrentJobCreationDTO> CreateNewCurrentJob(CurrentJobCreateDTO currentJobCreateDTO)
     {
         var newCurrentJob = currentJobCreateDTO;
         var currentJobCreationResponse = await TestClient.PostAsJsonAsync("/api/CurrentJob", newCurrentJob);
         return await currentJobCreationResponse.Content.ReadAsAsync<CurrentJobCreationDTO>();
     }
-    
+
     protected async Task<JobDTO> CreateJob()
     {
         var currentJobCreation = await CreateNewCurrentJob(CurrentJobFixtures.CompletedJobCreation);
@@ -125,7 +122,7 @@ public class IntegrationTest
         var createEducationResponse = await TestClient.PostAsJsonAsync(requestUri, createdEducation);
         return await createEducationResponse.Content.ReadAsAsync<EducationDTO>();
     }
-    
+
     protected async Task<WorkExperienceDTO> CreateWorkExperience()
     {
         var createdResume = await CreateResume();
@@ -134,7 +131,7 @@ public class IntegrationTest
         var createWorkExperienceResponse = await TestClient.PostAsJsonAsync(requestUri, createWorkExperienceDto);
         return await createWorkExperienceResponse.Content.ReadAsAsync<WorkExperienceDTO>();
     }
-    
+
     protected async Task<SkillDTO> AddSkill()
     {
         var createdResume = await CreateResume();
@@ -148,25 +145,22 @@ public class IntegrationTest
     {
         var newJobSeeker = await GetCurrentJobSeekerAccount();
         var employerAccount = await CreateEmployerWithNewOrganizationForAuthUser();
-        var createdJob = await CreateJob(); 
-        var requestUri = $"/api/Interview/{createdJob.Id}/job-seeker/{newJobSeeker.Id}"; 
+        var createdJob = await CreateJob();
+        var requestUri = $"/api/Interview/{createdJob.Id}/job-seeker/{newJobSeeker.Id}";
         var createInterviewResponse = await TestClient.PostAsJsonAsync(requestUri, "");
         return await createInterviewResponse.Content.ReadAsAsync<InterviewDTO>();
     }
 
     protected async Task<InterviewDTO> CreateInterview(int jobId, int jobSeekerId)
     {
-        var secondInterviewCreateRequestUri = $"/api/Interview/{jobId}/job-seeker/{jobSeekerId}"; 
+        var secondInterviewCreateRequestUri = $"/api/Interview/{jobId}/job-seeker/{jobSeekerId}";
         var interviewCreateResponse = await TestClient.PostAsJsonAsync(secondInterviewCreateRequestUri, "");
-        return  await interviewCreateResponse.Content.ReadAsAsync<InterviewDTO>();
-
+        return await interviewCreateResponse.Content.ReadAsAsync<InterviewDTO>();
     }
 
-    private async Task<AuthUserDTO> RegisterNewUser(CreateUpdateUserDTO newUser) 
+    private async Task<AuthUserDTO> RegisterNewUser(CreateUpdateUserDTO newUser)
     {
-       var response = await TestClient.PostAsJsonAsync("/api/auth/sign-up", newUser);
-       return await response.Content.ReadAsAsync<AuthUserDTO>();
+        var response = await TestClient.PostAsJsonAsync("/api/auth/sign-up", newUser);
+        return await response.Content.ReadAsAsync<AuthUserDTO>();
     }
-    
-    
 }

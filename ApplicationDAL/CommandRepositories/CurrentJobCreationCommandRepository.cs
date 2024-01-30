@@ -33,5 +33,4 @@ public class CurrentJobCreationCommandRepository : ICurrentJobCreationCommandRep
         _applicationContext.CurrentJobCreations.Remove(jobCreation);
         await _applicationContext.SaveChangesAsync();
     }
-
 }

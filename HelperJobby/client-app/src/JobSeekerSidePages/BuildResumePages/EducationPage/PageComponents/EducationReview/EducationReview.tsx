@@ -4,7 +4,7 @@ import {EducationDTO} from "../../../../../DTOs/resumeRelatedDTOs/EducationDTO";
 import {faPen, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {convertNumericMonthToStringValue} from "../../../../../utils/convertLogic/convertNumericMonthToStringValue";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {EducationService} from "../../../../../services/educationService";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
@@ -26,7 +26,7 @@ const EducationReview: FC<EducationReviewProps> = ({education}) => {
     const educationService = new EducationService();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const [editEducationPath, setEditEducationPath] = useState("");
-    
+
     useEffect(() => {
         const currentPath = window.location.pathname;
         let parentPath = getResumeInfoPageParentPath(currentPath);
@@ -53,10 +53,10 @@ const EducationReview: FC<EducationReviewProps> = ({education}) => {
             await educationService.deleteEducation(education.id);
             if (jobSeeker) {
                 const updatedJobSeeker = {...jobSeeker};
-                if (updatedJobSeeker.resume){
+                if (updatedJobSeeker.resume) {
                     updatedJobSeeker.resume.educations = updatedJobSeeker.resume.educations.filter(edu => edu.id !== education.id);
                     if (updatedJobSeeker.resume.educations.length < 0 && updatedJobSeeker.resume.workExperiences.length < 0
-                        && updatedJobSeeker.resume.skills.length < 0){
+                        && updatedJobSeeker.resume.skills.length < 0) {
                         updatedJobSeeker.resume = null;
                     }
                 }

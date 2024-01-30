@@ -14,16 +14,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="11.8.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.13" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.13" />
+        <PackageReference Include="FluentValidation" Version="11.8.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.13"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.13"/>
         <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.13"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -34,52 +34,53 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ApplicationBLL\ApplicationBLL.csproj" />
-      <ProjectReference Include="..\ApplicationDAL\ApplicationDAL.csproj" />
+        <ProjectReference Include="..\ApplicationBLL\ApplicationBLL.csproj"/>
+        <ProjectReference Include="..\ApplicationDAL\ApplicationDAL.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="API_IntegrationTests" />
+        <InternalsVisibleTo Include="API_IntegrationTests"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="client-app\src\AppRoutes\" />
-      <Folder Include="client-app\src\CommonPages\" />
-      <Folder Include="client-app\src\Components\Header\" />
-      <Folder Include="client-app\src\EmployerSidePages\" />
-      <Folder Include="client-app\src\EmployerSidePages\JobPostingPage\PageComponents\" />
-      <Folder Include="client-app\src\EmployersSideComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\AccountSettingsPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\ChangeAccountTypePage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\ChangeEmailPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\ChangePasswordPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\ChangePhonePage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\SharedComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\EditEducationPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\AddAddressPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\EditWorkExperiencePage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\EducationPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\AddNamePage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\AddPhonePage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\PreviewPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\SkillsPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\WorkExperiencePage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\EditContactInfoPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\HomePage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\JobPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\JobSeekerProfilePage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\ResumePage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\AddResumeInfoPages\ResumeAddEducationPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\AddResumeInfoPages\ResumeAddWorkExperiencePage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\AddResumeInfoPages\ResumeEditEducationPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\AddResumeInfoPages\ResumeEditWorkExperiencePage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\AddResumeInfoPages\SharedComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\SearchJobResultsPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\UserJobInteractionPages\InterviewsPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\UserJobInteractionPages\SavedJobsPage\PageComponents\" />
-      <Folder Include="client-app\src\JobSeekerSidePages\UserJobInteractionPages\SharedComponents\" />
+        <Folder Include="client-app\src\AppRoutes\"/>
+        <Folder Include="client-app\src\CommonPages\"/>
+        <Folder Include="client-app\src\Components\Header\"/>
+        <Folder Include="client-app\src\EmployerSidePages\"/>
+        <Folder Include="client-app\src\EmployerSidePages\EmployerSetupPage\PageComponents\"/>
+        <Folder Include="client-app\src\EmployerSidePages\JobPostingPage\PageComponents\"/>
+        <Folder Include="client-app\src\EmployersSideComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\AccountSettingsPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\ChangeAccountTypePage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\ChangeEmailPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\ChangePasswordPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\ChangePhonePage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\SharedComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\EditEducationPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\AddAddressPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\EditWorkExperiencePage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\EducationPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\AddNamePage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\AddPhonePage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\PreviewPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\SkillsPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\WorkExperiencePage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\EditContactInfoPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\HomePage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\JobPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\JobSeekerProfilePage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\ResumePage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\AddResumeInfoPages\ResumeAddEducationPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\AddResumeInfoPages\ResumeAddWorkExperiencePage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\AddResumeInfoPages\ResumeEditEducationPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\AddResumeInfoPages\ResumeEditWorkExperiencePage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\AddResumeInfoPages\SharedComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\SearchJobResultsPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\UserJobInteractionPages\InterviewsPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\UserJobInteractionPages\SavedJobsPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\UserJobInteractionPages\SharedComponents\"/>
     </ItemGroup>
-    
+
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
         <!-- Ensure Node.js is installed -->
         <Exec Command="node --version" ContinueOnError="true">

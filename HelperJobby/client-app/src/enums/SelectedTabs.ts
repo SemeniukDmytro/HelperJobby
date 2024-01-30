@@ -1,4 +1,4 @@
-export enum SelectedTabs{
+export enum SelectedTabs {
     firstTab = 1,
     secondTab
 }

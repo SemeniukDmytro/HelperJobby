@@ -21,7 +21,7 @@ public class CurrentJobFixtures
         ResumeRequired = true,
         Description = ""
     };
-    
+
     public static readonly CurrentJobCreateDTO CompletedJobCreation = new()
     {
         JobTitle = "Software Developer",

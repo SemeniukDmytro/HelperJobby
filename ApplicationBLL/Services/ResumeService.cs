@@ -1,4 +1,3 @@
-using ApplicationBLL.Interfaces;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
@@ -8,10 +7,10 @@ namespace ApplicationBLL.Services;
 
 public class ResumeService : IResumeService
 {
-    private readonly IUserService _userService;
     private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+    private readonly IUserService _userService;
 
-    public ResumeService(IUserService userService, 
+    public ResumeService(IUserService userService,
         IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository)
     {
         _userService = userService;
@@ -21,11 +20,8 @@ public class ResumeService : IResumeService
     public async Task<Resume> CreateResume(Resume resume)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var jobSeekerAccount = await  _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        if (jobSeekerAccount.Resume != null)
-        {
-            throw new ForbiddenException("Resume already exists");
-        }
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
+        if (jobSeekerAccount.Resume != null) throw new ForbiddenException("Resume already exists");
         resume.JobSeekerAccountId = jobSeekerAccount.Id;
         return resume;
     }
@@ -34,11 +30,8 @@ public class ResumeService : IResumeService
     public async Task<Resume> DeleteResume(int resumeId)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var jobSeekerAccount = await  _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        if (resumeId != jobSeekerAccount.Resume.Id)
-        {
-            throw new ForbiddenException();
-        }
+        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
+        if (resumeId != jobSeekerAccount.Resume.Id) throw new ForbiddenException();
         return jobSeekerAccount.Resume;
     }
 }

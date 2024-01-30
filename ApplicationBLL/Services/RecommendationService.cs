@@ -1,18 +1,17 @@
-using System.Text;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Abstraction.SearchRelatedIServices;
-using ApplicationDomain.Models;
 
 namespace ApplicationBLL.Services;
 
 public class RecommendationService : IRecommendationService
 {
-    private readonly IUserService _userService;
     private readonly IRecentUserSearchQueryRepository _recentUserSearchQueryRepository;
     private readonly ISearchService _searchService;
+    private readonly IUserService _userService;
 
-    public RecommendationService(IUserService userService, IRecentUserSearchQueryRepository recentUserSearchQueryRepository, ISearchService searchService)
+    public RecommendationService(IUserService userService,
+        IRecentUserSearchQueryRepository recentUserSearchQueryRepository, ISearchService searchService)
     {
         _userService = userService;
         _recentUserSearchQueryRepository = recentUserSearchQueryRepository;
@@ -23,8 +22,8 @@ public class RecommendationService : IRecommendationService
     {
         var currentUserId = _userService.GetCurrentUserId();
         var recentSearches = (await _recentUserSearchQueryRepository.GetRecentUserSearches(currentUserId)).ToArray();
-        string query = "";
-        string location = "";
+        var query = "";
+        var location = "";
         if (recentSearches.Length > 3)
         {
             query = $"{recentSearches[0].Query} {recentSearches[1].Query} {recentSearches[2].Query}";

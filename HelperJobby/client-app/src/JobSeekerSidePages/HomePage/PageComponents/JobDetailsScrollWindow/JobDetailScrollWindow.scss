@@ -1,7 +1,7 @@
 @use "../../../../Assets/scssSharedStyles/global-variables";
 
 
-.job-details-scroll-window{
+.job-details-scroll-window {
   flex: 1 1;
   height: calc(100vh - 12px);
   overflow-y: auto;
@@ -9,7 +9,7 @@
   overscroll-behavior-y: auto;
 }
 
-.job-details-container{
+.job-details-container {
   display: flex;
   position: relative;
   flex-direction: column;
@@ -17,17 +17,17 @@
   padding-top: 1rem;
 }
 
-.job-details-header{
+.job-details-header {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   box-sizing: border-box;
   padding-left: 1rem;
   border-bottom: 1px solid global-variables.$neutral-color-400;
-  
+
 }
 
-.small-title{
+.small-title {
   display: flex;
   flex-direction: column;
   font-size: 1.125rem;
@@ -36,24 +36,24 @@
   color: global-variables.$neutral-color-1000;
 }
 
-.short-main-info{
+.short-main-info {
   display: flex;
   flex-direction: row;
   margin-bottom: 1rem;
 }
 
-.job-details-icon-box{
+.job-details-icon-box {
   display: flex;
   color: global-variables.$neutral-color-700;
   padding-right: 1rem;
 }
 
-.job-details-header-info-box{
+.job-details-header-info-box {
   display: flex;
   flex-direction: column;
 }
 
-.job-details-info{
+.job-details-info {
   display: flex;
   color: global-variables.$neutral-color-900;
   font-weight: 700;
@@ -61,17 +61,17 @@
   margin-bottom: 0.25rem;
 }
 
-.detailed-job-features{
+.detailed-job-features {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-.title-additional-spacing{
+.title-additional-spacing {
   margin-top: 1.5rem;
 }
 
-.job-details-subtitle{
+.job-details-subtitle {
   margin-top: 0.5rem;
   display: flex;
   font-size: 0.75rem;
@@ -79,13 +79,13 @@
   color: global-variables.$neutral-color-800;
 }
 
-.benefits-box{
+.benefits-box {
   position: relative;
   display: flex;
   margin-bottom: 0.5rem;
 }
 
-.benefits{
+.benefits {
   position: relative;
   box-sizing: border-box;
   margin: 0px;
@@ -96,8 +96,8 @@
   line-height: 1.5;
 }
 
-.background-fade{
-  background: linear-gradient(180deg,#fff0,#fff);
+.background-fade {
+  background: linear-gradient(180deg, #fff0, #fff);
   bottom: 0;
   height: 3.75rem;
   margin: 0;
@@ -105,7 +105,7 @@
   width: 100%;
 }
 
-.show-more-benefits-button{
+.show-more-benefits-button {
   display: flex;
   color: global-variables.$dark-blue;
   width: fit-content;
@@ -116,16 +116,17 @@
   border: none;
   cursor: pointer;
   background-color: transparent;
-  &:hover{
+
+  &:hover {
     color: global-variables.$dark-blue-hover;
   }
 }
 
-.show-more-arrow{
+.show-more-arrow {
   margin-left: 0.5rem;
 }
 
-.full-description-box{
+.full-description-box {
   display: flex;
   padding-top: 1rem;
   padding-left: 1rem;

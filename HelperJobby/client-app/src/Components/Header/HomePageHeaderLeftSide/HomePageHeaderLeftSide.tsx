@@ -1,29 +1,27 @@
-import React, {FC, useEffect, useReducer, useState} from 'react';
+import React, {FC} from 'react';
 import "./HomePageHeaderLeftSide.scss";
 import {useNavigate} from "react-router-dom";
-import {RecommendationService} from "../../../services/recommendationService";
-import {useHomePage} from "../../../hooks/useHomePage";
 
 interface HomePageHeaderLeftSideProps {
-    onHomeClick? : () => Promise<void>;
+    onHomeClick?: () => Promise<void>;
 }
 
 const HomePageHeaderLeftSide: FC<HomePageHeaderLeftSideProps> = ({onHomeClick}) => {
-    
+
     const navigate = useNavigate();
+
     function navigateToHomePage() {
-        if (window.location.pathname != "/"){
+        if (window.location.pathname != "/") {
             navigate("/");
         }
     }
 
-    
 
     return (
         <div className={"header-left-side"}>
             <div className={"logo-block"}>
                 <button className={"logo-button"} onClick={onHomeClick || navigateToHomePage}>
-                   HelperJobby
+                    HelperJobby
                 </button>
             </div>
             <div className={"logo-content-divider"}/>

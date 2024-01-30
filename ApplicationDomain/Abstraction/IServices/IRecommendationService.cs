@@ -1,5 +1,3 @@
-using ApplicationDomain.Models;
-
 namespace ApplicationDomain.Abstraction.IServices;
 
 public interface IRecommendationService

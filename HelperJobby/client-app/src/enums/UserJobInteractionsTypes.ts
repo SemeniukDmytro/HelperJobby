@@ -1,4 +1,4 @@
-export enum UserJobInteractionsTypes{
+export enum UserJobInteractionsTypes {
     saved,
     applied,
     interviewing

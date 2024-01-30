@@ -1,6 +1,5 @@
 import CustomFetchService from "./customFetchService";
-import { JobSeekerAccountDTO } from "../DTOs/accountDTOs/JobSeekerAccountDTO";
-import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
+import {JobSeekerAccountDTO} from "../DTOs/accountDTOs/JobSeekerAccountDTO";
 import {UpdateJobSeekerAccountDTO} from "../DTOs/accountDTOs/UpdateJobSeekerAccountDTO";
 import {SavedJobDTO} from "../DTOs/userJobInteractionsDTOs/SavedJobDTO";
 
@@ -15,14 +14,15 @@ export class JobSeekerAccountService {
     public async getCurrentJobSeeker(): Promise<JobSeekerAccountDTO> {
         return await this.customFetchService.get<JobSeekerAccountDTO>(`${this.baseURI}/current-job-seeker`);
     }
-    
-    public async getCurrentJobSeekerAllInfo() : Promise<JobSeekerAccountDTO>{
+
+    public async getCurrentJobSeekerAllInfo(): Promise<JobSeekerAccountDTO> {
         return await this.customFetchService.get<JobSeekerAccountDTO>(`${this.baseURI}/current-job-seeker-all-info`);
     }
-    
-    public async getCurrentJobSeekerJobInteractions() : Promise<JobSeekerAccountDTO>{
+
+    public async getCurrentJobSeekerJobInteractions(): Promise<JobSeekerAccountDTO> {
         return await this.customFetchService.get<JobSeekerAccountDTO>(`${this.baseURI}/job-seeker-with-job-interactions`);
     }
+
     public async getSavedJobsOfCurrentJobSeeker(): Promise<SavedJobDTO[]> {
         return await this.customFetchService.get<SavedJobDTO[]>(`${this.baseURI}/my-saved-jobs`);
     }

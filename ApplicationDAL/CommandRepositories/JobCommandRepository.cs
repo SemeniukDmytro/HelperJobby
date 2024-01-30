@@ -1,7 +1,6 @@
 using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationDAL.CommandRepositories;
 

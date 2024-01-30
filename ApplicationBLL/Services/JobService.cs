@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using ApplicationBLL.Logic;
-using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
@@ -10,11 +9,12 @@ namespace ApplicationBLL.Services;
 
 public class JobService : IJobService
 {
+    private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
     private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IUserService _userService;
-    private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
 
-    public JobService(IJobQueryRepository jobQueryRepository, IUserService userService, IEmployerAccountQueryRepository employerAccountQueryRepository)
+    public JobService(IJobQueryRepository jobQueryRepository, IUserService userService,
+        IEmployerAccountQueryRepository employerAccountQueryRepository)
     {
         _jobQueryRepository = jobQueryRepository;
         _userService = userService;
@@ -23,15 +23,10 @@ public class JobService : IJobService
 
     public async Task<Job> CreateJob(Job job)
     {
-        if (!Validator.TryValidateObject(job, new ValidationContext(job), null, true))
-        {
-            throw new InvalidJobException();
-        }
+        if (!Validator.TryValidateObject(job, new ValidationContext(job), null, true)) throw new InvalidJobException();
 
         if (!SalaryRateHelper.CheckMinimalSalary(job.Salary, job.SalaryRate))
-        {
             throw new InvalidJobException("This wage appears to be below the minimum wage for this location");
-        }
         job.DatePosted = DateOnly.FromDateTime(DateTime.UtcNow);
         return job;
     }
@@ -41,11 +36,9 @@ public class JobService : IJobService
         var currentUserId = _userService.GetCurrentUserId();
         var employer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
         var jobEntity = await _jobQueryRepository.GetJobById(jobId);
-        
+
         if (jobEntity.EmployerAccountId != employer.Id)
-        {
             throw new ForbiddenException("You can not update this job information");
-        }
 
         var updatedEntity = JobUpdateValidation<CurrentJobCreation>.Update(jobEntity, updatedJob);
         return updatedEntity;
@@ -56,10 +49,7 @@ public class JobService : IJobService
         var currentUserId = _userService.GetCurrentUserId();
         var employer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
         var jobEntity = await _jobQueryRepository.GetJobById(jobId);
-        if (jobEntity.EmployerAccountId != employer.Id)
-        {
-            throw new ForbiddenException("You can not delete this job");
-        }
+        if (jobEntity.EmployerAccountId != employer.Id) throw new ForbiddenException("You can not delete this job");
 
         return jobEntity;
     }

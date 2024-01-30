@@ -14,12 +14,13 @@ import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentP
 import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
 import NotifyPopupWindow from "../../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
 
-interface ResumePhoneComponentProps {}
+interface ResumePhoneComponentProps {
+}
 
 const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
     const [savingInfo, setSavingInfo] = useState(false);
-    const {setProgressPercentage, setSaveFunc } = useResumeBuild();
-    const jobSeekerService = new  JobSeekerAccountService();
+    const {setProgressPercentage, setSaveFunc} = useResumeBuild();
+    const jobSeekerService = new JobSeekerAccountService();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
     const navigate = useNavigate();
@@ -36,27 +37,27 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
         setSaveFunc(() => customSaveFunc)
     }, [phoneNumber]);
 
-    async function customSaveFunc(){
+    async function customSaveFunc() {
         await updateJobSeekerInfo("/my-profile")
     }
-    
+
     async function updatePhoneNumber(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
         await updateJobSeekerInfo("/build/address")
     }
-    
-    async function updateJobSeekerInfo(resultPageURI : string){
+
+    async function updateJobSeekerInfo(resultPageURI: string) {
         try {
             setSavingInfo(true);
             const updatedJobSeeker = updateJobSeekerDTO(jobSeeker!.firstName,
                 jobSeeker!.lastName, phoneNumber, jobSeeker!.address);
             const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
             setJobSeeker((prevState) => {
-                if (prevState){
+                if (prevState) {
 
-                    const updatedJobSeeker : JobSeekerAccountDTO = {
+                    const updatedJobSeeker: JobSeekerAccountDTO = {
                         ...prevState,
-                        phoneNumber : response.phoneNumber
+                        phoneNumber: response.phoneNumber
                     }
                     return updatedJobSeeker;
                 }
@@ -64,24 +65,24 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
             })
             navigate(resultPageURI);
 
-        }
-        catch (e) {
-            if (e instanceof ServerError){
+        } catch (e) {
+            if (e instanceof ServerError) {
                 logErrorInfo(e)
                 setShowErrorNotify(true);
             }
-        }
-        finally {
+        } finally {
             setSavingInfo(false);
         }
     }
 
     return (
         <form className={"build-resume-form"}>
-            <NotifyPopupWindow isSuccessful={false}
-                               text={"Please enter a valid phone number"}
-                               showNotify={showErrorNotify}
-                               setShowNotify={setShowErrorNotify}/>
+            <NotifyPopupWindow
+                isSuccessful={false}
+                text={"Please enter a valid phone number"}
+                showNotify={showErrorNotify}
+                setShowNotify={setShowErrorNotify}
+            />
             {savingInfo && <div className={"request-in-process-surface"}></div>}
             <div className={"build-page-header"}>
                 Would you like to add a phone number to your resume?
@@ -89,16 +90,21 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
             <div className={"phone-page-disclaimer"}>
                 Only provided to employers you apply or respond to
             </div>
-            <CustomInputField fieldLabel={"Phone number"}
-                              isRequired={false}
-                              inputFieldValue={phoneNumber}
-                              setInputFieldValue={setPhoneNumber} fieldSubtitle={"starts with +"}
-                              inputRef={phoneNumberRef}/>
+            <CustomInputField
+                fieldLabel={"Phone number"}
+                isRequired={false}
+                inputFieldValue={phoneNumber}
+                setInputFieldValue={setPhoneNumber} fieldSubtitle={"starts with +"}
+                inputRef={phoneNumberRef}
+            />
             <div className={"phone-page-disclaimer"}>
-                By submitting the form with this box checked, you confirm that you are the primary user and subscriber to the telephone number provided, and you agree to receive calls (including using artificial or pre-recorded voice), texts, and WhatsApp messages from employers who use HelperJobby at the telephone number provided above.
+                By submitting the form with this box checked, you confirm that you are the primary user and subscriber
+                to the telephone number provided, and you agree to receive calls (including using artificial or
+                pre-recorded voice), texts, and WhatsApp messages from employers who use HelperJobby at the telephone
+                number provided above.
             </div>
             <button className={"submit-form-button"} onClick={updatePhoneNumber}>
-                {savingInfo ? 
+                {savingInfo ?
                     <WhiteLoadingSpinner/>
                     :
                     <span>Continue</span>

@@ -1,9 +1,7 @@
 import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './CustomPasswordInputField.scss';
-import {isNotEmpty} from "../../utils/validationLogic/isNotEmptyString";
-import GoogleImage from "../../Assets/pictures/google_on_white_hdpi.png";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleExclamation, faEye, faEyeSlash, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faCircleExclamation, faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 
 interface CustomPasswordInputFieldProps {
     password: string;
@@ -85,20 +83,25 @@ const CustomPasswordInputField: FC<CustomPasswordInputFieldProps> = ({
             </div>
             <div className={`field-input-container ${fieldError ? "red-field-focus" : ""}`}>
                 <div
-                    className={`border-lining ${inputFocus ? "field-focus" : ""} ${fieldError ? "red-field-focus" : ""}`}>
+                    className={`border-lining ${inputFocus ? "field-focus" : ""} ${fieldError ? "red-field-focus" : ""}`}
+                >
 
                 </div>
-                <input className={`field-input`}
-                       value={password}
-                       autoComplete={"new-password"}
-                       type={`${showPassword ? "text" : "password"}`}
-                       onChange={changeInputFieldValue}
-                       onFocus={handleInputFocus}
-                       onBlur={handleInputBlur}
-                       ref={inputRef}/>
+                <input
+                    className={`field-input`}
+                    value={password}
+                    autoComplete={"new-password"}
+                    type={`${showPassword ? "text" : "password"}`}
+                    onChange={changeInputFieldValue}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                    ref={inputRef}
+                />
                 <div className={"input-button-box"} onClick={toggleShowPassword}>
-                    <button type={"button"} className={"input-field-button right-margin-remove"}
-                            style={{minWidth: "40px"}}>
+                    <button
+                        type={"button"} className={"input-field-button right-margin-remove"}
+                        style={{minWidth: "40px"}}
+                    >
                         {showPassword ? <FontAwesomeIcon className={"svg125rem"} icon={faEyeSlash}/> :
                             <FontAwesomeIcon className={"svg125rem"} icon={faEye}/>}
                     </button>

@@ -1,6 +1,6 @@
 @use "../../../../Assets/scssSharedStyles/global-variables";
 
-.job-search-promo-container{
+.job-search-promo-container {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -10,28 +10,29 @@
   margin-bottom: 1rem;
 }
 
-.promo-container{
+.promo-container {
   display: flex;
   position: relative;
 }
 
-.promo-lower-container{
+.promo-lower-container {
   display: flex;
   position: relative;
   padding-top: 0.5rem;
 }
 
-.promo-link{
+.promo-link {
   color: global-variables.$dark-blue;
   font-weight: 700;
   cursor: pointer;
   transition: 0.1s;
-  &:hover{
+
+  &:hover {
     text-decoration: underline;
     color: global-variables.$dark-blue-hover;
   }
 }
 
-.promo-default-text{
+.promo-default-text {
   color: global-variables.$neutral-color-900;
 }

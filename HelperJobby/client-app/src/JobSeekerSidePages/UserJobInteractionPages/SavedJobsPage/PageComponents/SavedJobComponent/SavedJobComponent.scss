@@ -1,6 +1,6 @@
 @use "../../../../../Assets/scssSharedStyles/global-variables";
 
-.ji-job-block{
+.ji-job-block {
   display: block;
   width: 100%;
   padding: 1rem 0;
@@ -17,26 +17,26 @@
   }
 }
 
-.ji-job-layout{
+.ji-job-layout {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.ji-job-fb{
+.ji-job-fb {
   flex-basis: 50%;
   flex-grow: 1;
   display: flex;
   flex-direction: row;
 }
 
-.ji-apply-fb{
+.ji-apply-fb {
   display: flex;
   flex-basis: 40%;
   justify-content: end;
 }
 
-.job-interaction-deleted-box{
+.job-interaction-deleted-box {
   display: flex;
   flex-direction: row;
   justify-content: space-between;

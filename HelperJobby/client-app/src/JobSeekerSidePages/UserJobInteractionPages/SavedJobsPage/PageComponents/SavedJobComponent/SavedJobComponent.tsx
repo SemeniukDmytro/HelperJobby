@@ -19,8 +19,8 @@ import {useNavigate} from "react-router-dom";
 import {useJobActions} from "../../../../../hooks/useJobActions";
 
 interface SavedJobComponentProps {
-    job : JobDTO;
-    interactionTime : Date;
+    job: JobDTO;
+    interactionTime: Date;
 }
 
 const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) => {
@@ -33,7 +33,7 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
     const navigate = useNavigate();
     const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeeker, job);
 
-    async function handleJobInteraction(actionFunction : JobActionFunction, setShowRemoveFromSavedValue : ShowRemoveFromSavedSetter) {
+    async function handleJobInteraction(actionFunction: JobActionFunction, setShowRemoveFromSavedValue: ShowRemoveFromSavedSetter) {
         try {
             if (!authUser) {
                 navigate("/auth-page");
@@ -54,52 +54,54 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
     async function handleSaveJobClick() {
         await handleJobInteraction(saveJob, setShowRemoveFromSaved);
     }
-    
-    function closeUndoActionWindow(){
+
+    function closeUndoActionWindow() {
         setShowUndoRemoveWindow(false);
         setSavedJobs((prevSavedJobs) => prevSavedJobs!
             .filter(savedJob => savedJob.jobId !== job.id));
     }
-    
+
     return (
         !showUndoRemoveWindow ? null : <>
-        <div className={"ji-job-block"}>
-            {!showRemoveFromSaved ?
-                (<div className={"ji-job-layout"}>
-                    <UserJobInteractionShortJobInfo job={job}
-                                                    interactionTime={interactionTime}
-                                                    jobInteractionType={UserJobInteractionsTypes.saved}/>
-                    <div className={"ji-apply-fb"}>
-                        <div>
-                            <button className={"blue-button"}>
-                                Apply now
+            <div className={"ji-job-block"}>
+                {!showRemoveFromSaved ?
+                    (<div className={"ji-job-layout"}>
+                        <UserJobInteractionShortJobInfo
+                            job={job}
+                            interactionTime={interactionTime}
+                            jobInteractionType={UserJobInteractionsTypes.saved}
+                        />
+                        <div className={"ji-apply-fb"}>
+                            <div>
+                                <button className={"blue-button"}>
+                                    Apply now
+                                </button>
+                            </div>
+                        </div>
+                        <div className={"ml1rem"}>
+                            <button className={"medium-tr-btn-with-icon"} onClick={handleRemoveSavedJobClick}>
+                                <FontAwesomeIcon icon={faBookmark}/>
                             </button>
                         </div>
-                    </div>
-                    <div className={"ml1rem"}>
-                        <button className={"medium-tr-btn-with-icon"} onClick={handleRemoveSavedJobClick}>
-                            <FontAwesomeIcon icon={faBookmark}/>
-                        </button>
-                    </div>
-                </div>)
-                :
-                (
-                    <div className={"job-interaction-deleted-box"}>
-                        <div>
-                            <span className={"semi-dark-default-text bold-text"}>{job.jobTitle}&nbsp;</span>
-                            <span className={"light-dark-default-text"}>has been unsaved.&nbsp;</span>
-                            <a className={"bold-navigation-link"} onClick={handleSaveJobClick}>Undo</a>
+                    </div>)
+                    :
+                    (
+                        <div className={"job-interaction-deleted-box"}>
+                            <div>
+                                <span className={"semi-dark-default-text bold-text"}>{job.jobTitle}&nbsp;</span>
+                                <span className={"light-dark-default-text"}>has been unsaved.&nbsp;</span>
+                                <a className={"bold-navigation-link"} onClick={handleSaveJobClick}>Undo</a>
+                            </div>
+                            <div>
+                                <button className={"medium-tr-btn-with-icon"} onClick={closeUndoActionWindow}>
+                                    <FontAwesomeIcon className={"svg125rem"} icon={faXmark}/>
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <button className={"medium-tr-btn-with-icon"} onClick={closeUndoActionWindow}>
-                                <FontAwesomeIcon className={"svg125rem"} icon={faXmark}/>
-                            </button>
-                        </div>
-                    </div>
-                )}
-        </div>
-        <div className={"content-separation-line"}/>
-    </>)
+                    )}
+            </div>
+            <div className={"content-separation-line"}/>
+        </>)
 }
 
 export default SavedJobComponent;

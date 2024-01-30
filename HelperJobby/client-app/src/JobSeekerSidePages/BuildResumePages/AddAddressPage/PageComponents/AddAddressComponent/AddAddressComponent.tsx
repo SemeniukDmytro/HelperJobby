@@ -18,16 +18,19 @@ import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentP
 import {isNotEmpty} from "../../../../../utils/validationLogic/isNotEmptyString";
 import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
 
-interface ResumeAddressComponentProps {}
+interface ResumeAddressComponentProps {
+}
 
 const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
-    const {setProgressPercentage, setSaveFunc,
-        setShowDialogWindow} = useResumeBuild();
+    const {
+        setProgressPercentage, setSaveFunc,
+        setShowDialogWindow
+    } = useResumeBuild();
     const {authUser} = useAuth();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const jobSeekerService = new JobSeekerAccountService();
     const navigate = useNavigate();
-    
+
     const [savingInfo, setSavingInfo] = useState(false);
     const [country, setCountry] = useState(jobSeeker!.address?.country || "");
     const countryRef = useRef<HTMLSelectElement>(null);
@@ -54,34 +57,33 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
         setSaveFunc(() => customSaveFunc)
     }, [country, streetAddress, city, postalCode]);
 
-    async function customSaveFunc(){
+    async function customSaveFunc() {
         await updateJobSeekerAddress("/my-profile", true)
     }
 
-    async function updateJobSeekerAddress(resultPageURI : string, isSaveAndExitAction : boolean){
-        if(!isNotEmpty(country)){
+    async function updateJobSeekerAddress(resultPageURI: string, isSaveAndExitAction: boolean) {
+        if (!isNotEmpty(country)) {
             if (countryRef.current) {
                 countryRef.current.focus();
-                if (isSaveAndExitAction){
+                if (isSaveAndExitAction) {
                     setShowDialogWindow(true);
                 }
                 return;
             }
         }
-        if (!isNotEmpty(city))
-        {
-            if(cityInputRef.current){
+        if (!isNotEmpty(city)) {
+            if (cityInputRef.current) {
                 cityInputRef.current.focus();
-                if (isSaveAndExitAction){
+                if (isSaveAndExitAction) {
                     setShowDialogWindow(true);
                 }
                 return;
             }
         }
-        
+
         try {
             setSavingInfo(true);
-            const updatedAddress : UpdateAddressDTO = {
+            const updatedAddress: UpdateAddressDTO = {
                 streetAddress,
                 country,
                 city,
@@ -91,11 +93,11 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
                 jobSeeker!.lastName, jobSeeker!.phoneNumber, updatedAddress);
             const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
             setJobSeeker((prevState) => {
-                if (prevState){
+                if (prevState) {
 
-                    const updatedJobSeeker : JobSeekerAccountDTO = {
+                    const updatedJobSeeker: JobSeekerAccountDTO = {
                         ...prevState,
-                        address : response.address
+                        address: response.address
                     }
                     return updatedJobSeeker;
                 }
@@ -103,11 +105,9 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
             })
             navigate(resultPageURI);
 
-        }
-        catch (e) {
+        } catch (e) {
             logErrorInfo(e);
-        }
-        finally {
+        } finally {
             setSavingInfo(false);
         }
     }
@@ -115,23 +115,27 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
     return (
 
         <div>
-            {showStreetsAutocomplete && <AutocompleteResultsWindow inputFieldRef={streetAddressInputRef}
-                                                                   inputValue={streetAddress}
-                                                                   setInputValue={setStreetAddress}
-                                                                   cityInputValue={city}
-                                                                   setCityInputValue={setCity}
-                                                                   country={country}
-                                                                   showResult={showStreetsAutocomplete}
-                                                                   setShowResult={setShowStreetsAutocomplete}
-                                                                   autocompleteWindowType={AutocompleteWindowTypes.streetAddress}/>}
+            {showStreetsAutocomplete && <AutocompleteResultsWindow
+                inputFieldRef={streetAddressInputRef}
+                inputValue={streetAddress}
+                setInputValue={setStreetAddress}
+                cityInputValue={city}
+                setCityInputValue={setCity}
+                country={country}
+                showResult={showStreetsAutocomplete}
+                setShowResult={setShowStreetsAutocomplete}
+                autocompleteWindowType={AutocompleteWindowTypes.streetAddress}
+            />}
 
-            {showCityAutoComplete && <AutocompleteResultsWindow inputFieldRef={cityInputRef}
-                                                                inputValue={city}
-                                                                setInputValue={setCity}
-                                                                country={country}
-                                                                showResult={showCityAutoComplete}
-                                                                setShowResult={setShowCityAutoComplete}
-                                                                autocompleteWindowType={AutocompleteWindowTypes.city}/>}
+            {showCityAutoComplete && <AutocompleteResultsWindow
+                inputFieldRef={cityInputRef}
+                inputValue={city}
+                setInputValue={setCity}
+                country={country}
+                showResult={showCityAutoComplete}
+                setShowResult={setShowCityAutoComplete}
+                autocompleteWindowType={AutocompleteWindowTypes.city}
+            />}
             <div className={"build-resume-form"}>
                 {savingInfo && <div className={"request-in-process-surface"}></div>}
                 <div className={"build-page-header subtitle-margin"}>
@@ -140,31 +144,39 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
                 <div className={"build-page-subtitle"}>
                     This helps match you with nearby jobs
                 </div>
-                <CountrySelector country={country}
-                                 setCountry={setCountry}
-                                 selectRef={countryRef}/>
+                <CountrySelector
+                    country={country}
+                    setCountry={setCountry}
+                    selectRef={countryRef}
+                />
 
-                <CustomInputField fieldLabel={"Street address"}
-                                  isRequired={false}
-                                  inputFieldValue={streetAddress}
-                                  setInputFieldValue={setStreetAddress}
-                                  displayGoogleLogo={true}
-                                  inputRef={streetAddressInputRef} 
-                                  setShowAutocompleteWindow={setShowStreetsAutocomplete}/>
+                <CustomInputField
+                    fieldLabel={"Street address"}
+                    isRequired={false}
+                    inputFieldValue={streetAddress}
+                    setInputFieldValue={setStreetAddress}
+                    displayGoogleLogo={true}
+                    inputRef={streetAddressInputRef}
+                    setShowAutocompleteWindow={setShowStreetsAutocomplete}
+                />
 
-                <CustomInputField fieldLabel={"City, Province / Territory"}
-                                  isRequired={true}
-                                  inputFieldValue={city}
-                                  setInputFieldValue={setCity}
-                                  inputRef={cityInputRef}
-                                  displayGoogleLogo={true}
-                                  setShowAutocompleteWindow={setShowCityAutoComplete}/>
+                <CustomInputField
+                    fieldLabel={"City, Province / Territory"}
+                    isRequired={true}
+                    inputFieldValue={city}
+                    setInputFieldValue={setCity}
+                    inputRef={cityInputRef}
+                    displayGoogleLogo={true}
+                    setShowAutocompleteWindow={setShowCityAutoComplete}
+                />
 
-                <CustomInputField fieldLabel={"Postal code"}
-                                  isRequired={false}
-                                  inputFieldValue={postalCode}
-                                  setInputFieldValue={setPostalCode}
-                                  inputRef={postalCodeRef}/>
+                <CustomInputField
+                    fieldLabel={"Postal code"}
+                    isRequired={false}
+                    inputFieldValue={postalCode}
+                    setInputFieldValue={setPostalCode}
+                    inputRef={postalCodeRef}
+                />
                 <button className={"submit-form-button"} onClick={updateAddress}>
                     {savingInfo ?
                         <WhiteLoadingSpinner/>

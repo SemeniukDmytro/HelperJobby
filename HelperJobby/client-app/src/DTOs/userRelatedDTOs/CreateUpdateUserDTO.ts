@@ -1,6 +1,5 @@
-export interface CreateUpdateUserDTO
-{
-    email : string;
+export interface CreateUpdateUserDTO {
+    email: string;
     password: string;
-    accountType : string;
+    accountType: string;
 }

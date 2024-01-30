@@ -8,7 +8,6 @@ public class CreateUserDTOValidator : AbstractValidator<CreateUpdateUserDTO>
 {
     public CreateUserDTOValidator()
     {
-
         RuleFor(u => u.Password).Cascade(CascadeMode.Stop)
             .NotEmpty().WithMessage("You can not have an empty password")
             .Length(8, 25).WithMessage("Length of your Password is invalid");
@@ -24,10 +23,6 @@ public class CreateUserDTOValidator : AbstractValidator<CreateUpdateUserDTO>
         var validator = new CreateUserDTOValidator();
         var validationResult = validator.Validate(user);
 
-        if (!validationResult.IsValid)
-        {
-            throw new InvalidUserException(validationResult.ToString());
-        }
+        if (!validationResult.IsValid) throw new InvalidUserException(validationResult.ToString());
     }
-    
 }

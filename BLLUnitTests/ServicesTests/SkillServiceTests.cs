@@ -10,17 +10,17 @@ namespace BLLUnitTests.ServicesTests;
 
 public class SkillServiceTests
 {
+    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
+    private readonly Mock<ISkillQueryRepository> _skillQueryRepositoryMock = new();
     private readonly ISkillService _skillService;
     private readonly Mock<IUserService> _userServiceMock = new();
-    private readonly Mock<ISkillQueryRepository> _skillQueryRepositoryMock = new();
-    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
 
     public SkillServiceTests()
     {
         _skillService = new SkillService(_jobSeekerAccountRepository.Object, _skillQueryRepositoryMock.Object,
             _userServiceMock.Object);
     }
-    
+
     [Fact]
     public async Task CreateSkillShouldReturnEducation()
     {
@@ -39,7 +39,7 @@ public class SkillServiceTests
         Assert.Equal(createSkill.ResumeId, resume.Id);
         Assert.Equal(createSkill.Name, skill.Name);
     }
-    
+
     [Fact]
     public async Task CreateWorkExperienceShouldThrowAnExceptionIfInvalidResumeIdProvided()
     {
@@ -56,7 +56,7 @@ public class SkillServiceTests
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _skillService.AddSkill(resumeId, skill));
     }
-    
+
     [Fact]
     public async Task DeleteWorkExperienceShouldReturnEducationToDelete()
     {
@@ -74,7 +74,7 @@ public class SkillServiceTests
         //Assert
         Assert.Equal(skillEntity.Id, skill.skill.Id);
     }
-    
+
     [Fact]
     public async Task DeleteWorkExperienceShouldThrowForbiddenExceptionIfNotCurrentUserTriesToDelete()
     {
@@ -85,12 +85,12 @@ public class SkillServiceTests
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
         _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
-        _skillQueryRepositoryMock.Setup(r => r.GetSkillById(skillId)).ReturnsAsync(new Skill()
+        _skillQueryRepositoryMock.Setup(r => r.GetSkillById(skillId)).ReturnsAsync(new Skill
         {
             Id = skillId,
-            ResumeId = 2,
+            ResumeId = 2
         });
         //Act % Assert
-        await Assert.ThrowsAsync<ForbiddenException>( async () => await _skillService.DeleteSkill(skillId));
+        await Assert.ThrowsAsync<ForbiddenException>(async () => await _skillService.DeleteSkill(skillId));
     }
 }

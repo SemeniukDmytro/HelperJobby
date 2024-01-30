@@ -25,7 +25,7 @@ import {months} from "../../../../AppConstData/Months";
 import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
 
 interface WorkExperienceInfoComponentProps {
-    workExperience? : WorkExperienceDTO
+    workExperience?: WorkExperienceDTO
 }
 
 const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({workExperience}) => {
@@ -34,7 +34,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     const workExperienceService = new WorkExperienceService();
     const resumeService = new ResumeService();
     const navigate = useNavigate();
-    
+
     const [jobTitle, setJobTitle] = useState("");
     const jobTitleInputRef = useRef<HTMLInputElement>(null);
     const [company, setCompany] = useState("");
@@ -61,13 +61,13 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             descriptionInputRef.current.innerText = workExperience?.description || "";
         }
         setProgressPercentage(ProgressPercentPerPage * 5);
-        if (workExperience){
+        if (workExperience) {
             setPassedWorkExperienceValues();
         }
-        
+
         const currentPath = window.location.pathname;
         let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
-        if (parentPathFirstPart == "/build"){
+        if (parentPathFirstPart == "/build") {
             parentPathFirstPart = "/build/experience"
         }
         setParentPagePath(parentPathFirstPart);
@@ -76,20 +76,20 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     useEffect(() => {
         setSaveFunc(() => CustomSaveFunc);
     }, [jobTitle, company, country, city, fromMonth,
-    fromYear, toMonth, toYear, description, currentlyWorkingHere]);
+        fromYear, toMonth, toYear, description, currentlyWorkingHere]);
 
     function changeDescriptionValue(event: React.FormEvent<HTMLDivElement>) {
         setDescription(event.currentTarget.innerHTML);
     }
 
-    function toggleCurrentlyWorkHere(){
+    function toggleCurrentlyWorkHere() {
         setCurrentlyWorkingHere(!currentlyWorkingHere)
     }
-    
+
     async function CustomSaveFunc() {
         await handleWorkExperienceCreation("/my-profile", true)
     }
-    
+
     function navigateToSkillsPage() {
         navigate("/build/skills")
     }
@@ -108,7 +108,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             setValidateJobTitle(true);
             if (jobTitleInputRef.current) {
                 jobTitleInputRef.current.focus();
-                jobTitleInputRef.current.scrollIntoView({block : "end", behavior: "smooth" });
+                jobTitleInputRef.current.scrollIntoView({block: "end", behavior: "smooth"});
                 if (isSaveAndExitAction) {
                     setShowDialogWindow(true);
                 }
@@ -141,15 +141,16 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             }
             const retrievedResume = await resumeService.postResume(createdResume);
             setJobSeeker((prev) => {
-                if (prev){
-                    const updatedJobSeeker : JobSeekerAccountDTO = {
+                if (prev) {
+                    const updatedJobSeeker: JobSeekerAccountDTO = {
                         ...prev,
-                        resume : retrievedResume
+                        resume: retrievedResume
                     }
                     return updatedJobSeeker;
                 }
-                return prev;});
-            
+                return prev;
+            });
+
         } catch (err) {
             if (err instanceof ServerError) {
                 logErrorInfo(err)
@@ -203,12 +204,12 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             jobTitle,
             company,
             country,
-            cityOrProvince : city,
-            from : fromDate,
-            description : description,
-            currentlyWorkHere : currentlyWorkingHere
+            cityOrProvince: city,
+            from: fromDate,
+            description: description,
+            currentlyWorkHere: currentlyWorkingHere
         };
-        if (!currentlyWorkingHere){
+        if (!currentlyWorkingHere) {
             createUpdateWorkExperienceDTO.to = toDate;
         }
         return createUpdateWorkExperienceDTO;
@@ -230,12 +231,12 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
         if (educationFormattedFromDate) {
             const convertedFromMonth = months
                 .find((m) => m.monthNumber == Number.parseInt(educationFormattedFromDate[1]))?.name;
-            
+
 
             setFromMonth(convertedFromMonth || "");
             setFromYear(educationFormattedFromDate[0]);
         }
-        if (educationFormattedToDate){
+        if (educationFormattedToDate) {
             const convertedToMonth = months
                 .find((m) => m.monthNumber == Number.parseInt(educationFormattedToDate[1]))?.name;
             setToMonth(convertedToMonth || "");
@@ -243,22 +244,24 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
         }
     }
 
-    return(
+    return (
         <>
-            {showCityAutoComplete && <AutocompleteResultsWindow inputFieldRef={cityInputRef}
-                                                                inputValue={city}
-                                                                setInputValue={setCity}
-                                                                country={country || "Canada"}
-                                                                showResult={showCityAutoComplete}
-                                                                setShowResult={setShowCityAutoComplete}
-                                                                autocompleteWindowType={AutocompleteWindowTypes.city}/>}
+            {showCityAutoComplete && <AutocompleteResultsWindow
+                inputFieldRef={cityInputRef}
+                inputValue={city}
+                setInputValue={setCity}
+                country={country || "Canada"}
+                showResult={showCityAutoComplete}
+                setShowResult={setShowCityAutoComplete}
+                autocompleteWindowType={AutocompleteWindowTypes.city}
+            />}
 
             <form className={"build-resume-form"}>
                 {savingProcess && <div className={"request-in-process-surface"}></div>}
                 <div className={"build-page-header"}>
                     {workExperience ? <span>Edit work experience</span> : <span>Add work experience</span>}
                 </div>
-                <CustomInputField 
+                <CustomInputField
                     fieldLabel={"Job title"}
                     isRequired={true}
                     inputFieldValue={jobTitle}
@@ -266,18 +269,21 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                     inputRef={jobTitleInputRef}
                     notShowErrorInitially={true}
                     executeValidation={validateJobTitle}
-                    setExecuteValidation={setValidateJobTitle}/>
-                
+                    setExecuteValidation={setValidateJobTitle}
+                />
+
                 <CustomInputField
                     fieldLabel={"Company"}
                     isRequired={false}
                     inputFieldValue={company}
-                    setInputFieldValue={setCompany}/>
+                    setInputFieldValue={setCompany}
+                />
 
                 <CountrySelector
                     country={country}
                     setCountry={setCountry}
-                    selectRef={countryInputRef}/>
+                    selectRef={countryInputRef}
+                />
 
                 <CustomInputField
                     fieldLabel={"City, Province/Territory"}
@@ -286,8 +292,9 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                     setInputFieldValue={setCity}
                     displayGoogleLogo={true}
                     inputRef={cityInputRef}
-                    setShowAutocompleteWindow={setShowCityAutoComplete}/>
-                
+                    setShowAutocompleteWindow={setShowCityAutoComplete}
+                />
+
                 <div className={"is-current"}>
                     <div className={"field-label"}>
                         Time period
@@ -297,7 +304,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                         <span>I currently work here</span>
                     </div>
                 </div>
-                
+
                 <TimePeriod
                     fromMonth={fromMonth}
                     setFromMonth={setFromMonth}
@@ -309,19 +316,21 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                     setToYear={setToYear}
                     invalidValuesProvided={invalidValuesProvided}
                     setInvalidValuesProvided={setInvalidValuesProvided}
-                    currentlyEnrolledSelected={currentlyWorkingHere}/>
-                
+                    currentlyEnrolledSelected={currentlyWorkingHere}
+                />
+
                 <div className={"description-container"}>
                     <div className={"field-label"}>
                         <span>Description</span>
                     </div>
-                    <div style={{position : "relative", marginTop: "0.5rem"}}>
+                    <div style={{position: "relative", marginTop: "0.5rem"}}>
                         <div
                             role={"textbox"}
                             contentEditable={true}
                             className={"description-input"}
                             onInput={changeDescriptionValue}
-                            ref={descriptionInputRef}>
+                            ref={descriptionInputRef}
+                        >
                         </div>
                         <div className={"description-focused"}></div>
                     </div>
@@ -347,7 +356,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                 </div>
             </form>
         </>
-        
+
     )
 }
 

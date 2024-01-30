@@ -16,19 +16,13 @@ public class UpdateUserDTOValidator : AbstractValidator<CreateUpdateUserDTO>
             .Must(CommonValidator.HaveValidAccountType).WithMessage("Chosen role is invalid")
             .When(u => !string.IsNullOrEmpty(u.AccountType));
     }
-    
+
     public static void ValidateUser(CreateUpdateUserDTO user)
     {
-        if (!string.IsNullOrEmpty(user.Email))
-        {
-            CommonValidator.BeValidEmail(user.Email);
-        }
+        if (!string.IsNullOrEmpty(user.Email)) CommonValidator.BeValidEmail(user.Email);
         var validator = new UpdateUserDTOValidator();
         var validationResult = validator.Validate(user);
 
-        if (!validationResult.IsValid)
-        {
-            throw new InvalidUserException(validationResult.ToString());
-        }
+        if (!validationResult.IsValid) throw new InvalidUserException(validationResult.ToString());
     }
 }

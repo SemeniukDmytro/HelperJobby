@@ -1,4 +1,4 @@
-export interface MonthNameAndNumberDTO{
-    name : string,
-    monthNumber : number
+export interface MonthNameAndNumberDTO {
+    name: string,
+    monthNumber: number
 }

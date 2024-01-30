@@ -1,5 +1,6 @@
 import {JobSeekerAccountDTO} from "../accountDTOs/JobSeekerAccountDTO";
 import {EmployerAccountDTO} from "../accountDTOs/EmployerAccountDTO";
+
 export interface UserDTO {
     id: number;
     email: string;

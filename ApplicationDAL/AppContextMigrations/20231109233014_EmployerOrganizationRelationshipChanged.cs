@@ -3,123 +3,122 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ApplicationDAL.AppContextMigrations
+namespace ApplicationDAL.AppContextMigrations;
+
+/// <inheritdoc />
+public partial class EmployerOrganizationRelationshipChanged : Migration
 {
     /// <inheritdoc />
-    public partial class EmployerOrganizationRelationshipChanged : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Organizations_EmployerAccounts_EmployerAccountId",
-                table: "Organizations");
+        migrationBuilder.DropForeignKey(
+            "FK_Organizations_EmployerAccounts_EmployerAccountId",
+            "Organizations");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Organizations_EmployerAccountId",
-                table: "Organizations");
+        migrationBuilder.DropIndex(
+            "IX_Organizations_EmployerAccountId",
+            "Organizations");
 
-            migrationBuilder.DropColumn(
-                name: "EmployerAccountId",
-                table: "Organizations");
+        migrationBuilder.DropColumn(
+            "EmployerAccountId",
+            "Organizations");
 
-            migrationBuilder.AddColumn<int>(
-                name: "OrganizationId",
-                table: "EmployerAccounts",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
+        migrationBuilder.AddColumn<int>(
+            "OrganizationId",
+            "EmployerAccounts",
+            "int",
+            nullable: false,
+            defaultValue: 0);
 
-            migrationBuilder.CreateTable(
-                name: "OrganizationEmployeeEmails",
-                columns: table => new
+        migrationBuilder.CreateTable(
+                "OrganizationEmployeeEmails",
+                table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>("int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    Email = table.Column<string>("varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    OrganizationId = table.Column<int>(type: "int", nullable: false)
+                    OrganizationId = table.Column<int>("int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrganizationEmployeeEmails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrganizationEmployeeEmails_Organizations_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organizations",
-                        principalColumn: "Id",
+                        "FK_OrganizationEmployeeEmails_Organizations_OrganizationId",
+                        x => x.OrganizationId,
+                        "Organizations",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_EmployerAccounts_OrganizationId",
-                table: "EmployerAccounts",
-                column: "OrganizationId");
+        migrationBuilder.CreateIndex(
+            "IX_EmployerAccounts_OrganizationId",
+            "EmployerAccounts",
+            "OrganizationId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_OrganizationEmployeeEmails_Email",
-                table: "OrganizationEmployeeEmails",
-                column: "Email",
-                unique: true);
+        migrationBuilder.CreateIndex(
+            "IX_OrganizationEmployeeEmails_Email",
+            "OrganizationEmployeeEmails",
+            "Email",
+            unique: true);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_OrganizationEmployeeEmails_OrganizationId",
-                table: "OrganizationEmployeeEmails",
-                column: "OrganizationId");
+        migrationBuilder.CreateIndex(
+            "IX_OrganizationEmployeeEmails_OrganizationId",
+            "OrganizationEmployeeEmails",
+            "OrganizationId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_EmployerAccounts_Organizations_OrganizationId",
-                table: "EmployerAccounts",
-                column: "OrganizationId",
-                principalTable: "Organizations",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-        }
+        migrationBuilder.AddForeignKey(
+            "FK_EmployerAccounts_Organizations_OrganizationId",
+            "EmployerAccounts",
+            "OrganizationId",
+            "Organizations",
+            principalColumn: "Id",
+            onDelete: ReferentialAction.Cascade);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(
-                name: "FK_EmployerAccounts_Organizations_OrganizationId",
-                table: "EmployerAccounts");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropForeignKey(
+            "FK_EmployerAccounts_Organizations_OrganizationId",
+            "EmployerAccounts");
 
-            migrationBuilder.DropTable(
-                name: "OrganizationEmployeeEmails");
+        migrationBuilder.DropTable(
+            "OrganizationEmployeeEmails");
 
-            migrationBuilder.DropIndex(
-                name: "IX_EmployerAccounts_OrganizationId",
-                table: "EmployerAccounts");
+        migrationBuilder.DropIndex(
+            "IX_EmployerAccounts_OrganizationId",
+            "EmployerAccounts");
 
-            migrationBuilder.DropColumn(
-                name: "OrganizationId",
-                table: "EmployerAccounts");
+        migrationBuilder.DropColumn(
+            "OrganizationId",
+            "EmployerAccounts");
 
-            migrationBuilder.RenameColumn(
-                name: "Email",
-                table: "EmployerAccounts",
-                newName: "ContactEmail");
+        migrationBuilder.RenameColumn(
+            "Email",
+            "EmployerAccounts",
+            "ContactEmail");
 
-            migrationBuilder.AddColumn<int>(
-                name: "EmployerAccountId",
-                table: "Organizations",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
+        migrationBuilder.AddColumn<int>(
+            "EmployerAccountId",
+            "Organizations",
+            "int",
+            nullable: false,
+            defaultValue: 0);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Organizations_EmployerAccountId",
-                table: "Organizations",
-                column: "EmployerAccountId",
-                unique: true);
+        migrationBuilder.CreateIndex(
+            "IX_Organizations_EmployerAccountId",
+            "Organizations",
+            "EmployerAccountId",
+            unique: true);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Organizations_EmployerAccounts_EmployerAccountId",
-                table: "Organizations",
-                column: "EmployerAccountId",
-                principalTable: "EmployerAccounts",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-        }
+        migrationBuilder.AddForeignKey(
+            "FK_Organizations_EmployerAccounts_EmployerAccountId",
+            "Organizations",
+            "EmployerAccountId",
+            "EmployerAccounts",
+            principalColumn: "Id",
+            onDelete: ReferentialAction.Cascade);
     }
 }

@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import ChangeAccountTypeComponent from "./PageComponents/ChangeAccountTypeComponent/ChangeAccountTypeComponent";
 
-interface ChangeAccountTypePageProps {}
+interface ChangeAccountTypePageProps {
+}
 
 const ChangeAccountTypePage: FC<ChangeAccountTypePageProps> = () => (
-  <ChangeAccountTypeComponent/>
+    <ChangeAccountTypeComponent/>
 );
 
 export default ChangeAccountTypePage;

@@ -8,23 +8,23 @@ namespace API_IntegrationTests.Tests;
 
 public class EmployerAccountControllerTests : IntegrationTest
 {
-
     public EmployerAccountControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {
     }
 
     [Fact]
-    public async Task CreateEmployerAccount_ShouldReturnCreatedEmployerAccountAndCreateNewOrganization_IfOrganizationDoesNotExist()
+    public async Task
+        CreateEmployerAccount_ShouldReturnCreatedEmployerAccountAndCreateNewOrganization_IfOrganizationDoesNotExist()
     {
         //Arrange
         await AuthenticateAsync();
         var requestUri = "/api/employerAccount";
         var createdEmployer = NewEmployerFixtures.EmployerWithRandomOrganization;
-        
+
         //Act
         var employerCreationResponse = await TestClient.PostAsJsonAsync(requestUri, createdEmployer);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(employerCreationResponse, TestOutputHelper);
-        
+
         //Assert
         Assert.Equal(HttpStatusCode.OK, employerCreationResponse.StatusCode);
         var employer = await employerCreationResponse.Content.ReadAsAsync<EmployerAccountDTO>();
@@ -40,16 +40,17 @@ public class EmployerAccountControllerTests : IntegrationTest
         //Arrange
         var requestUri = "/api/employerAccount";
         var employerWithCreatedOrganization = await CreateEmployerWithNewOrganizationForAuthUser();
-        await TestClient.PostAsJsonAsync($"/api/organization/{employerWithCreatedOrganization.Organization.Id}/add-employee",
-            EmployeeEmailsFixtures.emailForAdding); 
+        await TestClient.PostAsJsonAsync(
+            $"/api/organization/{employerWithCreatedOrganization.Organization.Id}/add-employee",
+            EmployeeEmailsFixtures.emailForAdding);
         await AuthenticateAsync();
         var newEmployer = NewEmployerFixtures.EmployerCreationInCreatedOrganization;
         newEmployer.OrganizationName = employerWithCreatedOrganization.Organization.Name;
-        
+
         //Act
         var employerCreationResponse = await TestClient.PostAsJsonAsync(requestUri, newEmployer);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(employerCreationResponse, TestOutputHelper);
-        
+
         //Assert
         Assert.Equal(HttpStatusCode.OK, employerCreationResponse.StatusCode);
         var employer = await employerCreationResponse.Content.ReadAsAsync<EmployerAccountDTO>();
@@ -65,16 +66,16 @@ public class EmployerAccountControllerTests : IntegrationTest
         //Arrange
         var currentEmployer = await CreateEmployerWithNewOrganizationForAuthUser();
         var requestUri = $"/api/employerAccount/{currentEmployer.UserId}";
-        UpdateEmployerAccountDTO updateEmployerAccountDTO = new UpdateEmployerAccountDTO()
+        var updateEmployerAccountDTO = new UpdateEmployerAccountDTO
         {
             Email = "newemail@gmail.com",
             ContactNumber = ""
         };
-        
+
         //Act
         var updateEmployerResponse = await TestClient.PutAsJsonAsync(requestUri, updateEmployerAccountDTO);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(updateEmployerResponse, TestOutputHelper);
-        
+
         //Assert
         Assert.Equal(HttpStatusCode.OK, updateEmployerResponse.StatusCode);
         var updatedEmployer = await updateEmployerResponse.Content.ReadAsAsync<EmployerAccountDTO>();
@@ -94,25 +95,25 @@ public class EmployerAccountControllerTests : IntegrationTest
         //Act
         var getEmployerResponse = await TestClient.GetAsync(requestUri);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(getEmployerResponse, TestOutputHelper);
-        
+
         //Assert
         Assert.Equal(HttpStatusCode.OK, getEmployerResponse.StatusCode);
         var employer = await getEmployerResponse.Content.ReadAsAsync<EmployerAccountDTO>();
         Assert.Equal(createdEmployer.Id, employer.Id);
         Assert.Equal(createdEmployer.Email, employer.Email);
     }
-    
+
     [Fact]
     public async Task GetCurrenEmployer_ShouldReturnEmployerAccount()
     {
         //Arrange
         var createdEmployer = await CreateEmployerWithNewOrganizationForAuthUser();
-        var requestUri = $"/api/EmployerAccount/my-employer-account";
+        var requestUri = "/api/EmployerAccount/my-employer-account";
 
         //Act
         var getEmployerResponse = await TestClient.GetAsync(requestUri);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(getEmployerResponse, TestOutputHelper);
-        
+
         //Assert
         Assert.Equal(HttpStatusCode.OK, getEmployerResponse.StatusCode);
         var employer = await getEmployerResponse.Content.ReadAsAsync<EmployerAccountDTO>();

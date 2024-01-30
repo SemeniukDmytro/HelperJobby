@@ -1,6 +1,6 @@
 import {JobDTO} from "../jobRelatetedDTOs/JobDTO";
 
-export interface JobSearchResultDTO{
-    jobs : JobDTO[];
-    hasMore : boolean;
+export interface JobSearchResultDTO {
+    jobs: JobDTO[];
+    hasMore: boolean;
 }

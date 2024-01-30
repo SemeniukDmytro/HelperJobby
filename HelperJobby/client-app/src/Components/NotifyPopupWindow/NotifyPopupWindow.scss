@@ -1,8 +1,9 @@
 @use "../../Assets/scssSharedStyles/global-variables";
-$successful-color: rgb(42,134,59);
-$negative-color : rgb(134, 46, 40);
 
-.popup-bar{
+$successful-color: rgb(42, 134, 59);
+$negative-color: rgb(134, 46, 40);
+
+.popup-bar {
   box-sizing: border-box;
   margin: 0px;
   min-width: 0px;
@@ -11,10 +12,11 @@ $negative-color : rgb(134, 46, 40);
   padding: 0px 1rem;
   bottom: 10px;
   transition: 0.2s;
-  z-index: 5;  
+  z-index: 5;
   animation: fadeIn 0.5s ease;
 
 }
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -25,7 +27,7 @@ $negative-color : rgb(134, 46, 40);
 }
 
 
-.pop-up-box{
+.pop-up-box {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -38,7 +40,7 @@ $negative-color : rgb(134, 46, 40);
   padding: 0.75rem;
 }
 
-.successful-pop-up{
+.successful-pop-up {
   border: 1px solid;
   border-top-color: $successful-color;
   border-left: 0.5rem solid $successful-color;
@@ -46,29 +48,29 @@ $negative-color : rgb(134, 46, 40);
   border-bottom-color: $successful-color;
 }
 
-.successful-pop-up{
+.successful-pop-up {
   border: 1px solid $successful-color;
   border-left: 0.5rem solid $successful-color;
 }
 
-.negative-pop-up{
+.negative-pop-up {
   border: 1px solid $negative-color;
   border-left: 0.5rem solid $negative-color;
 }
 
-.successful-pop-up-icon{
+.successful-pop-up-icon {
   color: $successful-color;
   font-size: 1.25rem;
   margin-right: 1rem;
 }
 
-.negative-pop-up-icon{
+.negative-pop-up-icon {
   color: $negative-color;
   font-size: 1.25rem;
   margin-right: 1rem;
 }
 
-.pop-up-text{
+.pop-up-text {
   font-weight: 600;
   font-size: 0.875rem;
 }

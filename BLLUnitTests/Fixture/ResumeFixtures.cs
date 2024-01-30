@@ -4,36 +4,36 @@ namespace BLLUnitTests.Fixture;
 
 public static class ResumeFixtures
 {
-    public static Resume CreatedResume = new Resume()
+    public static Resume CreatedResume = new()
     {
-        Educations = new List<Education>()
+        Educations = new List<Education>
         {
-            new Education()
+            new()
             {
                 LevelOfEducation = "Bachelor's",
                 FieldOfStudy = "Software Engineering"
             }
         },
-        Skills = new List<Skill>()
+        Skills = new List<Skill>
         {
-            new Skill()
+            new()
             {
                 Name = "Recruiting"
             },
-            new Skill()
+            new()
             {
                 Name = "Data Analysis"
             }
         }
     };
-    
-    public static Resume ResumeEntity = new Resume()
+
+    public static Resume ResumeEntity = new()
     {
         Id = 1,
         JobSeekerAccountId = 1,
-        Educations = new List<Education>()
+        Educations = new List<Education>
         {
-            new Education()
+            new()
             {
                 Id = 1,
                 LevelOfEducation = "Bachelor's",
@@ -41,15 +41,15 @@ public static class ResumeFixtures
             }
         },
         WorkExperiences = new List<WorkExperience>(),
-        Skills = new List<Skill>()
+        Skills = new List<Skill>
         {
-            new Skill()
+            new()
             {
                 Id = 1,
                 Name = "Recruiting",
                 ResumeId = 1
             },
-            new Skill()
+            new()
             {
                 Id = 2,
                 Name = "Data Analysis",
@@ -57,11 +57,12 @@ public static class ResumeFixtures
             }
         }
     };
-    public static Resume UpdatedResume = new Resume()
+
+    public static Resume UpdatedResume = new()
     {
-        WorkExperiences = new List<WorkExperience>()
+        WorkExperiences = new List<WorkExperience>
         {
-            new WorkExperience()
+            new()
             {
                 JobTitle = "Software Engineer",
                 Company = "Google"

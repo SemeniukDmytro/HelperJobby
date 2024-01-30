@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import ResumeAddWorkExperienceComponent
     from "./PageComponents/PreviewAddWorkExperienceComponent/ResumeAddWorkExperienceComponent";
 
-interface ResumeAddWorkExperiencePageProps {}
+interface ResumeAddWorkExperiencePageProps {
+}
 
 const ResumeAddWorkExperiencePage: FC<ResumeAddWorkExperiencePageProps> = () => (
-  <ResumeAddWorkExperienceComponent/>
+    <ResumeAddWorkExperienceComponent/>
 );
 
 export default ResumeAddWorkExperiencePage;

@@ -1,6 +1,6 @@
 @use "../../../../../Assets/scssSharedStyles/global-variables";
 
-.short-info-container{
+.short-info-container {
   display: flex;
   position: relative;
   border: 1px solid global-variables.$neutral-color-400;
@@ -10,7 +10,7 @@
   overflow-wrap: break-word;
 }
 
-.review-block{
+.review-block {
   box-sizing: border-box;
   margin-block: 0px;
   margin-inline: 0px;
@@ -18,13 +18,14 @@
   flex: 1 1 0%;
 }
 
-.required-info{
+.required-info {
   margin-top: 0.5rem;
   font-weight: 700;
   color: global-variables.$neutral-color-1000;
   margin-bottom: 0.25rem;
 }
-.small-buttons-container{
+
+.small-buttons-container {
   box-sizing: border-box;
   margin-block: 0px;
   margin-inline: 0px;
@@ -34,7 +35,7 @@
   margin-right: -0.5rem;
 }
 
-.small-interaction-button{
+.small-interaction-button {
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -45,62 +46,66 @@
   color: global-variables.$neutral-color-1000;
   font-size: 1rem;
   border-radius: 0.5rem;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
     color: global-variables.$dark-blue-hover;
   }
-  &:active{
+
+  &:active {
     box-shadow: global-variables.$button-inner-shadow;
     background-color: global-variables.$light-blue-active;
     color: global-variables.$dark-blue-active;
   }
 }
 
-.add-info-button{
+.add-info-button {
   margin-top: 0.5rem;
   padding: 0.5rem 0.75rem;
   min-width: 2.25rem;
   border-radius: 0.5rem;
   background-color: transparent;
   margin-right: 1rem;
-  border : 1px solid global-variables.$neutral-color-400;
+  border: 1px solid global-variables.$neutral-color-400;
   cursor: pointer;
   color: global-variables.$dark-blue;
   font-weight: 600;
   line-height: 1.5;
   font-size: 1rem;
   margin-bottom: 1rem;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
     border-color: global-variables.$dark-blue;
   }
-  &:active{
+
+  &:active {
     box-shadow: global-variables.$button-inner-shadow;
     background-color: global-variables.$light-blue-active;
     border-color: global-variables.$dark-blue-active;
   }
 }
 
-.light-dark-small-text{
+.light-dark-small-text {
   color: global-variables.$neutral-color-700;
   line-height: 1.5;
   font-size: 0.875rem;
 }
 
-.semi-dark-small-text{
+.semi-dark-small-text {
   color: global-variables.$neutral-color-800;
   font-size: 0.875rem;
   line-height: 1.5;
   overflow-wrap: break-word;
 }
 
-.dark-small-text{
+.dark-small-text {
   color: global-variables.$neutral-color-900;
   font-size: 0.875rem;
   line-height: 1.5;
   overflow-wrap: break-word;
 }
 
-.icon-right-margin{
+.icon-right-margin {
   margin-right: 0.5rem;
 }

@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import AddNameComponent from "./PageComponents/AddNameComponent/AddNameComponent";
 
-interface ResumeNamePageProps {}
+interface ResumeNamePageProps {
+}
 
 
 const AddNamePage: FC<ResumeNamePageProps> = () => (
-  <AddNameComponent/>
+    <AddNameComponent/>
 );
 
 export default AddNamePage;

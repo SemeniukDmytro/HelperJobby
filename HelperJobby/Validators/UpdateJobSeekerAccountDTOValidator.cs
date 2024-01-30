@@ -19,20 +19,13 @@ public class UpdateJobSeekerAccountDTOValidator : AbstractValidator<UpdatedJobSe
             .NotEmpty().WithMessage("City field can not be empty")
             .MaximumLength(30).WithMessage("Invalid length of city field").When(a => a.Address != null);
     }
-    
+
     public static void ValidateAccount(UpdatedJobSeekerAccountDTO account)
     {
-
-        if (!string.IsNullOrEmpty(account.PhoneNumber))
-        {
-            CommonValidator.BeValidPhoneNumber(account.PhoneNumber);
-        }
+        if (!string.IsNullOrEmpty(account.PhoneNumber)) CommonValidator.BeValidPhoneNumber(account.PhoneNumber);
         var validator = new UpdateJobSeekerAccountDTOValidator();
         var validationResult = validator.Validate(account);
 
-        if (!validationResult.IsValid)
-        {
-            throw new InvalidJobSeekerAccountUpdateException(validationResult.ToString());
-        }
+        if (!validationResult.IsValid) throw new InvalidJobSeekerAccountUpdateException(validationResult.ToString());
     }
 }

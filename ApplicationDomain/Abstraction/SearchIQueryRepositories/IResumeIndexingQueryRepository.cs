@@ -10,5 +10,4 @@ public interface IResumeIndexingQueryRepository
         List<string> words);
 
     public Task<IEnumerable<ProcessedResumeWord>> GetProcessedResumeWordsByResumeId(int resumeId);
-
 }

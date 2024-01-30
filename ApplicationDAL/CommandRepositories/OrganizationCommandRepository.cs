@@ -20,12 +20,12 @@ public class OrganizationCommandRepository : IOrganizationCommandRepository
         return organization;
     }
 
-    public async Task<OrganizationEmployeeEmail> AddOrganizationEmployeesEmails(OrganizationEmployeeEmail organizationEmployeeEmail)
+    public async Task<OrganizationEmployeeEmail> AddOrganizationEmployeesEmails(
+        OrganizationEmployeeEmail organizationEmployeeEmail)
     {
         _applicationContext.OrganizationEmployeeEmails.Add(organizationEmployeeEmail);
         await _applicationContext.SaveChangesAsync();
         return organizationEmployeeEmail;
-
     }
 
     public async Task RemoveOrganizationEmployeesEmails(OrganizationEmployeeEmail organizationEmployeeEmail)

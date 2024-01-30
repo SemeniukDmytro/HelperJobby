@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using ApplicationDAL.Context;
 using ApplicationDAL.DALHelpers;
 using ApplicationDomain.Abstraction.IQueryRepositories;
@@ -9,17 +8,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationDAL.QueryRepositories;
 
-public class UserQueryRepository :  IUserQueryRepository
+public class UserQueryRepository : IUserQueryRepository
 {
     private readonly ApplicationContext _applicationContext;
     private readonly EntityInclusionHandler _entityInclusionHandler;
-    
+
     public UserQueryRepository(ApplicationContext applicationContext, EntityInclusionHandler entityInclusionHandler)
     {
         _applicationContext = applicationContext;
         _entityInclusionHandler = entityInclusionHandler;
     }
-    
+
 
     public async Task<User> GetUserByIdPlain(int userId)
     {
@@ -43,7 +42,7 @@ public class UserQueryRepository :  IUserQueryRepository
 
     public async Task<User> GetUserById(int userId)
     {
-        return await  _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.EmployerAccount)
+        return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.EmployerAccount)
             .Include(u => u.JobSeekerAccount));
     }
 
@@ -55,31 +54,23 @@ public class UserQueryRepository :  IUserQueryRepository
     public async Task<User> GetUserByEmail(string email)
     {
         var user = await _applicationContext.Users.FirstOrDefaultAsync(u => u.Email == email);
-        if (user == null)
-        {
-            throw new UserNotFoundException("User with specified email doesn't exist");
-        }
+        if (user == null) throw new UserNotFoundException("User with specified email doesn't exist");
 
         return user;
     }
 
     public async Task<User> GetUserByEmailWithRefreshToken(string email)
     {
-        var user = await _applicationContext.Users.Include(u => u.RefreshToken).FirstOrDefaultAsync(u => u.Email == email);
-        if (user == null)
-        {
-            throw new UserNotFoundException("User with provided email is not found");
-        }
+        var user = await _applicationContext.Users.Include(u => u.RefreshToken)
+            .FirstOrDefaultAsync(u => u.Email == email);
+        if (user == null) throw new UserNotFoundException("User with provided email is not found");
         return user;
     }
 
     public async Task<RefreshToken> GetRefreshTokenByUserId(int userId)
     {
         var token = await _applicationContext.RefreshTokens.FirstOrDefaultAsync(t => t.UserId == userId);
-        if (token == null)
-        {
-            throw new UnauthorizedException();
-        }
+        if (token == null) throw new UnauthorizedException();
 
         return token;
     }

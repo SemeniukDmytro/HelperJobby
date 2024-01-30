@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import EducationInfoComponent from "../SharedComponents/EducationInfoComponent/EducationInfoComponent";
 
-interface AddEducationPageProps {}
+interface AddEducationPageProps {
+}
 
 const AddEducationPage: FC<AddEducationPageProps> = () => (
-  <EducationInfoComponent/>
+    <EducationInfoComponent/>
 );
 
 export default AddEducationPage;

@@ -1,23 +1,18 @@
 import React, {FC, useState} from 'react';
 import './JobPostingComponent.scss';
-import {useEmployer} from "../../../../hooks/useEmployer";
+import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 
-interface JobPostingComponentProps {}
+interface JobPostingComponentProps {
+}
 
 const JobPostingComponent: FC<JobPostingComponentProps> = () => {
     const [loading, setLoading] = useState(true);
-    
-    const {fetchEmployer} = useEmployer();
-    
-    async function fetchPageInitialData(){
-        await fetchEmployer();
-        setLoading(false);
-    }
-    
+
     return (
-        <div>
-            
-        </div>
+        loading ? <LoadingPage/> :
+            <div>
+
+            </div>
     )
 }
 

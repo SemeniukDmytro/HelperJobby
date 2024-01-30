@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './EmployersPagesHeader.scss';
 import {useAuth} from "../../hooks/useAuth";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -11,17 +11,24 @@ import {
     faUser
 } from "@fortawesome/free-solid-svg-icons";
 import {useEmployer} from "../../hooks/useEmployer";
+import {useSignOut} from "../../hooks/useSignOut";
 
-interface EmployersPagesHeaderProps {}
+interface EmployersPagesHeaderProps {
+    loading: boolean;
+    setLoading: Dispatch<SetStateAction<boolean>>;
+}
 
-const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = () => {
-    const {authUser} = useAuth();
-    const {employer} = useEmployer();
+const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoading}) => {
+    const {authUser, setAuthUser} = useAuth();
+    const {employer, fetchEmployer} = useEmployer();
     const moreOptionsButtonRef = useRef<HTMLButtonElement>(null);
     const moreOptionsWindow = useRef<HTMLDivElement>(null);
     const [showMoreOptions, setShowMoreOptions] = useState(false);
+    const {signOut} = useSignOut(setAuthUser);
 
     useEffect(() => {
+        fetchEmployerInfo();
+
         function handleClickOutside(event: MouseEvent) {
             if (moreOptionsWindow.current && !moreOptionsWindow.current.contains(event.target as Node) &&
                 moreOptionsButtonRef.current && !moreOptionsButtonRef.current.contains(event.target as Node)) {
@@ -34,12 +41,14 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-    
+
     function handleShowMoreOptionsClick() {
-        if (!showMoreOptions){
-            
-        }
         setShowMoreOptions(!showMoreOptions);
+    }
+
+    async function fetchEmployerInfo() {
+        await fetchEmployer();
+        setLoading(false);
     }
 
     return (
@@ -48,19 +57,21 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = () => {
                 <div className="emh-logo-block">
                     HelperJobby
                 </div>
-                <div className="emh-right-side">
+                {!loading && <div className="emh-right-side">
                     <button className="neutral-transparent-button">
                         <FontAwesomeIcon className={"svg125rem icon-right-margin"} icon={faMessage}/>
                         <span>Messages</span>
                     </button>
                     <div className="emh-separator">
-                        
+
                     </div>
                     <div className="emh-email-block mr1rem">
-                        <button className={"neutral-transparent-button"}
-                                ref={moreOptionsButtonRef}
-                                onClick={handleShowMoreOptionsClick}>
-                            <FontAwesomeIcon className={"svg075rem mr05rem"} icon={faUser} />
+                        <button
+                            className={"neutral-transparent-button"}
+                            ref={moreOptionsButtonRef}
+                            onClick={handleShowMoreOptionsClick}
+                        >
+                            <FontAwesomeIcon className={"svg075rem mr05rem"} icon={faUser}/>
                             <span className={"mr05rem emh-user-email"}>{authUser?.user.email}</span>
                             <FontAwesomeIcon className={"svg05rem"} icon={faChevronDown}/>
                         </button>
@@ -68,7 +79,8 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = () => {
                             {showMoreOptions && <div className="emh-more-options-block" ref={moreOptionsWindow}>
                                 <div className={"emh-option-container"}>
                                     <span
-                                        className={"dark-default-text bold-text emh-employer-name"}>{employer?.fullName || "No account name"} </span>
+                                        className={"dark-default-text bold-text emh-employer-name"}
+                                    >{employer?.fullName || "No account name"} </span>
                                 </div>
                                 <div className={"emh-option-container"}>
                                     <button className={"emh-option"}>
@@ -94,22 +106,26 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = () => {
                                 </div>
                                 <div className={"emh-option-container"}>
                                     <button className={"emh-option"}>
-                                        <FontAwesomeIcon className={"icon-right-margin svg1rem"}
-                                                         icon={faArrowUpRightFromSquare}/>
+                                        <FontAwesomeIcon
+                                            className={"icon-right-margin svg1rem"}
+                                            icon={faArrowUpRightFromSquare}
+                                        />
                                         <span>HelperJobby for job seekers</span>
                                     </button>
                                 </div>
                                 <div className={"emh-option-container"}>
-                                    <button className={"emh-option"}>
-                                        <FontAwesomeIcon className={"icon-right-margin svg1rem"}
-                                                         icon={faArrowRightFromBracket}/>
+                                    <button className={"emh-option"} onClick={signOut}>
+                                        <FontAwesomeIcon
+                                            className={"icon-right-margin svg1rem"}
+                                            icon={faArrowRightFromBracket}
+                                        />
                                         <span>Sign out</span>
                                     </button>
                                 </div>
                             </div>}
                         </div>
                     </div>
-                </div>
+                </div>}
             </div>
         </div>
     )

@@ -4,6 +4,5 @@ public class InvalidUserException : InvalidModelExceptionBase
 {
     public InvalidUserException(string? message) : base(message)
     {
-        
     }
 }

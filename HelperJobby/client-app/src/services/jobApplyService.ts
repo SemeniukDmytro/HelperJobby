@@ -1,4 +1,3 @@
-import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
 import {JobApplyDTO} from "../DTOs/userJobInteractionsDTOs/JobApplyDTO";
 import CustomFetchService from "./customFetchService";
 

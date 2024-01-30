@@ -9,7 +9,8 @@ import {UpdateUserWIthCurrentPasswordDTO} from "../../../../../DTOs/userRelatedD
 import {ChangedInfoTypes} from "../../../../../enums/ChangedInfoTypes";
 import {useNavigate} from "react-router-dom";
 
-interface ChangePasswordComponentProps {}
+interface ChangePasswordComponentProps {
+}
 
 const ChangePasswordComponent: FC<ChangePasswordComponentProps> = () => {
     const {authUser, setAuthUser} = useAuth();
@@ -23,31 +24,30 @@ const ChangePasswordComponent: FC<ChangePasswordComponentProps> = () => {
     const navigate = useNavigate();
 
     async function changePassword() {
-        if (newPassword.length < 8 || newPassword.length > 25){
+        if (newPassword.length < 8 || newPassword.length > 25) {
             return;
         }
         try {
-            const updatedUserInfo : UpdateUserWIthCurrentPasswordDTO = {
-                password : newPassword,
-                currentPassword : currentPassword,
-                accountType : "",
-                email : ""
+            const updatedUserInfo: UpdateUserWIthCurrentPasswordDTO = {
+                password: newPassword,
+                currentPassword: currentPassword,
+                accountType: "",
+                email: ""
             }
             const retrievedUser = await userService.updateUserVulnerableInfo(authUser!.user.id, updatedUserInfo);
             setAuthUser((prev) => {
                 return prev ? {
                         ...prev,
-                        user : {
+                        user: {
                             ...prev.user,
-                            password : retrievedUser.password
+                            password: retrievedUser.password
                         }
                     } :
                     null;
             })
             navigate(`/settings?msg=${ChangedInfoTypes.changedpassword}`)
-            
-        }
-        catch (err){
+
+        } catch (err) {
             logErrorInfo(err)
             setCurrentPasswordError("Password provided for specified email is wrong")
         }
@@ -58,35 +58,38 @@ const ChangePasswordComponent: FC<ChangePasswordComponentProps> = () => {
     }
 
     return (
-    <ChangeAccountInfoForm>
-        <div className={"passpage-form-title-box"}>
-            <span className={"form-title"}>Changing password for {authUser?.user.email}</span>
-        </div>
-        <div className={"content-separation-margin"}/>
-        <CustomPasswordInputField
-            password={currentPassword}
-            setPassword={setCurrentPassword}
-            fieldLabel={"Current password"}
-            fieldError={currentPasswordError}
-            setFieldError={setCurrentPasswordError}
-            inputRef={currentPasswordInputRef}/>
-        <CustomPasswordInputField
-            password={newPassword}
-            setPassword={setNewPassword}
-            fieldLabel={"New password"}
-            fieldError={newPasswordError}
-            setFieldError={setNewPasswordError}
-            showLengthError={true}
-            inputRef={newPasswordInputRef}/>
-        <div className={"passpage-button-container"}>
-            <button className={"blue-button"} onClick={changePassword}>
-                Save password
-            </button>
-            <button className={"transparent-button margin-left1rem"} onClick={backToSettingsPage}>
-                Cancel changes
-            </button>
-        </div>
-    </ChangeAccountInfoForm>
-)};
+        <ChangeAccountInfoForm>
+            <div className={"passpage-form-title-box"}>
+                <span className={"form-title"}>Changing password for {authUser?.user.email}</span>
+            </div>
+            <div className={"content-separation-margin"}/>
+            <CustomPasswordInputField
+                password={currentPassword}
+                setPassword={setCurrentPassword}
+                fieldLabel={"Current password"}
+                fieldError={currentPasswordError}
+                setFieldError={setCurrentPasswordError}
+                inputRef={currentPasswordInputRef}
+            />
+            <CustomPasswordInputField
+                password={newPassword}
+                setPassword={setNewPassword}
+                fieldLabel={"New password"}
+                fieldError={newPasswordError}
+                setFieldError={setNewPasswordError}
+                showLengthError={true}
+                inputRef={newPasswordInputRef}
+            />
+            <div className={"passpage-button-container"}>
+                <button className={"blue-button"} onClick={changePassword}>
+                    Save password
+                </button>
+                <button className={"transparent-button margin-left1rem"} onClick={backToSettingsPage}>
+                    Cancel changes
+                </button>
+            </div>
+        </ChangeAccountInfoForm>
+    )
+};
 
 export default ChangePasswordComponent;

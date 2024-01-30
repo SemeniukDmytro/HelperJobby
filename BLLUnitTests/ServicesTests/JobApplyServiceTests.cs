@@ -10,13 +10,13 @@ namespace BLLUnitTests.ServicesTests;
 
 public class JobApplyServiceTests
 {
-    private readonly IJobApplyService _jobApplyService;
-    private readonly Mock<IUserService> _userServiceMock = new ();
-    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerQueryRepository = new();
-    private readonly Mock<IJobApplyQueryRepository> _jobApplyQueryRepositoryMock = new();
-    private readonly Mock<IJobQueryRepository> _jobQueryRepositoryMock = new();
     private readonly Mock<IEmployerAccountQueryRepository> _employerQueryRepositoryMock = new();
-    
+    private readonly Mock<IJobApplyQueryRepository> _jobApplyQueryRepositoryMock = new();
+    private readonly IJobApplyService _jobApplyService;
+    private readonly Mock<IJobQueryRepository> _jobQueryRepositoryMock = new();
+    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerQueryRepository = new();
+    private readonly Mock<IUserService> _userServiceMock = new();
+
     public JobApplyServiceTests()
     {
         _jobApplyService = new JobApplyService(_userServiceMock.Object, _jobSeekerQueryRepository.Object,
@@ -63,8 +63,8 @@ public class JobApplyServiceTests
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _jobApplyService.GetJobAppliesForSpecificJob(jobId));
     }
-    
-    
+
+
     [Fact]
     public async Task CreateJobApplyShouldReturnCreatedJobApply()
     {
@@ -83,9 +83,8 @@ public class JobApplyServiceTests
         //Assert
         Assert.Equal(jobSeekerId, createdJobApply.JobSeekerAccountId);
         Assert.Equal(jobId, createdJobApply.JobId);
-        
     }
-    
+
     [Fact]
     public async Task CreateJobApplyShouldThrowJobApplyingExceptionIfJobSeekerAlreadyApplied()
     {
@@ -97,15 +96,15 @@ public class JobApplyServiceTests
         var job = JobFixtures.FirstJobEntity;
         _userServiceMock.Setup(u => u.GetCurrentUserId()).Returns(currentUserId);
         _jobApplyQueryRepositoryMock.Setup(r => r.GetJobApplyByJobIdAndJobSeekerId(jobId, jobSeekerId))
-            .ReturnsAsync(new JobApply()
+            .ReturnsAsync(new JobApply
             {
-                JobId = 2, 
+                JobId = 2,
                 JobSeekerAccountId = 1
             });
         _jobSeekerQueryRepository.Setup(r => r.GetJobSeekerAccountByUserId(currentUserId))
             .ReturnsAsync(jobSeekerAccount);
         //Act & Assert
-        await Assert.ThrowsAsync 
+        await Assert.ThrowsAsync
             <JobApplyingException>(async () => await _jobApplyService.PostJobApply(jobId));
     }
 
@@ -118,9 +117,9 @@ public class JobApplyServiceTests
         var jobId = 2;
         var jobSeekerAccount = JobSeekerAccountFixture.JobSeekerAccountEntity;
         _jobApplyQueryRepositoryMock.Setup(r => r.GetJobApplyByJobIdAndJobSeekerId(jobId, jobSeekerId))
-            .ReturnsAsync(new JobApply()
+            .ReturnsAsync(new JobApply
             {
-                JobId = 2, 
+                JobId = 2,
                 JobSeekerAccountId = 1
             });
         _userServiceMock.Setup(u => u.GetCurrentUserId()).Returns(currentUserId);
@@ -132,6 +131,4 @@ public class JobApplyServiceTests
         Assert.Equal(jobSeekerId, createdJobApply.JobSeekerAccountId);
         Assert.Equal(jobId, createdJobApply.JobId);
     }
-
-    
 }

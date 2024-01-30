@@ -7,14 +7,14 @@ import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes
 import {mapCountryWithA2Code} from "../../../../utils/convertLogic/countryWithA2CodeMapper";
 
 interface AutocompleteResultsWindowProps {
-    inputFieldRef : RefObject<HTMLInputElement>;
-    inputValue : string;
-    setInputValue : Dispatch<SetStateAction<string>>;
+    inputFieldRef: RefObject<HTMLInputElement>;
+    inputValue: string;
+    setInputValue: Dispatch<SetStateAction<string>>;
     cityInputValue?: string;
     setCityInputValue?: Dispatch<SetStateAction<string>>;
-    country : string;
-    showResult : boolean;
-    setShowResult : Dispatch<SetStateAction<boolean>>;
+    country: string;
+    showResult: boolean;
+    setShowResult: Dispatch<SetStateAction<boolean>>;
     autocompleteWindowType: AutocompleteWindowTypes;
 }
 
@@ -60,43 +60,42 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
             window.removeEventListener('resize', handleResize);
         };
     }, [autoCompleteRef, props.inputFieldRef, autocompleteResults]);
-    
+
 
     useEffect(() => {
         setAutoCompleteSelected(false);
         const timeout = setTimeout(() => {
-            if (!autoCompleteSelected){
+            if (!autoCompleteSelected) {
                 setDelayedInputValue(props.inputValue);
             }
         }, 300);
         return () => clearTimeout(timeout)
     }, [props.inputValue]);
-    
+
 
     useEffect(() => {
         const fetchData = async () => {
-            if (delayedInputValue.length <= 0 || props.inputValue.length<=0) {
+            if (delayedInputValue.length <= 0 || props.inputValue.length <= 0) {
                 return;
             }
             try {
                 setLoading(true);
-                let response : string [];
-                if (props.autocompleteWindowType == AutocompleteWindowTypes.streetAddress){
+                let response: string [];
+                if (props.autocompleteWindowType == AutocompleteWindowTypes.streetAddress) {
                     response = await locationAutocompleteService.GetAutocompletesForStreetAddress(
                         delayedInputValue,
                         mapCountryWithA2Code(props.country)
                     );
-                }
-                else {
+                } else {
                     response = await locationAutocompleteService.GetAutocompletesForCities(
                         delayedInputValue,
                         mapCountryWithA2Code(props.country)
                     );
                 }
-                
+
                 const separatedValues = response.map((result) => result.split(', '));
                 const autoCompleteResults = separatedValues.map((values) => values.slice(0, values.length - 1));
-                if (autoCompleteResults.length == 0){
+                if (autoCompleteResults.length == 0) {
                     props.setShowResult(false);
                 }
                 setAutocompleteResults(autoCompleteResults);
@@ -104,14 +103,13 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
                 if (error instanceof ServerError) {
                     logErrorInfo(error);
                 }
-            }
-            finally {
+            } finally {
                 setLoading(false);
             }
         }
         fetchData();
     }, [delayedInputValue]);
-    
+
     useEffect(() => {
         const handleDocumentClick = (e: MouseEvent) => {
             const clickedElement = e.target as HTMLElement;
@@ -124,20 +122,20 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
             document.removeEventListener('click', handleDocumentClick);
         };
     }, []);
-    
-    function handleStreetSelect(locationResult : string[]) {
-        const cityStreetSeparationIndex = Math.max(1, locationResult.length-2);
+
+    function handleStreetSelect(locationResult: string[]) {
+        const cityStreetSeparationIndex = Math.max(1, locationResult.length - 2);
         const streetAddressSeparated = locationResult.slice(0, cityStreetSeparationIndex);
         const citySeparated = locationResult.slice(cityStreetSeparationIndex, locationResult.length);
         const firstCitySeparatedElement = citySeparated[0];
-        if (/\d/.test(firstCitySeparatedElement)){
+        if (/\d/.test(firstCitySeparatedElement)) {
             citySeparated.shift();
             streetAddressSeparated.push(firstCitySeparatedElement);
         }
-        if (props.setCityInputValue){
+        if (props.setCityInputValue) {
             props.setCityInputValue(citySeparated.join(", "));
         }
-        props.setInputValue (streetAddressSeparated.join(", "))
+        props.setInputValue(streetAddressSeparated.join(", "))
         setAutoCompleteSelected(true);
     }
 
@@ -148,21 +146,30 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
 
     return (
         !props.setShowResult ? (<></>) :
-            ( loading ? <></> : 
-                <div className={"autocomplete-results"} ref={autoCompleteRef}>
-                    {autocompleteResults.map((locationResult, index)  => (
-                       props.autocompleteWindowType == AutocompleteWindowTypes.streetAddress ?
-                           (<div className={"autocomplete-result"} key={index} onClick={() => handleStreetSelect(locationResult)}>
-                               {locationResult.join(', ')}
-                           </div>)
-                           : (<div className={"autocomplete-result"} key={index} onClick={() => handleCitySelect(locationResult)}>
-                               {locationResult.join(', ')}
-                           </div>)
-                    ))}
-                </div>
+            (loading ? <></> :
+                    <div className={"autocomplete-results"} ref={autoCompleteRef}>
+                        {autocompleteResults.map((locationResult, index) => (
+                            props.autocompleteWindowType == AutocompleteWindowTypes.streetAddress ?
+                                (<div
+                                    className={"autocomplete-result"}
+                                    key={index}
+                                    onClick={() => handleStreetSelect(locationResult)}
+                                >
+                                    {locationResult.join(', ')}
+                                </div>)
+                                : (<div
+                                    className={"autocomplete-result"}
+                                    key={index}
+                                    onClick={() => handleCitySelect(locationResult)}
+                                >
+                                    {locationResult.join(', ')}
+                                </div>)
+                        ))}
+                    </div>
             )
-        
-        
-)};
+
+
+    )
+};
 
 export default AutocompleteResultsWindow;

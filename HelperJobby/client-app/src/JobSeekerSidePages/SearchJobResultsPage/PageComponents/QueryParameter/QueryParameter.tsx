@@ -50,8 +50,10 @@ const QueryParameter: FC<QueryParameterProps> = ({
 
 
     return (
-        <button className={`query-param-box ${isSelected ? "selected-query-box" : ""}`}
-                ref={queryParamButtonRef} onClick={onClick}>
+        <button
+            className={`query-param-box ${isSelected ? "selected-query-box" : ""}`}
+            ref={queryParamButtonRef} onClick={onClick}
+        >
             <span className={"param-name"}>
                 {paramName}
             </span>

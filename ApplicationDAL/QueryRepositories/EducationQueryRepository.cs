@@ -24,20 +24,15 @@ public class EducationQueryRepository : IEducationQueryRepository
     {
         return await GetEducation(educationId, q => q.Include(e => e.Resume));
     }
-    
-    private async Task<Education> GetEducation(int educationId, Func<IQueryable<Education>, IQueryable<Education>> includeFunc = null)
+
+    private async Task<Education> GetEducation(int educationId,
+        Func<IQueryable<Education>, IQueryable<Education>> includeFunc = null)
     {
         var query = _applicationContext.Educations.AsQueryable();
-        if (includeFunc != null)
-        {
-            query = includeFunc(query);
-        }
+        if (includeFunc != null) query = includeFunc(query);
 
         var education = await query.FirstOrDefaultAsync(e => e.Id == educationId);
-        if (education == null)
-        {
-            throw new EducationNotFoundException();
-        }
+        if (education == null) throw new EducationNotFoundException();
         return education;
     }
 }

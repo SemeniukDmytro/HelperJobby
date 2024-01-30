@@ -24,20 +24,15 @@ public class WorkExperienceQueryRepository : IWorkExperienceQueryRepository
     {
         return await GetEducation(workExperienceId, q => q.Include(w => w.Resume));
     }
-    
-    private async Task<WorkExperience> GetEducation(int workExperienceId, Func<IQueryable<WorkExperience>, IQueryable<WorkExperience>> includeFunc = null)
+
+    private async Task<WorkExperience> GetEducation(int workExperienceId,
+        Func<IQueryable<WorkExperience>, IQueryable<WorkExperience>> includeFunc = null)
     {
         var query = _applicationContext.WorkExperiences.AsQueryable();
-        if (includeFunc != null)
-        {
-            query = includeFunc(query);
-        }
+        if (includeFunc != null) query = includeFunc(query);
 
         var workExperience = await query.FirstOrDefaultAsync(e => e.WorkExperienceId == workExperienceId);
-        if (workExperience == null)
-        {
-            throw new WorkExperienceNotFoundException();
-        }
+        if (workExperience == null) throw new WorkExperienceNotFoundException();
         return workExperience;
     }
 }

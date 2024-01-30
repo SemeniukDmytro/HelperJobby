@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import {Outlet, Route, Routes} from "react-router-dom";
 import HomePage from "../../JobSeekerSidePages/HomePage/HomePage";
 import JobSeekerProfilePage from "../../JobSeekerSidePages/JobSeekerProfilePage/JobSeekerProfilePage";
@@ -40,72 +40,76 @@ import SavedJobsPage from "../../JobSeekerSidePages/UserJobInteractionPages/Save
 import JobAppliesPage from "../../JobSeekerSidePages/UserJobInteractionPages/JobAppliesPage/JobAppliesPage";
 import InterviewsPage from "../../JobSeekerSidePages/UserJobInteractionPages/InterviewsPage/InterviewsPage";
 import JobPage from "../../JobSeekerSidePages/JobPage/JobPage";
+import RequireAuth from "../../Components/RequireAuth/RequireAuth";
 
-interface JobSeekerSideRoutesProps {}
+interface JobSeekerSideRoutesProps {
+}
 
 const JobSeekerSideRoutes: FC<JobSeekerSideRoutesProps> = () => (
-      <Routes>
-          <Route path={"/"} element={<HomePage/>}/>
+    <Routes>
+        <Route element={<RequireAuth/>}>
+            <Route path={"/"} element={<HomePage/>}/>
 
-          <Route path={"/my-profile"} element={<JobSeekerProfilePage/>}/>
+            <Route path={"/my-profile"} element={<JobSeekerProfilePage/>}/>
 
-          <Route path={"/edit/contact"} element={<EditContactInfoPage/>}/>
+            <Route path={"/edit/contact"} element={<EditContactInfoPage/>}/>
 
-          <Route path={"/build"} element={<BuildResumePage/>}>
-              <Route path={"name"} element={<AddNamePage/>}/>
-              <Route path={"phone"} element={<AddPhonePage/>}/>
-              <Route path={"address"} element={<ResumeAddressPage/>}/>
+            <Route path={"/build"} element={<BuildResumePage/>}>
+                <Route path={"name"} element={<AddNamePage/>}/>
+                <Route path={"phone"} element={<AddPhonePage/>}/>
+                <Route path={"address"} element={<ResumeAddressPage/>}/>
 
-              <Route path="education" element={<Outlet/>}>
-                  <Route index element={<EducationPage />} />
-                  <Route path="add" element={<AddEducationPage />} />
-                  <Route path=":id" element={<EditEducationPage />} />
-              </Route>
-              <Route path="experience" element={<Outlet/>}>
-                  <Route index element={<WorkExperiencePage />} />
-                  <Route path="add" element={<AddWorkExperiencePage />} />
-                  <Route path=":id" element={<EditWorkExperiencePage />} />
-              </Route>
+                <Route path="education" element={<Outlet/>}>
+                    <Route index element={<EducationPage/>}/>
+                    <Route path="add" element={<AddEducationPage/>}/>
+                    <Route path=":id" element={<EditEducationPage/>}/>
+                </Route>
+                <Route path="experience" element={<Outlet/>}>
+                    <Route index element={<WorkExperiencePage/>}/>
+                    <Route path="add" element={<AddWorkExperiencePage/>}/>
+                    <Route path=":id" element={<EditWorkExperiencePage/>}/>
+                </Route>
 
-              <Route path={"skills"} element={<SkillsPage/>}/>
+                <Route path={"skills"} element={<SkillsPage/>}/>
 
-              <Route path={"preview"} element={<Outlet/>}>
-                  <Route index element={<PreviewPage />} />
-                  <Route path={"skills/add"} element={<ResumeAddSkillPage/>}/>
-                  <Route path={"education/add"} element={<ResumeAddEducationPage/>}/>
-                  <Route path={"education/:id"} element={<ResumeEditEducationPage/>}/>
-                  <Route path={"experience/add"} element={<ResumeAddWorkExperiencePage/>}/>
-                  <Route path={"experience/:id"} element={<ResumeEditWorkExperiencePage/>}/>
-              </Route>
-          </Route>
+                <Route path={"preview"} element={<Outlet/>}>
+                    <Route index element={<PreviewPage/>}/>
+                    <Route path={"skills/add"} element={<ResumeAddSkillPage/>}/>
+                    <Route path={"education/add"} element={<ResumeAddEducationPage/>}/>
+                    <Route path={"education/:id"} element={<ResumeEditEducationPage/>}/>
+                    <Route path={"experience/add"} element={<ResumeAddWorkExperiencePage/>}/>
+                    <Route path={"experience/:id"} element={<ResumeEditWorkExperiencePage/>}/>
+                </Route>
+            </Route>
 
-          <Route path={"/resume"} element={<Outlet/>}>
-              <Route index element={<ResumePage/>} />
-              <Route path={"contact"} element={<EditContactInfoPage/>}/>
-              <Route path={"education/add"} element={<ResumeAddEducationPage/>}/>
-              <Route path={"education/:id"} element={<ResumeEditEducationPage/>}/>
-              <Route path={"experience/add"} element={<ResumeAddWorkExperiencePage/>}/>
-              <Route path={"experience/:id"} element={<ResumeEditWorkExperiencePage/>}/>
-              <Route path={"skills/add"} element={<ResumeAddSkillPage/>}/>
-          </Route>
+            <Route path={"/resume"} element={<Outlet/>}>
+                <Route index element={<ResumePage/>}/>
+                <Route path={"contact"} element={<EditContactInfoPage/>}/>
+                <Route path={"education/add"} element={<ResumeAddEducationPage/>}/>
+                <Route path={"education/:id"} element={<ResumeEditEducationPage/>}/>
+                <Route path={"experience/add"} element={<ResumeAddWorkExperiencePage/>}/>
+                <Route path={"experience/:id"} element={<ResumeEditWorkExperiencePage/>}/>
+                <Route path={"skills/add"} element={<ResumeAddSkillPage/>}/>
+            </Route>
 
-          <Route path={"/settings"} element={<AccountSettingsPage/>}/>
-          <Route path={"/account"} element={<Outlet/>}>
-              <Route index element={<AccountSettingsPage/>}/>
-              <Route path={"change-type"} element={<ChangeAccountTypePage/>}/>
-              <Route path={"change-email"} element={<ChangeEmailPage/>}/>
-              <Route path={"change-password"} element={<ChangePasswordPage/>}/>
-              <Route path={"change-phone"} element={<ChangePhonePage/>}/>
-          </Route>
+            <Route path={"/settings"} element={<AccountSettingsPage/>}/>
+            <Route path={"/account"} element={<Outlet/>}>
+                <Route index element={<AccountSettingsPage/>}/>
+                <Route path={"change-type"} element={<ChangeAccountTypePage/>}/>
+                <Route path={"change-email"} element={<ChangeEmailPage/>}/>
+                <Route path={"change-password"} element={<ChangePasswordPage/>}/>
+                <Route path={"change-phone"} element={<ChangePhonePage/>}/>
+            </Route>
 
-          <Route element={<MyJobsPagesWrap/>}>
-              <Route path={"saved"} element={<SavedJobsPage/>}/>
-              <Route path={"applied"} element={<JobAppliesPage/>}/>
-              <Route path={"interviews"} element={<InterviewsPage/>}/>
-          </Route>
+            <Route element={<MyJobsPagesWrap/>}>
+                <Route path={"saved"} element={<SavedJobsPage/>}/>
+                <Route path={"applied"} element={<JobAppliesPage/>}/>
+                <Route path={"interviews"} element={<InterviewsPage/>}/>
+            </Route>
 
-          <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
-      </Routes>
+            <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
+        </Route>
+    </Routes>
 );
 
 export default JobSeekerSideRoutes;

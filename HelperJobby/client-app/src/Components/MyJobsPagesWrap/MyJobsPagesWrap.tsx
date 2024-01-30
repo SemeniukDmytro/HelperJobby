@@ -1,14 +1,15 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import './MyJobsPagesWrap.scss';
 import {JobSeekerJobInteractionsProvider} from "../../contexts/JobSeekerJobInteractionsContext";
 import {Outlet} from "react-router-dom";
 
-interface MyJobsPagesWrapProps {}
+interface MyJobsPagesWrapProps {
+}
 
 const MyJobsPagesWrap: FC<MyJobsPagesWrapProps> = () => (
-  <JobSeekerJobInteractionsProvider>
-      <Outlet/>
-  </JobSeekerJobInteractionsProvider>
+    <JobSeekerJobInteractionsProvider>
+        <Outlet/>
+    </JobSeekerJobInteractionsProvider>
 );
 
 export default MyJobsPagesWrap;

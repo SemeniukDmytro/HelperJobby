@@ -23,27 +23,21 @@ public class ResumeQueryRepository : IResumeQueryRepository
             .Include(r => r.WorkExperiences)
             .Include(r => r.Skills)
             .FirstOrDefaultAsync(r => r.Id == resumeId);
-        if (resume == null)
-        {
-            throw new ResumeNotFoundException();
-        }
+        if (resume == null) throw new ResumeNotFoundException();
         return resume;
     }
 
     public async Task<Resume> GetResumeByJobSeekerId(int jobSeekerId)
     {
         var resume = await _applicationContext.Resumes.Where(r => r.JobSeekerAccountId == jobSeekerId)
-            .Select(r => new Resume()
+            .Select(r => new Resume
             {
                 Id = r.Id,
                 Educations = r.Educations,
                 WorkExperiences = r.WorkExperiences,
                 Skills = r.Skills
             }).FirstOrDefaultAsync();
-        if (resume == null)
-        {
-            throw new ResumeNotFoundException();
-        }
+        if (resume == null) throw new ResumeNotFoundException();
 
         resume.JobSeekerAccountId = jobSeekerId;
         return resume;
@@ -57,15 +51,15 @@ public class ResumeQueryRepository : IResumeQueryRepository
             {
                 Id = r.Id,
                 Educations = r.Educations
-                    .Select(e => new Education() { FieldOfStudy = e.FieldOfStudy, LevelOfEducation = e.LevelOfEducation})
+                    .Select(e => new Education { FieldOfStudy = e.FieldOfStudy, LevelOfEducation = e.LevelOfEducation })
                     .ToList(),
 
                 WorkExperiences = r.WorkExperiences
-                    .Select(w => new WorkExperience() { JobTitle = w.JobTitle })
+                    .Select(w => new WorkExperience { JobTitle = w.JobTitle })
                     .ToList(),
 
                 Skills = r.Skills
-                    .Select(s => new Skill() { Name = s.Name })
+                    .Select(s => new Skill { Name = s.Name })
                     .ToList()
             })
             .ToListAsync();

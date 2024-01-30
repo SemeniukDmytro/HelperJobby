@@ -60,7 +60,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
     useEffect(() => {
         const currentPath = window.location.pathname;
         let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
-        if (parentPathFirstPart == "/build"){
+        if (parentPathFirstPart == "/build") {
             parentPathFirstPart = "/build/education"
         }
         setParentPagePath(parentPathFirstPart);
@@ -172,12 +172,12 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
             setSavingProcess(false);
         }
     }
-    
-    function cancelEditing(){
+
+    function cancelEditing() {
         navigate(parentPagePath)
     }
-    
-    function navigateToWorkExperiencePage(){
+
+    function navigateToWorkExperiencePage() {
         navigate("/build/experience")
     }
 
@@ -224,24 +224,30 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
 
     return (
         <>
-            {showCityAutoComplete && <AutocompleteResultsWindow inputFieldRef={cityInputRef}
-                                                                inputValue={city}
-                                                                setInputValue={setCity}
-                                                                country={country || "Canada"}
-                                                                showResult={showCityAutoComplete}
-                                                                setShowResult={setShowCityAutoComplete}
-                                                                autocompleteWindowType={AutocompleteWindowTypes.city}/>}
+            {showCityAutoComplete && <AutocompleteResultsWindow
+                inputFieldRef={cityInputRef}
+                inputValue={city}
+                setInputValue={setCity}
+                country={country || "Canada"}
+                showResult={showCityAutoComplete}
+                setShowResult={setShowCityAutoComplete}
+                autocompleteWindowType={AutocompleteWindowTypes.city}
+            />}
             <form className={"build-resume-form"}>
                 {savingProcess && <div className={"request-in-process-surface"}></div>}
                 <div className={"build-page-header"}>
                     {education ? <span>Edit education</span> : <span>Add Education</span>}
                 </div>
-                <CustomInputField fieldLabel={"Level of education"}
-                                  isRequired={true}
-                                  inputFieldValue={levelOfEducation}
-                                  setInputFieldValue={setLevelOfEducation}
-                                  inputRef={levelOfEducationInputRef}
-                                  notShowErrorInitially={true} executeValidation={executeInputsValidation} setExecuteValidation={setExecuteInputValidations}/>
+                <CustomInputField
+                    fieldLabel={"Level of education"}
+                    isRequired={true}
+                    inputFieldValue={levelOfEducation}
+                    setInputFieldValue={setLevelOfEducation}
+                    inputRef={levelOfEducationInputRef}
+                    notShowErrorInitially={true}
+                    executeValidation={executeInputsValidation}
+                    setExecuteValidation={setExecuteInputValidations}
+                />
 
                 <CustomInputField
                     fieldLabel={'Field of study'}
@@ -258,12 +264,13 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     setInputFieldValue={setSchoolName}
                     inputRef={schoolNameInputRef}
                 />
-                
-                <CountrySelector 
+
+                <CountrySelector
                     country={country}
                     setCountry={setCountry}
-                    selectRef={countryInputRef}/>
-                
+                    selectRef={countryInputRef}
+                />
+
 
                 <CustomInputField
                     fieldLabel={"City, Province/Territory"}
@@ -272,8 +279,9 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     setInputFieldValue={setCity}
                     displayGoogleLogo={true}
                     inputRef={cityInputRef}
-                    setShowAutocompleteWindow={setShowCityAutoComplete}/>
-                
+                    setShowAutocompleteWindow={setShowCityAutoComplete}
+                />
+
                 <TimePeriod
                     fromMonth={fromMonth}
                     setFromMonth={setFromMonth}
@@ -284,7 +292,8 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     toYear={toYear}
                     setToYear={setToYear}
                     invalidValuesProvided={invalidTimeProvided}
-                    setInvalidValuesProvided={setInvalidTimeProvided}/>
+                    setInvalidValuesProvided={setInvalidTimeProvided}
+                />
                 <div className={"form-buttons-row-container"}>
                     <button className={"submit-form-button"} onClick={addEducation}>
                         {savingProcess ?
@@ -293,14 +302,14 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                             <span>Save</span>
                         }
                     </button>
-                    {parentPagePath == "/build/education" ? 
-                    <button className={"skip-form-button"} onClick={navigateToWorkExperiencePage}>
-                        Skip
-                    </button>
+                    {parentPagePath == "/build/education" ?
+                        <button className={"skip-form-button"} onClick={navigateToWorkExperiencePage}>
+                            Skip
+                        </button>
                         :
-                    <button className={"skip-form-button"} onClick={cancelEditing}>
-                        Cancel
-                    </button>
+                        <button className={"skip-form-button"} onClick={cancelEditing}>
+                            Cancel
+                        </button>
                     }
                 </div>
             </form>

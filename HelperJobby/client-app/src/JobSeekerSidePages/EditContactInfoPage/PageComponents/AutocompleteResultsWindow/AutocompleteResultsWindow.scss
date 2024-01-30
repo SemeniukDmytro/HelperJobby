@@ -1,6 +1,6 @@
 @use "../../../../Assets/scssSharedStyles/global-variables";
 
-.autocomplete-results{
+.autocomplete-results {
   position: absolute;
   background-color: white;
   z-index: 4;
@@ -12,6 +12,7 @@
   overflow-y: auto;
   margin: 0 auto;
   box-shadow: global-variables.$field-box-shadow;
+
   .autocomplete-result:first-child {
     border-top-right-radius: 0.5rem;
     border-top-left-radius: 0.5rem;
@@ -24,14 +25,15 @@
 
 }
 
-.autocomplete-result{
+.autocomplete-result {
   box-sizing: border-box;
   padding: 0.875rem 0.5rem;
   font-size: 0.9375rem;
   overflow: hidden auto;
   cursor: pointer;
   display: flex;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
   }
 }

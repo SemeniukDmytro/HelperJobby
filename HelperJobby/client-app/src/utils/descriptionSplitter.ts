@@ -2,7 +2,8 @@ function filterLines(lines: string[]): string[] {
     return lines.filter(line => !line.includes("?") && line.length >= 30 && !line.includes(':'));
 }
 
-function generateSentences(filteredLines: string[]): string[] {const sentences: string[] = [];
+function generateSentences(filteredLines: string[]): string[] {
+    const sentences: string[] = [];
     const index: number = Math.floor(filteredLines.length / 2);
 
     const addSentence = (sentence: string) => {
@@ -26,7 +27,7 @@ function generateSentences(filteredLines: string[]): string[] {const sentences: 
         thirdSentence = filteredLines[++thirdSentenceIndex];
     }
 
-    if (thirdSentence){
+    if (thirdSentence) {
         addSentence(thirdSentence);
     }
 

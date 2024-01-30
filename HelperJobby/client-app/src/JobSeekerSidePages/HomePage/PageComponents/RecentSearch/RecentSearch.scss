@@ -1,6 +1,6 @@
 @use "../../../../Assets/scssSharedStyles/global-variables";
 
-.recent-search-box{
+.recent-search-box {
   display: flex;
   height: 100%;
   flex-direction: row;
@@ -10,22 +10,22 @@
   min-height: 64px;
 }
 
-.search-info{
+.search-info {
   display: flex;
   flex-direction: column;
 }
 
-.query-info{
+.query-info {
   line-height: 1.5;
   color: global-variables.$neutral-color-1000;
 }
 
-.location-info{
+.location-info {
   line-height: 1.5;
   color: global-variables.$neutral-color-700;
 }
 
-.delete-search-button{
+.delete-search-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,12 +38,13 @@
   transition: 0.2s;
   color: global-variables.$neutral-color-800;
   cursor: pointer;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
   }
 }
 
-.delete-search-svg{
+.delete-search-svg {
   height: 1.5rem;
   width: 100%;
   font-weight: 100;

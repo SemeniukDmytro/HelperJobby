@@ -10,19 +10,20 @@ namespace BLLUnitTests.ServicesTests;
 
 public class WorkExperienceServiceTests
 {
-    private readonly IWorkExperienceService _workExperienceService;
+    private readonly Mock<IEnqueuingTaskHelper> _enqueuingTaskHelperMock = new();
+    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
     private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<IWorkExperienceQueryRepository> _workExperienceQueryRepositoryMock = new();
-    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
-    private readonly Mock<IEnqueuingTaskHelper> _enqueuingTaskHelperMock = new();
+    private readonly IWorkExperienceService _workExperienceService;
 
 
     public WorkExperienceServiceTests()
     {
         _workExperienceService = new WorkExperienceService(_userServiceMock.Object,
-            _workExperienceQueryRepositoryMock.Object, _jobSeekerAccountRepository.Object, _enqueuingTaskHelperMock.Object);
+            _workExperienceQueryRepositoryMock.Object, _jobSeekerAccountRepository.Object,
+            _enqueuingTaskHelperMock.Object);
     }
-    
+
     [Fact]
     public async Task CreateWorkExperienceShouldReturnEducation()
     {
@@ -41,7 +42,7 @@ public class WorkExperienceServiceTests
         Assert.Equal(createdWorkExperience.ResumeId, resume.Id);
         Assert.Equal(createdWorkExperience.JobTitle, workExperience.JobTitle);
     }
-    
+
     [Fact]
     public async Task CreateWorkExperienceShouldThrowAnExceptionIfInvalidResumeIdProvided()
     {
@@ -58,7 +59,7 @@ public class WorkExperienceServiceTests
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _workExperienceService.AddWorkExperience(resumeId, workExperience));
     }
-    
+
     [Fact]
     public async Task UpdateWorkExperienceShouldReturnUpdatedEducation()
     {
@@ -99,7 +100,7 @@ public class WorkExperienceServiceTests
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _workExperienceService.UpdateWorkExperience(workExperienceId, workExperience));
     }
-    
+
     [Fact]
     public async Task DeleteWorkExperienceShouldReturnEducationToDelete()
     {
@@ -111,13 +112,14 @@ public class WorkExperienceServiceTests
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
         _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
-        _workExperienceQueryRepositoryMock.Setup(r => r.GetWorkExperienceById(workExperienceId)).ReturnsAsync(workExperienceEntity);
+        _workExperienceQueryRepositoryMock.Setup(r => r.GetWorkExperienceById(workExperienceId))
+            .ReturnsAsync(workExperienceEntity);
         //Act
         var educationToDelete = await _workExperienceService.Delete(workExperienceId);
         //Assert
         Assert.Equal(workExperienceEntity.WorkExperienceId, educationToDelete.workExperience.WorkExperienceId);
     }
-    
+
     [Fact]
     public async Task DeleteWorkExperienceShouldThrowForbiddenExceptionIfNotCurrentUserTriesToDelete()
     {
@@ -129,8 +131,9 @@ public class WorkExperienceServiceTests
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
         _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
-        _workExperienceQueryRepositoryMock.Setup(r => r.GetWorkExperienceById(workExperienceId)).ReturnsAsync(workExperienceEntity);
+        _workExperienceQueryRepositoryMock.Setup(r => r.GetWorkExperienceById(workExperienceId))
+            .ReturnsAsync(workExperienceEntity);
         //Act % Assert
-        await Assert.ThrowsAsync<ForbiddenException>( async () => await _workExperienceService.Delete(workExperienceId));
+        await Assert.ThrowsAsync<ForbiddenException>(async () => await _workExperienceService.Delete(workExperienceId));
     }
 }

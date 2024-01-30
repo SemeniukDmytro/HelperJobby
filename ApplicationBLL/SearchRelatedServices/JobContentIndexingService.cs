@@ -10,11 +10,12 @@ namespace ApplicationBLL.SearchRelatedServices;
 
 public class JobContentIndexingService : IJobContentIndexingService
 {
-    private readonly IJobIndexingQueryRepository _jobIndexingQueryRepository;
     private readonly IJobIndexingCommandRepository _jobIndexingCommandRepository;
+    private readonly IJobIndexingQueryRepository _jobIndexingQueryRepository;
     private readonly IRankingService _rankingService;
 
-    public JobContentIndexingService(IJobIndexingQueryRepository jobIndexingQueryRepository, IJobIndexingCommandRepository jobIndexingCommandRepository, IRankingService rankingService)
+    public JobContentIndexingService(IJobIndexingQueryRepository jobIndexingQueryRepository,
+        IJobIndexingCommandRepository jobIndexingCommandRepository, IRankingService rankingService)
     {
         _jobIndexingQueryRepository = jobIndexingQueryRepository;
         _jobIndexingCommandRepository = jobIndexingCommandRepository;
@@ -23,31 +24,27 @@ public class JobContentIndexingService : IJobContentIndexingService
 
     public async Task IndexJobContent(Job job)
     {
-        List<string> jobFeatures = new List<string>();
-        jobFeatures.AddRange(FlagsEnumToArrayConverter.
-            GetArrayWithEnumValues<EmployeeBenefits>((int)job.Benefits)
+        var jobFeatures = new List<string>();
+        jobFeatures.AddRange(FlagsEnumToArrayConverter.GetArrayWithEnumValues<EmployeeBenefits>((int)job.Benefits)
             .Select(b => b.ToString().ToLower()));
-        jobFeatures.AddRange(FlagsEnumToArrayConverter.
-            GetArrayWithEnumValues<Schedules>((int)job.Schedule)
+        jobFeatures.AddRange(FlagsEnumToArrayConverter.GetArrayWithEnumValues<Schedules>((int)job.Schedule)
             .Select(b => b.ToString().ToLower()));
-        jobFeatures.AddRange(FlagsEnumToArrayConverter.
-            GetArrayWithEnumValues<JobTypes>((int)job.JobTypes)
+        jobFeatures.AddRange(FlagsEnumToArrayConverter.GetArrayWithEnumValues<JobTypes>((int)job.JobTypes)
             .Select(b => b.ToString().ToLower()));
         var processedContent = _rankingService.CalculateJobWordScores(TextSplitter.TextNormalization(job.JobTitle),
             jobFeatures.ToArray(), TextSplitter.TextNormalization(job.Description));
 
-        List<JobIndexedWord> newIndexedJobWords = new List<JobIndexedWord>();
-        List<ProcessedJobWord> newProcessedJobWords = new List<ProcessedJobWord>();
-        
+        var newIndexedJobWords = new List<JobIndexedWord>();
+        var newProcessedJobWords = new List<ProcessedJobWord>();
+
         var wordsToRetrieve = processedContent.Select(keyValuePair => keyValuePair.Key).ToList();
         var wordEntities = await _jobIndexingQueryRepository.GetJobIndexedWords(wordsToRetrieve);
-        
-        
+
+
         foreach (var weightedWord in processedContent)
         {
-            
             var possibleWordEntity = wordEntities.FirstOrDefault(w => w.Word == weightedWord.Key);
-            ProcessedJobWord newProcessedJobWord = new ProcessedJobWord()
+            var newProcessedJobWord = new ProcessedJobWord
             {
                 Rating = weightedWord.Value,
                 JobId = job.Id
@@ -61,23 +58,22 @@ public class JobContentIndexingService : IJobContentIndexingService
             }
             else
             {
-                newIndexedJobWords.Add(new JobIndexedWord()
+                newIndexedJobWords.Add(new JobIndexedWord
                 {
                     JobCount = 1,
                     Word = weightedWord.Key,
-                    ProcessedJobWords = new List<ProcessedJobWord>() {newProcessedJobWord}
+                    ProcessedJobWords = new List<ProcessedJobWord> { newProcessedJobWord }
                 });
             }
-            
         }
+
         await _jobIndexingCommandRepository.SaveIndexedJobWords(newIndexedJobWords);
         await _jobIndexingCommandRepository.SaveProcessedJobWords(newProcessedJobWords);
-    } 
-    
+    }
+
     public async Task UpdateAndIndexJobContent(Job job)
     {
         await _jobIndexingCommandRepository.RemoveProcessedJobWords(job.Id);
         await IndexJobContent(job);
     }
-
 }

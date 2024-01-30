@@ -1,12 +1,11 @@
-import React, { FC } from 'react';
-import './EmployerSetupPage.scss';
+import React, {FC} from 'react';
+import EmployerSetupComponent from "./PageComponents/EmployerSetupComponent/EmployerSetupComponent";
 
-interface EmployerSetupPageProps {}
+interface EmployerSetupPageProps {
+}
 
 const EmployerSetupPage: FC<EmployerSetupPageProps> = () => (
-  <div className="EmployerSetupPage">
-    EmployerSetupPage Component
-  </div>
+    <EmployerSetupComponent/>
 );
 
 export default EmployerSetupPage;

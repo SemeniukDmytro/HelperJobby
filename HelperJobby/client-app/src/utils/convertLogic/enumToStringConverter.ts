@@ -36,19 +36,17 @@ export const scheduleStringToEnumMap = (scheduleValue: string): string => {
     } else return scheduleValue;
 };
 
-export const benefitsEnumToStringMap = (benefitsValue : string) => {
-    let benefitsEnumValue : EmployeeBenefits = EmployeeBenefits[benefitsValue as keyof typeof EmployeeBenefits];
+export const benefitsEnumToStringMap = (benefitsValue: string) => {
+    let benefitsEnumValue: EmployeeBenefits = EmployeeBenefits[benefitsValue as keyof typeof EmployeeBenefits];
     const benefitsStringMapObj = EmployeeBenefitsMapData.find((bs) => bs.enumValue == benefitsEnumValue)
-    if (benefitsStringMapObj){
+    if (benefitsStringMapObj) {
         return benefitsStringMapObj.stringValue;
-    }
-    else return benefitsValue;
+    } else return benefitsValue;
 };
 
-export const benefitStringToEnumMap = (benefitsValue : string) => {
+export const benefitStringToEnumMap = (benefitsValue: string) => {
     const benefitsStringMapObj = EmployeeBenefitsMapData.find((bs) => bs.stringValue == benefitsValue)
-    if (benefitsStringMapObj){
+    if (benefitsStringMapObj) {
         return benefitsStringMapObj.enumValue.toString();
-    }
-    else return benefitsValue;
+    } else return benefitsValue;
 };

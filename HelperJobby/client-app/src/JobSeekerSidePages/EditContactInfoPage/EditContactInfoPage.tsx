@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import EditContactInfoForm from "./PageComponents/EditContactInfoForm/EditContactInfoForm";
 
 
-interface EditContactInfoPageProps {}
+interface EditContactInfoPageProps {
+}
 
 const EditContactInfoPage: FC<EditContactInfoPageProps> = () => (
-  <EditContactInfoForm/>
+    <EditContactInfoForm/>
 );
 
 export default EditContactInfoPage;

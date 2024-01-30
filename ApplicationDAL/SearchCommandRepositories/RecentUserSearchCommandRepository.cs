@@ -1,6 +1,5 @@
 using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.ICommandRepositories;
-using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Models;
 
 namespace ApplicationDAL.SearchCommandRepositories;

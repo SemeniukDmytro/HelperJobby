@@ -6,5 +6,5 @@ export interface SavedJobDTO {
     jobSeekerAccountId: number;
     job: JobDTO;
     jobSeekerAccount: JobSeekerAccountDTO;
-    dateSaved : Date;
+    dateSaved: Date;
 }

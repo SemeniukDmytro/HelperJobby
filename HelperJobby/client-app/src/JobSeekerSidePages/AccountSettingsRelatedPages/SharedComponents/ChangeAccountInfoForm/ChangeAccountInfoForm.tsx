@@ -3,7 +3,7 @@ import './ChangeAccountInfoForm.scss';
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 
 interface ChangeAccountInfoFormProps {
-    children : ReactNode
+    children: ReactNode
 }
 
 const ChangeAccountInfoForm: FC<ChangeAccountInfoFormProps> = ({children}) => (

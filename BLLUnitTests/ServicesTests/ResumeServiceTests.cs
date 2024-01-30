@@ -9,9 +9,9 @@ namespace BLLUnitTests.ServicesTests;
 
 public class ResumeServiceTests
 {
+    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
     private readonly IResumeService _resumeService;
     private readonly Mock<IUserService> _userServiceMock = new();
-    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
 
     public ResumeServiceTests()
     {
@@ -30,12 +30,12 @@ public class ResumeServiceTests
         _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
         //Act
-        var resume = await  _resumeService.CreateResume(createdResume);
+        var resume = await _resumeService.CreateResume(createdResume);
         //Assert
         Assert.Equal(createdResume.Educations.Count, resume.Educations.Count);
         Assert.Equal(createdResume.JobSeekerAccountId, jobSeekerAccountEntity.Id);
     }
-    
+
     [Fact]
     public async Task CreateResumeShouldThrowForbiddenExceptionIfCurrentUserAlreadyHasResume()
     {
@@ -49,7 +49,7 @@ public class ResumeServiceTests
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () => await _resumeService.CreateResume(createdResume));
     }
-    
+
     [Fact]
     public async Task DeleteResumeShouldReturnResumeToDelete()
     {
@@ -77,6 +77,6 @@ public class ResumeServiceTests
         _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
         //Act & Assert
-        await  Assert.ThrowsAsync<ForbiddenException>(async () =>  await  _resumeService.DeleteResume(resumeId));
+        await Assert.ThrowsAsync<ForbiddenException>(async () => await _resumeService.DeleteResume(resumeId));
     }
 }

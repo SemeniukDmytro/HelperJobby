@@ -1,24 +1,26 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import './SettingsChangeField.scss';
 import {useNavigate} from "react-router-dom";
 
 interface SettingsChangeFieldProps {
-    fieldLabel : string;
-    fieldValue : string;
-    fieldButtonText : string;
-    changeFieldPagePath : string;
+    fieldLabel: string;
+    fieldValue: string;
+    fieldButtonText: string;
+    changeFieldPagePath: string;
 }
 
-const SettingsChangeField: FC<SettingsChangeFieldProps> = ({fieldLabel,
+const SettingsChangeField: FC<SettingsChangeFieldProps> = ({
+                                                               fieldLabel,
                                                                fieldValue,
                                                                fieldButtonText,
-                                                               changeFieldPagePath}) => {
+                                                               changeFieldPagePath
+                                                           }) => {
     const navigate = useNavigate();
-    
-    function navigateToChangeAccountInfoPage(){
+
+    function navigateToChangeAccountInfoPage() {
         navigate(changeFieldPagePath)
     }
-    
+
     return (
         <>
             <div className={"content-separation-margin"}></div>
@@ -31,9 +33,12 @@ const SettingsChangeField: FC<SettingsChangeFieldProps> = ({fieldLabel,
                         <span>{fieldValue}</span>
                     </div>
                 </div>
-                    <button className={"light-button-with-margin button-without-margin"} onClick={navigateToChangeAccountInfoPage}>
-                        {fieldButtonText}
-                    </button>
+                <button
+                    className={"light-button-with-margin button-without-margin"}
+                    onClick={navigateToChangeAccountInfoPage}
+                >
+                    {fieldButtonText}
+                </button>
             </div>
             <div className={"content-separation-line"}></div>
         </>

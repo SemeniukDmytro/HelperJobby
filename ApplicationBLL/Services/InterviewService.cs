@@ -7,14 +7,15 @@ namespace ApplicationBLL.Services;
 
 public class InterviewService : IInterviewService
 {
-    private readonly IUserService _userService;
-    private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
     private readonly IInterviewQueryRepository _interviewQueryRepository;
+    private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+    private readonly IUserService _userService;
 
-    public InterviewService(IUserService userService, IJobQueryRepository jobQueryRepository, 
-        IEmployerAccountQueryRepository employerAccountQueryRepository, IInterviewQueryRepository interviewQueryRepository,
+    public InterviewService(IUserService userService, IJobQueryRepository jobQueryRepository,
+        IEmployerAccountQueryRepository employerAccountQueryRepository,
+        IInterviewQueryRepository interviewQueryRepository,
         IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository)
     {
         _userService = userService;
@@ -30,9 +31,7 @@ public class InterviewService : IInterviewService
         var currentEmployer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
         var job = await _jobQueryRepository.GetJobById(jobId);
         if (job.EmployerAccountId != currentEmployer.Id)
-        {
             throw new ForbiddenException("You can not have access to this information");
-        }
 
         return job;
     }
@@ -48,24 +47,18 @@ public class InterviewService : IInterviewService
         {
         }
 
-        if (interview != null)
-        {
-            throw new InterviewOperatingException("This interview is already created");
-        }
+        if (interview != null) throw new InterviewOperatingException("This interview is already created");
         var currentUserId = _userService.GetCurrentUserId();
         var currentEmployer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
         var job = await _jobQueryRepository.GetJobById(jobId);
         if (job.EmployerAccountId != currentEmployer.Id)
-        {
-            throw new ForbiddenException("You can't create interview for this job. Job was created by another employer");
-        }
+            throw new ForbiddenException(
+                "You can't create interview for this job. Job was created by another employer");
 
         if (interviewInfo.InterviewStart.TimeOfDay > interviewInfo.InterviewEnd.ToTimeSpan())
-        {
             throw new InterviewOperatingException("Invalid interview time provided");
-        }
 
-        var newInterview = new Interview()
+        var newInterview = new Interview
         {
             JobId = jobId,
             JobSeekerAccountId = jobSeekerId,
@@ -83,10 +76,8 @@ public class InterviewService : IInterviewService
         var currentUserId = _userService.GetCurrentUserId();
         var currentEmployer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
         if (interview.Job.EmployerAccountId != currentEmployer.Id)
-        {
             throw new ForbiddenException("You can't delete interview. Because it was created by another employer");
-        }
-        
+
         return interview;
     }
 

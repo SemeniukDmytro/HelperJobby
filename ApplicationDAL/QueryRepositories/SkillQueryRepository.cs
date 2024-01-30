@@ -24,20 +24,14 @@ public class SkillQueryRepository : ISkillQueryRepository
     {
         return await GetSkill(skillId, q => q.Include(s => s.Resume));
     }
-    
+
     private async Task<Skill> GetSkill(int skillId, Func<IQueryable<Skill>, IQueryable<Skill>> includeFunc = null)
     {
         var query = _applicationContext.Skills.AsQueryable();
-        if (includeFunc != null)
-        {
-            query = includeFunc(query);
-        }
+        if (includeFunc != null) query = includeFunc(query);
 
         var skill = await query.FirstOrDefaultAsync(e => e.Id == skillId);
-        if (skill == null)
-        {
-            throw new SkillNotFoundException();
-        }
+        if (skill == null) throw new SkillNotFoundException();
         return skill;
     }
 }

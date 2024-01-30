@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import JobSeekerProfile from "./PageComponents/JobSeekerProfile/JobSeekerProfile";
 
 
-interface JobSeekerProfilePageProps {}
+interface JobSeekerProfilePageProps {
+}
 
 const JobSeekerProfilePage: FC<JobSeekerProfilePageProps> = () => (
-  <JobSeekerProfile/>
+    <JobSeekerProfile/>
 );
 
 export default JobSeekerProfilePage;

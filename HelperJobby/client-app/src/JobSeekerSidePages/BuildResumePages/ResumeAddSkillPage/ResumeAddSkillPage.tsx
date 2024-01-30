@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import AddSkillComponent from "../SharedComponents/AddSkillComponent/AddSkillComponent";
 
-interface AddSkillPageProps {}
+interface AddSkillPageProps {
+}
 
 const ResumeAddSkillPage: FC<AddSkillPageProps> = () => (
     <AddSkillComponent/>

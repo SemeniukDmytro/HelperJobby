@@ -1,6 +1,4 @@
 import CustomFetchService from "./customFetchService";
-import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
-import {ResumeDTO} from "../DTOs/resumeRelatedDTOs/ResumeDTO";
 import {ResumeSearchResultDTO} from "../DTOs/searchDTOs/ResumeSearchResultDTO";
 import {JobSearchResultDTO} from "../DTOs/searchDTOs/JobSearchResultDTO";
 

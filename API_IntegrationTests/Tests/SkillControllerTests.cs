@@ -7,7 +7,8 @@ namespace API_IntegrationTests.Tests;
 
 public class SkillControllerTests : IntegrationTest
 
-{    private readonly string _baseUri = "/api/Skill";
+{
+    private readonly string _baseUri = "/api/Skill";
 
     public SkillControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {

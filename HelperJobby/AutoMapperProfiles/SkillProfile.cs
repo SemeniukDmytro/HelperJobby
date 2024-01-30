@@ -1,9 +1,6 @@
 using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Resume;
-using EducationDTO = HelperJobby.DTOs.Resume.EducationDTO;
-using ResumeDTO = HelperJobby.DTOs.Resume.ResumeDTO;
-using SkillDTO = HelperJobby.DTOs.Resume.SkillDTO;
 
 namespace HelperJobby.AutoMapperProfiles;
 

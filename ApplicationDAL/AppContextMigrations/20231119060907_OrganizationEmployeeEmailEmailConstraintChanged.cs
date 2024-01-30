@@ -2,37 +2,36 @@
 
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ApplicationDAL.AppContextMigrations
+namespace ApplicationDAL.AppContextMigrations;
+
+/// <inheritdoc />
+public partial class OrganizationEmployeeEmailEmailConstraintChanged : Migration
 {
     /// <inheritdoc />
-    public partial class OrganizationEmployeeEmailEmailConstraintChanged : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropIndex(
-                name: "IX_OrganizationEmployeeEmails_Email",
-                table: "OrganizationEmployeeEmails");
+        migrationBuilder.DropIndex(
+            "IX_OrganizationEmployeeEmails_Email",
+            "OrganizationEmployeeEmails");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_OrganizationEmployeeEmails_Email_OrganizationId",
-                table: "OrganizationEmployeeEmails",
-                columns: new[] { "Email", "OrganizationId" },
-                unique: true);
-        }
+        migrationBuilder.CreateIndex(
+            "IX_OrganizationEmployeeEmails_Email_OrganizationId",
+            "OrganizationEmployeeEmails",
+            new[] { "Email", "OrganizationId" },
+            unique: true);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropIndex(
-                name: "IX_OrganizationEmployeeEmails_Email_OrganizationId",
-                table: "OrganizationEmployeeEmails");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropIndex(
+            "IX_OrganizationEmployeeEmails_Email_OrganizationId",
+            "OrganizationEmployeeEmails");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_OrganizationEmployeeEmails_Email",
-                table: "OrganizationEmployeeEmails",
-                column: "Email",
-                unique: true);
-        }
+        migrationBuilder.CreateIndex(
+            "IX_OrganizationEmployeeEmails_Email",
+            "OrganizationEmployeeEmails",
+            "Email",
+            unique: true);
     }
 }

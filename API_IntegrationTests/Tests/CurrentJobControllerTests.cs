@@ -10,7 +10,7 @@ namespace API_IntegrationTests.Tests;
 public class CurrentJobControllerTests : IntegrationTest
 {
     private readonly string _baseUri = "/api/CurrentJob";
-    
+
     public CurrentJobControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {
     }
@@ -31,18 +31,18 @@ public class CurrentJobControllerTests : IntegrationTest
         Assert.Equal(currentJobCreation.Id, receivedCurrentJob.Id);
         Assert.Equal(currentJobCreation.JobTitle, receivedCurrentJob.JobTitle);
     }
-    
+
     [Fact]
     public async Task StartJobCreation_ShouldReturnCreatedCurrentJob()
     {
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
         var newCurrentJob = CurrentJobFixtures.NewJobCreation;
-        
+
         //Act
         var currentJobCreationResponse = await TestClient.PostAsJsonAsync(_baseUri, newCurrentJob);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(currentJobCreationResponse, TestOutputHelper);
-        
+
         //Assert
         Assert.Equal(HttpStatusCode.OK, currentJobCreationResponse.StatusCode);
         var currentJobCreation = await currentJobCreationResponse.Content.ReadAsAsync<CurrentJobCreationDTO>();
@@ -50,28 +50,28 @@ public class CurrentJobControllerTests : IntegrationTest
         Assert.Equal(employer.Id, currentJobCreation.EmployerAccountId);
         Assert.Equal(newCurrentJob.JobTitle, currentJobCreation.JobTitle);
     }
-    
+
     [Fact]
     public async Task UpdateJobCreation_ShouldReturnUpdatedCurrentJob()
     {
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
         var currentJobCreation = await CreateNewCurrentJob(CurrentJobFixtures.NewJobCreation);
-        var updatedJob = new CurrentJobCreateDTO()
+        var updatedJob = new CurrentJobCreateDTO
         {
-        JobTitle = "",
-        NumberOfOpenings = 5,
-        Language = "",
-        Location = "",
-        JobType = new List<JobTypes> {},
-        Salary = 0,
-        SalaryRate = "per hour",
-        ShowPayBy = "",
-        Schedule = new List<Schedules> { },
-        Benefits = new List<EmployeeBenefits> { },
-        ContactEmail = "contactemail@gmail.com",
-        ResumeRequired = false,
-        Description = ""
+            JobTitle = "",
+            NumberOfOpenings = 5,
+            Language = "",
+            Location = "",
+            JobType = new List<JobTypes>(),
+            Salary = 0,
+            SalaryRate = "per hour",
+            ShowPayBy = "",
+            Schedule = new List<Schedules>(),
+            Benefits = new List<EmployeeBenefits>(),
+            ContactEmail = "contactemail@gmail.com",
+            ResumeRequired = false,
+            Description = ""
         };
         var requestUri = $"{_baseUri}/{currentJobCreation.Id}";
         //Act
@@ -89,7 +89,7 @@ public class CurrentJobControllerTests : IntegrationTest
         Assert.Equal(updatedJob.ContactEmail, updatedCurrenJob.ContactEmail);
         Assert.Equal(updatedJob.ResumeRequired, updatedCurrenJob.ResumeRequired);
     }
-    
+
     [Fact]
     public async Task DeleteJobCreation_ShouldDeleteJobCreation()
     {
@@ -106,5 +106,4 @@ public class CurrentJobControllerTests : IntegrationTest
         await ExceptionsLogHelper.LogNotSuccessfulResponse(jobGetResponse, TestOutputHelper);
         Assert.Equal(HttpStatusCode.NotFound, jobGetResponse.StatusCode);
     }
-    
 }

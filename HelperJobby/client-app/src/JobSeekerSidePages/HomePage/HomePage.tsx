@@ -2,12 +2,12 @@ import React, {FC} from "react";
 import {HomePageContextProvider} from "../../contexts/HomePageContext";
 import HomeComponent from "./PageComponents/HomeComponent/HomeComponent";
 
-interface HomePageProps{
+interface HomePageProps {
 
 }
 
 const HomePage: FC<HomePageProps> = () => {
-    return(
+    return (
         <HomePageContextProvider>
             <HomeComponent/>
         </HomePageContextProvider>

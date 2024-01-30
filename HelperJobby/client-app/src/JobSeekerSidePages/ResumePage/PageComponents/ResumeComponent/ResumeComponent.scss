@@ -1,6 +1,6 @@
 @use "../../../../Assets/scssSharedStyles/global-variables";
 
-.resume-component-header{
+.resume-component-header {
   position: sticky;
   top: 0px;
   background-color: white;
@@ -13,20 +13,20 @@
   margin: 0.5rem 0;
 }
 
-.more-options-container{
+.more-options-container {
 }
 
-.additional-button-size{
+.additional-button-size {
   min-width: 44px;
   font-size: 1.25rem;
 }
 
-.more-resume-options-bar{
+.more-resume-options-bar {
   position: relative;
-  
+
 }
 
-.resume-options-container{
+.resume-options-container {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -34,20 +34,22 @@
   min-width: 265px;
   border: 1px solid global-variables.$neutral-color-600;
   border-radius: 0.5rem;
+
   .more-profile-option-button:first-child {
     border-top-right-radius: 0.5rem;
     border-top-left-radius: 0.5rem;
   }
+
   .more-profile-option-button:last-child {
     border-bottom-right-radius: 0.5rem;
     border-bottom-left-radius: 0.5rem;
   }
 }
 
-.delete-button-color{
+.delete-button-color {
   color: rgb(169, 37, 43);
 }
 
-.additional-text-margin-for-big-icon{
+.additional-text-margin-for-big-icon {
   margin-top: 0.125rem;
 }

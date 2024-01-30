@@ -10,7 +10,7 @@ public static class JobSeekerAccountFixture
         FirstName = "Firstname",
         LastName = "Lastname",
         PhoneNumber = "+123456789",
-        Address = new Address()
+        Address = new Address
         {
             Id = 1,
             City = "Test",
@@ -18,7 +18,7 @@ public static class JobSeekerAccountFixture
             PostalCode = "101101"
         }
     };
-    
+
     public static readonly JobSeekerAccount JobSeekerAccountEntity = new()
     {
         Id = 1,
@@ -26,7 +26,7 @@ public static class JobSeekerAccountFixture
         LastName = "Lastname",
         PhoneNumber = "",
         UserId = 1,
-        Address = new Address()
+        Address = new Address
         {
             Id = 1,
             City = "TestCity",
@@ -34,31 +34,31 @@ public static class JobSeekerAccountFixture
             PostalCode = ""
         },
         Resume = ResumeFixtures.ResumeEntity,
-        JobApplies = new List<JobApply>()
+        JobApplies = new List<JobApply>
         {
-            new JobApply()
+            new()
             {
                 JobId = 2,
                 JobSeekerAccountId = 1
             }
         },
-        Interviews = new List<Interview>()
+        Interviews = new List<Interview>
         {
-            new Interview()
+            new()
             {
                 JobId = 1,
                 JobSeekerAccountId = 1
             }
         }
     };
-    
+
     public static readonly JobSeekerAccount SecondJobSeekerAccountEntity = new()
     {
         Id = 1,
         FirstName = "Firstname",
         LastName = "Lastname",
         PhoneNumber = "",
-        SavedJobs = new List<SavedJob>()
+        SavedJobs = new List<SavedJob>
         {
             new()
             {

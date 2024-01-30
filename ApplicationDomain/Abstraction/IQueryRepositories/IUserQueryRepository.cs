@@ -15,5 +15,4 @@ public interface IUserQueryRepository
     public Task<User> GetUserByEmail(string email);
     public Task<User> GetUserByEmailWithRefreshToken(string email);
     public Task<RefreshToken> GetRefreshTokenByUserId(int userId);
-
 }

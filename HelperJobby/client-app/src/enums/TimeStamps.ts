@@ -1,4 +1,4 @@
-export enum TimeStamps{
-    Month, 
+export enum TimeStamps {
+    Month,
     Year
 }
