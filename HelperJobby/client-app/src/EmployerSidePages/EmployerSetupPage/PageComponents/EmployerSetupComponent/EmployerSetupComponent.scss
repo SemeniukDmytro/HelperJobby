@@ -56,3 +56,16 @@
   display: flex;
   flex-direction: column;
 }
+
+.emh-option-with-multiple-icons {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.emh-option-children-fb{
+  display: flex;
+  align-items: center;
+}

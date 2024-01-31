@@ -1,6 +1,5 @@
 import React, {FC, FormEvent, useRef, useState} from 'react';
 import './EmployerSetupComponent.scss';
-import CompanyBuilding from "../../../../Components/icons/CompanyBuilding";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 import CustomSelectField from "../../../../Components/CustomSelectField/CustomSelectField";
 import {numberOfEmployees} from "../../../../AppConstData/NumberOfEmployees";
@@ -10,11 +9,11 @@ import {EmployerAccountService} from "../../../../services/employerAccountServic
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {CreateEmployerAccountDTO} from "../../../../DTOs/accountDTOs/CreateEmployerAccountDTO";
-import {useAuth} from "../../../../hooks/useAuth";
 import {useEmployer} from "../../../../hooks/useEmployer";
 import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
 import {IsValidEmail, validatePhoneNumber} from "../../../../utils/validationLogic/authFormValidators";
+import {Company} from "../../../../Components/Icons/icons";
 
 interface EmployerSetupComponentProps {
 }
@@ -117,7 +116,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                     <span className={"dark-default-text ems-title"}>Create an employer account</span>
                 </div>
                 <div className={"ems-image-fb"}>
-                    <CompanyBuilding/>
+                    <Company/>
                 </div>
             </div>
             <div className={"ems-content"}>

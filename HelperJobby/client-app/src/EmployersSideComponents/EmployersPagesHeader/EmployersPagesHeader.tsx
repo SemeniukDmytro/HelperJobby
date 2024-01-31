@@ -6,7 +6,7 @@ import {
     faArrowRightFromBracket,
     faArrowUpRightFromSquare,
     faChevronDown,
-    faGear,
+    faGear, faMagnifyingGlass,
     faMessage,
     faUser
 } from "@fortawesome/free-solid-svg-icons";
@@ -105,13 +105,25 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
                                     </button>
                                 </div>
                                 <div className={"emh-option-container"}>
-                                    <button className={"emh-option"}>
-                                        <FontAwesomeIcon
-                                            className={"icon-right-margin svg1rem"}
-                                            icon={faArrowUpRightFromSquare}
-                                        />
-                                        <span>HelperJobby for job seekers</span>
-                                    </button>
+                                    <a className={"emh-option"}
+                                       target={"_blank"}
+                                       href={"/"}
+                                    >
+                                        <div className={"emh-option-with-multiple-icons"}>
+                                            <div className={"emh-option-children-fb"}>
+                                                <FontAwesomeIcon
+                                                    className={"icon-right-margin svg1rem"}
+                                                    icon={faMagnifyingGlass} />
+                                                <span>HelperJobby for job seekers</span>
+                                            </div>
+                                            <div className={"emh-option-children-fb"}>
+                                                <FontAwesomeIcon
+                                                    className={"svg1rem"}
+                                                    icon={faArrowUpRightFromSquare}
+                                                />
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
                                 <div className={"emh-option-container"}>
                                     <button className={"emh-option"} onClick={signOut}>
