@@ -12,8 +12,7 @@ interface JobDetailsScrollWindowProps {
 
 const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = ({
                                                                      selectedJob,
-                                                                     setIsFullHeaderGridTemplate
-                                                                     ,
+                                                                     setIsFullHeaderGridTemplate,
                                                                      setIsShortHeaderGridTemplate,
                                                                      mainContentReference
                                                                  }) => {
@@ -31,7 +30,7 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = ({
                 focusOnInnerContent()
             }
         };
-
+        
         if (jobDetailsScrollWindowRef.current) {
             jobDetailsScrollWindowRef.current.addEventListener('scroll', handleScroll);
         }
@@ -45,7 +44,7 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = ({
 
 
     function focusOnInnerContent() {
-
+        console.log('das')
         const scrollTop = jobDetailsScrollWindowRef.current?.scrollTop;
         if (scrollTop! !== 0) {
             setIsFullHeaderGridTemplate(0);

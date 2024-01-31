@@ -41,6 +41,8 @@ import JobAppliesPage from "../../JobSeekerSidePages/UserJobInteractionPages/Job
 import InterviewsPage from "../../JobSeekerSidePages/UserJobInteractionPages/InterviewsPage/InterviewsPage";
 import JobPage from "../../JobSeekerSidePages/JobPage/JobPage";
 import RequireAuth from "../../Components/RequireAuth/RequireAuth";
+import AuthPage from "../../CommonPages/AuthPage/AuthPage";
+import SearchJobResultsPage from "../../JobSeekerSidePages/SearchJobResultsPage/SearchJobResultsPage";
 
 interface JobSeekerSideRoutesProps {
 }
@@ -109,6 +111,12 @@ const JobSeekerSideRoutes: FC<JobSeekerSideRoutesProps> = () => (
 
             <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
         </Route>
+        
+        {/*Public routes*/}
+        <Route path="/home" element={<HomePage/>}/>
+        <Route path={"/auth-page"} element={<AuthPage/>}/>
+        <Route path={"/jobs"} element={<SearchJobResultsPage/>}/>
+        <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
     </Routes>
 );
 

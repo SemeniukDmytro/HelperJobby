@@ -80,7 +80,7 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
                         </div>
                         <div className={"ml1rem"}>
                             <button className={"medium-tr-btn-with-icon"} onClick={handleRemoveSavedJobClick}>
-                                <FontAwesomeIcon icon={faBookmark}/>
+                                <FontAwesomeIcon className={"svg"} icon={faBookmark}/>
                             </button>
                         </div>
                     </div>)

@@ -36,6 +36,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     const [city, setCity] = useState("");
     const [postalCode, setPostalCode] = useState("");
     const [loading, setLoading] = useState(true);
+    const [validateForm, setValidateForm] = useState(false);
     const location = useLocation();
 
     const firstNameInputRef = useRef<HTMLInputElement>(null);
@@ -89,6 +90,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
 
     async function saveUpdatedInfo(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        setValidateForm(true);
         if (!isNotEmpty(firstName)) {
             if (firstNameInputRef.current) {
                 firstNameInputRef.current.focus();
@@ -196,10 +198,12 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                 <CustomInputField
                                     fieldLabel={"First name"} isRequired={true} inputFieldValue={firstName}
                                     setInputFieldValue={setFirstName} inputRef={firstNameInputRef}
+                                    executeValidation={validateForm} setExecuteValidation={setValidateForm}
                                 />
                                 <CustomInputField
                                     fieldLabel={"Last name"} isRequired={true} inputFieldValue={lastName}
                                     setInputFieldValue={setLastName} inputRef={lastNameInputRef}
+                                    executeValidation={validateForm} setExecuteValidation={setValidateForm}
                                 />
                                 <CustomInputField
                                     fieldLabel={"Phone"}
@@ -242,6 +246,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                         setInputFieldValue={setCity}
                                         setShowAutocompleteWindow={setShowCityAutoComplete}
                                         displayGoogleLogo={true}
+                                        executeValidation={validateForm} setExecuteValidation={setValidateForm}
                                     />
                                     <CustomInputField
                                         fieldLabel={"Postal code"} isRequired={false} inputFieldValue={postalCode}

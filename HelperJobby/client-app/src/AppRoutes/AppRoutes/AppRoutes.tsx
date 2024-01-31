@@ -20,11 +20,7 @@ const AppRoutes: FC<AppRoutesProps> = () => (
             <Route path={"/employers/*"} element={<EmployerSideRoutes/>}>
             </Route>
 
-            {/*Public routes*/}
-            <Route path="/home" element={<HomePage/>}/>
-            <Route path={"/auth-page"} element={<AuthPage/>}/>
-            <Route path={"/jobs"} element={<SearchJobResultsPage/>}/>
-            <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
+            
 
             <Route path={"*"} element={<NotFoundPage/>}/>
 

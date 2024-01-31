@@ -21,7 +21,7 @@ interface JobFullInfoComponentProps {
 const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
     const {
         jobSeeker, setJobSeeker,
-        fetchJobSeekerJobApplies, fetchJobSeekerSavedJobs
+        fetchJobSeekerJobInteractions
     } = useJobSeeker();
     const [isApplied, setIsApplied] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
@@ -30,20 +30,18 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
     const {authUser} = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-
-
+        
     useEffect(() => {
-        fetchJobSeekerJobInteractions();
+        fetchPageInitialData();
     }, []);
 
     useEffect(() => {
         isApplicationCreated();
         isJobSaved();
     }, [jobSeeker?.savedJobs, jobSeeker?.jobApplies]);
-
-    async function fetchJobSeekerJobInteractions() {
-        await fetchJobSeekerSavedJobs();
-        await fetchJobSeekerJobApplies();
+    
+    async function fetchPageInitialData() {
+        await fetchJobSeekerJobInteractions()
         setLoading(false);
     }
 

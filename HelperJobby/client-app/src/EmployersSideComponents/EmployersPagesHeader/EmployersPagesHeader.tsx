@@ -80,7 +80,7 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
                                 <div className={"emh-option-container"}>
                                     <span
                                         className={"dark-default-text bold-text emh-employer-name"}
-                                    >{employer?.fullName || "No account name"} </span>
+                                    >{employer?.organization.name || "No account name"} </span>
                                 </div>
                                 <div className={"emh-option-container"}>
                                     <button className={"emh-option"}>

@@ -14,6 +14,7 @@ import {useAuth} from "../../../../hooks/useAuth";
 import {useEmployer} from "../../../../hooks/useEmployer";
 import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
+import {IsValidEmail, validatePhoneNumber} from "../../../../utils/validationLogic/authFormValidators";
 
 interface EmployerSetupComponentProps {
 }
@@ -25,12 +26,16 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
     const [employerCredentials, setEmployerCredentials] = useState("");
     const credentialsInputRef = useRef<HTMLInputElement>(null);
     const [contactPhone, setContactPhone] = useState("");
+    const phoneInputRef = useRef<HTMLInputElement>(null);
+    const [phoneNumberError, setPhoneNumberError] = useState("");
+    const [employerEmail, setEmployerEmail] = useState("");
+    const employerEmailInputRef = useRef<HTMLInputElement>(null);
+    const [employerEmailError, setEmployerEmailError] = useState("");
     const [executeFormValidation, setExecuteFormValidation] = useState(false);
     const [requestInProgress, setRequestInProgress] = useState(false);
     const [requestError, setRequestError] = useState("");
     const [showPopupWindow, setShowPopupWindow] = useState(false);
     
-    const {authUser} = useAuth();
     const {setEmployer} = useEmployer();
     const employerService = new EmployerAccountService();
 
@@ -38,12 +43,32 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
     async function handleFormSubmit(e: FormEvent) {
         e.preventDefault();
         setExecuteFormValidation(true);
+        let invalidDataProvided = false;
         if (!companyName) {
             companyInputRef.current?.focus();
-            return;
+            invalidDataProvided = true;
         }
         if (!employerCredentials) {
             credentialsInputRef.current?.focus();
+            invalidDataProvided = true;
+        }
+        
+        if (!IsValidEmail(employerEmail)){
+            setEmployerEmailError("Error: Invalid email address");
+            employerEmailInputRef.current?.focus();
+            invalidDataProvided = true;
+        }
+
+        if (contactPhone) {
+            const isValidPhoneNumber = validatePhoneNumber(contactPhone);
+            if (isValidPhoneNumber) {
+                setPhoneNumberError(isValidPhoneNumber);
+                phoneInputRef.current?.focus();
+                invalidDataProvided = true;
+            }
+        }
+        
+        if (invalidDataProvided){
             return;
         }
 
@@ -52,7 +77,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
             const createEmployerDTO : CreateEmployerAccountDTO = {
                 organizationName : companyName,
                 fullName : employerCredentials,
-                email : authUser!.user.email,
+                email : employerEmail,
                 contactNumber : contactPhone,
                 numberOfEmployees : convertNumberOfEmployeesRange()
             }
@@ -119,6 +144,18 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                         optionsArr={numberOfEmployees}
                     />
                     <CustomInputField
+                        fieldLabel={"Employer account email address"}
+                        fieldSubtitle={"This address must be included in the company's employees' email list unless the company was not registered."}
+                        isRequired={true}
+                        inputFieldValue={employerEmail}
+                        setInputFieldValue={setEmployerEmail}
+                        inputRef={employerEmailInputRef}
+                        customErrorMessage={employerEmailError}
+                        setCustomErrorMessage={setEmployerEmailError}
+                        executeValidation={executeFormValidation}
+                        setExecuteValidation={setExecuteFormValidation}
+                    />
+                    <CustomInputField
                         fieldLabel={"Your first and last name"}
                         isRequired={true}
                         inputFieldValue={employerCredentials}
@@ -129,10 +166,15 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                     />
                     <CustomInputField
                         fieldLabel={"Your phone number"}
-                        fieldSubtitle={"For account management communication. Not visible to job seekers.\n"}
+                        fieldSubtitle={"Include country code (start with +). Phone number must contain only numbers without spaces or dashes. For account management communication. Not visible to job seekers."}
                         isRequired={false}
                         inputFieldValue={contactPhone}
                         setInputFieldValue={setContactPhone}
+                        customErrorMessage={phoneNumberError}
+                        setCustomErrorMessage={setPhoneNumberError}
+                        inputRef={phoneInputRef}
+                        executeValidation={executeFormValidation}
+                        setExecuteValidation={setExecuteFormValidation}
                     />
                     <div className="mb2rem"></div>
                     <button

@@ -14,7 +14,6 @@ const RecommendedJobs: FC<RecommendedJobsProps> = () => {
         isFullHeaderGridTemplate, setIsFullHeaderGridTemplate, mainContentReferenceForHome
     } = useHomePage();
 
-
     return (
         <div className={"jobs-container"}>
             {recommendedJobs.length > 0 &&

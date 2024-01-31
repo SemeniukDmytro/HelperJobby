@@ -21,6 +21,7 @@ import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import getJobSearchRequestURI from "../../../../utils/getJobSearchRequestURI";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
+import HomePageMainContentWrap from "../../../HomePage/PageComponents/HomePageMainContentWrap/HomePageMainContentWrap";
 
 interface SearchResultsProps {
 }
@@ -35,7 +36,6 @@ const SearchResults: FC<SearchResultsProps> = () => {
     const [isFullHeaderGridTemplate, setIsFullHeaderGridTemplate] = useState<number | null>(null);
     const [isShortHeaderGridTemplate, setIsShortHeaderGridTemplate] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);
-    const [key, setKey] = useState(0);
 
     const {
         query,
@@ -54,6 +54,7 @@ const SearchResults: FC<SearchResultsProps> = () => {
         setLanguage,
         mainContentReferenceForSearch
     } = useQueryParams();
+
 
     const [showPayOptions, setShowPayOptions] = useState(false);
     const [showJobTypeOptions, setShowJobTypeOptions] = useState(false);
@@ -181,114 +182,120 @@ const SearchResults: FC<SearchResultsProps> = () => {
 
     return (
         <PageWrapWithHeader>
-            <div className={"content-separation-margin"}></div>
-            <JobSearchBar jobInitial={searchParams.get("q")!} locationInitial={searchParams.get("location") || ""}/>
-            <div className={"search-filters-containers"}>
-                <button
-                    className={`query-param-box ${isRemote ? "selected-query-box" : ""}`}
-                    onClick={remoteOptionHandler}
-                >
-                    <span className={"param-name"}>
-                        Remote
-                    </span>
-                    {isRemote && <FontAwesomeIcon className={"remove-query-param svg1rem"} icon={faXmark}/>}
-                </button>
-                <div className={"param-options-box"}>
-                    <QueryParameter
-                        queryParam={JobQueryParams.Pay} isSelected={pay != 0}
-                        onClick={handlePayClick} setShowMoreOptions={setShowPayOptions}
-                    />
-                    {showPayOptions && <div className={"param-options-start"}>
-                        <div className={"param-options-list"}>
-                            <button className={"param-option"} onClick={() => selectPay(15)}>
-                                $15.00+/hour
-                            </button>
-                            <button className={"param-option"} onClick={() => selectPay(25)}>
-                                $25.00+/hour
-                            </button>
-                            <button className={"param-option"} onClick={() => selectPay(35)}>
-                                $35.00+/hour
-                            </button>
-                            <button className={"param-option"} onClick={() => selectPay(45)}>
-                                $45.00+/hour
-                            </button>
-                        </div>
-                    </div>}
-                </div>
-                <div className={"param-options-box"}>
-                    <QueryParameter
-                        queryParam={JobQueryParams.JobType} isSelected={jobType != 0}
-                        onClick={handleJobTypeClick} setShowMoreOptions={setShowJobTypeOptions}
-                    />
-                    {showJobTypeOptions && <div className={"param-options-start"}>
-                        <div className={"param-options-list"}>
-                            {JobTypesMapData.map((data, index) => (
-                                <div
-                                    className={"param-option"}
-                                    key={index}
-                                    onClick={() => selectJobType(data.enumValue)}
-                                >{data.stringValue}</div>
-                            ))}
-                        </div>
-                    </div>}
-                </div>
-                <div className={"param-options-box"}>
-                    <QueryParameter
-                        queryParam={JobQueryParams.Language} isSelected={language.length != 0}
-                        onClick={handleLanguageClick} setShowMoreOptions={setShowLanguageOptions}
-                    />
-                    {showLanguageOptions && <div className={"param-options-start"}>
-                        <div className={"param-options-list"}>
-                            {mostSpokenLanguages.map((language, index) => (
-                                <div
-                                    className={"param-option"}
-                                    key={index}
-                                    onClick={() => selectLanguage(language)}
-                                >{language}</div>
-                            ))}
-                        </div>
-                    </div>}
-                </div>
-            </div>
-            <div className={"filters-results-separator"}>
-            </div>
-            {loading ? <LoadingPage/> :
-                (searchResults.length > 0 ? (<div className={"jobs-container"}>
-                    <div className={"job-descriptions"}>
-                        <div className={"short-job-descriptions-column smaller-margin-before-navigation"}>
-                            <div className={"title-container"}>
-                                <span>{searchParams.get("q")} {searchParams.get("location") ? `in ${searchParams.get("location")}` : ""} jobs</span>
+            <HomePageMainContentWrap>
+                <JobSearchBar
+                    jobInitial={searchParams.get("q")!}
+                    locationInitial={searchParams.get("location") || ""}
+                />
+                <div className={"search-filters-containers"}>
+                    <button
+                        className={`query-param-box ${isRemote ? "selected-query-box" : ""}`}
+                        onClick={remoteOptionHandler}
+                    >
+                                <span className={"param-name"}>
+                                    Remote
+                                </span>
+                        {isRemote && <FontAwesomeIcon className={"remove-query-param svg1rem"} icon={faXmark}/>}
+                    </button>
+                    <div className={"param-options-box"}>
+                        <QueryParameter
+                            queryParam={JobQueryParams.Pay} isSelected={pay != 0}
+                            onClick={handlePayClick} setShowMoreOptions={setShowPayOptions}
+                        />
+                        {showPayOptions && <div className={"param-options-start"}>
+                            <div className={"param-options-list"}>
+                                <button className={"param-option"} onClick={() => selectPay(15)}>
+                                    $15.00+/hour
+                                </button>
+                                <button className={"param-option"} onClick={() => selectPay(25)}>
+                                    $25.00+/hour
+                                </button>
+                                <button className={"param-option"} onClick={() => selectPay(35)}>
+                                    $35.00+/hour
+                                </button>
+                                <button className={"param-option"} onClick={() => selectPay(45)}>
+                                    $45.00+/hour
+                                </button>
                             </div>
-                            {searchResults.map((job, index) => (
-                                <ShortJobDescriptionBlock
-                                    key={index} job={job}
-                                    selectedJob={selectedJob}
-                                    setSelectedJob={setSelectedJob}
-                                ></ShortJobDescriptionBlock>
-                            ))}
-                        </div>
-                        <div className={"pages-navigation-container"}>
-                            {start != 0 && <button
-                                className={"navigation-button previous-button"}
-                                onClick={goToPreviousPageWithResults}
-                            >
-                                <FontAwesomeIcon icon={faChevronLeft}/>
-                            </button>}
-                            {hasMoreResults &&
-                                <button className={"navigation-button"} onClick={goToNextPageWithResults}>
-                                    <FontAwesomeIcon icon={faChevronRight}/>
-                                </button>}
-                        </div>
+                        </div>}
                     </div>
-                    <DetailedDescriptionColumn
-                        selectedJob={selectedJob}
-                        isFullHeaderGridTemplate={isFullHeaderGridTemplate}
-                        setIsFullHeaderGridTemplate={setIsFullHeaderGridTemplate}
-                        isShortHeaderGridTemplate={isShortHeaderGridTemplate}
-                        setIsShortHeaderGridTemplate={setIsShortHeaderGridTemplate}
-                        mainContentReference={mainContentReferenceForSearch}
-                    />
-                </div>) : (<></>))}
+                    <div className={"param-options-box"}>
+                        <QueryParameter
+                            queryParam={JobQueryParams.JobType} isSelected={jobType != 0}
+                            onClick={handleJobTypeClick} setShowMoreOptions={setShowJobTypeOptions}
+                        />
+                        {showJobTypeOptions && <div className={"param-options-start"}>
+                            <div className={"param-options-list"}>
+                                {JobTypesMapData.map((data, index) => (
+                                    <div
+                                        className={"param-option"}
+                                        key={index}
+                                        onClick={() => selectJobType(data.enumValue)}
+                                    >{data.stringValue}</div>
+                                ))}
+                            </div>
+                        </div>}
+                    </div>
+                    <div className={"param-options-box"}>
+                        <QueryParameter
+                            queryParam={JobQueryParams.Language} isSelected={language.length != 0}
+                            onClick={handleLanguageClick} setShowMoreOptions={setShowLanguageOptions}
+                        />
+                        {showLanguageOptions && <div className={"param-options-start"}>
+                            <div className={"param-options-list"}>
+                                {mostSpokenLanguages.map((language, index) => (
+                                    <div
+                                        className={"param-option"}
+                                        key={index}
+                                        onClick={() => selectLanguage(language)}
+                                    >{language}</div>
+                                ))}
+                            </div>
+                        </div>}
+                    </div>
+                </div>
+                <div className={"filters-results-separator"}>
+                </div>
+                {loading ? <LoadingPage/> :
+                    (searchResults.length > 0 ? (<div className={"jobs-container"}>
+                        <div className={"job-descriptions"}>
+                            <div className={"short-job-descriptions-column smaller-margin-before-navigation"}>
+                                <div className={"title-container"}>
+                                    <span>{searchParams.get("q")} {searchParams.get("location") ? `in ${searchParams.get("location")}` : ""} jobs</span>
+                                </div>
+                                {searchResults.map((job, index) => (
+                                    <ShortJobDescriptionBlock
+                                        key={index} job={job}
+                                        selectedJob={selectedJob}
+                                        setSelectedJob={setSelectedJob}
+                                    ></ShortJobDescriptionBlock>
+                                ))}
+                            </div>
+                            <div className={"pages-navigation-container"}>
+                                {start != 0 && <button
+                                    className={"navigation-button previous-button"}
+                                    onClick={goToPreviousPageWithResults}
+                                >
+                                    <FontAwesomeIcon icon={faChevronLeft}/>
+                                </button>}
+                                {hasMoreResults &&
+                                    <button className={"navigation-button"} onClick={goToNextPageWithResults}>
+                                        <FontAwesomeIcon icon={faChevronRight}/>
+                                    </button>}
+                            </div>
+                        </div>
+                        <DetailedDescriptionColumn
+                            selectedJob={selectedJob}
+                            isFullHeaderGridTemplate={isFullHeaderGridTemplate}
+                            setIsFullHeaderGridTemplate={setIsFullHeaderGridTemplate}
+                            isShortHeaderGridTemplate={isShortHeaderGridTemplate}
+                            setIsShortHeaderGridTemplate={setIsShortHeaderGridTemplate}
+                            mainContentReference={mainContentReferenceForSearch}
+                        />
+                    </div>) 
+                        : (<></>))
+                }
+            </HomePageMainContentWrap>
         </PageWrapWithHeader>
     )
 };

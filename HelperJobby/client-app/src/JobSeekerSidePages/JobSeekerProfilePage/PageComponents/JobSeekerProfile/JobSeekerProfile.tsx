@@ -16,7 +16,7 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
     const {authUser} = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-
+    
     useEffect(() => {
         fetchComponentInitialData();
     }, []);

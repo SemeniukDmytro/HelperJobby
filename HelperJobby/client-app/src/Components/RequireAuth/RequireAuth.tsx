@@ -9,7 +9,7 @@ interface RequireAuthProps {
 const RequireAuth: FC<RequireAuthProps> = () => {
     const location = useLocation();
     const {authUser} = useAuth();
-
+    console.log("pidad")
     return (
         authUser ? (
             <JobSeekerProvider>

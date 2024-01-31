@@ -34,7 +34,7 @@ public class EmployerAccountController : ExtendedBaseController
     [HttpGet("my-employer-account")]
     public async Task<EmployerAccountDTO> GetCurrentUserAccount()
     {
-        var user = await _accountQueryRepository.GetEmployerAccount(_userService.GetCurrentUserId());
+        var user = await _accountQueryRepository.GetEmployerAccountWithOrganization(_userService.GetCurrentUserId());
         return _mapper.Map<EmployerAccountDTO>(user);
     }
 

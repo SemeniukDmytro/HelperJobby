@@ -26,8 +26,24 @@ public class EmployerAccountQueryRepository : IEmployerAccountQueryRepository
 
     public async Task<EmployerAccount> GetEmployerAccountWithOrganization(int userId)
     {
-        return await GetUserWithEmployerAccount(userId,
-            q => q.Include(u => u.EmployerAccount).ThenInclude(ea => ea.Organization));
+        var employerWithOrganization = await _applicationContext.EmployerAccounts
+            .Where(e => e.UserId == userId)
+            .Select(ea => new EmployerAccount()
+            {
+                Id = ea.Id,
+                Email = ea.Email,
+                FullName = ea.FullName,
+                ContactNumber = ea.ContactNumber,
+                UserId = ea.UserId,
+                OrganizationId = ea.OrganizationId,
+                Organization = ea.Organization
+            }).FirstOrDefaultAsync();
+        if (employerWithOrganization == null)
+        {
+            throw new EmployerAccountNotFoundException();
+        }
+
+        return employerWithOrganization;
     }
 
     public async Task<EmployerAccount> GetEmployerAccountWithCurrentJobCreation(int userId)

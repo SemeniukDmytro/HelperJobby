@@ -75,7 +75,11 @@ const CustomInputField: FC<EditFormFieldProps> = ({
         if (!isNotEmpty(inputFieldValue) && isRequired && !setCustomErrorMessage) {
             setIsInvalidValue(true);
             setRequiredMessage(`${fieldLabel} is required`);
-        } else {
+        } 
+        else if (customErrorMessage){
+            setIsInvalidValue(true);
+        }
+        else {
             setIsInvalidValue(false);
         }
     }
