@@ -30,9 +30,12 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
     const currentPath = window.location.pathname;
 
     useEffect(() => {
-
+        if (!jobSeeker?.resume){
+            navigate("/build/name");
+            return;
+        }
         setProgressPercentage(ProgressPercentPerPage * 7);
-        setSaveFunc(() => navigateToProfilePage)
+        setSaveFunc(() => navigateToProfilePage);
     }, []);
 
     async function navigateToProfilePage() {
@@ -102,7 +105,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                             className={"small-interaction-button medium-margin-right"}
                             onClick={navigateToEditContactInfoPage}
                         >
-                            <FontAwesomeIcon icon={faPen}/>
+                            <FontAwesomeIcon className={"svg1rem"} icon={faPen}/>
                         </button>
                     </div>
                 </div>
@@ -113,7 +116,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                         Work experience
                     </div>
                     <button className={"small-interaction-button"} onClick={() => addResumeInfo("experience")}>
-                        <FontAwesomeIcon icon={faPlus}/>
+                        <FontAwesomeIcon className={"svg125rem"} icon={faPlus}/>
                     </button>
                 </div>
                 {jobSeeker?.resume?.workExperiences.length == 0 ?
@@ -134,7 +137,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                         Education
                     </div>
                     <button className={"small-interaction-button"} onClick={() => addResumeInfo("education")}>
-                        <FontAwesomeIcon icon={faPlus}/>
+                        <FontAwesomeIcon className={"svg125rem"} icon={faPlus}/>
                     </button>
                 </div>
                 {jobSeeker?.resume?.educations.length == 0 ?
@@ -155,7 +158,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                         Skills
                     </div>
                     <button className={"small-interaction-button"} onClick={() => addResumeInfo("skills")}>
-                        <FontAwesomeIcon icon={faPlus}/>
+                        <FontAwesomeIcon className={"svg125rem"} icon={faPlus}/>
                     </button>
                 </div>
                 {jobSeeker?.resume?.skills.length == 0 ?
@@ -170,7 +173,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                                 {skill.name}
                             </div>
                             <button className={"remove-skill-button"} onClick={() => removeResumeSkill(skill, index)}>
-                                <FontAwesomeIcon icon={faTrashCan}/>
+                                <FontAwesomeIcon className={"svg125rem"} icon={faTrashCan}/>
                             </button>
                         </div>)))
                 }

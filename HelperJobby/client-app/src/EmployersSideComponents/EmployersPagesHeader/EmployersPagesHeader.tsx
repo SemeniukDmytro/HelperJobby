@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {useEmployer} from "../../hooks/useEmployer";
 import {useSignOut} from "../../hooks/useSignOut";
+import {useNavigate} from "react-router-dom";
 
 interface EmployersPagesHeaderProps {
     loading: boolean;
@@ -25,6 +26,7 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
     const moreOptionsWindow = useRef<HTMLDivElement>(null);
     const [showMoreOptions, setShowMoreOptions] = useState(false);
     const {signOut} = useSignOut(setAuthUser);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchEmployerInfo();
@@ -51,6 +53,11 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
         setLoading(false);
     }
 
+    function navigateToAccountSettingPage() {
+        setShowMoreOptions(false);
+        navigate("/settings")
+    }
+
     return (
         <div className={"emh-layout"}>
             <div className="emh-fb">
@@ -59,7 +66,7 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
                 </div>
                 {!loading && <div className="emh-right-side">
                     <button className="neutral-transparent-button">
-                        <FontAwesomeIcon className={"svg125rem icon-right-margin"} icon={faMessage}/>
+                        <FontAwesomeIcon className={"svg1rem icon-right-margin"} icon={faMessage}/>
                         <span>Messages</span>
                     </button>
                     <div className="emh-separator">
@@ -99,12 +106,12 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
                                     <span className={"dark-default-text bold-text"}>{authUser?.user.email} </span>
                                 </div>
                                 <div className={"emh-option-container"}>
-                                    <button className={"emh-option"}>
+                                    <button className={"emh-option"} onClick={navigateToAccountSettingPage}>
                                         <FontAwesomeIcon className={"icon-right-margin svg1rem"} icon={faGear}/>
                                         <span>Account settings</span>
                                     </button>
                                 </div>
-                                <div className={"emh-option-container"}>
+                                <div className={"emh-option-container"} onClick={() => setShowMoreOptions(false)}>
                                     <a className={"emh-option"}
                                        target={"_blank"}
                                        href={"/"}

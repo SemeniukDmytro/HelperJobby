@@ -3,8 +3,8 @@ import type { SVGProps } from "react";
 const SvgPeopleStanding = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
+    width="18em"
+    height="13em"
     viewBox="0 0 3000 2000"
     {...props}
   >

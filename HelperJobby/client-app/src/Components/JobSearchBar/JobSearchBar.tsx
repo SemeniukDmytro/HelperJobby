@@ -296,7 +296,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
                                     <div className={"location-search-autocomplete-window"}>
                                         {autocompleteResults.map((locationResult, index) => (
                                             <div
-                                                className={"autocomplete-result"}
+                                                className={"select-option"}
                                                 key={index}
                                                 onClick={() => handleCitySelect(locationResult)}
                                             >

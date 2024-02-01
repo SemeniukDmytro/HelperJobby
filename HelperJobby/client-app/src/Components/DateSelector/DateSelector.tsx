@@ -42,7 +42,7 @@ const DateSelector: FC<DateSelectorProps> = ({
 
     return (
         <div className={"date-select-container"}>
-            <div className={`border-lining ${inputFocus ? "field-focus" : ""}`}>
+            <div className={`border-lining`}>
 
             </div>
             <select
@@ -66,7 +66,7 @@ const DateSelector: FC<DateSelectorProps> = ({
                 }
             </select>
             <div className={"selectArrow"}>
-                <FontAwesomeIcon icon={faChevronDown}/>
+                <FontAwesomeIcon className={"svg1rem"} icon={faChevronDown}/>
             </div>
         </div>
     )

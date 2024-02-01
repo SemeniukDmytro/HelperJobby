@@ -26,14 +26,12 @@ const ResumeInfoPagesHeader: FC<PreviewPagesHeaderProps> = ({children}) => {
     }
 
     return (
-        <PageWrapWithHeader>
-            <div className={"page-with-centered-content-layout"}>
-                <NavigateBackHeader onBackButtonClick={navigateToParentPage}/>
-                <div className={"form-layout"}>
-                    {children}
-                </div>
+        <div className={"page-with-centered-content-layout"}>
+            <NavigateBackHeader onBackButtonClick={navigateToParentPage}/>
+            <div className={"form-layout"}>
+                {children}
             </div>
-        </PageWrapWithHeader>
+        </div>
     )
 }
 

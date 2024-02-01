@@ -15,8 +15,8 @@ import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {useNavigate} from "react-router-dom";
 import {UpdateAddressDTO} from "../../../../../DTOs/addressDTOs/UpdateAddressDTO";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
-import {isNotEmpty} from "../../../../../utils/validationLogic/isNotEmptyString";
 import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
+import LocationCustomInputField from "../../../../../Components/LocationCustomInputField/LocationCustomInputField";
 
 interface ResumeAddressComponentProps {
 }
@@ -42,6 +42,7 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
     const postalCodeRef = useRef<HTMLInputElement>(null);
     const [showStreetsAutocomplete, setShowStreetsAutocomplete] = useState(false);
     const [showCityAutoComplete, setShowCityAutoComplete] = useState(false);
+    const [executeFormValidation, setExecuteFormValidation] = useState(false);
 
 
     useEffect(() => {
@@ -62,24 +63,23 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
     }
 
     async function updateJobSeekerAddress(resultPageURI: string, isSaveAndExitAction: boolean) {
-        if (!isNotEmpty(country)) {
-            if (countryRef.current) {
-                countryRef.current.focus();
-                if (isSaveAndExitAction) {
-                    setShowDialogWindow(true);
-                }
-                return;
+        setExecuteFormValidation(true);
+        
+        if (!country) {
+            countryRef.current?.focus();
+            if (isSaveAndExitAction) {
+                setShowDialogWindow(true);
             }
+            return;
         }
-        if (!isNotEmpty(city)) {
-            if (cityInputRef.current) {
-                cityInputRef.current.focus();
-                if (isSaveAndExitAction) {
-                    setShowDialogWindow(true);
-                }
-                return;
+        if (!city) {
+            cityInputRef.current?.focus();
+            if (isSaveAndExitAction) {
+                setShowDialogWindow(true);
             }
+            return;
         }
+        
 
         try {
             setSavingInfo(true);
@@ -117,6 +117,7 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
         <div>
             {showStreetsAutocomplete && <AutocompleteResultsWindow
                 inputFieldRef={streetAddressInputRef}
+                windowMaxWidth={"538px"}
                 inputValue={streetAddress}
                 setInputValue={setStreetAddress}
                 cityInputValue={city}
@@ -129,6 +130,7 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
 
             {showCityAutoComplete && <AutocompleteResultsWindow
                 inputFieldRef={cityInputRef}
+                windowMaxWidth={"538px"}
                 inputValue={city}
                 setInputValue={setCity}
                 country={country}
@@ -149,25 +151,25 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
                     setCountry={setCountry}
                     selectRef={countryRef}
                 />
-
-                <CustomInputField
+                
+                
+                <LocationCustomInputField
                     fieldLabel={"Street address"}
-                    isRequired={false}
-                    inputFieldValue={streetAddress}
-                    setInputFieldValue={setStreetAddress}
-                    displayGoogleLogo={true}
+                    inputValue={streetAddress}
+                    setInputValue={setStreetAddress}
                     inputRef={streetAddressInputRef}
-                    setShowAutocompleteWindow={setShowStreetsAutocomplete}
-                />
+                    isRequired={false}
+                    setShowAutocompleteResults={setShowStreetsAutocomplete}/>
 
-                <CustomInputField
+                <LocationCustomInputField
                     fieldLabel={"City, Province / Territory"}
-                    isRequired={true}
-                    inputFieldValue={city}
-                    setInputFieldValue={setCity}
+                    inputValue={city}
+                    setInputValue={setCity}
                     inputRef={cityInputRef}
-                    displayGoogleLogo={true}
-                    setShowAutocompleteWindow={setShowCityAutoComplete}
+                    isRequired={true}
+                    setShowAutocompleteResults={setShowCityAutoComplete}
+                    executeValidation={executeFormValidation}
+                    setExecuteValidation={setExecuteFormValidation}
                 />
 
                 <CustomInputField

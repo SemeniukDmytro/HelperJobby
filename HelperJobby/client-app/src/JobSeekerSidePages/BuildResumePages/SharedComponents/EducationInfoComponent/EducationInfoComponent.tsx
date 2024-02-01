@@ -7,7 +7,6 @@ import {ResumeService} from "../../../../services/resumeService";
 import {EducationService} from "../../../../services/educationService";
 import {useNavigate} from "react-router-dom";
 import {ProgressPercentPerPage} from "../ProgressPercentPerPage";
-import {isNotEmpty} from "../../../../utils/validationLogic/isNotEmptyString";
 import {CreateResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
 import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
@@ -22,6 +21,7 @@ import CountrySelector from "../../../EditContactInfoPage/PageComponents/Country
 import TimePeriod from "../TimePeriod/TimePeriod";
 import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
+import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
 
 
 interface AddEducationComponentProps {
@@ -88,24 +88,23 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
     }
 
     async function handleEducationCreation(nextPageRoute: string, isSaveAndExitAction: boolean) {
-        if (!isNotEmpty(levelOfEducation)) {
-            setExecuteInputValidations(true);
-            if (levelOfEducationInputRef.current) {
-                levelOfEducationInputRef.current.focus();
-                levelOfEducationInputRef.current.scrollIntoView({block: "end", behavior: "smooth"});
-                if (isSaveAndExitAction) {
-                    setShowDialogWindow(true);
-                }
-                return;
-            }
-        }
-        if (invalidTimeProvided) {
-            setExecuteInputValidations(true);
+        setExecuteInputValidations(true);
+        if (!levelOfEducation) {
+            levelOfEducationInputRef.current?.scrollIntoView({block: "end", behavior: "smooth"});
+            levelOfEducationInputRef.current?.focus();
             if (isSaveAndExitAction) {
                 setShowDialogWindow(true);
             }
             return;
         }
+        if (invalidTimeProvided) {
+            if (isSaveAndExitAction) {
+                setShowDialogWindow(true);
+            }
+            return;
+        }
+        
+        
         if (education) {
             await updateEducation();
         } else if (jobSeeker?.resume) {
@@ -226,6 +225,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
         <>
             {showCityAutoComplete && <AutocompleteResultsWindow
                 inputFieldRef={cityInputRef}
+                windowMaxWidth={"538px"}
                 inputValue={city}
                 setInputValue={setCity}
                 country={country || "Canada"}
@@ -244,7 +244,6 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     inputFieldValue={levelOfEducation}
                     setInputFieldValue={setLevelOfEducation}
                     inputRef={levelOfEducationInputRef}
-                    notShowErrorInitially={true}
                     executeValidation={executeInputsValidation}
                     setExecuteValidation={setExecuteInputValidations}
                 />
@@ -272,15 +271,13 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                 />
 
 
-                <CustomInputField
-                    fieldLabel={"City, Province/Territory"}
-                    isRequired={false}
-                    inputFieldValue={city}
-                    setInputFieldValue={setCity}
-                    displayGoogleLogo={true}
+                <LocationCustomInputField
+                    fieldLabel={"City, Province / Territory"}
+                    inputValue={city}
+                    setInputValue={setCity}
                     inputRef={cityInputRef}
-                    setShowAutocompleteWindow={setShowCityAutoComplete}
-                />
+                    isRequired={false}
+                    setShowAutocompleteResults={setShowCityAutoComplete}/>
 
                 <TimePeriod
                     fromMonth={fromMonth}

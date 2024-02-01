@@ -1,6 +1,9 @@
 @use "./global-variables";
 
 .light-button-with-margin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.5rem 1rem;
   min-width: 2.25rem;
   border-radius: 0.5rem;

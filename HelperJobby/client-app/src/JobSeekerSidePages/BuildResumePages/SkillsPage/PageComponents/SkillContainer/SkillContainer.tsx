@@ -15,7 +15,7 @@ const SkillContainer: FC<SkillContainerProps> = ({skillName, removeSkill}) => (
             {skillName}
         </div>
         <button className={"remove-skill-button"} onClick={removeSkill}>
-            <FontAwesomeIcon icon={faTrashCan}/>
+            <FontAwesomeIcon className={"svg125rem"} icon={faTrashCan}/>
         </button>
     </div>
 );

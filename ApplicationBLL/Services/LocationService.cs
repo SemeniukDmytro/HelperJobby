@@ -10,7 +10,7 @@ public class LocationService : ILocationService
     private const string StreetAddressType = "address";
     private const string CityAddressType = "(cities)";
 
-    public async Task<List<string>> GetStreetAddressAutocomplete(string input, string countryCode)
+    public async Task<List<string>> GetAddressAutocomplete(string input, string countryCode)
     {
         return await GetLocationsResults(input, countryCode, StreetAddressType);
     }

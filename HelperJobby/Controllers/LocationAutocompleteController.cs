@@ -20,7 +20,7 @@ public class LocationAutocompleteController : ControllerBase
         [FromQuery] string input,
         [FromQuery] string countryA2code)
     {
-        return await _locationService.GetStreetAddressAutocomplete(input, countryA2code);
+        return await _locationService.GetAddressAutocomplete(input, countryA2code);
     }
 
     [HttpGet]

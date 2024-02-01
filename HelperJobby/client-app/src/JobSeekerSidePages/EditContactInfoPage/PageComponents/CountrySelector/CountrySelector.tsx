@@ -3,7 +3,6 @@ import './CountrySelector.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronDown} from "@fortawesome/free-solid-svg-icons";
 import {countries} from "../../../../AppConstData/CountriesData";
-import {isNotEmpty} from "../../../../utils/validationLogic/isNotEmptyString";
 
 interface CountrySelectorProps {
     country: string;
@@ -19,7 +18,7 @@ const CountrySelector: FC<CountrySelectorProps> = ({
     const [showCountrySelector, setShowCountrySelector] = useState(false);
 
     useEffect(() => {
-        if (!isNotEmpty(country)) {
+        if (country) {
             setCountry("Canada")
         }
     }, [country]);

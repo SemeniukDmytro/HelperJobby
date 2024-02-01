@@ -2,8 +2,6 @@ import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState} f
 import './CustomInputField.scss';
 import {faCircleExclamation, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import GoogleImage from '../../Assets/pictures/google_on_white_hdpi.png'
-import {isNotEmpty} from "../../utils/validationLogic/isNotEmptyString";
 
 
 interface EditFormFieldProps {
@@ -12,10 +10,7 @@ interface EditFormFieldProps {
     inputFieldValue: string;
     setInputFieldValue: Dispatch<SetStateAction<string>>;
     inputRef?: React.RefObject<HTMLInputElement>;
-    setShowAutocompleteWindow?: Dispatch<SetStateAction<boolean>>;
     fieldSubtitle?: string;
-    displayGoogleLogo?: boolean;
-    notShowErrorInitially?: boolean;
     executeValidation?: boolean;
     setExecuteValidation?: Dispatch<SetStateAction<boolean>>;
     customErrorMessage?: string;
@@ -28,10 +23,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({
                                                       fieldLabel,
                                                       isRequired,
                                                       inputRef,
-                                                      setShowAutocompleteWindow,
                                                       fieldSubtitle,
-                                                      displayGoogleLogo,
-                                                      notShowErrorInitially,
                                                       executeValidation,
                                                       setExecuteValidation,
                                                       customErrorMessage,
@@ -43,13 +35,6 @@ const CustomInputField: FC<EditFormFieldProps> = ({
     const [showEraseJobBtn, setShowEraseButton] = useState(inputFieldValue.length > 0);
 
     useEffect(() => {
-        validateInputValue();
-        if (inputFieldValue.length > 0) {
-            setShowEraseButton(true);
-        }
-    }, [inputFieldValue]);
-
-    useEffect(() => {
         if (customErrorMessage) {
             setIsInvalidValue(true);
             setRequiredMessage("");
@@ -58,11 +43,6 @@ const CustomInputField: FC<EditFormFieldProps> = ({
         }
     }, [customErrorMessage]);
 
-    useEffect(() => {
-        if (notShowErrorInitially) {
-            setIsInvalidValue(false);
-        }
-    }, []);
 
     useEffect(() => {
         if (executeValidation && setExecuteValidation) {
@@ -72,31 +52,23 @@ const CustomInputField: FC<EditFormFieldProps> = ({
     }, [executeValidation]);
 
     function validateInputValue() {
-        if (!isNotEmpty(inputFieldValue) && isRequired && !setCustomErrorMessage) {
+        if (!inputFieldValue && isRequired && !customErrorMessage) {
             setIsInvalidValue(true);
             setRequiredMessage(`${fieldLabel} is required`);
-        } 
-        else if (customErrorMessage){
+        } else if (customErrorMessage) {
             setIsInvalidValue(true);
-        }
-        else {
+        } else {
             setIsInvalidValue(false);
         }
     }
 
     function changeInputFieldValue(e: ChangeEvent<HTMLInputElement>) {
         setIsInvalidValue(false);
+        validateInputValue();
         if (setCustomErrorMessage) {
             setCustomErrorMessage("");
         }
-        if (setShowAutocompleteWindow) {
-            setShowAutocompleteWindow(true);
-        }
-        if (e.target.value.length == 0) {
-            setShowEraseButton(false);
-        } else {
-            setShowEraseButton(true)
-        }
+        e.target.value ? setShowEraseButton(true) : setShowEraseButton(false);
         setInputFieldValue(e.target.value);
     }
 
@@ -126,9 +98,9 @@ const CustomInputField: FC<EditFormFieldProps> = ({
                     value={inputFieldValue}
                     type={"text"}
                     onChange={changeInputFieldValue}
+                    onBlur={validateInputValue}
                     ref={inputRef}
                 />
-                {displayGoogleLogo && <img className={"google-logo"} src={GoogleImage} alt={""}></img>}
                 {showEraseJobBtn && <div className={"input-button-box"} onClick={eraseInput}>
                     <button type={"button"} className={"input-field-button"}>
                         <FontAwesomeIcon className={"svg1rem"} icon={faXmark}/>

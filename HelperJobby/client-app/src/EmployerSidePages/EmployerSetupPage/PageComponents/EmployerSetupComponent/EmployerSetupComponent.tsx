@@ -14,20 +14,26 @@ import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
 import {IsValidEmail, validatePhoneNumber} from "../../../../utils/validationLogic/authFormValidators";
 import {Company} from "../../../../Components/Icons/icons";
+import {UpdateEmployerAccountDTO} from "../../../../DTOs/accountDTOs/UpdateEmployerAccountDTO";
+import {EmployerAccountDTO} from "../../../../DTOs/accountDTOs/EmployerAccountDTO";
+import {useAuth} from "../../../../hooks/useAuth";
+import {useNavigate} from "react-router-dom";
+import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface EmployerSetupComponentProps {
 }
 
 const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
-    const [companyName, setCompanyName] = useState("");
+    const {employer, setEmployer} = useEmployer();
+    const [companyName, setCompanyName] = useState(employer?.organization.name || "");
     const companyInputRef = useRef<HTMLInputElement>(null);
     const [numberOfEmployeesRange, setNumberOfEmployeesRange] = useState("");
-    const [employerCredentials, setEmployerCredentials] = useState("");
+    const [employerCredentials, setEmployerCredentials] = useState(employer?.fullName || "");
     const credentialsInputRef = useRef<HTMLInputElement>(null);
-    const [contactPhone, setContactPhone] = useState("");
+    const [contactPhone, setContactPhone] = useState(employer?.contactNumber || "");
     const phoneInputRef = useRef<HTMLInputElement>(null);
     const [phoneNumberError, setPhoneNumberError] = useState("");
-    const [employerEmail, setEmployerEmail] = useState("");
+    const [employerEmail, setEmployerEmail] = useState(employer?.email || "");
     const employerEmailInputRef = useRef<HTMLInputElement>(null);
     const [employerEmailError, setEmployerEmailError] = useState("");
     const [executeFormValidation, setExecuteFormValidation] = useState(false);
@@ -35,9 +41,9 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
     const [requestError, setRequestError] = useState("");
     const [showPopupWindow, setShowPopupWindow] = useState(false);
     
-    const {setEmployer} = useEmployer();
     const employerService = new EmployerAccountService();
-
+    const {authUser} = useAuth();
+    const navigate = useNavigate();
 
     async function handleFormSubmit(e: FormEvent) {
         e.preventDefault();
@@ -73,16 +79,36 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
 
         try {
             setRequestInProgress(true);
-            const createEmployerDTO : CreateEmployerAccountDTO = {
-                organizationName : companyName,
-                fullName : employerCredentials,
-                email : employerEmail,
-                contactNumber : contactPhone,
-                numberOfEmployees : convertNumberOfEmployeesRange()
-            }
+
+            let retrievedEmployer : EmployerAccountDTO;
             
-            const retrievedEmployer = await employerService.createEmployerAccount(createEmployerDTO);
-            setEmployer(retrievedEmployer);
+            if (employer){
+                const updateEmployerDTO : UpdateEmployerAccountDTO = {
+                    email : employerEmail,
+                    contactNumber : contactPhone
+                }
+                retrievedEmployer = await employerService.updateEmployerAccount(authUser!.user.id, updateEmployerDTO);
+                setEmployer(prev => {
+                    return  prev ? {
+                        ...prev,
+                        contactNumber : retrievedEmployer.contactNumber,
+                        email : retrievedEmployer.email
+                    } : retrievedEmployer;
+                })
+            }
+            else {
+                const createEmployerDTO : CreateEmployerAccountDTO = {
+                    organizationName : companyName,
+                    fullName : employerCredentials,
+                    email : employerEmail,
+                    contactNumber : contactPhone,
+                    numberOfEmployees : convertNumberOfEmployeesRange()
+                }
+                retrievedEmployer = await employerService.createEmployerAccount(createEmployerDTO);
+                setEmployer(retrievedEmployer);
+            }
+            navigate(employerPagesPaths.ADD_JOB_BASICS)
+
         } catch (err) {
             logErrorInfo(err);
             if (err instanceof ServerError){
@@ -125,7 +151,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                     <span className={"bold-navigation-link"}>Not here to post a job</span>
                 </div>
                 <div className="mt2rem"></div>
-                <form className={"employers-side-form-fb"}>
+                <form className={"emp-form-fb"}>
                     {requestInProgress && <div className={"request-in-process-surface"}></div>}
                     <CustomInputField
                         fieldLabel={"Your company's name"}
@@ -141,6 +167,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                         fieldValue={numberOfEmployeesRange}
                         setFieldValue={setNumberOfEmployeesRange}
                         optionsArr={numberOfEmployees}
+                        isRequired={false}
                     />
                     <CustomInputField
                         fieldLabel={"Employer account email address"}

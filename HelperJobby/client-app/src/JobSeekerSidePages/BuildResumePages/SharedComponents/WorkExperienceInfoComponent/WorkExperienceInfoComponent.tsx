@@ -19,10 +19,10 @@ import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {WorkExperienceService} from "../../../../services/workExperienceService";
 import {ResumeService} from "../../../../services/resumeService";
 import {JobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
-import {isNotEmpty} from "../../../../utils/validationLogic/isNotEmptyString";
 import {useNavigate} from "react-router-dom";
 import {months} from "../../../../AppConstData/Months";
 import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
+import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
 
 interface WorkExperienceInfoComponentProps {
     workExperience?: WorkExperienceDTO
@@ -52,7 +52,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     const [currentlyWorkingHere, setCurrentlyWorkingHere] = useState(false);
     const [showCityAutoComplete, setShowCityAutoComplete] = useState(false);
     const [savingProcess, setSavingProcess] = useState(false);
-    const [validateJobTitle, setValidateJobTitle] = useState(false);
+    const [validateJobTitle, setExecuteValidation] = useState(false);
     const [parentPagePath, setParentPagePath] = useState("");
 
 
@@ -104,16 +104,14 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     }
 
     async function handleWorkExperienceCreation(nextPageRoute: string, isSaveAndExitAction: boolean) {
-        if (!isNotEmpty(jobTitle)) {
-            setValidateJobTitle(true);
-            if (jobTitleInputRef.current) {
-                jobTitleInputRef.current.focus();
-                jobTitleInputRef.current.scrollIntoView({block: "end", behavior: "smooth"});
-                if (isSaveAndExitAction) {
-                    setShowDialogWindow(true);
-                }
-                return;
+        if (!jobTitle) {
+            setExecuteValidation(true);
+            jobTitleInputRef.current?.focus();
+            jobTitleInputRef.current?.scrollIntoView({block: "end", behavior: "smooth"});
+            if (isSaveAndExitAction) {
+                setShowDialogWindow(true);
             }
+            return;
         }
         if (invalidValuesProvided) {
             if (isSaveAndExitAction) {
@@ -121,6 +119,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             }
             return;
         }
+        
         if (workExperience) {
             await updateWorkExperience();
         } else if (jobSeeker?.resume) {
@@ -248,6 +247,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
         <>
             {showCityAutoComplete && <AutocompleteResultsWindow
                 inputFieldRef={cityInputRef}
+                windowMaxWidth={"538px"}
                 inputValue={city}
                 setInputValue={setCity}
                 country={country || "Canada"}
@@ -267,9 +267,8 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                     inputFieldValue={jobTitle}
                     setInputFieldValue={setJobTitle}
                     inputRef={jobTitleInputRef}
-                    notShowErrorInitially={true}
                     executeValidation={validateJobTitle}
-                    setExecuteValidation={setValidateJobTitle}
+                    setExecuteValidation={setExecuteValidation}
                 />
 
                 <CustomInputField
@@ -285,15 +284,13 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                     selectRef={countryInputRef}
                 />
 
-                <CustomInputField
-                    fieldLabel={"City, Province/Territory"}
-                    isRequired={false}
-                    inputFieldValue={city}
-                    setInputFieldValue={setCity}
-                    displayGoogleLogo={true}
+                <LocationCustomInputField
+                    fieldLabel={"City, Province / Territory"}
+                    inputValue={city}
+                    setInputValue={setCity}
                     inputRef={cityInputRef}
-                    setShowAutocompleteWindow={setShowCityAutoComplete}
-                />
+                    isRequired={false}
+                    setShowAutocompleteResults={setShowCityAutoComplete}/>
 
                 <div className={"is-current"}>
                     <div className={"field-label"}>

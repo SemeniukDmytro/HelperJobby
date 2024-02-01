@@ -13,6 +13,7 @@ import {useNavigate} from "react-router-dom";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
 import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
 import NotifyPopupWindow from "../../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
+import {validatePhoneNumber} from "../../../../../utils/validationLogic/authFormValidators";
 
 interface ResumePhoneComponentProps {
 }
@@ -25,9 +26,8 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
     const {authUser} = useAuth();
     const navigate = useNavigate();
     const [phoneNumber, setPhoneNumber] = useState(jobSeeker!.phoneNumber);
-    const phoneNumberRef = useRef<HTMLInputElement>(null);
-    const [showErrorNotify, setShowErrorNotify] = useState(false);
-
+    const phoneNumberInputRef = useRef<HTMLInputElement>(null);
+    const [phoneNumberError, setPhoneNumberError] = useState("");
 
     useEffect(() => {
         setProgressPercentage(ProgressPercentPerPage * 2);
@@ -48,6 +48,15 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
 
     async function updateJobSeekerInfo(resultPageURI: string) {
         try {
+            if (phoneNumber) {
+                const isValidPhoneNumber = validatePhoneNumber(phoneNumber);
+                if (isValidPhoneNumber) {
+                    setPhoneNumberError(isValidPhoneNumber);
+                    phoneNumberInputRef.current?.focus();
+                    return;
+                }
+            }
+            
             setSavingInfo(true);
             const updatedJobSeeker = updateJobSeekerDTO(jobSeeker!.firstName,
                 jobSeeker!.lastName, phoneNumber, jobSeeker!.address);
@@ -66,23 +75,15 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
             navigate(resultPageURI);
 
         } catch (e) {
-            if (e instanceof ServerError) {
-                logErrorInfo(e)
-                setShowErrorNotify(true);
-            }
-        } finally {
+            logErrorInfo(e)
+        } 
+        finally {
             setSavingInfo(false);
         }
     }
 
     return (
         <form className={"build-resume-form"}>
-            <NotifyPopupWindow
-                isSuccessful={false}
-                text={"Please enter a valid phone number"}
-                showNotify={showErrorNotify}
-                setShowNotify={setShowErrorNotify}
-            />
             {savingInfo && <div className={"request-in-process-surface"}></div>}
             <div className={"build-page-header"}>
                 Would you like to add a phone number to your resume?
@@ -94,8 +95,11 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
                 fieldLabel={"Phone number"}
                 isRequired={false}
                 inputFieldValue={phoneNumber}
-                setInputFieldValue={setPhoneNumber} fieldSubtitle={"starts with +"}
-                inputRef={phoneNumberRef}
+                setInputFieldValue={setPhoneNumber}
+                fieldSubtitle={"Include country code (start with +). Phone number must contain only numbers without spaces or dashes"}
+                inputRef={phoneNumberInputRef}
+                customErrorMessage={phoneNumberError}
+                setCustomErrorMessage={setPhoneNumberError}
             />
             <div className={"phone-page-disclaimer"}>
                 By submitting the form with this box checked, you confirm that you are the primary user and subscriber

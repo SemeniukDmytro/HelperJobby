@@ -5,9 +5,11 @@ import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {LocationAutocompleteService} from "../../../../services/locationAutocompleteService";
 import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes";
 import {mapCountryWithA2Code} from "../../../../utils/convertLogic/countryWithA2CodeMapper";
+import useSelectWindowPosition from "../../../../hooks/useSelectWindowPosition";
 
 interface AutocompleteResultsWindowProps {
     inputFieldRef: RefObject<HTMLInputElement>;
+    windowMaxWidth : string;
     inputValue: string;
     setInputValue: Dispatch<SetStateAction<string>>;
     cityInputValue?: string;
@@ -16,6 +18,8 @@ interface AutocompleteResultsWindowProps {
     showResult: boolean;
     setShowResult: Dispatch<SetStateAction<boolean>>;
     autocompleteWindowType: AutocompleteWindowTypes;
+    locationSelected?: boolean;
+    setLocationSelected?: Dispatch<SetStateAction<boolean>>;
 }
 
 const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) => {
@@ -27,39 +31,11 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
     const [delayedInputValue, setDelayedInputValue] = useState("");
     const [autocompleteResults, setAutocompleteResults] = useState<string[][]>([]);
     const [loading, setLoading] = useState(true);
-    const getAutocompleteWindowPosition = () => {
-        if (!props.inputFieldRef.current || !autoCompleteRef.current) {
-            return;
-        }
-
-        const streetInputRect = props.inputFieldRef.current?.getBoundingClientRect();
-        autoCompleteRef.current.style.left = `${streetInputRect.left}px`;
-
-        const windowScrollY = window.scrollY;
-        const viewPortHeight = window.innerHeight;
-
-        if (viewPortHeight - streetInputRect.bottom > autoCompleteRef.current?.clientHeight) {
-            autoCompleteRef.current.style.top = `${streetInputRect.bottom + windowScrollY + 3}px`;
-        } else {
-            autoCompleteRef.current.style.top = `${streetInputRect.top + windowScrollY - autoCompleteRef.current!.clientHeight - 6}px`;
-        }
-    };
+    const getAutocompleteWindowPosition = useSelectWindowPosition(props.inputFieldRef, autoCompleteRef, props.setShowResult);    
 
     useEffect(() => {
         getAutocompleteWindowPosition();
-
-        const handleResize = () => {
-            getAutocompleteWindowPosition();
-        };
-
-        window.addEventListener('scroll', getAutocompleteWindowPosition);
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('scroll', getAutocompleteWindowPosition);
-            window.removeEventListener('resize', handleResize);
-        };
-    }, [autoCompleteRef, props.inputFieldRef, autocompleteResults]);
+    }, [autocompleteResults]);
 
 
     useEffect(() => {
@@ -109,19 +85,7 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
         }
         fetchData();
     }, [delayedInputValue]);
-
-    useEffect(() => {
-        const handleDocumentClick = (e: MouseEvent) => {
-            const clickedElement = e.target as HTMLElement;
-            if (!props.inputFieldRef.current?.contains(clickedElement)) {
-                props.setShowResult(false);
-            }
-        };
-        document.addEventListener('click', handleDocumentClick);
-        return () => {
-            document.removeEventListener('click', handleDocumentClick);
-        };
-    }, []);
+    
 
     function handleStreetSelect(locationResult: string[]) {
         const cityStreetSeparationIndex = Math.max(1, locationResult.length - 2);
@@ -137,28 +101,37 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
         }
         props.setInputValue(streetAddressSeparated.join(", "))
         setAutoCompleteSelected(true);
+        if (props.setLocationSelected){
+            props.setLocationSelected(true)
+        }
+        
     }
 
     function handleCitySelect(locationResult: string[]) {
         props.setInputValue(locationResult.join(", "))
         setAutoCompleteSelected(true);
+        if (props.setLocationSelected){
+            props.setLocationSelected(true)
+        }
     }
 
     return (
         !props.setShowResult ? (<></>) :
             (loading ? <></> :
-                    <div className={"autocomplete-results"} ref={autoCompleteRef}>
+                    <div className={"autocomplete-results"}
+                         style={{maxWidth : props.windowMaxWidth}}
+                         ref={autoCompleteRef}>
                         {autocompleteResults.map((locationResult, index) => (
                             props.autocompleteWindowType == AutocompleteWindowTypes.streetAddress ?
                                 (<div
-                                    className={"autocomplete-result"}
+                                    className={"select-option"}
                                     key={index}
                                     onClick={() => handleStreetSelect(locationResult)}
                                 >
                                     {locationResult.join(', ')}
                                 </div>)
                                 : (<div
-                                    className={"autocomplete-result"}
+                                    className={"select-option"}
                                     key={index}
                                     onClick={() => handleCitySelect(locationResult)}
                                 >

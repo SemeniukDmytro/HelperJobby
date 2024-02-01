@@ -109,7 +109,6 @@ const AddSkillComponent: FC<AddSkillComponentProps> = () => {
     }
 
     return (
-        <PageWrapWithHeader>
             <div className={"page-with-centered-content-layout"}>
                 <NavigateBackHeader onBackButtonClick={navigateBack}></NavigateBackHeader>
                 <form className={"form-layout"}>
@@ -122,7 +121,6 @@ const AddSkillComponent: FC<AddSkillComponentProps> = () => {
                         isRequired={true}
                         inputFieldValue={skill}
                         setInputFieldValue={setSkill}
-                        notShowErrorInitially={true}
                         executeValidation={validateSkill}
                         setExecuteValidation={setValidateSkill}
                         inputRef={skillInputRef}
@@ -143,7 +141,6 @@ const AddSkillComponent: FC<AddSkillComponentProps> = () => {
                 </form>
 
             </div>
-        </PageWrapWithHeader>
     )
 }
 

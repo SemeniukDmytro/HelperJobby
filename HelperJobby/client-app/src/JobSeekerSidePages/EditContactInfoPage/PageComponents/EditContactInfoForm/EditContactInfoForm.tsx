@@ -14,10 +14,10 @@ import {useLocation, useNavigate} from "react-router-dom";
 import AutocompleteResultsWindow from "../AutocompleteResultsWindow/AutocompleteResultsWindow";
 import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
-import {isNotEmpty} from "../../../../utils/validationLogic/isNotEmptyString";
 import NavigateBackHeader from "../../../../Components/NavigateBackHeader/NavigateBackHeader";
 import {validatePhoneNumber} from "../../../../utils/validationLogic/authFormValidators";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
+import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
 
 interface EditContactInfoFormProps {
 }
@@ -36,7 +36,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     const [city, setCity] = useState("");
     const [postalCode, setPostalCode] = useState("");
     const [loading, setLoading] = useState(true);
-    const [validateForm, setValidateForm] = useState(false);
+    const [executeFormValidation, setExecuteFormValidation] = useState(false);
     const location = useLocation();
 
     const firstNameInputRef = useRef<HTMLInputElement>(null);
@@ -90,30 +90,14 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
 
     async function saveUpdatedInfo(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        setValidateForm(true);
-        if (!isNotEmpty(firstName)) {
-            if (firstNameInputRef.current) {
-                firstNameInputRef.current.focus();
-                return;
-            }
+        setExecuteFormValidation(true);
+        if (!firstName) {
+            firstNameInputRef.current?.focus();
+            return;
         }
-        if (!isNotEmpty(lastName)) {
-            if (lastNameInputRef.current) {
-                lastNameInputRef.current.focus();
-                return;
-            }
-        }
-        if (!isNotEmpty(country)) {
-            if (countryInputRef.current) {
-                countryInputRef.current.focus();
-                return;
-            }
-        }
-        if (!isNotEmpty(city)) {
-            if (cityInputRef.current) {
-                cityInputRef.current.focus();
-                return;
-            }
+        if (!lastName) {
+            lastNameInputRef.current?.focus();
+            return;
         }
         if (phoneNumber) {
             const isValidPhoneNumber = validatePhoneNumber(phoneNumber);
@@ -123,6 +107,16 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                 return;
             }
         }
+        
+        if (!country) {
+            countryInputRef.current?.focus();
+            return;
+        }
+        if (!city) {
+            cityInputRef.current?.focus();
+            return;
+        }
+        
         const updateJobSeekerInfo: UpdateJobSeekerAccountDTO = {
             firstName: firstName,
             lastName: lastName,
@@ -168,6 +162,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                 <>
                     {showStreetsAutocomplete && <AutocompleteResultsWindow
                         inputFieldRef={streetAddressInputRef}
+                        windowMaxWidth={"538px"}
                         inputValue={streetAddress}
                         setInputValue={setStreetAddress}
                         cityInputValue={city}
@@ -180,6 +175,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
 
                     {showCityAutoComplete && <AutocompleteResultsWindow
                         inputFieldRef={cityInputRef}
+                        windowMaxWidth={"538px"}
                         inputValue={city}
                         setInputValue={setCity}
                         country={country}
@@ -198,12 +194,12 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                 <CustomInputField
                                     fieldLabel={"First name"} isRequired={true} inputFieldValue={firstName}
                                     setInputFieldValue={setFirstName} inputRef={firstNameInputRef}
-                                    executeValidation={validateForm} setExecuteValidation={setValidateForm}
+                                    executeValidation={executeFormValidation} setExecuteValidation={setExecuteFormValidation}
                                 />
                                 <CustomInputField
                                     fieldLabel={"Last name"} isRequired={true} inputFieldValue={lastName}
                                     setInputFieldValue={setLastName} inputRef={lastNameInputRef}
-                                    executeValidation={validateForm} setExecuteValidation={setValidateForm}
+                                    executeValidation={executeFormValidation} setExecuteValidation={setExecuteFormValidation}
                                 />
                                 <CustomInputField
                                     fieldLabel={"Phone"}
@@ -228,25 +224,26 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                         setCountry={setCountry}
                                         selectRef={countryInputRef}
                                     ></CountrySelector>
-                                    <CustomInputField
+                                    
+                                    <LocationCustomInputField
                                         fieldLabel={"Street address"}
-                                        isRequired={false}
-                                        inputFieldValue={streetAddress}
-                                        setInputFieldValue={setStreetAddress}
-                                        setShowAutocompleteWindow={setShowStreetsAutocomplete}
-                                        inputRef={streetAddressInputRef}
                                         fieldSubtitle={"Visible only to you"}
-                                        displayGoogleLogo={true}
+                                        inputValue={streetAddress}
+                                        setInputValue={setStreetAddress}
+                                        inputRef={streetAddressInputRef}
+                                        isRequired={false}
+                                        setShowAutocompleteResults={setShowStreetsAutocomplete}
                                     />
-                                    <CustomInputField
+                                    
+                                    <LocationCustomInputField
                                         fieldLabel={"City, Province / Territory"}
-                                        isRequired={true}
-                                        inputFieldValue={city}
+                                        inputValue={city}
+                                        setInputValue={setCity}
                                         inputRef={cityInputRef}
-                                        setInputFieldValue={setCity}
-                                        setShowAutocompleteWindow={setShowCityAutoComplete}
-                                        displayGoogleLogo={true}
-                                        executeValidation={validateForm} setExecuteValidation={setValidateForm}
+                                        isRequired={true}
+                                        setShowAutocompleteResults={setShowCityAutoComplete}
+                                        executeValidation={executeFormValidation}
+                                        setExecuteValidation={setExecuteFormValidation}
                                     />
                                     <CustomInputField
                                         fieldLabel={"Postal code"} isRequired={false} inputFieldValue={postalCode}

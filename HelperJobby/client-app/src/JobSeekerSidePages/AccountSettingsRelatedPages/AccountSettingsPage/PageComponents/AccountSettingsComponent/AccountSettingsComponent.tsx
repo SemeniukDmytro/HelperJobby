@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import './AccountSettingsComponent.scss';
 import PageWrapWithHeader from "../../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
-import SettingsChangeField from "../SettingsChangeField/SettingsChangeField";
+import SettingsChangeField from "../SettingsFieldtToChange/SettingsFieldtToChange";
 import {useAuth} from "../../../../../hooks/useAuth";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
@@ -87,12 +87,12 @@ const AccountSettingsComponent: FC<AccountSettingsComponentProps> = () => {
                         {showChangeInfoMsg &&
                             <>
                                 <div className={"content-separation-margin"}></div>
-                                <div className={"changed-info-notify-container"}>
-                                    <div className={"changed-type-message"}>
+                                <div className={"info-notify-container green-notify-container"}>
+                                    <div className={"notify-container-message-fb"}>
                                         <div className={"successful-pop-up-icon"}>
                                             <FontAwesomeIcon icon={faCircleCheck}/>
                                         </div>
-                                        <div className={"field-label"}>
+                                        <div className={"dark-default-text bold-text"}>
                                             {changedInfoMsg}
                                         </div>
                                     </div>
@@ -100,7 +100,7 @@ const AccountSettingsComponent: FC<AccountSettingsComponentProps> = () => {
                                         className={"small-interaction-button"}
                                         onClick={() => setShowChangeInfoMsg(false)}
                                     >
-                                        <FontAwesomeIcon icon={faXmark}/>
+                                        <FontAwesomeIcon className={"svg1rem"} icon={faXmark}/>
                                     </button>
                                 </div>
                             </>

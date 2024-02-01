@@ -11,7 +11,6 @@ import {useAuth} from "../../../../../hooks/useAuth";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {updateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
-import {isNotEmpty} from "../../../../../utils/validationLogic/isNotEmptyString";
 import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
 
 interface ResumeNameComponentProps {
@@ -32,7 +31,8 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
     const [savingInfo, setSavingInfo] = useState(false);
     const firstNameInputRef = useRef<HTMLInputElement>(null);
     const lastNameInputRef = useRef<HTMLInputElement>(null);
-
+    const [executeFormValidation, setExecuteFormValidation] = useState(false);
+    
     useEffect(() => {
         if (!firstName) {
             firstNameInputRef.current?.focus();
@@ -56,16 +56,9 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
     }
 
     async function updateJobSeekerCredentials(resultPageURI: string, isSaveAndExitAction: boolean) {
-        if (!isNotEmpty(firstName)) {
-            if (firstNameInputRef.current) {
-                firstNameInputRef.current.focus();
-                if (isSaveAndExitAction) {
-                    setShowDialogWindow(true);
-                }
-                return;
-            }
-        }
-        if (!isNotEmpty(lastName)) {
+        setExecuteFormValidation(true);
+
+        if (!lastName) {
             if (lastNameInputRef.current) {
                 lastNameInputRef.current.focus();
                 if (isSaveAndExitAction) {
@@ -74,6 +67,17 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
                 return;
             }
         }
+        
+        if (!firstName) {
+            if (firstNameInputRef.current) {
+                firstNameInputRef.current.focus();
+                if (isSaveAndExitAction) {
+                    setShowDialogWindow(true);
+                }
+                return;
+            }
+        }
+        
         try {
             setSavingInfo(true);
             const updatedJobSeeker = updateJobSeekerDTO(firstName, lastName, jobSeeker!.phoneNumber,
@@ -114,6 +118,8 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
                 inputFieldValue={firstName}
                 setInputFieldValue={setFirstName}
                 inputRef={firstNameInputRef}
+                executeValidation={executeFormValidation}
+                setExecuteValidation={setExecuteFormValidation}
             />
             <CustomInputField
                 fieldLabel={"Last name"}
@@ -121,6 +127,8 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
                 inputFieldValue={lastName}
                 setInputFieldValue={setLastName}
                 inputRef={lastNameInputRef}
+                executeValidation={executeFormValidation}
+                setExecuteValidation={setExecuteFormValidation}
             />
             <button className={"submit-form-button"} onClick={moveToPhonePage} disabled={savingInfo}>
                 {savingInfo ?

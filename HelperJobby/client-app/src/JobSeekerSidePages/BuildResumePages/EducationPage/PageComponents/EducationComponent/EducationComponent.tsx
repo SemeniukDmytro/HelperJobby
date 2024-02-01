@@ -19,10 +19,12 @@ const EducationComponent: FC<ResumeEducationComponentProps> = () => {
 
     useEffect(() => {
         if (jobSeeker?.resume == null) {
-            navigate("/build/education/add")
+            navigate("/build/education/add");
+            return;
         }
         if (jobSeeker!.resume!.educations.length == 0) {
-            navigate("/build/education/add")
+            navigate("/build/education/add");
+            return;
         }
         setProgressPercentage(ProgressPercentPerPage * 4);
         setSaveFunc(() => customSaveFunc)
@@ -55,7 +57,7 @@ const EducationComponent: FC<ResumeEducationComponentProps> = () => {
                 }
                 <div className={"form-and-buttons-divider"}>
                     <button className={"light-button-with-margin"} onClick={addAnotherEducation}>
-                        <FontAwesomeIcon className={"icon-right-margin"} icon={faPlus}/>
+                        <FontAwesomeIcon className={"icon-right-margin svg125rem"} icon={faPlus}/>
                         <span>Add another education</span>
                     </button>
                 </div>

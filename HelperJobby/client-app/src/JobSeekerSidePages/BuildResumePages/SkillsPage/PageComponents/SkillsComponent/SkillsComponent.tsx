@@ -159,7 +159,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
                     setInputFieldValue={setCurrentSkill}
                 />
                 <button className={"add-skill-button"} disabled={!currentSkill} onClick={addSkill}>
-                    <FontAwesomeIcon icon={faPlus}/>
+                    <FontAwesomeIcon className={"svg125rem"} icon={faPlus}/>
                 </button>
             </div>
             <div className={"form-and-buttons-divider"}>

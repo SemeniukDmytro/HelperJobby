@@ -35,14 +35,15 @@ import ChangeEmailPage from "../../JobSeekerSidePages/AccountSettingsRelatedPage
 import ChangePasswordPage
     from "../../JobSeekerSidePages/AccountSettingsRelatedPages/ChangePasswordPage/ChangePasswordPage";
 import ChangePhonePage from "../../JobSeekerSidePages/AccountSettingsRelatedPages/ChangePhonePage/ChangePhonePage";
-import MyJobsPagesWrap from "../../Components/MyJobsPagesWrap/MyJobsPagesWrap";
+
 import SavedJobsPage from "../../JobSeekerSidePages/UserJobInteractionPages/SavedJobsPage/SavedJobsPage";
 import JobAppliesPage from "../../JobSeekerSidePages/UserJobInteractionPages/JobAppliesPage/JobAppliesPage";
 import InterviewsPage from "../../JobSeekerSidePages/UserJobInteractionPages/InterviewsPage/InterviewsPage";
 import JobPage from "../../JobSeekerSidePages/JobPage/JobPage";
-import RequireAuth from "../../Components/RequireAuth/RequireAuth";
 import AuthPage from "../../CommonPages/AuthPage/AuthPage";
 import SearchJobResultsPage from "../../JobSeekerSidePages/SearchJobResultsPage/SearchJobResultsPage";
+import MyJobsPagesWrap from "../../JobSeekerSidePages/UserJobInteractionPages/MyJobsPagesWrap/MyJobsPagesWrap";
+import RequireAuth from "../../JobSeekerSidePages/RequireAuth/RequireAuth";
 
 interface JobSeekerSideRoutesProps {
 }

@@ -146,12 +146,12 @@
   width: 100%;
   overflow: auto;
 
-  .autocomplete-result:first-child {
+  .select-option:first-child {
     border-top-right-radius: 0.5rem;
     border-top-left-radius: 0.5rem;
   }
 
-  .autocomplete-result:last-child {
+  .select-option:last-child {
     border-bottom-right-radius: 0.5rem;
     border-bottom-left-radius: 0.5rem;
   }

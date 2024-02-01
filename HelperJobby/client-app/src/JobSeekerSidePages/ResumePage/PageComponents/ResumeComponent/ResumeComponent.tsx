@@ -112,20 +112,20 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
                 <div className={"page-with-centered-content-layout"}>
                     <div className={"resume-component-header"}>
                         <button className={"back-button"} onClick={onBackButtonClick}>
-                            <FontAwesomeIcon icon={faArrowLeftLong}/>
+                            <FontAwesomeIcon className={"svg125rem"} icon={faArrowLeftLong}/>
                         </button>
                         <div className={"more-options-container"}>
                             <button
                                 className={"small-interaction-button additional-button-size"}
                                 onClick={handleMoreOptionsClick} ref={moreOptionsButtonRef}
                             >
-                                <FontAwesomeIcon icon={faEllipsisVertical}/>
+                                <FontAwesomeIcon className={"svg125rem"} icon={faEllipsisVertical}/>
                             </button>
                             {showMoreOptions && <div className={"more-resume-options-bar"}>
                                 <div className={"resume-options-container"} ref={moreOptionsRef}>
                                     <button className={"more-profile-option-button"}>
                                         <FontAwesomeIcon
-                                            className={"icon-right-margin margin-left1rem"}
+                                            className={"icon-right-margin svg125rem ml05rem"}
                                             icon={faUpload}
                                         />
                                         <span
@@ -137,7 +137,7 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
                                         onClick={() => setShowDialogWindow(true)}
                                     >
                                         <FontAwesomeIcon
-                                            className={"icon-right-margin margin-left1rem"}
+                                            className={"icon-right-margin svg125rem ml05rem"}
                                             icon={faTrashCan}
                                         />
                                         <span className={"additional-text-margin-for-big-icon"}>Delete</span>

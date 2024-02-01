@@ -66,7 +66,7 @@ const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
                     <div className={"build-resume-sticky-panel"}>
                         <nav className={"build-resume-navigation"}>
                             <div className={"back-button"} onClick={goBack}>
-                                <FontAwesomeIcon icon={faArrowLeftLong}/>
+                                <FontAwesomeIcon className={"svg125rem"} icon={faArrowLeftLong}/>
                             </div>
                             <div className={"bold-navigation-link"}>
                                 <a onClick={saveInfo}>

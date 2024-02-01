@@ -39,11 +39,11 @@ const DialogWindow: FC<DialogWindowProps> = ({
     return (
         !showDialog ? null :
             <div className={"dialog-window"}>
-                <div className={"dialogue-content-container"}>
+                <div className={"dialog-content-container"}>
                     <div className={"dialog-header-box"}>
                         <span>{titleText}</span>
-                        <button className={"close-dialogue-button"} onClick={closeDialog}>
-                            <FontAwesomeIcon icon={faXmark}/>
+                        <button className={"small-interaction-button"} onClick={closeDialog}>
+                            <FontAwesomeIcon className={"svg1rem"} icon={faXmark}/>
                         </button>
                     </div>
                     <div className={"dialog-separation-line"}></div>

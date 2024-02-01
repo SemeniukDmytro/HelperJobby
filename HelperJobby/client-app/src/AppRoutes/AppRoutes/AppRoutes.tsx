@@ -20,8 +20,6 @@ const AppRoutes: FC<AppRoutesProps> = () => (
             <Route path={"/employers/*"} element={<EmployerSideRoutes/>}>
             </Route>
 
-            
-
             <Route path={"*"} element={<NotFoundPage/>}/>
 
         </Routes>

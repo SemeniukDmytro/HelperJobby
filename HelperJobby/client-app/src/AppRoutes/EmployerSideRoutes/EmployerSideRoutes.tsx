@@ -3,8 +3,9 @@ import './EmployerSideRoutes.scss';
 import {Outlet, Route, Routes} from "react-router-dom";
 import JobPostingPage from "../../EmployerSidePages/JobPostingPage/JobPostingPage";
 import EmployerSetupPage from "../../EmployerSidePages/EmployerSetupPage/EmployerSetupPage";
-import RequireAuthForEmployersPages from "../../Components/RequireAuthForEmployersPages/RequireAuthForEmployersPages";
-import AddJobBasicsPage from "../../EmployerSidePages/AddJobBasicsPage/AddJobBasicsPage";
+import RequireAuthForEmployersPages
+    from "../../EmployerSidePages/RequireAuthForEmployersPages/RequireAuthForEmployersPages";
+import AddJobBasicsPage from "../../EmployerSidePages/JobCreationPages/AddJobBasicsPage/AddJobBasicsPage";
 
 interface EmployerSideRoutesProps {
 }

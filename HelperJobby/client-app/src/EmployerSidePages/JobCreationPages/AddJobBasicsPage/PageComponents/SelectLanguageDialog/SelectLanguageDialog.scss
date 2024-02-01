@@ -1,0 +1,16 @@
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+.language-dialog-header {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 1.75rem;
+  padding-right: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  color: global-variables.$neutral-color-1000;
+  font-size: 1.125rem;
+  font-weight: 700;
+}

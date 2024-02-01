@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import './SettingsChangeField.scss';
+import './SettingsFieldtToChange.scss';
 import {useNavigate} from "react-router-dom";
 
 interface SettingsChangeFieldProps {
@@ -9,7 +9,7 @@ interface SettingsChangeFieldProps {
     changeFieldPagePath: string;
 }
 
-const SettingsChangeField: FC<SettingsChangeFieldProps> = ({
+const SettingsFieldtToChange: FC<SettingsChangeFieldProps> = ({
                                                                fieldLabel,
                                                                fieldValue,
                                                                fieldButtonText,
@@ -45,4 +45,4 @@ const SettingsChangeField: FC<SettingsChangeFieldProps> = ({
     )
 }
 
-export default SettingsChangeField;
+export default SettingsFieldtToChange;
