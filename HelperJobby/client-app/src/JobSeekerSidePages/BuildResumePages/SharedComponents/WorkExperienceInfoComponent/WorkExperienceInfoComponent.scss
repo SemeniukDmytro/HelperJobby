@@ -11,6 +11,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
 }
 
 .checkbox {
@@ -22,7 +23,7 @@
   border: 1px solid global-variables.$neutral-color-800;
   border-radius: 0.25rem;
   transition: 0.2s;
-
+  cursor: pointer;
   &:hover {
     background-color: global-variables.$light-blue;
     border-color: global-variables.$dark-blue;

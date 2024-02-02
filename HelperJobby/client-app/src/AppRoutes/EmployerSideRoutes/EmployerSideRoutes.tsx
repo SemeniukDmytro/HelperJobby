@@ -7,6 +7,8 @@ import RequireAuthForEmployersPages
     from "../../EmployerSidePages/RequireAuthForEmployersPages/RequireAuthForEmployersPages";
 import AddJobBasicsPage from "../../EmployerSidePages/JobCreationPages/AddJobBasicsPage/AddJobBasicsPage";
 import JobDetailsPage from "../../EmployerSidePages/JobCreationPages/JobDetailsPage/JobDetailsPage";
+import AddJobPayAndBenefitsPage
+    from "../../EmployerSidePages/JobCreationPages/AddJobPayAndBenefitsPage/AddJobPayAndBenefitsPage";
 
 interface EmployerSideRoutesProps {
 }
@@ -19,6 +21,7 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
             <Route path={"/posting"} element={<Outlet/>}>
                 <Route path={"getting-started"} element={<AddJobBasicsPage/>}/>
                 <Route path={"job-details"} element={<JobDetailsPage/>}/>
+                <Route path={"compensation-details"} element={<AddJobPayAndBenefitsPage/>}/>
             </Route>
         </Route>
     </Routes>

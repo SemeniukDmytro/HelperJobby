@@ -4,7 +4,7 @@ import DateSelector from "../../../../Components/DateSelector/DateSelector";
 import {TimeStamps} from "../../../../enums/TimeStamps";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
-import {isNanAfterIntParse} from "../../../../utils/validationLogic/isNanAfterIntParse";
+import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValidators";
 import {months} from "../../../../AppConstData/Months";
 
 interface TimePeriodProps {

@@ -67,7 +67,8 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
     }
 
     function handleJobDetailsSubmit(e : FormEvent) {
-        e.preventDefault()
+        e.preventDefault();
+        navigate(EmployerPagesPaths.COMPENSATION_DETAILS)
     }
 
     return (
