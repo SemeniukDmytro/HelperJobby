@@ -14,11 +14,11 @@ export const jobTypesEnumToStringMap = (jobType: string): string => {
     } else return jobType;
 };
 
-export const jobTypeStringToEnumMap = (jobType: string): string => {
+export const jobTypeStringToEnumMap = (jobType: string): JobTypes | undefined => {
     const jobTypesStringMapObj = JobTypesMapData.find((js) => js.stringValue === jobType);
     if (jobTypesStringMapObj) {
-        return jobTypesStringMapObj.enumValue.toString();
-    } else return jobType;
+        return jobTypesStringMapObj.enumValue;
+    }
 };
 
 export const schedulesEnumToStringMap = (scheduleValue: string): string => {
@@ -29,11 +29,11 @@ export const schedulesEnumToStringMap = (scheduleValue: string): string => {
     } else return scheduleValue;
 };
 
-export const scheduleStringToEnumMap = (scheduleValue: string): string => {
+export const scheduleStringToEnumMap = (scheduleValue: string): Schedules | undefined => {
     const schedulesStringMapObj = SchedulesMapData.find((ss) => ss.stringValue === scheduleValue);
     if (schedulesStringMapObj) {
-        return schedulesStringMapObj.enumValue.toString();
-    } else return scheduleValue;
+        return schedulesStringMapObj.enumValue
+    }
 };
 
 export const benefitsEnumToStringMap = (benefitsValue: string) => {
@@ -44,9 +44,9 @@ export const benefitsEnumToStringMap = (benefitsValue: string) => {
     } else return benefitsValue;
 };
 
-export const benefitStringToEnumMap = (benefitsValue: string) => {
+export const benefitStringToEnumMap = (benefitsValue: string) : EmployeeBenefits | undefined => {
     const benefitsStringMapObj = EmployeeBenefitsMapData.find((bs) => bs.stringValue == benefitsValue)
     if (benefitsStringMapObj) {
-        return benefitsStringMapObj.enumValue.toString();
-    } else return benefitsValue;
+        return benefitsStringMapObj.enumValue;
+    }
 };

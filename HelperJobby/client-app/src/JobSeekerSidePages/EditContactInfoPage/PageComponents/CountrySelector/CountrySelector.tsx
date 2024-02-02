@@ -18,7 +18,7 @@ const CountrySelector: FC<CountrySelectorProps> = ({
     const [showCountrySelector, setShowCountrySelector] = useState(false);
 
     useEffect(() => {
-        if (country) {
+        if (!country) {
             setCountry("Canada")
         }
     }, [country]);

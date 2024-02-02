@@ -13,12 +13,13 @@ import {useEmployer} from "../../../../hooks/useEmployer";
 import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
 import {IsValidEmail, validatePhoneNumber} from "../../../../utils/validationLogic/authFormValidators";
-import {Company} from "../../../../Components/Icons/icons";
 import {UpdateEmployerAccountDTO} from "../../../../DTOs/accountDTOs/UpdateEmployerAccountDTO";
 import {EmployerAccountDTO} from "../../../../DTOs/accountDTOs/EmployerAccountDTO";
 import {useAuth} from "../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
+import Company from "../../../../Components/Icons/Company";
+import PageTitleWithImage from "../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 
 interface EmployerSetupComponentProps {
 }
@@ -137,14 +138,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                 showNotify={showPopupWindow}
                 setShowNotify={setShowPopupWindow}
             />
-            <div className={"ems-title-with-img-fb"}>
-                <div className={"ems-title-fb"}>
-                    <span className={"dark-default-text ems-title"}>Create an employer account</span>
-                </div>
-                <div className={"ems-image-fb"}>
-                    <Company/>
-                </div>
-            </div>
+            <PageTitleWithImage imageElement={<Company/>} title={"Create employer account"}/>
             <div className={"ems-content"}>
                 <span className={"dark-default-text ems-sub-title"}>You haven't posted a job before, so you'll need to create an employer account.</span>
                 <div className={"mt1rem"}>

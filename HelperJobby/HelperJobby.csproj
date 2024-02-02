@@ -47,7 +47,8 @@
         <Folder Include="client-app\src\Components\Header\"/>
         <Folder Include="client-app\src\Components\Icons\" />
         <Folder Include="client-app\src\EmployerSidePages\EmployerSetupPage\PageComponents\"/>
-        <Folder Include="client-app\src\EmployerSidePages\JobCreationPages\" />
+        <Folder Include="client-app\src\EmployerSidePages\JobCreationPages\JobDetailsPage\PageComponents\" />
+        <Folder Include="client-app\src\EmployerSidePages\JobCreationPages\SharedComponents\" />
         <Folder Include="client-app\src\EmployerSidePages\JobPostingPage\PageComponents\"/>
         <Folder Include="client-app\src\EmployersSideComponents\"/>
         <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\AccountSettingsPage\PageComponents\"/>

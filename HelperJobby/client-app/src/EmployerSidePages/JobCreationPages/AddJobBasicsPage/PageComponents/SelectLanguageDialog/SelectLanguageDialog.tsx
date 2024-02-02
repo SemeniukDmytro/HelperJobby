@@ -25,6 +25,7 @@ const SelectLanguageDialog: FC<SelectLanguageDialogProps> = ({
     setCurrentCountry
                                                              }) => {
     const [language, setLanguage] = useState(currentLanguage);
+    const [country, setCountry] = useState(currentCountry);
     const [validateData, setValidateData] = useState(false);
     const isInvalidLanguage = false;
     const countrySelectorRef = useRef<HTMLSelectElement>(null);
@@ -39,6 +40,7 @@ const SelectLanguageDialog: FC<SelectLanguageDialogProps> = ({
         if (isInvalidLanguage){
             return;
         }
+        setCurrentCountry(country);
         setCurrentLanguage(language);
         closeDialog();
     }
@@ -65,8 +67,8 @@ const SelectLanguageDialog: FC<SelectLanguageDialogProps> = ({
                         isInvalidSelect={isInvalidLanguage}
                      />
                     <CountrySelector
-                        country={currentCountry}
-                        setCountry={setCurrentCountry}
+                        country={country}
+                        setCountry={setCountry}
                         selectRef={countrySelectorRef}
                     />
                 </div>

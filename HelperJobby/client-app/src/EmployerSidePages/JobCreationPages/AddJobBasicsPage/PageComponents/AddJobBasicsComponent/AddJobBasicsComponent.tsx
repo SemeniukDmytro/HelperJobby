@@ -2,7 +2,6 @@ import React, {FC, FormEvent, useEffect, useRef, useState} from 'react';
 import './AddJobBasicsComponent.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeftLong, faArrowRightLong, faCircleInfo, faPen} from "@fortawesome/free-solid-svg-icons";
-import {PeopleStanding} from "../../../../../Components/Icons/icons";
 import SelectLanguageDialog from "../SelectLanguageDialog/SelectLanguageDialog";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
 import CustomSelectField from "../../../../../Components/CustomSelectField/CustomSelectField";
@@ -13,6 +12,14 @@ import AutocompleteResultsWindow
     from "../../../../../JobSeekerSidePages/EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
 import {AutocompleteWindowTypes} from "../../../../../enums/AutocompleteWindowTypes";
 import LocationCustomInputField from "../../../../../Components/LocationCustomInputField/LocationCustomInputField";
+import {useNavigate} from "react-router-dom";
+import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
+import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
+import JobBasics from "../../../../../Components/Icons/JobBasics";
+import JobCreateNavigationButtons
+    from "../../../SharedComponents/JobCreateNavigationButtons/JobCreateNavigationButtons";
+import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
+
 
 interface AddJobBasicsComponentProps {
 }
@@ -34,7 +41,9 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
     const [showCityAutoComplete, setShowCityAutoComplete] = useState(false);
     const [locationSelectedFromSuggests, setLocationSelectedFromSuggests] = useState(false);
     const [locationError, setLocationError] = useState("");
-
+    const navigate = useNavigate();
+    const [requestInProgress, setRequestInProgress] = useState(false);
+    
     useEffect(() => {
         handleJobLocationTypeChange()
     }, [jobLocationTypeEnumValue]);
@@ -42,8 +51,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
     function handleJobBasicsSubmit(e: FormEvent) {
         e.preventDefault();
         setExecuteFormValidation(true);
-        if (invalidNumberOfOpenings) {
-        }
+        navigate(EmployerPagesPaths.JOB_DETAILS);
     }
 
     function handleJobLocationTypeChange() {
@@ -100,14 +108,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                 setCurrentCountry={setJobPostingCountry}
             />
             <div className={"employers-centralized-page-layout"}>
-                <div className={"ems-title-with-img-fb mb2rem"}>
-                    <div className={"ems-title-fb"}>
-                        <span className={"dark-default-text ems-title"}>Add job basics</span>
-                    </div>
-                    <div className={"ems-image-fb"}>
-                        <PeopleStanding/>
-                    </div>
-                </div>
+                <PageTitleWithImage imageElement={<JobBasics/>} title={"Add job basics"}/>
                 <div className={"crj-form-fb"}>
                     <form className={"emp-form-fb"}>
                         <div className={"mb2rem"}>
@@ -184,17 +185,19 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                                     setCustomErrorMessage={setLocationError}/>
                             )
                         }
-
-                        <div className="crj-buttons-fb">
-                            <button className={"light-button-with-margin"} type={"button"}>
-                                <FontAwesomeIcon className={"svg125rem mr05rem"} icon={faArrowLeftLong}/>
-                                <span>Back</span>
-                            </button>
-                            <button className={"blue-button"} type={"submit"} onClick={handleJobBasicsSubmit}>
-                                <span className={"mr05rem"}>Continue</span>
-                                <FontAwesomeIcon className={"svg125rem"} icon={faArrowRightLong}/>
-                            </button>
-                        </div>
+                        <button
+                            className="blue-button br-corner-button min-continue-button-size"
+                            type={'submit'}
+                            onClick={handleJobBasicsSubmit}
+                        >
+                            {requestInProgress ? <WhiteLoadingSpinner/>
+                                :
+                                <>
+                                    <span>Continue</span>
+                                    <FontAwesomeIcon className={'svg1rem ml05rem'} icon={faArrowRightLong}/>
+                                </>
+                            }
+                        </button>
                     </form>
                 </div>
             </div>

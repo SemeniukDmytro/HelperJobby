@@ -1,0 +1,12 @@
+.job-features-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+}
+
+.job-features-fb {
+  transition: height 0.4s;
+  overflow-y: clip;
+}
