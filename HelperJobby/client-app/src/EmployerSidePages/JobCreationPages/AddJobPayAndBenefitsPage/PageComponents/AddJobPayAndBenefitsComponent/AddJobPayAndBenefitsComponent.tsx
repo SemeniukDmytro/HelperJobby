@@ -190,23 +190,61 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     return (
         <div className={"employers-centralized-page-layout"}>
             <PageTitleWithImage imageElement={<Wages/>} title={"Add job pay and benefits"}/>
-            <form className={"emp-form-fb"}>
-                <span className={"small-title"}>Pay</span>
-                <div className="pb-pay-info-fb">
-                    <CustomSelectWindow
-                        fieldLabel={"Show pay by"}
-                        selectedValue={showPayBy}
-                        setSelectedValue={setShowPayBy}
-                        optionsArr={showPayByOptions}
-                    />
-                    <div className={"pi-salary-amount-container"}>
-                        {
-                            showPayBy === "Range" ?
-                                (
-                                    <>
+            <div className={"crj-form-fb"}>
+                <form className={"emp-form-fb"}>
+                    <span className={"small-title"}>Pay</span>
+                    <div className="pb-pay-info-fb">
+                        <CustomSelectWindow
+                            fieldLabel={"Show pay by"}
+                            selectedValue={showPayBy}
+                            setSelectedValue={setShowPayBy}
+                            optionsArr={showPayByOptions}
+                        />
+                        <div className={"pi-salary-amount-container"}>
+                            {
+                                showPayBy === "Range" ?
+                                    (
+                                        <>
+                                            <div className={"salary-input-box"}>
+                                                <SalaryAmountInputField
+                                                    fieldLabel={"Minimum"}
+                                                    inputValue={minSalaryAmount}
+                                                    setInputValue={setMinSalaryAmount}
+                                                    currency={currency}
+                                                    isInvalidValue={isInvalidMinSalary}
+                                                    onInputChange={onMinSalaryInputChange}
+                                                    onBlur={() => validateMinSalaryInput(minSalaryAmount)}
+                                                />
+                                            </div>
+
+                                            <span
+                                                className={"salary-input-box dark-default-text mt1rem"}
+                                                style={{
+                                                    alignSelf: "center"
+                                                }}
+                                            >
+                                            to
+                                        </span>
+
+                                            <div className={"salary-input-box"}>
+                                                <SalaryAmountInputField
+                                                    fieldLabel={"Maximum"}
+                                                    inputValue={maxSalaryAmount}
+                                                    setInputValue={setMaxSalaryAmount}
+                                                    currency={currency}
+                                                    isInvalidValue={isInvalidMaxSalary}
+                                                    onInputChange={onMaxSalaryInputChange}
+                                                    onBlur={() => validateMaxSalaryInput(minSalaryAmount, maxSalaryAmount)}
+                                                />
+                                            </div>
+                                        </>
+
+                                    )
+                                    :
+                                    (
                                         <div className={"salary-input-box"}>
                                             <SalaryAmountInputField
-                                                fieldLabel={"Minimum"}
+                                                fieldLabel={"Amount"}
                                                 inputValue={minSalaryAmount}
                                                 setInputValue={setMinSalaryAmount}
                                                 currency={currency}
@@ -215,108 +253,73 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                                                 onBlur={() => validateMinSalaryInput(minSalaryAmount)}
                                             />
                                         </div>
-
-                                        <span
-                                            className={"salary-input-box dark-default-text mt1rem"}
-                                            style={{
-                                                alignSelf: "center"
-                                            }}
-                                        >
-                                            to
-                                        </span>
-
-                                        <div className={"salary-input-box"}>
-                                            <SalaryAmountInputField
-                                                fieldLabel={"Maximum"}
-                                                inputValue={maxSalaryAmount}
-                                                setInputValue={setMaxSalaryAmount}
-                                                currency={currency}
-                                                isInvalidValue={isInvalidMaxSalary}
-                                                onInputChange={onMaxSalaryInputChange}
-                                                onBlur={() => validateMaxSalaryInput(minSalaryAmount, maxSalaryAmount)}
-                                            />
-                                        </div>
-                                    </>
-
-                                )
+                                    )
+                            }
+                        </div>
+                        <CustomSelectWindow
+                            fieldLabel={"Rate"}
+                            selectedValue={salaryRate}
+                            setSelectedValue={setSalaryRate}
+                            optionsArr={salaryRates}
+                        />
+                    </div>
+                    {(isInvalidMinSalary || isInvalidMaxSalary) &&
+                        <div className={"error-box"}>
+                            <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
+                            {(minSalaryInputError === minimalSalaryIsTooLowError && !minSalaryMeetsLaw) ?
+                                <span className={"error-text"}>{minSalaryInputError ? minSalaryInputError : maxSalaryInputError}</span>
                                 :
-                                (
-                                    <div className={"salary-input-box"}>
-                                        <SalaryAmountInputField
-                                            fieldLabel={"Amount"}
-                                            inputValue={minSalaryAmount}
-                                            setInputValue={setMinSalaryAmount}
-                                            currency={currency}
-                                            isInvalidValue={isInvalidMinSalary}
-                                            onInputChange={onMinSalaryInputChange}
-                                            onBlur={() => validateMinSalaryInput(minSalaryAmount)}
-                                        />
-                                    </div>
-                                )
-                        }
-                    </div>
-                    <CustomSelectWindow
-                        fieldLabel={"Rate"}
-                        selectedValue={salaryRate}
-                        setSelectedValue={setSalaryRate}
-                        optionsArr={salaryRates}
-                    />
-                </div>
-                {(isInvalidMinSalary || isInvalidMaxSalary) &&
-                    <div className={"error-box"}>
-                        <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
-                        {(minSalaryInputError === minimalSalaryIsTooLowError && !minSalaryMeetsLaw) ?
-                            <span className={"error-text"}>{minSalaryInputError ? minSalaryInputError : maxSalaryInputError}</span>
-                            :
-                            <span className={"error-text"}>{maxSalaryInputError ? maxSalaryInputError : minSalaryInputError}</span>
-                        }
-                    </div>}
-                {minSalaryInputError == minimalSalaryIsTooLowError &&
-                    <div className={"checkbox-container"} onClick={removeInvalidMinimalSalaryError}>
-                        <input className={"checkbox"} checked={minSalaryMeetsLaw} type={"checkbox"}/>
-                        <span>This job meets or is exempt from the local and minimum wage requirements</span>
-                    </div>
-                }
-                {showMissingSalaryWarning && <div className={"info-notify-container orange-notify-container mt1rem"}>
-                    <div className={"warning-pop-up-icon mr1rem"}>
-                        <FontAwesomeIcon icon={faTriangleExclamation}/>
-                    </div>
-                    <div className={"ntf-msg-with-ttl-container"}>
-                        <div className={"dark-small-text bold-text"}>
-                            Missing pay information
+                                <span className={"error-text"}>{maxSalaryInputError ? maxSalaryInputError : minSalaryInputError}</span>
+                            }
+                        </div>}
+                    {minSalaryInputError == minimalSalaryIsTooLowError &&
+                        <div className={"checkbox-container"} onClick={removeInvalidMinimalSalaryError}>
+                            <input className={"checkbox"} checked={minSalaryMeetsLaw} type={"checkbox"}/>
+                            <span>This job meets or is exempt from the local and minimum wage requirements</span>
                         </div>
-                        <div className={"dark-small-text"}>
-                            If you do not provide pay information, job seekers won't see job offer if they
-                            will decide to sort jobs by pay.
-                            Jobs without employer-provided pay have lower visibility
-                            on HelperJobby and receive fewer quality applications.
-                        </div>
+                    }
+                    {showMissingSalaryWarning &&
+                        <div className={"info-notify-container orange-notify-container mt1rem"}>
+                            <div className={"warning-pop-up-icon mr1rem"}>
+                                <FontAwesomeIcon icon={faTriangleExclamation}/>
+                            </div>
+                            <div className={"ntf-msg-with-ttl-container"}>
+                                <div className={"dark-small-text bold-text"}>
+                                    Missing pay information
+                                </div>
+                                <div className={"dark-small-text"}>
+                                    If you do not provide pay information, job seekers won't see job offer if they
+                                    will decide to sort jobs by pay.
+                                    Jobs without employer-provided pay have lower visibility
+                                    on HelperJobby and receive fewer quality applications.
+                                </div>
+                            </div>
+                        </div>}
+                    <div className={"content-separation-line mt3rem mb3rem"}></div>
+                    <div className={"small-title"}>
+                        Benefits
                     </div>
-                </div>}
-                <div className={"content-separation-line mt3rem mb3rem"}></div>
-                <div className={"small-title"}>
-                    Benefits
-                </div>
-                <div
-                    className={"job-features-fb"}
-                    style={{
-                        height: benefitsBoxHeight
-                    }}
-                >
-                    <ul className={"job-features-list"}
-                        ref={benefitsListRef}
+                    <div
+                        className={"job-features-fb"}
+                        style={{
+                            height: benefitsBoxHeight
+                        }}
                     >
-                        {benefitsStringValues.map((benefits, index) => (
-                            <JobFeature
-                                key={index}
-                                featureName={benefits}
-                                isSelected={selectedBenefits.includes(benefitStringToEnumMap(benefits)!)}
-                                onClick={() => addBenefit(benefits)}
-                            />
-                        ))}
-                    </ul>
-                </div>
-                <div className={"mt05rem"}>
+                        <ul
+                            className={"job-features-list"}
+                            ref={benefitsListRef}
+                        >
+                            {benefitsStringValues.map((benefits, index) => (
+                                <JobFeature
+                                    key={index}
+                                    featureName={benefits}
+                                    isSelected={selectedBenefits.includes(benefitStringToEnumMap(benefits)!)}
+                                    onClick={() => addBenefit(benefits)}
+                                />
+                            ))}
+                        </ul>
+                    </div>
+                    <div className={"mt05rem"}>
                    <span className={"bold-navigation-link"} onClick={handleBenefitsListAppearance}>
                         <span>{`${showFullBenefitsList ? "Show less" : "Show more"}`}</span>
                        {showFullBenefitsList ?
@@ -325,9 +328,13 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                            <FontAwesomeIcon className={'svg1rem ml1rem'} icon={faChevronDown}/>
                        }
                     </span>
-                </div>
-                <JobCreateNavigationButtons backButtonOnClick={goToPreviousPage} nextPageButtonClick={handlePayAndBenefitSubmit}/>
-            </form>
+                    </div>
+                    <JobCreateNavigationButtons
+                        backButtonOnClick={goToPreviousPage}
+                        nextPageButtonClick={handlePayAndBenefitSubmit}
+                    />
+                </form>
+            </div>
         </div>
     )
 };

@@ -74,56 +74,62 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
     return (
         <div className="employers-centralized-page-layout">
             <PageTitleWithImage imageElement={<WomanWorking/>} title={"Add job details"}/>
-            <form className={"emp-form-fb"}>
-                <div className={"mb025rem"}>
-                    <span className={"dark-default-text bold-text"}>Job type</span>
-                    <span className={"error-text"}>&nbsp;*</span>
-                </div>
-                <ul className={"job-features-list"}>
-                    {jobTypesStringValues.map((jobType, index) => (
-                        <JobFeature
-                            key={index}
-                            featureName={jobType}
-                            isSelected={selectedJobType?.includes(jobTypeStringToEnumMap(jobType)!)}
-                            onClick={() => addJobType(jobType)}
-                        />
-                    ))}
-                </ul>
-                <div className={'content-separation-line mt2rem mb2rem'}/>
-                <div className={"mb025rem"}>
-                    <span className={"dark-default-text bold-text"}>Schedule</span>
-                </div>
-                <div
-                    className={"job-features-fb"}
-                    style={{
-                        height: scheduleBoxHeight
-                    }}
-                >
-                    <ul className={"job-features-list"}
-                        ref={scheduleListRef}
-                    >
-                        {schedulesStringValues.map((schedule, index) => (
+            <div className={"crj-form-fb"}>
+                <form className={"emp-form-fb"}>
+                    <div className={"small-title horizontal-title"}>
+                        <span className={"dark-default-text bold-text"}>Job type</span>
+                        <span className={"error-text"}>&nbsp;*</span>
+                    </div>
+                    <ul className={"job-features-list"}>
+                        {jobTypesStringValues.map((jobType, index) => (
                             <JobFeature
                                 key={index}
-                                featureName={schedule}
-                                isSelected={selectedSchedule.includes(scheduleStringToEnumMap(schedule)!)}
-                                onClick={() => addSchedule(schedule)}
+                                featureName={jobType}
+                                isSelected={selectedJobType?.includes(jobTypeStringToEnumMap(jobType)!)}
+                                onClick={() => addJobType(jobType)}
                             />
                         ))}
                     </ul>
-                </div>
-                <div className={"mt05rem"}>
+                    <div className={'content-separation-line mt2rem mb2rem'}/>
+                    <div className={"mb025rem"}>
+                        <span className={"small-title"}>Schedule</span>
+                    </div>
+                    <div
+                        className={"job-features-fb"}
+                        style={{
+                            height: scheduleBoxHeight
+                        }}
+                    >
+                        <ul
+                            className={"job-features-list"}
+                            ref={scheduleListRef}
+                        >
+                            {schedulesStringValues.map((schedule, index) => (
+                                <JobFeature
+                                    key={index}
+                                    featureName={schedule}
+                                    isSelected={selectedSchedule.includes(scheduleStringToEnumMap(schedule)!)}
+                                    onClick={() => addSchedule(schedule)}
+                                />
+                            ))}
+                        </ul>
+                    </div>
+                    <div className={"mt05rem"}>
                    <span className={"bold-navigation-link"} onClick={handleScheduleListAppearance}>
                         <span>{`${showFullScheduleList ? "Show less" : "Show more"}`}</span>
-                           {showFullScheduleList ?
-                               <FontAwesomeIcon className={'svg1rem ml1rem'} icon={faChevronUp}/>
-                               :
-                               <FontAwesomeIcon className={'svg1rem ml1rem'} icon={faChevronDown}/>
-                           }
-                    </span> 
-                </div>
-                <JobCreateNavigationButtons backButtonOnClick={goToPreviousPage} nextPageButtonClick={handleJobDetailsSubmit}/>
-            </form>
+                       {showFullScheduleList ?
+                           <FontAwesomeIcon className={'svg1rem ml1rem'} icon={faChevronUp}/>
+                           :
+                           <FontAwesomeIcon className={'svg1rem ml1rem'} icon={faChevronDown}/>
+                       }
+                    </span>
+                    </div>
+                    <JobCreateNavigationButtons
+                        backButtonOnClick={goToPreviousPage}
+                        nextPageButtonClick={handleJobDetailsSubmit}
+                    />
+                </form>
+            </div>
         </div>
     );
 }

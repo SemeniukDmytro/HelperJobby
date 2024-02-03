@@ -9,6 +9,8 @@ import AddJobBasicsPage from "../../EmployerSidePages/JobCreationPages/AddJobBas
 import JobDetailsPage from "../../EmployerSidePages/JobCreationPages/JobDetailsPage/JobDetailsPage";
 import AddJobPayAndBenefitsPage
     from "../../EmployerSidePages/JobCreationPages/AddJobPayAndBenefitsPage/AddJobPayAndBenefitsPage";
+import JobDescriptionAndPreferencesPage
+    from "../../EmployerSidePages/JobCreationPages/JobDescriptionAndPreferencesPage/JobDescriptionAndPreferencesPage";
 
 interface EmployerSideRoutesProps {
 }
@@ -22,6 +24,7 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
                 <Route path={"getting-started"} element={<AddJobBasicsPage/>}/>
                 <Route path={"job-details"} element={<JobDetailsPage/>}/>
                 <Route path={"compensation-details"} element={<AddJobPayAndBenefitsPage/>}/>
+                <Route path={"description-and-application-settings"} element={<JobDescriptionAndPreferencesPage/>}/>
             </Route>
         </Route>
     </Routes>
