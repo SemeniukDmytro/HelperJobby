@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import './AccountSettingsComponent.scss';
 import PageWrapWithHeader from "../../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
-import SettingsChangeField from "../SettingsFieldtToChange/SettingsFieldtToChange";
+import SettingsChangeField from "../SettingsFieldtToChange/SettingsFieldToChange";
 import {useAuth} from "../../../../../hooks/useAuth";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";

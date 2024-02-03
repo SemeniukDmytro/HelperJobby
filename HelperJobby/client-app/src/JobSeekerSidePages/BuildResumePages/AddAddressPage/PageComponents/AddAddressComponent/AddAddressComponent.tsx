@@ -117,7 +117,7 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
         <div>
             {showStreetsAutocomplete && <AutocompleteResultsWindow
                 inputFieldRef={streetAddressInputRef}
-                windowMaxWidth={"538px"}
+                windowMaxWidth={"calc(602px - 2rem)"}
                 inputValue={streetAddress}
                 setInputValue={setStreetAddress}
                 cityInputValue={city}
@@ -130,7 +130,7 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
 
             {showCityAutoComplete && <AutocompleteResultsWindow
                 inputFieldRef={cityInputRef}
-                windowMaxWidth={"538px"}
+                windowMaxWidth={"calc(602px - 2rem)"}
                 inputValue={city}
                 setInputValue={setCity}
                 country={country}

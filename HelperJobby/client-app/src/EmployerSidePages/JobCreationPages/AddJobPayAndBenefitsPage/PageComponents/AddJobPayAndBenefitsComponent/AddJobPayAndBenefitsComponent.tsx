@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useState} from 'react';
+import React, {ChangeEvent, FC, useEffect, useRef, useState} from 'react';
 import './AddJobPayAndBenefitsComponent.scss';
 import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import Wages from "../../../../../Components/Icons/Wages";
@@ -8,11 +8,24 @@ import SalaryAmountInputField from "../../../../../Components/SalaryAmountInputF
 import {countriesWithCurrencies} from "../../../../../AppConstData/CountriesWithCurrencies";
 import {
     getValidFloatNumberFromString,
-    isNanAfterIntParse,
     isValidNumber
 } from "../../../../../utils/validationLogic/numbersValidators";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
+import {
+    faChevronDown,
+    faChevronUp,
+    faCircleExclamation,
+    faTriangleExclamation
+} from "@fortawesome/free-solid-svg-icons";
+import {checkMinimalSalary} from "../../../../../utils/validationLogic/checkMinimalSalary";
+import {benefitsStringValues} from "../../../../../AppConstData/JobEnumsToStringsArrays";
+import JobFeature from "../../../../../EmployersSideComponents/JobFeature/JobFeature";
+import {benefitStringToEnumMap} from "../../../../../utils/convertLogic/enumToStringConverter";
+import EmployeeBenefits from "../../../../../enums/EmployeeBenefits";
+import JobCreateNavigationButtons
+    from "../../../SharedComponents/JobCreateNavigationButtons/JobCreateNavigationButtons";
+import {useNavigate} from "react-router-dom";
+import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface AddJobPayAndBenefitsComponentProps {
 }
@@ -28,11 +41,22 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     const [minSalaryInputError, setMinSalaryInputError] = useState("");
     const [maxSalaryInputError, setMaxSalaryInputError] = useState("");
     const [minSalaryMeetsLaw, setMinSalaryMeetsLaw] = useState(false);
+    const [showMissingSalaryWarning, setShowMissingSalaryWaring] = useState(false);
+    const [selectedBenefits, setSelectedBenefits] = useState<EmployeeBenefits[]>([]);
+    const [benefitsBoxHeight, setBenefitsBoxHeight] = useState("78px");
+    const benefitsListRef = useRef<HTMLUListElement>(null);
+    const [showFullBenefitsList, setShowFullBenefitsList] = useState(false);
+    const navigate = useNavigate();
     
     const invalidNumberError: string = "This number doesn't look right. Use a valid format (e.g. 50,000.00).";
     const minimalSalaryIsTooLowError: string = "This wage appears to be below the minimum wage for this location. Update the minimum pay or check the box to confirm that your job is exempt from local minimum wage requirements.";
-    const maximumSalaryIsLowerThanMinimumError: string ="Use a range (low to high), or make another selection for pay."; 
-    
+    const maximumSalaryIsLowerThanMinimumError: string ="Use a range (low to high), or make another selection for pay.";
+
+    useEffect(() => {
+        removeErrors();
+        setMinSalaryInputError("");
+        setMaxSalaryInputError("");
+    }, [showPayBy]);
 
     function onMinSalaryInputChange(e: ChangeEvent<HTMLInputElement>) {
         setMinSalaryAmount(e.target.value);
@@ -45,6 +69,15 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     }
 
     function validateMinSalaryInput(minSalaryAmountString: string) {
+        if (!minSalaryAmountString && !maxSalaryAmount){
+            setIsInvalidMinSalary(false);
+            setShowMissingSalaryWaring(true);
+            return;
+        }
+        else {
+            setShowMissingSalaryWaring(false);
+        } 
+        
         if (!isValidNumber(minSalaryAmountString)) {
             setIsInvalidMinSalary(true);
             setMinSalaryInputError(invalidNumberError)
@@ -70,29 +103,21 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     }
 
     function validateMaxSalaryInput(minSalaryAmountValue: string, maxSalaryAmountValue: string) {
+        if (!minSalaryAmountValue && !maxSalaryAmountValue){
+            setShowMissingSalaryWaring(true);
+            setIsInvalidMaxSalary(false);
+            return;
+        }
+        else {
+            setShowMissingSalaryWaring(false);
+        }
+        
         if (!isValidNumber(maxSalaryAmountValue)) {
             setIsInvalidMaxSalary(true);
             setMaxSalaryInputError(invalidNumberError)
             return;
         }
         isValidSalaryRageProvided(minSalaryAmountValue, maxSalaryAmountValue)
-    }
-
-    function checkMinimalSalary(salary: number, salaryRate: string): boolean {
-        switch (salaryRate.toLowerCase()) {
-            case "per hour":
-                return salary > 16.65;
-            case "per day":
-                return salary > 100;
-            case "per week":
-                return salary > 494;
-            case "per month":
-                return salary > 2000;
-            case "per year":
-                return salary > 24000;
-            default:
-                return false;
-        }
     }
     
     function isValidSalaryRageProvided(minSalaryAmount: string, maxSalaryAmount: string){
@@ -107,6 +132,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
             setIsInvalidMaxSalary(false);
         }
     }
+    
 
     function getCurrency() {
         const currency = countriesWithCurrencies.find(c => c.country === "Canada")?.currency;
@@ -122,12 +148,50 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
             setIsInvalidMinSalary(true);
         }
     }
+    
+    function removeErrors(){
+        setMinSalaryAmount("");
+        setMaxSalaryAmount("");
+        setIsInvalidMinSalary(false);
+        setIsInvalidMaxSalary(false);
+    }
+
+    function addBenefit(benefitString: string) {
+        const schedule = benefitStringToEnumMap(benefitString);
+        if (schedule && !selectedBenefits.includes(schedule)) {
+            setSelectedBenefits(prevSelectedBenefits => [...prevSelectedBenefits, schedule]);
+        } else if (schedule) {
+            setSelectedBenefits(prevSelectedBenefits =>
+                prevSelectedBenefits.filter(type => type !== schedule),
+            );
+        }
+    }
+
+    function handleBenefitsListAppearance() {
+        if (showFullBenefitsList){
+            setShowFullBenefitsList(false);
+            setBenefitsBoxHeight("78px");
+        }
+        else {
+            setShowFullBenefitsList(true);
+            const scheduleListRefBoundingRect = benefitsListRef.current?.getBoundingClientRect();
+            setBenefitsBoxHeight(`${scheduleListRefBoundingRect?.height}px`)
+        }
+    }
+
+    function goToPreviousPage() {
+        navigate(EmployerPagesPaths.JOB_DETAILS)
+    }
+
+    function handlePayAndBenefitSubmit() {
+        
+    }
 
     return (
         <div className={"employers-centralized-page-layout"}>
             <PageTitleWithImage imageElement={<Wages/>} title={"Add job pay and benefits"}/>
             <form className={"emp-form-fb"}>
-                <span className={"dark-default-text bold-text mb15rem"}>Pay</span>
+                <span className={"small-title"}>Pay</span>
                 <div className="pb-pay-info-fb">
                     <CustomSelectWindow
                         fieldLabel={"Show pay by"}
@@ -177,7 +241,17 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                                 )
                                 :
                                 (
-                                    <div></div>
+                                    <div className={"salary-input-box"}>
+                                        <SalaryAmountInputField
+                                            fieldLabel={"Amount"}
+                                            inputValue={minSalaryAmount}
+                                            setInputValue={setMinSalaryAmount}
+                                            currency={currency}
+                                            isInvalidValue={isInvalidMinSalary}
+                                            onInputChange={onMinSalaryInputChange}
+                                            onBlur={() => validateMinSalaryInput(minSalaryAmount)}
+                                        />
+                                    </div>
                                 )
                         }
                     </div>
@@ -198,11 +272,61 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                         }
                     </div>}
                 {minSalaryInputError == minimalSalaryIsTooLowError &&
-                    <div className={"checkbox-container"}>
-                        <input className={"checkbox"} checked={minSalaryMeetsLaw} type={"checkbox"} onChange={removeInvalidMinimalSalaryError}/>
+                    <div className={"checkbox-container"} onClick={removeInvalidMinimalSalaryError}>
+                        <input className={"checkbox"} checked={minSalaryMeetsLaw} type={"checkbox"}/>
                         <span>This job meets or is exempt from the local and minimum wage requirements</span>
                     </div>
                 }
+                {showMissingSalaryWarning && <div className={"info-notify-container orange-notify-container mt1rem"}>
+                    <div className={"warning-pop-up-icon mr1rem"}>
+                        <FontAwesomeIcon icon={faTriangleExclamation}/>
+                    </div>
+                    <div className={"ntf-msg-with-ttl-container"}>
+                        <div className={"dark-small-text bold-text"}>
+                            Missing pay information
+                        </div>
+                        <div className={"dark-small-text"}>
+                            If you do not provide pay information, job seekers won't see job offer if they
+                            will decide to sort jobs by pay.
+                            Jobs without employer-provided pay have lower visibility
+                            on HelperJobby and receive fewer quality applications.
+                        </div>
+                    </div>
+                </div>}
+                <div className={"content-separation-line mt3rem mb3rem"}></div>
+                <div className={"small-title"}>
+                    Benefits
+                </div>
+                <div
+                    className={"job-features-fb"}
+                    style={{
+                        height: benefitsBoxHeight
+                    }}
+                >
+                    <ul className={"job-features-list"}
+                        ref={benefitsListRef}
+                    >
+                        {benefitsStringValues.map((benefits, index) => (
+                            <JobFeature
+                                key={index}
+                                featureName={benefits}
+                                isSelected={selectedBenefits.includes(benefitStringToEnumMap(benefits)!)}
+                                onClick={() => addBenefit(benefits)}
+                            />
+                        ))}
+                    </ul>
+                </div>
+                <div className={"mt05rem"}>
+                   <span className={"bold-navigation-link"} onClick={handleBenefitsListAppearance}>
+                        <span>{`${showFullBenefitsList ? "Show less" : "Show more"}`}</span>
+                       {showFullBenefitsList ?
+                           <FontAwesomeIcon className={'svg1rem ml1rem'} icon={faChevronUp}/>
+                           :
+                           <FontAwesomeIcon className={'svg1rem ml1rem'} icon={faChevronDown}/>
+                       }
+                    </span>
+                </div>
+                <JobCreateNavigationButtons backButtonOnClick={goToPreviousPage} nextPageButtonClick={handlePayAndBenefitSubmit}/>
             </form>
         </div>
     )

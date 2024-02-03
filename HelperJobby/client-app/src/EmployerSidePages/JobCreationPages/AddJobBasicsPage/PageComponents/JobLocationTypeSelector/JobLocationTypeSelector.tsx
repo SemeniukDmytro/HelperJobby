@@ -38,7 +38,7 @@ const JobLocationTypeSelector: FC<JobLocationTypeSelectorProps> = ({
     return (
         <>
             {showOptions && <div
-                className={"jloc-types-window"}
+                className={"select-window-container"}
                 ref={selectWindowRef}
             >
                 {jobLocationTypesArr.map((jobLocationType, index) => (

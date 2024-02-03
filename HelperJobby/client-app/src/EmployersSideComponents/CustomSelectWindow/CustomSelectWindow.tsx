@@ -39,7 +39,7 @@ const CustomSelectWindow: FC<CustomSelectWindowProps> = ({
     return (
         <>
             {showOptions && <div
-                className={"jloc-types-window"}
+                className={"select-window-container"}
                 ref={selectWindowRef}
                 style={{
                     width : selectedValueButtonRef.current?.getBoundingClientRect().width

@@ -247,7 +247,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
         <>
             {showCityAutoComplete && <AutocompleteResultsWindow
                 inputFieldRef={cityInputRef}
-                windowMaxWidth={"538px"}
+                windowMaxWidth={"calc(602px - 2rem)"}
                 inputValue={city}
                 setInputValue={setCity}
                 country={country || "Canada"}

@@ -9,7 +9,7 @@ import useSelectWindowPosition from "../../../../hooks/useSelectWindowPosition";
 
 interface AutocompleteResultsWindowProps {
     inputFieldRef: RefObject<HTMLInputElement>;
-    windowMaxWidth : string;
+    windowMaxWidth: string;
     inputValue: string;
     setInputValue: Dispatch<SetStateAction<string>>;
     cityInputValue?: string;
@@ -31,7 +31,7 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
     const [delayedInputValue, setDelayedInputValue] = useState("");
     const [autocompleteResults, setAutocompleteResults] = useState<string[][]>([]);
     const [loading, setLoading] = useState(true);
-    const getAutocompleteWindowPosition = useSelectWindowPosition(props.inputFieldRef, autoCompleteRef, props.setShowResult);    
+    const getAutocompleteWindowPosition = useSelectWindowPosition(props.inputFieldRef, autoCompleteRef, props.setShowResult);
 
     useEffect(() => {
         getAutocompleteWindowPosition();
@@ -85,7 +85,7 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
         }
         fetchData();
     }, [delayedInputValue]);
-    
+
 
     function handleStreetSelect(locationResult: string[]) {
         const cityStreetSeparationIndex = Math.max(1, locationResult.length - 2);
@@ -101,16 +101,16 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
         }
         props.setInputValue(streetAddressSeparated.join(", "))
         setAutoCompleteSelected(true);
-        if (props.setLocationSelected){
+        if (props.setLocationSelected) {
             props.setLocationSelected(true)
         }
-        
+
     }
 
     function handleCitySelect(locationResult: string[]) {
         props.setInputValue(locationResult.join(", "))
         setAutoCompleteSelected(true);
-        if (props.setLocationSelected){
+        if (props.setLocationSelected) {
             props.setLocationSelected(true)
         }
     }
@@ -118,9 +118,14 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
     return (
         !props.setShowResult ? (<></>) :
             (loading ? <></> :
-                    <div className={"autocomplete-results"}
-                         style={{maxWidth : props.windowMaxWidth}}
-                         ref={autoCompleteRef}>
+                    <div
+                        className={"select-window-container"}
+                        style={{
+                            maxWidth: props.windowMaxWidth,
+                            width: "100%"
+                        }}
+                        ref={autoCompleteRef}
+                    >
                         {autocompleteResults.map((locationResult, index) => (
                             props.autocompleteWindowType == AutocompleteWindowTypes.streetAddress ?
                                 (<div
