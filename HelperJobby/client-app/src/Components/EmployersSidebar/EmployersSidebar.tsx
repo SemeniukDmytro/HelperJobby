@@ -116,7 +116,7 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                                 </div>
                                 {showCreateOptions && <div className={"create-new-option-container"}>
                                     <div className={"create-new-options-layout"}>
-                                        <div className={"create-new-options-box"}>
+                                        <div className={"create-new-options-text"}>
                                             <ul className={"nav-buttons-list"}>
                                                 <li className={"nav-list-component"}>
                                                     <div className={"nav-bar-button-container"}>

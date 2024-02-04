@@ -74,8 +74,8 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
     return (
         <div className="employers-centralized-page-layout">
             <PageTitleWithImage imageElement={<WomanWorking/>} title={"Add job details"}/>
-            <div className={"crj-form-fb"}>
-                <form className={"emp-form-fb"}>
+            <div className={"emp-form-fb"}>
+                <form className={"emp-form"}>
                     <div className={"small-title horizontal-title"}>
                         <span className={"dark-default-text bold-text"}>Job type</span>
                         <span className={"error-text"}>&nbsp;*</span>

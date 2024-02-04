@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useEffect, useRef, useState} from 'react';
+import React, {ChangeEvent, FC, FormEvent, useEffect, useRef, useState} from 'react';
 import './AddJobPayAndBenefitsComponent.scss';
 import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import Wages from "../../../../../Components/Icons/Wages";
@@ -183,15 +183,16 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
         navigate(EmployerPagesPaths.JOB_DETAILS)
     }
 
-    function handlePayAndBenefitSubmit() {
-        
+    function handlePayAndBenefitSubmit(e : FormEvent) {
+        e.preventDefault();
+        navigate(EmployerPagesPaths.DESCRIPTION_AND_APPLICATION_DETAILS)
     }
 
     return (
         <div className={"employers-centralized-page-layout"}>
             <PageTitleWithImage imageElement={<Wages/>} title={"Add job pay and benefits"}/>
-            <div className={"crj-form-fb"}>
-                <form className={"emp-form-fb"}>
+            <div className={"emp-form-fb"}>
+                <form className={"emp-form"}>
                     <span className={"small-title"}>Pay</span>
                     <div className="pb-pay-info-fb">
                         <CustomSelectWindow
@@ -274,7 +275,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                         </div>}
                     {minSalaryInputError == minimalSalaryIsTooLowError &&
                         <div className={"checkbox-container"} onClick={removeInvalidMinimalSalaryError}>
-                            <input className={"checkbox"} checked={minSalaryMeetsLaw} type={"checkbox"}/>
+                            <input className={"checkbox"} onChange={removeInvalidMinimalSalaryError} checked={minSalaryMeetsLaw} type={"checkbox"}/>
                             <span>This job meets or is exempt from the local and minimum wage requirements</span>
                         </div>
                     }

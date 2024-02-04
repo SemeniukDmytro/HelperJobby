@@ -145,7 +145,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                     <span className={"bold-navigation-link"}>Not here to post a job</span>
                 </div>
                 <div className="mt2rem"></div>
-                <form className={"emp-form-fb"}>
+                <form className={"emp-form"}>
                     {requestInProgress && <div className={"request-in-process-surface"}></div>}
                     <CustomInputField
                         fieldLabel={"Your company's name"}

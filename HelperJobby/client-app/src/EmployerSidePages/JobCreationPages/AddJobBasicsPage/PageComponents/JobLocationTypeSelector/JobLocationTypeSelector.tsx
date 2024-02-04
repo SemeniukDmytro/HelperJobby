@@ -34,12 +34,14 @@ const JobLocationTypeSelector: FC<JobLocationTypeSelectorProps> = ({
         setJobLocationTypeEnumValue(jobLocationType.enumValue);
         setCurrentJobLocationType(jobLocationType.type);
     }
+    
 
     return (
         <>
             {showOptions && <div
                 className={"select-window-container"}
                 ref={selectWindowRef}
+                style={{width : `${locationTypeButtonRef.current?.getBoundingClientRect().width}px`}}
             >
                 {jobLocationTypesArr.map((jobLocationType, index) => (
                     <div

@@ -16,8 +16,6 @@ import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import JobBasics from "../../../../../Components/Icons/JobBasics";
-import JobCreateNavigationButtons
-    from "../../../SharedComponents/JobCreateNavigationButtons/JobCreateNavigationButtons";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 
 
@@ -109,8 +107,8 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             />
             <div className={"employers-centralized-page-layout"}>
                 <PageTitleWithImage imageElement={<JobBasics/>} title={"Add job basics"}/>
-                <div className={"crj-form-fb"}>
-                    <form className={"emp-form-fb"}>
+                <div className={"emp-form-fb"}>
+                    <form className={"emp-form"}>
                         <div className={"mb2rem"}>
                             <span className={"dark-default-text"}>Job post will bee in&nbsp;</span>
                             <span className={"dark-default-text bold-text"}>{jobPostLanguage}</span>

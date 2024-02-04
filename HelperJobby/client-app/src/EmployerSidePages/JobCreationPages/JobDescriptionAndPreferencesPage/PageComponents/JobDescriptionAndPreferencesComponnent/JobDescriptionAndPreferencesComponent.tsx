@@ -59,8 +59,8 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
     return <div className={"employers-centralized-page-layout"}>
         <PageTitleWithImage imageElement={<TeamAnalysis/>}
                             title={"Add description and set preferences"}/>
-        <div className={"crj-form-fb"}>
-            <form className={"emp-form-fb"}>
+        <div className={"emp-form-fb"}>
+            <form className={"emp-form"}>
                 <div className={"description-container"}>
                     <div
                         className={`small-title horizontal-title ${isInvalidDescription ? "error-text" : ""}`}
