@@ -1,0 +1,16 @@
+
+.empp-with-sidebar-layout {
+  display: flex;
+  box-sizing: border-box;
+  margin-block: 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
+  flex: 1 1 0%;
+  width: 100%;
+}
+
+.emp-main-content-layout {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}

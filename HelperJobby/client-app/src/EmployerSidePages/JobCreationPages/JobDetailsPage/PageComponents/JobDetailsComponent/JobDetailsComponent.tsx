@@ -4,7 +4,7 @@ import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitle
 import WomanWorking from "../../../../../Components/Icons/WomanWorking";
 import JobTypes from "../../../../../enums/JobTypes";
 import {
-    jobTypeStringToEnumMap, schedulesEnumToStringMap, scheduleStringToEnumMap
+    jobTypeStringToEnumMap, scheduleStringToEnumMap
 } from "../../../../../utils/convertLogic/enumToStringConverter";
 import JobFeature from "../../../../../EmployersSideComponents/JobFeature/JobFeature";
 import Schedules from "../../../../../enums/Schedules";

@@ -4,8 +4,6 @@ import {EmployerAccountDTO} from "../DTOs/accountDTOs/EmployerAccountDTO";
 import {EmployerAccountService} from "../services/employerAccountService";
 import {useAuth} from "../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
-import EmployersPagesHeader from "../EmployersSideComponents/EmployersPagesHeader/EmployersPagesHeader";
-import LoadingPage from "../Components/LoadingPage/LoadingPage";
 
 const EmployerContext = createContext<EmployerContextProps>({
     employer: null,
@@ -20,8 +18,6 @@ export function EmployerProvider({children}: { children: ReactNode }) {
     const employerService = new EmployerAccountService();
     const {authUser} = useAuth();
     const navigate = useNavigate();
-    const [employerLoading, setEmployerLoading] = useState(true);
-
     const fetchEmployer = async () => {
         try {
             if (!authUser) {
@@ -48,16 +44,9 @@ export function EmployerProvider({children}: { children: ReactNode }) {
                 fetchEmployer
             }}
         >
-            <EmployersPagesHeader
-                loading={employerLoading}
-                setLoading={setEmployerLoading}
-            />
-
-            {employerLoading ? (
-                <LoadingPage/>
-            ) : (
+            {
                 children
-            )}
+            }
         </EmployerContext.Provider>
     )
 }

@@ -11,6 +11,9 @@ import AddJobPayAndBenefitsPage
     from "../../EmployerSidePages/JobCreationPages/AddJobPayAndBenefitsPage/AddJobPayAndBenefitsPage";
 import JobDescriptionAndPreferencesPage
     from "../../EmployerSidePages/JobCreationPages/JobDescriptionAndPreferencesPage/JobDescriptionAndPreferencesPage";
+import PagesWithoutSidebarWrap from "../../EmployersSideComponents/PagesWithoutSidebarWrap/PagesWithoutSidebarWrap";
+import EmployerPagesWithSidebarWrap
+    from "../../EmployersSideComponents/EmployerPagesWithSidebarWrap/EmployerPagesWithSidebarWrap";
 
 interface EmployerSideRoutesProps {
 }
@@ -18,13 +21,17 @@ interface EmployerSideRoutesProps {
 const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
     <Routes>
         <Route element={<RequireAuthForEmployersPages/>}>
-            <Route path={"/posting"} element={<JobPostingPage/>}/>
-            <Route path={"/setup-employer"} element={<EmployerSetupPage/>}/>
-            <Route path={"/posting"} element={<Outlet/>}>
-                <Route path={"getting-started"} element={<AddJobBasicsPage/>}/>
-                <Route path={"job-details"} element={<JobDetailsPage/>}/>
-                <Route path={"compensation-details"} element={<AddJobPayAndBenefitsPage/>}/>
-                <Route path={"description-and-application-settings"} element={<JobDescriptionAndPreferencesPage/>}/>
+            <Route element={<PagesWithoutSidebarWrap/>}>
+                <Route path={"/setup-employer"} element={<EmployerSetupPage/>}/>
+            </Route>
+            <Route element={<EmployerPagesWithSidebarWrap/>}>
+                <Route path={"/posting"} element={<Outlet/>}>
+                    <Route index element={<JobPostingPage/>}/>
+                    <Route path={"getting-started"} element={<AddJobBasicsPage/>}/>
+                    <Route path={"job-details"} element={<JobDetailsPage/>}/>
+                    <Route path={"compensation-details"} element={<AddJobPayAndBenefitsPage/>}/>
+                    <Route path={"description-and-application-settings"} element={<JobDescriptionAndPreferencesPage/>}/>
+                </Route>
             </Route>
         </Route>
     </Routes>
