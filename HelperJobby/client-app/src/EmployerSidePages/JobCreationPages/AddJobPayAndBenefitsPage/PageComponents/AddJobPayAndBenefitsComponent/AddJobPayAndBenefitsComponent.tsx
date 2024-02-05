@@ -21,11 +21,12 @@ import {checkMinimalSalary} from "../../../../../utils/validationLogic/checkMini
 import {benefitsStringValues} from "../../../../../AppConstData/JobEnumsToStringsArrays";
 import JobFeature from "../../../../../EmployersSideComponents/JobFeature/JobFeature";
 import {benefitStringToEnumMap} from "../../../../../utils/convertLogic/enumToStringConverter";
-import EmployeeBenefits from "../../../../../enums/EmployeeBenefits";
+
 import JobCreateNavigationButtons
     from "../../../SharedComponents/JobCreateNavigationButtons/JobCreateNavigationButtons";
 import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
+import EmployeeBenefits from "../../../../../enums/modelDataEnums/EmployeeBenefits";
 
 interface AddJobPayAndBenefitsComponentProps {
 }

@@ -6,10 +6,10 @@ import CustomInputField from "../../../../../Components/EditFormField/CustomInpu
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
-import {UpdateJobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/UpdateJobSeekerAccountDTO";
-import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountService";
+import {UpdateJobSeekerDTO} from "../../../../../DTOs/accountDTOs/UpdateJobSeekerDTO";
+import {JobSeekerService} from "../../../../../services/jobSeekerService";
 import {useNavigate} from "react-router-dom";
-import {ChangedInfoTypes} from "../../../../../enums/ChangedInfoTypes";
+import {ChangedInfoTypes} from "../../../../../enums/utilityEnums/ChangedInfoTypes";
 
 interface ChangePhoneComponentProps {
 }
@@ -19,7 +19,7 @@ const ChangePhoneComponent: FC<ChangePhoneComponentProps> = () => {
     const [phoneError, setPhoneError] = useState("");
     const {jobSeeker, setJobSeeker, fetchJobSeeker} = useJobSeeker();
     const [loading, setLoading] = useState(true);
-    const jobSeekerService = new JobSeekerAccountService();
+    const jobSeekerService = new JobSeekerService();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -39,7 +39,7 @@ const ChangePhoneComponent: FC<ChangePhoneComponentProps> = () => {
             return;
         }
         try {
-            const updatedJobSeeker: UpdateJobSeekerAccountDTO = {
+            const updatedJobSeeker: UpdateJobSeekerDTO = {
                 phoneNumber: phone,
                 firstName: jobSeeker!.firstName,
                 lastName: jobSeeker!.lastName,

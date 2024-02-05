@@ -3,9 +3,9 @@ import './JobLocationTypeSelector.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import useSelectWindowPosition from "../../../../../hooks/useSelectWindowPosition";
-import {JobLocationTypes} from "../../../../../enums/JobLocationTypes";
 import {jobLocationTypesArr} from "../../../../../AppConstData/JobLocationTypesArr";
-import {JobLocationType} from "../../../../../DTOs/LocationDTO/JobLocationType";
+import {JobLocationTypes} from "../../../../../enums/utilityEnums/JobLocationTypes";
+import {JobLocationType} from "../../../../../DTOs/locationDTO/JobLocationType";
 
 interface JobLocationTypeSelectorProps {
     jobLocationTypeEnumValue : JobLocationTypes;

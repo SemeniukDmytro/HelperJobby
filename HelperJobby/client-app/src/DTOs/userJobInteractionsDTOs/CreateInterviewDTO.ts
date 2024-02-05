@@ -1,4 +1,4 @@
-import {InterviewTypes} from "../../enums/InterviewTypes";
+import {InterviewTypes} from "../../enums/modelDataEnums/InterviewTypes";
 
 export interface CreateInterviewDTO {
     interviewDateTime: string;

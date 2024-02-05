@@ -2,8 +2,8 @@ import React, {ChangeEvent, Dispatch, FC, SetStateAction, useState} from 'react'
 import './DateSelector.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronDown} from "@fortawesome/free-solid-svg-icons";
-import {TimeStamps} from "../../enums/TimeStamps";
 import {months} from "../../AppConstData/Months";
+import {TimeStamps} from "../../enums/utilityEnums/TimeStamps";
 
 interface DateSelectorProps {
     selectValue: string;

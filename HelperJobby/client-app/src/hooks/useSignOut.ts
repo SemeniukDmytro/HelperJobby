@@ -1,5 +1,4 @@
 import {removeAuthToken} from "../utils/authTokenInteraction";
-import {ServerError} from "../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../utils/logErrorInfo";
 import {Dispatch, SetStateAction, useCallback} from "react";
 import {AuthUserDTO} from "../DTOs/userRelatedDTOs/AuthUserDTO";
@@ -16,9 +15,7 @@ export const useSignOut = (setAuthUser: Dispatch<SetStateAction<AuthUserDTO | nu
             setAuthUser(null);
 
         } catch (error) {
-            if (error instanceof ServerError) {
-                logErrorInfo(error);
-            }
+            logErrorInfo(error)
         }
     }, [setAuthUser])
 

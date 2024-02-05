@@ -6,10 +6,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBookmark, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {JobDTO} from "../../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
-import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountService";
+import {JobSeekerService} from "../../../../../services/jobSeekerService";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {useJobSeekerJobInteractions} from "../../../../../hooks/useJobSeekerJobInteractions";
-import {UserJobInteractionsTypes} from "../../../../../enums/UserJobInteractionsTypes";
 import {
     JobActionFunction,
     ShowRemoveFromSavedSetter
@@ -17,6 +16,7 @@ import {
 import {useAuth} from "../../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import {useJobActions} from "../../../../../hooks/useJobActions";
+import {UserJobInteractionsTypes} from "../../../../../enums/utilityEnums/UserJobInteractionsTypes";
 
 interface SavedJobComponentProps {
     job: JobDTO;
@@ -26,7 +26,7 @@ interface SavedJobComponentProps {
 const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) => {
     const {setSavedJobs} = useJobSeekerJobInteractions();
     const {setJobSeeker} = useJobSeeker();
-    const jobSeekerService = new JobSeekerAccountService();
+    const jobSeekerService = new JobSeekerService();
     const [showRemoveFromSaved, setShowRemoveFromSaved] = useState(false);
     const [showUndoRemoveWindow, setShowUndoRemoveWindow] = useState(true);
     const {authUser} = useAuth();

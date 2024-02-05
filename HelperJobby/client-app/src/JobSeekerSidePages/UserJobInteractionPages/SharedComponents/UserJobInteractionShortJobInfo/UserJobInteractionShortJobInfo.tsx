@@ -3,8 +3,8 @@ import './UserJobInteractionShortJobInfo.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBuilding} from "@fortawesome/free-solid-svg-icons";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {UserJobInteractionsTypes} from "../../../../enums/UserJobInteractionsTypes";
 import {useNavigate} from "react-router-dom";
+import {UserJobInteractionsTypes} from "../../../../enums/utilityEnums/UserJobInteractionsTypes";
 
 interface UserJobInteractionShortJobInfoProps {
     job: JobDTO;
@@ -78,7 +78,7 @@ const UserJobInteractionShortJobInfo: FC<UserJobInteractionShortJobInfoProps> = 
             </div>
             <div className={"ji-job-info-box"} onClick={navigateToJobPage}>
                 <span className={"ji-job-title"}>{job.jobTitle}</span>
-                <span className={"dark-default-text"}>{job.employerAccount.organization.name}</span>
+                <span className={"dark-default-text"}>{job.employer.organization.name}</span>
                 <span className={"dark-default-text"}>{job.location}</span>
                 <span
                     className={"semi-dark-small-text"}

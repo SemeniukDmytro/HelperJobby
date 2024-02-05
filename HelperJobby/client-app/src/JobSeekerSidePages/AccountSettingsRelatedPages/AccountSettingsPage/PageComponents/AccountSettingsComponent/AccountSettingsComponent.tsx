@@ -6,13 +6,12 @@ import {useAuth} from "../../../../../hooks/useAuth";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {removeAuthToken} from "../../../../../utils/authTokenInteraction";
-import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import AuthService from "../../../../../services/authService";
 import {useSearchParams} from "react-router-dom";
-import {ChangedInfoTypes} from "../../../../../enums/ChangedInfoTypes";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {ChangedInfoTypes} from "../../../../../enums/utilityEnums/ChangedInfoTypes";
 
 interface AccountSettingsComponentProps {
 }
@@ -44,9 +43,7 @@ const AccountSettingsComponent: FC<AccountSettingsComponentProps> = () => {
             removeAuthToken();
             setAuthUser(null);
         } catch (error) {
-            if (error instanceof ServerError) {
-                logErrorInfo(error);
-            }
+            logErrorInfo(error)
         } finally {
             setLoading(false);
         }

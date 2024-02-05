@@ -1,8 +1,8 @@
-import {EmployerAccountDTO} from "../DTOs/accountDTOs/EmployerAccountDTO";
+import {EmployerDTO} from "../DTOs/accountDTOs/EmployerDTO";
 import {Dispatch, SetStateAction} from "react";
 
 export interface EmployerContextProps {
-    employer: EmployerAccountDTO | null;
-    setEmployer: Dispatch<SetStateAction<EmployerAccountDTO | null>>;
+    employer: EmployerDTO | null;
+    setEmployer: Dispatch<SetStateAction<EmployerDTO | null>>;
     fetchEmployer: () => void;
 }

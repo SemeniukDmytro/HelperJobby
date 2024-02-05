@@ -3,11 +3,11 @@ import './JobPostingComponent.scss';
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import PageTitleWithImage from "../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import PeopleInAnOffice from "../../../../Components/Icons/PeopleInAnOffice";
-import {JobPostingMethods} from "../../../../enums/JobPostingMethods";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
+import {JobPostingMethods} from "../../../../enums/utilityEnums/JobPostingMethods";
 
 interface JobPostingComponentProps {
 }

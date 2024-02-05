@@ -1,8 +1,9 @@
 import {OrganizationDTO} from "../organizationDTOs/OrganizationDTO";
 import {JobDTO} from "../jobRelatetedDTOs/JobDTO";
 import {UserDTO} from "../userRelatedDTOs/UserDTO";
+import {IncompleteJobDTO} from "../jobRelatetedDTOs/IncompleteJobDTO";
 
-export interface EmployerAccountDTO {
+export interface EmployerDTO {
     id: number;
     userId: number;
     email: string;
@@ -12,4 +13,5 @@ export interface EmployerAccountDTO {
     organizationId: number;
     organization: OrganizationDTO;
     jobs: JobDTO[];
+    incompleteJob? : IncompleteJobDTO | null;
 }

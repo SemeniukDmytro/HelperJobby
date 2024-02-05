@@ -7,12 +7,13 @@ import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBookmark} from "@fortawesome/free-solid-svg-icons";
-import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
+import {JobSeekerService} from "../../../../services/jobSeekerService";
 import {useJobActions} from "../../../../hooks/useJobActions";
 import {JobActionFunction} from "../../../../hooks/customHooksTypes/UseJobActionsHookTypes";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {useAuth} from "../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
+import {formatJobSalaryDisplay} from "../../../../utils/convertLogic/formatJobSalaryDisplay";
 
 interface JobFullInfoComponentProps {
     job: JobDTO
@@ -25,7 +26,7 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
     } = useJobSeeker();
     const [isApplied, setIsApplied] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
-    const jobSeekerService = new JobSeekerAccountService();
+    const jobSeekerService = new JobSeekerService();
     const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeeker, job);
     const {authUser} = useAuth();
     const navigate = useNavigate();
@@ -97,11 +98,11 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
                     <div className={"fji-job-container"}>
                         <div className={"fji-job-header-block"}>
                             <div className={"fji-job-title bold-text"}>{job.jobTitle}</div>
-                            <div className={"fji-organization-name"}>{job.employerAccount.organization.name}</div>
+                            <div className={"fji-organization-name"}>{job.employer.organization.name}</div>
                             <div className={"dark-default-text mb25rem"}>{job.location}</div>
                             <div
                                 className={"dark-default-text mb1rem"}
-                            >${thousandsDisplayHelper(job.salary)} {job.salaryRate}</div>
+                            >{formatJobSalaryDisplay(job)}</div>
                             <div className={"header-job-interactions-box"}>
                                 <button
                                     className={"blue-button mr1rem"}

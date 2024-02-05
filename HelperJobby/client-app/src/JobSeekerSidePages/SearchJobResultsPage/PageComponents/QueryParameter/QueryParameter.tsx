@@ -2,7 +2,7 @@ import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from '
 import './QueryParameter.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSortDown, faXmark} from "@fortawesome/free-solid-svg-icons";
-import {JobQueryParams} from "../../../../enums/JobQueryParams";
+import {JobQueryParams} from "../../../../enums/utilityEnums/JobQueryParams";
 
 interface QueryParameterProps {
     queryParam: JobQueryParams;

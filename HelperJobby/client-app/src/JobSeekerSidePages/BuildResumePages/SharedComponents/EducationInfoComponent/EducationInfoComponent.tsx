@@ -8,20 +8,19 @@ import {EducationService} from "../../../../services/educationService";
 import {useNavigate} from "react-router-dom";
 import {ProgressPercentPerPage} from "../ProgressPercentPerPage";
 import {CreateResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import dateToStringConverter from "../../../../utils/convertLogic/dateToStringConverter";
 import {CreateUpdateEducationDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateUpdateEducationDTO";
 import {months} from "../../../../AppConstData/Months";
 import AutocompleteResultsWindow
     from "../../../EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
-import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 import CountrySelector from "../../../EditContactInfoPage/PageComponents/CountrySelector/CountrySelector";
 import TimePeriod from "../TimePeriod/TimePeriod";
 import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
 import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
+import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/AutocompleteWindowTypes";
 
 
 interface AddEducationComponentProps {
@@ -128,9 +127,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
             updatedJobSeeker!.resume = retrievedResume;
             setJobSeeker(updatedJobSeeker);
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err)
         } finally {
             setSavingProcess(false);
         }
@@ -144,9 +141,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
             updatedJobSeeker?.resume!.educations.push(retrievedEducation);
             setJobSeeker(updatedJobSeeker);
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err)
         } finally {
             setSavingProcess(false);
         }
@@ -164,9 +159,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                 setJobSeeker(updatedJobSeeker);
             }
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err)
         } finally {
             setSavingProcess(false);
         }

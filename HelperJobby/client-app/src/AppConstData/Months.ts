@@ -1,4 +1,4 @@
-import {MonthNameAndNumberDTO} from "../DTOs/DateDTO/MonthNameAndNumberDTO";
+import {MonthNameAndNumberDTO} from "../DTOs/dateDTO/MonthNameAndNumberDTO";
 
 export const months: MonthNameAndNumberDTO[] = [
     'January', 'February', 'March', 'April',

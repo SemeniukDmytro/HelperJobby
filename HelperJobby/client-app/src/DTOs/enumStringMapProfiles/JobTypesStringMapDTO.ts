@@ -1,4 +1,5 @@
-import JobTypes from "../../enums/JobTypes";
+import JobTypes from "../../enums/modelDataEnums/JobTypes";
+
 
 export interface JobTypesStringMapDTO {
     enumValue: JobTypes;

@@ -29,5 +29,5 @@ public class Employer
 
     public List<Job> Jobs { get; set; }
 
-    public IncompleteJob IncompleteJob { get; set; }
+    public IncompleteJob? IncompleteJob { get; set; }
 }

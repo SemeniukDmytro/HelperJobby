@@ -1,11 +1,11 @@
-import JobTypes from "../enums/JobTypes";
 import {
     benefitsEnumToStringMap,
     jobTypesEnumToStringMap,
     schedulesEnumToStringMap
 } from "../utils/convertLogic/enumToStringConverter";
-import Schedules from "../enums/Schedules";
-import employeeBenefits from "../enums/EmployeeBenefits";
+import JobTypes from "../enums/modelDataEnums/JobTypes";
+import Schedules from "../enums/modelDataEnums/Schedules";
+import employeeBenefits from "../enums/modelDataEnums/EmployeeBenefits";
 
 export const jobTypesStringValues = Object.keys(JobTypes)
     .filter(key => isNaN(Number(key)))

@@ -1,11 +1,10 @@
 import React, {Dispatch, FC, RefObject, SetStateAction, useEffect, useRef, useState} from 'react';
 import './AutocompleteResultsWindow.scss';
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {LocationAutocompleteService} from "../../../../services/locationAutocompleteService";
-import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes";
 import {mapCountryWithA2Code} from "../../../../utils/convertLogic/countryWithA2CodeMapper";
 import useSelectWindowPosition from "../../../../hooks/useSelectWindowPosition";
+import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/AutocompleteWindowTypes";
 
 interface AutocompleteResultsWindowProps {
     inputFieldRef: RefObject<HTMLInputElement>;
@@ -76,9 +75,7 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
                 }
                 setAutocompleteResults(autoCompleteResults);
             } catch (error) {
-                if (error instanceof ServerError) {
-                    logErrorInfo(error);
-                }
+                logErrorInfo(error)
             } finally {
                 setLoading(false);
             }

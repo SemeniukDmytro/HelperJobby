@@ -1,4 +1,4 @@
-import {CountryWithCurrency} from "../DTOs/LocationDTO/CountryWithCurrency";
+import {CountryWithCurrency} from "../DTOs/locationDTO/CountryWithCurrency";
 
 export const countriesWithCurrencies: CountryWithCurrency[] = [
     { country: 'Afghanistan', currency: 'AFN' },

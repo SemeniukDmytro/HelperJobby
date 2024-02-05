@@ -30,7 +30,7 @@ const WorkExperienceReview: FC<WorkExperienceReviewProps> = ({workExperience}) =
     useEffect(() => {
         const currentPath = window.location.pathname;
         let parentPath = getResumeInfoPageParentPath(currentPath);
-        parentPath = `${parentPath}/experience/${workExperience.workExperienceId}`
+        parentPath = `${parentPath}/experience/${workExperience.id}`
         setEditWorkExperiencePath(parentPath);
     }, []);
 
@@ -53,12 +53,12 @@ const WorkExperienceReview: FC<WorkExperienceReviewProps> = ({workExperience}) =
     async function deleteWorkExperience() {
         try {
             setSavingInfo(true);
-            await workExperienceService.deleteWorkExperience(workExperience.workExperienceId);
+            await workExperienceService.deleteWorkExperience(workExperience.id);
             if (jobSeeker) {
                 const updatedJobSeeker = {...jobSeeker};
                 if (updatedJobSeeker.resume) {
                     updatedJobSeeker.resume.workExperiences = updatedJobSeeker.resume.workExperiences
-                        .filter(we => we.workExperienceId !== workExperience.workExperienceId);
+                        .filter(we => we.id !== workExperience.id);
                     if (updatedJobSeeker.resume.educations.length < 0 && updatedJobSeeker.resume.workExperiences.length < 0
                         && updatedJobSeeker.resume.skills.length < 0) {
                         updatedJobSeeker.resume = null;

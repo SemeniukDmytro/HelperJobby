@@ -1,9 +1,9 @@
-import {JobSeekerAccountDTO} from "../DTOs/accountDTOs/JobSeekerAccountDTO";
+import {JobSeekerDTO} from "../DTOs/accountDTOs/JobSeekerDTO";
 import {Dispatch, SetStateAction} from "react";
 
 export interface JobSeekerContextProps {
-    jobSeeker: JobSeekerAccountDTO | null;
-    setJobSeeker: Dispatch<SetStateAction<JobSeekerAccountDTO | null>>;
+    jobSeeker: JobSeekerDTO | null;
+    setJobSeeker: Dispatch<SetStateAction<JobSeekerDTO | null>>;
     savedJobsWereLoaded: boolean;
     setSavedJobsWereLoaded: Dispatch<SetStateAction<boolean>>;
     jobAppliesWereLoaded: boolean;

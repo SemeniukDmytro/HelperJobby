@@ -1,11 +1,11 @@
 import {Dispatch, SetStateAction, useCallback, useState} from "react";
-import {JobSeekerAccountService} from "../services/jobSeekerAccountService";
+import {JobSeekerService} from "../services/jobSeekerService";
 import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
-import {JobSeekerAccountDTO} from "../DTOs/accountDTOs/JobSeekerAccountDTO";
+import {JobSeekerDTO} from "../DTOs/accountDTOs/JobSeekerDTO";
 
 export const useJobActions = (
-    jobSeekerService: JobSeekerAccountService,
-    setJobSeeker: Dispatch<SetStateAction<JobSeekerAccountDTO | null>>,
+    jobSeekerService: JobSeekerService,
+    setJobSeeker: Dispatch<SetStateAction<JobSeekerDTO | null>>,
     job: JobDTO
 ) => {
     const [requestInProcess, setRequestInProcess] = useState(false);

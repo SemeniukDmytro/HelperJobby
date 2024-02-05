@@ -1,11 +1,11 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './TimePeriod.scss';
 import DateSelector from "../../../../Components/DateSelector/DateSelector";
-import {TimeStamps} from "../../../../enums/TimeStamps";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValidators";
 import {months} from "../../../../AppConstData/Months";
+import {TimeStamps} from "../../../../enums/utilityEnums/TimeStamps";
 
 interface TimePeriodProps {
     fromMonth: string;

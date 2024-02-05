@@ -2,8 +2,8 @@ import React, {FC, ReactNode, useState} from 'react';
 import './UserJobInteractionPagesHeader.scss';
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import {useJobSeekerJobInteractions} from "../../../../hooks/useJobSeekerJobInteractions";
-import {UserJobInteractionsTypes} from "../../../../enums/UserJobInteractionsTypes";
 import {useNavigate} from "react-router-dom";
+import {UserJobInteractionsTypes} from "../../../../enums/utilityEnums/UserJobInteractionsTypes";
 
 interface UserJobInteractionPagesHeaderProps {
     children: ReactNode;

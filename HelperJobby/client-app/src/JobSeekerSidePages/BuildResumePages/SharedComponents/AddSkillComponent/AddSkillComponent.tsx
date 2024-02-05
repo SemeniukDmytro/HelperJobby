@@ -11,7 +11,7 @@ import {useNavigate} from "react-router-dom";
 import {CreateSkillDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateSkillDTO";
 import {ResumeService} from "../../../../services/resumeService";
 import {CreateResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
-import {JobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
+import {JobSeekerDTO} from "../../../../DTOs/accountDTOs/JobSeekerDTO";
 
 interface AddSkillComponentProps {
 }
@@ -64,7 +64,7 @@ const AddSkillComponent: FC<AddSkillComponentProps> = () => {
             updatedResume.skills.push(retrievedSkill);
             setJobSeeker((prev) => {
                 if (prev) {
-                    const updatedJobSeeker: JobSeekerAccountDTO = {
+                    const updatedJobSeeker: JobSeekerDTO = {
                         ...prev,
                         resume: updatedResume
                     }
@@ -91,7 +91,7 @@ const AddSkillComponent: FC<AddSkillComponentProps> = () => {
             const retrievedResume = await resumeService.postResume(createdResume);
             setJobSeeker((prev) => {
                 if (prev) {
-                    const updatedJobSeeker: JobSeekerAccountDTO = {
+                    const updatedJobSeeker: JobSeekerDTO = {
                         ...prev,
                         resume: retrievedResume
                     }

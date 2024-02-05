@@ -34,7 +34,7 @@ const EditWorkExperienceComponent: FC<EditWorkExperienceComponentProps> = () => 
                 return;
             }
             const workExperience = jobSeeker?.resume?.workExperiences
-                .find((we) => we.workExperienceId == Number.parseInt(id))
+                .find((we) => we.id == Number.parseInt(id))
             if (!workExperience) {
                 navigate(parentPagePath)
                 return;

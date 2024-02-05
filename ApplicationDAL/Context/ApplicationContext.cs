@@ -55,10 +55,6 @@ public class ApplicationContext : DbContext
             .IsRequired();
 
         modelBuilder.Entity<JobSeeker>()
-            .HasIndex(jsa => jsa.PhoneNumber)
-            .IsUnique();
-
-        modelBuilder.Entity<JobSeeker>()
             .HasOne(a => a.Address)
             .WithMany()
             .HasForeignKey(jsa => jsa.AddressId);
@@ -83,10 +79,6 @@ public class ApplicationContext : DbContext
             .WithOne(cj => cj.Employer)
             .HasForeignKey<IncompleteJob>(cj => cj.EmployerId)
             .IsRequired();
-
-        modelBuilder.Entity<Organization>()
-            .HasIndex(o => o.PhoneNumber)
-            .IsUnique();
 
         modelBuilder.Entity<Organization>()
             .HasMany(o => o.EmployeeEmails)

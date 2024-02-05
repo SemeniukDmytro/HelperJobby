@@ -1,5 +1,5 @@
 import {Dispatch, MutableRefObject, SetStateAction} from "react";
-import JobTypes from "../enums/JobTypes";
+import JobTypes from "../enums/modelDataEnums/JobTypes";
 
 export interface JobQueryParamsContextProps {
     query: string;

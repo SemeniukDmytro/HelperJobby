@@ -12,7 +12,6 @@ import {SkillService} from "../../../../../services/skillService";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {ResumeService} from "../../../../../services/resumeService";
 import {CreateResumeDTO} from "../../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
-import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
 import {useNavigate} from "react-router-dom";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 
@@ -99,9 +98,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
             updatedJobSeeker!.resume = retrievedResume;
             setJobSeeker(updatedJobSeeker);
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err);
         } finally {
             setSavingProcess(false);
         }

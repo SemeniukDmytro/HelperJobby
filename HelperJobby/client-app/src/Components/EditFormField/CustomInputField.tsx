@@ -46,13 +46,13 @@ const CustomInputField: FC<EditFormFieldProps> = ({
 
     useEffect(() => {
         if (executeValidation && setExecuteValidation) {
-            validateInputValue();
+            validateInputValue(inputFieldValue);
             setExecuteValidation(false);
         }
     }, [executeValidation]);
 
-    function validateInputValue() {
-        if (!inputFieldValue && isRequired && !customErrorMessage) {
+    function validateInputValue(inputValue : string) {
+        if (!inputValue && isRequired && !customErrorMessage) {
             setIsInvalidValue(true);
             setRequiredMessage(`${fieldLabel} is required`);
         } else if (customErrorMessage) {
@@ -64,7 +64,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({
 
     function changeInputFieldValue(e: ChangeEvent<HTMLInputElement>) {
         setIsInvalidValue(false);
-        validateInputValue();
+        validateInputValue(e.target.value);
         if (setCustomErrorMessage) {
             setCustomErrorMessage("");
         }
@@ -98,7 +98,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({
                     value={inputFieldValue}
                     type={"text"}
                     onChange={changeInputFieldValue}
-                    onBlur={validateInputValue}
+                    onBlur={() => validateInputValue(inputFieldValue)}
                     ref={inputRef}
                 />
                 {showEraseJobBtn && <div className={"input-button-box"} onClick={eraseInput}>

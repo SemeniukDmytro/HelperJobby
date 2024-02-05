@@ -4,14 +4,11 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import QueryParameter from "../QueryParameter/QueryParameter";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronLeft, faChevronRight, faXmark} from "@fortawesome/free-solid-svg-icons";
-import {JobQueryParams} from "../../../../enums/JobQueryParams";
 import useQueryParams from "../../../../hooks/useQueryParams";
 import JobSearchBar from "../../../../Components/JobSearchBar/JobSearchBar";
 import {JobTypesMapData} from "../../../../AppConstData/JobTypesMapData";
 import {mostSpokenLanguages} from "../../../../AppConstData/Languages";
-import JobTypes from "../../../../enums/JobTypes";
 import {SearchService} from "../../../../services/searchService";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import ShortJobDescriptionBlock
     from "../../../HomePage/PageComponents/ShortJobDescriptionBlock/ShortJobDescriptionBlock";
@@ -22,6 +19,8 @@ import getJobSearchRequestURI from "../../../../utils/getJobSearchRequestURI";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import HomePageMainContentWrap from "../../../HomePage/PageComponents/HomePageMainContentWrap/HomePageMainContentWrap";
+import JobTypes from "../../../../enums/modelDataEnums/JobTypes";
+import {JobQueryParams} from "../../../../enums/utilityEnums/JobQueryParams";
 
 interface SearchResultsProps {
 }
@@ -99,10 +98,8 @@ const SearchResults: FC<SearchResultsProps> = () => {
                     setSelectedJob(response.jobs[0]);
                 }
                 setHasMoreResults(response.hasMore);
-            } catch (e) {
-                if (e instanceof ServerError) {
-                    logErrorInfo(e);
-                }
+            } catch (err) {
+                logErrorInfo(err)
             } finally {
                 setLoading(false);
             }

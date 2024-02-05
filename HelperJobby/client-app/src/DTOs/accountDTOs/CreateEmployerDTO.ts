@@ -1,4 +1,5 @@
-export interface CreateEmployerAccountDTO {
+
+export interface CreateEmployerDTO {
     email: string;
     fullName: string;
     contactNumber: string;

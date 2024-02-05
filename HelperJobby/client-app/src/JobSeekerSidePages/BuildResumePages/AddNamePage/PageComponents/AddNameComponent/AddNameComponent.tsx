@@ -4,14 +4,13 @@ import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import useResumeBuild from "../../../../../hooks/useResumeBuild";
 import {useNavigate} from "react-router-dom";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
-import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountService";
-import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
+import {JobSeekerService} from "../../../../../services/jobSeekerService";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {useAuth} from "../../../../../hooks/useAuth";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {updateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
-import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
+import {JobSeekerDTO} from "../../../../../DTOs/accountDTOs/JobSeekerDTO";
 
 interface ResumeNameComponentProps {
 }
@@ -22,7 +21,7 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
         setSaveFunc,
         setShowDialogWindow
     } = useResumeBuild();
-    const jobSeekerService = new JobSeekerAccountService();
+    const jobSeekerService = new JobSeekerService();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
     const navigate = useNavigate();
@@ -86,7 +85,7 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
             setJobSeeker((prevState) => {
                 if (prevState) {
 
-                    const updatedJobSeeker: JobSeekerAccountDTO = {
+                    const updatedJobSeeker: JobSeekerDTO = {
                         ...prevState,
                         firstName: response.firstName,
                         lastName: response.lastName,
@@ -97,10 +96,8 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
             })
             navigate(resultPageURI);
 
-        } catch (e) {
-            if (e instanceof ServerError) {
-                logErrorInfo(e)
-            }
+        } catch (error) {
+            logErrorInfo(error)
         } finally {
             setSavingInfo(false);
         }

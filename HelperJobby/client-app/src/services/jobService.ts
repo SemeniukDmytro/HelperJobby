@@ -22,8 +22,8 @@ export class JobService {
         return await this.customFetchService.get<JobDTO>(`${this.baseURI}/${jobId}`);
     }
 
-    public async createJob(jobCreationId: number): Promise<JobDTO> {
-        return await this.customFetchService.post<JobDTO>(`${this.baseURI}/${jobCreationId}`, {});
+    public async createJob(incompleteJobId: number): Promise<JobDTO> {
+        return await this.customFetchService.post<JobDTO>(`${this.baseURI}/${incompleteJobId}`, {});
     }
 
     public async putJob(jobId: number, updatedJob: UpdatedJobDTO): Promise<JobDTO> {

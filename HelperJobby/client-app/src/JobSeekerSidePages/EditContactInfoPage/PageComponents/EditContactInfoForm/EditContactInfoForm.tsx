@@ -3,21 +3,20 @@ import "./EditContactInfoForm.scss";
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import {useAuth} from "../../../../hooks/useAuth";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
-import {JobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
-import {UpdateJobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/UpdateJobSeekerAccountDTO";
+import {JobSeekerService} from "../../../../services/jobSeekerService";
+import {JobSeekerDTO} from "../../../../DTOs/accountDTOs/JobSeekerDTO";
+import {UpdateJobSeekerDTO} from "../../../../DTOs/accountDTOs/UpdateJobSeekerDTO";
 import CountrySelector from "../CountrySelector/CountrySelector";
 import EditEmail from "../EditEmail/EditEmail";
 import {useLocation, useNavigate} from "react-router-dom";
 import AutocompleteResultsWindow from "../AutocompleteResultsWindow/AutocompleteResultsWindow";
-import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 import NavigateBackHeader from "../../../../Components/NavigateBackHeader/NavigateBackHeader";
 import {validatePhoneNumber} from "../../../../utils/validationLogic/authFormValidators";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
+import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/AutocompleteWindowTypes";
 
 interface EditContactInfoFormProps {
 }
@@ -49,7 +48,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     const [showStreetsAutocomplete, setShowStreetsAutocomplete] = useState(false);
     const [showCityAutoComplete, setShowCityAutoComplete] = useState(false);
 
-    const jobSeekerService = new JobSeekerAccountService;
+    const jobSeekerService = new JobSeekerService;
 
     let newJobSeekerInstanceWasLoaded = false;
 
@@ -78,7 +77,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     }
 
 
-    function setJobSeekerValues(jobSeeker: JobSeekerAccountDTO) {
+    function setJobSeekerValues(jobSeeker: JobSeekerDTO) {
         setFirstName(jobSeeker.firstName);
         setLastName(jobSeeker.lastName);
         setPhoneNumber(jobSeeker.phoneNumber);
@@ -117,7 +116,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
             return;
         }
         
-        const updateJobSeekerInfo: UpdateJobSeekerAccountDTO = {
+        const updateJobSeekerInfo: UpdateJobSeekerDTO = {
             firstName: firstName,
             lastName: lastName,
             phoneNumber: phoneNumber,
@@ -134,7 +133,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
             setJobSeeker((prevState) => {
                 if (prevState) {
 
-                    const updatedJobSeeker: JobSeekerAccountDTO = {
+                    const updatedJobSeeker: JobSeekerDTO = {
                         ...prevState,
                         firstName: response.firstName,
                         lastName: response.lastName,
@@ -148,9 +147,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
 
 
         } catch (error) {
-            if (error instanceof ServerError) {
-                logErrorInfo(error)
-            }
+            logErrorInfo(error)
         } finally {
             navigateToNextPage();
         }

@@ -1,4 +1,5 @@
-import {ServerError} from "../ErrorDTOs/ServerErrorDTO";
+import {ServerError} from "../DTOs/errorDTOs/ServerErrorDTO";
+
 
 export function logErrorInfo(error: unknown) {
     if (error instanceof ServerError) {

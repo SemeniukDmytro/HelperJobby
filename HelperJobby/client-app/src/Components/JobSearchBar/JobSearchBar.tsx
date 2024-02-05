@@ -6,7 +6,7 @@ import GoogleImage from "../../Assets/pictures/google_on_white_hdpi.png";
 import {useNavigate} from "react-router-dom";
 import {LocationAutocompleteService} from "../../services/locationAutocompleteService";
 import {useJobSeeker} from "../../hooks/useJobSeeker";
-import {ServerError} from "../../ErrorDTOs/ServerErrorDTO";
+
 import {logErrorInfo} from "../../utils/logErrorInfo";
 import useJobQueryParams from "../../hooks/useQueryParams";
 
@@ -110,9 +110,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
                     setShowAutoComplete(false);
                 }
             } catch (error) {
-                if (error instanceof ServerError) {
-                    logErrorInfo(error);
-                }
+                logErrorInfo(error)
             } finally {
                 setLoading(false);
             }

@@ -6,7 +6,7 @@ import {UserService} from "../../../../../services/userService";
 import {useNavigate} from "react-router-dom";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {CreateUpdateUserDTO} from "../../../../../DTOs/userRelatedDTOs/CreateUpdateUserDTO";
-import {ChangedInfoTypes} from "../../../../../enums/ChangedInfoTypes";
+import {ChangedInfoTypes} from "../../../../../enums/utilityEnums/ChangedInfoTypes";
 
 interface ChangeAccountTypeComponentProps {
 }

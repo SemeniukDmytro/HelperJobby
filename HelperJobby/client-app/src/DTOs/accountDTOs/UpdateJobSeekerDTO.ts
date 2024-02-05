@@ -1,6 +1,6 @@
 import {UpdateAddressDTO} from "../addressDTOs/UpdateAddressDTO";
 
-export interface UpdateJobSeekerAccountDTO {
+export interface UpdateJobSeekerDTO {
     firstName: string;
     lastName: string;
     phoneNumber: string;

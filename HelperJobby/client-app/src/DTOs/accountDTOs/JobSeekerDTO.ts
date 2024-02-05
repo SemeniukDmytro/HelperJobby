@@ -5,7 +5,7 @@ import {SavedJobDTO} from "../userJobInteractionsDTOs/SavedJobDTO";
 import {InterviewDTO} from "../userJobInteractionsDTOs/InterviewDTO";
 import {UserDTO} from "../userRelatedDTOs/UserDTO";
 
-export interface JobSeekerAccountDTO {
+export interface JobSeekerDTO {
     id: number;
     firstName: string;
     lastName: string;

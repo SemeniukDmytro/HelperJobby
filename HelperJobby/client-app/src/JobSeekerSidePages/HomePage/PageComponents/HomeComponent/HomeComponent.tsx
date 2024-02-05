@@ -3,12 +3,12 @@ import "./HomeComponent.scss";
 import JobSearchPromoContainer from "../JobSearchPromoContainer/JobSearchPromoContainer";
 import RecommendedJobs from "../RecommendedJobs/RecommendedJobs";
 import RecentSearches from "../RecentSearches/RecentSearches";
-import {SelectedTabs} from "../../../../enums/SelectedTabs";
 import HomePageMainContentWrap from "../HomePageMainContentWrap/HomePageMainContentWrap";
 import JobSearchBar from "../../../../Components/JobSearchBar/JobSearchBar";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
-import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
+import {JobSeekerService} from "../../../../services/jobSeekerService";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
+import {SelectedTabs} from "../../../../enums/utilityEnums/SelectedTabs";
 
 
 interface HomeComponentProps {
@@ -19,7 +19,7 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     const {fetchJobSeekerJobInteractions} = useJobSeeker();
     const [loading, setLoading] = useState(true);
 
-    const jobSeekerService = new JobSeekerAccountService();
+    const jobSeekerService = new JobSeekerService();
 
     useEffect(() => {
         fetchData()

@@ -50,11 +50,11 @@ public class IncompleteJobController : ExtendedBaseController
     }
 
     // PUT: api/CurrentJob/5
-    [HttpPut("{currentJobId}")]
-    public async Task<IncompleteJobDTO> Put(int currentJobId, [FromBody] IncompleteJobCreateDTO incompleteJobCreationDto)
+    [HttpPut("{incompleteJobId}")]
+    public async Task<IncompleteJobDTO> Put(int incompleteJobId, [FromBody] IncompleteJobCreateDTO incompleteJobCreationDto)
     {
         var incompleteJob =
-            await _incompleteJobService.UpdateIncompleteJob(currentJobId,
+            await _incompleteJobService.UpdateIncompleteJob(incompleteJobId,
                 _mapper.Map<IncompleteJob>(incompleteJobCreationDto));
         var incompleteJobDTO =
             _mapper.Map<IncompleteJobDTO>(
@@ -63,10 +63,10 @@ public class IncompleteJobController : ExtendedBaseController
     }
 
     // DELETE: api/CurrentJob/5
-    [HttpDelete("{jobId}")]
-    public async Task Delete(int jobId)
+    [HttpDelete("{incompleteJobId}")]
+    public async Task Delete(int incompleteJobId)
     {
-        var jobCreation = await _incompleteJobService.DeleteIncompleteJob(jobId);
+        var jobCreation = await _incompleteJobService.DeleteIncompleteJob(incompleteJobId);
         await _incompleteJobCommandRepository.DeleteIncompleteJob(jobCreation);
     }
 }

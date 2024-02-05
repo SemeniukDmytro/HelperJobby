@@ -6,8 +6,8 @@ import CustomPasswordInputField from "../../../../../Components/CustomPasswordIn
 import {UserService} from "../../../../../services/userService";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {UpdateUserWIthCurrentPasswordDTO} from "../../../../../DTOs/userRelatedDTOs/UpdateUserWIthCurrentPasswordDTO";
-import {ChangedInfoTypes} from "../../../../../enums/ChangedInfoTypes";
 import {useNavigate} from "react-router-dom";
+import {ChangedInfoTypes} from "../../../../../enums/utilityEnums/ChangedInfoTypes";
 
 interface ChangePasswordComponentProps {
 }

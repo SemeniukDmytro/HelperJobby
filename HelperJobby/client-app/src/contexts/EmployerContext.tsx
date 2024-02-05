@@ -1,7 +1,7 @@
 import {createContext, ReactNode, useState} from "react";
 import {EmployerContextProps} from "../contextTypes/EmployerContextProps";
-import {EmployerAccountDTO} from "../DTOs/accountDTOs/EmployerAccountDTO";
-import {EmployerAccountService} from "../services/employerAccountService";
+import {EmployerDTO} from "../DTOs/accountDTOs/EmployerDTO";
+import {EmployerService} from "../services/employerService";
 import {useAuth} from "../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 
@@ -14,8 +14,8 @@ const EmployerContext = createContext<EmployerContextProps>({
 });
 
 export function EmployerProvider({children}: { children: ReactNode }) {
-    const [employer, setEmployer] = useState<EmployerAccountDTO | null>(null);
-    const employerService = new EmployerAccountService();
+    const [employer, setEmployer] = useState<EmployerDTO | null>(null);
+    const employerService = new EmployerService();
     const {authUser} = useAuth();
     const navigate = useNavigate();
     const fetchEmployer = async () => {

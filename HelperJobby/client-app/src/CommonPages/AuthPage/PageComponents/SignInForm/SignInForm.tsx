@@ -10,13 +10,13 @@ import {useAuth} from "../../../../hooks/useAuth";
 import AuthService from "../../../../services/authService";
 import {LoginUserDTO} from "../../../../DTOs/userRelatedDTOs/LoginUserDTO";
 import {setAuthToken} from "../../../../utils/authTokenInteraction";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
 import {
     IsValidPasswordMaximalLength,
     IsValidPasswordMinimalLength
 } from "../../../../utils/validationLogic/authFormValidators";
 import CustomPasswordInputField from "../../../../Components/CustomPasswordInputField/CustomPasswordInputField";
+import {ServerError} from "../../../../DTOs/errorDTOs/ServerErrorDTO";
 
 interface SignInFormProps {
 }

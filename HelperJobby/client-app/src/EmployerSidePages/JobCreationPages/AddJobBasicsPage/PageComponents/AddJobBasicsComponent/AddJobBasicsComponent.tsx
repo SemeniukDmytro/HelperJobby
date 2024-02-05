@@ -7,16 +7,16 @@ import CustomInputField from "../../../../../Components/EditFormField/CustomInpu
 import CustomSelectField from "../../../../../Components/CustomSelectField/CustomSelectField";
 import {numberOfOpeningsOptions} from "../../../../../AppConstData/NumberOfOpeningsOptions";
 import JobLocationTypeSelector from "../JobLocationTypeSelector/JobLocationTypeSelector";
-import {JobLocationTypes} from "../../../../../enums/JobLocationTypes";
 import AutocompleteResultsWindow
     from "../../../../../JobSeekerSidePages/EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
-import {AutocompleteWindowTypes} from "../../../../../enums/AutocompleteWindowTypes";
 import LocationCustomInputField from "../../../../../Components/LocationCustomInputField/LocationCustomInputField";
 import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import JobBasics from "../../../../../Components/Icons/JobBasics";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
+import {JobLocationTypes} from "../../../../../enums/utilityEnums/JobLocationTypes";
+import {AutocompleteWindowTypes} from "../../../../../enums/utilityEnums/AutocompleteWindowTypes";
 
 
 interface AddJobBasicsComponentProps {

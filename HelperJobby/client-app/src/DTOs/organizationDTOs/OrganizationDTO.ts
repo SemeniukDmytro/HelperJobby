@@ -1,4 +1,4 @@
-import {EmployerAccountDTO} from "../accountDTOs/EmployerAccountDTO";
+import {EmployerDTO} from "../accountDTOs/EmployerDTO";
 import {CreateOrganizationEmployeeEmailDTO} from "./CreateOrganizationEmployeeEmailDTO";
 
 export interface OrganizationDTO {
@@ -7,6 +7,6 @@ export interface OrganizationDTO {
     phoneNumber: string;
     numberOfEmployees: number | null;
     organizationOwnerId: number;
-    employeeAccounts: EmployerAccountDTO[];
+    employeeAccounts: EmployerDTO[];
     employeeEmails: CreateOrganizationEmployeeEmailDTO[];
 }

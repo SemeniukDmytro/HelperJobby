@@ -5,21 +5,21 @@ import CustomSelectField from "../../../../Components/CustomSelectField/CustomSe
 import {numberOfEmployees} from "../../../../AppConstData/NumberOfEmployees";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong} from "@fortawesome/free-solid-svg-icons";
-import {EmployerAccountService} from "../../../../services/employerAccountService";
+import {EmployerService} from "../../../../services/employerService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
-import {CreateEmployerAccountDTO} from "../../../../DTOs/accountDTOs/CreateEmployerAccountDTO";
+import {CreateEmployerDTO} from "../../../../DTOs/accountDTOs/CreateEmployerDTO";
 import {useEmployer} from "../../../../hooks/useEmployer";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
 import {IsValidEmail, validatePhoneNumber} from "../../../../utils/validationLogic/authFormValidators";
-import {UpdateEmployerAccountDTO} from "../../../../DTOs/accountDTOs/UpdateEmployerAccountDTO";
-import {EmployerAccountDTO} from "../../../../DTOs/accountDTOs/EmployerAccountDTO";
+import {UpdateEmployerDTO} from "../../../../DTOs/accountDTOs/UpdateEmployerDTO";
+import {EmployerDTO} from "../../../../DTOs/accountDTOs/EmployerDTO";
 import {useAuth} from "../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import Company from "../../../../Components/Icons/Company";
 import PageTitleWithImage from "../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
+import {ServerError} from "../../../../DTOs/errorDTOs/ServerErrorDTO";
 
 interface EmployerSetupComponentProps {
 }
@@ -42,7 +42,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
     const [requestError, setRequestError] = useState("");
     const [showPopupWindow, setShowPopupWindow] = useState(false);
     
-    const employerService = new EmployerAccountService();
+    const employerService = new EmployerService();
     const {authUser} = useAuth();
     const navigate = useNavigate();
 
@@ -81,10 +81,10 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
         try {
             setRequestInProgress(true);
 
-            let retrievedEmployer : EmployerAccountDTO;
+            let retrievedEmployer : EmployerDTO;
             
             if (employer){
-                const updateEmployerDTO : UpdateEmployerAccountDTO = {
+                const updateEmployerDTO : UpdateEmployerDTO = {
                     email : employerEmail,
                     contactNumber : contactPhone
                 }
@@ -98,7 +98,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                 })
             }
             else {
-                const createEmployerDTO : CreateEmployerAccountDTO = {
+                const createEmployerDTO : CreateEmployerDTO = {
                     organizationName : companyName,
                     fullName : employerCredentials,
                     email : employerEmail,

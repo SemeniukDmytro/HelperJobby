@@ -1,5 +1,6 @@
-import {JobTypesStringMapDTO} from "../DTOs/EnumStringMapProfiles/JobTypesStringMapDTO";
-import JobTypes from "../enums/JobTypes";
+import JobTypes from "../enums/modelDataEnums/JobTypes";
+import {JobTypesStringMapDTO} from "../DTOs/enumStringMapProfiles/JobTypesStringMapDTO";
+
 
 export const JobTypesMapData: JobTypesStringMapDTO[] = [
     {enumValue: JobTypes.FullTime, stringValue: 'Full-time'},

@@ -1,11 +1,11 @@
-import {JobSeekerAccountDTO} from "../accountDTOs/JobSeekerAccountDTO";
-import {EmployerAccountDTO} from "../accountDTOs/EmployerAccountDTO";
+import {JobSeekerDTO} from "../accountDTOs/JobSeekerDTO";
+import {EmployerDTO} from "../accountDTOs/EmployerDTO";
 
 export interface UserDTO {
     id: number;
     email: string;
     password: string;
     accountType: string;
-    jobSeekerAccount: JobSeekerAccountDTO;
-    employerAccount: EmployerAccountDTO;
+    jobSeekerAccount: JobSeekerDTO;
+    employerAccount: EmployerDTO;
 }

@@ -12,6 +12,7 @@ import {
 } from "../../utils/convertLogic/enumToStringConverter";
 import JobDetailsFeatureBox
     from "../../JobSeekerSidePages/HomePage/PageComponents/JobDetailsFeatureBox/JobDetailsFeatureBox";
+import {formatJobSalaryDisplay} from "../../utils/convertLogic/formatJobSalaryDisplay";
 
 interface DetailedJobInfoProps {
     job: JobDTO
@@ -61,7 +62,7 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                         </div>
                         <div className={"detailed-job-features"}>
                             <JobDetailsFeatureBox
-                                featureText={`$${thousandsDisplayHelper(job.salary)} ${job.salaryRate}`}
+                                featureText={formatJobSalaryDisplay(job)}
                             />
                         </div>
                     </div>

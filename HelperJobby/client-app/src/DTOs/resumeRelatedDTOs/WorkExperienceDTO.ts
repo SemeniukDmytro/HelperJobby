@@ -1,7 +1,7 @@
 import {ResumeDTO} from "./ResumeDTO";
 
 export interface WorkExperienceDTO {
-    workExperienceId: number;
+    id: number;
     jobTitle: string;
     company?: string;
     country?: string;

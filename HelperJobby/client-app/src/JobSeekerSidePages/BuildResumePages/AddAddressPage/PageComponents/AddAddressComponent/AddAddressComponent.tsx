@@ -3,20 +3,20 @@ import './AddAddressComponent.scss';
 import useResumeBuild from "../../../../../hooks/useResumeBuild";
 import {useAuth} from "../../../../../hooks/useAuth";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
-import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountService";
+import {JobSeekerService} from "../../../../../services/jobSeekerService";
 import CountrySelector from "../../../../EditContactInfoPage/PageComponents/CountrySelector/CountrySelector";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
 import AutocompleteResultsWindow
     from "../../../../EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
-import {AutocompleteWindowTypes} from "../../../../../enums/AutocompleteWindowTypes";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {updateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {useNavigate} from "react-router-dom";
 import {UpdateAddressDTO} from "../../../../../DTOs/addressDTOs/UpdateAddressDTO";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
-import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
+import {JobSeekerDTO} from "../../../../../DTOs/accountDTOs/JobSeekerDTO";
 import LocationCustomInputField from "../../../../../Components/LocationCustomInputField/LocationCustomInputField";
+import {AutocompleteWindowTypes} from "../../../../../enums/utilityEnums/AutocompleteWindowTypes";
 
 interface ResumeAddressComponentProps {
 }
@@ -28,7 +28,7 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
     } = useResumeBuild();
     const {authUser} = useAuth();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
-    const jobSeekerService = new JobSeekerAccountService();
+    const jobSeekerService = new JobSeekerService();
     const navigate = useNavigate();
 
     const [savingInfo, setSavingInfo] = useState(false);
@@ -95,7 +95,7 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
             setJobSeeker((prevState) => {
                 if (prevState) {
 
-                    const updatedJobSeeker: JobSeekerAccountDTO = {
+                    const updatedJobSeeker: JobSeekerDTO = {
                         ...prevState,
                         address: response.address
                     }

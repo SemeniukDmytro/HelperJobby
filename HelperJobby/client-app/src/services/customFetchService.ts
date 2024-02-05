@@ -1,5 +1,5 @@
 import {addAuthHeader} from "../utils/addAuthHeader";
-import {ServerError} from "../ErrorDTOs/ServerErrorDTO";
+import {ServerError} from "../DTOs/errorDTOs/ServerErrorDTO";
 
 export const DEFAULT_HEADERS: { [key: string]: string } = {
     "Accept": "application/json",

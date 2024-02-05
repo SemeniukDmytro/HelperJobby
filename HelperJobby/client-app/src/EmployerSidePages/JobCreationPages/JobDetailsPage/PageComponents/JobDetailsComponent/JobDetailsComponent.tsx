@@ -2,12 +2,10 @@ import React, {FC, FormEvent, useRef, useState} from 'react';
 import './JobDetailsComponent.scss';
 import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import WomanWorking from "../../../../../Components/Icons/WomanWorking";
-import JobTypes from "../../../../../enums/JobTypes";
 import {
     jobTypeStringToEnumMap, scheduleStringToEnumMap
 } from "../../../../../utils/convertLogic/enumToStringConverter";
 import JobFeature from "../../../../../EmployersSideComponents/JobFeature/JobFeature";
-import Schedules from "../../../../../enums/Schedules";
 import {jobTypesStringValues, schedulesStringValues} from "../../../../../AppConstData/JobEnumsToStringsArrays";
 import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -15,6 +13,8 @@ import JobCreateNavigationButtons
     from "../../../SharedComponents/JobCreateNavigationButtons/JobCreateNavigationButtons";
 import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
+import JobTypes from "../../../../../enums/modelDataEnums/JobTypes";
+import Schedules from "../../../../../enums/modelDataEnums/Schedules";
 
 interface JobDetailsComponentProps {
 }

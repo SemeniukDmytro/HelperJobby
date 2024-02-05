@@ -1,4 +1,4 @@
-import {CountryWithA2Code} from "../DTOs/LocationDTO/CountryWithA2Code";
+import {CountryWithA2Code} from "../DTOs/locationDTO/CountryWithA2Code";
 
 export const countries: CountryWithA2Code[] = [
     {name: 'Afghanistan', code: 'AF'},

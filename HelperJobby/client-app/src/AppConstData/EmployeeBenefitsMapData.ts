@@ -1,5 +1,6 @@
-import {BenefitsStringMapDTO} from "../DTOs/EnumStringMapProfiles/BenefitsStringMapDTO";
-import EmployeeBenefits from "../enums/EmployeeBenefits";
+import EmployeeBenefits from "../enums/modelDataEnums/EmployeeBenefits";
+import {BenefitsStringMapDTO} from "../DTOs/enumStringMapProfiles/BenefitsStringMapDTO";
+
 
 export const EmployeeBenefitsMapData: BenefitsStringMapDTO[] = [
     {enumValue: EmployeeBenefits.DentalCare, stringValue: 'Dental care'},

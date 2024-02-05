@@ -1,6 +1,6 @@
 import {createContext, MutableRefObject, ReactNode, useState} from "react";
 import {JobQueryParamsContextProps} from "../contextTypes/JobQueryParamsContextProps";
-import JobTypes from "../enums/JobTypes";
+import JobTypes from "../enums/modelDataEnums/JobTypes";
 
 export const JobQueryParamsContext = createContext<JobQueryParamsContextProps>({
     query: "",

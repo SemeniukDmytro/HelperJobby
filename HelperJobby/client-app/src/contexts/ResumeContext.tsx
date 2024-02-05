@@ -2,7 +2,6 @@ import {createContext, ReactNode, useEffect, useState} from "react";
 import {ResumeBuildContextProps} from "../contextTypes/ResumeBuildContextProps";
 import {useJobSeeker} from "../hooks/useJobSeeker";
 import {ResumeService} from "../services/resumeService";
-import {ServerError} from "../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../utils/logErrorInfo";
 import LoadingPage from "../Components/LoadingPage/LoadingPage";
 import PageWrapWithHeader from "../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
@@ -55,9 +54,7 @@ export function ResumeContextProvider({children}: { children: ReactNode }) {
             updatedJobSeeker.resume = retrievedResume;
             setJobSeeker(updatedJobSeeker);
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err);
-            }
+            logErrorInfo(err);
         } finally {
             setLoading(false);
         }

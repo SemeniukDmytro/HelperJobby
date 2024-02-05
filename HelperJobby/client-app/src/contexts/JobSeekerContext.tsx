@@ -1,9 +1,8 @@
 import {createContext, ReactNode, useState} from "react";
 import {JobSeekerContextProps} from "../contextTypes/JobSeekerContextProps";
-import {JobSeekerAccountDTO} from "../DTOs/accountDTOs/JobSeekerAccountDTO";
-import {ServerError} from "../ErrorDTOs/ServerErrorDTO";
+import {JobSeekerDTO} from "../DTOs/accountDTOs/JobSeekerDTO";
 import {logErrorInfo} from "../utils/logErrorInfo";
-import {JobSeekerAccountService} from "../services/jobSeekerAccountService";
+import {JobSeekerService} from "../services/jobSeekerService";
 import {useAuth} from "../hooks/useAuth";
 import {JobApplyService} from "../services/jobApplyService";
 import {ResumeDTO} from "../DTOs/resumeRelatedDTOs/ResumeDTO";
@@ -29,12 +28,12 @@ const JobSeekerContext = createContext<JobSeekerContextProps>({
 });
 
 export function JobSeekerProvider({children}: { children: ReactNode }) {
-    const [jobSeeker, setJobSeeker] = useState<JobSeekerAccountDTO | null>(null);
+    const [jobSeeker, setJobSeeker] = useState<JobSeekerDTO | null>(null);
     const {authUser} = useAuth();
     const [savedJobsWereLoaded, setSavedJobsWereLoaded] = useState(false);
     const [jobAppliesWereLoaded, setJobAppliesWereLoaded] = useState(false);
     const [jobSeekerWasLoaded, setJobSeekerWasLoaded] = useState(false);
-    const jobSeekerService = new JobSeekerAccountService();
+    const jobSeekerService = new JobSeekerService();
     const jobApplyService = new JobApplyService();
     const fetchJobSeeker = async () => {
         try {
@@ -61,9 +60,7 @@ export function JobSeekerProvider({children}: { children: ReactNode }) {
             setJobSeekerWasLoaded(true);
 
         } catch (error) {
-            if (error instanceof ServerError) {
-                logErrorInfo(error);
-            }
+            logErrorInfo(error);
         }
     }
 

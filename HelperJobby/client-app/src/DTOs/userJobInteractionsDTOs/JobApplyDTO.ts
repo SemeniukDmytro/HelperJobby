@@ -1,10 +1,10 @@
-import {JobSeekerAccountDTO} from "../accountDTOs/JobSeekerAccountDTO";
+import {JobSeekerDTO} from "../accountDTOs/JobSeekerDTO";
 import {JobDTO} from "../jobRelatetedDTOs/JobDTO";
 
 export interface JobApplyDTO {
     jobId: number;
-    jobSeekerAccountId: number;
+    jobSeekerId: number;
     job: JobDTO;
-    jobSeekerAccount: JobSeekerAccountDTO;
+    jobSeeker: JobSeekerDTO;
     dateApplied: Date;
 }

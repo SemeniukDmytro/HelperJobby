@@ -104,7 +104,7 @@ const InterviewComponent: FC<InterviewComponentProps> = ({interview}) => {
                                 <span className={"ji-job-title"}>{interview.job.jobTitle}</span>
                                 <span
                                     className={"dark-default-text"}
-                                >{interview.job.employerAccount.organization.name}</span>
+                                >{interview.job.employer.organization.name}</span>
                                 <span className={"dark-default-text"}>{interview.job.location}</span>
                                 <div>
                                     <span className={"dark-default-text"}>Interview format:&nbsp;</span>

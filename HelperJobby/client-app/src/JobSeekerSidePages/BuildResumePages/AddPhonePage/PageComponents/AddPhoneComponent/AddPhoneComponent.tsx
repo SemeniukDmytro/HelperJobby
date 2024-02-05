@@ -5,14 +5,12 @@ import CustomInputField from "../../../../../Components/EditFormField/CustomInpu
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {updateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
-import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
-import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountService";
+import {JobSeekerService} from "../../../../../services/jobSeekerService";
 import {useAuth} from "../../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
-import {JobSeekerAccountDTO} from "../../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
-import NotifyPopupWindow from "../../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
+import {JobSeekerDTO} from "../../../../../DTOs/accountDTOs/JobSeekerDTO";
 import {validatePhoneNumber} from "../../../../../utils/validationLogic/authFormValidators";
 
 interface ResumePhoneComponentProps {
@@ -21,7 +19,7 @@ interface ResumePhoneComponentProps {
 const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
     const [savingInfo, setSavingInfo] = useState(false);
     const {setProgressPercentage, setSaveFunc} = useResumeBuild();
-    const jobSeekerService = new JobSeekerAccountService();
+    const jobSeekerService = new JobSeekerService();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
     const navigate = useNavigate();
@@ -64,7 +62,7 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
             setJobSeeker((prevState) => {
                 if (prevState) {
 
-                    const updatedJobSeeker: JobSeekerAccountDTO = {
+                    const updatedJobSeeker: JobSeekerDTO = {
                         ...prevState,
                         phoneNumber: response.phoneNumber
                     }
@@ -74,8 +72,8 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
             })
             navigate(resultPageURI);
 
-        } catch (e) {
-            logErrorInfo(e)
+        } catch (error) {
+            logErrorInfo(error)
         } 
         finally {
             setSavingInfo(false);

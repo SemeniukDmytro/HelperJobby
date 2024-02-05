@@ -3,7 +3,7 @@ import {JobSeekerJobInteractionsContextProps} from "../contextTypes/JobSeekerJob
 import {SavedJobDTO} from "../DTOs/userJobInteractionsDTOs/SavedJobDTO";
 import {JobApplyDTO} from "../DTOs/userJobInteractionsDTOs/JobApplyDTO";
 import {InterviewDTO} from "../DTOs/userJobInteractionsDTOs/InterviewDTO";
-import {JobSeekerAccountService} from "../services/jobSeekerAccountService";
+import {JobSeekerService} from "../services/jobSeekerService";
 import {JobApplyService} from "../services/jobApplyService";
 import {InterviewService} from "../services/interviewService";
 import {logErrorInfo} from "../utils/logErrorInfo";
@@ -29,7 +29,7 @@ export function JobSeekerJobInteractionsProvider({children}: { children: ReactNo
     const [jobApplies, setJobApplies] = useState<JobApplyDTO[] | null>(null);
     const [interviews, setInterviews] = useState<InterviewDTO[] | null>(null);
     const {setJobSeeker, setJobAppliesWereLoaded, setSavedJobsWereLoaded} = useJobSeeker();
-    const jobSeekerService = new JobSeekerAccountService();
+    const jobSeekerService = new JobSeekerService();
     const jobAppliesService = new JobApplyService();
     const interviewsService = new InterviewService();
     const [requestInProgress, setRequestInProgress] = useState(true);

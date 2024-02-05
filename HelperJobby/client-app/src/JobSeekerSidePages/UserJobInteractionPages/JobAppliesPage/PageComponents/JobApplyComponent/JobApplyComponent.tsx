@@ -9,7 +9,7 @@ import UserJobInteractionShortJobInfo
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
 import {JobApplyService} from "../../../../../services/jobApplyService";
-import {UserJobInteractionsTypes} from "../../../../../enums/UserJobInteractionsTypes";
+import {UserJobInteractionsTypes} from "../../../../../enums/utilityEnums/UserJobInteractionsTypes";
 
 interface JobApplyComponentProps {
     job: JobDTO;

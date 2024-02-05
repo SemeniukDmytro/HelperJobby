@@ -2,7 +2,7 @@ import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from '
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import "./JobDescriptionHeader.scss";
 import {faBookmark} from "@fortawesome/free-solid-svg-icons";
-import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
+import {JobSeekerService} from "../../../../services/jobSeekerService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
@@ -11,6 +11,7 @@ import {useNavigate} from "react-router-dom";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {useJobActions} from "../../../../hooks/useJobActions";
 import {JobActionFunction, ShowRemoveFromSavedSetter} from "../../../../hooks/customHooksTypes/UseJobActionsHookTypes";
+import {formatJobSalaryDisplay} from "../../../../utils/convertLogic/formatJobSalaryDisplay";
 
 interface JobDescriptionHeaderProps {
     selectedJob: JobDTO | null;
@@ -35,7 +36,7 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({
 
     const moreActionsButtonRef = useRef<HTMLButtonElement | null>(null);
 
-    const jobSeekerService = new JobSeekerAccountService();
+    const jobSeekerService = new JobSeekerService();
     const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeeker, selectedJob!);
 
     useEffect(() => {
@@ -97,21 +98,21 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({
             <div className={"full-header-info"} style={{gridTemplateRows: `${isFullHeaderGridTemplate}fr`}}>
                 <div className={"inner-content-wrapper"}>
                     <a className={"header-company-name"}>
-                        <span>{selectedJob?.employerAccount.organization.name}</span>
+                        <span>{selectedJob?.employer.organization.name}</span>
                     </a>
                     <div className={"header-job-location"}>
                         <span>{selectedJob?.location}</span>
                     </div>
                     <div className={"header-job-salary"}>
-                        <span>${thousandsDisplayHelper(selectedJob!.salary)} {selectedJob?.salaryRate}</span>
+                        <span>{formatJobSalaryDisplay(selectedJob!)}</span>
                     </div>
                 </div>
             </div>
             <div className={"short-header-info"} style={{gridTemplateRows: `${isShortHeaderGridTemplate}fr`}}>
                 <div className={"inner-content-wrapper"}>
-                    <a className={"short-company-name"}>{selectedJob?.employerAccount.organization.name}</a>
+                    <a className={"short-company-name"}>{selectedJob?.employer.organization.name}</a>
                     <span>&nbsp; | {selectedJob?.location}</span>
-                    <span>&nbsp; | ${thousandsDisplayHelper(selectedJob!.salary)} {selectedJob?.salaryRate}</span>
+                    <span>&nbsp; | {formatJobSalaryDisplay(selectedJob!)}</span>
                 </div>
             </div>
             <div className={"header-job-interactions-box"}>

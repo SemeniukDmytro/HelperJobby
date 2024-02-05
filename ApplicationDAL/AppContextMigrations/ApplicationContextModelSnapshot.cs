@@ -510,9 +510,6 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.HasIndex("PhoneNumber")
-                        .IsUnique();
-
                     b.HasIndex("UserId")
                         .IsUnique();
 
@@ -996,8 +993,7 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDomain.Models.Employer", b =>
                 {
-                    b.Navigation("IncompleteJob")
-                        .IsRequired();
+                    b.Navigation("IncompleteJob");
 
                     b.Navigation("Jobs");
                 });

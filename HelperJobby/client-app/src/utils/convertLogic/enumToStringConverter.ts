@@ -1,9 +1,9 @@
-import JobTypes from "../../enums/JobTypes";
 import {JobTypesMapData} from "../../AppConstData/JobTypesMapData";
-import Schedules from "../../enums/Schedules";
 import {SchedulesMapData} from "../../AppConstData/SchedulesMapData";
-import EmployeeBenefits from "../../enums/EmployeeBenefits";
 import {EmployeeBenefitsMapData} from "../../AppConstData/EmployeeBenefitsMapData";
+import JobTypes from "../../enums/modelDataEnums/JobTypes";
+import Schedules from "../../enums/modelDataEnums/Schedules";
+import EmployeeBenefits from "../../enums/modelDataEnums/EmployeeBenefits";
 
 
 export const jobTypesEnumToStringMap = (jobType: string): string => {

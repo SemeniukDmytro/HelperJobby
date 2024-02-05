@@ -1,6 +1,7 @@
-import {EmployerAccountDTO} from "../accountDTOs/EmployerAccountDTO";
+import {EmployerDTO} from "../accountDTOs/EmployerDTO";
 import {InterviewDTO} from "../userJobInteractionsDTOs/InterviewDTO";
 import {JobApplyDTO} from "../userJobInteractionsDTOs/JobApplyDTO";
+import {JobSalaryDTO} from "./JobSalaryDTO";
 
 export interface JobDTO {
     id: number;
@@ -9,17 +10,15 @@ export interface JobDTO {
     language: string;
     location: string;
     jobType: string[];
-    salary: number;
-    salaryRate: string;
-    showPayBy: string;
+    salary : JobSalaryDTO;
     schedule: string[];
     benefits: string[];
     contactEmail: string;
     resumeRequired: boolean;
     description: string;
     datePosted: Date;
-    employerAccountId: number;
-    employerAccount: EmployerAccountDTO;
+    employerId: number;
+    employer: EmployerDTO;
     interviews: InterviewDTO[];
     jobApplies: JobApplyDTO[];
 }

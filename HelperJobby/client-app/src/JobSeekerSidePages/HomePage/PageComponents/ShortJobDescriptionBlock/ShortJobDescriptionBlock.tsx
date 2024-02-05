@@ -6,15 +6,16 @@ import "./ShortJobDescriptionBlock.scss";
 import JobFeatureBox from "../JobFeatureBox/JobFeatureBox";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../../hooks/useAuth";
-import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
+import {JobSeekerService} from "../../../../services/jobSeekerService";
 import {descriptionSplitter} from "../../../../utils/descriptionSplitter";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
 import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {jobTypesEnumToStringMap, schedulesEnumToStringMap} from "../../../../utils/convertLogic/enumToStringConverter";
+import {ShowPayByOptions} from "../../../../enums/modelDataEnums/ShowPayByOptions";
+import {formatJobSalaryDisplay} from "../../../../utils/convertLogic/formatJobSalaryDisplay";
 
 interface ShortJobDescriptionBlockProps {
     job: JobDTO;
@@ -41,7 +42,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props: Shor
     const [saveJobButtonText, setSaveJobButtonText] = useState("");
     const [isSelected, setIsSelected] = useState(false);
 
-    const jobSeekerService = new JobSeekerAccountService();
+    const jobSeekerService = new JobSeekerService();
 
     useEffect(() => {
         setShortDescription(descriptionSplitter(job.description));
@@ -134,9 +135,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props: Shor
                 });
             }
         } catch (error) {
-            if (error instanceof ServerError) {
-                logErrorInfo(error)
-            }
+            logErrorInfo(error)
         }
     }
 
@@ -195,7 +194,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props: Shor
                         {job.jobTitle}
                     </a>
                     <a className={"medium-description-text"}>
-                        {job.employerAccount.organization.name}
+                        {job.employer.organization.name}
                     </a>
 
                     <div className={"medium-description-text"}>
@@ -204,7 +203,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props: Shor
 
                     <div className={"job-features-info"}>
                         <JobFeatureBox
-                            featureName={`$${thousandsDisplayHelper(job.salary)} ${job.salaryRate}`}
+                            featureName={formatJobSalaryDisplay(job)}
                             moreFeaturesAmount={0}
                         />
                         {job.jobType.length != 0 && <JobFeatureBox

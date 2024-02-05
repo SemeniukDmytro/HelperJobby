@@ -2,10 +2,10 @@ import React, {FC, useEffect} from 'react';
 import './SavedJobsComponent.scss';
 import UserJobInteractionPagesHeader
     from "../../../SharedComponents/UserJobInteractionPagesHeader/UserJobInteractionPagesHeader";
-import {UserJobInteractionsTypes} from "../../../../../enums/UserJobInteractionsTypes";
 import {useJobSeekerJobInteractions} from "../../../../../hooks/useJobSeekerJobInteractions";
 import SavedJobComponent from "../SavedJobComponent/SavedJobComponent";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
+import {UserJobInteractionsTypes} from "../../../../../enums/utilityEnums/UserJobInteractionsTypes";
 
 interface SavedJobsComponentProps {
 }

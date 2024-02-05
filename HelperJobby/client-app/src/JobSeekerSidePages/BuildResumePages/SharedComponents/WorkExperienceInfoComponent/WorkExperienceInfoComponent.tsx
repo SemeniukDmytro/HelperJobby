@@ -3,7 +3,6 @@ import './WorkExperienceInfoComponent.scss';
 import TimePeriod from "../TimePeriod/TimePeriod";
 import AutocompleteResultsWindow
     from "../../../EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
-import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes";
 import {WorkExperienceDTO} from "../../../../DTOs/resumeRelatedDTOs/WorkExperienceDTO";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 import CountrySelector from "../../../EditContactInfoPage/PageComponents/CountrySelector/CountrySelector";
@@ -11,18 +10,18 @@ import useResumeBuild from "../../../../hooks/useResumeBuild";
 import {ProgressPercentPerPage} from "../ProgressPercentPerPage";
 import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {CreateResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import dateToStringConverter from "../../../../utils/convertLogic/dateToStringConverter";
 import {CreateUpdateWorkExperienceDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateUpdateWorkExperienceDTO";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {WorkExperienceService} from "../../../../services/workExperienceService";
 import {ResumeService} from "../../../../services/resumeService";
-import {JobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
+import {JobSeekerDTO} from "../../../../DTOs/accountDTOs/JobSeekerDTO";
 import {useNavigate} from "react-router-dom";
 import {months} from "../../../../AppConstData/Months";
 import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
 import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
+import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/AutocompleteWindowTypes";
 
 interface WorkExperienceInfoComponentProps {
     workExperience?: WorkExperienceDTO
@@ -141,7 +140,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             const retrievedResume = await resumeService.postResume(createdResume);
             setJobSeeker((prev) => {
                 if (prev) {
-                    const updatedJobSeeker: JobSeekerAccountDTO = {
+                    const updatedJobSeeker: JobSeekerDTO = {
                         ...prev,
                         resume: retrievedResume
                     }
@@ -151,9 +150,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             });
 
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err);
         } finally {
             setSavingProcess(false);
         }
@@ -167,9 +164,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             updatedJobSeeker?.resume!.workExperiences.push(retrievedWorkExperience);
             setJobSeeker(updatedJobSeeker);
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err)
         } finally {
             setSavingProcess(false);
         }
@@ -178,18 +173,16 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     async function updateWorkExperience() {
         try {
             setSavingProcess(true);
-            const retrievedWorkExperience = await workExperienceService.updateWorkExperience(workExperience!.workExperienceId, fillWorkExperienceDTO());
+            const retrievedWorkExperience = await workExperienceService.updateWorkExperience(workExperience!.id, fillWorkExperienceDTO());
             const updatedJobSeeker = jobSeeker;
-            const workExperienceIndex = updatedJobSeeker!.resume!.educations.findIndex(e => e.id === retrievedWorkExperience.workExperienceId);
+            const workExperienceIndex = updatedJobSeeker!.resume!.educations.findIndex(e => e.id === retrievedWorkExperience.id);
 
             if (workExperienceIndex !== -1) {
                 updatedJobSeeker!.resume!.workExperiences[workExperienceIndex] = retrievedWorkExperience;
                 setJobSeeker(updatedJobSeeker);
             }
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err)
         } finally {
             setSavingProcess(false);
         }
