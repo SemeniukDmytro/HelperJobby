@@ -12,9 +12,12 @@ public class CurrentJobFixtures
         Language = "English",
         Location = "New York",
         JobType = new List<JobTypes> { JobTypes.FullTime, JobTypes.Apprenticeship },
-        Salary = 80000.00m,
-        SalaryRate = "per year",
-        ShowPayBy = "minimal amount",
+        Salary = new CreateUpdateSalaryDTO()
+        {
+            MinimalAmount = 80000.00m,
+            SalaryRate = SalaryRates.PerYear,
+            ShowPayByOption = ShowPayByOptions.MinimalAmount
+        },
         Schedule = new List<Schedules> { Schedules.Holidays, Schedules.Other },
         Benefits = new List<EmployeeBenefits> { EmployeeBenefits.CommuterBenefits },
         ContactEmail = "",
@@ -29,9 +32,12 @@ public class CurrentJobFixtures
         Language = "English",
         Location = "New York",
         JobType = new List<JobTypes> { JobTypes.FullTime, JobTypes.Apprenticeship },
-        Salary = 80000.00m,
-        SalaryRate = "per year",
-        ShowPayBy = "minimal amount",
+        Salary = new CreateUpdateSalaryDTO()
+        {
+            MinimalAmount = 80000.00m,
+            SalaryRate = SalaryRates.PerYear,
+            ShowPayByOption = ShowPayByOptions.MinimalAmount
+        },
         Schedule = new List<Schedules> { Schedules.Holidays, Schedules.Other },
         Benefits = new List<EmployeeBenefits> { EmployeeBenefits.CommuterBenefits },
         ContactEmail = "employer@gmail.com",

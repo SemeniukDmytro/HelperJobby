@@ -40,7 +40,10 @@ public static class ResumeFixtures
                 FieldOfStudy = "Software Engineering"
             }
         },
-        WorkExperiences = new List<WorkExperience>(),
+        WorkExperiences = new List<WorkExperience>()
+        {
+            WorkExperienceFixtures.FirstWorkExperienceEntity
+        },
         Skills = new List<Skill>
         {
             new()

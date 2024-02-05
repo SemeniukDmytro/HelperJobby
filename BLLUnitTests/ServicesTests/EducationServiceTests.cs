@@ -115,18 +115,18 @@ public class EducationServiceTests
             .ReturnsAsync(jobSeekerWithResume);
         _educationQueryRepositoryMock.Setup(r => r.GetEducationById(educationId)).ReturnsAsync(educationEntity);
         //Act
-        var educationToDelete = await _educationService.Delete(educationId);
+        var educationToDelete = await _educationService.DeleteEducation(educationId);
         //Assert
         Assert.Equal(educationEntity.Id, educationToDelete.educationToDelete.Id);
     }
 
     [Fact]
-    public async Task DeleteEducationShouldThrowForbiddenExceptionIfNotCurrentUserTriesToDelete()
+    public async Task DeleteEducationShouldThrowForbiddenExceptionIfEducationDoesNotExist()
     {
         //Arrange
         var userId = 1;
-        var educationId = 1;
-        var educationEntity = EducationFixtures.SecondEducationEntity;
+        var educationId = 12;
+        var educationEntity = EducationFixtures.FirstEducationEntity;
         var jobSeekerWithResume = JobSeekerAccountFixture.JobSeekerAccountEntity;
         jobSeekerWithResume.Resume = ResumeFixtures.ResumeEntity;
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
@@ -134,6 +134,6 @@ public class EducationServiceTests
             .ReturnsAsync(jobSeekerWithResume);
         _educationQueryRepositoryMock.Setup(r => r.GetEducationById(educationId)).ReturnsAsync(educationEntity);
         //Act % Assert
-        await Assert.ThrowsAsync<ForbiddenException>(async () => await _educationService.Delete(educationId));
+        await Assert.ThrowsAsync<ForbiddenException>(async () => await _educationService.DeleteEducation(educationId));
     }
 }

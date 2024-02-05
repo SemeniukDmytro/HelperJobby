@@ -1,4 +1,5 @@
 using ApplicationDomain.Enums;
+using ApplicationDomain.Models;
 using HelperJobby.DTOs.Account;
 
 namespace HelperJobby.DTOs.Job;
@@ -11,9 +12,7 @@ public class CurrentJobCreationDTO
     public string Language { get; set; }
     public string Location { get; set; }
     public List<JobTypes> JobType { get; set; }
-    public decimal Salary { get; set; }
-    public string SalaryRate { get; set; }
-    public string ShowPayBy { get; set; }
+    public CurrentJobSalaryDTO? Salary { get; set; } 
     public List<Schedules> Schedule { get; set; }
     public List<EmployeeBenefits> Benefits { get; set; }
     public string ContactEmail { get; set; }

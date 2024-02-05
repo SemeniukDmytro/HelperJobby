@@ -14,8 +14,6 @@ public static class JobProjections
             Location = j.Location,
             JobTypes = j.JobTypes,
             Salary = j.Salary,
-            SalaryRate = j.SalaryRate,
-            ShowPayBy = j.ShowPayBy,
             Schedule = j.Schedule,
             Benefits = j.Benefits,
             ContactEmail = j.ContactEmail,

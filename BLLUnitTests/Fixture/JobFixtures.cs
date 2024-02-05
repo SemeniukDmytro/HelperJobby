@@ -12,9 +12,12 @@ public static class JobFixtures
         Language = "English",
         Location = "Random Address",
         JobTypes = JobTypes.Freelance,
-        Salary = 100.90m,
-        SalaryRate = "per hour",
-        ShowPayBy = "minimum amount",
+        Salary = new JobSalary()
+        {
+            MinimalAmount = 100.90m,
+            SalaryRate = SalaryRates.PerHour,
+            ShowPayByOption = ShowPayByOptions.MinimalAmount
+        },
         Schedule = Schedules.DayShift,
         Benefits = EmployeeBenefits.CommuterBenefits,
         ContactEmail = "test@gmail.com",
@@ -29,9 +32,12 @@ public static class JobFixtures
         Language = "English",
         Location = "Random Address",
         JobTypes = JobTypes.Freelance,
-        Salary = 100.90m,
-        SalaryRate = "per hour",
-        ShowPayBy = "minimum amount",
+        Salary = new JobSalary()
+        {
+            MinimalAmount = 100.90m,
+            SalaryRate = SalaryRates.PerHour,
+            ShowPayByOption = ShowPayByOptions.MinimalAmount
+        },
         Schedule = Schedules.DayShift,
         Benefits = EmployeeBenefits.CommuterBenefits,
         ContactEmail = "test@gmail.com",
@@ -47,9 +53,12 @@ public static class JobFixtures
         Language = "English",
         Location = "Random Address",
         JobTypes = JobTypes.Freelance,
-        Salary = 100.90m,
-        SalaryRate = "per hour",
-        ShowPayBy = "minimum amount",
+        Salary = new JobSalary()
+        {
+            MinimalAmount = 100.90m,
+            SalaryRate = SalaryRates.PerHour,
+            ShowPayByOption = ShowPayByOptions.MinimalAmount
+        },
         Schedule = Schedules.DayShift,
         Benefits = EmployeeBenefits.CommuterBenefits,
         ContactEmail = "test@gmail.com",
@@ -65,9 +74,12 @@ public static class JobFixtures
         Language = "English",
         Location = "Random Address",
         JobTypes = JobTypes.Freelance,
-        Salary = 100.90m,
-        SalaryRate = "per hour",
-        ShowPayBy = "minimum amount",
+        Salary = new JobSalary()
+        {
+            MinimalAmount = 100.90m,
+            SalaryRate = SalaryRates.PerHour,
+            ShowPayByOption = ShowPayByOptions.MinimalAmount
+        },
         Schedule = Schedules.DayShift,
         Benefits = EmployeeBenefits.CommuterBenefits,
         ContactEmail = "test@gmail.com",
@@ -82,9 +94,12 @@ public static class JobFixtures
         Language = "English",
         Location = "Random Address",
         JobTypes = JobTypes.Freelance,
-        Salary = 110.90m,
-        SalaryRate = "per hour",
-        ShowPayBy = "minimum amount",
+        Salary = new JobSalary()
+        {
+            MinimalAmount = 100.90m,
+            SalaryRate = SalaryRates.PerHour,
+            ShowPayByOption = ShowPayByOptions.MinimalAmount
+        },
         Schedule = Schedules.DayShift,
         Benefits = EmployeeBenefits.CommuterBenefits,
         ContactEmail = "test@gmail.com",

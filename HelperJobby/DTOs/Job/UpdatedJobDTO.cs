@@ -9,9 +9,7 @@ public class UpdatedJobDTO
     public string Language { get; set; }
     public string Location { get; set; }
     public List<JobTypes> JobType { get; set; }
-    public decimal Salary { get; set; }
-    public string SalaryRate { get; set; }
-    public string ShowPayBy { get; set; }
+    public CreateUpdateSalaryDTO Salary { get; set; }
     public List<Schedules> Schedule { get; set; }
     public List<EmployeeBenefits> Benefits { get; set; }
     public string ContactEmail { get; set; }

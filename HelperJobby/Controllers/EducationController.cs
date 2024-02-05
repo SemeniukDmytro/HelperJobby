@@ -72,7 +72,7 @@ public class EducationController : ExtendedBaseController
     [HttpDelete("{educationId}")]
     public async Task Delete(int educationId)
     {
-        var educationWithResumeInfo = await _educationService.Delete(educationId);
+        var educationWithResumeInfo = await _educationService.DeleteEducation(educationId);
         await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
         {
             await indexingService.RemoveIndexedResumeRelatedContent(

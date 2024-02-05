@@ -36,7 +36,9 @@ public class ApplicationContext : DbContext
     public DbSet<ProcessedJobWord> ProcessedJobsWords { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<RecentUserSearch> RecentUserSearches { get; set; }
-
+    public DbSet<JobSalary> JobSalaries { get; set; }
+    public DbSet<CurrentJobSalary> CurrentJobSalaries { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
@@ -103,6 +105,17 @@ public class ApplicationContext : DbContext
             .WithMany(ea => ea.Jobs)
             .HasForeignKey(j => j.EmployerAccountId);
 
+        modelBuilder.Entity<JobSalary>()
+            .HasOne(s => s.Job)
+            .WithOne(j => j.Salary)
+            .HasForeignKey<JobSalary>(s => s.JobId);
+            
+        modelBuilder.Entity<CurrentJobSalary>()
+            .HasOne(s => s.CurrentJob)
+            .WithOne(j => j.Salary)
+            .HasForeignKey<CurrentJobSalary>(s => s.CurrentJobId);
+
+        
         modelBuilder.Entity<Resume>()
             .HasMany(r => r.Educations)
             .WithOne(e => e.Resume)

@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using API_IntegrationTests.Fixtures;
 using API_IntegrationTests.TestHelpers;
 using ApplicationDAL.Context;
+using ApplicationDomain.Enums;
 using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.Resume;
@@ -147,14 +148,16 @@ public class IntegrationTest
         var employerAccount = await CreateEmployerWithNewOrganizationForAuthUser();
         var createdJob = await CreateJob();
         var requestUri = $"/api/Interview/{createdJob.Id}/job-seeker/{newJobSeeker.Id}";
-        var createInterviewResponse = await TestClient.PostAsJsonAsync(requestUri, "");
+        var createInterviewDTO = InterviewFixtures.createInterviewDTO;
+        var createInterviewResponse = await TestClient.PostAsJsonAsync(requestUri, createInterviewDTO);
         return await createInterviewResponse.Content.ReadAsAsync<InterviewDTO>();
     }
 
     protected async Task<InterviewDTO> CreateInterview(int jobId, int jobSeekerId)
     {
         var secondInterviewCreateRequestUri = $"/api/Interview/{jobId}/job-seeker/{jobSeekerId}";
-        var interviewCreateResponse = await TestClient.PostAsJsonAsync(secondInterviewCreateRequestUri, "");
+        var createInterviewDTO = InterviewFixtures.createInterviewDTO;
+        var interviewCreateResponse = await TestClient.PostAsJsonAsync(secondInterviewCreateRequestUri, createInterviewDTO);
         return await interviewCreateResponse.Content.ReadAsAsync<InterviewDTO>();
     }
 

@@ -64,9 +64,12 @@ public class CurrentJobControllerTests : IntegrationTest
             Language = "",
             Location = "",
             JobType = new List<JobTypes>(),
-            Salary = 0,
-            SalaryRate = "per hour",
-            ShowPayBy = "",
+            Salary = new CreateUpdateSalaryDTO()
+            {
+                MinimalAmount = 0,
+                SalaryRate = SalaryRates.PerYear,
+                ShowPayByOption = ShowPayByOptions.MinimalAmount
+            },
             Schedule = new List<Schedules>(),
             Benefits = new List<EmployeeBenefits>(),
             ContactEmail = "contactemail@gmail.com",
@@ -84,7 +87,7 @@ public class CurrentJobControllerTests : IntegrationTest
         Assert.Equal(currentJobCreation.JobTitle, updatedCurrenJob.JobTitle);
         Assert.Equal(updatedJob.NumberOfOpenings, updatedCurrenJob.NumberOfOpenings);
         Assert.Equal(currentJobCreation.JobType.Count, updatedCurrenJob.JobType.Count);
-        Assert.Equal(currentJobCreation.Salary, updatedCurrenJob.Salary);
+        Assert.Equal(currentJobCreation.Salary.MinimalAmount, updatedCurrenJob.Salary.MinimalAmount);
         Assert.Equal(currentJobCreation.EmployerAccountId, updatedCurrenJob.EmployerAccountId);
         Assert.Equal(updatedJob.ContactEmail, updatedCurrenJob.ContactEmail);
         Assert.Equal(updatedJob.ResumeRequired, updatedCurrenJob.ResumeRequired);

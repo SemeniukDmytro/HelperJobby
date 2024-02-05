@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,6 +13,9 @@ public class EmployerAccount
     [Required] [MaxLength(50)] public string Email { get; set; }
 
     [MaxLength(15)] public string ContactNumber { get; set; }
+    
+    [DefaultValue(false)]
+    public bool HasPostedFirstJob { get; set; }
 
     [ForeignKey("User")] public int UserId { get; set; }
 

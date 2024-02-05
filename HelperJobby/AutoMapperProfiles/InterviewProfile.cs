@@ -13,7 +13,7 @@ public class InterviewProfile : Profile
     {
         CreateMap<Interview, InterviewDTO>().ForMember(dest => dest.InterviewType,
                 opt => opt
-                    .MapFrom(src => InterviewTypesToStringConverter.InterviewTypeToStringConverter(src.InterviewType)))
+                    .MapFrom(src => EnumToStringConverter.InterviewTypeToStringConverter(src.InterviewType)))
             .AfterMap((src, dest, context) =>
             {
                 dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccount, JobSeekerAccountDTO>(src.JobSeekerAccount);

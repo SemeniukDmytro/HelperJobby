@@ -74,7 +74,7 @@ public class WorkExperienceController : ExtendedBaseController
     [HttpDelete("{workExperienceId}")]
     public async Task Delete(int workExperienceId)
     {
-        var workExperienceWithResumeRelateContent = await _workExperienceService.Delete(workExperienceId);
+        var workExperienceWithResumeRelateContent = await _workExperienceService.DeleteWorkExperience(workExperienceId);
         await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
         {
             await indexingService.RemoveIndexedResumeRelatedContent(

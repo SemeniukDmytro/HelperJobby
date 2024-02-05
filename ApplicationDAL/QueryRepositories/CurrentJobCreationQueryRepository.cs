@@ -23,7 +23,8 @@ public class CurrentJobCreationQueryRepository : ICurrentJobCreationQueryReposit
     public async Task<CurrentJobCreation> GetJobCreationByEmployerId(int employerId)
     {
         var jobEntity =
-            await _applicationContext.CurrentJobCreations.FirstOrDefaultAsync(j => j.EmployerAccountId == employerId);
+            await _applicationContext.CurrentJobCreations.Include(j=> j.Salary)
+                .FirstOrDefaultAsync(j => j.EmployerAccountId == employerId);
         if (jobEntity == null) throw new JobNotFoundException("There isn't any previous job creations");
 
         return jobEntity;
@@ -41,7 +42,8 @@ public class CurrentJobCreationQueryRepository : ICurrentJobCreationQueryReposit
 
         if (includeQuery != null) query = includeQuery(query);
 
-        var currenJobEntity = await query.FirstOrDefaultAsync(j => j.Id == jobCreationId);
+        var currenJobEntity = await query.Include(j => j.Salary)
+            .FirstOrDefaultAsync(j => j.Id == jobCreationId);
 
         if (currenJobEntity == null) throw new JobNotFoundException("Job with specified id doesn't exist");
 

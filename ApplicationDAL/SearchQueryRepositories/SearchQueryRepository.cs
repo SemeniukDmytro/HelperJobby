@@ -29,12 +29,12 @@ public class SearchQueryRepository : ISearchQueryRepository
         if (isRemote) query = query.Where(p => p.Job.Location.ToLower().Contains("remote"));
 
         if (payPerHour > 0)
-            query = query.Where(p =>
-                (p.Job.Salary >= payPerHour && p.Job.SalaryRate.ToLower() == "per hour")
-                || (p.Job.Salary >= payPerDay && p.Job.SalaryRate.ToLower() == "per day")
-                || (p.Job.Salary >= payPerWeek && p.Job.SalaryRate.ToLower() == "per week")
-                || (p.Job.Salary >= payPerMonth && p.Job.SalaryRate.ToLower() == "per month")
-                || (p.Job.Salary >= payPerYear && p.Job.SalaryRate.ToLower() == "per year"));
+            query = query.Where(p => p.Job.Salary != null && (
+                (p.Job.Salary.MinimalAmount >= payPerHour && p.Job.Salary.SalaryRate == SalaryRates.PerHour)
+                || (p.Job.Salary.MinimalAmount >= payPerDay && p.Job.Salary.SalaryRate == SalaryRates.PerDay)
+                || (p.Job.Salary.MinimalAmount >= payPerWeek && p.Job.Salary.SalaryRate == SalaryRates.PerWeek)
+                || (p.Job.Salary.MinimalAmount >= payPerMonth && p.Job.Salary.SalaryRate == SalaryRates.PerMonth)
+                || (p.Job.Salary.MinimalAmount >= payPerYear && p.Job.Salary.SalaryRate == SalaryRates.PerYear)));
 
         if ((int)jobType != 0) query = query.Where(p => (p.Job.JobTypes & jobType) != 0);
 

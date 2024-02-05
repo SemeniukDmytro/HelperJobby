@@ -11,9 +11,7 @@ public class JobDTO
     public string Language { get; set; }
     public string Location { get; set; }
     public List<string> JobType { get; set; }
-    public decimal Salary { get; set; }
-    public string SalaryRate { get; set; }
-    public string ShowPayBy { get; set; }
+    public JobSalaryDTO Salary { get; set; }
     public List<string> Schedule { get; set; }
     public List<string> Benefits { get; set; }
     public string ContactEmail { get; set; }

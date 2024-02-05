@@ -6,7 +6,7 @@ public interface ICurrentJobCreationService
 {
     public Task<CurrentJobCreation> StartJobCreation(CurrentJobCreation currentJobCreation);
 
-    public Task<CurrentJobCreation> UpdateCurrentJob(int jobId, CurrentJobCreation currentJobCreation);
+    public Task<CurrentJobCreation> UpdateCurrentJob(int currentJobId, CurrentJobCreation updatedCurrentJobCreation);
 
     public Task<CurrentJobCreation> DeleteCurrentJob(int jobId);
 }

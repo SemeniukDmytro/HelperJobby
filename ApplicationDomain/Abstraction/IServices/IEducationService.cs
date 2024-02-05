@@ -6,5 +6,5 @@ public interface IEducationService
 {
     public Task<Education> AddEducation(int resumeId, Education education);
     public Task<Education> UpdateEducation(int educationId, Education updatedEducation);
-    public Task<(Education educationToDelete, bool isResumeNeedToBeDeleted)> Delete(int educationId);
+    public Task<(Education educationToDelete, bool isResumeNeedToBeDeleted)> DeleteEducation(int educationId);
 }

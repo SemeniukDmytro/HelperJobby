@@ -76,7 +76,8 @@ public class InterviewServiceTests
         var jobId = 1;
         var createdInterviewInfo = new Interview
         {
-            InterviewStart = DateTime.UtcNow
+            InterviewStart = DateTime.UtcNow,
+            InterviewEnd = TimeOnly.FromDateTime(DateTime.UtcNow).Add(TimeOnly.FromTimeSpan(TimeSpan.FromHours(1)).ToTimeSpan())
         };
         _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, jobSeekerId))
             .ThrowsAsync(new InterviewOperatingException("Interview not found"));

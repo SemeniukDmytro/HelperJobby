@@ -19,12 +19,8 @@ public class CurrentJobCreation
     [MaxLength(50)] public string Location { get; set; }
 
     public JobTypes JobTypes { get; set; }
-
-    [Column(TypeName = "decimal(10,2)")] public decimal Salary { get; set; }
-
-    [Required] [MaxLength(9)] public string SalaryRate { get; set; }
-
-    [Required] [MaxLength(15)] public string ShowPayBy { get; set; }
+    [ExcludeFromUpdate]
+    public CurrentJobSalary? Salary { get; set; }
 
     public Schedules Schedule { get; set; }
 

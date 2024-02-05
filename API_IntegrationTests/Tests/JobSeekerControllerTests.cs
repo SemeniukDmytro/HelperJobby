@@ -53,13 +53,13 @@ public class JobSeekerControllerTests : IntegrationTest
         //Assert
         Assert.Equal(HttpStatusCode.OK, getSavedJobsResponse.StatusCode);
 
-        var savedJobs = (await getSavedJobsResponse.Content.ReadAsAsync<IEnumerable<JobDTO>>()).ToList();
+        var savedJobs = (await getSavedJobsResponse.Content.ReadAsAsync<IEnumerable<SavedJobDTO>>()).ToList();
 
         Assert.Equal(expectedJobCount, savedJobs.Count);
-        Assert.Equal(firstCreatedJob.Id, savedJobs[0].Id);
-        Assert.Equal(firstCreatedJob.JobTitle, savedJobs[0].JobTitle);
-        Assert.Equal(secondCreatedJob.Id, savedJobs[1].Id);
-        Assert.Equal(secondCreatedJob.JobTitle, savedJobs[1].JobTitle);
+        Assert.Equal(firstCreatedJob.Id, savedJobs[0].Job.Id);
+        Assert.Equal(firstCreatedJob.JobTitle, savedJobs[0].Job.JobTitle);
+        Assert.Equal(secondCreatedJob.Id, savedJobs[1].Job.Id);
+        Assert.Equal(secondCreatedJob.JobTitle, savedJobs[1].Job.JobTitle);
     }
 
     [Fact]

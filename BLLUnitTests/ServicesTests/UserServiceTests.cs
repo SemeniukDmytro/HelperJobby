@@ -66,8 +66,9 @@ public class UserServiceTests
             Email = "oldemail@gmail.com"
         });
         _userQueryRepository.Setup(r => r.IsEmailAvailable(It.IsAny<string>())).ReturnsAsync(true);
+        _passwordHandler.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
         //Act
-        var userToUpdate = await _userService.UpdateUser(It.IsAny<int>(), updatedUser);
+        var userToUpdate = await _userService.UpdateUserVulnerableInfo(It.IsAny<int>(), updatedUser, It.IsAny<string>());
         //Assert
         Assert.Equal(updatedUser.Email, userToUpdate.Email);
     }
@@ -85,13 +86,14 @@ public class UserServiceTests
             Email = "oldemail@gmail.com"
         });
         _userQueryRepository.Setup(r => r.IsEmailAvailable(It.IsAny<string>())).ReturnsAsync(false);
+        _passwordHandler.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
         //Act & Assert
         await Assert.ThrowsAsync<EmailIsNotAvailableException>(async () =>
-            await _userService.UpdateUser(It.IsAny<int>(), updatedUser));
+            await _userService.UpdateUserVulnerableInfo(It.IsAny<int>(), updatedUser, "oldPassword"));
     }
 
     [Fact]
-    public async Task UpdateUserShouldUpdateUserPasswordAndUserAccount()
+    public async Task UpdateUserShouldThrowForbiddenIfInvalidPasswordProvided()
     {
         //Arrange
         var updatedUser = new User
@@ -108,10 +110,9 @@ public class UserServiceTests
         });
         _userQueryRepository.Setup(r => r.IsEmailAvailable(It.IsAny<string>())).ReturnsAsync(false);
         _passwordHandler.Setup(h => h.ChangePassword(It.IsAny<string>())).Returns(updatedUser.PasswordHash);
-        //Act
-        var userToUpdate = await _userService.UpdateUser(It.IsAny<int>(), updatedUser);
-        //Assert
-        Assert.Equal(updatedUser.PasswordHash, userToUpdate.PasswordHash);
-        Assert.Equal(updatedUser.AccountType, userToUpdate.AccountType);
+        _passwordHandler.Setup(p => p.Verify("oldPassword", "oldPassword")).Returns(true);
+        //Assert act
+        await Assert.ThrowsAsync<UserNotFoundException>(async () =>
+            await _userService.UpdateUserVulnerableInfo(It.IsAny<int>(), updatedUser, "newPassword"));
     }
 }

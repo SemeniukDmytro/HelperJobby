@@ -24,9 +24,12 @@ public class JobService : IJobService
     public async Task<Job> CreateJob(Job job)
     {
         if (!Validator.TryValidateObject(job, new ValidationContext(job), null, true)) throw new InvalidJobException();
-
-        if (!SalaryRateHelper.CheckMinimalSalary(job.Salary, job.SalaryRate))
-            throw new InvalidJobException("This wage appears to be below the minimum wage for this location");
+        
+        if (job.Salary != null)
+        {
+            if (!SalaryRateHelper.CheckMinimalSalary(job.Salary.MinimalAmount, job.Salary.SalaryRate))
+                throw new InvalidJobException("This wage appears to be below the minimum wage for this location");
+        }
         job.DatePosted = DateOnly.FromDateTime(DateTime.UtcNow);
         return job;
     }
@@ -40,7 +43,17 @@ public class JobService : IJobService
         if (jobEntity.EmployerAccountId != employer.Id)
             throw new ForbiddenException("You can not update this job information");
 
-        var updatedEntity = JobUpdateValidation<CurrentJobCreation>.Update(jobEntity, updatedJob);
+        var updatedEntity = EntitiesUpdator<CurrentJobCreation>.UpdateEntityProperties(jobEntity, updatedJob);
+        if (jobEntity.Salary == null)
+        {
+            updatedEntity.Salary = updatedJob.Salary;
+        }
+        else
+        {
+            var updatedSalary = EntitiesUpdator<CurrentJobSalary>.UpdateEntityProperties(updatedEntity.Salary,
+                updatedJob.Salary);
+            updatedEntity.Salary = updatedSalary;
+        }
         return updatedEntity;
     }
 

@@ -32,14 +32,25 @@ public class CurrentJobCreationService : ICurrentJobCreationService
         return currentJobCreation;
     }
 
-    public async Task<CurrentJobCreation> UpdateCurrentJob(int jobId, CurrentJobCreation currentJobCreation)
+    public async Task<CurrentJobCreation> UpdateCurrentJob(int currentJobId, CurrentJobCreation updatedCurrentJobCreation)
     {
         var currentEmployer = await _employerAccountQueryRepository.GetEmployerAccount(_userService.GetCurrentUserId());
-        var jobEntity = await _currentJobCreationQueryRepository.GetJobCreationById(jobId);
+        var currentJobEntity = await _currentJobCreationQueryRepository.GetJobCreationById(currentJobId);
 
-        if (jobEntity.EmployerAccountId != currentEmployer.Id) throw new ForbiddenException();
+        if (currentJobEntity.EmployerAccountId != currentEmployer.Id) throw new ForbiddenException();
 
-        var updatedEntity = JobUpdateValidation<CurrentJobCreation>.Update(jobEntity, currentJobCreation);
+        var updatedEntity = EntitiesUpdator<CurrentJobCreation>
+            .UpdateEntityProperties(currentJobEntity, updatedCurrentJobCreation);
+        if (currentJobEntity.Salary == null)
+        {
+            updatedEntity.Salary = updatedCurrentJobCreation.Salary;
+        }
+        else
+        {
+            var updatedSalary = EntitiesUpdator<CurrentJobSalary>.UpdateEntityProperties(updatedEntity.Salary,
+                updatedCurrentJobCreation.Salary);
+            updatedEntity.Salary = updatedSalary;
+        }
         return updatedEntity;
     }
 

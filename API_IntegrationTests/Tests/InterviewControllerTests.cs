@@ -1,5 +1,7 @@
 using System.Net;
+using API_IntegrationTests.Fixtures;
 using API_IntegrationTests.TestHelpers;
+using ApplicationDomain.Enums;
 using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.UserJobInteractions;
 using Xunit.Abstractions;
@@ -79,9 +81,10 @@ public class InterviewControllerTests : IntegrationTest
         var employerAccount = await CreateEmployerWithNewOrganizationForAuthUser();
         var createdJob = await CreateJob();
         var requestUri = $"{_baseUri}/{createdJob.Id}/job-seeker/{newJobSeeker.Id}";
+        var createInterviewDTO = InterviewFixtures.createInterviewDTO;
 
         //Act
-        var createInterviewResponse = await TestClient.PostAsJsonAsync(requestUri, "");
+        var createInterviewResponse = await TestClient.PostAsJsonAsync(requestUri, createInterviewDTO);
 
         //Assert
         Assert.Equal(HttpStatusCode.OK, createInterviewResponse.StatusCode);

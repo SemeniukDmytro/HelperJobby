@@ -50,7 +50,7 @@ public class EducationService : IEducationService
         return educationEntity;
     }
 
-    public async Task<(Education educationToDelete, bool isResumeNeedToBeDeleted)> Delete(int educationId)
+    public async Task<(Education educationToDelete, bool isResumeNeedToBeDeleted)> DeleteEducation(int educationId)
     {
         var isInvalidResume = false;
         var currentUserId = _userService.GetCurrentUserId();

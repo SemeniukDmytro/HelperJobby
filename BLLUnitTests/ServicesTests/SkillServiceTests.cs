@@ -76,11 +76,11 @@ public class SkillServiceTests
     }
 
     [Fact]
-    public async Task DeleteWorkExperienceShouldThrowForbiddenExceptionIfNotCurrentUserTriesToDelete()
+    public async Task DeleteWorkExperienceShouldThrowForbiddenExceptionIfSkillDoesNotExist()
     {
         //Arrange
         var userId = 1;
-        var skillId = 2;
+        var skillId = 10;
         var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
         _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))

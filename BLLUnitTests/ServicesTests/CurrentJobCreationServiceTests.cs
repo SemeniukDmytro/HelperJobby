@@ -85,7 +85,11 @@ public class CurrentJobCreationServiceTests
         //Arrange
         var newJob = new CurrentJobCreation
         {
-            JobTypes = default, Salary = 1000,
+            JobTypes = default, 
+            Salary = new CurrentJobSalary()
+            {
+                MinimalAmount = 1000
+            },
             Benefits = (EmployeeBenefits)3
         };
         var userId = 1;
@@ -108,7 +112,7 @@ public class CurrentJobCreationServiceTests
         var job = await _currentJobCreationService.UpdateCurrentJob(jobId, newJob);
         //Assert
         Assert.Equal("new Job", job.JobTitle);
-        Assert.Equal(newJob.Salary, job.Salary);
+        Assert.Equal(newJob.Salary.MinimalAmount, job.Salary.MinimalAmount);
         Assert.Equal(employerAccountId, job.EmployerAccountId);
         Assert.Equal(jobId, job.Id);
     }
@@ -119,7 +123,6 @@ public class CurrentJobCreationServiceTests
         //Arrange
         var newJob = new CurrentJobCreation
         {
-            Salary = 1000,
             Benefits = (EmployeeBenefits)3
         };
         var userId = 1;

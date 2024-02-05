@@ -57,7 +57,7 @@ public class JobServiceTests
         var job = await _jobService.UpdateJob(jobId, updatedJob);
         //Assert
         Assert.Equal(updatedJob.JobTitle, job.JobTitle);
-        Assert.Equal(updatedJob.Salary, job.Salary);
+        Assert.Equal(updatedJob.Salary.MinimalAmount, job.Salary.MinimalAmount);
         Assert.Equal(employerAccount.Id, job.EmployerAccountId);
         Assert.Equal(jobId, job.Id);
     }

@@ -18,7 +18,7 @@ public class JobQueryRepository : IJobQueryRepository
 
     public async Task<Job> GetJobById(int jobId)
     {
-        var job = await _applicationContext.Jobs.FirstOrDefaultAsync(j => j.Id == jobId);
+        var job = await _applicationContext.Jobs.Include(j => j.Salary).FirstOrDefaultAsync(j => j.Id == jobId);
         if (job == null) throw new JobNotFoundException();
 
         return job;
@@ -26,7 +26,8 @@ public class JobQueryRepository : IJobQueryRepository
 
     public async Task<IEnumerable<Job>> GetJobsByUserId(int userId)
     {
-        var jobs = await _applicationContext.Jobs.Where(j => j.EmployerAccount.UserId == userId).ToListAsync();
+        var jobs = await _applicationContext.Jobs.Where(j => j.EmployerAccount.UserId == userId)
+            .Include(j => j.Salary).ToListAsync();
         return jobs;
     }
 
@@ -34,6 +35,7 @@ public class JobQueryRepository : IJobQueryRepository
     public async Task<IEnumerable<Job>> GetJobsByOrganizationId(int organizationId)
     {
         var jobs = await _applicationContext.Jobs.Where(j => j.EmployerAccount.OrganizationId == organizationId)
+            .Include(j => j.Salary)
             .ToListAsync();
 
         return jobs;
@@ -50,12 +52,14 @@ public class JobQueryRepository : IJobQueryRepository
     public async Task<Job> GetJobWithJobApplies(Job job)
     {
         await _applicationContext.Entry(job).Collection(j => j.JobApplies).LoadAsync();
+        if (job == null) throw new JobNotFoundException();
         return job;
     }
 
     public async Task<Job> GetJobWithInterviews(Job job)
     {
         await _applicationContext.Entry(job).Collection(j => j.Interviews).LoadAsync();
+        if (job == null) throw new JobNotFoundException();
         return job;
     }
 
@@ -70,10 +74,11 @@ public class JobQueryRepository : IJobQueryRepository
 
     public async Task<Job> GetJobWithOrganizationInfo(int jobId)
     {
-        var jobs = await _applicationContext
+        var job = await _applicationContext
             .Jobs.Where(j => j.Id == jobId)
             .Select(JobProjections.JobWithOrganizationName())
             .FirstOrDefaultAsync();
-        return jobs;
+        if (job == null) throw new JobNotFoundException();
+        return job;
     }
 }

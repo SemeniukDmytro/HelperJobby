@@ -53,7 +53,7 @@ public class WorkExperienceService : IWorkExperienceService
         return workExperienceEntity;
     }
 
-    public async Task<(WorkExperience workExperience, bool isResumeNeedToBeDeleted)> Delete(int workExperienceId)
+    public async Task<(WorkExperience workExperience, bool isResumeNeedToBeDeleted)> DeleteWorkExperience(int workExperienceId)
     {
         var isInvalidResume = false;
         var currentUserId = _userService.GetCurrentUserId();

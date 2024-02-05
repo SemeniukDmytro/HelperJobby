@@ -95,7 +95,7 @@ public class JobControllerTests : IntegrationTest
         var createdJob = await jobCreateResponse.Content.ReadAsAsync<JobDTO>();
         Assert.NotEqual(0, createdJob.Id);
         Assert.Equal(currentJobCreation.Benefits.Count, createdJob.Benefits.Count);
-        Assert.Equal(currentJobCreation.Salary, createdJob.Salary);
+        Assert.Equal(currentJobCreation.Salary.MinimalAmount, createdJob.Salary.MinimalAmount);
         Assert.Equal(currentJobCreation.Description, createdJob.Description);
     }
 
@@ -113,9 +113,12 @@ public class JobControllerTests : IntegrationTest
             Language = "C#",
             Location = "New York",
             JobType = new List<JobTypes> { JobTypes.FullTime },
-            Salary = 80000.0m,
-            SalaryRate = "per year",
-            ShowPayBy = "minimal amount",
+            Salary = new CreateUpdateSalaryDTO()
+            {
+                MinimalAmount = 90000.00m,
+                SalaryRate = SalaryRates.PerYear,
+                ShowPayByOption = ShowPayByOptions.MinimalAmount
+            },
             Schedule = new List<Schedules> { Schedules.MondayToFriday },
             Benefits = new List<EmployeeBenefits>(),
             ContactEmail = "hr@gmail.com",
@@ -136,7 +139,7 @@ public class JobControllerTests : IntegrationTest
         Assert.Equal(updatedJobDTO.Language, updatedJob.Language);
         Assert.Equal(updatedJobDTO.Location, updatedJob.Location);
         Assert.Equal(updatedJobDTO.JobType.Select(j => j.ToString()), updatedJob.JobType);
-        Assert.Equal(updatedJobDTO.Salary, updatedJob.Salary);
+        Assert.Equal(updatedJobDTO.Salary.MinimalAmount, updatedJob.Salary.MinimalAmount);
         Assert.Equal(updatedJobDTO.Schedule.Select(s => s.ToString()), updatedJob.Schedule);
         Assert.Equal(updatedJobDTO.Benefits.Select(b => b.ToString()), updatedJob.Benefits);
         Assert.Equal(updatedJobDTO.ContactEmail, updatedJob.ContactEmail);

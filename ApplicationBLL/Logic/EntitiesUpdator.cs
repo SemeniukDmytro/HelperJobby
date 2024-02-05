@@ -1,11 +1,12 @@
 using ApplicationDomain.Attributes;
 using ApplicationDomain.Enums;
+using ApplicationDomain.Models;
 
 namespace ApplicationBLL.Logic;
 
-public class JobUpdateValidation<T>
+public static class EntitiesUpdator<T>
 {
-    public static T Update<T>(T entityToUpdate, T updatedEntity)
+    public static T UpdateEntityProperties<T>(T entityToUpdate, T updatedEntity)
     {
         var entityProperties = entityToUpdate.GetType().GetProperties();
         var updatedJobProperties = updatedEntity.GetType().GetProperties();
@@ -18,7 +19,6 @@ public class JobUpdateValidation<T>
             if (entityProperty != null)
             {
                 var updatedValue = updatedProperty.GetValue(updatedEntity);
-                var currentValue = entityProperty.GetValue(entityToUpdate);
 
                 if (IsValid(updatedValue)) entityProperty.SetValue(entityToUpdate, updatedValue);
             }
