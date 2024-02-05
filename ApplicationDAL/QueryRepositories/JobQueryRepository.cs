@@ -26,7 +26,7 @@ public class JobQueryRepository : IJobQueryRepository
 
     public async Task<IEnumerable<Job>> GetJobsByUserId(int userId)
     {
-        var jobs = await _applicationContext.Jobs.Where(j => j.EmployerAccount.UserId == userId)
+        var jobs = await _applicationContext.Jobs.Where(j => j.Employer.UserId == userId)
             .Include(j => j.Salary).ToListAsync();
         return jobs;
     }
@@ -34,7 +34,7 @@ public class JobQueryRepository : IJobQueryRepository
 
     public async Task<IEnumerable<Job>> GetJobsByOrganizationId(int organizationId)
     {
-        var jobs = await _applicationContext.Jobs.Where(j => j.EmployerAccount.OrganizationId == organizationId)
+        var jobs = await _applicationContext.Jobs.Where(j => j.Employer.OrganizationId == organizationId)
             .Include(j => j.Salary)
             .ToListAsync();
 

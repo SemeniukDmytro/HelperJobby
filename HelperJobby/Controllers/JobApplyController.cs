@@ -17,18 +17,18 @@ public class JobApplyController : ExtendedBaseController
     private readonly IJobApplyQueryRepository _jobApplyQueryRepository;
     private readonly IJobApplyService _jobApplyService;
     private readonly IJobQueryRepository _jobQueryRepository;
-    private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+    private readonly IJobSeekerQueryRepository _jobSeekerQueryRepository;
     private readonly IUserService _userService;
 
     public JobApplyController(IMapper mapper, IJobApplyCommandRepository jobApplyCommandRepository,
         IJobApplyQueryRepository jobApplyQueryRepository, IJobApplyService jobApplyService,
-        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IJobQueryRepository jobQueryRepository,
+        IJobSeekerQueryRepository jobSeekerQueryRepository, IJobQueryRepository jobQueryRepository,
         IUserService userService) : base(mapper)
     {
         _jobApplyCommandRepository = jobApplyCommandRepository;
         _jobApplyQueryRepository = jobApplyQueryRepository;
         _jobApplyService = jobApplyService;
-        _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
+        _jobSeekerQueryRepository = jobSeekerQueryRepository;
         _jobQueryRepository = jobQueryRepository;
         _userService = userService;
     }
@@ -38,7 +38,7 @@ public class JobApplyController : ExtendedBaseController
     public async Task<IEnumerable<JobApplyDTO>> GetUserJobApplies()
     {
         var jobApplies =
-            await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithJobApplies(_userService.GetCurrentUserId());
+            await _jobSeekerQueryRepository.GetJobSeekerWithJobApplies(_userService.GetCurrentUserId());
         return _mapper.Map<IEnumerable<JobApplyDTO>>(jobApplies);
     }
 

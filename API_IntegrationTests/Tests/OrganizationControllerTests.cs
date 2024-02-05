@@ -99,7 +99,7 @@ public class OrganizationControllerTests : IntegrationTest
         newEmployer.OrganizationName = employerAccount.Organization.Name;
         newEmployer.Email = email.Email;
         var createEmployerResponse = await TestClient.PostAsJsonAsync("/api/employerAccount", newEmployer);
-        var employerToRemove = await createEmployerResponse.Content.ReadAsAsync<EmployerAccountDTO>();
+        var employerToRemove = await createEmployerResponse.Content.ReadAsAsync<EmployerDTO>();
 
         await LoginUser(employerAccount.User.Email, "randomPwd");
         var requestUri = $"{_baseUri}/{email.Id}/remove-employee";

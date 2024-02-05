@@ -10,14 +10,14 @@ namespace BLLUnitTests.ServicesTests;
 
 public class EmployerAccountServiceTests
 {
-    private readonly Mock<IEmployerAccountQueryRepository> _employerAccountQueryRepositoryMock = new();
-    private readonly EmployerAccountService _employerAccountService;
+    private readonly Mock<IEmployerQueryRepository> _employerAccountQueryRepositoryMock = new();
+    private readonly EmployerService _employerService;
     private readonly Mock<IOrganizationQueryRepository> _organizationQueryRepositoryMock = new();
     private readonly Mock<IUserService> _userServiceMock = new();
 
     public EmployerAccountServiceTests()
     {
-        _employerAccountService = new EmployerAccountService(_userServiceMock.Object,
+        _employerService = new EmployerService(_userServiceMock.Object,
             _employerAccountQueryRepositoryMock.Object,
             _organizationQueryRepositoryMock.Object);
     }
@@ -26,7 +26,7 @@ public class EmployerAccountServiceTests
     public async Task CreateShouldReturnCreatedAccountIfUserCreatesNewOrganization()
     {
         //Arrange
-        var createdAccount = new EmployerAccount
+        var createdAccount = new Employer
         {
             FullName = "test first",
             Email = "test@gmail.com",
@@ -37,12 +37,12 @@ public class EmployerAccountServiceTests
         };
         var userId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId))
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployer(userId))
             .ThrowsAsync(new EmployerAccountNotFoundException());
         _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationByName(createdAccount.Organization.Name))
             .ReturnsAsync((Organization?)null);
         //Act
-        var account = await _employerAccountService.CreateEmployerAccount(createdAccount);
+        var account = await _employerService.CreateEmployer(createdAccount);
         //Assert
         Assert.Equal(createdAccount.FullName, account.FullName);
         Assert.Equal(userId, account.UserId);
@@ -55,7 +55,7 @@ public class EmployerAccountServiceTests
         //Arrange
         var userId = 1;
         var organizationId = 1;
-        var createdAccount = new EmployerAccount
+        var createdAccount = new Employer
         {
             FullName = "test first",
             Email = "test@gmail.com",
@@ -79,14 +79,14 @@ public class EmployerAccountServiceTests
             }
         };
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId))
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployer(userId))
             .ThrowsAsync(new EmployerAccountNotFoundException());
         _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationByName(createdAccount.Organization.Name))
             .ReturnsAsync(organization);
         _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmailByOrganizationId(organization.Id,
             "test@gmail.com")).ReturnsAsync(employeeEmail);
         //Act
-        var account = await _employerAccountService.CreateEmployerAccount(createdAccount);
+        var account = await _employerService.CreateEmployer(createdAccount);
         //Assert
         Assert.Equal(createdAccount.FullName, account.FullName);
         Assert.Equal(userId, account.UserId);
@@ -97,7 +97,7 @@ public class EmployerAccountServiceTests
     public async Task CreateShouldThrowForbiddenExceptionIfEmailIsNotSpecifiedInOrganizationEmployeeEmails()
     {
         //Arrange
-        var createdAccount = new EmployerAccount
+        var createdAccount = new Employer
         {
             FullName = "test first",
             Email = "test@gmail.com",
@@ -119,21 +119,21 @@ public class EmployerAccountServiceTests
             }
         };
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId))
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployer(userId))
             .ThrowsAsync(new EmployerAccountNotFoundException());
         _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationByName(createdAccount.Organization.Name))
             .ReturnsAsync(organization);
         _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmailByOrganizationId(organization.Id,
             "test@gmail.com")).ReturnsAsync((OrganizationEmployeeEmail?)null);
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
-            await _employerAccountService.CreateEmployerAccount(createdAccount));
+            await _employerService.CreateEmployer(createdAccount));
     }
 
     [Fact]
     public async Task CreateShouldThrowEmployerAccountAlreadyExistsExceptionIfAccountAlreadyHasBeenCrated()
     {
         //Arrange
-        var createdAccount = new EmployerAccount
+        var createdAccount = new Employer
         {
             FullName = "test first",
             Email = "test@gmail.com",
@@ -144,17 +144,17 @@ public class EmployerAccountServiceTests
         };
         var userId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId))
-            .ReturnsAsync(EmployerAccountFixtures.EmployerAccountEntity);
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployer(userId))
+            .ReturnsAsync(EmployerAccountFixtures.EmployerEntity);
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
-            await _employerAccountService.CreateEmployerAccount(createdAccount));
+            await _employerService.CreateEmployer(createdAccount));
     }
 
     [Fact]
     public async Task UpdateShouldReturnUpdatedAccount()
     {
         //Arrange
-        var updatedAccount = new EmployerAccount
+        var updatedAccount = new Employer
         {
             FullName = "oldName",
             Email = "test@gmail.com"
@@ -162,15 +162,15 @@ public class EmployerAccountServiceTests
         var userId = 1;
         var accountId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(accountId)).ReturnsAsync(
-            new EmployerAccount
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployer(accountId)).ReturnsAsync(
+            new Employer
             {
                 UserId = userId,
                 FullName = "oldName",
                 Email = "oldContactEmail"
             });
         //Act
-        var account = await _employerAccountService.UpdateEmployerAccount(accountId, updatedAccount);
+        var account = await _employerService.UpdateEmployer(accountId, updatedAccount);
         //Assert
         Assert.Equal(updatedAccount.Email, account.Email);
         Assert.Equal(userId, account.UserId);
@@ -181,7 +181,7 @@ public class EmployerAccountServiceTests
     public async Task UpdateShouldThrownAnExceptionIfNotCurrentUserTriesToChangeAccount()
     {
         //Arrange
-        var updatedAccount = new EmployerAccount
+        var updatedAccount = new Employer
         {
             FullName = "oldName",
             Email = "test@gmail.com"
@@ -189,8 +189,8 @@ public class EmployerAccountServiceTests
         var userId = 1;
         var accountId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(accountId)).ReturnsAsync(
-            new EmployerAccount
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployer(accountId)).ReturnsAsync(
+            new Employer
             {
                 UserId = 2,
                 FullName = "oldName",
@@ -198,6 +198,6 @@ public class EmployerAccountServiceTests
             });
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
-            await _employerAccountService.UpdateEmployerAccount(accountId, updatedAccount));
+            await _employerService.UpdateEmployer(accountId, updatedAccount));
     }
 }

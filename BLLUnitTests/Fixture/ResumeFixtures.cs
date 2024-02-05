@@ -30,7 +30,7 @@ public static class ResumeFixtures
     public static Resume ResumeEntity = new()
     {
         Id = 1,
-        JobSeekerAccountId = 1,
+        JobSeekerId = 1,
         Educations = new List<Education>
         {
             new()

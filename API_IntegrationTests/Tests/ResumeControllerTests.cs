@@ -29,7 +29,7 @@ public class ResumeControllerTests : IntegrationTest
         Assert.Equal(HttpStatusCode.OK, getResumeResponse.StatusCode);
         var receivedResume = await getResumeResponse.Content.ReadAsAsync<ResumeDTO>();
         Assert.Equal(createdResume.Id, receivedResume.Id);
-        Assert.Equal(createdResume.JobSeekerAccountId, createdResume.JobSeekerAccountId);
+        Assert.Equal(createdResume.JobSeekerId, createdResume.JobSeekerId);
         Assert.Equal(createdResume.WorkExperiences[0].JobTitle, receivedResume.WorkExperiences[0].JobTitle);
     }
 
@@ -39,7 +39,7 @@ public class ResumeControllerTests : IntegrationTest
         //Arrange
         var currentUser = await AuthenticateAsync();
         var getCurrentJobSeekerResponse = await TestClient.GetAsync("api/JobSeekerAccount/current-job-seeker");
-        var jobSeeker = await getCurrentJobSeekerResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
+        var jobSeeker = await getCurrentJobSeekerResponse.Content.ReadAsAsync<JobSeekerDTO>();
         var createdResumeDTO = ResumeFixtures.Resume;
         var requestUri = _baseUri;
 
@@ -51,7 +51,7 @@ public class ResumeControllerTests : IntegrationTest
 
         var createdResume = await createResumeResponse.Content.ReadAsAsync<ResumeDTO>();
         Assert.NotEqual(0, createdResume.Id);
-        Assert.Equal(createdResume.JobSeekerAccountId, jobSeeker.Id);
+        Assert.Equal(createdResume.JobSeekerId, jobSeeker.Id);
         Assert.Equal(createdResumeDTO.Educations[0].LevelOfEducation, createdResume.Educations[0].LevelOfEducation);
     }
 

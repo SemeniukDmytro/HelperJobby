@@ -7,31 +7,31 @@ namespace ApplicationBLL.Services;
 
 public class ResumeService : IResumeService
 {
-    private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+    private readonly IJobSeekerQueryRepository _jobSeekerQueryRepository;
     private readonly IUserService _userService;
 
     public ResumeService(IUserService userService,
-        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository)
+        IJobSeekerQueryRepository jobSeekerQueryRepository)
     {
         _userService = userService;
-        _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
+        _jobSeekerQueryRepository = jobSeekerQueryRepository;
     }
 
-    public async Task<Resume> CreateResume(Resume resume)
+    public async Task<Resume> CreateResume(Resume createdResume)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        if (jobSeekerAccount.Resume != null) throw new ForbiddenException("Resume already exists");
-        resume.JobSeekerAccountId = jobSeekerAccount.Id;
-        return resume;
+        var jobSeeker = await _jobSeekerQueryRepository.GetJobSeekerWithResume(currentUserId);
+        if (jobSeeker.Resume != null) throw new ForbiddenException("Resume already exists");
+        createdResume.JobSeekerId = jobSeeker.Id;
+        return createdResume;
     }
 
 
     public async Task<Resume> DeleteResume(int resumeId)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        if (resumeId != jobSeekerAccount.Resume.Id) throw new ForbiddenException();
-        return jobSeekerAccount.Resume;
+        var jobSeeker = await _jobSeekerQueryRepository.GetJobSeekerWithResume(currentUserId);
+        if (resumeId != jobSeeker.Resume.Id) throw new ForbiddenException();
+        return jobSeeker.Resume;
     }
 }

@@ -11,12 +11,12 @@ public class ResumeProfile : Profile
     {
         CreateMap<Resume, ResumeDTO>().AfterMap((src, dest, context) =>
         {
-            dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccount, JobSeekerAccountDTO>(src.JobSeekerAccount);
+            dest.JobSeeker = context.Mapper.Map<JobSeeker, JobSeekerDTO>(src.JobSeeker);
         });
 
         CreateMap<ResumeDTO, Resume>().AfterMap((src, dest, context) =>
         {
-            dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccountDTO, JobSeekerAccount>(src.JobSeekerAccount);
+            dest.JobSeeker = context.Mapper.Map<JobSeekerDTO, JobSeeker>(src.JobSeeker);
         });
         CreateMap<CreateResumeDTO, Resume>();
     }

@@ -18,7 +18,7 @@ public class ResumeQueryRepository : IResumeQueryRepository
     public async Task<Resume> GetResumeById(int resumeId)
     {
         var resume = await _applicationContext.Resumes
-            .Include(r => r.JobSeekerAccount)
+            .Include(r => r.JobSeeker)
             .Include(r => r.Educations)
             .Include(r => r.WorkExperiences)
             .Include(r => r.Skills)
@@ -29,7 +29,7 @@ public class ResumeQueryRepository : IResumeQueryRepository
 
     public async Task<Resume> GetResumeByJobSeekerId(int jobSeekerId)
     {
-        var resume = await _applicationContext.Resumes.Where(r => r.JobSeekerAccountId == jobSeekerId)
+        var resume = await _applicationContext.Resumes.Where(r => r.JobSeekerId == jobSeekerId)
             .Select(r => new Resume
             {
                 Id = r.Id,
@@ -39,7 +39,7 @@ public class ResumeQueryRepository : IResumeQueryRepository
             }).FirstOrDefaultAsync();
         if (resume == null) throw new ResumeNotFoundException();
 
-        resume.JobSeekerAccountId = jobSeekerId;
+        resume.JobSeekerId = jobSeekerId;
         return resume;
     }
 

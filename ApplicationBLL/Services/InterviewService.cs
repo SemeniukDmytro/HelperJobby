@@ -7,30 +7,30 @@ namespace ApplicationBLL.Services;
 
 public class InterviewService : IInterviewService
 {
-    private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
+    private readonly IEmployerQueryRepository _employerQueryRepository;
     private readonly IInterviewQueryRepository _interviewQueryRepository;
     private readonly IJobQueryRepository _jobQueryRepository;
-    private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+    private readonly IJobSeekerQueryRepository _jobSeekerQueryRepository;
     private readonly IUserService _userService;
 
     public InterviewService(IUserService userService, IJobQueryRepository jobQueryRepository,
-        IEmployerAccountQueryRepository employerAccountQueryRepository,
+        IEmployerQueryRepository employerQueryRepository,
         IInterviewQueryRepository interviewQueryRepository,
-        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository)
+        IJobSeekerQueryRepository jobSeekerQueryRepository)
     {
         _userService = userService;
         _jobQueryRepository = jobQueryRepository;
-        _employerAccountQueryRepository = employerAccountQueryRepository;
+        _employerQueryRepository = employerQueryRepository;
         _interviewQueryRepository = interviewQueryRepository;
-        _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
+        _jobSeekerQueryRepository = jobSeekerQueryRepository;
     }
 
     public async Task<Job> GetInterviewsForSpecificJob(int jobId)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var currentEmployer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
+        var currentEmployer = await _employerQueryRepository.GetEmployer(currentUserId);
         var job = await _jobQueryRepository.GetJobById(jobId);
-        if (job.EmployerAccountId != currentEmployer.Id)
+        if (job.EmployerId != currentEmployer.Id)
             throw new ForbiddenException("You can not have access to this information");
 
         return job;
@@ -49,9 +49,9 @@ public class InterviewService : IInterviewService
 
         if (interview != null) throw new InterviewOperatingException("This interview is already created");
         var currentUserId = _userService.GetCurrentUserId();
-        var currentEmployer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
+        var currentEmployer = await _employerQueryRepository.GetEmployer(currentUserId);
         var job = await _jobQueryRepository.GetJobById(jobId);
-        if (job.EmployerAccountId != currentEmployer.Id)
+        if (job.EmployerId != currentEmployer.Id)
             throw new ForbiddenException(
                 "You can't create interview for this job. Job was created by another employer");
 
@@ -61,7 +61,7 @@ public class InterviewService : IInterviewService
         var newInterview = new Interview
         {
             JobId = jobId,
-            JobSeekerAccountId = jobSeekerId,
+            JobSeekerId = jobSeekerId,
             InterviewStart = interviewInfo.InterviewStart,
             InterviewEnd = interviewInfo.InterviewEnd,
             InterviewType = interviewInfo.InterviewType,
@@ -72,21 +72,21 @@ public class InterviewService : IInterviewService
 
     public async Task<Interview> CancelInterviewFromEmployerAccount(int jobId, int jobSeekerId)
     {
-        var interview = await _interviewQueryRepository.GetInterviewWithJob(jobId, jobSeekerId);
+        var interviewEntity = await _interviewQueryRepository.GetInterviewWithJob(jobId, jobSeekerId);
         var currentUserId = _userService.GetCurrentUserId();
-        var currentEmployer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
-        if (interview.Job.EmployerAccountId != currentEmployer.Id)
+        var currentEmployer = await _employerQueryRepository.GetEmployer(currentUserId);
+        if (interviewEntity.Job.EmployerId != currentEmployer.Id)
             throw new ForbiddenException("You can't delete interview. Because it was created by another employer");
 
-        return interview;
+        return interviewEntity;
     }
 
     public async Task<Interview> CancelInterviewFromJobSeekerAccount(int jobId)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var currentJobSeeker = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountByUserId(currentUserId);
-        var interview =
+        var currentJobSeeker = await _jobSeekerQueryRepository.GetJobSeekerByUserId(currentUserId);
+        var interviewEntity =
             await _interviewQueryRepository.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, currentJobSeeker.Id);
-        return interview;
+        return interviewEntity;
     }
 }

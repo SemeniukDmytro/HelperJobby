@@ -55,11 +55,11 @@ public class IntegrationTest
         return userWithToken.User;
     }
 
-    protected async Task<EmployerAccountDTO> CreateEmployerWithNewOrganizationForAuthUser()
+    protected async Task<EmployerDTO> CreateEmployerWithNewOrganizationForAuthUser()
     {
         await AuthenticateAsync();
         var requestUri = "/api/employerAccount";
-        var createdEmployer = new CreateEmployerAccountDTO
+        var createdEmployer = new CreateEmployerDTO
         {
             FullName = "test name",
             Email = RandomStringGenerator.GenerateRandomEmail(),
@@ -68,16 +68,16 @@ public class IntegrationTest
             NumberOfEmployees = 10
         };
         var response = await TestClient.PostAsJsonAsync(requestUri, createdEmployer);
-        var employerWithCreatedOrganization = await response.Content.ReadAsAsync<EmployerAccountDTO>();
+        var employerWithCreatedOrganization = await response.Content.ReadAsAsync<EmployerDTO>();
         return employerWithCreatedOrganization;
     }
 
-    protected async Task<JobSeekerAccountDTO> GetCurrentJobSeekerAccount()
+    protected async Task<JobSeekerDTO> GetCurrentJobSeekerAccount()
     {
         await AuthenticateAsync();
         var getJobSeekerRequestUri = "api/JobSeekerAccount/current-job-seeker";
         var jobSeekerResponse = await TestClient.GetAsync(getJobSeekerRequestUri);
-        return await jobSeekerResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
+        return await jobSeekerResponse.Content.ReadAsAsync<JobSeekerDTO>();
     }
 
     protected async Task<AuthUserDTO> LoginUser(string email, string password)
@@ -92,16 +92,16 @@ public class IntegrationTest
         return authUserDTO;
     }
 
-    protected async Task<CurrentJobCreationDTO> CreateNewCurrentJob(CurrentJobCreateDTO currentJobCreateDTO)
+    protected async Task<IncompleteJobDTO> CreateNewCurrentJob(IncompleteJobCreateDTO incompleteJobCreateDto)
     {
-        var newCurrentJob = currentJobCreateDTO;
+        var newCurrentJob = incompleteJobCreateDto;
         var currentJobCreationResponse = await TestClient.PostAsJsonAsync("/api/CurrentJob", newCurrentJob);
-        return await currentJobCreationResponse.Content.ReadAsAsync<CurrentJobCreationDTO>();
+        return await currentJobCreationResponse.Content.ReadAsAsync<IncompleteJobDTO>();
     }
 
     protected async Task<JobDTO> CreateJob()
     {
-        var currentJobCreation = await CreateNewCurrentJob(CurrentJobFixtures.CompletedJobCreation);
+        var currentJobCreation = await CreateNewCurrentJob(IncompleteJobFixtures.CompletedJobCreation);
         var requestUri = $"/api/job/{currentJobCreation.Id}";
         var jobCreateResponse = await TestClient.PostAsJsonAsync(requestUri, currentJobCreation.Id);
         return await jobCreateResponse.Content.ReadAsAsync<JobDTO>();

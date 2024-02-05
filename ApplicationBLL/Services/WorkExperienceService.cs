@@ -9,38 +9,38 @@ namespace ApplicationBLL.Services;
 public class WorkExperienceService : IWorkExperienceService
 {
     private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
-    private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+    private readonly IJobSeekerQueryRepository _jobSeekerQueryRepository;
     private readonly IUserService _userService;
     private readonly IWorkExperienceQueryRepository _workExperienceQueryRepository;
 
     public WorkExperienceService(IUserService userService,
         IWorkExperienceQueryRepository workExperienceQueryRepository,
-        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository,
+        IJobSeekerQueryRepository jobSeekerQueryRepository,
         IEnqueuingTaskHelper enqueuingTaskHelper)
     {
         _userService = userService;
         _workExperienceQueryRepository = workExperienceQueryRepository;
-        _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
+        _jobSeekerQueryRepository = jobSeekerQueryRepository;
         _enqueuingTaskHelper = enqueuingTaskHelper;
     }
 
-    public async Task<WorkExperience> AddWorkExperience(int resumeId, WorkExperience workExperience)
+    public async Task<WorkExperience> AddWorkExperience(int resumeId, WorkExperience createdWorkExperience)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        if (jobSeekerAccount.Resume.Id != resumeId)
+        var jobSeeker = await _jobSeekerQueryRepository.GetJobSeekerWithResume(currentUserId);
+        if (jobSeeker.Resume.Id != resumeId)
             throw new ForbiddenException("You can not add work experience to this resume");
 
-        workExperience.ResumeId = resumeId;
-        return workExperience;
+        createdWorkExperience.ResumeId = resumeId;
+        return createdWorkExperience;
     }
 
     public async Task<WorkExperience> UpdateWorkExperience(int workExperienceId, WorkExperience updatedWorkExperience)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
+        var jobSeeker = await _jobSeekerQueryRepository.GetJobSeekerWithResume(currentUserId);
         var workExperienceEntity = await _workExperienceQueryRepository.GetWorkExperienceById(workExperienceId);
-        if (workExperienceEntity.ResumeId != jobSeekerAccount.Resume.Id) throw new ForbiddenException();
+        if (workExperienceEntity.ResumeId != jobSeeker.Resume.Id) throw new ForbiddenException();
 
         var oldWorkExperienceJobTitle = workExperienceEntity.JobTitle;
         workExperienceEntity = UpdateWorkExperience(workExperienceEntity, updatedWorkExperience);
@@ -57,16 +57,16 @@ public class WorkExperienceService : IWorkExperienceService
     {
         var isInvalidResume = false;
         var currentUserId = _userService.GetCurrentUserId();
-        var jobSeekerAccount = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        if (jobSeekerAccount.Resume == null) throw new ResumeNotFoundException();
+        var jobSeeker = await _jobSeekerQueryRepository.GetJobSeekerWithResume(currentUserId);
+        if (jobSeeker.Resume == null) throw new ResumeNotFoundException();
         var workExperience =
-            jobSeekerAccount.Resume.WorkExperiences.FirstOrDefault(we => we.WorkExperienceId == workExperienceId);
+            jobSeeker.Resume.WorkExperiences.FirstOrDefault(we => we.Id == workExperienceId);
 
         if (workExperience == null) throw new ForbiddenException();
-        if (jobSeekerAccount.Resume.Educations.Count == 0 && jobSeekerAccount.Resume.WorkExperiences.Count <= 1
-                                                          && jobSeekerAccount.Resume.Skills.Count == 0)
+        if (jobSeeker.Resume.Educations.Count == 0 && jobSeeker.Resume.WorkExperiences.Count <= 1
+                                                          && jobSeeker.Resume.Skills.Count == 0)
             isInvalidResume = true;
-        workExperience.Resume = jobSeekerAccount.Resume;
+        workExperience.Resume = jobSeeker.Resume;
         return (workExperience, isInvalidResume);
     }
 

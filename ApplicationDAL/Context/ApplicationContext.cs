@@ -11,18 +11,15 @@ public class ApplicationContext : DbContext
     {
     }
 
-    public ApplicationContext()
-    {
-    }
 
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Education> Educations { get; set; }
-    public DbSet<EmployerAccount> EmployerAccounts { get; set; }
-    public DbSet<CurrentJobCreation> CurrentJobCreations { get; set; }
+    public DbSet<Employer> Employers { get; set; }
+    public DbSet<IncompleteJob> IncompleteJobs { get; set; }
     public DbSet<Interview> Interviews { get; set; }
     public DbSet<Job> Jobs { get; set; }
     public DbSet<JobApply> JobApplies { get; set; }
-    public DbSet<JobSeekerAccount> JobSeekerAccounts { get; set; }
+    public DbSet<JobSeeker> JobSeekers { get; set; }
     public DbSet<Organization> Organizations { get; set; }
     public DbSet<Resume> Resumes { get; set; }
     public DbSet<SavedJob> SavedJobs { get; set; }
@@ -37,7 +34,7 @@ public class ApplicationContext : DbContext
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<RecentUserSearch> RecentUserSearches { get; set; }
     public DbSet<JobSalary> JobSalaries { get; set; }
-    public DbSet<CurrentJobSalary> CurrentJobSalaries { get; set; }
+    public DbSet<IncompleteJobSalary> IncompleteJobSalaries { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -46,45 +43,45 @@ public class ApplicationContext : DbContext
             .IsUnique();
 
         modelBuilder.Entity<User>()
-            .HasOne(u => u.JobSeekerAccount)
+            .HasOne(u => u.JobSeeker)
             .WithOne(jsa => jsa.User)
-            .HasForeignKey<JobSeekerAccount>(jsa => jsa.UserId)
+            .HasForeignKey<JobSeeker>(jsa => jsa.UserId)
             .IsRequired();
 
         modelBuilder.Entity<User>()
-            .HasOne(u => u.EmployerAccount)
+            .HasOne(u => u.Employer)
             .WithOne(ea => ea.User)
-            .HasForeignKey<EmployerAccount>(ea => ea.UserId)
+            .HasForeignKey<Employer>(ea => ea.UserId)
             .IsRequired();
 
-        modelBuilder.Entity<JobSeekerAccount>()
+        modelBuilder.Entity<JobSeeker>()
             .HasIndex(jsa => jsa.PhoneNumber)
             .IsUnique();
 
-        modelBuilder.Entity<JobSeekerAccount>()
+        modelBuilder.Entity<JobSeeker>()
             .HasOne(a => a.Address)
             .WithMany()
             .HasForeignKey(jsa => jsa.AddressId);
 
-        modelBuilder.Entity<JobSeekerAccount>()
+        modelBuilder.Entity<JobSeeker>()
             .HasOne(jsa => jsa.Resume)
-            .WithOne(r => r.JobSeekerAccount)
-            .HasForeignKey<Resume>(r => r.JobSeekerAccountId)
+            .WithOne(r => r.JobSeeker)
+            .HasForeignKey<Resume>(r => r.JobSeekerId)
             .IsRequired();
 
-        modelBuilder.Entity<EmployerAccount>()
+        modelBuilder.Entity<Employer>()
             .HasIndex(e => e.Email)
             .IsUnique();
 
-        modelBuilder.Entity<EmployerAccount>().HasOne(ea => ea.Organization)
-            .WithMany(o => o.EmployeeAccounts)
+        modelBuilder.Entity<Employer>().HasOne(ea => ea.Organization)
+            .WithMany(o => o.Employees)
             .HasForeignKey(o => o.OrganizationId)
             .IsRequired();
 
-        modelBuilder.Entity<EmployerAccount>()
-            .HasOne(ea => ea.CurrentJobCreation)
-            .WithOne(cj => cj.EmployerAccount)
-            .HasForeignKey<CurrentJobCreation>(cj => cj.EmployerAccountId)
+        modelBuilder.Entity<Employer>()
+            .HasOne(ea => ea.IncompleteJob)
+            .WithOne(cj => cj.Employer)
+            .HasForeignKey<IncompleteJob>(cj => cj.EmployerId)
             .IsRequired();
 
         modelBuilder.Entity<Organization>()
@@ -101,19 +98,19 @@ public class ApplicationContext : DbContext
             .IsUnique();
 
         modelBuilder.Entity<Job>()
-            .HasOne(j => j.EmployerAccount)
+            .HasOne(j => j.Employer)
             .WithMany(ea => ea.Jobs)
-            .HasForeignKey(j => j.EmployerAccountId);
+            .HasForeignKey(j => j.EmployerId);
 
         modelBuilder.Entity<JobSalary>()
             .HasOne(s => s.Job)
             .WithOne(j => j.Salary)
             .HasForeignKey<JobSalary>(s => s.JobId);
             
-        modelBuilder.Entity<CurrentJobSalary>()
-            .HasOne(s => s.CurrentJob)
+        modelBuilder.Entity<IncompleteJobSalary>()
+            .HasOne(s => s.IncompleteJob)
             .WithOne(j => j.Salary)
-            .HasForeignKey<CurrentJobSalary>(s => s.CurrentJobId);
+            .HasForeignKey<IncompleteJobSalary>(s => s.IncompleteJobId);
 
         
         modelBuilder.Entity<Resume>()
@@ -132,7 +129,7 @@ public class ApplicationContext : DbContext
             .HasForeignKey(s => s.ResumeId);
 
         modelBuilder.Entity<SavedJob>()
-            .HasKey(e => new { e.JobId, e.JobSeekerAccountId });
+            .HasKey(e => new { e.JobId, JobSeekerAccountId = e.JobSeekerId });
 
         modelBuilder.Entity<SavedJob>()
             .HasOne(sj => sj.Job)
@@ -140,12 +137,12 @@ public class ApplicationContext : DbContext
             .HasForeignKey(sj => sj.JobId);
 
         modelBuilder.Entity<SavedJob>()
-            .HasOne(sj => sj.JobSeekerAccount)
+            .HasOne(sj => sj.JobSeeker)
             .WithMany(jsa => jsa.SavedJobs)
-            .HasForeignKey(sj => sj.JobSeekerAccountId);
+            .HasForeignKey(sj => sj.JobSeekerId);
 
         modelBuilder.Entity<Interview>()
-            .HasKey(e => new { e.JobId, e.JobSeekerAccountId });
+            .HasKey(e => new { e.JobId, JobSeekerAccountId = e.JobSeekerId });
 
         modelBuilder.Entity<Interview>()
             .HasOne(i => i.Job)
@@ -153,12 +150,12 @@ public class ApplicationContext : DbContext
             .HasForeignKey(i => i.JobId);
 
         modelBuilder.Entity<Interview>()
-            .HasOne(i => i.JobSeekerAccount)
+            .HasOne(i => i.JobSeeker)
             .WithMany(jsa => jsa.Interviews)
-            .HasForeignKey(i => i.JobSeekerAccountId);
+            .HasForeignKey(i => i.JobSeekerId);
 
         modelBuilder.Entity<JobApply>()
-            .HasKey(e => new { e.JobId, e.JobSeekerAccountId });
+            .HasKey(e => new { e.JobId, JobSeekerAccountId = e.JobSeekerId });
 
         modelBuilder.Entity<JobApply>()
             .HasOne(ja => ja.Job)
@@ -166,9 +163,9 @@ public class ApplicationContext : DbContext
             .HasForeignKey(ja => ja.JobId);
 
         modelBuilder.Entity<JobApply>()
-            .HasOne(ja => ja.JobSeekerAccount)
+            .HasOne(ja => ja.JobSeeker)
             .WithMany(j => j.JobApplies)
-            .HasForeignKey(ja => ja.JobSeekerAccountId);
+            .HasForeignKey(ja => ja.JobSeekerId);
 
         modelBuilder.Entity<JobIndexedWord>()
             .HasMany(iw => iw.ProcessedJobWords)

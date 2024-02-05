@@ -49,7 +49,7 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
     public async Task<Organization> GetOrganizationWithEmployees(int organizationId)
     {
         var organization = await GetOrganizationPlain(organizationId);
-        await _applicationContext.Entry(organization).Collection(o => o.EmployeeAccounts).LoadAsync();
+        await _applicationContext.Entry(organization).Collection(o => o.Employees).LoadAsync();
         return organization;
     }
 

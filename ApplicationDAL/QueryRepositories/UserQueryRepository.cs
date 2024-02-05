@@ -30,20 +30,20 @@ public class UserQueryRepository : IUserQueryRepository
         return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.RefreshToken));
     }
 
-    public async Task<User> GetUserWithEmployerAccount(int userId)
+    public async Task<User> GetUserWithEmployer(int userId)
     {
-        return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.EmployerAccount));
+        return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.Employer));
     }
 
-    public async Task<User> GetUserWithJobSeekerAccount(int userId)
+    public async Task<User> GetUserWithJobSeeker(int userId)
     {
-        return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.JobSeekerAccount));
+        return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.JobSeeker));
     }
 
     public async Task<User> GetUserById(int userId)
     {
-        return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.EmployerAccount)
-            .Include(u => u.JobSeekerAccount));
+        return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.Employer)
+            .Include(u => u.JobSeeker));
     }
 
     public async Task<bool> IsEmailAvailable(string email)

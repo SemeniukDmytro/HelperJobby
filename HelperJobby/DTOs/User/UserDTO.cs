@@ -12,7 +12,7 @@ public class UserDTO
 
     public string AccountType { get; set; }
 
-    public JobSeekerAccountDTO JobSeekerAccount { get; set; }
+    public JobSeekerDTO JobSeeker { get; set; }
 
-    public EmployerAccountDTO EmployerAccount { get; set; }
+    public EmployerDTO Employer { get; set; }
 }

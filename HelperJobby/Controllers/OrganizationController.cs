@@ -15,7 +15,7 @@ namespace HelperJobby.Controllers;
 [Authorize]
 public class OrganizationController : ExtendedBaseController
 {
-    private readonly IEmployerAccountCommandRepository _employerAccountCommandRepository;
+    private readonly IEmployerCommandRepository _employerCommandRepository;
     private readonly IOrganizationCommandRepository _organizationCommandRepository;
     private readonly IOrganizationQueryRepository _organizationQueryRepository;
     private readonly IOrganizationService _organizationService;
@@ -23,12 +23,12 @@ public class OrganizationController : ExtendedBaseController
     // GET: api/Organization/5
     public OrganizationController(IOrganizationQueryRepository organizationQueryRepository,
         IOrganizationService organizationService, IOrganizationCommandRepository organizationCommandRepository,
-        IMapper mapper, IEmployerAccountCommandRepository employerAccountCommandRepository) : base(mapper)
+        IMapper mapper, IEmployerCommandRepository employerCommandRepository) : base(mapper)
     {
         _organizationQueryRepository = organizationQueryRepository;
         _organizationService = organizationService;
         _organizationCommandRepository = organizationCommandRepository;
-        _employerAccountCommandRepository = employerAccountCommandRepository;
+        _employerCommandRepository = employerCommandRepository;
     }
 
     [HttpGet("{id}")]
@@ -67,6 +67,6 @@ public class OrganizationController : ExtendedBaseController
         var employeeEmail =
             await _organizationService.RemoveEmployeeEmail(employeeEmailId);
         await _organizationCommandRepository.RemoveOrganizationEmployeesEmails(employeeEmail);
-        await _employerAccountCommandRepository.RemoveEmployeeByEmployeeEmail(employeeEmail);
+        await _employerCommandRepository.RemoveEmployeeByEmployeeEmail(employeeEmail);
     }
 }

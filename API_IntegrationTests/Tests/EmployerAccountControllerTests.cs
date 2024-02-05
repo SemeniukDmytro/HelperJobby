@@ -27,7 +27,7 @@ public class EmployerAccountControllerTests : IntegrationTest
 
         //Assert
         Assert.Equal(HttpStatusCode.OK, employerCreationResponse.StatusCode);
-        var employer = await employerCreationResponse.Content.ReadAsAsync<EmployerAccountDTO>();
+        var employer = await employerCreationResponse.Content.ReadAsAsync<EmployerDTO>();
         Assert.NotEqual(0, employer.Id);
         Assert.NotEqual(0, employer.Organization.Id);
         Assert.Equal(employer.Email, createdEmployer.Email);
@@ -53,7 +53,7 @@ public class EmployerAccountControllerTests : IntegrationTest
 
         //Assert
         Assert.Equal(HttpStatusCode.OK, employerCreationResponse.StatusCode);
-        var employer = await employerCreationResponse.Content.ReadAsAsync<EmployerAccountDTO>();
+        var employer = await employerCreationResponse.Content.ReadAsAsync<EmployerDTO>();
         Assert.NotEqual(0, employer.Id);
         Assert.NotEqual(0, employer.Organization.Id);
         Assert.Equal(newEmployer.Email, employer.Email);
@@ -66,7 +66,7 @@ public class EmployerAccountControllerTests : IntegrationTest
         //Arrange
         var currentEmployer = await CreateEmployerWithNewOrganizationForAuthUser();
         var requestUri = $"/api/employerAccount/{currentEmployer.UserId}";
-        var updateEmployerAccountDTO = new UpdateEmployerAccountDTO
+        var updateEmployerAccountDTO = new UpdateEmployerDTO
         {
             Email = "newemail@gmail.com",
             ContactNumber = ""
@@ -78,7 +78,7 @@ public class EmployerAccountControllerTests : IntegrationTest
 
         //Assert
         Assert.Equal(HttpStatusCode.OK, updateEmployerResponse.StatusCode);
-        var updatedEmployer = await updateEmployerResponse.Content.ReadAsAsync<EmployerAccountDTO>();
+        var updatedEmployer = await updateEmployerResponse.Content.ReadAsAsync<EmployerDTO>();
         Assert.Equal(currentEmployer.Id, updatedEmployer.Id);
         Assert.Equal(currentEmployer.ContactNumber, updatedEmployer.ContactNumber);
         Assert.Equal(currentEmployer.UserId, updatedEmployer.UserId);
@@ -98,7 +98,7 @@ public class EmployerAccountControllerTests : IntegrationTest
 
         //Assert
         Assert.Equal(HttpStatusCode.OK, getEmployerResponse.StatusCode);
-        var employer = await getEmployerResponse.Content.ReadAsAsync<EmployerAccountDTO>();
+        var employer = await getEmployerResponse.Content.ReadAsAsync<EmployerDTO>();
         Assert.Equal(createdEmployer.Id, employer.Id);
         Assert.Equal(createdEmployer.Email, employer.Email);
     }
@@ -116,7 +116,7 @@ public class EmployerAccountControllerTests : IntegrationTest
 
         //Assert
         Assert.Equal(HttpStatusCode.OK, getEmployerResponse.StatusCode);
-        var employer = await getEmployerResponse.Content.ReadAsAsync<EmployerAccountDTO>();
+        var employer = await getEmployerResponse.Content.ReadAsAsync<EmployerDTO>();
         Assert.Equal(createdEmployer.Id, employer.Id);
         Assert.Equal(createdEmployer.Email, employer.Email);
     }

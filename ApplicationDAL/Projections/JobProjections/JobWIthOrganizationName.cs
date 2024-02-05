@@ -20,13 +20,13 @@ public static class JobProjections
             ResumeRequired = j.ResumeRequired,
             Description = j.Description,
             DatePosted = j.DatePosted,
-            EmployerAccountId = j.EmployerAccountId,
-            EmployerAccount = new EmployerAccount
+            EmployerId = j.EmployerId,
+            Employer = new Employer
             {
                 Organization = new Organization
                 {
-                    Id = j.EmployerAccount.OrganizationId,
-                    Name = j.EmployerAccount.Organization.Name
+                    Id = j.Employer.OrganizationId,
+                    Name = j.Employer.Organization.Name
                 }
             }
         };

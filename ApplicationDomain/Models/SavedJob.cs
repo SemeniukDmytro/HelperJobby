@@ -12,12 +12,12 @@ public class SavedJob
 
     [Key]
     [Column(Order = 1)]
-    [ForeignKey("JobSeekerAccount")]
-    public int JobSeekerAccountId { get; set; }
+    [ForeignKey("JobSeeker")]
+    public int JobSeekerId { get; set; }
 
     public Job Job { get; set; }
 
-    public JobSeekerAccount JobSeekerAccount { get; set; }
+    public JobSeeker JobSeeker { get; set; }
 
     [Required] public DateOnly DateSaved { get; set; }
 }

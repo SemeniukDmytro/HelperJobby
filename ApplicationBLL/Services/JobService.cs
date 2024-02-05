@@ -9,16 +9,16 @@ namespace ApplicationBLL.Services;
 
 public class JobService : IJobService
 {
-    private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
+    private readonly IEmployerQueryRepository _employerQueryRepository;
     private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IUserService _userService;
 
     public JobService(IJobQueryRepository jobQueryRepository, IUserService userService,
-        IEmployerAccountQueryRepository employerAccountQueryRepository)
+        IEmployerQueryRepository employerQueryRepository)
     {
         _jobQueryRepository = jobQueryRepository;
         _userService = userService;
-        _employerAccountQueryRepository = employerAccountQueryRepository;
+        _employerQueryRepository = employerQueryRepository;
     }
 
     public async Task<Job> CreateJob(Job job)
@@ -37,20 +37,20 @@ public class JobService : IJobService
     public async Task<Job> UpdateJob(int jobId, Job updatedJob)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var employer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
+        var employer = await _employerQueryRepository.GetEmployer(currentUserId);
         var jobEntity = await _jobQueryRepository.GetJobById(jobId);
 
-        if (jobEntity.EmployerAccountId != employer.Id)
+        if (jobEntity.EmployerId != employer.Id)
             throw new ForbiddenException("You can not update this job information");
 
-        var updatedEntity = EntitiesUpdator<CurrentJobCreation>.UpdateEntityProperties(jobEntity, updatedJob);
+        var updatedEntity = EntitiesUpdator<IncompleteJob>.UpdateEntityProperties(jobEntity, updatedJob);
         if (jobEntity.Salary == null)
         {
             updatedEntity.Salary = updatedJob.Salary;
         }
         else
         {
-            var updatedSalary = EntitiesUpdator<CurrentJobSalary>.UpdateEntityProperties(updatedEntity.Salary,
+            var updatedSalary = EntitiesUpdator<IncompleteJobSalary>.UpdateEntityProperties(updatedEntity.Salary,
                 updatedJob.Salary);
             updatedEntity.Salary = updatedSalary;
         }
@@ -60,9 +60,9 @@ public class JobService : IJobService
     public async Task<Job> DeleteJob(int jobId)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var employer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
+        var employer = await _employerQueryRepository.GetEmployer(currentUserId);
         var jobEntity = await _jobQueryRepository.GetJobById(jobId);
-        if (jobEntity.EmployerAccountId != employer.Id) throw new ForbiddenException("You can not delete this job");
+        if (jobEntity.EmployerId != employer.Id) throw new ForbiddenException("You can not delete this job");
 
         return jobEntity;
     }

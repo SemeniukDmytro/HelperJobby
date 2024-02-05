@@ -31,7 +31,7 @@ public class WorkExperienceQueryRepository : IWorkExperienceQueryRepository
         var query = _applicationContext.WorkExperiences.AsQueryable();
         if (includeFunc != null) query = includeFunc(query);
 
-        var workExperience = await query.FirstOrDefaultAsync(e => e.WorkExperienceId == workExperienceId);
+        var workExperience = await query.FirstOrDefaultAsync(e => e.Id == workExperienceId);
         if (workExperience == null) throw new WorkExperienceNotFoundException();
         return workExperience;
     }

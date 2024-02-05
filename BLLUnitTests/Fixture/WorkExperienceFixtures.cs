@@ -30,7 +30,7 @@ public static class WorkExperienceFixtures
 
     public static WorkExperience FirstWorkExperienceEntity = new()
     {
-        WorkExperienceId = 1,
+        Id = 1,
         JobTitle = "Software Developer",
         Company = "ABC Inc.",
         Country = "United States",
@@ -44,7 +44,7 @@ public static class WorkExperienceFixtures
 
     public static WorkExperience SecondWorkExperienceEntity = new()
     {
-        WorkExperienceId = 2,
+        Id = 2,
         JobTitle = "Software Developer",
         Company = "ABC Inc.",
         Country = "United States",

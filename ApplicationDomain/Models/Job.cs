@@ -35,10 +35,10 @@ public class Job
 
     [ExcludeFromUpdate]
     [Required]
-    [ForeignKey("EmployerAccount")]
-    public int EmployerAccountId { get; set; }
+    [ForeignKey("Employer")]
+    public int EmployerId { get; set; }
 
-    [ExcludeFromUpdate] public EmployerAccount EmployerAccount { get; set; }
+    [ExcludeFromUpdate] public Employer Employer { get; set; }
 
     public List<Interview> Interviews { get; set; }
 

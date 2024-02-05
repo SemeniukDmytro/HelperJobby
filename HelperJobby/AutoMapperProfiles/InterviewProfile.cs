@@ -16,13 +16,13 @@ public class InterviewProfile : Profile
                     .MapFrom(src => EnumToStringConverter.InterviewTypeToStringConverter(src.InterviewType)))
             .AfterMap((src, dest, context) =>
             {
-                dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccount, JobSeekerAccountDTO>(src.JobSeekerAccount);
+                dest.JobSeeker = context.Mapper.Map<JobSeeker, JobSeekerDTO>(src.JobSeeker);
                 dest.Job = context.Mapper.Map<Job, JobDTO>(src.Job);
             });
 
         CreateMap<InterviewDTO, Interview>().AfterMap((src, dest, context) =>
         {
-            dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccountDTO, JobSeekerAccount>(src.JobSeekerAccount);
+            dest.JobSeeker = context.Mapper.Map<JobSeekerDTO, JobSeeker>(src.JobSeeker);
             dest.Job = context.Mapper.Map<JobDTO, Job>(src.Job);
         });
 

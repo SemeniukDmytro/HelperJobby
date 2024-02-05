@@ -7,17 +7,17 @@ namespace ApplicationBLL.Services;
 
 public class OrganizationService : IOrganizationService
 {
-    private readonly IEmployerAccountQueryRepository _employerAccountQueryRepository;
+    private readonly IEmployerQueryRepository _employerQueryRepository;
     private readonly IOrganizationQueryRepository _organizationQueryRepository;
     private readonly IUserService _userService;
 
     public OrganizationService(IUserService userService,
         IOrganizationQueryRepository organizationQueryRepository,
-        IEmployerAccountQueryRepository employerAccountQueryRepository)
+        IEmployerQueryRepository employerQueryRepository)
     {
         _userService = userService;
         _organizationQueryRepository = organizationQueryRepository;
-        _employerAccountQueryRepository = employerAccountQueryRepository;
+        _employerQueryRepository = employerQueryRepository;
     }
 
 
@@ -55,7 +55,7 @@ public class OrganizationService : IOrganizationService
         var currentUserId = _userService.GetCurrentUserId();
         var employeeEmail = await _organizationQueryRepository.GetEmployeeEmail(employeeEmailId);
         if (employeeEmail.Organization.OrganizationOwnerId != currentUserId) throw new ForbiddenException();
-        var currentEmployer = await _employerAccountQueryRepository.GetEmployerAccount(currentUserId);
+        var currentEmployer = await _employerQueryRepository.GetEmployer(currentUserId);
         if (currentEmployer.Email == employeeEmail.Email)
             throw new ForbiddenException("You can not remove yourself from your organization");
         return employeeEmail;

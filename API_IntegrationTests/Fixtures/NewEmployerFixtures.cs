@@ -5,7 +5,7 @@ namespace API_IntegrationTests.Fixtures;
 
 public class NewEmployerFixtures
 {
-    public static readonly CreateEmployerAccountDTO EmployerWithRandomOrganization = new()
+    public static readonly CreateEmployerDTO EmployerWithRandomOrganization = new()
     {
         FullName = "test name",
         Email = RandomStringGenerator.GenerateRandomEmail(),
@@ -14,7 +14,7 @@ public class NewEmployerFixtures
         NumberOfEmployees = 10
     };
 
-    public static CreateEmployerAccountDTO EmployerCreationInCreatedOrganization = new()
+    public static CreateEmployerDTO EmployerCreationInCreatedOrganization = new()
     {
         FullName = "test name",
         Email = "test@gmail.com",

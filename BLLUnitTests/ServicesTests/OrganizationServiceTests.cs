@@ -10,7 +10,7 @@ namespace BLLUnitTests.ServicesTests;
 
 public class OrganizationServiceTests
 {
-    private readonly Mock<IEmployerAccountQueryRepository> _employerAccountQueryRepositoryMock = new();
+    private readonly Mock<IEmployerQueryRepository> _employerAccountQueryRepositoryMock = new();
     private readonly Mock<IOrganizationQueryRepository> _organizationQueryRepositoryMock = new();
     private readonly OrganizationService _organizationService;
     private readonly Mock<IUserService> _userServiceMock = new();
@@ -163,8 +163,8 @@ public class OrganizationServiceTests
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
         _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmail(emailId))
             .ReturnsAsync(employeeEmail);
-        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId))
-            .ReturnsAsync(EmployerAccountFixtures.SecondEmployerAccountEntity);
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployer(userId))
+            .ReturnsAsync(EmployerAccountFixtures.SecondEmployerEntity);
         //Act
         var result = await _organizationService.RemoveEmployeeEmail(emailId);
         // Assert
@@ -216,8 +216,8 @@ public class OrganizationServiceTests
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
         _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmail(emailId))
             .ReturnsAsync(employeeEmail);
-        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployerAccount(userId))
-            .ReturnsAsync(EmployerAccountFixtures.EmployerAccountEntity);
+        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployer(userId))
+            .ReturnsAsync(EmployerAccountFixtures.EmployerEntity);
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(
             async () => await _organizationService.RemoveEmployeeEmail(emailId));

@@ -13,10 +13,10 @@ public class JobCommandRepository : IJobCommandRepository
         _applicationContext = applicationContext;
     }
 
-    public async Task<Job> CreateJob(CurrentJobCreation currentJobCreation, Job createdJob)
+    public async Task<Job> CreateJob(IncompleteJob incompleteJob, Job createdJob)
     {
         _applicationContext.Jobs.Add(createdJob);
-        _applicationContext.CurrentJobCreations.Remove(currentJobCreation);
+        _applicationContext.IncompleteJobs.Remove(incompleteJob);
         await _applicationContext.SaveChangesAsync();
         return createdJob;
     }

@@ -15,7 +15,7 @@ namespace HelperJobby.Controllers;
 [Authorize]
 public class JobController : ExtendedBaseController
 {
-    private readonly ICurrentJobCreationQueryRepository _currentJobCreationQueryRepository;
+    private readonly IIncompleteJobQueryRepository _incompleteJobQueryRepository;
     private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
     private readonly IJobCommandRepository _jobCommandRepository;
     private readonly IJobQueryRepository _jobQueryRepository;
@@ -23,13 +23,13 @@ public class JobController : ExtendedBaseController
 
     public JobController(IMapper mapper, IJobQueryRepository jobQueryRepository,
         IJobCommandRepository jobCommandRepository,
-        IJobService jobService, ICurrentJobCreationQueryRepository currentJobCreationQueryRepository,
+        IJobService jobService, IIncompleteJobQueryRepository incompleteJobQueryRepository,
         IEnqueuingTaskHelper enqueuingTaskHelper) : base(mapper)
     {
         _jobQueryRepository = jobQueryRepository;
         _jobCommandRepository = jobCommandRepository;
         _jobService = jobService;
-        _currentJobCreationQueryRepository = currentJobCreationQueryRepository;
+        _incompleteJobQueryRepository = incompleteJobQueryRepository;
         _enqueuingTaskHelper = enqueuingTaskHelper;
     }
 
@@ -52,12 +52,12 @@ public class JobController : ExtendedBaseController
         return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobWithOrganizationInfo(jobId));
     }
 
-    [HttpPost("{jobCreationId}")]
-    public async Task<JobDTO> CreateJob(int jobCreationId)
+    [HttpPost("{incompleteJobId}")]
+    public async Task<JobDTO> CreateJob(int incompleteJobId)
     {
-        var currentJobToCreate = await _currentJobCreationQueryRepository.GetJobCreationById(jobCreationId);
-        var createdJob = await _jobService.CreateJob(_mapper.Map<Job>(currentJobToCreate));
-        createdJob = await _jobCommandRepository.CreateJob(currentJobToCreate, createdJob);
+        var incompleteJobToCreate = await _incompleteJobQueryRepository.GetIncompleteJobById(incompleteJobId);
+        var createdJob = await _jobService.CreateJob(_mapper.Map<Job>(incompleteJobToCreate));
+        createdJob = await _jobCommandRepository.CreateJob(incompleteJobToCreate, createdJob);
 
         await _enqueuingTaskHelper.EnqueueJobIndexingTaskAsync(async indexingService =>
         {

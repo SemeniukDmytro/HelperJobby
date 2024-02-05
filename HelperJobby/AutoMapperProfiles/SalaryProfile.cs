@@ -10,10 +10,10 @@ public class SalaryProfile : Profile
     public SalaryProfile()
     {
         CreateMap<CreateUpdateSalaryDTO, JobSalary>();
-        CreateMap<CreateUpdateSalaryDTO, CurrentJobSalary>();
-        CreateMap<CurrentJobSalary, CurrentJobSalaryDTO>().AfterMap((src, dest, opt) =>
+        CreateMap<CreateUpdateSalaryDTO, IncompleteJobSalary>();
+        CreateMap<IncompleteJobSalary, IncompleteJobSalaryDTO>().AfterMap((src, dest, opt) =>
         {
-            dest.CurrentJob = opt.Mapper.Map<CurrentJobCreation, CurrentJobCreationDTO>(src.CurrentJob);
+            dest.IncompleteJob = opt.Mapper.Map<IncompleteJob, IncompleteJobDTO>(src.IncompleteJob);
             dest.SalaryRate = EnumToStringConverter.JobSalaryRateConverter(src.SalaryRate);
         });
         CreateMap<JobSalary, JobSalaryDTO>().AfterMap((src, dest, opt) =>
@@ -21,6 +21,6 @@ public class SalaryProfile : Profile
             dest.Job = opt.Mapper.Map<Job, JobDTO>(src.Job);
             dest.SalaryRate = EnumToStringConverter.JobSalaryRateConverter(src.SalaryRate);
         });
-        CreateMap<CurrentJobSalary, JobSalary>().ReverseMap();
+        CreateMap<IncompleteJobSalary, JobSalary>().ReverseMap();
     }
 }

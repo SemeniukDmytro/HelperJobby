@@ -4,7 +4,7 @@ namespace BLLUnitTests.Fixture;
 
 public static class EmployerAccountFixtures
 {
-    public static EmployerAccount EmployerAccountEntity = new()
+    public static Employer EmployerEntity = new()
     {
         Id = 1,
         FullName = "test name",
@@ -20,7 +20,7 @@ public static class EmployerAccountFixtures
         }
     };
 
-    public static EmployerAccount SecondEmployerAccountEntity = new()
+    public static Employer SecondEmployerEntity = new()
     {
         Id = 2,
         FullName = "test name",

@@ -22,7 +22,7 @@ public static class JobFixtures
         Benefits = EmployeeBenefits.CommuterBenefits,
         ContactEmail = "test@gmail.com",
         Description = "test description",
-        EmployerAccountId = 1
+        EmployerId = 1
     };
 
     public static readonly Job InvalidCreatedJob = new()
@@ -42,7 +42,7 @@ public static class JobFixtures
         Benefits = EmployeeBenefits.CommuterBenefits,
         ContactEmail = "test@gmail.com",
         Description = "test description",
-        EmployerAccountId = 1
+        EmployerId = 1
     };
 
     public static readonly Job FirstJobEntity = new()
@@ -63,7 +63,7 @@ public static class JobFixtures
         Benefits = EmployeeBenefits.CommuterBenefits,
         ContactEmail = "test@gmail.com",
         Description = "test description",
-        EmployerAccountId = 1
+        EmployerId = 1
     };
 
     public static readonly Job SecondJobEntity = new()
@@ -84,7 +84,7 @@ public static class JobFixtures
         Benefits = EmployeeBenefits.CommuterBenefits,
         ContactEmail = "test@gmail.com",
         Description = "test description",
-        EmployerAccountId = 2
+        EmployerId = 2
     };
 
     public static readonly Job UpdatedJob = new()
@@ -104,6 +104,6 @@ public static class JobFixtures
         Benefits = EmployeeBenefits.CommuterBenefits,
         ContactEmail = "test@gmail.com",
         Description = "test description",
-        EmployerAccountId = 1
+        EmployerId = 1
     };
 }

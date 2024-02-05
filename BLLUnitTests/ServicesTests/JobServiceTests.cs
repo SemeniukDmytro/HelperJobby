@@ -9,7 +9,7 @@ namespace BLLUnitTests.ServicesTests;
 
 public class JobServiceTests
 {
-    private readonly Mock<IEmployerAccountQueryRepository> _employerAccountQueryRepository = new();
+    private readonly Mock<IEmployerQueryRepository> _employerAccountQueryRepository = new();
     private readonly Mock<IJobQueryRepository> _jobQueryRepository = new();
     private readonly IJobService _jobService;
     private readonly Mock<IUserService> _userServiceMock = new();
@@ -47,10 +47,10 @@ public class JobServiceTests
         var jobEntity = JobFixtures.FirstJobEntity;
         var updatedJob = JobFixtures.UpdatedJob;
         var jobId = 1;
-        var employerAccount = EmployerAccountFixtures.EmployerAccountEntity;
+        var employerAccount = EmployerAccountFixtures.EmployerEntity;
         var currentUserId = 1;
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(currentUserId);
-        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId)).ReturnsAsync(employerAccount);
+        _employerAccountQueryRepository.Setup(r => r.GetEmployer(currentUserId)).ReturnsAsync(employerAccount);
         _jobQueryRepository.Setup(r => r.GetJobById(jobId))
             .ReturnsAsync(jobEntity);
         //Act
@@ -58,7 +58,7 @@ public class JobServiceTests
         //Assert
         Assert.Equal(updatedJob.JobTitle, job.JobTitle);
         Assert.Equal(updatedJob.Salary.MinimalAmount, job.Salary.MinimalAmount);
-        Assert.Equal(employerAccount.Id, job.EmployerAccountId);
+        Assert.Equal(employerAccount.Id, job.EmployerId);
         Assert.Equal(jobId, job.Id);
     }
 
@@ -69,10 +69,10 @@ public class JobServiceTests
         var jobEntity = JobFixtures.SecondJobEntity;
         var updatedJob = JobFixtures.UpdatedJob;
         var jobId = 2;
-        var employerAccount = EmployerAccountFixtures.EmployerAccountEntity;
+        var employerAccount = EmployerAccountFixtures.EmployerEntity;
         var currentUserId = 1;
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(currentUserId);
-        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId)).ReturnsAsync(employerAccount);
+        _employerAccountQueryRepository.Setup(r => r.GetEmployer(currentUserId)).ReturnsAsync(employerAccount);
         _jobQueryRepository.Setup(r => r.GetJobById(jobId))
             .ReturnsAsync(jobEntity);
         //Act & assert
@@ -86,10 +86,10 @@ public class JobServiceTests
         //Arrange
         var jobEntity = JobFixtures.FirstJobEntity;
         var jobId = 1;
-        var employerAccount = EmployerAccountFixtures.EmployerAccountEntity;
+        var employerAccount = EmployerAccountFixtures.EmployerEntity;
         var currentUserId = 1;
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(currentUserId);
-        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId)).ReturnsAsync(employerAccount);
+        _employerAccountQueryRepository.Setup(r => r.GetEmployer(currentUserId)).ReturnsAsync(employerAccount);
         _jobQueryRepository.Setup(r => r.GetJobById(jobId))
             .ReturnsAsync(jobEntity);
 
@@ -98,7 +98,7 @@ public class JobServiceTests
         //Assert
         Assert.Equal(jobEntity.JobTitle, job.JobTitle);
         Assert.Equal(jobEntity.Id, job.Id);
-        Assert.Equal(jobEntity.EmployerAccountId, job.EmployerAccountId);
+        Assert.Equal(jobEntity.EmployerId, job.EmployerId);
     }
 
     [Fact]
@@ -107,10 +107,10 @@ public class JobServiceTests
         //Arrange
         var jobEntity = JobFixtures.SecondJobEntity;
         var jobId = 2;
-        var employerAccount = EmployerAccountFixtures.EmployerAccountEntity;
+        var employerAccount = EmployerAccountFixtures.EmployerEntity;
         var currentUserId = 1;
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(currentUserId);
-        _employerAccountQueryRepository.Setup(r => r.GetEmployerAccount(currentUserId)).ReturnsAsync(employerAccount);
+        _employerAccountQueryRepository.Setup(r => r.GetEmployer(currentUserId)).ReturnsAsync(employerAccount);
         _jobQueryRepository.Setup(r => r.GetJobById(jobId))
             .ReturnsAsync(jobEntity);
 

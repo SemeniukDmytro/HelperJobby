@@ -18,8 +18,8 @@ public class JobDTO
     public bool ResumeRequired { get; set; }
     public string Description { get; set; }
     public DateOnly DatePosted { get; set; }
-    public int EmployerAccountId { get; set; }
-    public EmployerAccountDTO EmployerAccount { get; set; }
+    public int EmployerId { get; set; }
+    public EmployerDTO Employer { get; set; }
     public List<InterviewDTO> Interviews { get; set; }
     public List<JobApplyDTO> JobApplies { get; set; }
 }

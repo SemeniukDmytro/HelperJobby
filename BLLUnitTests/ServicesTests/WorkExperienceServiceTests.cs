@@ -11,7 +11,7 @@ namespace BLLUnitTests.ServicesTests;
 public class WorkExperienceServiceTests
 {
     private readonly Mock<IEnqueuingTaskHelper> _enqueuingTaskHelperMock = new();
-    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
+    private readonly Mock<IJobSeekerQueryRepository> _jobSeekerAccountRepository = new();
     private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<IWorkExperienceQueryRepository> _workExperienceQueryRepositoryMock = new();
     private readonly IWorkExperienceService _workExperienceService;
@@ -30,12 +30,12 @@ public class WorkExperienceServiceTests
         //Arrange
         var userId = 1;
         var resumeId = 1;
-        var jobSeekerAccount = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        var jobSeekerAccount = JobSeekerAccountFixture.JobSeekerEntity;
         var resume = ResumeFixtures.ResumeEntity;
         jobSeekerAccount.Resume = resume;
         var workExperience = WorkExperienceFixtures.CreatedWorkExperience;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId)).ReturnsAsync(jobSeekerAccount);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId)).ReturnsAsync(jobSeekerAccount);
         //Act
         var createdWorkExperience = await _workExperienceService.AddWorkExperience(resumeId, workExperience);
         //Assert
@@ -49,12 +49,12 @@ public class WorkExperienceServiceTests
         //Arrange
         var userId = 1;
         var resumeId = 2;
-        var jobSeekerAccount = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        var jobSeekerAccount = JobSeekerAccountFixture.JobSeekerEntity;
         var resume = ResumeFixtures.ResumeEntity;
         jobSeekerAccount.Resume = resume;
         var workExperience = WorkExperienceFixtures.CreatedWorkExperience;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId)).ReturnsAsync(jobSeekerAccount);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId)).ReturnsAsync(jobSeekerAccount);
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _workExperienceService.AddWorkExperience(resumeId, workExperience));
@@ -68,9 +68,9 @@ public class WorkExperienceServiceTests
         var workExperienceId = 1;
         var workExperience = WorkExperienceFixtures.UpdatedWorkExperience;
         var workExperienceEntity = WorkExperienceFixtures.FirstWorkExperienceEntity;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerEntity;
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
         _workExperienceQueryRepositoryMock.Setup(r => r.GetWorkExperienceById(workExperienceId))
             .ReturnsAsync(workExperienceEntity);
@@ -89,10 +89,10 @@ public class WorkExperienceServiceTests
         var userId = 1;
         var workExperienceId = 2;
         var workExperience = WorkExperienceFixtures.UpdatedWorkExperience;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerEntity;
         var workExperienceEntity = WorkExperienceFixtures.SecondWorkExperienceEntity;
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
         _workExperienceQueryRepositoryMock.Setup(r => r.GetWorkExperienceById(workExperienceId))
             .ReturnsAsync(workExperienceEntity);
@@ -108,16 +108,16 @@ public class WorkExperienceServiceTests
         var userId = 1;
         var workExperienceId = 1;
         var workExperienceEntity = WorkExperienceFixtures.FirstWorkExperienceEntity;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerEntity;
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
         _workExperienceQueryRepositoryMock.Setup(r => r.GetWorkExperienceById(workExperienceId))
             .ReturnsAsync(workExperienceEntity);
         //Act
         var educationToDelete = await _workExperienceService.DeleteWorkExperience(workExperienceId);
         //Assert
-        Assert.Equal(workExperienceEntity.WorkExperienceId, educationToDelete.workExperience.WorkExperienceId);
+        Assert.Equal(workExperienceEntity.Id, educationToDelete.workExperience.Id);
     }
 
     [Fact]
@@ -127,9 +127,9 @@ public class WorkExperienceServiceTests
         var userId = 1;
         var workExperienceId = 10;
         var workExperienceEntity = WorkExperienceFixtures.SecondWorkExperienceEntity;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerEntity;
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
         _workExperienceQueryRepositoryMock.Setup(r => r.GetWorkExperienceById(workExperienceId))
             .ReturnsAsync(workExperienceEntity);

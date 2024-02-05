@@ -18,17 +18,17 @@ public class InterviewController : ExtendedBaseController
     private readonly IInterviewQueryRepository _interviewQueryRepository;
     private readonly IInterviewService _interviewService;
     private readonly IJobQueryRepository _jobQueryRepository;
-    private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+    private readonly IJobSeekerQueryRepository _jobSeekerQueryRepository;
     private readonly IUserService _userService;
 
 
     public InterviewController(IMapper mapper, IJobQueryRepository jobQueryRepository,
-        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository, IUserService userService,
+        IJobSeekerQueryRepository jobSeekerQueryRepository, IUserService userService,
         IInterviewService interviewService, IInterviewCommandRepository interviewCommandRepository,
         IInterviewQueryRepository interviewQueryRepository) : base(mapper)
     {
         _jobQueryRepository = jobQueryRepository;
-        _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
+        _jobSeekerQueryRepository = jobSeekerQueryRepository;
         _userService = userService;
         _interviewService = interviewService;
         _interviewCommandRepository = interviewCommandRepository;
@@ -39,7 +39,7 @@ public class InterviewController : ExtendedBaseController
     [HttpGet("my-interviews")]
     public async Task<IEnumerable<InterviewDTO>> GetCurrentJobSeekerInterviews()
     {
-        var currentJobSeeker = await _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithInterviews(
+        var currentJobSeeker = await _jobSeekerQueryRepository.GetJobSeekerWithInterviews(
             _userService.GetCurrentUserId());
         return _mapper.Map<IEnumerable<InterviewDTO>>(currentJobSeeker);
     }

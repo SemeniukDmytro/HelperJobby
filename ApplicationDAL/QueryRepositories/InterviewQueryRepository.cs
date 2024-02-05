@@ -18,7 +18,7 @@ public class InterviewQueryRepository : IInterviewQueryRepository
     public async Task<Interview> GetInterviewByJobIdAndJobSeeker(int jobId, int jobSeekerId)
     {
         return await GetInterview(jobId, jobSeekerId, q => q
-            .Include(i => i.JobSeekerAccount));
+            .Include(i => i.JobSeeker));
     }
 
     public async Task<Interview> GetInterviewByJobIdAndJobSeekerIdPlain(int jobId, int jobSeekerId)
@@ -34,7 +34,7 @@ public class InterviewQueryRepository : IInterviewQueryRepository
     private async Task<Interview> GetInterview(int jobId, int jobSeekerId,
         Func<IQueryable<Interview>, IQueryable<Interview>> includeFunc = null)
     {
-        var query = _applicationContext.Interviews.Where(j => j.JobId == jobId && j.JobSeekerAccountId == jobSeekerId);
+        var query = _applicationContext.Interviews.Where(j => j.JobId == jobId && j.JobSeekerId == jobSeekerId);
 
         if (includeFunc != null) query = includeFunc(query);
 

@@ -4,7 +4,7 @@ import {CreateEmployerAccountDTO} from "../DTOs/accountDTOs/CreateEmployerAccoun
 import {UpdateEmployerAccountDTO} from "../DTOs/accountDTOs/UpdateEmployerAccountDTO";
 
 export class EmployerAccountService {
-    private readonly baseURI: string = "api/EmployerAccount";
+    private readonly baseURI: string = "api/Employer";
     private readonly customFetchService: CustomFetchService;
 
     constructor() {

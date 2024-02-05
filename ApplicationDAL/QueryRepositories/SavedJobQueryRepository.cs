@@ -29,7 +29,7 @@ public class SavedJobQueryRepository : ISavedJobQueryRepository
     private async Task<SavedJob> GetSavedJob(int jobId, int jobSeekerId,
         Func<IQueryable<SavedJob>, IQueryable<SavedJob>> includeFunc = null)
     {
-        var query = _applicationContext.SavedJobs.Where(j => j.JobId == jobId && j.JobSeekerAccountId == jobSeekerId);
+        var query = _applicationContext.SavedJobs.Where(j => j.JobId == jobId && j.JobSeekerId == jobSeekerId);
 
         if (includeFunc != null) query = includeFunc(query);
 

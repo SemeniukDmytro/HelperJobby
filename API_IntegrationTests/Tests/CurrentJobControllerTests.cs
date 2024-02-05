@@ -9,7 +9,7 @@ namespace API_IntegrationTests.Tests;
 
 public class CurrentJobControllerTests : IntegrationTest
 {
-    private readonly string _baseUri = "/api/CurrentJob";
+    private readonly string _baseUri = "/api/IncompleteJob";
 
     public CurrentJobControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {
@@ -21,13 +21,13 @@ public class CurrentJobControllerTests : IntegrationTest
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
         var requestUri = $"{_baseUri}/{employer.Id}/current-job-creation";
-        var currentJobCreation = await CreateNewCurrentJob(CurrentJobFixtures.NewJobCreation);
+        var currentJobCreation = await CreateNewCurrentJob(IncompleteJobFixtures.NewJobCreation);
         //Act
         var jobGetResponse = await TestClient.GetAsync(requestUri);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(jobGetResponse, TestOutputHelper);
         //Assert
         Assert.Equal(HttpStatusCode.OK, jobGetResponse.StatusCode);
-        var receivedCurrentJob = await jobGetResponse.Content.ReadAsAsync<CurrentJobCreationDTO>();
+        var receivedCurrentJob = await jobGetResponse.Content.ReadAsAsync<IncompleteJobDTO>();
         Assert.Equal(currentJobCreation.Id, receivedCurrentJob.Id);
         Assert.Equal(currentJobCreation.JobTitle, receivedCurrentJob.JobTitle);
     }
@@ -37,7 +37,7 @@ public class CurrentJobControllerTests : IntegrationTest
     {
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
-        var newCurrentJob = CurrentJobFixtures.NewJobCreation;
+        var newCurrentJob = IncompleteJobFixtures.NewJobCreation;
 
         //Act
         var currentJobCreationResponse = await TestClient.PostAsJsonAsync(_baseUri, newCurrentJob);
@@ -45,9 +45,9 @@ public class CurrentJobControllerTests : IntegrationTest
 
         //Assert
         Assert.Equal(HttpStatusCode.OK, currentJobCreationResponse.StatusCode);
-        var currentJobCreation = await currentJobCreationResponse.Content.ReadAsAsync<CurrentJobCreationDTO>();
+        var currentJobCreation = await currentJobCreationResponse.Content.ReadAsAsync<IncompleteJobDTO>();
         Assert.NotEqual(0, currentJobCreation.Id);
-        Assert.Equal(employer.Id, currentJobCreation.EmployerAccountId);
+        Assert.Equal(employer.Id, currentJobCreation.EmployerId);
         Assert.Equal(newCurrentJob.JobTitle, currentJobCreation.JobTitle);
     }
 
@@ -56,8 +56,8 @@ public class CurrentJobControllerTests : IntegrationTest
     {
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
-        var currentJobCreation = await CreateNewCurrentJob(CurrentJobFixtures.NewJobCreation);
-        var updatedJob = new CurrentJobCreateDTO
+        var currentJobCreation = await CreateNewCurrentJob(IncompleteJobFixtures.NewJobCreation);
+        var updatedJob = new IncompleteJobCreateDTO
         {
             JobTitle = "",
             NumberOfOpenings = 5,
@@ -82,13 +82,13 @@ public class CurrentJobControllerTests : IntegrationTest
         await ExceptionsLogHelper.LogNotSuccessfulResponse(updateResponse, TestOutputHelper);
         //Assert
         Assert.Equal(HttpStatusCode.OK, updateResponse.StatusCode);
-        var updatedCurrenJob = await updateResponse.Content.ReadAsAsync<CurrentJobCreationDTO>();
+        var updatedCurrenJob = await updateResponse.Content.ReadAsAsync<IncompleteJobDTO>();
         Assert.NotEqual(0, updatedCurrenJob.Id);
         Assert.Equal(currentJobCreation.JobTitle, updatedCurrenJob.JobTitle);
         Assert.Equal(updatedJob.NumberOfOpenings, updatedCurrenJob.NumberOfOpenings);
         Assert.Equal(currentJobCreation.JobType.Count, updatedCurrenJob.JobType.Count);
         Assert.Equal(currentJobCreation.Salary.MinimalAmount, updatedCurrenJob.Salary.MinimalAmount);
-        Assert.Equal(currentJobCreation.EmployerAccountId, updatedCurrenJob.EmployerAccountId);
+        Assert.Equal(currentJobCreation.EmployerId, updatedCurrenJob.EmployerId);
         Assert.Equal(updatedJob.ContactEmail, updatedCurrenJob.ContactEmail);
         Assert.Equal(updatedJob.ResumeRequired, updatedCurrenJob.ResumeRequired);
     }
@@ -98,7 +98,7 @@ public class CurrentJobControllerTests : IntegrationTest
     {
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
-        var currentJobCreation = await CreateNewCurrentJob(CurrentJobFixtures.NewJobCreation);
+        var currentJobCreation = await CreateNewCurrentJob(IncompleteJobFixtures.NewJobCreation);
         var requestUri = $"{_baseUri}/{currentJobCreation.Id}";
         //Act
         var jobDeleteResponse = await TestClient.DeleteAsync(requestUri);

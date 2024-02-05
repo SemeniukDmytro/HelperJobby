@@ -170,91 +170,6 @@ namespace ApplicationDAL.Migrations
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("ApplicationDomain.Models.CurrentJobCreation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("Benefits")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ContactEmail")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("EmployerAccountId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("JobTitle")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int>("JobTypes")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Language")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int>("NumberOfOpenings")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("ResumeRequired")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("Schedule")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployerAccountId")
-                        .IsUnique();
-
-                    b.ToTable("CurrentJobCreations");
-                });
-
-            modelBuilder.Entity("ApplicationDomain.Models.CurrentJobSalary", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("CurrentJobId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("MaximalAmount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal>("MinimalAmount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<int>("SalaryRate")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShowPayByOption")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurrentJobId")
-                        .IsUnique();
-
-                    b.ToTable("CurrentJobSalaries");
-                });
-
             modelBuilder.Entity("ApplicationDomain.Models.Education", b =>
                 {
                     b.Property<int>("Id")
@@ -298,7 +213,7 @@ namespace ApplicationDAL.Migrations
                     b.ToTable("Educations");
                 });
 
-            modelBuilder.Entity("ApplicationDomain.Models.EmployerAccount", b =>
+            modelBuilder.Entity("ApplicationDomain.Models.Employer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -338,41 +253,10 @@ namespace ApplicationDAL.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("EmployerAccounts");
+                    b.ToTable("Employers");
                 });
 
-            modelBuilder.Entity("ApplicationDomain.Models.Interview", b =>
-                {
-                    b.Property<int>("JobId")
-                        .HasColumnType("int")
-                        .HasColumnOrder(0);
-
-                    b.Property<int>("JobSeekerAccountId")
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    b.Property<string>("AppointmentInfo")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<TimeOnly>("InterviewEnd")
-                        .HasColumnType("time(6)");
-
-                    b.Property<DateTime>("InterviewStart")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("InterviewType")
-                        .HasColumnType("int");
-
-                    b.HasKey("JobId", "JobSeekerAccountId");
-
-                    b.HasIndex("JobSeekerAccountId");
-
-                    b.ToTable("Interviews");
-                });
-
-            modelBuilder.Entity("ApplicationDomain.Models.Job", b =>
+            modelBuilder.Entity("ApplicationDomain.Models.IncompleteJob", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -386,14 +270,11 @@ namespace ApplicationDAL.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<DateOnly>("DatePosted")
-                        .HasColumnType("date");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("EmployerAccountId")
+                    b.Property<int>("EmployerId")
                         .HasColumnType("int");
 
                     b.Property<string>("JobTitle")
@@ -425,7 +306,126 @@ namespace ApplicationDAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployerAccountId");
+                    b.HasIndex("EmployerId")
+                        .IsUnique();
+
+                    b.ToTable("IncompleteJobs");
+                });
+
+            modelBuilder.Entity("ApplicationDomain.Models.IncompleteJobSalary", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("IncompleteJobId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("MaximalAmount")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal>("MinimalAmount")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<int>("SalaryRate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShowPayByOption")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IncompleteJobId")
+                        .IsUnique();
+
+                    b.ToTable("IncompleteJobSalaries");
+                });
+
+            modelBuilder.Entity("ApplicationDomain.Models.Interview", b =>
+                {
+                    b.Property<int>("JobId")
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
+
+                    b.Property<int>("JobSeekerId")
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("AppointmentInfo")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<TimeOnly>("InterviewEnd")
+                        .HasColumnType("time(6)");
+
+                    b.Property<DateTime>("InterviewStart")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("InterviewType")
+                        .HasColumnType("int");
+
+                    b.HasKey("JobId", "JobSeekerId");
+
+                    b.HasIndex("JobSeekerId");
+
+                    b.ToTable("Interviews");
+                });
+
+            modelBuilder.Entity("ApplicationDomain.Models.Job", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("Benefits")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContactEmail")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateOnly>("DatePosted")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("EmployerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("JobTypes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("NumberOfOpenings")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ResumeRequired")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("Schedule")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployerId");
 
                     b.ToTable("Jobs");
                 });
@@ -436,16 +436,16 @@ namespace ApplicationDAL.Migrations
                         .HasColumnType("int")
                         .HasColumnOrder(0);
 
-                    b.Property<int>("JobSeekerAccountId")
+                    b.Property<int>("JobSeekerId")
                         .HasColumnType("int")
                         .HasColumnOrder(1);
 
                     b.Property<DateOnly>("DateApplied")
                         .HasColumnType("date");
 
-                    b.HasKey("JobId", "JobSeekerAccountId");
+                    b.HasKey("JobId", "JobSeekerId");
 
-                    b.HasIndex("JobSeekerAccountId");
+                    b.HasIndex("JobSeekerId");
 
                     b.ToTable("JobApplies");
                 });
@@ -479,7 +479,7 @@ namespace ApplicationDAL.Migrations
                     b.ToTable("JobSalaries");
                 });
 
-            modelBuilder.Entity("ApplicationDomain.Models.JobSeekerAccount", b =>
+            modelBuilder.Entity("ApplicationDomain.Models.JobSeeker", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -516,7 +516,7 @@ namespace ApplicationDAL.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("JobSeekerAccounts");
+                    b.ToTable("JobSeekers");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Organization", b =>
@@ -605,12 +605,12 @@ namespace ApplicationDAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("JobSeekerAccountId")
+                    b.Property<int>("JobSeekerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JobSeekerAccountId")
+                    b.HasIndex("JobSeekerId")
                         .IsUnique();
 
                     b.ToTable("Resumes");
@@ -622,16 +622,16 @@ namespace ApplicationDAL.Migrations
                         .HasColumnType("int")
                         .HasColumnOrder(0);
 
-                    b.Property<int>("JobSeekerAccountId")
+                    b.Property<int>("JobSeekerId")
                         .HasColumnType("int")
                         .HasColumnOrder(1);
 
                     b.Property<DateOnly>("DateSaved")
                         .HasColumnType("date");
 
-                    b.HasKey("JobId", "JobSeekerAccountId");
+                    b.HasKey("JobId", "JobSeekerId");
 
-                    b.HasIndex("JobSeekerAccountId");
+                    b.HasIndex("JobSeekerId");
 
                     b.ToTable("SavedJobs");
                 });
@@ -688,7 +688,7 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDomain.Models.WorkExperience", b =>
                 {
-                    b.Property<int>("WorkExperienceId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -725,7 +725,7 @@ namespace ApplicationDAL.Migrations
                     b.Property<DateOnly?>("To")
                         .HasColumnType("date");
 
-                    b.HasKey("WorkExperienceId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ResumeId");
 
@@ -781,28 +781,6 @@ namespace ApplicationDAL.Migrations
                     b.Navigation("ResumeIndexedWord");
                 });
 
-            modelBuilder.Entity("ApplicationDomain.Models.CurrentJobCreation", b =>
-                {
-                    b.HasOne("ApplicationDomain.Models.EmployerAccount", "EmployerAccount")
-                        .WithOne("CurrentJobCreation")
-                        .HasForeignKey("ApplicationDomain.Models.CurrentJobCreation", "EmployerAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("EmployerAccount");
-                });
-
-            modelBuilder.Entity("ApplicationDomain.Models.CurrentJobSalary", b =>
-                {
-                    b.HasOne("ApplicationDomain.Models.CurrentJobCreation", "CurrentJob")
-                        .WithOne("CurrentJobSalary")
-                        .HasForeignKey("ApplicationDomain.Models.CurrentJobSalary", "CurrentJobId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CurrentJob");
-                });
-
             modelBuilder.Entity("ApplicationDomain.Models.Education", b =>
                 {
                     b.HasOne("ApplicationDomain.Models.Resume", "Resume")
@@ -814,23 +792,45 @@ namespace ApplicationDAL.Migrations
                     b.Navigation("Resume");
                 });
 
-            modelBuilder.Entity("ApplicationDomain.Models.EmployerAccount", b =>
+            modelBuilder.Entity("ApplicationDomain.Models.Employer", b =>
                 {
                     b.HasOne("ApplicationDomain.Models.Organization", "Organization")
-                        .WithMany("EmployeeAccounts")
+                        .WithMany("Employees")
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ApplicationDomain.Models.User", "User")
-                        .WithOne("EmployerAccount")
-                        .HasForeignKey("ApplicationDomain.Models.EmployerAccount", "UserId")
+                        .WithOne("Employer")
+                        .HasForeignKey("ApplicationDomain.Models.Employer", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Organization");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ApplicationDomain.Models.IncompleteJob", b =>
+                {
+                    b.HasOne("ApplicationDomain.Models.Employer", "Employer")
+                        .WithOne("IncompleteJob")
+                        .HasForeignKey("ApplicationDomain.Models.IncompleteJob", "EmployerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employer");
+                });
+
+            modelBuilder.Entity("ApplicationDomain.Models.IncompleteJobSalary", b =>
+                {
+                    b.HasOne("ApplicationDomain.Models.IncompleteJob", "IncompleteJob")
+                        .WithOne("Salary")
+                        .HasForeignKey("ApplicationDomain.Models.IncompleteJobSalary", "IncompleteJobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IncompleteJob");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Interview", b =>
@@ -841,26 +841,26 @@ namespace ApplicationDAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApplicationDomain.Models.JobSeekerAccount", "JobSeekerAccount")
+                    b.HasOne("ApplicationDomain.Models.JobSeeker", "JobSeeker")
                         .WithMany("Interviews")
-                        .HasForeignKey("JobSeekerAccountId")
+                        .HasForeignKey("JobSeekerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Job");
 
-                    b.Navigation("JobSeekerAccount");
+                    b.Navigation("JobSeeker");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Job", b =>
                 {
-                    b.HasOne("ApplicationDomain.Models.EmployerAccount", "EmployerAccount")
+                    b.HasOne("ApplicationDomain.Models.Employer", "Employer")
                         .WithMany("Jobs")
-                        .HasForeignKey("EmployerAccountId")
+                        .HasForeignKey("EmployerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("EmployerAccount");
+                    b.Navigation("Employer");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.JobApply", b =>
@@ -871,15 +871,15 @@ namespace ApplicationDAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApplicationDomain.Models.JobSeekerAccount", "JobSeekerAccount")
+                    b.HasOne("ApplicationDomain.Models.JobSeeker", "JobSeeker")
                         .WithMany("JobApplies")
-                        .HasForeignKey("JobSeekerAccountId")
+                        .HasForeignKey("JobSeekerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Job");
 
-                    b.Navigation("JobSeekerAccount");
+                    b.Navigation("JobSeeker");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.JobSalary", b =>
@@ -893,15 +893,15 @@ namespace ApplicationDAL.Migrations
                     b.Navigation("Job");
                 });
 
-            modelBuilder.Entity("ApplicationDomain.Models.JobSeekerAccount", b =>
+            modelBuilder.Entity("ApplicationDomain.Models.JobSeeker", b =>
                 {
                     b.HasOne("ApplicationDomain.Models.Address", "Address")
                         .WithMany()
                         .HasForeignKey("AddressId");
 
                     b.HasOne("ApplicationDomain.Models.User", "User")
-                        .WithOne("JobSeekerAccount")
-                        .HasForeignKey("ApplicationDomain.Models.JobSeekerAccount", "UserId")
+                        .WithOne("JobSeeker")
+                        .HasForeignKey("ApplicationDomain.Models.JobSeeker", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -934,13 +934,13 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDomain.Models.Resume", b =>
                 {
-                    b.HasOne("ApplicationDomain.Models.JobSeekerAccount", "JobSeekerAccount")
+                    b.HasOne("ApplicationDomain.Models.JobSeeker", "JobSeeker")
                         .WithOne("Resume")
-                        .HasForeignKey("ApplicationDomain.Models.Resume", "JobSeekerAccountId")
+                        .HasForeignKey("ApplicationDomain.Models.Resume", "JobSeekerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("JobSeekerAccount");
+                    b.Navigation("JobSeeker");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.SavedJob", b =>
@@ -951,15 +951,15 @@ namespace ApplicationDAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApplicationDomain.Models.JobSeekerAccount", "JobSeekerAccount")
+                    b.HasOne("ApplicationDomain.Models.JobSeeker", "JobSeeker")
                         .WithMany("SavedJobs")
-                        .HasForeignKey("JobSeekerAccountId")
+                        .HasForeignKey("JobSeekerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Job");
 
-                    b.Navigation("JobSeekerAccount");
+                    b.Navigation("JobSeeker");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Skill", b =>
@@ -994,17 +994,17 @@ namespace ApplicationDAL.Migrations
                     b.Navigation("ProcessedResumeWords");
                 });
 
-            modelBuilder.Entity("ApplicationDomain.Models.CurrentJobCreation", b =>
+            modelBuilder.Entity("ApplicationDomain.Models.Employer", b =>
                 {
-                    b.Navigation("CurrentJobSalary");
-                });
-
-            modelBuilder.Entity("ApplicationDomain.Models.EmployerAccount", b =>
-                {
-                    b.Navigation("CurrentJobCreation")
+                    b.Navigation("IncompleteJob")
                         .IsRequired();
 
                     b.Navigation("Jobs");
+                });
+
+            modelBuilder.Entity("ApplicationDomain.Models.IncompleteJob", b =>
+                {
+                    b.Navigation("Salary");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Job", b =>
@@ -1016,7 +1016,7 @@ namespace ApplicationDAL.Migrations
                     b.Navigation("Salary");
                 });
 
-            modelBuilder.Entity("ApplicationDomain.Models.JobSeekerAccount", b =>
+            modelBuilder.Entity("ApplicationDomain.Models.JobSeeker", b =>
                 {
                     b.Navigation("Interviews");
 
@@ -1029,9 +1029,9 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDomain.Models.Organization", b =>
                 {
-                    b.Navigation("EmployeeAccounts");
-
                     b.Navigation("EmployeeEmails");
+
+                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Resume", b =>
@@ -1045,10 +1045,10 @@ namespace ApplicationDAL.Migrations
 
             modelBuilder.Entity("ApplicationDomain.Models.User", b =>
                 {
-                    b.Navigation("EmployerAccount")
+                    b.Navigation("Employer")
                         .IsRequired();
 
-                    b.Navigation("JobSeekerAccount")
+                    b.Navigation("JobSeeker")
                         .IsRequired();
 
                     b.Navigation("RecentUserSearches");

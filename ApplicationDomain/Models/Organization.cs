@@ -15,5 +15,5 @@ public class Organization
     public int? NumberOfEmployees { get; set; }
 
     public List<OrganizationEmployeeEmail> EmployeeEmails { get; set; }
-    public List<EmployerAccount> EmployeeAccounts { get; set; }
+    public List<Employer> Employees { get; set; }
 }

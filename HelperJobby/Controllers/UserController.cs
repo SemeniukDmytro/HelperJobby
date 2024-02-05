@@ -45,7 +45,7 @@ public class UserController : ExtendedBaseController
     }
 
     [HttpGet("current-user")]
-    public async Task<UserDTO> GetUser()
+    public async Task<UserDTO> GetCurrentUser()
     {
         var user = await _userQueryRepository.GetUserById(_userService.GetCurrentUserId());
         var userDTO = _mapper.Map<UserDTO>(user);

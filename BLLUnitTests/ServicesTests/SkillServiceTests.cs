@@ -10,14 +10,13 @@ namespace BLLUnitTests.ServicesTests;
 
 public class SkillServiceTests
 {
-    private readonly Mock<IJobSeekerAccountQueryRepository> _jobSeekerAccountRepository = new();
-    private readonly Mock<ISkillQueryRepository> _skillQueryRepositoryMock = new();
+    private readonly Mock<IJobSeekerQueryRepository> _jobSeekerAccountRepository = new();
     private readonly ISkillService _skillService;
     private readonly Mock<IUserService> _userServiceMock = new();
 
     public SkillServiceTests()
     {
-        _skillService = new SkillService(_jobSeekerAccountRepository.Object, _skillQueryRepositoryMock.Object,
+        _skillService = new SkillService(_jobSeekerAccountRepository.Object,
             _userServiceMock.Object);
     }
 
@@ -27,12 +26,12 @@ public class SkillServiceTests
         //Arrange
         var userId = 1;
         var resumeId = 1;
-        var jobSeekerAccount = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        var jobSeekerAccount = JobSeekerAccountFixture.JobSeekerEntity;
         var resume = ResumeFixtures.ResumeEntity;
         jobSeekerAccount.Resume = resume;
         var skill = SkillFixtures.CreatedSkill;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId)).ReturnsAsync(jobSeekerAccount);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId)).ReturnsAsync(jobSeekerAccount);
         //Act
         var createSkill = await _skillService.AddSkill(resumeId, skill);
         //Assert
@@ -46,12 +45,12 @@ public class SkillServiceTests
         //Arrange
         var userId = 1;
         var resumeId = 2;
-        var jobSeekerAccount = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        var jobSeekerAccount = JobSeekerAccountFixture.JobSeekerEntity;
         var resume = ResumeFixtures.ResumeEntity;
         jobSeekerAccount.Resume = resume;
         var skill = SkillFixtures.CreatedSkill;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId)).ReturnsAsync(jobSeekerAccount);
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId)).ReturnsAsync(jobSeekerAccount);
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _skillService.AddSkill(resumeId, skill));
@@ -64,11 +63,10 @@ public class SkillServiceTests
         var userId = 1;
         var skillId = 1;
         var skillEntity = SkillFixtures.SkillEntity;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerEntity;
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
-        _skillQueryRepositoryMock.Setup(r => r.GetSkillById(skillId)).ReturnsAsync(skillEntity);
         //Act
         var skill = await _skillService.DeleteSkill(skillId);
         //Assert
@@ -81,15 +79,10 @@ public class SkillServiceTests
         //Arrange
         var userId = 1;
         var skillId = 10;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerAccountEntity;
+        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerEntity;
         _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerAccountWithResume(userId))
+        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId))
             .ReturnsAsync(jobSeekerAccountEntity);
-        _skillQueryRepositoryMock.Setup(r => r.GetSkillById(skillId)).ReturnsAsync(new Skill
-        {
-            Id = skillId,
-            ResumeId = 2
-        });
         //Act % Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () => await _skillService.DeleteSkill(skillId));
     }

@@ -28,7 +28,7 @@ public class JobSeekerControllerTests : IntegrationTest
 
         //Assert
         Assert.Equal(HttpStatusCode.OK, jobSeekerResponse.StatusCode);
-        var jobSeeker = await jobSeekerResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
+        var jobSeeker = await jobSeekerResponse.Content.ReadAsAsync<JobSeekerDTO>();
         Assert.Equal(user.Id, jobSeeker.UserId);
     }
 
@@ -68,7 +68,7 @@ public class JobSeekerControllerTests : IntegrationTest
         //Arrange
         var currentJobSeekerAccount = await GetCurrentJobSeekerAccount();
         var requestUri = $"{_baseUri}/{currentJobSeekerAccount.UserId}";
-        var updatedJobSeekerAccountDTO = new UpdatedJobSeekerAccountDTO
+        var updatedJobSeekerAccountDTO = new UpdatedJobSeekerDTO
         {
             FirstName = "FirstName",
             LastName = "LadsName",
@@ -88,7 +88,7 @@ public class JobSeekerControllerTests : IntegrationTest
 
         //Assert
         Assert.Equal(HttpStatusCode.OK, updateJobSeekerResponse.StatusCode);
-        var updatedJobSeekerAccount = await updateJobSeekerResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
+        var updatedJobSeekerAccount = await updateJobSeekerResponse.Content.ReadAsAsync<JobSeekerDTO>();
         Assert.Equal(currentJobSeekerAccount.Id, updatedJobSeekerAccount.Id);
         Assert.Equal(currentJobSeekerAccount.UserId, updatedJobSeekerAccount.UserId);
         Assert.Equal(updatedJobSeekerAccountDTO.PhoneNumber, updatedJobSeekerAccount.PhoneNumber);

@@ -4,7 +4,7 @@ namespace BLLUnitTests.Fixture;
 
 public static class JobSeekerAccountFixture
 {
-    public static readonly JobSeekerAccount UpdatedJobSeekerAccount = new()
+    public static readonly JobSeeker UpdatedJobSeeker = new()
     {
         Id = 1,
         FirstName = "Firstname",
@@ -19,7 +19,7 @@ public static class JobSeekerAccountFixture
         }
     };
 
-    public static readonly JobSeekerAccount JobSeekerAccountEntity = new()
+    public static readonly JobSeeker JobSeekerEntity = new()
     {
         Id = 1,
         FirstName = "Firstname",
@@ -39,7 +39,7 @@ public static class JobSeekerAccountFixture
             new()
             {
                 JobId = 2,
-                JobSeekerAccountId = 1
+                JobSeekerId = 1
             }
         },
         Interviews = new List<Interview>
@@ -47,12 +47,12 @@ public static class JobSeekerAccountFixture
             new()
             {
                 JobId = 1,
-                JobSeekerAccountId = 1
+                JobSeekerId = 1
             }
         }
     };
 
-    public static readonly JobSeekerAccount SecondJobSeekerAccountEntity = new()
+    public static readonly JobSeeker SecondJobSeekerEntity = new()
     {
         Id = 1,
         FirstName = "Firstname",
@@ -63,7 +63,7 @@ public static class JobSeekerAccountFixture
             new()
             {
                 JobId = 1,
-                JobSeekerAccountId = 1
+                JobSeekerId = 1
             }
         }
     };

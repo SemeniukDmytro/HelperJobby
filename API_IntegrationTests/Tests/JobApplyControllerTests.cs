@@ -41,8 +41,8 @@ public class JobApplyControllerTests : IntegrationTest
         Assert.Equal(expectedJobCount, jobApplies.Count);
         Assert.Equal(createdJob.Id, jobApplies[0].JobId);
         Assert.Equal(createdJob.Id, jobApplies[1].JobId);
-        Assert.Equal(firstJobSeeker.Id, jobApplies[0].JobSeekerAccountId);
-        Assert.Equal(secondJobSeeker.Id, jobApplies[1].JobSeekerAccountId);
+        Assert.Equal(firstJobSeeker.Id, jobApplies[0].JobSeekerId);
+        Assert.Equal(secondJobSeeker.Id, jobApplies[1].JobSeekerId);
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class JobApplyControllerTests : IntegrationTest
         Assert.Equal(HttpStatusCode.OK, getJobApplyResponse.StatusCode);
         var jobApply = await getJobApplyResponse.Content.ReadAsAsync<JobApplyDTO>();
         Assert.Equal(jobApplyDTO.JobId, jobApply.JobId);
-        Assert.Equal(jobApplyDTO.JobSeekerAccountId, jobApply.JobSeekerAccountId);
+        Assert.Equal(jobApplyDTO.JobSeekerId, jobApply.JobSeekerId);
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public class JobApplyControllerTests : IntegrationTest
         Assert.Equal(HttpStatusCode.OK, jobApplyResponse.StatusCode);
         var jobApply = await jobApplyResponse.Content.ReadAsAsync<SavedJobDTO>();
         Assert.Equal(jobApply.JobId, createdJob.Id);
-        Assert.Equal(jobApply.JobSeekerAccountId, jobSeeker.Id);
+        Assert.Equal(jobApply.JobSeekerId, jobSeeker.Id);
     }
 
     [Fact]
