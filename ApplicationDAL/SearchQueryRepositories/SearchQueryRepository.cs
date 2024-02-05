@@ -1,5 +1,6 @@
 using ApplicationDAL.Context;
 using ApplicationDomain.Abstraction.SearchIQueryRepositories;
+using ApplicationDomain.Abstraction.SearchRelatedIServices;
 using ApplicationDomain.Enums;
 using ApplicationDomain.IndexedModels;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,12 @@ public class SearchQueryRepository : ISearchQueryRepository
     private const int MoreResultsMinimumNumber = 1;
 
     private readonly ApplicationContext _applicationContext;
-
-    public SearchQueryRepository(ApplicationContext applicationContext)
+    private readonly IFilteringService _filteringService;
+    
+    public SearchQueryRepository(ApplicationContext applicationContext, IFilteringService filteringService)
     {
         _applicationContext = applicationContext;
+        _filteringService = filteringService;
     }
 
     public async Task<IEnumerable<ProcessedJobWord>> GetProcessedJobWordsByWord(string word, string location,
@@ -26,21 +29,11 @@ public class SearchQueryRepository : ISearchQueryRepository
     {
         var query = _applicationContext.ProcessedJobsWords.Where(p => p.JobIndexedWord.Word == word);
 
-        if (isRemote) query = query.Where(p => p.Job.Location.ToLower().Contains("remote"));
-
-        if (payPerHour > 0)
-            query = query.Where(p => p.Job.Salary != null && (
-                (p.Job.Salary.MinimalAmount >= payPerHour && p.Job.Salary.SalaryRate == SalaryRates.PerHour)
-                || (p.Job.Salary.MinimalAmount >= payPerDay && p.Job.Salary.SalaryRate == SalaryRates.PerDay)
-                || (p.Job.Salary.MinimalAmount >= payPerWeek && p.Job.Salary.SalaryRate == SalaryRates.PerWeek)
-                || (p.Job.Salary.MinimalAmount >= payPerMonth && p.Job.Salary.SalaryRate == SalaryRates.PerMonth)
-                || (p.Job.Salary.MinimalAmount >= payPerYear && p.Job.Salary.SalaryRate == SalaryRates.PerYear)));
-
-        if ((int)jobType != 0) query = query.Where(p => (p.Job.JobTypes & jobType) != 0);
-
-        if (!string.IsNullOrEmpty(location)) query = query.Where(p => p.Job.Location.Contains(location));
-
-        if (!string.IsNullOrEmpty(language)) query = query.Where(p => p.Job.Language.ToLower() == language.ToLower());
+        query = _filteringService.FilterByRemote(query, isRemote);
+        query = _filteringService.FilterBySalary(query, payPerHour, payPerDay, payPerWeek, payPerMonth, payPerYear);
+        query = _filteringService.FilterByJobType(query, jobType);
+        query = _filteringService.FilterByLocation(query, location);
+        query = _filteringService.FilterByLanguage(query, language);
 
         var processedJobWords = await query
             .OrderByDescending(p => p.Rating)
