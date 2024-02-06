@@ -28,15 +28,15 @@ public class IncompleteJobController : ExtendedBaseController
         _incompleteJobService = incompleteJobService;
     }
 
-    // GET: api/CurrentJob/current-job-creation
-    [HttpGet("{employerId}/incomplete-job")]
-    public async Task<IncompleteJobDTO> GetCurrentJob(int employerId)
+    // GET: api/IncompleteJob/1/incomplete-jobs
+    [HttpGet("{employerId}/incomplete-jobs")]
+    public async Task<IEnumerable<IncompleteJobDTO>> GetEmployerIncompleteJobs(int employerId)
     {
-        return _mapper.Map<IncompleteJobDTO>(await
-            _incompleteJobQueryRepository.GetIncompleteJobByEmployerId(employerId));
+        return _mapper.Map<IEnumerable<IncompleteJobDTO>>(await
+            _incompleteJobQueryRepository.GetIncompleteJobsByEmployerId(employerId));
     }
 
-    // POST: api/CurrentJob
+    // POST: api/IncompleteJob
     [HttpPost]
     public async Task<IncompleteJobDTO> Post([FromBody] IncompleteJobCreateDTO incompleteJobCreateDto)
     {
@@ -49,7 +49,7 @@ public class IncompleteJobController : ExtendedBaseController
         return createdIncompleteJobDTO;
     }
 
-    // PUT: api/CurrentJob/5
+    // PUT: api/IncompleteJob/5
     [HttpPut("{incompleteJobId}")]
     public async Task<IncompleteJobDTO> Put(int incompleteJobId, [FromBody] IncompleteJobCreateDTO incompleteJobCreationDto)
     {
@@ -62,7 +62,7 @@ public class IncompleteJobController : ExtendedBaseController
         return incompleteJobDTO;
     }
 
-    // DELETE: api/CurrentJob/5
+    // DELETE: api/IncompleteJob/5
     [HttpDelete("{incompleteJobId}")]
     public async Task Delete(int incompleteJobId)
     {

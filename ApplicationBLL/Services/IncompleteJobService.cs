@@ -23,11 +23,7 @@ public class IncompleteJobService : IIncompleteJobService
 
     public async Task<IncompleteJob> StartIncompleteJobCreation(IncompleteJob incompleteJob)
     {
-        var employer =
-            await _employerQueryRepository.GetEmployerWithIncompleteJob(
-                _userService.GetCurrentUserId());
-        if (employer.IncompleteJob != null)
-            throw new ForbiddenException("Current employer already started job creation");
+        var employer = await _employerQueryRepository.GetEmployer(_userService.GetCurrentUserId());
         incompleteJob.EmployerId = employer.Id;
         return incompleteJob;
     }

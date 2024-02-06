@@ -3,16 +3,19 @@ using System;
 using ApplicationDAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ApplicationDAL.Migrations
+namespace ApplicationDAL.AppContextMigrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240206002953_IncompleteJobTemporaryRemoved")]
+    partial class IncompleteJobTemporaryRemoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -308,7 +311,7 @@ namespace ApplicationDAL.Migrations
 
                     b.HasIndex("EmployerId");
 
-                    b.ToTable("IncompleteJobs");
+                    b.ToTable("IncompleteJob");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.IncompleteJobSalary", b =>
@@ -337,7 +340,7 @@ namespace ApplicationDAL.Migrations
                     b.HasIndex("IncompleteJobId")
                         .IsUnique();
 
-                    b.ToTable("IncompleteJobSalaries");
+                    b.ToTable("IncompleteJobSalary");
                 });
 
             modelBuilder.Entity("ApplicationDomain.Models.Interview", b =>

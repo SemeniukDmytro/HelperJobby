@@ -46,29 +46,6 @@ public class EmployerQueryRepository : IEmployerQueryRepository
         return employerWithOrganization;
     }
 
-    public async Task<Employer> GetEmployerWithIncompleteJob(int userId)
-    {
-        return await GetUserWithEmployerAccount(userId,
-            q => q.Include(u => u.Employer).ThenInclude(ea => ea.IncompleteJob));
-    }
-
-    public async Task<Employer> GetEmployerWithOrganizationAndIncompleteJob(int userId)
-    {
-        return await GetUserWithEmployerAccount(userId, q => q
-            .Include(u => u.Employer)
-            .ThenInclude(ea => ea.Organization)
-            .Include(u => u.Employer)
-            .ThenInclude(ea => ea.IncompleteJob)
-        );
-    }
-
-    public async Task<Employer> GetEmployerWithJobs(int userId)
-    {
-        var employerAccount = await GetUserWithEmployerAccount(userId, q => q.Include(u => u.Employer));
-        await _applicationContext.Entry(employerAccount).Collection(e => e.Jobs).LoadAsync();
-        return employerAccount;
-    }
-
     private async Task<Employer> GetUserWithEmployerAccount(int userId,
         Func<IQueryable<User>, IQueryable<User>> includeFunc = null)
     {

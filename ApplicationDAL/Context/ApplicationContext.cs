@@ -44,20 +44,20 @@ public class ApplicationContext : DbContext
 
         modelBuilder.Entity<User>()
             .HasOne(u => u.JobSeeker)
-            .WithOne(jsa => jsa.User)
-            .HasForeignKey<JobSeeker>(jsa => jsa.UserId)
+            .WithOne(js => js.User)
+            .HasForeignKey<JobSeeker>(js => js.UserId)
             .IsRequired();
 
         modelBuilder.Entity<User>()
             .HasOne(u => u.Employer)
-            .WithOne(ea => ea.User)
-            .HasForeignKey<Employer>(ea => ea.UserId)
+            .WithOne(e => e.User)
+            .HasForeignKey<Employer>(e => e.UserId)
             .IsRequired();
 
         modelBuilder.Entity<JobSeeker>()
             .HasOne(a => a.Address)
             .WithMany()
-            .HasForeignKey(jsa => jsa.AddressId);
+            .HasForeignKey(js => js.AddressId);
 
         modelBuilder.Entity<JobSeeker>()
             .HasOne(jsa => jsa.Resume)
@@ -74,10 +74,10 @@ public class ApplicationContext : DbContext
             .HasForeignKey(o => o.OrganizationId)
             .IsRequired();
 
-        modelBuilder.Entity<Employer>()
-            .HasOne(ea => ea.IncompleteJob)
-            .WithOne(cj => cj.Employer)
-            .HasForeignKey<IncompleteJob>(cj => cj.EmployerId)
+        modelBuilder.Entity<IncompleteJob>()
+            .HasOne(ij => ij.Employer)
+            .WithMany(e => e.IncompleteJobs)
+            .HasForeignKey(ij => ij.EmployerId)
             .IsRequired();
 
         modelBuilder.Entity<Organization>()
@@ -91,7 +91,7 @@ public class ApplicationContext : DbContext
 
         modelBuilder.Entity<Job>()
             .HasOne(j => j.Employer)
-            .WithMany(ea => ea.Jobs)
+            .WithMany(e => e.Jobs)
             .HasForeignKey(j => j.EmployerId);
 
         modelBuilder.Entity<JobSalary>()
@@ -107,8 +107,8 @@ public class ApplicationContext : DbContext
         
         modelBuilder.Entity<Resume>()
             .HasMany(r => r.Educations)
-            .WithOne(e => e.Resume)
-            .HasForeignKey(e => e.ResumeId);
+            .WithOne(ed => ed.Resume)
+            .HasForeignKey(ed => ed.ResumeId);
 
         modelBuilder.Entity<Resume>()
             .HasMany(r => r.WorkExperiences)
@@ -121,7 +121,7 @@ public class ApplicationContext : DbContext
             .HasForeignKey(s => s.ResumeId);
 
         modelBuilder.Entity<SavedJob>()
-            .HasKey(e => new { e.JobId, JobSeekerAccountId = e.JobSeekerId });
+            .HasKey(e => new { e.JobId, e.JobSeekerId });
 
         modelBuilder.Entity<SavedJob>()
             .HasOne(sj => sj.Job)
@@ -130,11 +130,11 @@ public class ApplicationContext : DbContext
 
         modelBuilder.Entity<SavedJob>()
             .HasOne(sj => sj.JobSeeker)
-            .WithMany(jsa => jsa.SavedJobs)
+            .WithMany(js => js.SavedJobs)
             .HasForeignKey(sj => sj.JobSeekerId);
 
         modelBuilder.Entity<Interview>()
-            .HasKey(e => new { e.JobId, JobSeekerAccountId = e.JobSeekerId });
+            .HasKey(e => new { e.JobId, e.JobSeekerId });
 
         modelBuilder.Entity<Interview>()
             .HasOne(i => i.Job)
@@ -147,7 +147,7 @@ public class ApplicationContext : DbContext
             .HasForeignKey(i => i.JobSeekerId);
 
         modelBuilder.Entity<JobApply>()
-            .HasKey(e => new { e.JobId, JobSeekerAccountId = e.JobSeekerId });
+            .HasKey(e => new { e.JobId, e.JobSeekerId });
 
         modelBuilder.Entity<JobApply>()
             .HasOne(ja => ja.Job)

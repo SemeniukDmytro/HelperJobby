@@ -15,5 +15,5 @@ public class EmployerDTO
     public int OrganizationId { get; set; }
     public OrganizationDTO Organization { get; set; }
     public List<JobDTO> Jobs { get; set; }
-    public IncompleteJobDTO? IncompleteJob { get; set; }
+    public List<IncompleteJobDTO> IncompleteJobs { get; set; }
 }
