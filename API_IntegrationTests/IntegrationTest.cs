@@ -24,8 +24,6 @@ public class IntegrationTest
     protected IntegrationTest(ITestOutputHelper testOutputHelper)
     {
         TestOutputHelper = testOutputHelper;
-        var connectionString =
-            "Server=34.132.58.30; User=root; Database=HelperJobbyTestsDB; Port=3306; Password=aAI9E)1k|d(t\"Jr#;";
         var appFactory = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(builder =>
             {
@@ -51,14 +49,12 @@ public class IntegrationTest
         var authUserDTO = await RegisterNewUser(newUser);
         TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authUserDTO.Token);
         return authUserDTO.User;
-        var userWithToken = await LoginUser(newUser.Email, newUser.Password);
-        return userWithToken.User;
     }
 
     protected async Task<EmployerDTO> CreateEmployerWithNewOrganizationForAuthUser()
     {
         await AuthenticateAsync();
-        var requestUri = "/api/employerAccount";
+        var requestUri = "/api/employer";
         var createdEmployer = new CreateEmployerDTO
         {
             FullName = "test name",
@@ -75,7 +71,7 @@ public class IntegrationTest
     protected async Task<JobSeekerDTO> GetCurrentJobSeekerAccount()
     {
         await AuthenticateAsync();
-        var getJobSeekerRequestUri = "api/JobSeekerAccount/current-job-seeker";
+        var getJobSeekerRequestUri = "api/JobSeeker/current-job-seeker";
         var jobSeekerResponse = await TestClient.GetAsync(getJobSeekerRequestUri);
         return await jobSeekerResponse.Content.ReadAsAsync<JobSeekerDTO>();
     }
@@ -92,10 +88,10 @@ public class IntegrationTest
         return authUserDTO;
     }
 
-    protected async Task<IncompleteJobDTO> CreateNewCurrentJob(IncompleteJobCreateDTO incompleteJobCreateDto)
+    protected async Task<IncompleteJobDTO> CreateNewCurrentJob(UpdatedIncompleteJobDTO updatedIncompleteJobDto)
     {
-        var newCurrentJob = incompleteJobCreateDto;
-        var currentJobCreationResponse = await TestClient.PostAsJsonAsync("/api/CurrentJob", newCurrentJob);
+        var newCurrentJob = updatedIncompleteJobDto;
+        var currentJobCreationResponse = await TestClient.PostAsJsonAsync("/api/IncompleteJob", newCurrentJob);
         return await currentJobCreationResponse.Content.ReadAsAsync<IncompleteJobDTO>();
     }
 

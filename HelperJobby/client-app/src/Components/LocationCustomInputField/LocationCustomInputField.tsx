@@ -51,6 +51,27 @@ const LocationCustomInputField: FC<LocationCustomInputFieldProps> = ({
 
 
     useEffect(() => {
+        checkIfSelectedFromSuggestions();
+    }, [selectedFromSuggests]);
+
+
+    useEffect(() => {
+        if (executeValidation && setExecuteValidation) {
+            validateInputValue(inputValue);
+            setExecuteValidation(false);
+        }
+    }, [executeValidation]);
+
+
+    function validateInputValue(value : string) {
+        if ((!value && isRequired) || customErrorMessage) {
+            setIsInvalidValue(true);
+        } else {
+            setIsInvalidValue(false);
+        }
+    }
+    
+    function checkIfSelectedFromSuggestions(){
         if (!setCustomErrorMessage || !inputValue) {
             return;
         }
@@ -60,35 +81,19 @@ const LocationCustomInputField: FC<LocationCustomInputFieldProps> = ({
             setIsInvalidValue(true);
             setCustomErrorMessage("We don't recognize this address. Please select address from suggestions window");
         }
-    }, [selectedFromSuggests]);
-
-
-    useEffect(() => {
-        if (executeValidation && setExecuteValidation) {
-            validateInputValue();
-            setExecuteValidation(false);
-        }
-    }, [executeValidation]);
-
-
-    function validateInputValue() {
-        if ((!inputValue && isRequired) || customErrorMessage) {
-            setIsInvalidValue(true);
-        } else {
-            setIsInvalidValue(false);
-        }
     }
 
 
     function changeInputFieldValue(e: ChangeEvent<HTMLInputElement>) {
         setIsInvalidValue(false);
-        validateInputValue();
-        if (setCustomErrorMessage) {
-            setCustomErrorMessage("");
+        validateInputValue(e.target.value);
+        if (customErrorMessage == "Add an address"){
+            setCustomErrorMessage && setCustomErrorMessage("");
         }
         setShowAutocompleteResults(true);
         e.target.value ? setShowEraseButton(true) : setShowEraseButton(false);
         setSelectedFromSuggests && setSelectedFromSuggests(false);
+        checkIfSelectedFromSuggestions();
         setInputValue(e.target.value);
     }
 
@@ -119,7 +124,7 @@ const LocationCustomInputField: FC<LocationCustomInputFieldProps> = ({
                     value={inputValue}
                     type={"text"}
                     onChange={changeInputFieldValue}
-                    onBlur={validateInputValue}
+                    onBlur={() => validateInputValue(inputValue)}
                     ref={inputRef}
                 />
                 <img className={"google-logo"} src={GoogleImage} alt={""}></img>

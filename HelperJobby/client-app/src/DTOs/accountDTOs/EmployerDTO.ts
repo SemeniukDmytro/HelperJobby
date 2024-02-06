@@ -8,10 +8,11 @@ export interface EmployerDTO {
     userId: number;
     email: string;
     contactNumber: string;
+    hasPostedFirstJob : boolean;
     fullName: string;
     user: UserDTO;
     organizationId: number;
     organization: OrganizationDTO;
     jobs: JobDTO[];
-    incompleteJob? : IncompleteJobDTO | null;
+    incompleteJob : IncompleteJobDTO[];
 }

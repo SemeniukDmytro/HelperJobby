@@ -35,7 +35,7 @@ public class IncompleteJobService : IIncompleteJobService
 
         if (incompleteJobEntity.EmployerId != currentEmployer.Id) throw new ForbiddenException();
 
-        var updatedEntity = EntitiesUpdator<IncompleteJob>
+        var updatedEntity = EntitiesUpdateManager<IncompleteJob>
             .UpdateEntityProperties(incompleteJobEntity, updatedIncompleteJob);
         if (incompleteJobEntity.Salary == null)
         {
@@ -43,7 +43,7 @@ public class IncompleteJobService : IIncompleteJobService
         }
         else
         {
-            var updatedSalary = EntitiesUpdator<IncompleteJobSalary>.UpdateEntityProperties(updatedEntity.Salary,
+            var updatedSalary = EntitiesUpdateManager<IncompleteJobSalary>.UpdateEntityProperties(updatedEntity.Salary,
                 updatedIncompleteJob.Salary);
             updatedEntity.Salary = updatedSalary;
         }

@@ -4,7 +4,7 @@ using ApplicationDomain.Models;
 
 namespace ApplicationBLL.Logic;
 
-public static class EntitiesUpdator<T>
+public static class EntitiesUpdateManager<T>
 {
     public static T UpdateEntityProperties<T>(T entityToUpdate, T updatedEntity)
     {
@@ -29,9 +29,11 @@ public static class EntitiesUpdator<T>
 
     private static bool IsValid(object value)
     {
+        if (value == null) return false;
+        
         if (value is EmployeeBenefits) return true;
 
-        if (value == null) return false;
+        if (value is Schedules) return true;
 
         if (value is decimal) return (decimal)value != 0.0m;
 

@@ -76,7 +76,7 @@ public class InterviewControllerTests : IntegrationTest
     {
         //Arrange
         var user = await AuthenticateAsync();
-        var getJobSeekerResponse = await TestClient.GetAsync("api/JobSeekerAccount/current-job-seeker");
+        var getJobSeekerResponse = await TestClient.GetAsync("api/JobSeeker/current-job-seeker");
         var newJobSeeker = await getJobSeekerResponse.Content.ReadAsAsync<JobSeekerDTO>();
         var employerAccount = await CreateEmployerWithNewOrganizationForAuthUser();
         var createdJob = await CreateJob();

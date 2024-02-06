@@ -28,15 +28,16 @@ public class EmployerQueryRepository : IEmployerQueryRepository
     {
         var employerWithOrganization = await _applicationContext.Employers
             .Where(e => e.UserId == userId)
-            .Select(ea => new Employer()
+            .Select(e => new Employer()
             {
-                Id = ea.Id,
-                Email = ea.Email,
-                FullName = ea.FullName,
-                ContactNumber = ea.ContactNumber,
-                UserId = ea.UserId,
-                OrganizationId = ea.OrganizationId,
-                Organization = ea.Organization
+                Id = e.Id,
+                Email = e.Email,
+                FullName = e.FullName,
+                ContactNumber = e.ContactNumber,
+                UserId = e.UserId,
+                HasPostedFirstJob = e.HasPostedFirstJob,
+                OrganizationId = e.OrganizationId,
+                Organization = e.Organization
             }).FirstOrDefaultAsync();
         if (employerWithOrganization == null)
         {
@@ -50,10 +51,10 @@ public class EmployerQueryRepository : IEmployerQueryRepository
         Func<IQueryable<User>, IQueryable<User>> includeFunc = null)
     {
         var user = await _entityInclusionHandler.GetUser(userId, includeFunc);
-        var account = user.Employer;
+        var employer = user.Employer;
 
-        if (account == null) throw new EmployerAccountNotFoundException();
+        if (employer == null) throw new EmployerAccountNotFoundException();
 
-        return account;
+        return employer;
     }
 }

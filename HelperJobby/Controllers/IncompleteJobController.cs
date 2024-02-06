@@ -38,11 +38,11 @@ public class IncompleteJobController : ExtendedBaseController
 
     // POST: api/IncompleteJob
     [HttpPost]
-    public async Task<IncompleteJobDTO> Post([FromBody] IncompleteJobCreateDTO incompleteJobCreateDto)
+    public async Task<IncompleteJobDTO> Post([FromBody] CreateIncompleteJobDTO updatedIncompleteJobDto)
     {
         var incompleteJob =
             await _incompleteJobService.StartIncompleteJobCreation(
-                _mapper.Map<IncompleteJob>(incompleteJobCreateDto));
+                _mapper.Map<IncompleteJob>(updatedIncompleteJobDto));
         var createdIncompleteJobDTO =
             _mapper.Map<IncompleteJobDTO>(
                 await _incompleteJobCommandRepository.CreateIncompleteJob(incompleteJob));
@@ -51,11 +51,11 @@ public class IncompleteJobController : ExtendedBaseController
 
     // PUT: api/IncompleteJob/5
     [HttpPut("{incompleteJobId}")]
-    public async Task<IncompleteJobDTO> Put(int incompleteJobId, [FromBody] IncompleteJobCreateDTO incompleteJobCreationDto)
+    public async Task<IncompleteJobDTO> Put(int incompleteJobId, [FromBody] UpdatedIncompleteJobDTO updatedIncompleteJobCreationDto)
     {
         var incompleteJob =
             await _incompleteJobService.UpdateIncompleteJob(incompleteJobId,
-                _mapper.Map<IncompleteJob>(incompleteJobCreationDto));
+                _mapper.Map<IncompleteJob>(updatedIncompleteJobCreationDto));
         var incompleteJobDTO =
             _mapper.Map<IncompleteJobDTO>(
                 await _incompleteJobCommandRepository.UpdateIncompleteJob(incompleteJob));

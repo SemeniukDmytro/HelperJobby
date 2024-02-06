@@ -38,7 +38,7 @@ public class ResumeControllerTests : IntegrationTest
     {
         //Arrange
         var currentUser = await AuthenticateAsync();
-        var getCurrentJobSeekerResponse = await TestClient.GetAsync("api/JobSeekerAccount/current-job-seeker");
+        var getCurrentJobSeekerResponse = await TestClient.GetAsync("api/JobSeeker/current-job-seeker");
         var jobSeeker = await getCurrentJobSeekerResponse.Content.ReadAsAsync<JobSeekerDTO>();
         var createdResumeDTO = ResumeFixtures.Resume;
         var requestUri = _baseUri;

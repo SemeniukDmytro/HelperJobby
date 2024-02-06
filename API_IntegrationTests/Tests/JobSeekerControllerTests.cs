@@ -10,7 +10,7 @@ namespace API_IntegrationTests.Tests;
 
 public class JobSeekerControllerTests : IntegrationTest
 {
-    private readonly string _baseUri = "/api/JobSeekerAccount";
+    private readonly string _baseUri = "/api/JobSeeker";
 
     public JobSeekerControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {
@@ -21,7 +21,7 @@ public class JobSeekerControllerTests : IntegrationTest
     {
         //Arrange
         var user = await AuthenticateAsync();
-        var getJobSeekerRequestUri = "api/JobSeekerAccount/current-job-seeker";
+        var getJobSeekerRequestUri = "api/JobSeeker/current-job-seeker";
 
         //Act
         var jobSeekerResponse = await TestClient.GetAsync(getJobSeekerRequestUri);
@@ -47,7 +47,7 @@ public class JobSeekerControllerTests : IntegrationTest
         await TestClient.PostAsJsonAsync(saveJobSecondRequestUri, "");
 
         //Act
-        var getSavedJobsResponse = await TestClient.GetAsync("api/JobSeekerAccount/my-saved-jobs");
+        var getSavedJobsResponse = await TestClient.GetAsync("api/JobSeeker/my-saved-jobs");
         await ExceptionsLogHelper.LogNotSuccessfulResponse(getSavedJobsResponse, TestOutputHelper);
 
         //Assert

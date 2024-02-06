@@ -7,29 +7,29 @@ using Xunit.Abstractions;
 
 namespace API_IntegrationTests.Tests;
 
-public class CurrentJobControllerTests : IntegrationTest
+public class IncompleteJobControllerTests : IntegrationTest
 {
     private readonly string _baseUri = "/api/IncompleteJob";
 
-    public CurrentJobControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+    public IncompleteJobControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {
     }
 
     [Fact]
-    public async Task GetCurrentJobCreation_ShouldReturnJobCreationOfCurrentEmployer()
+    public async Task GetEmployerIncompleteJobs_ShouldReturnJobCreationOfCurrentEmployer()
     {
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
-        var requestUri = $"{_baseUri}/{employer.Id}/current-job-creation";
+        var requestUri = $"{_baseUri}/{employer.Id}/incomplete-jobs";
         var currentJobCreation = await CreateNewCurrentJob(IncompleteJobFixtures.NewJobCreation);
         //Act
         var jobGetResponse = await TestClient.GetAsync(requestUri);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(jobGetResponse, TestOutputHelper);
         //Assert
         Assert.Equal(HttpStatusCode.OK, jobGetResponse.StatusCode);
-        var receivedCurrentJob = await jobGetResponse.Content.ReadAsAsync<IncompleteJobDTO>();
-        Assert.Equal(currentJobCreation.Id, receivedCurrentJob.Id);
-        Assert.Equal(currentJobCreation.JobTitle, receivedCurrentJob.JobTitle);
+        var receivedCurrentJob = (await jobGetResponse.Content.ReadAsAsync<IEnumerable<IncompleteJobDTO>>()).ToList();
+        Assert.Equal(currentJobCreation.Id, receivedCurrentJob[0].Id);
+        Assert.Equal(currentJobCreation.JobTitle, receivedCurrentJob[0].JobTitle);
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class CurrentJobControllerTests : IntegrationTest
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
         var currentJobCreation = await CreateNewCurrentJob(IncompleteJobFixtures.NewJobCreation);
-        var updatedJob = new IncompleteJobCreateDTO
+        var updatedJob = new UpdatedIncompleteJobDTO
         {
             JobTitle = "",
             NumberOfOpenings = 5,

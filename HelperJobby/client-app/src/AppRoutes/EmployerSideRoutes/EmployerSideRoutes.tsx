@@ -14,6 +14,8 @@ import JobDescriptionAndPreferencesPage
 import PagesWithoutSidebarWrap from "../../EmployersSideComponents/PagesWithoutSidebarWrap/PagesWithoutSidebarWrap";
 import EmployerPagesWithSidebarWrap
     from "../../EmployersSideComponents/EmployerPagesWithSidebarWrap/EmployerPagesWithSidebarWrap";
+import JobPostingPagesWrap
+    from "../../EmployerSidePages/JobCreationPages/SharedComponents/JobPostingPagesWrap/JobPostingPagesWrap";
 
 interface EmployerSideRoutesProps {
 }
@@ -25,6 +27,9 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
                 <Route path={"/setup-employer"} element={<EmployerSetupPage/>}/>
             </Route>
             <Route element={<EmployerPagesWithSidebarWrap/>}>
+                
+            </Route>
+            <Route element={<JobPostingPagesWrap/>}>
                 <Route path={"/posting"} element={<Outlet/>}>
                     <Route index element={<JobPostingPage/>}/>
                     <Route path={"getting-started"} element={<AddJobBasicsPage/>}/>

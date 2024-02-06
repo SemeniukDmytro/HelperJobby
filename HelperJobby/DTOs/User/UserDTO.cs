@@ -14,5 +14,5 @@ public class UserDTO
 
     public JobSeekerDTO JobSeekerAccount { get; set; }
 
-    public EmployerDTO EmployerAccount { get; set; }
+    public EmployerDTO? EmployerAccount { get; set; }
 }

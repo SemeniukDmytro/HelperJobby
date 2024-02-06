@@ -5,7 +5,7 @@ namespace API_IntegrationTests.Fixtures;
 
 public class IncompleteJobFixtures
 {
-    public static readonly IncompleteJobCreateDTO NewJobCreation = new()
+    public static readonly UpdatedIncompleteJobDTO NewJobCreation = new()
     {
         JobTitle = "Software Developer",
         NumberOfOpenings = 3,
@@ -25,7 +25,7 @@ public class IncompleteJobFixtures
         Description = ""
     };
 
-    public static readonly IncompleteJobCreateDTO CompletedJobCreation = new()
+    public static readonly UpdatedIncompleteJobDTO CompletedJobCreation = new()
     {
         JobTitle = "Software Developer",
         NumberOfOpenings = 3,

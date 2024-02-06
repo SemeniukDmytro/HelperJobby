@@ -2,8 +2,8 @@ namespace HelperJobby.DTOs.Resume;
 
 public class WorkExperienceDTO
 {
-    public int WorkExperienceId { get; set; }
-    public string? JobTitle { get; set; }
+    public int Id { get; set; }
+    public string JobTitle { get; set; }
     public string? Company { get; set; }
     public string? Country { get; set; }
     public string? CityOrProvince { get; set; }

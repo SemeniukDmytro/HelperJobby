@@ -16,7 +16,7 @@ public class User
 
     public JobSeeker JobSeeker { get; set; }
 
-    public Employer Employer { get; set; }
+    public Employer? Employer { get; set; }
 
     public RefreshToken RefreshToken { get; set; }
 }

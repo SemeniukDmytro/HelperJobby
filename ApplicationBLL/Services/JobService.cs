@@ -43,14 +43,14 @@ public class JobService : IJobService
         if (jobEntity.EmployerId != employer.Id)
             throw new ForbiddenException("You can not update this job information");
 
-        var updatedEntity = EntitiesUpdator<IncompleteJob>.UpdateEntityProperties(jobEntity, updatedJob);
+        var updatedEntity = EntitiesUpdateManager<IncompleteJob>.UpdateEntityProperties(jobEntity, updatedJob);
         if (jobEntity.Salary == null)
         {
             updatedEntity.Salary = updatedJob.Salary;
         }
         else
         {
-            var updatedSalary = EntitiesUpdator<IncompleteJobSalary>.UpdateEntityProperties(updatedEntity.Salary,
+            var updatedSalary = EntitiesUpdateManager<IncompleteJobSalary>.UpdateEntityProperties(updatedEntity.Salary,
                 updatedJob.Salary);
             updatedEntity.Salary = updatedSalary;
         }

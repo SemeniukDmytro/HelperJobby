@@ -10,7 +10,7 @@ export interface JobDTO {
     language: string;
     location: string;
     jobType: string[];
-    salary : JobSalaryDTO;
+    salary? : JobSalaryDTO;
     schedule: string[];
     benefits: string[];
     contactEmail: string;

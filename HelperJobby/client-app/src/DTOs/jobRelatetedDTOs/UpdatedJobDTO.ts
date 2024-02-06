@@ -9,7 +9,7 @@ export interface UpdatedJobDTO {
     language: string;
     location: string;
     jobType: JobTypes[];
-    salary : CreateUpdateSalaryDTO;
+    salary? : CreateUpdateSalaryDTO;
     schedule: Schedules[];
     benefits: EmployeeBenefits[];
     contactEmail: string;

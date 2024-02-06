@@ -6,19 +6,19 @@ using Xunit.Abstractions;
 
 namespace API_IntegrationTests.Tests;
 
-public class EmployerAccountControllerTests : IntegrationTest
+public class EmployerControllerTests : IntegrationTest
 {
-    public EmployerAccountControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+    public EmployerControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {
     }
 
     [Fact]
     public async Task
-        CreateEmployerAccount_ShouldReturnCreatedEmployerAccountAndCreateNewOrganization_IfOrganizationDoesNotExist()
+        CreateEmployer_ShouldReturnCreatedEmployerAndCreateNewOrganization_IfOrganizationDoesNotExist()
     {
         //Arrange
         await AuthenticateAsync();
-        var requestUri = "/api/employerAccount";
+        var requestUri = "/api/employer";
         var createdEmployer = NewEmployerFixtures.EmployerWithRandomOrganization;
 
         //Act
@@ -35,17 +35,19 @@ public class EmployerAccountControllerTests : IntegrationTest
     }
 
     [Fact]
-    public async Task CreateEmployerAccount_ShouldReturnCreatedAccount_IfEmployerEmailIsInOrganizationEmailsList()
+    public async Task CreateEmployer_ShouldReturnCreatedEmployer_IfEmployerEmailIsInOrganizationEmailsList()
     {
         //Arrange
-        var requestUri = "/api/employerAccount";
+        var requestUri = "/api/employer";
         var employerWithCreatedOrganization = await CreateEmployerWithNewOrganizationForAuthUser();
+        TestOutputHelper.WriteLine(employerWithCreatedOrganization.Organization.EmployeeEmails[0].Email);
         await TestClient.PostAsJsonAsync(
             $"/api/organization/{employerWithCreatedOrganization.Organization.Id}/add-employee",
             EmployeeEmailsFixtures.emailForAdding);
         await AuthenticateAsync();
         var newEmployer = NewEmployerFixtures.EmployerCreationInCreatedOrganization;
         newEmployer.OrganizationName = employerWithCreatedOrganization.Organization.Name;
+        TestOutputHelper.WriteLine(newEmployer.Email);
 
         //Act
         var employerCreationResponse = await TestClient.PostAsJsonAsync(requestUri, newEmployer);
@@ -61,11 +63,11 @@ public class EmployerAccountControllerTests : IntegrationTest
     }
 
     [Fact]
-    public async Task UpdateEmployerAccount_ShouldReturnUpdatedEmployerAccount()
+    public async Task UpdateEmployer_ShouldReturnUpdatedEmployer()
     {
         //Arrange
         var currentEmployer = await CreateEmployerWithNewOrganizationForAuthUser();
-        var requestUri = $"/api/employerAccount/{currentEmployer.UserId}";
+        var requestUri = $"/api/employer/{currentEmployer.UserId}";
         var updateEmployerAccountDTO = new UpdateEmployerDTO
         {
             Email = "newemail@gmail.com",
@@ -86,11 +88,11 @@ public class EmployerAccountControllerTests : IntegrationTest
     }
 
     [Fact]
-    public async Task GetEmployerAccountByUserId_ShouldReturnEmployerAccount()
+    public async Task GetEmployerByUserId_ShouldReturnEmployer()
     {
         //Arrange
         var createdEmployer = await CreateEmployerWithNewOrganizationForAuthUser();
-        var requestUri = $"/api/EmployerAccount/{createdEmployer.UserId}";
+        var requestUri = $"/api/Employer/{createdEmployer.UserId}";
 
         //Act
         var getEmployerResponse = await TestClient.GetAsync(requestUri);
@@ -108,7 +110,7 @@ public class EmployerAccountControllerTests : IntegrationTest
     {
         //Arrange
         var createdEmployer = await CreateEmployerWithNewOrganizationForAuthUser();
-        var requestUri = "/api/EmployerAccount/my-employer-account";
+        var requestUri = "/api/Employer/my-employer-account";
 
         //Act
         var getEmployerResponse = await TestClient.GetAsync(requestUri);

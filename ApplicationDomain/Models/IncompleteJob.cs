@@ -16,21 +16,21 @@ public class IncompleteJob
 
     [Required] [MaxLength(20)] public string Language { get; set; }
 
-    [MaxLength(50)] public string Location { get; set; }
+    [Required] [MaxLength(50)] public string Location { get; set; }
 
-    public JobTypes JobTypes { get; set; }
+    public JobTypes? JobTypes { get; set; }
     [ExcludeFromUpdate]
     public IncompleteJobSalary? Salary { get; set; }
 
-    public Schedules Schedule { get; set; }
+    public Schedules? Schedule { get; set; }
 
-    public EmployeeBenefits Benefits { get; set; }
+    public EmployeeBenefits? Benefits { get; set; }
 
-    [MaxLength(50)] public string ContactEmail { get; set; }
+    [MaxLength(50)] public string? ContactEmail { get; set; }
 
-    [DefaultValue(false)] public bool ResumeRequired { get; set; }
+    [DefaultValue(false)] public bool? ResumeRequired { get; set; }
 
-    [Column(TypeName = "text")] public string Description { get; set; }
+    [Column(TypeName = "text")] public string? Description { get; set; }
 
     [Required]
     [ExcludeFromUpdate]

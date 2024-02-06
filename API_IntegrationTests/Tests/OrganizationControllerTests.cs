@@ -87,7 +87,7 @@ public class OrganizationControllerTests : IntegrationTest
         var employerAccount = await CreateEmployerWithNewOrganizationForAuthUser();
         var newEmployeeEmail = new CreateOrganizationEmployeeEmailDTO
         {
-            Email = RandomStringGenerator.GenerateRandomEmail()
+            Email = "random@gmail.com"
         };
         var addEmailResponse = await TestClient.PostAsJsonAsync(
             $"/api/organization/{employerAccount.Organization.Id}/add-employee",
@@ -95,10 +95,10 @@ public class OrganizationControllerTests : IntegrationTest
         var email = await addEmailResponse.Content.ReadAsAsync<OrganizationEmployeeEmailDTO>();
 
         await AuthenticateAsync();
-        var newEmployer = NewEmployerFixtures.EmployerCreationInCreatedOrganization;
+        var newEmployer = NewEmployerFixtures.SecondEmployerCreationInCreatedOrganization;
         newEmployer.OrganizationName = employerAccount.Organization.Name;
         newEmployer.Email = email.Email;
-        var createEmployerResponse = await TestClient.PostAsJsonAsync("/api/employerAccount", newEmployer);
+        var createEmployerResponse = await TestClient.PostAsJsonAsync("/api/employer", newEmployer);
         var employerToRemove = await createEmployerResponse.Content.ReadAsAsync<EmployerDTO>();
 
         await LoginUser(employerAccount.User.Email, "randomPwd");
@@ -110,7 +110,7 @@ public class OrganizationControllerTests : IntegrationTest
 
         //Assert
         Assert.Equal(HttpStatusCode.OK, removeEmployeeEmailResponse.StatusCode);
-        var getRemovedEmployeeResponse = await TestClient.GetAsync($"/api/EmployerAccount/{employerToRemove.UserId}");
+        var getRemovedEmployeeResponse = await TestClient.GetAsync($"/api/Employer/{employerToRemove.UserId}");
         await ExceptionsLogHelper.LogNotSuccessfulResponse(getRemovedEmployeeResponse, TestOutputHelper);
         Assert.Equal(HttpStatusCode.NotFound, getRemovedEmployeeResponse.StatusCode);
     }

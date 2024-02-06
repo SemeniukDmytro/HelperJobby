@@ -37,11 +37,13 @@ public class CurrentJobCreationServiceTests
         };
         var userId = 1;
         _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
+        _employerAccountQueryRepositoryMock.Setup(eqr => eqr.GetEmployer(userId))
+            .ReturnsAsync(EmployerAccountFixtures.EmployerEntity);
         //Act
         var job = await _incompleteJobService.StartIncompleteJobCreation(newJob);
         //Assert
         Assert.Equal(newJob.NumberOfOpenings, job.NumberOfOpenings);
-        Assert.Equal(2, job.EmployerId);
+        Assert.Equal(EmployerAccountFixtures.EmployerEntity.Id, job.EmployerId);
     }
     
 

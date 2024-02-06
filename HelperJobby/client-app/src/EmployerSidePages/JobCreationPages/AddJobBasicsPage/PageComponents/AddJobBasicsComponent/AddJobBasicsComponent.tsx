@@ -1,7 +1,7 @@
 import React, {FC, FormEvent, useEffect, useRef, useState} from 'react';
 import './AddJobBasicsComponent.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowLeftLong, faArrowRightLong, faCircleInfo, faPen} from "@fortawesome/free-solid-svg-icons";
+import {faArrowRightLong, faCircleInfo, faPen} from "@fortawesome/free-solid-svg-icons";
 import SelectLanguageDialog from "../SelectLanguageDialog/SelectLanguageDialog";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
 import CustomSelectField from "../../../../../Components/CustomSelectField/CustomSelectField";
@@ -11,12 +11,16 @@ import AutocompleteResultsWindow
     from "../../../../../JobSeekerSidePages/EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
 import LocationCustomInputField from "../../../../../Components/LocationCustomInputField/LocationCustomInputField";
 import {useNavigate} from "react-router-dom";
-import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import JobBasics from "../../../../../Components/Icons/JobBasics";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {JobLocationTypes} from "../../../../../enums/utilityEnums/JobLocationTypes";
 import {AutocompleteWindowTypes} from "../../../../../enums/utilityEnums/AutocompleteWindowTypes";
+import {logErrorInfo} from "../../../../../utils/logErrorInfo";
+import {IncompleteJobService} from "../../../../../services/incompleteJobService";
+import {CreateIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/CreateIncompleteJobDTO";
+import {isNanAfterIntParse} from "../../../../../utils/validationLogic/numbersValidators";
+import useJobCreation from "../../../../../hooks/useJobCreation";
 
 
 interface AddJobBasicsComponentProps {
@@ -41,15 +45,53 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
     const [locationError, setLocationError] = useState("");
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
+    const {incompleteJob, setIncompleteJob} = useJobCreation();
+    const incompleteJobService = new IncompleteJobService();
     
     useEffect(() => {
         handleJobLocationTypeChange()
     }, [jobLocationTypeEnumValue]);
 
-    function handleJobBasicsSubmit(e: FormEvent) {
+    async function handleJobBasicsSubmit(e: FormEvent) {
         e.preventDefault();
         setExecuteFormValidation(true);
-        navigate(EmployerPagesPaths.JOB_DETAILS);
+        if (!jobTitle){
+            jobTitleInputRef.current?.focus();
+            return;
+        }
+        if (isNanAfterIntParse(numberOfOpenings) || invalidNumberOfOpenings){
+            return;
+        }
+        if (!jobLocation){
+            setLocationError("Add an address")
+            return;
+        }
+        if (!locationSelectedFromSuggests){
+            setLocationError("We don't recognize this address. Please select address from suggestions window")
+            return;
+        }
+        
+        try {
+            setRequestInProgress(true);
+            const createdIncompleteJob : CreateIncompleteJobDTO = {
+                jobTitle: jobTitle,
+                numberOfOpenings: parseInt(numberOfOpenings),
+                location: jobLocation,
+                language: jobPostLanguage,
+                jobType: [],
+                schedule: [],
+                benefits: []
+            }
+            const jobCreationResponse = await incompleteJobService.startJobCreation(createdIncompleteJob);
+            console.log(jobCreationResponse);
+            setIncompleteJob(jobCreationResponse);
+        }
+        catch (err){
+            logErrorInfo(err)
+        }
+        finally {
+            setRequestInProgress(false);
+        }
     }
 
     function handleJobLocationTypeChange() {
@@ -63,6 +105,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                 return;
             case JobLocationTypes.Remote:
                 setJobLocationFieldLabel("Your job location will appear as Remote, and we’ll advertise it to people searching for remote work nationwide.")
+                setJobLocation("Remote");
                 return;
             case JobLocationTypes.OnRoad:
                 setJobLocationFieldLabel("What is the operating area for this job?")
@@ -110,7 +153,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                 <div className={"emp-form-fb"}>
                     <form className={"emp-form"}>
                         <div className={"mb2rem"}>
-                            <span className={"dark-default-text"}>Job post will bee in&nbsp;</span>
+                            <span className={"dark-default-text"}>Job post will be in&nbsp;</span>
                             <span className={"dark-default-text bold-text"}>{jobPostLanguage}</span>
                             <span className={"dark-default-text"}>&nbsp;in&nbsp;</span>
                             <span className={"dark-default-text bold-text"}>{jobPostingCountry}</span>

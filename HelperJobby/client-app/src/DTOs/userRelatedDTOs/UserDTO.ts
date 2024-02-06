@@ -7,5 +7,5 @@ export interface UserDTO {
     password: string;
     accountType: string;
     jobSeekerAccount: JobSeekerDTO;
-    employerAccount: EmployerDTO;
+    employerAccount?: EmployerDTO;
 }

@@ -12,7 +12,7 @@ const EmployerPagesWithSidebarWrap: FC<EmployerPagesWithSidebarWrapProps> = () =
 
 
     return (
-        <div className={"empp-with-sidebar-layout"}>
+        <div className={"emp-with-sidebar-layout"}>
             <EmployersSidebar/>
             <div className={"emp-main-content-layout"}>
                 <EmployersPagesHeader loading={loading} setLoading={setLoading}/>

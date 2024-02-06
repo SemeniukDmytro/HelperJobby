@@ -35,7 +35,7 @@ public class EmployerService : IEmployerAccountService
         if (employer != null) throw new ForbiddenException("Employer account has already been created");
 
         var organization = await _organizationQueryRepository.GetOrganizationByName(createdEmployer.Organization.Name);
-
+        
         if (organization != null)
         {
             var employeeEmail =

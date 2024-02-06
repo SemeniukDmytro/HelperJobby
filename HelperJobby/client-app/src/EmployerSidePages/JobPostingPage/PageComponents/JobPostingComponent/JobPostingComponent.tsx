@@ -1,4 +1,4 @@
-import React, {FC, FormEvent, useState} from 'react';
+import React, {FC, FormEvent, useEffect, useState} from 'react';
 import './JobPostingComponent.scss';
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import PageTitleWithImage from "../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
@@ -8,14 +8,23 @@ import {faArrowRightLong} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {JobPostingMethods} from "../../../../enums/utilityEnums/JobPostingMethods";
+import {useEmployer} from "../../../../hooks/useEmployer";
 
 interface JobPostingComponentProps {
 }
 
 const JobPostingComponent: FC<JobPostingComponentProps> = () => {
     const [jobPostingMethod, setJobPostingMethod] = useState<JobPostingMethods>(JobPostingMethods.fromPreviousPost);
-    const [loading, setLoading] = useState(false);
+    const {employer} = useEmployer();
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!employer?.hasPostedFirstJob){
+            navigate(EmployerPagesPaths.ADD_JOB_BASICS)
+        }
+        setLoading(false);
+    }, []);
     
     function handleFromPreviousJobPostClick() {
         setJobPostingMethod(JobPostingMethods.fromPreviousPost);
