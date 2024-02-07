@@ -48,6 +48,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     const benefitsListRef = useRef<HTMLUListElement>(null);
     const [showFullBenefitsList, setShowFullBenefitsList] = useState(false);
     const navigate = useNavigate();
+    const [requestInProgress, setRequestInProgress] = useState(false);
     
     const invalidNumberError: string = "This number doesn't look right. Use a valid format (e.g. 50,000.00).";
     const minimalSalaryIsTooLowError: string = "This wage appears to be below the minimum wage for this location. Update the minimum pay or check the box to confirm that your job is exempt from local minimum wage requirements.";
@@ -332,6 +333,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                     </span>
                     </div>
                     <JobCreateNavigationButtons
+                        requestInProgress={requestInProgress}
                         backButtonOnClick={goToPreviousPage}
                         nextPageButtonClick={handlePayAndBenefitSubmit}
                     />

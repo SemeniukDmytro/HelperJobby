@@ -28,6 +28,7 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
     const [isContactPhoneAvailable, setIsContactPhoneAvailable] = useState(false);
     const [isResumeRequired, setIsResumeRequired] = useState("");
     const navigate = useNavigate();
+    const [requestInProgress, setRequestInProgress] = useState(false);
     function changeDescriptionValue(event: React.FormEvent<HTMLDivElement>) {
         validateDescription(event.currentTarget.innerHTML);
         setJobDescription(event.currentTarget.innerHTML);
@@ -128,6 +129,7 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
                     optionsArr={resumeRequirements}
                 />
                 <JobCreateNavigationButtons
+                    requestInProgress={requestInProgress}
                     backButtonOnClick={navigateToPreviousPage}
                     nextPageButtonClick={handleDescriptionAndPreferencesSubmit}
                 />

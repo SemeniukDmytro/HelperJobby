@@ -32,11 +32,11 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
             <Route element={<JobPostingPagesWrap/>}>
                 <Route path={"/posting"} element={<Outlet/>}>
                     <Route index element={<JobPostingPage/>}/>
-                    <Route path={"getting-started/:jid"} element={<AddJobBasicsPage/>}/>
                     <Route path={"getting-started"} element={<AddJobBasicsPage/>}/>
-                    <Route path={"job-details"} element={<JobDetailsPage/>}/>
-                    <Route path={"compensation-details"} element={<AddJobPayAndBenefitsPage/>}/>
-                    <Route path={"description-and-application-settings"} element={<JobDescriptionAndPreferencesPage/>}/>
+                    <Route path={"getting-started/:jobId"} element={<AddJobBasicsPage/>}/>
+                    <Route path={"job-details/:jobId"} element={<JobDetailsPage/>}/>
+                    <Route path={"compensation-details/:jobId"} element={<AddJobPayAndBenefitsPage/>}/>
+                    <Route path={"description-and-application-settings/:jobId"} element={<JobDescriptionAndPreferencesPage/>}/>
                 </Route>
             </Route>
         </Route>

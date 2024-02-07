@@ -1,4 +1,4 @@
-import React, {FC, FormEvent, useRef, useState} from 'react';
+import React, {FC, FormEvent, useEffect, useRef, useState} from 'react';
 import './JobDetailsComponent.scss';
 import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import WomanWorking from "../../../../../Components/Icons/WomanWorking";
@@ -7,14 +7,22 @@ import {
 } from "../../../../../utils/convertLogic/enumToStringConverter";
 import JobFeature from "../../../../../EmployersSideComponents/JobFeature/JobFeature";
 import {jobTypesStringValues, schedulesStringValues} from "../../../../../AppConstData/JobEnumsToStringsArrays";
-import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import {faChevronDown, faChevronUp, faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import JobCreateNavigationButtons
     from "../../../SharedComponents/JobCreateNavigationButtons/JobCreateNavigationButtons";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import JobTypes from "../../../../../enums/modelDataEnums/JobTypes";
 import Schedules from "../../../../../enums/modelDataEnums/Schedules";
+import useJobCreation from "../../../../../hooks/useJobCreation";
+import {
+    useJobLoaderForSettingCurrentIncompleteJob
+} from "../../../../../hooks/useJobLoaderForSettingCurrentIncompleteJob";
+import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
+import {logErrorInfo} from "../../../../../utils/logErrorInfo";
+import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
+import {IncompleteJobService} from "../../../../../services/incompleteJobService";
 
 interface JobDetailsComponentProps {
 }
@@ -25,13 +33,36 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
     const [scheduleBoxHeight, setScheduleBoxHeight] = useState("78px");
     const scheduleListRef = useRef<HTMLUListElement>(null);
     const [showFullScheduleList, setShowFullScheduleList] = useState(false);
+    const {incompleteJob, setIncompleteJob} = useJobCreation();
+    const {jobId} = useParams<{jobId : string}>();
+    const {fetchJobAndSetJobCreation} =  useJobLoaderForSettingCurrentIncompleteJob(jobId ? parseInt(jobId) : 0, incompleteJob, setIncompleteJob);
+    const [loading, setLoading] = useState(false);
+    const [isInvalidForm, setIsInvalidForm] = useState(false);
     const navigate = useNavigate();
+    const [requestInProgress, setRequestInProgress] = useState(false);
+    const incompleteJobService = new IncompleteJobService();
 
+    useEffect(() => {
+        fetchInitialPageData()
+    }, []);
+
+    useEffect(() => {
+        if (incompleteJob){
+            setSelectedJobType(incompleteJob.jobType);
+            setSelectedSchedule(incompleteJob.schedule);
+            setLoading(false);
+        }
+    }, [incompleteJob]);
+    
+    async function fetchInitialPageData(){
+        await fetchJobAndSetJobCreation();
+    }
 
     function addJobType(jobTypeString: string) {
         const jobType = jobTypeStringToEnumMap(jobTypeString);
         if (jobType && !selectedJobType.includes(jobType)) {
             setSelectedJobType(prevSelectedJobType => [...prevSelectedJobType, jobType]);
+            setIsInvalidForm(false);
         } else if (jobType) {
             setSelectedJobType(prevSelectedJobType =>
                 prevSelectedJobType.filter(type => type !== jobType),
@@ -63,21 +94,42 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
     }
 
     function goToPreviousPage() {
-        navigate(EmployerPagesPaths.ADD_JOB_BASICS)
+        navigate(`${EmployerPagesPaths.ADD_JOB_BASICS}/${jobId}`)
     }
 
-    function handleJobDetailsSubmit(e : FormEvent) {
+    async function handleJobDetailsSubmit(e : FormEvent) {
         e.preventDefault();
-        navigate(EmployerPagesPaths.COMPENSATION_DETAILS)
+        if (selectedJobType.length == 0){
+            setIsInvalidForm(true);
+            return;
+        }
+        try{
+            setRequestInProgress(true);
+            const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
+                jobType : selectedJobType,
+                schedule : selectedSchedule,
+            }
+            const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(parseInt(jobId!), updatedIncompleteJob);
+            setIncompleteJob(retrievedIncompleteJob);
+            navigate(`${EmployerPagesPaths.COMPENSATION_DETAILS}/${retrievedIncompleteJob.id}`)
+        }
+        catch (error){
+            logErrorInfo(error);
+        }
+        finally {
+            setRequestInProgress(false);
+        }
+        
     }
 
     return (
+        loading ? <LoadingPage/> :
         <div className="employers-centralized-page-layout">
             <PageTitleWithImage imageElement={<WomanWorking/>} title={"Add job details"}/>
             <div className={"emp-form-fb"}>
                 <form className={"emp-form"}>
                     <div className={"small-title horizontal-title"}>
-                        <span className={"dark-default-text bold-text"}>Job type</span>
+                        <span className={`dark-default-text bold-text ${isInvalidForm ? "error-text" : ""}`}>Job type</span>
                         <span className={"error-text"}>&nbsp;*</span>
                     </div>
                     <ul className={"job-features-list"}>
@@ -90,6 +142,11 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
                             />
                         ))}
                     </ul>
+                    {isInvalidForm &&
+                    <div className={"error-box"}>
+                        <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
+                        <span className={"error-text"}>Make a selection</span>
+                    </div>}
                     <div className={'content-separation-line mt2rem mb2rem'}/>
                     <div className={"mb025rem"}>
                         <span className={"small-title"}>Schedule</span>
@@ -125,6 +182,7 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
                     </span>
                     </div>
                     <JobCreateNavigationButtons
+                        requestInProgress={requestInProgress}
                         backButtonOnClick={goToPreviousPage}
                         nextPageButtonClick={handleJobDetailsSubmit}
                     />
