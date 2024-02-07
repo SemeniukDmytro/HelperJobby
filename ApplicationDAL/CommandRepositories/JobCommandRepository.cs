@@ -16,6 +16,7 @@ public class JobCommandRepository : IJobCommandRepository
     public async Task<Job> CreateJob(IncompleteJob incompleteJob, Job createdJob)
     {
         _applicationContext.Jobs.Add(createdJob);
+        _applicationContext.Employers.Entry(createdJob.Employer).Property(e => e.HasPostedFirstJob).IsModified = true;
         _applicationContext.IncompleteJobs.Remove(incompleteJob);
         await _applicationContext.SaveChangesAsync();
         return createdJob;

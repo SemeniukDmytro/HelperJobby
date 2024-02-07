@@ -5,7 +5,7 @@ export interface IncompleteJobSalaryDTO {
   id: number;
   showPayByOption: ShowPayByOptions;
   minimalAmount: number;
-  maximalAmount?: number | null;
+  maximalAmount?: number;
   salaryRate: string;
   incompleteJobId: number;
   incompleteJob: IncompleteJobDTO;

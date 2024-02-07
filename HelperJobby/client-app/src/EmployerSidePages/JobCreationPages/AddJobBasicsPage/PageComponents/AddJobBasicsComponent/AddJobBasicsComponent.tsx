@@ -10,23 +10,29 @@ import JobLocationTypeSelector from "../JobLocationTypeSelector/JobLocationTypeS
 import AutocompleteResultsWindow
     from "../../../../../JobSeekerSidePages/EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
 import LocationCustomInputField from "../../../../../Components/LocationCustomInputField/LocationCustomInputField";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import JobBasics from "../../../../../Components/Icons/JobBasics";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
-import {JobLocationTypes} from "../../../../../enums/utilityEnums/JobLocationTypes";
 import {AutocompleteWindowTypes} from "../../../../../enums/utilityEnums/AutocompleteWindowTypes";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
 import {CreateIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/CreateIncompleteJobDTO";
 import {isNanAfterIntParse} from "../../../../../utils/validationLogic/numbersValidators";
 import useJobCreation from "../../../../../hooks/useJobCreation";
+import {
+    useJobLoaderForSettingCurrentIncompleteJob
+} from "../../../../../hooks/useJobLoaderForSettingCurrentIncompleteJob";
+import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
+import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
+import {JobLocationTypes} from "../../../../../enums/modelDataEnums/JobLocationTypes";
 
 
 interface AddJobBasicsComponentProps {
 }
 
 const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
+    const {incompleteJob, setIncompleteJob} = useJobCreation();
     const [jobPostLanguage, setJobPostLanguage] = useState("English");
     const [jobPostingCountry, setJobPostingCountry] = useState("Canada");
     const [showLanguageDialog, setShowLanguageDialog] = useState(false);
@@ -45,8 +51,39 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
     const [locationError, setLocationError] = useState("");
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
     const incompleteJobService = new IncompleteJobService();
+    const [loading, setLoading] = useState(true);
+    const {jid} = useParams<{jid : string}>();
+    const {fetchJobAndSetJobCreation} =  useJobLoaderForSettingCurrentIncompleteJob(jid ? parseInt(jid) : 0, incompleteJob, setIncompleteJob);
+    
+    useEffect(() => {
+        if (jid){
+            fetchPageInitialData();
+        }
+    }, []);
+    console.log(jobLocation);
+
+    useEffect(() => {
+        if (!jid){
+            setLoading(false);
+            return;
+        }
+        if (incompleteJob){
+            setJobTitle(incompleteJob.jobTitle);
+            setNumberOfOpenings(incompleteJob.numberOfOpenings.toString())
+            setJobPostLanguage(incompleteJob.language);
+            setJobPostingCountry(incompleteJob.locationCountry);
+            setJobLocation(incompleteJob.location);
+            setJobLocationTypeEnumValue(incompleteJob.jobLocationType);
+            getJobLocationTypeLabel();
+            setLocationSelectedFromSuggests(true);
+            setLoading(false);
+        }
+    }, [incompleteJob]);
+    
+    async function fetchPageInitialData(){
+        await fetchJobAndSetJobCreation();
+    }
     
     useEffect(() => {
         handleJobLocationTypeChange()
@@ -71,19 +108,27 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             return;
         }
         
+        if (incompleteJob && jid){
+            await updateIncompleteJob();
+        }
+        else {
+            await createIncompleteJob();
+        }
+    }
+    
+    async function createIncompleteJob(){
         try {
             setRequestInProgress(true);
             const createdIncompleteJob : CreateIncompleteJobDTO = {
                 jobTitle: jobTitle,
                 numberOfOpenings: parseInt(numberOfOpenings),
-                location: jobLocation,
                 language: jobPostLanguage,
-                jobType: [],
-                schedule: [],
-                benefits: []
+                locationCountry : jobPostingCountry,
+                jobLocationType : jobLocationTypeEnumValue,
+                location: jobLocation,
+                
             }
             const jobCreationResponse = await incompleteJobService.startJobCreation(createdIncompleteJob);
-            console.log(jobCreationResponse);
             setIncompleteJob(jobCreationResponse);
         }
         catch (err){
@@ -93,9 +138,37 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             setRequestInProgress(false);
         }
     }
+    
+    async function updateIncompleteJob(){
+        try {
+            setRequestInProgress(true);
+            const updatedIncompleteJob: UpdatedIncompleteJobDTO = {
+                jobTitle: jobTitle,
+                numberOfOpenings: parseInt(numberOfOpenings),
+                language: jobPostLanguage,
+                locationCountry : jobPostingCountry,
+                jobLocationType : jobLocationTypeEnumValue,
+                location: jobLocation,
+            }
+            const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJob);
+            setIncompleteJob(retrievedIncompleteJob);
+        }
+        catch (error){
+            logErrorInfo(error)
+        }
+        finally {
+            setRequestInProgress(false);
+        }
+    }
 
     function handleJobLocationTypeChange() {
-        setJobLocation("");
+        if (jobLocation !== incompleteJob?.location){
+            setJobLocation("");
+        }
+        getJobLocationTypeLabel();
+    }
+    
+    function getJobLocationTypeLabel(){
         switch (jobLocationTypeEnumValue) {
             case JobLocationTypes.InPerson:
                 setJobLocationFieldLabel("What is the street address for this location?")
@@ -114,6 +187,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
     }
 
     return (
+        loading ? <LoadingPage/> : 
         <>
             {showStreetsAutocomplete && <AutocompleteResultsWindow
                 inputFieldRef={locationInputRef}

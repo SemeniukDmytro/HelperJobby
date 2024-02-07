@@ -4,8 +4,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import useSelectWindowPosition from "../../../../../hooks/useSelectWindowPosition";
 import {jobLocationTypesArr} from "../../../../../AppConstData/JobLocationTypesArr";
-import {JobLocationTypes} from "../../../../../enums/utilityEnums/JobLocationTypes";
 import {JobLocationType} from "../../../../../DTOs/locationDTO/JobLocationType";
+import {JobLocationTypes} from "../../../../../enums/modelDataEnums/JobLocationTypes";
 
 interface JobLocationTypeSelectorProps {
     jobLocationTypeEnumValue : JobLocationTypes;
@@ -20,7 +20,8 @@ const JobLocationTypeSelector: FC<JobLocationTypeSelectorProps> = ({
     const selectWindowRef = useRef<HTMLDivElement>(null);
     const locationTypeButtonRef = useRef<HTMLButtonElement>(null);
     const getSelectWindowPosition = useSelectWindowPosition(locationTypeButtonRef, selectWindowRef, setShowOptions);
-    const [currentJobLocationType, setCurrentJobLocationType] = useState("In-person, precise location");
+    const [currentJobLocationType, setCurrentJobLocationType] =
+        useState(jobLocationTypesArr.find(jlt => jlt.enumValue == jobLocationTypeEnumValue)?.type || "In person precise location");
     
     useEffect(() => {
         getSelectWindowPosition();

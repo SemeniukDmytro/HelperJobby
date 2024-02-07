@@ -15,7 +15,8 @@ public class Job
     [Required] public int NumberOfOpenings { get; set; }
 
     [Required] [MaxLength(20)] public string Language { get; set; }
-
+    [Required] [MaxLength(50)] public string LocationCountry { get; set; }
+    [Required] public JobLocationTypes JobLocationType { get; set; }
     [Required] [MaxLength(50)] public string Location { get; set; }
 
     [Required] public JobTypes JobTypes { get; set; }

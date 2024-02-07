@@ -1,4 +1,4 @@
-import {JobLocationTypes} from "../../enums/utilityEnums/JobLocationTypes";
+import {JobLocationTypes} from "../../enums/modelDataEnums/JobLocationTypes";
 
 export interface JobLocationType{
     enumValue : JobLocationTypes

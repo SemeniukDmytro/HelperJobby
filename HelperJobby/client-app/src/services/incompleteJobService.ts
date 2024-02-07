@@ -16,6 +16,12 @@ export class IncompleteJobService {
             `${this.baseURI}/${employerId}/incomplete-jobs`
         );
     }
+    
+    public async getIncompleteJobById(incompleteJobId : number) : Promise<IncompleteJobDTO>{
+        return await this.customFetchService.get<IncompleteJobDTO>(
+            `${this.baseURI}/${incompleteJobId}`
+        );
+    }
 
     public async startJobCreation(incompleteJoCreateDTO: CreateIncompleteJobDTO): Promise<IncompleteJobDTO> {
         return await this.customFetchService.post<IncompleteJobDTO>(this.baseURI, incompleteJoCreateDTO);

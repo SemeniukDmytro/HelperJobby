@@ -30,6 +30,8 @@ public class JobService : IJobService
             if (!SalaryRateHelper.CheckMinimalSalary(job.Salary.MinimalAmount, job.Salary.SalaryRate))
                 throw new InvalidJobException("This wage appears to be below the minimum wage for this location");
         }
+
+        job.Employer.HasPostedFirstJob = true;
         job.DatePosted = DateOnly.FromDateTime(DateTime.UtcNow);
         return job;
     }

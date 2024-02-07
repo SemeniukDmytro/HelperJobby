@@ -1,3 +1,4 @@
+using ApplicationDomain.Enums;
 using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.UserJobInteractions;
 
@@ -10,6 +11,8 @@ public class JobDTO
     public int NumberOfOpenings { get; set; }
     public string Language { get; set; }
     public string Location { get; set; }
+    public string LocationCountry { get; set; }
+    public JobLocationTypes JobLocationType { get; set; }
     public List<string> JobType { get; set; }
     public JobSalaryDTO Salary { get; set; }
     public List<string> Schedule { get; set; }

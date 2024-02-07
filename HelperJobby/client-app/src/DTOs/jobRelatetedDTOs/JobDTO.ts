@@ -2,6 +2,7 @@ import {EmployerDTO} from "../accountDTOs/EmployerDTO";
 import {InterviewDTO} from "../userJobInteractionsDTOs/InterviewDTO";
 import {JobApplyDTO} from "../userJobInteractionsDTOs/JobApplyDTO";
 import {JobSalaryDTO} from "./JobSalaryDTO";
+import {JobLocationTypes} from "../../enums/modelDataEnums/JobLocationTypes";
 
 export interface JobDTO {
     id: number;
@@ -10,6 +11,8 @@ export interface JobDTO {
     language: string;
     location: string;
     jobType: string[];
+    locationCountry : string;
+    jobLocationType : JobLocationTypes;
     salary? : JobSalaryDTO;
     schedule: string[];
     benefits: string[];

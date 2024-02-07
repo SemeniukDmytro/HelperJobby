@@ -55,7 +55,7 @@ public class JobController : ExtendedBaseController
     [HttpPost("{incompleteJobId}")]
     public async Task<JobDTO> CreateJob(int incompleteJobId)
     {
-        var incompleteJobToCreate = await _incompleteJobQueryRepository.GetIncompleteJobById(incompleteJobId);
+        var incompleteJobToCreate = await _incompleteJobQueryRepository.GetIncompleteJobWithEmployer(incompleteJobId);
         var createdJob = await _jobService.CreateJob(_mapper.Map<Job>(incompleteJobToCreate));
         createdJob = await _jobCommandRepository.CreateJob(incompleteJobToCreate, createdJob);
 

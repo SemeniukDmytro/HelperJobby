@@ -10,11 +10,9 @@ import {JobSeekerService} from "../../../../services/jobSeekerService";
 import {descriptionSplitter} from "../../../../utils/descriptionSplitter";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
-import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {jobTypesEnumToStringMap, schedulesEnumToStringMap} from "../../../../utils/convertLogic/enumToStringConverter";
-import {ShowPayByOptions} from "../../../../enums/modelDataEnums/ShowPayByOptions";
 import {formatJobSalaryDisplay} from "../../../../utils/convertLogic/formatJobSalaryDisplay";
 
 interface ShortJobDescriptionBlockProps {

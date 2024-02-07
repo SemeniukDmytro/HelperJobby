@@ -36,6 +36,13 @@ public class IncompleteJobController : ExtendedBaseController
             _incompleteJobQueryRepository.GetIncompleteJobsByEmployerId(employerId));
     }
 
+    [HttpGet("{incompleteJobId}")]
+    public async Task<IncompleteJobDTO> GetIncompleteJobById(int incompleteJobId)
+    {
+        return _mapper.Map<IncompleteJobDTO>(
+            await _incompleteJobQueryRepository.GetIncompleteJobById(incompleteJobId));
+    }
+
     // POST: api/IncompleteJob
     [HttpPost]
     public async Task<IncompleteJobDTO> Post([FromBody] CreateIncompleteJobDTO updatedIncompleteJobDto)

@@ -1,5 +1,5 @@
-import {JobLocationTypes} from "../enums/utilityEnums/JobLocationTypes";
 import {JobLocationType} from "../DTOs/locationDTO/JobLocationType";
+import {JobLocationTypes} from "../enums/modelDataEnums/JobLocationTypes";
 
 
 export const jobLocationTypesArr : JobLocationType[] = [
