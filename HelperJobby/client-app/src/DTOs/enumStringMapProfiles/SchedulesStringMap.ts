@@ -1,6 +1,6 @@
 import Schedules from "../../enums/modelDataEnums/Schedules";
 
-export interface SchedulesStringMapDTO {
+export interface SchedulesStringMap {
     enumValue: Schedules;
     stringValue: string;
 }

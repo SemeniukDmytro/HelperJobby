@@ -2,8 +2,8 @@ namespace ApplicationDomain.Enums;
 
 public enum ShowPayByOptions
 {
-    Range,
+    Range = 0,
     StartingAmount,
-    MinimalAmount,
+    MaximumAmount,
     ExactAmount
 }

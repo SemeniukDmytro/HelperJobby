@@ -117,7 +117,7 @@ public class JobControllerTests : IntegrationTest
             {
                 MinimalAmount = 90000.00m,
                 SalaryRate = SalaryRates.PerYear,
-                ShowPayByOption = ShowPayByOptions.MinimalAmount
+                ShowPayByOption = ShowPayByOptions.StartingAmount
             },
             Schedule = new List<Schedules> { Schedules.MondayToFriday },
             Benefits = new List<EmployeeBenefits>(),

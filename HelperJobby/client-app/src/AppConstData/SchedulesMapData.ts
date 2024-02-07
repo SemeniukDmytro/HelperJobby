@@ -1,8 +1,8 @@
 import Schedules from "../enums/modelDataEnums/Schedules";
-import {SchedulesStringMapDTO} from "../DTOs/enumStringMapProfiles/SchedulesStringMapDTO";
+import {SchedulesStringMap} from "../DTOs/enumStringMapProfiles/SchedulesStringMap";
 
 
-export const SchedulesMapData: SchedulesStringMapDTO[] = [
+export const SchedulesMapData: SchedulesStringMap[] = [
     {enumValue: Schedules.MondayToFriday, stringValue: 'Monday to Friday'},
     {enumValue: Schedules.WeekendsAsNeeded, stringValue: 'Weekends as needed'},
     {enumValue: Schedules.EightHourShift, stringValue: '8 hour shift'},

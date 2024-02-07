@@ -4,6 +4,6 @@ import {SalaryRates} from "../../enums/modelDataEnums/SalaryRates";
 export interface CreateUpdateSalaryDTO {
     showPayByOption: ShowPayByOptions;
     minimalAmount: number;
-    maximalAmount?: number | null;
+    maximalAmount?: number;
     salaryRate: SalaryRates;
 }

@@ -16,7 +16,7 @@ public static class JobFixtures
         {
             MinimalAmount = 100.90m,
             SalaryRate = SalaryRates.PerHour,
-            ShowPayByOption = ShowPayByOptions.MinimalAmount
+            ShowPayByOption = ShowPayByOptions.StartingAmount
         },
         Schedule = Schedules.DayShift,
         Benefits = EmployeeBenefits.CommuterBenefits,
@@ -36,7 +36,7 @@ public static class JobFixtures
         {
             MinimalAmount = 100.90m,
             SalaryRate = SalaryRates.PerHour,
-            ShowPayByOption = ShowPayByOptions.MinimalAmount
+            ShowPayByOption = ShowPayByOptions.StartingAmount
         },
         Schedule = Schedules.DayShift,
         Benefits = EmployeeBenefits.CommuterBenefits,
@@ -57,7 +57,7 @@ public static class JobFixtures
         {
             MinimalAmount = 100.90m,
             SalaryRate = SalaryRates.PerHour,
-            ShowPayByOption = ShowPayByOptions.MinimalAmount
+            ShowPayByOption = ShowPayByOptions.StartingAmount
         },
         Schedule = Schedules.DayShift,
         Benefits = EmployeeBenefits.CommuterBenefits,
@@ -78,7 +78,7 @@ public static class JobFixtures
         {
             MinimalAmount = 100.90m,
             SalaryRate = SalaryRates.PerHour,
-            ShowPayByOption = ShowPayByOptions.MinimalAmount
+            ShowPayByOption = ShowPayByOptions.StartingAmount
         },
         Schedule = Schedules.DayShift,
         Benefits = EmployeeBenefits.CommuterBenefits,
@@ -98,7 +98,7 @@ public static class JobFixtures
         {
             MinimalAmount = 100.90m,
             SalaryRate = SalaryRates.PerHour,
-            ShowPayByOption = ShowPayByOptions.MinimalAmount
+            ShowPayByOption = ShowPayByOptions.StartingAmount
         },
         Schedule = Schedules.DayShift,
         Benefits = EmployeeBenefits.CommuterBenefits,

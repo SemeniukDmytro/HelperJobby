@@ -16,7 +16,7 @@ public class IncompleteJobFixtures
         {
             MinimalAmount = 80000.00m,
             SalaryRate = SalaryRates.PerYear,
-            ShowPayByOption = ShowPayByOptions.MinimalAmount
+            ShowPayByOption = ShowPayByOptions.StartingAmount
         },
         Schedule = new List<Schedules> { Schedules.Holidays, Schedules.Other },
         Benefits = new List<EmployeeBenefits> { EmployeeBenefits.CommuterBenefits },
@@ -36,7 +36,7 @@ public class IncompleteJobFixtures
         {
             MinimalAmount = 80000.00m,
             SalaryRate = SalaryRates.PerYear,
-            ShowPayByOption = ShowPayByOptions.MinimalAmount
+            ShowPayByOption = ShowPayByOptions.StartingAmount
         },
         Schedule = new List<Schedules> { Schedules.Holidays, Schedules.Other },
         Benefits = new List<EmployeeBenefits> { EmployeeBenefits.CommuterBenefits },

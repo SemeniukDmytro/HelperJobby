@@ -1,15 +1,11 @@
-import React, {ChangeEvent, FC, FormEvent, useEffect, useRef, useState} from 'react';
+import React, {ChangeEvent, Dispatch, FC, FormEvent, SetStateAction, useEffect, useRef, useState} from 'react';
 import './AddJobPayAndBenefitsComponent.scss';
 import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import Wages from "../../../../../Components/Icons/Wages";
 import CustomSelectWindow from "../../../../../EmployersSideComponents/CustomSelectWindow/CustomSelectWindow";
-import {salaryRates, showPayByOptions} from "../../../../../AppConstData/PayRelatedData";
+import {salaryRatesMapData, showPayByOptionsMapData} from "../../../../../AppConstData/PayRelatedData";
 import SalaryAmountInputField from "../../../../../Components/SalaryAmountInputField/SalaryAmountInputField";
 import {countriesWithCurrencies} from "../../../../../AppConstData/CountriesWithCurrencies";
-import {
-    getValidFloatNumberFromString,
-    isValidNumber
-} from "../../../../../utils/validationLogic/numbersValidators";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
     faChevronDown,
@@ -17,16 +13,26 @@ import {
     faCircleExclamation,
     faTriangleExclamation
 } from "@fortawesome/free-solid-svg-icons";
-import {checkMinimalSalary} from "../../../../../utils/validationLogic/checkMinimalSalary";
 import {benefitsStringValues} from "../../../../../AppConstData/JobEnumsToStringsArrays";
 import JobFeature from "../../../../../EmployersSideComponents/JobFeature/JobFeature";
 import {benefitStringToEnumMap} from "../../../../../utils/convertLogic/enumToStringConverter";
 
 import JobCreateNavigationButtons
     from "../../../SharedComponents/JobCreateNavigationButtons/JobCreateNavigationButtons";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import EmployeeBenefits from "../../../../../enums/modelDataEnums/EmployeeBenefits";
+import {ShowPayByOptions} from "../../../../../enums/modelDataEnums/ShowPayByOptions";
+import useJobCreation from "../../../../../hooks/useJobCreation";
+import {
+    useJobLoaderForSettingCurrentIncompleteJob
+} from "../../../../../hooks/useJobLoaderForSettingCurrentIncompleteJob";
+import {IncompleteJobService} from "../../../../../services/incompleteJobService";
+import {minimalSalaryIsTooLowError, useSalaryValidation} from "../../../../../hooks/useSalaryValidation";
+import {logErrorInfo} from "../../../../../utils/logErrorInfo";
+import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
+import {getValidFloatNumberFromString} from "../../../../../utils/validationLogic/numbersValidators";
+import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 
 interface AddJobPayAndBenefitsComponentProps {
 }
@@ -34,105 +40,85 @@ interface AddJobPayAndBenefitsComponentProps {
 const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = () => {
     const [showPayBy, setShowPayBy] = useState("Range");
     const [salaryRate, setSalaryRate] = useState("per hour");
-    const [minSalaryAmount, setMinSalaryAmount] = useState("");
-    const [maxSalaryAmount, setMaxSalaryAmount] = useState("");
+    const [rangeMinSalaryAmount, setRangeMinSalaryAmount] = useState("");
+    const [rangeMaxSalaryAmount, setRangeMaxSalaryAmount] = useState("");
+    const [exactSalaryAmount, setExactSalaryAmount] = useState("");
+    const [startingSalaryAmount, setStartingSalaryAmount] = useState("");
+    const [maximumSalaryAmount, setMaximumSalaryAmount] = useState("");
     const [isInvalidMinSalary, setIsInvalidMinSalary] = useState(false);
     const [isInvalidMaxSalary, setIsInvalidMaxSalary] = useState(false);
-    const currency = getCurrency();
+    const [currency, setCurrency] = useState(getCurrency());
     const [minSalaryInputError, setMinSalaryInputError] = useState("");
     const [maxSalaryInputError, setMaxSalaryInputError] = useState("");
     const [minSalaryMeetsLaw, setMinSalaryMeetsLaw] = useState(false);
-    const [showMissingSalaryWarning, setShowMissingSalaryWaring] = useState(false);
+    const [showMissingSalaryWarning, setShowMissingSalaryWarning] = useState(false);
     const [selectedBenefits, setSelectedBenefits] = useState<EmployeeBenefits[]>([]);
     const [benefitsBoxHeight, setBenefitsBoxHeight] = useState("78px");
     const benefitsListRef = useRef<HTMLUListElement>(null);
     const [showFullBenefitsList, setShowFullBenefitsList] = useState(false);
+
+    const {incompleteJob, setIncompleteJob} = useJobCreation();
+    const {jobId} = useParams<{jobId : string}>();
+    const {fetchJobAndSetJobCreation} =  useJobLoaderForSettingCurrentIncompleteJob(jobId ? parseInt(jobId) : 0, incompleteJob, setIncompleteJob);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
+    const incompleteJobService = new IncompleteJobService();
     
-    const invalidNumberError: string = "This number doesn't look right. Use a valid format (e.g. 50,000.00).";
-    const minimalSalaryIsTooLowError: string = "This wage appears to be below the minimum wage for this location. Update the minimum pay or check the box to confirm that your job is exempt from local minimum wage requirements.";
-    const maximumSalaryIsLowerThanMinimumError: string ="Use a range (low to high), or make another selection for pay.";
+    const {isValidSalaryValueProvided, validateMaxSalaryInput, validateMinSalaryInput} = 
+        useSalaryValidation(setIsInvalidMinSalary, setIsInvalidMaxSalary, setShowMissingSalaryWarning,
+        setMaxSalaryInputError, setMinSalaryInputError, minSalaryMeetsLaw, salaryRate, showPayBy);
 
     useEffect(() => {
-        removeErrors();
-        setMinSalaryInputError("");
-        setMaxSalaryInputError("");
+        fetchInitialPageData()
+    }, []);
+
+    useEffect(() => {
+        if (incompleteJob){
+            if (incompleteJob.salary){
+                const incompleteJobShowPayOption = showPayByOptionsMapData.find(spo => spo.enumValue == incompleteJob.salary?.showPayByOption)?.stringValue || "Range";
+                setShowPayBy(incompleteJobShowPayOption);
+                setSalaryRate(incompleteJob.salary.salaryRate);
+                getSalaryInputProp(incompleteJobShowPayOption).setSalaryInput(incompleteJob.salary.minimalAmount.toString());
+                if (incompleteJob.salary.showPayByOption == ShowPayByOptions.Range){
+                    setRangeMaxSalaryAmount(incompleteJob.salary.maximalAmount?.toString() || "")
+                }
+            }
+            
+            setSelectedBenefits(incompleteJob.benefits);
+            setCurrency(countriesWithCurrencies.find(c => c.country === incompleteJob.locationCountry)?.currency || "")
+            setLoading(false);
+        }
+    }, [incompleteJob]);
+
+    async function fetchInitialPageData(){
+        await fetchJobAndSetJobCreation();
+    }
+    
+    useEffect(() => {
+        const currentSalaryValue = getSalaryInputProp(showPayBy).salaryInput;
+        if (currentSalaryValue){
+            isValidSalaryValueProvided(currentSalaryValue);
+            if (showPayBy == "Range" && rangeMaxSalaryAmount){
+                validateMaxSalaryInput(rangeMinSalaryAmount, rangeMaxSalaryAmount)
+            }
+        }
+        else {
+            setIsInvalidMinSalary(false);
+            setIsInvalidMaxSalary(false);
+            setMinSalaryInputError("");
+            setMaxSalaryInputError("");   
+        }
     }, [showPayBy]);
 
     function onMinSalaryInputChange(e: ChangeEvent<HTMLInputElement>) {
-        setMinSalaryAmount(e.target.value);
-        validateMinSalaryInput(e.target.value);
+        getSalaryInputProp(showPayBy).setSalaryInput(e.target.value);
+        validateMinSalaryInput(e.target.value, rangeMaxSalaryAmount);
     }
 
     function onMaxSalaryInputChange(e: ChangeEvent<HTMLInputElement>) {
-        setMaxSalaryAmount(e.target.value);
-        validateMaxSalaryInput(minSalaryAmount, e.target.value);
-    }
-
-    function validateMinSalaryInput(minSalaryAmountString: string) {
-        if (!minSalaryAmountString && !maxSalaryAmount){
-            setIsInvalidMinSalary(false);
-            setShowMissingSalaryWaring(true);
-            return;
-        }
-        else {
-            setShowMissingSalaryWaring(false);
-        } 
-        
-        if (!isValidNumber(minSalaryAmountString)) {
-            setIsInvalidMinSalary(true);
-            setMinSalaryInputError(invalidNumberError)
-            return;
-        }
-        
-        const minSalaryAmountNumber = getValidFloatNumberFromString(minSalaryAmountString);
-        
-        if (!checkMinimalSalary(minSalaryAmountNumber, salaryRate)) {
-            setMinSalaryInputError(minimalSalaryIsTooLowError)
-            if (!minSalaryMeetsLaw){
-                setIsInvalidMinSalary(true);
-            }
-            else {
-                setIsInvalidMinSalary(false);   
-            }
-        } else {
-            setMinSalaryInputError("");
-            setIsInvalidMinSalary(false);
-        }
-        
-        isValidSalaryRageProvided(minSalaryAmountString, maxSalaryAmount)
-    }
-
-    function validateMaxSalaryInput(minSalaryAmountValue: string, maxSalaryAmountValue: string) {
-        if (!minSalaryAmountValue && !maxSalaryAmountValue){
-            setShowMissingSalaryWaring(true);
-            setIsInvalidMaxSalary(false);
-            return;
-        }
-        else {
-            setShowMissingSalaryWaring(false);
-        }
-        
-        if (!isValidNumber(maxSalaryAmountValue)) {
-            setIsInvalidMaxSalary(true);
-            setMaxSalaryInputError(invalidNumberError)
-            return;
-        }
-        isValidSalaryRageProvided(minSalaryAmountValue, maxSalaryAmountValue)
-    }
-    
-    function isValidSalaryRageProvided(minSalaryAmount: string, maxSalaryAmount: string){
-        const minSalaryAmountNumber = getValidFloatNumberFromString(minSalaryAmount);
-        const maxSalaryAmountNumber = getValidFloatNumberFromString(maxSalaryAmount);
-
-        if (minSalaryAmountNumber >= maxSalaryAmountNumber) {
-            setIsInvalidMaxSalary(true);
-            setMaxSalaryInputError(maximumSalaryIsLowerThanMinimumError);
-        } else {
-            setMaxSalaryInputError("")
-            setIsInvalidMaxSalary(false);
-        }
+        setRangeMaxSalaryAmount(e.target.value);
+        validateMaxSalaryInput(rangeMinSalaryAmount, e.target.value);
     }
     
 
@@ -149,13 +135,6 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
         else {
             setIsInvalidMinSalary(true);
         }
-    }
-    
-    function removeErrors(){
-        setMinSalaryAmount("");
-        setMaxSalaryAmount("");
-        setIsInvalidMinSalary(false);
-        setIsInvalidMaxSalary(false);
     }
 
     function addBenefit(benefitString: string) {
@@ -185,12 +164,61 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
         navigate(EmployerPagesPaths.JOB_DETAILS)
     }
 
-    function handlePayAndBenefitSubmit(e : FormEvent) {
+   async function handlePayAndBenefitSubmit(e : FormEvent) {
         e.preventDefault();
-        navigate(EmployerPagesPaths.DESCRIPTION_AND_APPLICATION_DETAILS)
+        const currentSalaryValue = getSalaryInputProp(showPayBy).salaryInput;
+        if (currentSalaryValue){
+            isValidSalaryValueProvided(currentSalaryValue);
+            if (showPayBy == "Range"){
+                validateMaxSalaryInput(currentSalaryValue, rangeMaxSalaryAmount);
+            }
+            if (isInvalidMaxSalary || isInvalidMinSalary){
+                return;
+            }
+        }
+        try {
+            setRequestInProgress(false);
+            const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
+                benefits : selectedBenefits
+            }
+            if (currentSalaryValue){
+                updatedIncompleteJob.salary = {
+                    minimalAmount: getValidFloatNumberFromString(currentSalaryValue),
+                    maximalAmount: showPayBy == "Range" ? getValidFloatNumberFromString(rangeMaxSalaryAmount) : undefined,
+                    salaryRate: salaryRatesMapData.find(sr => sr.stringValue == salaryRate)!.enumValue,
+                    showPayByOption: showPayByOptionsMapData.find(spo => spo.stringValue == showPayBy)!.enumValue
+                }
+            }
+            const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(parseInt(jobId!), updatedIncompleteJob);
+            setIncompleteJob(retrievedIncompleteJob);
+            
+        }
+        catch (err){
+            logErrorInfo(err)
+        }
+        finally {
+            setRequestInProgress(false)
+        }
     }
-
+    
+    function getSalaryInputProp(showPayByOption : string) : {salaryInput : string, setSalaryInput : Dispatch<SetStateAction<string>>} {
+        const showPayEnumValue : ShowPayByOptions = showPayByOptionsMapData.find(spo => spo.stringValue == showPayByOption)!.enumValue;
+        switch (showPayEnumValue){
+            case ShowPayByOptions.Range:
+                return {salaryInput : rangeMinSalaryAmount, setSalaryInput : setRangeMinSalaryAmount};
+            case ShowPayByOptions.StartingAmount:
+                return {salaryInput : startingSalaryAmount, setSalaryInput : setStartingSalaryAmount};
+            case ShowPayByOptions.MaximumAmount:
+                return {salaryInput : maximumSalaryAmount, setSalaryInput : setMaximumSalaryAmount};
+            case ShowPayByOptions.ExactAmount:
+                return {salaryInput : exactSalaryAmount, setSalaryInput : setExactSalaryAmount};
+                
+        }
+        
+    }
+    
     return (
+        loading ? <LoadingPage/> : 
         <div className={"employers-centralized-page-layout"}>
             <PageTitleWithImage imageElement={<Wages/>} title={"Add job pay and benefits"}/>
             <div className={"emp-form-fb"}>
@@ -201,7 +229,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                             fieldLabel={"Show pay by"}
                             selectedValue={showPayBy}
                             setSelectedValue={setShowPayBy}
-                            optionsArr={showPayByOptions}
+                            optionsArr={showPayByOptionsMapData.map(spo => spo.stringValue)}
                         />
                         <div className={"pi-salary-amount-container"}>
                             {
@@ -211,12 +239,12 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                                             <div className={"salary-input-box"}>
                                                 <SalaryAmountInputField
                                                     fieldLabel={"Minimum"}
-                                                    inputValue={minSalaryAmount}
-                                                    setInputValue={setMinSalaryAmount}
+                                                    inputValue={rangeMinSalaryAmount}
+                                                    setInputValue={setRangeMinSalaryAmount}
                                                     currency={currency}
                                                     isInvalidValue={isInvalidMinSalary}
                                                     onInputChange={onMinSalaryInputChange}
-                                                    onBlur={() => validateMinSalaryInput(minSalaryAmount)}
+                                                    onBlur={() => validateMinSalaryInput(rangeMinSalaryAmount, rangeMaxSalaryAmount)}
                                                 />
                                             </div>
 
@@ -232,12 +260,12 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                                             <div className={"salary-input-box"}>
                                                 <SalaryAmountInputField
                                                     fieldLabel={"Maximum"}
-                                                    inputValue={maxSalaryAmount}
-                                                    setInputValue={setMaxSalaryAmount}
+                                                    inputValue={rangeMaxSalaryAmount}
+                                                    setInputValue={setRangeMaxSalaryAmount}
                                                     currency={currency}
                                                     isInvalidValue={isInvalidMaxSalary}
                                                     onInputChange={onMaxSalaryInputChange}
-                                                    onBlur={() => validateMaxSalaryInput(minSalaryAmount, maxSalaryAmount)}
+                                                    onBlur={() => validateMaxSalaryInput(rangeMinSalaryAmount, rangeMaxSalaryAmount)}
                                                 />
                                             </div>
                                         </>
@@ -248,12 +276,12 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                                         <div className={"salary-input-box"}>
                                             <SalaryAmountInputField
                                                 fieldLabel={"Amount"}
-                                                inputValue={minSalaryAmount}
-                                                setInputValue={setMinSalaryAmount}
+                                                inputValue={getSalaryInputProp(showPayBy).salaryInput}
+                                                setInputValue={getSalaryInputProp(showPayBy).setSalaryInput}
                                                 currency={currency}
                                                 isInvalidValue={isInvalidMinSalary}
                                                 onInputChange={onMinSalaryInputChange}
-                                                onBlur={() => validateMinSalaryInput(minSalaryAmount)}
+                                                onBlur={() => validateMinSalaryInput(getSalaryInputProp(showPayBy).salaryInput, rangeMaxSalaryAmount)}
                                             />
                                         </div>
                                     )
@@ -263,18 +291,21 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                             fieldLabel={"Rate"}
                             selectedValue={salaryRate}
                             setSelectedValue={setSalaryRate}
-                            optionsArr={salaryRates}
+                            optionsArr={salaryRatesMapData.map(sr => sr.stringValue)}
                         />
                     </div>
-                    {(isInvalidMinSalary || isInvalidMaxSalary) &&
+                    {isInvalidMinSalary &&
                         <div className={"error-box"}>
                             <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
-                            {(minSalaryInputError === minimalSalaryIsTooLowError && !minSalaryMeetsLaw) ?
-                                <span className={"error-text"}>{minSalaryInputError ? minSalaryInputError : maxSalaryInputError}</span>
-                                :
-                                <span className={"error-text"}>{maxSalaryInputError ? maxSalaryInputError : minSalaryInputError}</span>
-                            }
-                        </div>}
+                            <span className={"error-text"}>{minSalaryInputError}</span>
+                        </div>
+                    }
+                    {(isInvalidMaxSalary && !isInvalidMinSalary && showPayBy == "Range") &&
+                        <div className={"error-box"}>
+                            <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
+                            <span className={"error-text"}>{maxSalaryInputError}</span>
+                        </div>
+                    }
                     {minSalaryInputError == minimalSalaryIsTooLowError &&
                         <div className={"checkbox-container"} onClick={removeInvalidMinimalSalaryError}>
                             <input className={"checkbox"} onChange={removeInvalidMinimalSalaryError} checked={minSalaryMeetsLaw} type={"checkbox"}/>

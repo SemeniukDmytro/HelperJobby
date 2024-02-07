@@ -1,6 +1,6 @@
 export enum ShowPayByOptions{
     Range,
     StartingAmount,
-    MinimalAmount,
+    MaximumAmount,
     ExactAmount    
 }
