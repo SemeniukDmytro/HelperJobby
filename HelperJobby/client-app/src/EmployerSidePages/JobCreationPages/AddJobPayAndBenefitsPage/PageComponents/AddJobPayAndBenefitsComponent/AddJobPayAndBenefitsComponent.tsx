@@ -33,6 +33,7 @@ import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {getValidFloatNumberFromString} from "../../../../../utils/validationLogic/numbersValidators";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
+import {checkMinimalSalary} from "../../../../../utils/validationLogic/checkMinimalSalary";
 
 interface AddJobPayAndBenefitsComponentProps {
 }
@@ -50,7 +51,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     const [currency, setCurrency] = useState(getCurrency());
     const [minSalaryInputError, setMinSalaryInputError] = useState("");
     const [maxSalaryInputError, setMaxSalaryInputError] = useState("");
-    const [minSalaryMeetsLaw, setMinSalaryMeetsLaw] = useState(false);
+    const [minSalaryMeetsRequirement, setMinSalaryMeetsRequirement] = useState(false);
     const [showMissingSalaryWarning, setShowMissingSalaryWarning] = useState(false);
     const [selectedBenefits, setSelectedBenefits] = useState<EmployeeBenefits[]>([]);
     const [benefitsBoxHeight, setBenefitsBoxHeight] = useState("78px");
@@ -67,7 +68,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     
     const {isValidSalaryValueProvided, validateMaxSalaryInput, validateMinSalaryInput} = 
         useSalaryValidation(setIsInvalidMinSalary, setIsInvalidMaxSalary, setShowMissingSalaryWarning,
-        setMaxSalaryInputError, setMinSalaryInputError, minSalaryMeetsLaw, salaryRate, showPayBy);
+        setMaxSalaryInputError, setMinSalaryInputError, minSalaryMeetsRequirement, salaryRate, showPayBy);
 
     useEffect(() => {
         fetchInitialPageData()
@@ -82,6 +83,10 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                 getSalaryInputProp(incompleteJobShowPayOption).setSalaryInput(incompleteJob.salary.minimalAmount.toString());
                 if (incompleteJob.salary.showPayByOption == ShowPayByOptions.Range){
                     setRangeMaxSalaryAmount(incompleteJob.salary.maximalAmount?.toString() || "")
+                }
+                if (incompleteJob.salary.meetsMinSalaryRequirement && !checkMinimalSalary(incompleteJob.salary.minimalAmount, incompleteJob.salary.salaryRate)){
+                    setMinSalaryMeetsRequirement(true);
+                    setMinSalaryInputError(minimalSalaryIsTooLowError);
                 }
             }
             
@@ -128,8 +133,8 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     }
 
     function removeInvalidMinimalSalaryError() {
-        setMinSalaryMeetsLaw(!minSalaryMeetsLaw);
-        if (!minSalaryMeetsLaw){
+        setMinSalaryMeetsRequirement(!minSalaryMeetsRequirement);
+        if (!minSalaryMeetsRequirement){
             setIsInvalidMinSalary(false);   
         }
         else {
@@ -161,7 +166,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     }
 
     function goToPreviousPage() {
-        navigate(EmployerPagesPaths.JOB_DETAILS)
+        navigate(`${EmployerPagesPaths.JOB_DETAILS}/${jobId}`)
     }
 
    async function handlePayAndBenefitSubmit(e : FormEvent) {
@@ -177,7 +182,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
             }
         }
         try {
-            setRequestInProgress(false);
+            setRequestInProgress(true);
             const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
                 benefits : selectedBenefits
             }
@@ -186,12 +191,13 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                     minimalAmount: getValidFloatNumberFromString(currentSalaryValue),
                     maximalAmount: showPayBy == "Range" ? getValidFloatNumberFromString(rangeMaxSalaryAmount) : undefined,
                     salaryRate: salaryRatesMapData.find(sr => sr.stringValue == salaryRate)!.enumValue,
-                    showPayByOption: showPayByOptionsMapData.find(spo => spo.stringValue == showPayBy)!.enumValue
+                    showPayByOption: showPayByOptionsMapData.find(spo => spo.stringValue == showPayBy)!.enumValue,
+                    meetsMinSalaryRequirement : minSalaryMeetsRequirement
                 }
             }
             const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(parseInt(jobId!), updatedIncompleteJob);
             setIncompleteJob(retrievedIncompleteJob);
-            
+            navigate(`${EmployerPagesPaths.DESCRIPTION_AND_APPLICATION_DETAILS}/${jobId}`)
         }
         catch (err){
             logErrorInfo(err)
@@ -308,7 +314,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                     }
                     {minSalaryInputError == minimalSalaryIsTooLowError &&
                         <div className={"checkbox-container"} onClick={removeInvalidMinimalSalaryError}>
-                            <input className={"checkbox"} onChange={removeInvalidMinimalSalaryError} checked={minSalaryMeetsLaw} type={"checkbox"}/>
+                            <input className={"checkbox"} onChange={removeInvalidMinimalSalaryError} checked={minSalaryMeetsRequirement} type={"checkbox"}/>
                             <span>This job meets or is exempt from the local and minimum wage requirements</span>
                         </div>
                     }

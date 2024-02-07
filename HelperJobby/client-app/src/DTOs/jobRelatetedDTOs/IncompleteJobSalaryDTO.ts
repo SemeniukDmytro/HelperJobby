@@ -7,6 +7,7 @@ export interface IncompleteJobSalaryDTO {
   minimalAmount: number;
   maximalAmount?: number;
   salaryRate: string;
+  meetsMinSalaryRequirement : boolean;
   incompleteJobId: number;
   incompleteJob: IncompleteJobDTO;
 }

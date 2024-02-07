@@ -2,6 +2,7 @@ using ApplicationBLL.Logic;
 using ApplicationDomain.Enums;
 using ApplicationDomain.Models;
 using AutoMapper;
+using HelperJobby.AutoMapperProfiles.CustomConverters;
 using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Job;
 
@@ -18,18 +19,21 @@ public class IncompleteJobProfile : Profile
             dest.Schedule = FlagsEnumToArrayConverter.GetArrayWithEnumValues<Schedules>((int)src.Schedule);
             dest.JobType = FlagsEnumToArrayConverter.GetArrayWithEnumValues<JobTypes>((int)src.JobTypes);
         });
-        CreateMap<UpdatedIncompleteJobDTO, IncompleteJob>().ForMember(dest => dest.Benefits,
-                opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.Benefits)))
-            .ForMember(dest => dest.Schedule,
-                opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.Schedule)))
-            .ForMember(dest => dest.JobTypes,
-                opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.JobType)));
+        CreateMap<UpdatedIncompleteJobDTO, IncompleteJob>()
+            .ForMember(dest => dest.Schedule, opt => opt.MapFrom<GenericScheduleListToEnumResolver>())
+            .ForMember(dest => dest.Benefits, opt => opt.MapFrom<GenericBenefitsListToEnumResolver>())
+            .AfterMap((src, dest, context) =>
+            {
+                dest.JobTypes = src.JobType == null ? null : FlagsEnumToArrayConverter.GetSingleValue(src.JobType);
+                dest.JobLocationType = src.JobLocationType ?? JobLocationTypes.NotSpecified;
+            });
         
-        CreateMap<CreateIncompleteJobDTO, IncompleteJob>().ForMember(dest => dest.Benefits,
-                opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.Benefits)))
-            .ForMember(dest => dest.Schedule,
-                opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.Schedule)))
-            .ForMember(dest => dest.JobTypes,
-                opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.JobType)));
+        CreateMap<CreateIncompleteJobDTO, IncompleteJob>()
+            .ForMember(dest => dest.Schedule, opt => opt.MapFrom<GenericScheduleListToEnumResolver>())
+            .ForMember(dest => dest.Benefits, opt => opt.MapFrom<GenericBenefitsListToEnumResolver>())
+            .AfterMap((src, dest) =>
+        {
+            dest.JobTypes = src.JobType == null ? null : FlagsEnumToArrayConverter.GetSingleValue(src.JobType);
+        });
     }
 }

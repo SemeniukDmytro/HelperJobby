@@ -5,5 +5,6 @@ export interface CreateUpdateSalaryDTO {
     showPayByOption: ShowPayByOptions;
     minimalAmount: number;
     maximalAmount?: number;
+    meetsMinSalaryRequirement : boolean;
     salaryRate: SalaryRates;
 }

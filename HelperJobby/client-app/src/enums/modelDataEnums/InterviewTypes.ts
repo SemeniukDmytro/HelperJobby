@@ -1,5 +1,5 @@
 export enum InterviewTypes {
-    Video,
+    Video= 1,
     Phone,
     InPerson
 }

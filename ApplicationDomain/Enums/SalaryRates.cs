@@ -2,7 +2,7 @@ namespace ApplicationDomain.Enums;
 
 public enum SalaryRates
 {
-    PerHour,
+    PerHour = 1,
     PerDay,
     PerWeek,
     PerMonth,

@@ -7,5 +7,6 @@ public class CreateUpdateSalaryDTO
     public ShowPayByOptions ShowPayByOption { get; set; }
     public decimal MinimalAmount { get; set; }
     public decimal? MaximalAmount { get; set; }
+    public bool MeetsMinSalaryRequirement { get; set; }
     public SalaryRates SalaryRate { get; set; }
 }

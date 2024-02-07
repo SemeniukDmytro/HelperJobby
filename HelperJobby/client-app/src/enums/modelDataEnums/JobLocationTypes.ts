@@ -1,5 +1,5 @@
 export enum JobLocationTypes{
-    InPerson,
+    InPerson = 1,
     GeneralLocation,
     Remote,
     OnRoad

@@ -25,10 +25,10 @@ public class JobService : IJobService
     {
         if (!Validator.TryValidateObject(job, new ValidationContext(job), null, true)) throw new InvalidJobException();
         
-        if (job.Salary != null)
+        if (job.Salary != null && !job.Salary.MeetsMinSalaryRequirement)
         {
             if (!SalaryRateHelper.CheckMinimalSalary(job.Salary.MinimalAmount, job.Salary.SalaryRate))
-                throw new InvalidJobException("This wage appears to be below the minimum wage for this location");
+                throw new InvalidJobException("Salary wage appears to be below the minimum wage for this location");
         }
 
         job.Employer.HasPostedFirstJob = true;
@@ -46,6 +46,12 @@ public class JobService : IJobService
             throw new ForbiddenException("You can not update this job information");
 
         var updatedEntity = EntitiesUpdateManager<IncompleteJob>.UpdateEntityProperties(jobEntity, updatedJob);
+        if (updatedJob.Salary != null && !updatedJob.Salary.MeetsMinSalaryRequirement)
+        {
+            if (!SalaryRateHelper.CheckMinimalSalary(updatedJob.Salary.MinimalAmount, updatedJob.Salary.SalaryRate))
+                throw new InvalidJobException("This wage appears to be below the minimum wage for this location");
+        }
+        
         if (jobEntity.Salary == null)
         {
             updatedEntity.Salary = updatedJob.Salary;

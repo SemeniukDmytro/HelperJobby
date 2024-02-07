@@ -75,7 +75,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             setNumberOfOpenings(incompleteJob.numberOfOpenings.toString())
             setJobPostLanguage(incompleteJob.language);
             setJobPostingCountry(incompleteJob.locationCountry);
-            setOnRoadJobLocation(incompleteJob.location);
+            getCurrentJobLocationInputProp(incompleteJob.jobLocationType).setInputValue(incompleteJob.location);
             setJobLocationTypeEnumValue(incompleteJob.jobLocationType);
             handleJobLocationTypeChange();
             setLocationSelectedFromSuggests(true);
@@ -102,7 +102,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
         if (isNanAfterIntParse(numberOfOpenings) || invalidNumberOfOpenings) {
             return;
         }
-        if (!getCurrentJobLocationInputProp().inputValue) {
+        if (!getCurrentJobLocationInputProp(jobLocationTypeEnumValue).inputValue) {
             setLocationError("Add an address")
             return;
         }
@@ -126,7 +126,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                 language: jobPostLanguage,
                 locationCountry: jobPostingCountry,
                 jobLocationType: jobLocationTypeEnumValue,
-                location: getCurrentJobLocationInputProp().inputValue,
+                location: getCurrentJobLocationInputProp(jobLocationTypeEnumValue).inputValue,
 
             }
             const jobCreationResponse = await incompleteJobService.startJobCreation(createdIncompleteJob);
@@ -148,7 +148,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                 language: jobPostLanguage,
                 locationCountry: jobPostingCountry,
                 jobLocationType: jobLocationTypeEnumValue,
-                location: getCurrentJobLocationInputProp().inputValue,
+                location: getCurrentJobLocationInputProp(jobLocationTypeEnumValue).inputValue,
             }
             const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJob);
             setIncompleteJob(retrievedIncompleteJob);
@@ -178,8 +178,8 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
         }
     }
 
-    function getCurrentJobLocationInputProp(): { inputValue: string, setInputValue: Dispatch<SetStateAction<string>> } {
-        switch (jobLocationTypeEnumValue) {
+    function getCurrentJobLocationInputProp(jobLocationType : JobLocationTypes): { inputValue: string, setInputValue: Dispatch<SetStateAction<string>> } {
+        switch (jobLocationType) {
             case JobLocationTypes.InPerson:
                 return {inputValue: inPersonJobLocation, setInputValue: setInPersonJobLocation};
             case JobLocationTypes.GeneralLocation:
@@ -197,8 +197,8 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                 {showStreetsAutocomplete && <AutocompleteResultsWindow
                     inputFieldRef={locationInputRef}
                     windowMaxWidth={"702px"}
-                    inputValue={getCurrentJobLocationInputProp().inputValue}
-                    setInputValue={getCurrentJobLocationInputProp().setInputValue}
+                    inputValue={getCurrentJobLocationInputProp(jobLocationTypeEnumValue).inputValue}
+                    setInputValue={getCurrentJobLocationInputProp(jobLocationTypeEnumValue).setInputValue}
                     country={jobPostingCountry}
                     showResult={showStreetsAutocomplete}
                     setShowResult={setShowStreetsAutocomplete}
@@ -209,8 +209,8 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                 {showCityAutoComplete && <AutocompleteResultsWindow
                     inputFieldRef={locationInputRef}
                     windowMaxWidth={"702px"}
-                    inputValue={getCurrentJobLocationInputProp().inputValue}
-                    setInputValue={getCurrentJobLocationInputProp().setInputValue}
+                    inputValue={getCurrentJobLocationInputProp(jobLocationTypeEnumValue).inputValue}
+                    setInputValue={getCurrentJobLocationInputProp(jobLocationTypeEnumValue).setInputValue}
                     country={jobPostingCountry}
                     showResult={showCityAutoComplete}
                     setShowResult={setShowCityAutoComplete}
@@ -294,8 +294,8 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                                     :
                                     <LocationCustomInputField
                                         fieldLabel={jobLocationFieldLabel}
-                                        inputValue={getCurrentJobLocationInputProp().inputValue}
-                                        setInputValue={getCurrentJobLocationInputProp().setInputValue}
+                                        inputValue={getCurrentJobLocationInputProp(jobLocationTypeEnumValue).inputValue}
+                                        setInputValue={getCurrentJobLocationInputProp(jobLocationTypeEnumValue).setInputValue}
                                         inputRef={locationInputRef}
                                         isRequired={true}
                                         setShowAutocompleteResults={setShowCityAutoComplete}

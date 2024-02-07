@@ -24,6 +24,11 @@ public class IncompleteJobService : IIncompleteJobService
     public async Task<IncompleteJob> StartIncompleteJobCreation(IncompleteJob incompleteJob)
     {
         var employer = await _employerQueryRepository.GetEmployer(_userService.GetCurrentUserId());
+        if (incompleteJob.Salary != null && !incompleteJob.Salary.MeetsMinSalaryRequirement)
+        {
+            if (!SalaryRateHelper.CheckMinimalSalary(incompleteJob.Salary.MinimalAmount, incompleteJob.Salary.SalaryRate))
+                throw new InvalidJobException("Salary wage appears to be below the minimum wage for this location");
+        }
         incompleteJob.EmployerId = employer.Id;
         return incompleteJob;
     }
@@ -37,11 +42,18 @@ public class IncompleteJobService : IIncompleteJobService
 
         var updatedEntity = EntitiesUpdateManager<IncompleteJob>
             .UpdateEntityProperties(incompleteJobEntity, updatedIncompleteJob);
+        
+        if (updatedIncompleteJob.Salary != null && !updatedIncompleteJob.Salary.MeetsMinSalaryRequirement)
+        {
+            if (!SalaryRateHelper.CheckMinimalSalary(updatedIncompleteJob.Salary.MinimalAmount, updatedIncompleteJob.Salary.SalaryRate))
+                throw new InvalidJobException("This wage appears to be below the minimum wage for this location");
+        }
+        
         if (incompleteJobEntity.Salary == null)
         {
             updatedEntity.Salary = updatedIncompleteJob.Salary;
         }
-        else
+        else if (updatedIncompleteJob.Salary != null)
         {
             var updatedSalary = EntitiesUpdateManager<IncompleteJobSalary>.UpdateEntityProperties(updatedEntity.Salary,
                 updatedIncompleteJob.Salary);

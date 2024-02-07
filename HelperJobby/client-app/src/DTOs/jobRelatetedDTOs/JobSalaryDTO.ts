@@ -7,6 +7,7 @@ export interface JobSalaryDTO {
     minimalAmount: number;
     maximalAmount?: number | null;
     salaryRate: string;
+    meetsMinSalaryRequirement : boolean;
     jobId: number;
     job: JobDTO;
 }

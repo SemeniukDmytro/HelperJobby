@@ -76,11 +76,11 @@ export function useSalaryValidation(
 
         if (!checkMinimalSalary(minSalaryAmountNumber, salaryRate)) {
             setMinSalaryInputError(minimalSalaryIsTooLowError)
-            if (!minSalaryMeetsLaw){
-                setIsInvalidMinSalary(true);
+            if (minSalaryMeetsLaw){
+                setIsInvalidMinSalary(false);
             }
             else {
-                setIsInvalidMinSalary(false);
+                setIsInvalidMinSalary(true);
             }
         } else {
             setMinSalaryInputError("");

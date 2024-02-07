@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ApplicationDomain.Attributes;
@@ -19,6 +20,9 @@ public class IncompleteJobSalary
     public decimal? MaximalAmount { get; set; }
     [Required]
     public SalaryRates SalaryRate { get; set; }
+    [Required]
+    [DefaultValue(true)]
+    public bool MeetsMinSalaryRequirement { get; set; }
     [ExcludeFromUpdate]
     [Required]
     [ForeignKey("IncompleteJob")]

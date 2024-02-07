@@ -1,5 +1,5 @@
 export enum SalaryRates{
-    PerHour,
+    PerHour=1 ,
     PerDay,
     PerWeek,
     PerMonth,

@@ -10,6 +10,7 @@ public class IncompleteJobSalaryDTO
     public decimal? MaximalAmount { get; set; }
     public string SalaryRate { get; set; }
     public int IncompleteJobId { get; set; }
+    public bool MeetsMinSalaryRequirement { get; set; }
     public IncompleteJobDTO IncompleteJob { get; set; }
 
 }
