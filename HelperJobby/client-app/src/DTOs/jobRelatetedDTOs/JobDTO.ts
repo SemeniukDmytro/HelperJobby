@@ -3,6 +3,7 @@ import {InterviewDTO} from "../userJobInteractionsDTOs/InterviewDTO";
 import {JobApplyDTO} from "../userJobInteractionsDTOs/JobApplyDTO";
 import {JobSalaryDTO} from "./JobSalaryDTO";
 import {JobLocationTypes} from "../../enums/modelDataEnums/JobLocationTypes";
+import {ResumeRequirementOptions} from "../../enums/modelDataEnums/ResumeRequirementOptions";
 
 export interface JobDTO {
     id: number;
@@ -17,7 +18,8 @@ export interface JobDTO {
     schedule: string[];
     benefits: string[];
     contactEmail: string;
-    resumeRequired: boolean;
+    contactPhoneNumber? : string;
+    resumeRequired: ResumeRequirementOptions;
     description: string;
     datePosted: Date;
     employerId: number;

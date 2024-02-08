@@ -73,7 +73,7 @@ public class IncompleteJobControllerTests : IntegrationTest
             Schedule = new List<Schedules>(),
             Benefits = new List<EmployeeBenefits>(),
             ContactEmail = "contactemail@gmail.com",
-            ResumeRequired = false,
+            ResumeRequired = ResumeRequirementOptions.Optional,
             Description = ""
         };
         var requestUri = $"{_baseUri}/{currentJobCreation.Id}";

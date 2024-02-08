@@ -122,7 +122,7 @@ public class JobControllerTests : IntegrationTest
             Schedule = new List<Schedules> { Schedules.MondayToFriday },
             Benefits = new List<EmployeeBenefits>(),
             ContactEmail = "hr@gmail.com",
-            ResumeRequired = true,
+            ResumeRequired = ResumeRequirementOptions.Optional,
             Description = "We are looking for experienced software engineers to join our team."
         };
 

@@ -15,6 +15,7 @@ namespace HelperJobby.DTOs.Job;
         public List<Schedules>? Schedule { get; set; }
         public List<EmployeeBenefits>? Benefits { get; set; }
         public string? ContactEmail { get; set; }
-        public bool? ResumeRequired { get; set; }
+        public string? ContactPhoneNumber { get; set; } 
+        public ResumeRequirementOptions? ResumeRequired { get; set; }
         public string? Description { get; set; }
     }

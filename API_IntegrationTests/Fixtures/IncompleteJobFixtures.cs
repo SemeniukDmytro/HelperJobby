@@ -21,7 +21,7 @@ public class IncompleteJobFixtures
         Schedule = new List<Schedules> { Schedules.Holidays, Schedules.Other },
         Benefits = new List<EmployeeBenefits> { EmployeeBenefits.CommuterBenefits },
         ContactEmail = "",
-        ResumeRequired = true,
+        ResumeRequired = ResumeRequirementOptions.Optional,
         Description = ""
     };
 
@@ -41,7 +41,7 @@ public class IncompleteJobFixtures
         Schedule = new List<Schedules> { Schedules.Holidays, Schedules.Other },
         Benefits = new List<EmployeeBenefits> { EmployeeBenefits.CommuterBenefits },
         ContactEmail = "employer@gmail.com",
-        ResumeRequired = true,
+        ResumeRequired = ResumeRequirementOptions.Optional,
         Description = "You need to know C#"
     };
 }

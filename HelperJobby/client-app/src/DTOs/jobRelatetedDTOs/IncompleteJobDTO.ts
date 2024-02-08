@@ -4,6 +4,7 @@ import Schedules from "../../enums/modelDataEnums/Schedules";
 import EmployeeBenefits from "../../enums/modelDataEnums/EmployeeBenefits";
 import {IncompleteJobSalaryDTO} from "./IncompleteJobSalaryDTO";
 import {JobLocationTypes} from "../../enums/modelDataEnums/JobLocationTypes";
+import {ResumeRequirementOptions} from "../../enums/modelDataEnums/ResumeRequirementOptions";
 
 export interface IncompleteJobDTO {
     id: number;
@@ -13,12 +14,13 @@ export interface IncompleteJobDTO {
     location: string;
     locationCountry : string;
     jobLocationType : JobLocationTypes;
-    jobType: JobTypes[];
+    jobType?: JobTypes[];
     salary? : IncompleteJobSalaryDTO;
-    schedule: Schedules[];
-    benefits: EmployeeBenefits[];
+    schedule?: Schedules[];
+    benefits?: EmployeeBenefits[];
     contactEmail?: string;
-    resumeRequired?: boolean;
+    contactPhoneNumber? : string;
+    resumeRequired?: ResumeRequirementOptions;
     description?: string;
     employerId: number;
     employer: EmployerDTO;

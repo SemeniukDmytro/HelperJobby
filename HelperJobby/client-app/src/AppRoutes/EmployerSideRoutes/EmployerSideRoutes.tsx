@@ -16,6 +16,7 @@ import EmployerPagesWithSidebarWrap
     from "../../EmployersSideComponents/EmployerPagesWithSidebarWrap/EmployerPagesWithSidebarWrap";
 import JobPostingPagesWrap
     from "../../EmployerSidePages/JobCreationPages/SharedComponents/JobPostingPagesWrap/JobPostingPagesWrap";
+import ReviewJobPage from "../../EmployerSidePages/JobCreationPages/ReviewJobPage/ReviewJobPage";
 
 interface EmployerSideRoutesProps {
 }
@@ -37,6 +38,7 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
                     <Route path={"job-details/:jobId"} element={<JobDetailsPage/>}/>
                     <Route path={"compensation-details/:jobId"} element={<AddJobPayAndBenefitsPage/>}/>
                     <Route path={"description-and-application-settings/:jobId"} element={<JobDescriptionAndPreferencesPage/>}/>
+                    <Route path={"review-job/:jobId"} element={<ReviewJobPage/>}/>
                 </Route>
             </Route>
         </Route>

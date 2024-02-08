@@ -28,8 +28,9 @@ public class IncompleteJob
     public EmployeeBenefits? Benefits { get; set; }
 
     [MaxLength(50)] public string? ContactEmail { get; set; }
+    [MaxLength(15)] public string? ContactPhoneNumber { get; set; }
 
-    [DefaultValue(false)] public bool? ResumeRequired { get; set; }
+    [DefaultValue(0)] public ResumeRequirementOptions? ResumeRequired { get; set; }
 
     [Column(TypeName = "text")] public string? Description { get; set; }
 

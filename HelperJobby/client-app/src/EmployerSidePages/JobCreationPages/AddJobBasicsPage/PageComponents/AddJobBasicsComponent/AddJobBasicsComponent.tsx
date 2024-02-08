@@ -53,6 +53,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
     const [showCityAutoComplete, setShowCityAutoComplete] = useState(false);
     const [locationSelectedFromSuggests, setLocationSelectedFromSuggests] = useState(false);
     const [locationError, setLocationError] = useState("");
+    
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
     const incompleteJobService = new IncompleteJobService();

@@ -8,7 +8,8 @@ const AppPaths = {
     ADD_JOB_BASICS: createPath('/posting/getting-started'),
     JOB_DETAILS : createPath('/posting/job-details'),
     COMPENSATION_DETAILS : createPath('/posting/compensation-details'),
-    DESCRIPTION_AND_APPLICATION_DETAILS : createPath('/posting/description-and-application-settings')
+    DESCRIPTION_AND_APPLICATION_DETAILS : createPath('/posting/description-and-application-settings'),
+    REVIEW_JOB_PAGE : createPath('/posting/review-job')
 };
 
 export default AppPaths;

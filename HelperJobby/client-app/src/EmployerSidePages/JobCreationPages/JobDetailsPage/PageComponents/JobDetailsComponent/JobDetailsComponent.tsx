@@ -48,8 +48,8 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
 
     useEffect(() => {
         if (incompleteJob){
-            setSelectedJobType(incompleteJob.jobType);
-            setSelectedSchedule(incompleteJob.schedule);
+            setSelectedJobType(incompleteJob.jobType || []);
+            setSelectedSchedule(incompleteJob.schedule || []);
             setLoading(false);
         }
     }, [incompleteJob]);

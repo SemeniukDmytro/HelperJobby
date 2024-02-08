@@ -67,8 +67,16 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     const incompleteJobService = new IncompleteJobService();
     
     const {isValidSalaryValueProvided, validateMaxSalaryInput, validateMinSalaryInput} = 
-        useSalaryValidation(setIsInvalidMinSalary, setIsInvalidMaxSalary, setShowMissingSalaryWarning,
-        setMaxSalaryInputError, setMinSalaryInputError, minSalaryMeetsRequirement, salaryRate, showPayBy);
+        useSalaryValidation(
+            setIsInvalidMinSalary,
+            setIsInvalidMaxSalary,
+            setShowMissingSalaryWarning,
+            setMaxSalaryInputError,
+            setMinSalaryInputError,
+            minSalaryMeetsRequirement,
+            salaryRate,
+            showPayBy
+        );
 
     useEffect(() => {
         fetchInitialPageData()
@@ -90,7 +98,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                 }
             }
             
-            setSelectedBenefits(incompleteJob.benefits);
+            setSelectedBenefits(incompleteJob.benefits || []);
             setCurrency(countriesWithCurrencies.find(c => c.country === incompleteJob.locationCountry)?.currency || "")
             setLoading(false);
         }
