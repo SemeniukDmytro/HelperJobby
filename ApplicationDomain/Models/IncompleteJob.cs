@@ -20,15 +20,14 @@ public class IncompleteJob
     [Required] [MaxLength(50)] public string Location { get; set; }
 
     public JobTypes? JobTypes { get; set; }
-    [ExcludeFromUpdate]
-    public IncompleteJobSalary? Salary { get; set; }
+    [ExcludeFromUpdate] public IncompleteJobSalary? Salary { get; set; }
 
     public Schedules? Schedule { get; set; }
 
     public EmployeeBenefits? Benefits { get; set; }
 
     [MaxLength(50)] public string? ContactEmail { get; set; }
-    [MaxLength(15)] public string? ContactPhoneNumber { get; set; }
+    [AllowEmptyString] [MaxLength(15)] public string? ContactPhoneNumber { get; set; }
 
     [DefaultValue(0)] public ResumeRequirementOptions? ResumeRequired { get; set; }
 

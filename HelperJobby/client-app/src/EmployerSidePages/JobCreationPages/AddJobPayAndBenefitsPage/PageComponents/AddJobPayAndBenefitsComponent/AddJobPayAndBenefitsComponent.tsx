@@ -15,7 +15,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {benefitsStringValues} from "../../../../../AppConstData/JobEnumsToStringsArrays";
 import JobFeature from "../../../../../EmployersSideComponents/JobFeature/JobFeature";
-import {benefitStringToEnumMap} from "../../../../../utils/convertLogic/enumToStringConverter";
+import {
+    benefitStringToEnumMap,
+    salaryRatesEnumToStringMap
+} from "../../../../../utils/convertLogic/enumToStringConverter";
 
 import JobCreateNavigationButtons
     from "../../../SharedComponents/JobCreateNavigationButtons/JobCreateNavigationButtons";
@@ -87,12 +90,14 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
             if (incompleteJob.salary){
                 const incompleteJobShowPayOption = showPayByOptionsMapData.find(spo => spo.enumValue == incompleteJob.salary?.showPayByOption)?.stringValue || "Range";
                 setShowPayBy(incompleteJobShowPayOption);
-                setSalaryRate(incompleteJob.salary.salaryRate);
+                setSalaryRate(salaryRatesEnumToStringMap(incompleteJob.salary.salaryRate));
                 getSalaryInputProp(incompleteJobShowPayOption).setSalaryInput(incompleteJob.salary.minimalAmount.toString());
                 if (incompleteJob.salary.showPayByOption == ShowPayByOptions.Range){
                     setRangeMaxSalaryAmount(incompleteJob.salary.maximalAmount?.toString() || "")
                 }
-                if (incompleteJob.salary.meetsMinSalaryRequirement && !checkMinimalSalary(incompleteJob.salary.minimalAmount, incompleteJob.salary.salaryRate)){
+                if (incompleteJob.salary.meetsMinSalaryRequirement && !checkMinimalSalary(incompleteJob.salary.minimalAmount,
+                    salaryRatesEnumToStringMap(incompleteJob.salary.salaryRate)))
+                {
                     setMinSalaryMeetsRequirement(true);
                     setMinSalaryInputError(minimalSalaryIsTooLowError);
                 }
@@ -111,6 +116,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     useEffect(() => {
         const currentSalaryValue = getSalaryInputProp(showPayBy).salaryInput;
         if (currentSalaryValue){
+            setShowMissingSalaryWarning(false);
             isValidSalaryValueProvided(currentSalaryValue);
             if (showPayBy == "Range" && rangeMaxSalaryAmount){
                 validateMaxSalaryInput(rangeMinSalaryAmount, rangeMaxSalaryAmount)
@@ -122,7 +128,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
             setMinSalaryInputError("");
             setMaxSalaryInputError("");   
         }
-    }, [showPayBy]);
+    }, [showPayBy, salaryRate]);
 
     function onMinSalaryInputChange(e: ChangeEvent<HTMLInputElement>) {
         getSalaryInputProp(showPayBy).setSalaryInput(e.target.value);

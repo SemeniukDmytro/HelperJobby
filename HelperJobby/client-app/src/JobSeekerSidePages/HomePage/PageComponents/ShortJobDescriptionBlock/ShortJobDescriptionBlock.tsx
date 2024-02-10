@@ -221,7 +221,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props: Shor
                         </ul>
                     </div>
                     {isNewJob && <div className={"date-posted"}>
-                        <span>{jobPostDaysDifference == 0 ? "Just posted" : `Posted ${jobPostDaysDifference} ago}`}</span>
+                        <span>{jobPostDaysDifference == 0 ? "Just posted" : `Posted ${jobPostDaysDifference} days ago`}</span>
                     </div>}
                 </div>
             </div>

@@ -18,16 +18,4 @@ public static class FlagsEnumToArrayConverter
 
         return results;
     }
-
-    public static List<string> GetArrayWithStringValues<T>(int singleEnumValue) where T : Enum
-    {
-        var binaryEnumValuesRepresentation = Convert.ToString(singleEnumValue, 2);
-        var results = binaryEnumValuesRepresentation
-            .Select((num, ind) => (binaryEnumValuesRepresentation.Length - ind - 1, num == '1'))
-            .Where(t => t.Item2)
-            .Select(t => Enum.GetName(typeof(T), 1 << t.Item1))
-            .ToList();
-
-        return results;
-    }
 }

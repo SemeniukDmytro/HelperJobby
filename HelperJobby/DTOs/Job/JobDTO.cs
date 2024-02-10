@@ -13,10 +13,10 @@ public class JobDTO
     public string Location { get; set; }
     public string LocationCountry { get; set; }
     public JobLocationTypes JobLocationType { get; set; }
-    public List<string> JobType { get; set; }
+    public List<JobTypes> JobType { get; set; }
     public JobSalaryDTO Salary { get; set; }
-    public List<string> Schedule { get; set; }
-    public List<string> Benefits { get; set; }
+    public List<Schedules> Schedule { get; set; }
+    public List<EmployeeBenefits> Benefits { get; set; }
     public string ContactEmail { get; set; }
     public string? ContactPhoneNumber { get; set; } 
     public ResumeRequirementOptions ResumeRequired { get; set; }

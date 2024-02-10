@@ -17,7 +17,8 @@ public static class EmployerAccountFixtures
         Organization = new Organization
         {
             Name = "newOrganization"
-        }
+        },
+        HasPostedFirstJob = false
     };
 
     public static Employer SecondEmployerEntity = new()

@@ -5,12 +5,13 @@ namespace BLLUnitTests.Fixture;
 
 public static class JobFixtures
 {
-    public static readonly Job CreatedJob = new()
+    public static readonly Job CreatedJobWithEmployer = new()
     {
         JobTitle = "Software engineer",
         NumberOfOpenings = 10,
         Language = "English",
         Location = "Random Address",
+        LocationCountry = "Random Country",
         JobTypes = JobTypes.Freelance,
         Salary = new JobSalary()
         {
@@ -22,7 +23,8 @@ public static class JobFixtures
         Benefits = EmployeeBenefits.CommuterBenefits,
         ContactEmail = "test@gmail.com",
         Description = "test description",
-        EmployerId = 1
+        EmployerId = 1,
+        Employer = EmployerAccountFixtures.EmployerEntity
     };
 
     public static readonly Job InvalidCreatedJob = new()

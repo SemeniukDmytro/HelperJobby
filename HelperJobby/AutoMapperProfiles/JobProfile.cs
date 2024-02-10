@@ -14,9 +14,9 @@ public class JobProfile : Profile
         CreateMap<Job, JobDTO>().AfterMap((src, dest, context) =>
         {
             dest.Employer = context.Mapper.Map<Employer, EmployerDTO>(src.Employer);
-            dest.Benefits = FlagsEnumToArrayConverter.GetArrayWithStringValues<EmployeeBenefits>((int)src.Benefits);
-            dest.Schedule = FlagsEnumToArrayConverter.GetArrayWithStringValues<Schedules>((int)src.Schedule);
-            dest.JobType = FlagsEnumToArrayConverter.GetArrayWithStringValues<JobTypes>((int)src.JobTypes);
+            dest.Benefits = FlagsEnumToArrayConverter.GetArrayWithEnumValues<EmployeeBenefits>((int)src.Benefits);
+            dest.Schedule = FlagsEnumToArrayConverter.GetArrayWithEnumValues<Schedules>((int)src.Schedule);
+            dest.JobType = FlagsEnumToArrayConverter.GetArrayWithEnumValues<JobTypes>((int)src.JobTypes);
         });
 
         CreateMap<IncompleteJobDTO, Job>()

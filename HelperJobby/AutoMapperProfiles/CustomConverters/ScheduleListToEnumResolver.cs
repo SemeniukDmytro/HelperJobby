@@ -17,7 +17,12 @@ public class GenericScheduleListToEnumResolver : IValueResolver<object, Incomple
 
         var scheduleValue = scheduleProperty.GetValue(source) as IEnumerable<Schedules>;
 
-        if (scheduleValue == null || !scheduleValue.Any())
+        if (scheduleValue == null)
+        {
+            return null;
+        }
+        
+        if  (!scheduleValue.Any())
         {
             return (Schedules)0;
         }

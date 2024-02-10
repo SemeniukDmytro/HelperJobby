@@ -98,7 +98,6 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
     function addAbilityToProvidePhone() {
         setIsContactPhoneAvailable(!isContactPhoneAvailable);
     }
-
     async function handleDescriptionAndPreferencesSubmit(e : FormEvent) {
         e.preventDefault();
         setExecuteFormValidation(true);
@@ -125,7 +124,7 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
             const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
                 description : jobDescription,
                 contactEmail : contactEmail,
-                contactPhoneNumber : contactPhoneNumber ? contactPhoneNumber : undefined,
+                contactPhoneNumber : isContactPhoneAvailable ? contactPhoneNumber : "",
                 resumeRequired : resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)?.enumValue
             }
             const  retrievedIncompleteJob = await incompleteJobService.updateJobCreation(parseInt(jobId!), updatedIncompleteJob);
@@ -195,7 +194,7 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
                         setExecuteValidation={setExecuteFormValidation}
                     />
                     <div className={"checkbox-container mb15rem"} onClick={addAbilityToProvidePhone}>
-                        <input className={"checkbox"} checked={isContactPhoneAvailable} type={"checkbox"}/>
+                        <input className={"checkbox"} onChange={addAbilityToProvidePhone} checked={isContactPhoneAvailable} type={"checkbox"}/>
                         <span>Let potential candidates contact you by phone</span>
                     </div>
                     {isContactPhoneAvailable &&

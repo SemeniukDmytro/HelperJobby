@@ -4,6 +4,9 @@ import {JobApplyDTO} from "../userJobInteractionsDTOs/JobApplyDTO";
 import {JobSalaryDTO} from "./JobSalaryDTO";
 import {JobLocationTypes} from "../../enums/modelDataEnums/JobLocationTypes";
 import {ResumeRequirementOptions} from "../../enums/modelDataEnums/ResumeRequirementOptions";
+import Schedules from "../../enums/modelDataEnums/Schedules";
+import EmployeeBenefits from "../../enums/modelDataEnums/EmployeeBenefits";
+import JobTypes from "../../enums/modelDataEnums/JobTypes";
 
 export interface JobDTO {
     id: number;
@@ -11,12 +14,12 @@ export interface JobDTO {
     numberOfOpenings: number;
     language: string;
     location: string;
-    jobType: string[];
+    jobType: JobTypes[];
     locationCountry : string;
     jobLocationType : JobLocationTypes;
     salary? : JobSalaryDTO;
-    schedule: string[];
-    benefits: string[];
+    schedule: Schedules[];
+    benefits: EmployeeBenefits[];
     contactEmail: string;
     contactPhoneNumber? : string;
     resumeRequired: ResumeRequirementOptions;

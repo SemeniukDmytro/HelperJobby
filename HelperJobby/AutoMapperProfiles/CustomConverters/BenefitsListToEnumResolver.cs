@@ -18,9 +18,14 @@ public class GenericBenefitsListToEnumResolver : IValueResolver<object, Incomple
 
         var benefitsValue = benefitsProperty.GetValue(source) as IEnumerable<EmployeeBenefits>;
 
-        if (benefitsValue == null || !benefitsValue.Any())
+        if (benefitsValue == null )
         {
-            return (EmployeeBenefits)0;
+            return null;
+        }
+
+        if (!benefitsValue.Any())
+        {
+            return 0;
         }
 
         return benefitsValue.Aggregate((current, next) => current | next);

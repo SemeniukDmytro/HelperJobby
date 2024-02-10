@@ -25,16 +25,15 @@ public class Job
     public EmployeeBenefits Benefits { get; set; }
 
     [Required] [MaxLength(50)] public string ContactEmail { get; set; }
-    
-    [MaxLength(15)] public string? ContactPhoneNumber { get; set; }
+
+    [AllowEmptyString] [MaxLength(15)] public string? ContactPhoneNumber { get; set; }
 
     [DefaultValue(0)] public ResumeRequirementOptions ResumeRequired { get; set; }
 
     [Required] [Column(TypeName = "text")] public string Description { get; set; }
 
     [Required] public DateOnly DatePosted { get; set; }
-    [ExcludeFromUpdate]
-    public JobSalary? Salary { get; set; }
+    [ExcludeFromUpdate] public JobSalary? Salary { get; set; }
 
     [ExcludeFromUpdate]
     [Required]

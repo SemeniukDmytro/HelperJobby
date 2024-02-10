@@ -8,7 +8,7 @@ public class IncompleteJobSalaryDTO
     public ShowPayByOptions ShowPayByOption { get; set; }
     public decimal MinimalAmount { get; set; }
     public decimal? MaximalAmount { get; set; }
-    public string SalaryRate { get; set; }
+    public SalaryRates SalaryRate { get; set; }
     public int IncompleteJobId { get; set; }
     public bool MeetsMinSalaryRequirement { get; set; }
     public IncompleteJobDTO IncompleteJob { get; set; }

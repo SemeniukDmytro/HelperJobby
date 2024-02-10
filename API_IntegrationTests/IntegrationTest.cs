@@ -88,16 +88,15 @@ public class IntegrationTest
         return authUserDTO;
     }
 
-    protected async Task<IncompleteJobDTO> CreateNewCurrentJob(UpdatedIncompleteJobDTO updatedIncompleteJobDto)
+    protected async Task<IncompleteJobDTO> CreateNewCurrentJob(CreateIncompleteJobDTO createdIncompleteJobDto)
     {
-        var newCurrentJob = updatedIncompleteJobDto;
-        var currentJobCreationResponse = await TestClient.PostAsJsonAsync("/api/IncompleteJob", newCurrentJob);
+        var currentJobCreationResponse = await TestClient.PostAsJsonAsync("/api/IncompleteJob", createdIncompleteJobDto);
         return await currentJobCreationResponse.Content.ReadAsAsync<IncompleteJobDTO>();
     }
 
     protected async Task<JobDTO> CreateJob()
     {
-        var currentJobCreation = await CreateNewCurrentJob(IncompleteJobFixtures.CompletedJobCreation);
+        var currentJobCreation = await CreateNewCurrentJob(IncompleteJobFixtures.NewJobCreation);
         var requestUri = $"/api/job/{currentJobCreation.Id}";
         var jobCreateResponse = await TestClient.PostAsJsonAsync(requestUri, currentJobCreation.Id);
         return await jobCreateResponse.Content.ReadAsAsync<JobDTO>();

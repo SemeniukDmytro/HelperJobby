@@ -24,7 +24,7 @@ public class JobServiceTests
     public async Task CreateJobShouldReturnCreatedJob()
     {
         //Arrange
-        var validJob = JobFixtures.CreatedJob;
+        var validJob = JobFixtures.CreatedJobWithEmployer;
         //Act
         var jobToCreate = await _jobService.CreateJob(validJob);
         //Assert

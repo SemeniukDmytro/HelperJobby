@@ -1,3 +1,4 @@
+using System.Reflection;
 using ApplicationDomain.Attributes;
 using ApplicationDomain.Enums;
 using ApplicationDomain.Models;
@@ -20,16 +21,27 @@ public static class EntitiesUpdateManager<T>
             {
                 var updatedValue = updatedProperty.GetValue(updatedEntity);
 
-                if (IsValid(updatedValue)) entityProperty.SetValue(entityToUpdate, updatedValue);
+                if (IsValid(entityProperty, updatedValue))
+                {
+                    entityProperty.SetValue(entityToUpdate, updatedValue);
+                }
             }
         }
 
         return entityToUpdate;
     }
 
-    private static bool IsValid(object value)
+    private static bool IsValid(PropertyInfo propertyInfo, object? value)
     {
         if (value == null) return false;
+        
+        if (value is string stringValue)
+        {
+            bool allowEmpty = propertyInfo.GetCustomAttribute<AllowEmptyStringAttribute>() != null;
+            if (!allowEmpty && string.IsNullOrEmpty(stringValue)) return false;
+            return true;
+        }
+
         
         if (value is EmployeeBenefits) return true;
 
@@ -42,7 +54,6 @@ public static class EntitiesUpdateManager<T>
         if (value is Enum) return (int)value != 0;
         if (int.TryParse(value.ToString(), out var possibleInt)) return possibleInt != 0;
 
-        if (value is string && string.IsNullOrEmpty((string)value)) return false;
 
         return true;
     }

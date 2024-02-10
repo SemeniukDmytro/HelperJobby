@@ -81,7 +81,7 @@ public class JobControllerTests : IntegrationTest
     {
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
-        var currentJobCreation = await CreateNewCurrentJob(IncompleteJobFixtures.CompletedJobCreation);
+        var currentJobCreation = await CreateNewCurrentJob(IncompleteJobFixtures.NewJobCreation);
         var requestUri = $"/api/job/{currentJobCreation.Id}";
 
         //Act
@@ -112,6 +112,7 @@ public class JobControllerTests : IntegrationTest
             NumberOfOpenings = 3,
             Language = "C#",
             Location = "New York",
+            LocationCountry = "USA",
             JobType = new List<JobTypes> { JobTypes.FullTime },
             Salary = new CreateUpdateSalaryDTO()
             {
@@ -138,10 +139,10 @@ public class JobControllerTests : IntegrationTest
         Assert.Equal(updatedJobDTO.NumberOfOpenings, updatedJob.NumberOfOpenings);
         Assert.Equal(updatedJobDTO.Language, updatedJob.Language);
         Assert.Equal(updatedJobDTO.Location, updatedJob.Location);
-        Assert.Equal(updatedJobDTO.JobType.Select(j => j.ToString()), updatedJob.JobType);
+        Assert.Equal(updatedJobDTO.JobType, updatedJob.JobType);
         Assert.Equal(updatedJobDTO.Salary.MinimalAmount, updatedJob.Salary.MinimalAmount);
-        Assert.Equal(updatedJobDTO.Schedule.Select(s => s.ToString()), updatedJob.Schedule);
-        Assert.Equal(updatedJobDTO.Benefits.Select(b => b.ToString()), updatedJob.Benefits);
+        Assert.Equal(updatedJobDTO.Schedule, updatedJob.Schedule);
+        Assert.Equal(updatedJobDTO.Benefits, updatedJob.Benefits);
         Assert.Equal(updatedJobDTO.ContactEmail, updatedJob.ContactEmail);
         Assert.Equal(updatedJobDTO.ResumeRequired, updatedJob.ResumeRequired);
         Assert.Equal(updatedJobDTO.Description, updatedJob.Description);

@@ -1,0 +1,47 @@
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+.jr-job-info-container {
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 1fr;
+  box-sizing: border-box;
+  margin-block: 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
+  display: grid;
+  column-gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ji-field-value-manage-block {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  padding: 0.5625rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  &:hover{
+    background-color: global-variables.$neutral-color-200 !important;
+  }
+  &:active{
+    background-color: global-variables.$light-blue-active;
+    box-shadow: global-variables.$button-inner-shadow;
+  }
+  
+}
+
+.ji-value-info-layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.ji-value-container {
+  display: inline-block;
+  overflow: hidden;
+  transition: 0.2s;
+}
+
+.ji-show-full-value {
+  padding: 0.5rem 0rem;
+  z-index: 1;
+}

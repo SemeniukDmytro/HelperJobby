@@ -25,9 +25,9 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
 
     useEffect(() => {
         if (job.benefits.length < 6) {
-            setDisplayedBenefits(job.benefits);
+            setDisplayedBenefits(job.benefits.map(b => benefitsEnumToStringMap(b)));
         } else {
-            setDisplayedBenefits(job.benefits.slice(0, 6));
+            setDisplayedBenefits(job.benefits.map(b => benefitsEnumToStringMap(b).slice(0, 6)));
             setShowAllBenefits(false);
             setBenefitsButtonText("Show more")
         }
@@ -36,11 +36,11 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
     function displayAllBenefits() {
         if (!showAllBenefits) {
             setBenefitsButtonText("Show less")
-            setDisplayedBenefits(job.benefits);
+            setDisplayedBenefits(job.benefits.map(b => benefitsEnumToStringMap(b)));
             setShowAllBenefits(true);
         } else {
             setBenefitsButtonText("Show more")
-            setDisplayedBenefits(job.benefits.slice(0, 6));
+            setDisplayedBenefits(job.benefits.map(b => benefitsEnumToStringMap(b).slice(0, 6)));
             setShowAllBenefits(false);
         }
     }
@@ -114,7 +114,7 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                 <div className={"benefits-box"}>
                     <ul className={"benefits"}>
                         {displayedBenefits.map((benefit, index) => (
-                            <li key={index}>{benefitsEnumToStringMap(benefit)}</li>
+                            <li key={index}>{benefit}</li>
                         ))}
                     </ul>
                     {(!showAllBenefits && job.benefits.length > 6) &&

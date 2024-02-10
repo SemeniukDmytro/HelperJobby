@@ -56,7 +56,8 @@ public class CurrentJobCreationServiceTests
             JobTypes = default, 
             Salary = new IncompleteJobSalary()
             {
-                MinimalAmount = 1000
+                MinimalAmount = 256,
+                SalaryRate = SalaryRates.PerDay
             },
             Benefits = (EmployeeBenefits)3
         };
