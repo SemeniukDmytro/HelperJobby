@@ -10,16 +10,18 @@ import {JobLocationTypes} from "../../../../../enums/modelDataEnums/JobLocationT
 interface JobLocationTypeSelectorProps {
     jobLocationTypeEnumValue : JobLocationTypes;
     setJobLocationTypeEnumValue : Dispatch<SetStateAction<JobLocationTypes>>;
+    includeWindowHeight : boolean;
 }
 
 const JobLocationTypeSelector: FC<JobLocationTypeSelectorProps> = ({
     jobLocationTypeEnumValue,
-    setJobLocationTypeEnumValue
+    setJobLocationTypeEnumValue,
+    includeWindowHeight
                                                                    }) => {
     const [showOptions, setShowOptions] = useState(false);
     const selectWindowRef = useRef<HTMLDivElement>(null);
     const locationTypeButtonRef = useRef<HTMLButtonElement>(null);
-    const getSelectWindowPosition = useSelectWindowPosition(locationTypeButtonRef, selectWindowRef, setShowOptions);
+    const getSelectWindowPosition = useSelectWindowPosition(locationTypeButtonRef, selectWindowRef, setShowOptions, includeWindowHeight);
     const [currentJobLocationType, setCurrentJobLocationType] =
         useState(jobLocationTypesArr.find(jlt => jlt.enumValue == jobLocationTypeEnumValue)?.type || "In person precise location");
     

@@ -3,7 +3,8 @@ import {useEffect, useCallback, RefObject, Dispatch, SetStateAction} from 'react
 const useSelectWindowPosition = (
     inputFieldRef: RefObject<HTMLElement>,
     selectWindowRef: RefObject<HTMLElement>,
-    setShowResults : Dispatch<SetStateAction<boolean>>
+    setShowResults : Dispatch<SetStateAction<boolean>>,
+    includeWindowScroll : boolean
 ) => {
     
     const getSelectWindowPosition = useCallback(() => {
@@ -14,7 +15,7 @@ const useSelectWindowPosition = (
         const inputRect = inputFieldRef.current.getBoundingClientRect();
         selectWindowRef.current.style.left = `${inputRect.left}px`;
 
-        const windowScrollY = window.scrollY;
+        const windowScrollY = includeWindowScroll ? window.scrollY : 0;
         const viewPortHeight = window.innerHeight;
 
         if (viewPortHeight - inputRect.bottom > selectWindowRef.current.clientHeight) {

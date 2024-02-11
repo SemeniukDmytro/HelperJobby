@@ -21,7 +21,7 @@ const CustomSelectWindow: FC<CustomSelectWindowProps> = ({
     const [showOptions, setShowOptions] = useState(false);
     const selectWindowRef = useRef<HTMLDivElement>(null);
     const selectedValueButtonRef = useRef<HTMLButtonElement>(null);
-    const getSelectWindowPosition = useSelectWindowPosition(selectedValueButtonRef, selectWindowRef, setShowOptions);
+    const getSelectWindowPosition = useSelectWindowPosition(selectedValueButtonRef, selectWindowRef, setShowOptions, true);
 
     useEffect(() => {
         getSelectWindowPosition();

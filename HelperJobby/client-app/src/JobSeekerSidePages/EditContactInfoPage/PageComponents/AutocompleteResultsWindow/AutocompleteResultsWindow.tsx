@@ -19,6 +19,7 @@ interface AutocompleteResultsWindowProps {
     autocompleteWindowType: AutocompleteWindowTypes;
     locationSelected?: boolean;
     setLocationSelected?: Dispatch<SetStateAction<boolean>>;
+    windowZIndex? : number;
 }
 
 const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) => {
@@ -30,7 +31,7 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
     const [delayedInputValue, setDelayedInputValue] = useState("");
     const [autocompleteResults, setAutocompleteResults] = useState<string[][]>([]);
     const [loading, setLoading] = useState(true);
-    const getAutocompleteWindowPosition = useSelectWindowPosition(props.inputFieldRef, autoCompleteRef, props.setShowResult);
+    const getAutocompleteWindowPosition = useSelectWindowPosition(props.inputFieldRef, autoCompleteRef, props.setShowResult, true);
 
     useEffect(() => {
         getAutocompleteWindowPosition();
@@ -119,7 +120,8 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
                         className={"select-window-container"}
                         style={{
                             maxWidth: props.windowMaxWidth,
-                            width: "100%"
+                            width: "100%",
+                            zIndex : props.windowZIndex
                         }}
                         ref={autoCompleteRef}
                     >

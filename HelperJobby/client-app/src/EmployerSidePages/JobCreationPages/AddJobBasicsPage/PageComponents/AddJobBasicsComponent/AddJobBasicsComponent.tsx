@@ -1,15 +1,13 @@
-import React, {Dispatch, FC, FormEvent, SetStateAction, useEffect, useRef, useState} from 'react';
+import React, {FC, FormEvent, useEffect, useRef, useState} from 'react';
 import './AddJobBasicsComponent.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowRightLong, faCircleInfo, faPen} from "@fortawesome/free-solid-svg-icons";
+import {faArrowRightLong, faPen} from "@fortawesome/free-solid-svg-icons";
 import SelectLanguageDialog from "../SelectLanguageDialog/SelectLanguageDialog";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
 import CustomSelectField from "../../../../../Components/CustomSelectField/CustomSelectField";
 import {numberOfOpeningsOptions} from "../../../../../AppConstData/NumberOfOpeningsOptions";
-import JobLocationTypeSelector from "../JobLocationTypeSelector/JobLocationTypeSelector";
 import AutocompleteResultsWindow
     from "../../../../../JobSeekerSidePages/EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
-import LocationCustomInputField from "../../../../../Components/LocationCustomInputField/LocationCustomInputField";
 import {useNavigate, useParams} from "react-router-dom";
 import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import JobBasics from "../../../../../Components/Icons/JobBasics";
@@ -27,6 +25,9 @@ import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {JobLocationTypes} from "../../../../../enums/modelDataEnums/JobLocationTypes";
 import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
+import {useJobLocationType} from "../../../../../hooks/useJobLocationType";
+import JobLocationSelectionComponent
+    from "../../../SharedComponents/JobLocationSelectionComponent/JobLocationSelectionComponent";
 
 
 interface AddJobBasicsComponentProps {
@@ -42,7 +43,6 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
     const [numberOfOpenings, setNumberOfOpenings] = useState("");
     const [invalidNumberOfOpenings, setInvalidNumberOfOpenings] = useState(true);
     const [jobLocationTypeEnumValue, setJobLocationTypeEnumValue] = useState(JobLocationTypes.InPerson);
-    const [jobLocationFieldLabel, setJobLocationFieldLabel] = useState("What is the street address for this location?");
     const [inPersonJobLocation, setInPersonJobLocation] = useState("");
     const [generalJobLocation, setGeneralJobLocation] = useState("");
     const [remoteJobLocation, setRemoteJobLocation] = useState("");
@@ -50,9 +50,13 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
     const locationInputRef = useRef<HTMLInputElement>(null);
     const [executeFormValidation, setExecuteFormValidation] = useState(false);
     const [showStreetsAutocomplete, setShowStreetsAutocomplete] = useState(false);
-    const [showCityAutoComplete, setShowCityAutoComplete] = useState(false);
+    const [showCityAutoComplete, setShowCitiesAutoComplete] = useState(false);
     const [locationSelectedFromSuggests, setLocationSelectedFromSuggests] = useState(false);
     const [locationError, setLocationError] = useState("");
+    const {getCurrentJobLocationInputProp} = useJobLocationType(inPersonJobLocation, setInPersonJobLocation,
+        generalJobLocation, setGeneralJobLocation,
+        remoteJobLocation, setRemoteJobLocation,
+        onRoadJobLocation, setOnRoadJobLocation);
     
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
@@ -60,6 +64,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
     const [loading, setLoading] = useState(true);
     const {jobId} = useParams<{ jobId: string }>();
     const {fetchJobAndSetJobCreation} = useJobLoaderForSettingCurrentIncompleteJob(jobId ? parseInt(jobId) : 0, incompleteJob, setIncompleteJob);
+    const [isSettingFromIncompleteJob, setIsSettingFromIncompleteJob] = useState(false);
 
     useEffect(() => {
         if (jobId) {
@@ -72,13 +77,13 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             return;
         }
         if (incompleteJob) {
+            setIsSettingFromIncompleteJob(true);
             setJobTitle(incompleteJob.jobTitle);
             setNumberOfOpenings(incompleteJob.numberOfOpenings.toString())
             setJobPostLanguage(incompleteJob.language);
             setJobPostingCountry(incompleteJob.locationCountry);
             getCurrentJobLocationInputProp(incompleteJob.jobLocationType).setInputValue(incompleteJob.location);
             setJobLocationTypeEnumValue(incompleteJob.jobLocationType);
-            handleJobLocationTypeChange();
             setLocationSelectedFromSuggests(true);
             setInvalidNumberOfOpenings(false);
             setLoading(false);
@@ -90,8 +95,16 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
     }
 
     useEffect(() => {
-        handleJobLocationTypeChange()
-    }, [jobLocationTypeEnumValue]);
+        if (isSettingFromIncompleteJob) {
+            setIsSettingFromIncompleteJob(false);
+            return;
+        }
+
+        setInPersonJobLocation("");
+        setOnRoadJobLocation("");
+        setGeneralJobLocation("");
+        setLocationSelectedFromSuggests(false);
+    }, [jobPostingCountry]);
 
     async function handleJobBasicsSubmit(e: FormEvent) {
         e.preventDefault();
@@ -160,37 +173,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             setRequestInProgress(false);
         }
     }
-
-    function handleJobLocationTypeChange() {
-        switch (jobLocationTypeEnumValue) {
-            case JobLocationTypes.InPerson:
-                setJobLocationFieldLabel("What is the street address for this location?")
-                return;
-            case JobLocationTypes.GeneralLocation:
-                setJobLocationFieldLabel("What is the job location?")
-                return;
-            case JobLocationTypes.Remote:
-                setJobLocationFieldLabel("Your job location will appear as Remote, and we’ll advertise it to people searching for remote work nationwide.")
-                setRemoteJobLocation("Remote");
-                return;
-            case JobLocationTypes.OnRoad:
-                setJobLocationFieldLabel("What is the operating area for this job?")
-                return;
-        }
-    }
-
-    function getCurrentJobLocationInputProp(jobLocationType : JobLocationTypes): { inputValue: string, setInputValue: Dispatch<SetStateAction<string>> } {
-        switch (jobLocationType) {
-            case JobLocationTypes.InPerson:
-                return {inputValue: inPersonJobLocation, setInputValue: setInPersonJobLocation};
-            case JobLocationTypes.GeneralLocation:
-                return {inputValue: generalJobLocation, setInputValue: setGeneralJobLocation};
-            case JobLocationTypes.Remote:
-                return {inputValue: remoteJobLocation, setInputValue: setRemoteJobLocation};
-            case JobLocationTypes.OnRoad:
-                return {inputValue: onRoadJobLocation, setInputValue: setOnRoadJobLocation};
-        }
-    }
+    
 
     return (
         loading ? <LoadingPage/> :
@@ -214,7 +197,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                     setInputValue={getCurrentJobLocationInputProp(jobLocationTypeEnumValue).setInputValue}
                     country={jobPostingCountry}
                     showResult={showCityAutoComplete}
-                    setShowResult={setShowCityAutoComplete}
+                    setShowResult={setShowCitiesAutoComplete}
                     autocompleteWindowType={AutocompleteWindowTypes.city}
                     locationSelected={locationSelectedFromSuggests}
                     setLocationSelected={setLocationSelectedFromSuggests}
@@ -266,49 +249,28 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                                 executeValidation={executeFormValidation}
                                 setExecuteValidation={setExecuteFormValidation}
                             />
-                            <JobLocationTypeSelector
+                            <JobLocationSelectionComponent 
                                 jobLocationTypeEnumValue={jobLocationTypeEnumValue}
                                 setJobLocationTypeEnumValue={setJobLocationTypeEnumValue}
+                                locationInputRef={locationInputRef}
+                                inPersonJobLocation={inPersonJobLocation}
+                                setInPersonJobLocation={setInPersonJobLocation}
+                                generalJobLocation={generalJobLocation}
+                                setGeneralJobLocation={setGeneralJobLocation}
+                                remoteJobLocation={remoteJobLocation}
+                                setRemoteJobLocation={setRemoteJobLocation}
+                                onRoadJobLocation={onRoadJobLocation}
+                                setOnRoadJobLocation={setOnRoadJobLocation}
+                                setShowStreetsAutocomplete={setShowStreetsAutocomplete}
+                                setShowCitiesAutocomplete={setShowCitiesAutoComplete}
+                                executeFormValidation={executeFormValidation}
+                                setExecuteFormValidation={setExecuteFormValidation}
+                                locationSelectedFromSuggests={locationSelectedFromSuggests}
+                                setLocationSelectedFromSuggests={setLocationSelectedFromSuggests}
+                                locationError={locationError}
+                                setLocationError={setLocationError}
+                                includePageHeight={false}
                             />
-                            {jobLocationTypeEnumValue === JobLocationTypes.Remote ?
-                                <div className={"info-notify-container blue-notify-container mb15rem"}>
-                                    <FontAwesomeIcon className={"svg1rem dark-blue-color mr1rem"} icon={faCircleInfo}/>
-                                    <span className={"dark-small-text"}>{jobLocationFieldLabel}</span>
-                                </div>
-                                :
-                                (jobLocationTypeEnumValue === JobLocationTypes.InPerson ?
-                                    <LocationCustomInputField
-                                        fieldLabel={jobLocationFieldLabel}
-                                        inputValue={inPersonJobLocation}
-                                        setInputValue={setInPersonJobLocation}
-                                        inputRef={locationInputRef}
-                                        isRequired={true}
-                                        setShowAutocompleteResults={setShowStreetsAutocomplete}
-                                        selectedFromSuggests={locationSelectedFromSuggests}
-                                        setSelectedFromSuggests={setLocationSelectedFromSuggests}
-                                        executeValidation={executeFormValidation}
-                                        setExecuteValidation={setExecuteFormValidation}
-                                        customErrorMessage={locationError}
-                                        setCustomErrorMessage={setLocationError}
-                                    />
-
-                                    :
-                                    <LocationCustomInputField
-                                        fieldLabel={jobLocationFieldLabel}
-                                        inputValue={getCurrentJobLocationInputProp(jobLocationTypeEnumValue).inputValue}
-                                        setInputValue={getCurrentJobLocationInputProp(jobLocationTypeEnumValue).setInputValue}
-                                        inputRef={locationInputRef}
-                                        isRequired={true}
-                                        setShowAutocompleteResults={setShowCityAutoComplete}
-                                        selectedFromSuggests={locationSelectedFromSuggests}
-                                        setSelectedFromSuggests={setLocationSelectedFromSuggests}
-                                        executeValidation={executeFormValidation}
-                                        setExecuteValidation={setExecuteFormValidation}
-                                        customErrorMessage={locationError}
-                                        setCustomErrorMessage={setLocationError}
-                                    />)
-
-                            }
 
                             <button
                                 className="blue-button br-corner-button min-continue-button-size"
