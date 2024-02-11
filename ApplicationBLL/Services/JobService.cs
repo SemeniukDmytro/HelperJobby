@@ -9,16 +9,13 @@ namespace ApplicationBLL.Services;
 
 public class JobService : IJobService
 {
-    private readonly IEmployerQueryRepository _employerQueryRepository;
     private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IUserService _userService;
 
-    public JobService(IJobQueryRepository jobQueryRepository, IUserService userService,
-        IEmployerQueryRepository employerQueryRepository)
+    public JobService(IJobQueryRepository jobQueryRepository, IUserService userService)
     {
         _jobQueryRepository = jobQueryRepository;
         _userService = userService;
-        _employerQueryRepository = employerQueryRepository;
     }
 
     public async Task<Job> CreateJob(Job job)
@@ -39,11 +36,18 @@ public class JobService : IJobService
     public async Task<Job> UpdateJob(int jobId, Job updatedJob)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var employer = await _employerQueryRepository.GetEmployer(currentUserId);
-        var jobEntity = await _jobQueryRepository.GetJobById(jobId);
+        var jobEntity = await _jobQueryRepository.GetJobByIdWithEmployer(jobId);
 
-        if (jobEntity.EmployerId != employer.Id)
+        if (jobEntity.Employer.UserId != currentUserId)
             throw new ForbiddenException("You can not update this job information");
+
+        var locationChangeNeeded = false;
+        
+        if (jobEntity.LocationCountry != updatedJob.LocationCountry &&
+            (jobEntity.Location == updatedJob.Location || string.IsNullOrEmpty(updatedJob.Location)))
+        {
+            locationChangeNeeded = true;
+        }
 
         var updatedEntity = EntitiesUpdateManager<IncompleteJob>.UpdateEntityProperties(jobEntity, updatedJob);
         if (updatedJob.Salary != null && !updatedJob.Salary.MeetsMinSalaryRequirement)
@@ -62,15 +66,19 @@ public class JobService : IJobService
                 updatedJob.Salary);
             updatedEntity.Salary = updatedSalary;
         }
+        
+        
+        updatedEntity.Location = locationChangeNeeded ? "" : updatedEntity.Location;
         return updatedEntity;
     }
 
     public async Task<Job> DeleteJob(int jobId)
     {
         var currentUserId = _userService.GetCurrentUserId();
-        var employer = await _employerQueryRepository.GetEmployer(currentUserId);
-        var jobEntity = await _jobQueryRepository.GetJobById(jobId);
-        if (jobEntity.EmployerId != employer.Id) throw new ForbiddenException("You can not delete this job");
+        var jobEntity = await _jobQueryRepository.GetJobByIdWithEmployer(jobId);
+
+        if (jobEntity.Employer.UserId != currentUserId)
+            throw new ForbiddenException("You can not delete this job");
 
         return jobEntity;
     }

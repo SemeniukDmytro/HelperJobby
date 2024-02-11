@@ -47,7 +47,7 @@ const JobReviewJobInfoBlock: FC<JobReviewJobInfoBlockProps> = (
                 {jobInfoLabel}
             </div>
             <div>
-                <a className={"ji-field-value-manage-block"}>
+                <a className={"ji-field-value-manage-block"} onClick={onEditClick}>
                     <div className={"ji-value-info-layout"}>
                         <div 
                             className={"ji-value-container semi-dark-default-text"}

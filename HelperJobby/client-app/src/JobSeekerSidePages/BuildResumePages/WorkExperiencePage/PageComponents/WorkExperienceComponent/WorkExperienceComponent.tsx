@@ -18,8 +18,13 @@ const WorkExperienceComponent: FC<WorkExperienceComponentProps> = () => {
 
     useEffect(() => {
         setProgressPercentage(ProgressPercentPerPage * 5);
-        if (jobSeeker?.resume!.workExperiences.length == 0) {
-            navigate("/build/experience/add")
+        if (!jobSeeker?.resume){
+            navigate("/build/experience/add");
+            return;
+        }
+        if (jobSeeker?.resume.workExperiences.length == 0) {
+            navigate("/build/experience/add");
+            return;
         }
         setSaveFunc(() => customSaveFunc)
     }, []);

@@ -55,7 +55,7 @@ const SelectLanguageDialog: FC<SelectLanguageDialogProps> = ({
                     </button>
                 </div>
                 <div className={"dialog-separation-line"}></div>
-                <div className={"dialog-main-text"}>
+                <div className={"dialog-main-content"}>
                     <CustomSelectField
                         fieldLabel={"Language of job post"}
                         fieldValue={language}

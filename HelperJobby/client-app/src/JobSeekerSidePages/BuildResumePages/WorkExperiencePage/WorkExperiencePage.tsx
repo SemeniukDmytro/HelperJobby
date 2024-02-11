@@ -5,7 +5,7 @@ interface WorkExperiencePageProps {
 }
 
 const WorkExperiencePage: FC<WorkExperiencePageProps> = () => (
-    <WorkExperienceComponent></WorkExperienceComponent>
+    <WorkExperienceComponent/>
 );
 
 export default WorkExperiencePage;

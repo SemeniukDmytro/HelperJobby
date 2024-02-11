@@ -35,10 +35,17 @@ public class IncompleteJobService : IIncompleteJobService
 
     public async Task<IncompleteJob> UpdateIncompleteJob(int incompleteJobId, IncompleteJob updatedIncompleteJob)
     {
-        var currentEmployer = await _employerQueryRepository.GetEmployer(_userService.GetCurrentUserId());
-        var incompleteJobEntity = await _incompleteJobQueryRepository.GetIncompleteJobById(incompleteJobId);
+        var incompleteJobEntity = await _incompleteJobQueryRepository.GetIncompleteJobWithEmployer(incompleteJobId);
 
-        if (incompleteJobEntity.EmployerId != currentEmployer.Id) throw new ForbiddenException();
+        if (incompleteJobEntity.Employer.UserId != _userService.GetCurrentUserId()) throw new ForbiddenException();
+
+        var locationChangeNeeded = false;
+        
+        if (incompleteJobEntity.LocationCountry != updatedIncompleteJob.LocationCountry &&
+            (incompleteJobEntity.Location == updatedIncompleteJob.Location || string.IsNullOrEmpty(updatedIncompleteJob.Location)))
+        {
+            locationChangeNeeded = true;
+        }
 
         var updatedEntity = EntitiesUpdateManager<IncompleteJob>
             .UpdateEntityProperties(incompleteJobEntity, updatedIncompleteJob);
@@ -59,15 +66,18 @@ public class IncompleteJobService : IIncompleteJobService
                 updatedIncompleteJob.Salary);
             updatedEntity.Salary = updatedSalary;
         }
+
+        updatedEntity.Location = locationChangeNeeded ? "" : updatedEntity.Location;
+        
         return updatedEntity;
     }
 
 
     public async Task<IncompleteJob> DeleteIncompleteJob(int incompleteJobId)
     {
-        var currentEmployer = await _employerQueryRepository.GetEmployer(_userService.GetCurrentUserId());
-        var incompleteJobEntity = await _incompleteJobQueryRepository.GetIncompleteJobById(incompleteJobId);
-        if (incompleteJobEntity.EmployerId != currentEmployer.Id) throw new ForbiddenException();
+        var incompleteJobEntity = await _incompleteJobQueryRepository.GetIncompleteJobWithEmployer(incompleteJobId);
+
+        if (incompleteJobEntity.Employer.UserId != _userService.GetCurrentUserId()) throw new ForbiddenException();
 
         return incompleteJobEntity;
     }

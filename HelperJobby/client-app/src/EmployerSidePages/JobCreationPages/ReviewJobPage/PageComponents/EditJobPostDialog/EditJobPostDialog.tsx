@@ -1,32 +1,25 @@
-import React, {Dispatch, FC, SetStateAction, useEffect} from 'react';
-import './DialogWindow.scss';
+import React, {Dispatch, FC, ReactNode, SetStateAction, useEffect} from 'react';
+import './EditJobPostDialog.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
-import '../../Assets/scssSharedStyles/DefaultButtons.scss'
+import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 
-interface DialogWindowProps {
-    firstButtonOnClick?: () => void | Promise<void>;
-    secondButtonOnClick?: () => void | Promise<void>;
-    showDialog: boolean;
-    setShowDialog: Dispatch<SetStateAction<boolean>>;
-    titleText: string;
-    mainText: string;
-    firstButtonText: string;
-    secondButtonText: string;
-    positiveDialog: boolean;
+interface EditJobPostDialogProps {
+    showDialog : boolean;
+    setShowDialog : Dispatch<SetStateAction<boolean>>;
+    requestInProgress : boolean;
+    executeJobEditing : () => void;
+    children : ReactNode
 }
 
-const DialogWindow: FC<DialogWindowProps> = ({
-                                                 firstButtonOnClick,
-                                                 secondButtonOnClick,
-                                                 showDialog,
-                                                 setShowDialog,
-                                                 titleText,
-                                                 mainText,
-                                                 firstButtonText,
-                                                 secondButtonText,
-                                                 positiveDialog
-                                             }) => {
+const EditJobPostDialog: FC<EditJobPostDialogProps> = ({
+    showDialog,
+    setShowDialog,
+    executeJobEditing,
+    requestInProgress,
+    children
+                                                             }) => {
+
 
     useEffect(() => {
         if (showDialog) {
@@ -48,36 +41,42 @@ const DialogWindow: FC<DialogWindowProps> = ({
             <div className={"dialog-window"}>
                 <div className={"dialog-content-container"}>
                     <div className={"dialog-header-box"}>
-                        <span>{titleText}</span>
+                        <span>Edit the job post</span>
                         <button className={"small-interaction-button"} onClick={closeDialog}>
                             <FontAwesomeIcon className={"svg1rem"} icon={faXmark}/>
                         </button>
                     </div>
                     <div className={"dialog-separation-line"}></div>
                     <div className={"dialog-main-content"}>
-                        <span>{mainText}</span>
+                        {children}
                     </div>
                     <div className={"dialog-separation-line"}></div>
                     <div className={"dialog-buttons"}>
                         <button
                             className={"light-button-with-margin"}
-                            onClick={firstButtonOnClick ? firstButtonOnClick : closeDialog}
+                            onClick={closeDialog}
                         >
-                            {firstButtonText}
+                            Close
                         </button>
                         <button
-                            className={`${positiveDialog ? "blue-button" : "red-button"}`}
-                            onClick={secondButtonOnClick ? secondButtonOnClick : closeDialog}
+                            className={"blue-button mib-done-button-width"}
+                            onClick={executeJobEditing}
+                            disabled={requestInProgress}
                         >
-                            {secondButtonText}
+                            {requestInProgress ? <WhiteLoadingSpinner/>
+                                :
+                                <>
+                                    <span>Done</span>
+                                </>
+                            }
                         </button>
                     </div>
                 </div>
                 <div className={"background-overlay"} onClick={closeDialog}>
-
+                        
                 </div>
             </div>
     )
 }
 
-export default DialogWindow;
+export default EditJobPostDialog;
