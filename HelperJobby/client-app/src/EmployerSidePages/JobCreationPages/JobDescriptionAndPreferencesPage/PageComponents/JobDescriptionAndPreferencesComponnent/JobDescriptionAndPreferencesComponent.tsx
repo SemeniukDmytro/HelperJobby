@@ -218,6 +218,7 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
                         selectedValue={isResumeRequired}
                         setSelectedValue={setIsResumeRequired}
                         optionsArr={resumeRequirementOptionsMapData.map(rr => rr.stringValue)}
+                        includeWindowScroll={true}
                     />
                     <JobCreateNavigationButtons
                         requestInProgress={requestInProgress}

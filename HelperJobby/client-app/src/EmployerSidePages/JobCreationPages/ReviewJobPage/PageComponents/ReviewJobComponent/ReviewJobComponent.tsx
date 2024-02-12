@@ -27,6 +27,7 @@ import EditLanguageAndCountryDialog from "../EditLanguageAndCountryDialog/EditLa
 import EditJobLocationDialog from "../EditJobLocationDialog/EditJobLocationDialog";
 import employerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import EditJobTypeDialog from "../EditJobTypeDialog/EditJobTypeDialog";
+import EditJobSalaryDialog from "../EditJobSalaryDialog/EditJobSalaryDialog";
 
 
 interface ReviewJobComponentProps {}
@@ -86,6 +87,8 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                        setShowDialog={setShowEditLocationDialog}/>
                 <EditJobTypeDialog showDialog={showEditJobTypeDialog}
                                    setShowDialog={setShowEditJobTypeDialog}/>
+                <EditJobSalaryDialog showDialog={showEditSalaryDialog}
+                                     setShowDialog={setShowEditSalaryDialog}/>
                 <div className={"employers-centralized-page-layout"}>
                     <PageTitleWithImage imageElement={<SvgReview/>} title={"Review"}/>
                     <div className={'emp-form-fb'}>

@@ -16,12 +16,12 @@ class CustomFetchService {
         return response.json();
     }
 
-    async post<T>(url: string, body: object, headers: { [key: string]: string } = {}): Promise<T> {
+    async post<T>(url: string, body: object | null, headers: { [key: string]: string } = {}): Promise<T> {
         const response = await this.request(url, "POST", body, headers);
         return response.json();
     }
 
-    async put<T>(url: string, body: object, headers: { [key: string]: string } = {}): Promise<T> {
+    async put<T>(url: string, body: object | null, headers: { [key: string]: string } = {}): Promise<T> {
         const response = await this.request(url, "PUT", body, headers);
         return response.json();
     }

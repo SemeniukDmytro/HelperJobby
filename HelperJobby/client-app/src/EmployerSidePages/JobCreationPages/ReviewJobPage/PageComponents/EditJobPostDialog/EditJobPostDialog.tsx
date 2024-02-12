@@ -39,7 +39,7 @@ const EditJobPostDialog: FC<EditJobPostDialogProps> = ({
     return (
         !showDialog ? null :
             <div className={"dialog-window"}>
-                <div className={"dialog-content-container"}>
+                <div className={"dialog-content-container job-post-dialog"}>
                     <div className={"dialog-header-box"}>
                         <span>Edit the job post</span>
                         <button className={"small-interaction-button"} onClick={closeDialog}>

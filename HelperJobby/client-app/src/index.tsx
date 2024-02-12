@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import './Assets/scssSharedStyles/SharedMargins.scss'
+import './Assets/scssSharedStyles/SharedMargins.scss';
+import './Assets/scssSharedStyles/DefaultFlexContentPositions.scss'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom"

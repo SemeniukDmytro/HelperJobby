@@ -9,19 +9,23 @@ interface CustomSelectWindowProps {
     selectedValue: string;
     setSelectedValue: Dispatch<SetStateAction<string>>;
     optionsArr: string[];
+    includeWindowScroll: boolean;
+    windowZIndex?: number;
 }
 
 const CustomSelectWindow: FC<CustomSelectWindowProps> = ({
                                                              fieldLabel,
                                                              selectedValue,
                                                              setSelectedValue,
-                                                             optionsArr
+                                                             optionsArr,
+                                                             includeWindowScroll,
+                                                             windowZIndex
                                                          }) => {
 
     const [showOptions, setShowOptions] = useState(false);
     const selectWindowRef = useRef<HTMLDivElement>(null);
     const selectedValueButtonRef = useRef<HTMLButtonElement>(null);
-    const getSelectWindowPosition = useSelectWindowPosition(selectedValueButtonRef, selectWindowRef, setShowOptions, true);
+    const getSelectWindowPosition = useSelectWindowPosition(selectedValueButtonRef, selectWindowRef, setShowOptions, includeWindowScroll);
 
     useEffect(() => {
         getSelectWindowPosition();
@@ -34,7 +38,7 @@ const CustomSelectWindow: FC<CustomSelectWindowProps> = ({
 
     function selectJobLocationTypeHandler(option: string) {
         setSelectedValue(option);
-    }   
+    }
 
     return (
         <>
@@ -42,9 +46,10 @@ const CustomSelectWindow: FC<CustomSelectWindowProps> = ({
                 className={"select-window-container"}
                 ref={selectWindowRef}
                 style={{
-                    width : selectedValueButtonRef.current?.getBoundingClientRect().width
+                    width: selectedValueButtonRef.current?.getBoundingClientRect().width,
+                    zIndex : windowZIndex
                 }}
-                
+
             >
                 {optionsArr.map((option, index) => (
                     <div

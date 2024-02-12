@@ -28,7 +28,10 @@ const EditJobTypeDialog: FC<EditJobTypeDialogProps> = ({
 
     useEffect(() => {
         if (showDialog){
-            setSelectedJobTypes(incompleteJob?.jobType || [])
+            setSelectedJobTypes(incompleteJob?.jobType || []);
+            if (incompleteJob?.jobType && incompleteJob.jobType.length > 0){
+                setIsInvalidForm(false);
+            }
         }
     }, [showDialog]);
     async function editJobType() {

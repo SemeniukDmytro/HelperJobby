@@ -269,7 +269,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                                 setLocationSelectedFromSuggests={setLocationSelectedFromSuggests}
                                 locationError={locationError}
                                 setLocationError={setLocationError}
-                                includePageHeight={false}
+                                includeWindowScroll={false}
                             />
 
                             <button

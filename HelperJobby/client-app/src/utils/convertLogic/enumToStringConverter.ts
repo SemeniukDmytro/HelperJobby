@@ -5,7 +5,8 @@ import JobTypes from "../../enums/modelDataEnums/JobTypes";
 import Schedules from "../../enums/modelDataEnums/Schedules";
 import EmployeeBenefits from "../../enums/modelDataEnums/EmployeeBenefits";
 import {SalaryRates} from "../../enums/modelDataEnums/SalaryRates";
-import {salaryRatesMapData} from "../../AppConstData/PayRelatedData";
+import {salaryRatesMapData, showPayByOptionsMapData} from "../../AppConstData/PayRelatedData";
+import {ShowPayByOptions} from "../../enums/modelDataEnums/ShowPayByOptions";
 
 
 export const jobTypesEnumToStringMap = (jobType: JobTypes): string => {
@@ -55,4 +56,11 @@ export const salaryRatesEnumToStringMap = (salaryRateEnumValue: SalaryRates): st
     if (salaryRatesStringMap) {
         return salaryRatesStringMap.stringValue;
     } else return SalaryRates[salaryRateEnumValue];
+};
+
+export const showPayByOptionsEnumToStringMap = (salaryRateEnumValue: ShowPayByOptions): string => {
+    const showPayByOptionStringMap = showPayByOptionsMapData.find((spo) => spo.enumValue === salaryRateEnumValue);
+    if (showPayByOptionStringMap) {
+        return showPayByOptionStringMap.stringValue;
+    } else return ShowPayByOptions[salaryRateEnumValue];
 };

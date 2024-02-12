@@ -1,9 +1,8 @@
 import React, {Dispatch, FC, SetStateAction, useRef, useState} from 'react';
 import './EditLanguageAndCountryDialog.scss';
-import SelectLanguageDialog from "../../../AddJobBasicsPage/PageComponents/SelectLanguageDialog/SelectLanguageDialog";
 import useJobCreation from "../../../../../hooks/useJobCreation";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faTriangleExclamation, faXmark} from "@fortawesome/free-solid-svg-icons";
 import CustomSelectField from "../../../../../Components/CustomSelectField/CustomSelectField";
 import {mostSpokenLanguages} from "../../../../../AppConstData/Languages";
 import CountrySelector
@@ -69,7 +68,7 @@ const EditLanguageAndCountryDialog: FC<EditLanguageAndCountryDialogProps> = ({
 
     return !showDialog ? null :
         <div className={"dialog-window"}>
-            <div className={"dialog-content-container"}>
+            <div className={"dialog-content-container job-post-dialog"}>
                 <div className={"language-dialog-header"}>
                     <span>Edit language</span>
                     <button className={"small-interaction-button"} onClick={closeDialog}>
@@ -93,6 +92,17 @@ const EditLanguageAndCountryDialog: FC<EditLanguageAndCountryDialogProps> = ({
                         setCountry={setCountry}
                         selectRef={countrySelectorRef}
                     />
+                    <div className={"info-notify-container orange-notify-container"}>
+                        <div className={"horizontal-title mb05rem"}>
+                            <div className={"warning-pop-up-icon mr1rem"}>
+                                <FontAwesomeIcon icon={faTriangleExclamation}/>
+                            </div>
+                            <div className={"dark-small-text centralized-content"}>
+                                If you change the job's language or country now, you may need to enter additional
+                                information before posting your job.
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className={"dialog-separation-line"}></div>
                 <div className={"dialog-buttons"}>
@@ -109,16 +119,16 @@ const EditLanguageAndCountryDialog: FC<EditLanguageAndCountryDialogProps> = ({
                         {requestInProgress ? <WhiteLoadingSpinner/>
                             :
                             <>
-                                <span>Done</span>
+                            <span>Done</span>
                             </>
                         }
                     </button>
                 </div>
             </div>
             <div className={"background-overlay"} onClick={closeDialog}>
-    
+
             </div>
         </div>
-    };
+};
 
 export default EditLanguageAndCountryDialog;

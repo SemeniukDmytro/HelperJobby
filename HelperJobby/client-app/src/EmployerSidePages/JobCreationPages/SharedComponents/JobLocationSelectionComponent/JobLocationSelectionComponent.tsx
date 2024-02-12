@@ -28,7 +28,7 @@ interface JobLocationSelectionComponentProps {
     setLocationSelectedFromSuggests : Dispatch<SetStateAction<boolean>>;
     locationError: string;
     setLocationError : Dispatch<SetStateAction<string>>;
-    includePageHeight : boolean;
+    includeWindowScroll : boolean;
 }
 
 const JobLocationSelectionComponent: FC<JobLocationSelectionComponentProps> = ({
@@ -51,7 +51,7 @@ const JobLocationSelectionComponent: FC<JobLocationSelectionComponentProps> = ({
     setLocationError,
     executeFormValidation,
     setExecuteFormValidation,
-    includePageHeight
+    includeWindowScroll
     
                                                                                }) => {
     const [jobLocationFieldLabel, setJobLocationFieldLabel] = 
@@ -88,7 +88,7 @@ const JobLocationSelectionComponent: FC<JobLocationSelectionComponentProps> = ({
             <JobLocationTypeSelector
                 jobLocationTypeEnumValue={jobLocationTypeEnumValue}
                 setJobLocationTypeEnumValue={setJobLocationTypeEnumValue}
-                includeWindowHeight={includePageHeight}
+                includeWindowScroll={includeWindowScroll}
             />
             {jobLocationTypeEnumValue === JobLocationTypes.Remote ?
                 <div className={"info-notify-container blue-notify-container mb15rem"}>

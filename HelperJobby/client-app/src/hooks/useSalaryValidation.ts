@@ -22,6 +22,8 @@ export function useSalaryValidation(
         if (!minSalaryAmountString && !maxSalaryAmountString){
             setMinSalaryInputError("");
             setIsInvalidMinSalary(false);
+            setMaxSalaryInputError("");
+            setIsInvalidMaxSalary(false);
             setShowMissingSalaryWarning(true);
             return;
         }
@@ -37,9 +39,11 @@ export function useSalaryValidation(
 
     function validateMaxSalaryInput(minSalaryAmountValue: string, maxSalaryAmountValue: string) {
         if (!minSalaryAmountValue && !maxSalaryAmountValue){
+            setMinSalaryInputError("");
+            setIsInvalidMinSalary(false);
             setMaxSalaryInputError("");
-            setShowMissingSalaryWarning(true);
             setIsInvalidMaxSalary(false);
+            setShowMissingSalaryWarning(true);
             return;
         }
         else {

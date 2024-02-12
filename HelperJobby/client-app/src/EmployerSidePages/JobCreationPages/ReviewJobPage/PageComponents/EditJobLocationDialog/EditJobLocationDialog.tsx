@@ -12,6 +12,8 @@ import {AutocompleteWindowTypes} from "../../../../../enums/utilityEnums/Autocom
 import EditJobPostDialog from "../EditJobPostDialog/EditJobPostDialog";
 import JobLocationSelectionComponent
     from "../../../SharedComponents/JobLocationSelectionComponent/JobLocationSelectionComponent";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlus, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 
 interface EditJobLocationDialogProps {
     showDialog: boolean;
@@ -130,7 +132,7 @@ const EditJobLocationDialog: FC<EditJobLocationDialogProps> = ({
                     setLocationSelectedFromSuggests={setLocationSelectedFromSuggests}
                     locationError={locationError}
                     setLocationError={setLocationError}
-                    includePageHeight={false}
+                    includeWindowScroll={false}
                 />
             </EditJobPostDialog></>
     )

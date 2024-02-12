@@ -2,6 +2,7 @@ import CustomFetchService from "./customFetchService";
 import {IncompleteJobDTO} from "../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
 import {CreateIncompleteJobDTO} from "../DTOs/jobRelatetedDTOs/CreateIncompleteJobDTO";
 import {UpdatedIncompleteJobDTO} from "../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
+import {CreateUpdateSalaryDTO} from "../DTOs/jobRelatetedDTOs/CreateUpdateSalaryDTO";
 
 export class IncompleteJobService {
     private readonly baseURI: string = "api/IncompleteJob";
@@ -34,6 +35,12 @@ export class IncompleteJobService {
         );
     }
 
+    public async updateIncompleteJobSalary(currentJobId: number, updatedSalaryDTO: CreateUpdateSalaryDTO | null): Promise<IncompleteJobDTO> {
+        return await this.customFetchService.put<IncompleteJobDTO>(
+            `${this.baseURI}/${currentJobId}/salary-update`,
+            updatedSalaryDTO
+        );
+    }
     public async deleteJobCreation(incompleteJobId: number): Promise<void> {
         await this.customFetchService.delete<void>(`${this.baseURI}/${incompleteJobId}`);
     }
