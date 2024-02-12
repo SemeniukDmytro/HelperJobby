@@ -41,7 +41,7 @@ public class IncompleteJobService : IIncompleteJobService
 
         var locationChangeNeeded = false;
         
-        if (incompleteJobEntity.LocationCountry != updatedIncompleteJob.LocationCountry &&
+        if (!string.IsNullOrEmpty(updatedIncompleteJob.LocationCountry) && incompleteJobEntity.LocationCountry != updatedIncompleteJob.LocationCountry &&
             (incompleteJobEntity.Location == updatedIncompleteJob.Location || string.IsNullOrEmpty(updatedIncompleteJob.Location)))
         {
             locationChangeNeeded = true;

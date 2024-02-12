@@ -24,7 +24,10 @@ import JobCreateNavigationButtons
 import EditJobTitleDialog from "../EditJobTitleDialog/EditJobTitleDialog";
 import EditNumberOfOpeningsDialog from "../EditNumberOfOpeningsDialog/EditNumberOfOpeningsDialog";
 import EditLanguageAndCountryDialog from "../EditLanguageAndCountryDialog/EditLanguageAndCountryDialog";
-import EditJobLocationDialog from "../../../../../Components/EditJobLocationDialog/EditJobLocationDialog";
+import EditJobLocationDialog from "../EditJobLocationDialog/EditJobLocationDialog";
+import employerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
+import EditJobTypeDialog from "../EditJobTypeDialog/EditJobTypeDialog";
+
 
 interface ReviewJobComponentProps {}
 
@@ -40,6 +43,13 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
     const [showEditNumberOfOpeningsDialog, setShowEditNumberOfOpeningsDialog] = useState(false);
     const [showEditLanguageAndCountryDialog, setShowEditLanguageAndCountryDialog] = useState(false);    
     const [showEditLocationDialog, setShowEditLocationDialog] = useState(false);
+    const [showEditJobTypeDialog, setShowEditJobTypeDialog] = useState(false);
+    const [showEditScheduleDialog, setShowEditScheduleDialog] = useState(false);
+    const [showEditSalaryDialog, setShowEditSalaryDialog] = useState(false);
+    const [showEditBenefitsDialog, setShowEditBenefitsDialog] = useState(false);
+    const [showEditJobDescriptionDialog, setShowEditJobDescriptionDialog] = useState(false);
+    const [showEditApplicationMethodDialog, setShowEditApplicationMethodDialog] = useState(false);
+    const [showEditContactInfoDialog, setShowEditContactInfoDialog] = useState(false);
     
     useEffect(() => {
         fetchInitialPageData()
@@ -55,42 +65,8 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
         await fetchJobAndSetJobCreation();
     }
 
-    
-
-    function editSelectedJobTypes() {
-        
-    }
-
-    function editSelectedSchedules() {
-        
-    }
-
-    function editSalary() {
-        
-    }
-
-    function editSelectedBenefits() {
-        
-    }
-
-    function editJobDescription() {
-        
-    }
-
-    function editApplicationMethod() {
-        
-    }
-
-    function editContactEmail() {
-        
-    }
-
-    function editContactPhone() {
-        
-    }
-
     function goToPreviousPage() {
-        
+        navigate(`${employerPagesPaths.DESCRIPTION_AND_APPLICATION_DETAILS}/${jobId}`);
     }
 
     function confirmJobCreation() {
@@ -108,6 +84,8 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                               setShowDialog={setShowEditLanguageAndCountryDialog}/>
                 <EditJobLocationDialog showDialog={showEditLocationDialog}
                                        setShowDialog={setShowEditLocationDialog}/>
+                <EditJobTypeDialog showDialog={showEditJobTypeDialog}
+                                   setShowDialog={setShowEditJobTypeDialog}/>
                 <div className={"employers-centralized-page-layout"}>
                     <PageTitleWithImage imageElement={<SvgReview/>} title={"Review"}/>
                     <div className={'emp-form-fb'}>
@@ -158,7 +136,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                 />
                                 <MultipleRowsReviewBlock
                                     fieldLabel={"Job type"}
-                                    onEditClick={editSelectedJobTypes}
+                                    onEditClick={() => setShowEditJobTypeDialog(true)}
                                 >
                                     {(incompleteJob?.jobType && incompleteJob.jobType.length != 0) ?
                                         (incompleteJob.jobType.map((jt, index) => (
@@ -171,7 +149,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                 </MultipleRowsReviewBlock>
                                 <MultipleRowsReviewBlock
                                     fieldLabel={"Schedule"}
-                                    onEditClick={editSelectedSchedules}
+                                    onEditClick={() => setShowEditScheduleDialog(true)}
                                 >
                                     {(incompleteJob?.schedule && incompleteJob.schedule.length != 0) ?
                                         (incompleteJob.schedule.map((s, index) => (
@@ -185,11 +163,11 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                 <JobReviewJobInfoBlock
                                     jobInfoLabel={"Pay"}
                                     fieldValue={formatJobSalaryDisplay(incompleteJob!)}
-                                    onEditClick={editSalary}
+                                    onEditClick={() => setShowEditSalaryDialog(true)}
                                 />
                                 <MultipleRowsReviewBlock
                                     fieldLabel={"Benefits"}
-                                    onEditClick={editSelectedBenefits}
+                                    onEditClick={()=> setShowEditBenefitsDialog(true)}
                                 >
                                     {(incompleteJob?.benefits && incompleteJob.benefits.length != 0) ?
                                         (incompleteJob.benefits.map((b, index) => (
@@ -203,7 +181,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                 <JobReviewJobInfoBlock
                                     jobInfoLabel={"Job description"}
                                     fieldValue={incompleteJob!.description || ""}
-                                    onEditClick={editJobDescription}
+                                    onEditClick={() => setShowEditJobDescriptionDialog(true)}
                                 />
                             </div>
 
@@ -212,22 +190,22 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                             <JobReviewJobInfoBlock
                                 jobInfoLabel={"Application method"}
                                 fieldValue={`Email ${incompleteJob?.contactPhoneNumber ? "and phone number" : ""}`}
-                                onEditClick={editApplicationMethod}
+                                onEditClick={() => setShowEditApplicationMethodDialog(true)}
                             />
                             <JobReviewJobInfoBlock
                                 jobInfoLabel={"Require resume"}
                                 fieldValue={resumeRequirementOptionsMapData.find(r => r.enumValue == incompleteJob!.resumeRequired)?.stringValue || resumeRequirementOptionsMapData[0].stringValue}
-                                onEditClick={editApplicationMethod}
+                                onEditClick={() => setShowEditApplicationMethodDialog(true)}
                             />
                             <JobReviewJobInfoBlock
                                 jobInfoLabel={"Candidates contact you (e-mail)"}
                                 fieldValue={incompleteJob!.contactEmail || ""}
-                                onEditClick={editContactEmail}
+                                onEditClick={() => setShowEditContactInfoDialog(true)}
                             />
                             <JobReviewJobInfoBlock
                                 jobInfoLabel={"Candidates contact you (phone number)"}
                                 fieldValue={incompleteJob!.contactPhoneNumber || ""}
-                                onEditClick={editContactPhone}
+                                onEditClick={() => setShowEditContactInfoDialog(true)}
                             />
                             <JobCreateNavigationButtons
                                 backButtonOnClick={goToPreviousPage}

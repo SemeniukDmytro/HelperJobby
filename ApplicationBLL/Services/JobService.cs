@@ -43,7 +43,7 @@ public class JobService : IJobService
 
         var locationChangeNeeded = false;
         
-        if (jobEntity.LocationCountry != updatedJob.LocationCountry &&
+        if (!string.IsNullOrEmpty(updatedJob.LocationCountry) && jobEntity.LocationCountry != updatedJob.LocationCountry &&
             (jobEntity.Location == updatedJob.Location || string.IsNullOrEmpty(updatedJob.Location)))
         {
             locationChangeNeeded = true;

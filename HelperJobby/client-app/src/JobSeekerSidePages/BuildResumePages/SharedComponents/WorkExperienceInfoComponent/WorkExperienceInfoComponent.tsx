@@ -289,7 +289,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                     <div className={"field-label"}>
                         Time period
                     </div>
-                    <div className={"checkbox-container"}>
+                <div className={"checkbox-container mt05rem"}>
                         <input className={"checkbox"} type={"checkbox"} onChange={toggleCurrentlyWorkHere}/>
                         <span>I currently work here</span>
                     </div>

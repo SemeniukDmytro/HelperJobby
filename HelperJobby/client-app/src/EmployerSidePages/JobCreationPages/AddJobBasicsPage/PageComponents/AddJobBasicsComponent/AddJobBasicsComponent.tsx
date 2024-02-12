@@ -24,10 +24,10 @@ import {
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {JobLocationTypes} from "../../../../../enums/modelDataEnums/JobLocationTypes";
-import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {useJobLocationType} from "../../../../../hooks/useJobLocationType";
 import JobLocationSelectionComponent
     from "../../../SharedComponents/JobLocationSelectionComponent/JobLocationSelectionComponent";
+import employerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 
 
 interface AddJobBasicsComponentProps {
@@ -145,7 +145,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             }
             const jobCreationResponse = await incompleteJobService.startJobCreation(createdIncompleteJob);
             setIncompleteJob(jobCreationResponse);
-            navigate(`${EmployerPagesPaths.JOB_DETAILS}/${jobId}`)
+            navigate(`${employerPagesPaths.JOB_DETAILS}/${jobId}`)
         } catch (err) {
             logErrorInfo(err)
         } finally {
@@ -166,7 +166,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             }
             const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJob);
             setIncompleteJob(retrievedIncompleteJob);
-            navigate(`${EmployerPagesPaths.JOB_DETAILS}/${jobId}`)
+            navigate(`${employerPagesPaths.JOB_DETAILS}/${jobId}`)
         } catch (error) {
             logErrorInfo(error)
         } finally {

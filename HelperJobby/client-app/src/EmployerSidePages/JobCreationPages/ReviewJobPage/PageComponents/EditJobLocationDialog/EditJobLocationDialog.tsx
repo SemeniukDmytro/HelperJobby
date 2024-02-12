@@ -1,18 +1,17 @@
-import React, {Dispatch, FC, SetStateAction, useRef, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './EditJobLocationDialog.scss';
-import EditJobPostDialog
-    from "../../EmployerSidePages/JobCreationPages/ReviewJobPage/PageComponents/EditJobPostDialog/EditJobPostDialog";
-import JobLocationSelectionComponent
-    from "../../EmployerSidePages/JobCreationPages/SharedComponents/JobLocationSelectionComponent/JobLocationSelectionComponent";
-import useJobCreation from "../../hooks/useJobCreation";
-import {JobLocationTypes} from "../../enums/modelDataEnums/JobLocationTypes";
-import {useJobLocationType} from "../../hooks/useJobLocationType";
+import useJobCreation from "../../../../../hooks/useJobCreation";
+import {JobLocationTypes} from "../../../../../enums/modelDataEnums/JobLocationTypes";
+import {useJobLocationType} from "../../../../../hooks/useJobLocationType";
+import {IncompleteJobService} from "../../../../../services/incompleteJobService";
+import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
+import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import AutocompleteResultsWindow
-    from "../../JobSeekerSidePages/EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
-import {AutocompleteWindowTypes} from "../../enums/utilityEnums/AutocompleteWindowTypes";
-import {logErrorInfo} from "../../utils/logErrorInfo";
-import {UpdatedIncompleteJobDTO} from "../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
-import {IncompleteJobService} from "../../services/incompleteJobService";
+    from "../../../../../JobSeekerSidePages/EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
+import {AutocompleteWindowTypes} from "../../../../../enums/utilityEnums/AutocompleteWindowTypes";
+import EditJobPostDialog from "../EditJobPostDialog/EditJobPostDialog";
+import JobLocationSelectionComponent
+    from "../../../SharedComponents/JobLocationSelectionComponent/JobLocationSelectionComponent";
 
 interface EditJobLocationDialogProps {
     showDialog: boolean;
@@ -41,6 +40,13 @@ const EditJobLocationDialog: FC<EditJobLocationDialogProps> = ({
         onRoadJobLocation, setOnRoadJobLocation);
     const [requestInProgress, setRequestInProgress] = useState(false);
     const incompleteJobService = new IncompleteJobService();
+
+    useEffect(() => {
+        if (incompleteJob?.location){
+            setLocationSelectedFromSuggests(true);
+            getCurrentJobLocationInputProp(jobLocationType).setInputValue(incompleteJob?.location || "");
+        }
+    }, []);
 
     async function editLocation() {
         if (!getCurrentJobLocationInputProp(jobLocationType).inputValue) {

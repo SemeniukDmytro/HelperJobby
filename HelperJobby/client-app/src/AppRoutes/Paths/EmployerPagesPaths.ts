@@ -2,7 +2,7 @@ const basePath = '/employers';
 
 const createPath = (path : string) => `${basePath}${path}`;
 
-const AppPaths = {
+ const employerPagesPaths = {
     JOB_POSTING: createPath('/posting'),
     EMPLOYER_SETUP: createPath('/setup-employer'),
     ADD_JOB_BASICS: createPath('/posting/getting-started'),
@@ -12,4 +12,4 @@ const AppPaths = {
     REVIEW_JOB_PAGE : createPath('/posting/review-job')
 };
 
-export default AppPaths;
+export default employerPagesPaths;

@@ -23,6 +23,7 @@ import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
+import {addJobType} from "../../../../../utils/manageJobFeatureSelect";
 
 interface JobDetailsComponentProps {
 }
@@ -56,18 +57,6 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
     
     async function fetchInitialPageData(){
         await fetchJobAndSetJobCreation();
-    }
-
-    function addJobType(jobTypeString: string) {
-        const jobType = jobTypeStringToEnumMap(jobTypeString);
-        if (jobType && !selectedJobType.includes(jobType)) {
-            setSelectedJobType(prevSelectedJobType => [...prevSelectedJobType, jobType]);
-            setIsInvalidForm(false);
-        } else if (jobType) {
-            setSelectedJobType(prevSelectedJobType =>
-                prevSelectedJobType.filter(type => type !== jobType),
-            );
-        }
     }
 
     function addSchedule(scheduleString: string) {
@@ -138,7 +127,7 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
                                 key={index}
                                 featureName={jobType}
                                 isSelected={selectedJobType?.includes(jobTypeStringToEnumMap(jobType)!)}
-                                onClick={() => addJobType(jobType)}
+                                onClick={() => addJobType(jobType, selectedJobType, setSelectedJobType, setIsInvalidForm)}
                             />
                         ))}
                     </ul>
