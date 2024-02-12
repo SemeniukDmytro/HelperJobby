@@ -4,7 +4,6 @@ import "./JobDescriptionHeader.scss";
 import {faBookmark} from "@fortawesome/free-solid-svg-icons";
 import {JobSeekerService} from "../../../../services/jobSeekerService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {useAuth} from "../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";

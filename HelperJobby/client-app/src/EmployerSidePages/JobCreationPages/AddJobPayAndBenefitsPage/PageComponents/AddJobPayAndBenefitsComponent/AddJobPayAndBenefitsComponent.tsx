@@ -35,6 +35,8 @@ import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {checkMinimalSalary} from "../../../../../utils/validationLogic/checkMinimalSalary";
 import JobSalaryBlock from "../../../SharedComponents/JobSalaryBlock/JobSalaryBlock";
 import {useShowPayByOption} from "../../../../../hooks/comnonentsSharedHooks/useShowPayByOption";
+import {handleJobFeaturesListAppearance} from "../../../../../utils/handleJobFeaturesListHeight";
+import {addBenefit} from "../../../../../utils/manageJobFeatureSelect";
 
 interface AddJobPayAndBenefitsComponentProps {
 }
@@ -116,29 +118,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     async function fetchInitialPageData(){
         await fetchJobAndSetJobCreation();
     }
-
-    function addBenefit(benefitString: string) {
-        const schedule = benefitStringToEnumMap(benefitString);
-        if (schedule && !selectedBenefits.includes(schedule)) {
-            setSelectedBenefits(prevSelectedBenefits => [...prevSelectedBenefits, schedule]);
-        } else if (schedule) {
-            setSelectedBenefits(prevSelectedBenefits =>
-                prevSelectedBenefits.filter(type => type !== schedule),
-            );
-        }
-    }
-
-    function handleBenefitsListAppearance() {
-        if (showFullBenefitsList){
-            setShowFullBenefitsList(false);
-            setBenefitsBoxHeight("78px");
-        }
-        else {
-            setShowFullBenefitsList(true);
-            const scheduleListRefBoundingRect = benefitsListRef.current?.getBoundingClientRect();
-            setBenefitsBoxHeight(`${scheduleListRefBoundingRect?.height}px`)
-        }
-    }
+    
 
     function goToPreviousPage() {
         navigate(`${EmployerPagesPaths.JOB_DETAILS}/${jobId}`)
@@ -239,13 +219,14 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                                     key={index}
                                     featureName={benefits}
                                     isSelected={selectedBenefits.includes(benefitStringToEnumMap(benefits)!)}
-                                    onClick={() => addBenefit(benefits)}
+                                    onClick={() => addBenefit(benefits, selectedBenefits, setSelectedBenefits)}
                                 />
                             ))}
                         </ul>
                     </div>
                     <div className={"mt05rem"}>
-                   <span className={"bold-navigation-link"} onClick={handleBenefitsListAppearance}>
+                   <span className={"bold-navigation-link"} onClick={() => handleJobFeaturesListAppearance(showFullBenefitsList,
+                       setShowFullBenefitsList, setBenefitsBoxHeight, benefitsListRef)}>
                         <span>{`${showFullBenefitsList ? "Show less" : "Show more"}`}</span>
                        {showFullBenefitsList ?
                            <FontAwesomeIcon className={'svg1rem ml1rem'} icon={faChevronUp}/>

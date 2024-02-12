@@ -30,7 +30,8 @@ const JobReviewJobInfoBlock: FC<JobReviewJobInfoBlockProps> = (
         return false
     }
 
-    function manageFieldValueHeight() {
+    function manageFieldValueHeight(event: React.MouseEvent) {
+        event.stopPropagation();
         if (showMoreOptions){
             setShowMoreOptions(false);
             setFieldValueContainerHeight("3rem");

@@ -88,7 +88,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             setInvalidNumberOfOpenings(false);
             setLoading(false);
         }
-    }, [incompleteJob]);
+    }, [incompleteJob, []]);
 
     async function fetchPageInitialData() {
         await fetchJobAndSetJobCreation();

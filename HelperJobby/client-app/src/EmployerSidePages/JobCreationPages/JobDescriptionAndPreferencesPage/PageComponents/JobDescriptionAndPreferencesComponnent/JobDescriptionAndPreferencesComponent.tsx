@@ -21,6 +21,7 @@ import {IsValidEmail, validatePhoneNumber} from "../../../../../utils/validation
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
+import {isValidDescription} from "../../../../../utils/validationLogic/isValidDescription";
 
 interface JobDescriptionAndPreferencesComponentProps {}
 
@@ -78,21 +79,8 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
     }
     
     function changeDescriptionValue(event: React.FormEvent<HTMLDivElement>) {
-        isValidDescription(event.currentTarget.innerHTML);
+        isValidDescription(event.currentTarget.innerHTML, setDescriptionError, setIsInvalidDescription);
         setJobDescription(event.currentTarget.innerHTML);
-    }
-    
-    function isValidDescription(descriptionValue : string) : boolean{
-        if (descriptionValue.length < 30){
-            setDescriptionError("Add a job description with a minimum of 30 characters.");
-            setIsInvalidDescription(true);
-            return false;
-        }
-        else {
-            setDescriptionError("");
-            setIsInvalidDescription(false);
-            return true;
-        }
     }
 
     function addAbilityToProvidePhone() {
@@ -101,7 +89,7 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
     async function handleDescriptionAndPreferencesSubmit(e : FormEvent) {
         e.preventDefault();
         setExecuteFormValidation(true);
-        if (!isValidDescription(jobDescription)){
+        if (!isValidDescription(jobDescription, setDescriptionError, setIsInvalidDescription)){
             descriptionInputRef.current?.focus();
             return;
             
@@ -165,7 +153,7 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
                                 ref={descriptionInputRef}
                                 className={`description-input ${isInvalidDescription ? "red-field-focus" : ""}`}
                                 onInput={changeDescriptionValue}
-                                onBlur={() => isValidDescription(jobDescription)}
+                                onBlur={() => isValidDescription(jobDescription, setDescriptionError, setIsInvalidDescription)}
                             >
                             </div>
                             <div className={`description-focused ${isInvalidDescription ? "red-field-focus" : ""}`}></div>

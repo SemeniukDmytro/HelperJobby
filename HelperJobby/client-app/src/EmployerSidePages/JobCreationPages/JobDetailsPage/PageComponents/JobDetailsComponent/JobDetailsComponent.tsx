@@ -23,7 +23,8 @@ import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
-import {addJobType} from "../../../../../utils/manageJobFeatureSelect";
+import {addJobType, addSchedule} from "../../../../../utils/manageJobFeatureSelect";
+import {handleJobFeaturesListAppearance} from "../../../../../utils/handleJobFeaturesListHeight";
 
 interface JobDetailsComponentProps {
 }
@@ -57,29 +58,6 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
     
     async function fetchInitialPageData(){
         await fetchJobAndSetJobCreation();
-    }
-
-    function addSchedule(scheduleString: string) {
-        const schedule = scheduleStringToEnumMap(scheduleString);
-        if (schedule && !selectedSchedule.includes(schedule)) {
-            setSelectedSchedule(prevSelectedSchedule => [...prevSelectedSchedule, schedule]);
-        } else if (schedule) {
-            setSelectedSchedule(prevSelectedSchedule =>
-                prevSelectedSchedule.filter(type => type !== schedule),
-            );
-        }
-    }
-
-    function handleScheduleListAppearance() {
-        if (showFullScheduleList){
-            setShowFullScheduleList(false);
-            setScheduleBoxHeight("78px");
-        }
-        else {
-            setShowFullScheduleList(true);
-            const scheduleListRefBoundingRect = scheduleListRef.current?.getBoundingClientRect();
-            setScheduleBoxHeight(`${scheduleListRefBoundingRect?.height}px`)
-        }
     }
 
     function goToPreviousPage() {
@@ -155,13 +133,14 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
                                     key={index}
                                     featureName={schedule}
                                     isSelected={selectedSchedule.includes(scheduleStringToEnumMap(schedule)!)}
-                                    onClick={() => addSchedule(schedule)}
+                                    onClick={() => addSchedule(schedule, selectedSchedule, setSelectedSchedule)}
                                 />
                             ))}
                         </ul>
                     </div>
                     <div className={"mt05rem"}>
-                   <span className={"bold-navigation-link"} onClick={handleScheduleListAppearance}>
+                   <span className={"bold-navigation-link"} onClick={() => handleJobFeaturesListAppearance(showFullScheduleList,
+                       setShowFullScheduleList, setScheduleBoxHeight, scheduleListRef)}>
                         <span>{`${showFullScheduleList ? "Show less" : "Show more"}`}</span>
                        {showFullScheduleList ?
                            <FontAwesomeIcon className={'svg1rem ml1rem'} icon={faChevronUp}/>
