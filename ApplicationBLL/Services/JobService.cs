@@ -35,11 +35,11 @@ public class JobService : IJobService
 
     public async Task<Job> UpdateJob(int jobId, Job updatedJob)
     {
-        var currentUserId = _userService.GetCurrentUserId();
+        CheckIfValidSalaryProvided(updatedJob.Salary);
+        
         var jobEntity = await _jobQueryRepository.GetJobByIdWithEmployer(jobId);
+        CheckIfUserHasAccessToPerformAnAction(jobEntity);
 
-        if (jobEntity.Employer.UserId != currentUserId)
-            throw new ForbiddenException("You can not update this job information");
 
         var locationChangeNeeded = false;
         
@@ -50,11 +50,6 @@ public class JobService : IJobService
         }
 
         var updatedEntity = EntitiesUpdateManager<IncompleteJob>.UpdateEntityProperties(jobEntity, updatedJob);
-        if (updatedJob.Salary != null && !updatedJob.Salary.MeetsMinSalaryRequirement)
-        {
-            if (!SalaryRateHelper.CheckMinimalSalary(updatedJob.Salary.MinimalAmount, updatedJob.Salary.SalaryRate))
-                throw new InvalidJobException("This wage appears to be below the minimum wage for this location");
-        }
         
         if (jobEntity.Salary == null)
         {
@@ -72,14 +67,35 @@ public class JobService : IJobService
         return updatedEntity;
     }
 
+    public async Task<Job> UpdateJobSalary(int jobId, JobSalary updatedSalary)
+    {
+        var jobEntity = await _jobQueryRepository.GetJobByIdWithEmployer(jobId);
+        CheckIfUserHasAccessToPerformAnAction(jobEntity);
+        CheckIfValidSalaryProvided(updatedSalary);
+        jobEntity.Salary = updatedSalary;
+        return jobEntity;
+    }
+
     public async Task<Job> DeleteJob(int jobId)
     {
-        var currentUserId = _userService.GetCurrentUserId();
         var jobEntity = await _jobQueryRepository.GetJobByIdWithEmployer(jobId);
-
-        if (jobEntity.Employer.UserId != currentUserId)
-            throw new ForbiddenException("You can not delete this job");
+        CheckIfUserHasAccessToPerformAnAction(jobEntity);
 
         return jobEntity;
+    }
+    
+    private void CheckIfValidSalaryProvided(JobSalary? salary)
+    {
+        Console.WriteLine(salary);
+        if (salary != null && !salary.MeetsMinSalaryRequirement)
+        {
+            if (!SalaryRateHelper.CheckMinimalSalary(salary.MinimalAmount, salary.SalaryRate))
+                throw new InvalidJobException("This wage appears to be below the minimum wage for this location");
+        }
+    }
+
+    private void CheckIfUserHasAccessToPerformAnAction(Job job)
+    {
+        if (job.Employer.UserId != _userService.GetCurrentUserId()) throw new ForbiddenException();
     }
 }

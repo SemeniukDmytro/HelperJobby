@@ -80,6 +80,18 @@ public class JobController : ExtendedBaseController
 
         return _mapper.Map<JobDTO>(job);
     }
+    
+    [HttpPut("{jobId}/salary-update")]
+    public async Task<IncompleteJobDTO> PutIncompleteJobSalary(int jobId,
+        [FromBody] CreateUpdateSalaryDTO? updateSalaryDTO = null)
+    {
+        var job = await _jobService.UpdateJobSalary(jobId,
+            _mapper.Map<JobSalary>(updateSalaryDTO));
+        var jobDTO =
+            _mapper.Map<IncompleteJobDTO>(
+                await _jobCommandRepository.UpdateJob(job));
+        return jobDTO;
+    }
 
     [HttpDelete("{jobId}")]
     public async Task DeleteJob(int jobId)
