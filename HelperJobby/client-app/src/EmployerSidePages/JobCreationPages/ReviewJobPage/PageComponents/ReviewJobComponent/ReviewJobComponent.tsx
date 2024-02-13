@@ -31,6 +31,10 @@ import EditJobSalaryDialog from "../EditJobSalaryDialog/EditJobSalaryDialog";
 import EditScheduleDialog from "../EditScheduleDialog/EditScheduleDialog";
 import EditBenefitsDialog from "../EditBenefitsDialog/EditBenefitsDialog";
 import EditDescriptionDialog from "../EditDescriptionDialog/EditDescriptionDialog";
+import EditApplicationMethodDialog from "../EditApplicationMethodDialog/EditApplicationMethodDialog";
+import EditResumeRequirementsDialog from "../EditResumeRequirementsDialog/EditResumeRequirementsDialog";
+import EditContactEmailDialog from "../EditContactEmailDialog/EditContactEmailDialog";
+import EditContactPhoneDialog from "../EditContactPhoneDialog/EditContactPhoneDialog";
 
 
 interface ReviewJobComponentProps {}
@@ -53,7 +57,9 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
     const [showEditBenefitsDialog, setShowEditBenefitsDialog] = useState(false);
     const [showEditJobDescriptionDialog, setShowEditJobDescriptionDialog] = useState(false);
     const [showEditApplicationMethodDialog, setShowEditApplicationMethodDialog] = useState(false);
-    const [showEditContactInfoDialog, setShowEditContactInfoDialog] = useState(false);
+    const [showEditResumeRequirementsDialog, setShowEditResumeRequirementsDialog] = useState(false);
+    const [showEditContactEmailDialog, setShowEditContactEmailDialog] = useState(false);
+    const [showEditContactPhoneDialog, setShowEditContactPhoneDialog] = useState(false);
     
     useEffect(() => {
         fetchInitialPageData()
@@ -98,6 +104,14 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                     setShowDialog={setShowEditBenefitsDialog}/>
                 <EditDescriptionDialog showDialog={showEditJobDescriptionDialog}
                                        setShowDialog={setShowEditJobDescriptionDialog}/>
+                <EditApplicationMethodDialog showDialog={showEditApplicationMethodDialog}
+                                             setShowDialog={setShowEditApplicationMethodDialog}/>
+                <EditResumeRequirementsDialog showDialog={showEditResumeRequirementsDialog}
+                                              setShowDialog={setShowEditResumeRequirementsDialog}/>
+                <EditContactEmailDialog showDialog={showEditContactEmailDialog}
+                                        setShowDialog={setShowEditContactEmailDialog}/>
+                <EditContactPhoneDialog showDialog={showEditContactPhoneDialog}
+                                        setShowDialog={setShowEditContactPhoneDialog}/>
                 <div className={"employers-centralized-page-layout"}>
                     <PageTitleWithImage imageElement={<SvgReview/>} title={"Review"}/>
                     <div className={'emp-form-fb'}>
@@ -207,17 +221,17 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                             <JobReviewJobInfoBlock
                                 jobInfoLabel={"Require resume"}
                                 fieldValue={resumeRequirementOptionsMapData.find(r => r.enumValue == incompleteJob!.resumeRequired)?.stringValue || resumeRequirementOptionsMapData[0].stringValue}
-                                onEditClick={() => setShowEditApplicationMethodDialog(true)}
+                                onEditClick={() => setShowEditResumeRequirementsDialog(true)}
                             />
                             <JobReviewJobInfoBlock
                                 jobInfoLabel={"Candidates contact you (e-mail)"}
                                 fieldValue={incompleteJob!.contactEmail || ""}
-                                onEditClick={() => setShowEditContactInfoDialog(true)}
+                                onEditClick={() => setShowEditContactEmailDialog(true)}
                             />
                             <JobReviewJobInfoBlock
                                 jobInfoLabel={"Candidates contact you (phone number)"}
                                 fieldValue={incompleteJob!.contactPhoneNumber || ""}
-                                onEditClick={() => setShowEditContactInfoDialog(true)}
+                                onEditClick={() => setShowEditContactPhoneDialog(true)}
                             />
                             <JobCreateNavigationButtons
                                 backButtonOnClick={goToPreviousPage}

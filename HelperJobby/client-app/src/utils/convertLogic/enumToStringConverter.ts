@@ -7,6 +7,8 @@ import EmployeeBenefits from "../../enums/modelDataEnums/EmployeeBenefits";
 import {SalaryRates} from "../../enums/modelDataEnums/SalaryRates";
 import {salaryRatesMapData, showPayByOptionsMapData} from "../../AppConstData/PayRelatedData";
 import {ShowPayByOptions} from "../../enums/modelDataEnums/ShowPayByOptions";
+import {ResumeRequirementOptions} from "../../enums/modelDataEnums/ResumeRequirementOptions";
+import {resumeRequirementOptionsMapData} from "../../AppConstData/ResumeRequirements";
 
 
 export const jobTypesEnumToStringMap = (jobType: JobTypes): string => {
@@ -58,9 +60,16 @@ export const salaryRatesEnumToStringMap = (salaryRateEnumValue: SalaryRates): st
     } else return SalaryRates[salaryRateEnumValue];
 };
 
-export const showPayByOptionsEnumToStringMap = (salaryRateEnumValue: ShowPayByOptions): string => {
-    const showPayByOptionStringMap = showPayByOptionsMapData.find((spo) => spo.enumValue === salaryRateEnumValue);
+export const showPayByOptionsEnumToStringMap = (showPayByOptionEnumValue: ShowPayByOptions): string => {
+    const showPayByOptionStringMap = showPayByOptionsMapData.find((spo) => spo.enumValue === showPayByOptionEnumValue);
     if (showPayByOptionStringMap) {
         return showPayByOptionStringMap.stringValue;
-    } else return ShowPayByOptions[salaryRateEnumValue];
+    } else return ShowPayByOptions[showPayByOptionEnumValue];
+};
+
+export const resumeRequirementOptionsEnumToStringMap = (resumeRequirementOptionEnumValue: ResumeRequirementOptions): string => {
+    const resumeRequirementByOptionStringMap = resumeRequirementOptionsMapData.find((rro) => rro.enumValue === resumeRequirementOptionEnumValue);
+    if (resumeRequirementByOptionStringMap) {
+        return resumeRequirementByOptionStringMap.stringValue;
+    } else return ResumeRequirementOptions[resumeRequirementOptionEnumValue];
 };

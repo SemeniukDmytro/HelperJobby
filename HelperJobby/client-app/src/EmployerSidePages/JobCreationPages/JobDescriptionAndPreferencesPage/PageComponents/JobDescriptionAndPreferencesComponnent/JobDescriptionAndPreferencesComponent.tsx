@@ -22,6 +22,9 @@ import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {isValidDescription} from "../../../../../utils/validationLogic/isValidDescription";
+import CommunicationPreferencesBlock
+    from "../../../SharedComponents/CommunicationPreferencesBlock/CommunicationPreferencesBlock";
+import {resumeRequirementOptionsEnumToStringMap} from "../../../../../utils/convertLogic/enumToStringConverter";
 
 interface JobDescriptionAndPreferencesComponentProps {}
 
@@ -67,7 +70,7 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
                 setContactEmail(incompleteJob.contactEmail);
             }
             if (incompleteJob.resumeRequired){
-                setIsResumeRequired(resumeRequirementOptionsMapData.find(rro => rro.enumValue == incompleteJob.resumeRequired)!.stringValue);
+                setIsResumeRequired(resumeRequirementOptionsEnumToStringMap(incompleteJob.resumeRequired));
             }
             
             setLoading(false);
@@ -81,10 +84,6 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
     function changeDescriptionValue(event: React.FormEvent<HTMLDivElement>) {
         isValidDescription(event.currentTarget.innerHTML, setDescriptionError, setIsInvalidDescription);
         setJobDescription(event.currentTarget.innerHTML);
-    }
-
-    function addAbilityToProvidePhone() {
-        setIsContactPhoneAvailable(!isContactPhoneAvailable);
     }
     async function handleDescriptionAndPreferencesSubmit(e : FormEvent) {
         e.preventDefault();
@@ -169,45 +168,24 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
                         }
                     </div>
                     <div className={"content-separation-line mt2rem mb3rem"}></div>
-                    <div className={"small-title"}>Communication preferences</div>
-                    <CustomInputField
-                        fieldLabel={"Email for job seekers to contact with you"}
-                        isRequired={true}
-                        inputFieldValue={contactEmail}
-                        setInputFieldValue={setContactEmail}
-                        inputRef={emailInputRef}
-                        customErrorMessage={emailError}
-                        setCustomErrorMessage={setEmailError}
-                        executeValidation={executeFormValidation}
-                        setExecuteValidation={setExecuteFormValidation}
-                    />
-                    <div className={"checkbox-container mb15rem"} onClick={addAbilityToProvidePhone}>
-                        <input className={"checkbox"} onChange={addAbilityToProvidePhone} checked={isContactPhoneAvailable} type={"checkbox"}/>
-                        <span>Let potential candidates contact you by phone</span>
-                    </div>
-                    {isContactPhoneAvailable &&
-                        <CustomInputField
-                            fieldLabel={"Phone number for job seekers to contact with you"}
-                            fieldSubtitle={"Include country code (start with +). Phone number must contain only numbers without spaces or dashes"}
-                            isRequired={false}
-                            inputFieldValue={contactPhoneNumber}
-                            setInputFieldValue={setContactPhoneNumber}
-                            inputRef={phoneNumberInputRef}
-                            customErrorMessage={phoneError}
-                            setCustomErrorMessage={setPhoneError}
-                            executeValidation={executeFormValidation}
-                            setExecuteValidation={setExecuteFormValidation}
-                        />
-                    }
-                    <div className={"content-separation-line mt2rem mb3rem"}></div>
-                    <div className={"small-title"}>Application preferences</div>
-                    <CustomSelectWindow
-                        fieldLabel={"Ask potential candidates for a resume?"}
-                        selectedValue={isResumeRequired}
-                        setSelectedValue={setIsResumeRequired}
-                        optionsArr={resumeRequirementOptionsMapData.map(rr => rr.stringValue)}
-                        includeWindowScroll={true}
-                    />
+                    <CommunicationPreferencesBlock 
+                        contactEmail={contactEmail}
+                        setContactEmail={setContactEmail}
+                        emailInputRef={emailInputRef}
+                        emailError={emailError}
+                        setEmailError={setEmailError}
+                        executeFormValidation={executeFormValidation}
+                        setExecuteFormValidation={setExecuteFormValidation}
+                        isContactPhoneAvailable={isContactPhoneAvailable}
+                        setIsContactPhoneAvailable={setIsContactPhoneAvailable}
+                        contactPhoneNumber={contactPhoneNumber}
+                        setContactPhoneNumber={setContactPhoneNumber}
+                        phoneNumberInputRef={phoneNumberInputRef}
+                        phoneError={phoneError}
+                        setPhoneError={setPhoneError}
+                        isResumeRequired={isResumeRequired}
+                        setIsResumeRequired={setIsResumeRequired}
+                        includeWindowScrollForSelect={true}/>
                     <JobCreateNavigationButtons
                         requestInProgress={requestInProgress}
                         backButtonOnClick={navigateToPreviousPage}
