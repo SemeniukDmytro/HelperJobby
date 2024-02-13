@@ -32,7 +32,7 @@ const EditContactPhoneDialog: FC<EditContactPhoneDialogProps> = ({
     useEffect(() => {
         if (showDialog){
             setContactPhoneNumber(incompleteJob?.contactPhoneNumber || employer!.contactNumber);
-            setContactPhoneNumber("");
+            setPhoneError("");
         }
     }, [showDialog]);
 

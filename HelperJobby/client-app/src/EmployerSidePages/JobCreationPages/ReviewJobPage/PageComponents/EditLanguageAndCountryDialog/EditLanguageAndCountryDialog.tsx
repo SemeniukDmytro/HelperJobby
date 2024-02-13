@@ -113,10 +113,12 @@ const EditLanguageAndCountryDialog: FC<EditLanguageAndCountryDialogProps> = ({
                         Close
                     </button>
                     <button
-                        className={`blue-button`}
+                        className={`blue-button min-save-button-size`}
                         onClick={changeCurrentLanguageAndCountry}
+                        disabled={requestInProgress}
                     >
-                        {requestInProgress ? <WhiteLoadingSpinner/>
+                        {requestInProgress ? 
+                            <WhiteLoadingSpinner/>
                             :
                             <>
                             <span>Done</span>

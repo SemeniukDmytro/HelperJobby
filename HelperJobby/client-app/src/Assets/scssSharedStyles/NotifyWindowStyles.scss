@@ -1,0 +1,31 @@
+﻿@use "./global-variables";
+
+.orange-notify-container {
+  background-color: rgb(253, 239, 233);
+  border-color: rgb(247, 201, 179) !important;
+}
+
+.warning-pop-up-icon {
+  align-self: flex-start;
+  color: rgb(177, 99, 0);
+}
+
+.blue-notify-container {
+  background-color: global-variables.$light-blue;
+  border-color: global-variables.$light-blue-active !important;
+  padding: 1rem 1rem;
+}
+
+.green-notify-container{
+  background-color: rgb(228, 247, 230);
+  border-color: rgb(173, 223, 179) !important;
+}
+
+.red-notify-container{
+  background-color: global-variables.$light-red;
+  border-color: global-variables.$light-red-active !important;
+}
+
+.message-pop-up-icon {
+  color: global-variables.$red;
+}

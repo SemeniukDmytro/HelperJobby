@@ -1,0 +1,43 @@
+.default-footer {
+  box-sizing: border-box;
+  background-color: rgb(255, 255, 255);
+  box-shadow: none;
+  position: sticky;
+  bottom: 0px;
+  padding: 1.5rem;
+  z-index: 1;
+}
+
+.rj-highlighted-footer {
+  box-sizing: border-box;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(45, 45, 45, 0.2) 0px 0px 2px 0px, rgba(45, 45, 45, 0.12) 0px -8px 16px 0px, rgba(45, 45, 45, 0.16) 0px -4px 8px 0px;
+  position: sticky;
+  bottom: 0px;
+  padding: 1.5rem;
+  z-index: 1;
+}
+
+.rj-footer-content-fb {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.rj-footer-disclaimer {
+  margin: 0px auto;
+  width: 48rem;
+}
+
+.rj-footer-buttons {
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: row;
+  margin-block: 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  margin: 0px auto;
+  width: 48rem;
+}

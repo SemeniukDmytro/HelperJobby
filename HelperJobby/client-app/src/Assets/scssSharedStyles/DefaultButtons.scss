@@ -71,7 +71,7 @@
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 0.5rem;
-  background-color: rgb(169, 37, 43);
+  background-color: global-variables.$dark-red;
   cursor: pointer;
   font-weight: 700;
   color: white;
@@ -80,11 +80,13 @@
   transition: 0.2s;
 
   &:hover {
-    background-color: rgb(131, 22, 27);;
+    background-color: global-variables.$light-red;
+    color: global-variables.$dark-red-hover;
   }
 
   &:active {
-    background-color: rgb(95, 12, 16);
+    background-color: global-variables.$light-red-active;
+    color: global-variables.$dark-red-active;
     box-shadow: global-variables.$button-inner-shadow;
   }
 

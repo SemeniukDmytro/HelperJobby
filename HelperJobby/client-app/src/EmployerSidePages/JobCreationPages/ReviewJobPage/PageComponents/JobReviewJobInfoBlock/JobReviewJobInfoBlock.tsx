@@ -1,42 +1,46 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './JobReviewJobInfoBlock.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronDown, faChevronUp, faPen} from "@fortawesome/free-solid-svg-icons";
+import {faChevronDown, faChevronUp, faCircleExclamation, faPen} from "@fortawesome/free-solid-svg-icons";
+import JobDataNotProvidedNotifier from "../JobDataNotProvidedNotifier/JobDataNotProvidedNotifier";
 
 interface JobReviewJobInfoBlockProps {
     jobInfoLabel: string;
     fieldValue: string;
     onEditClick: () => void;
+    isFieldRequired: boolean;
 }
 
 const JobReviewJobInfoBlock: FC<JobReviewJobInfoBlockProps> = (
     {
         jobInfoLabel,
         fieldValue,
-        onEditClick
+        onEditClick,
+        isFieldRequired
     }) => {
     const fieldValueRef = useRef<HTMLDivElement>(null);
     const [showShowMoreButton, setShowMoreButton] = useState(isValueSizeIsTooBig());
     const [showMoreOptions, setShowMoreOptions] = useState(false);
     const [fieldValueContainerHeight, setFieldValueContainerHeight] = useState("3rem");
+    const infoNotProvided = fieldValue.length === 0;
 
     useEffect(() => {
         setShowMoreButton(isValueSizeIsTooBig());
     }, [fieldValueRef.current]);
-    function isValueSizeIsTooBig() : boolean{
-        if (fieldValueRef.current?.getBoundingClientRect().height){
+
+    function isValueSizeIsTooBig(): boolean {
+        if (fieldValueRef.current?.getBoundingClientRect().height) {
             return fieldValueRef.current.getBoundingClientRect()?.height > 48;
         }
-        return false
+        return false;
     }
 
     function manageFieldValueHeight(event: React.MouseEvent) {
         event.stopPropagation();
-        if (showMoreOptions){
+        if (showMoreOptions) {
             setShowMoreOptions(false);
             setFieldValueContainerHeight("3rem");
-        }
-        else {
+        } else {
             setShowMoreOptions(true);
             setFieldValueContainerHeight(`${fieldValueRef.current?.getBoundingClientRect().height}px`);
         }
@@ -48,38 +52,44 @@ const JobReviewJobInfoBlock: FC<JobReviewJobInfoBlockProps> = (
                 {jobInfoLabel}
             </div>
             <div>
-                <a className={"ji-field-value-manage-block"} onClick={onEditClick}>
-                    <div className={"ji-value-info-layout"}>
-                        <div 
-                            className={"ji-value-container semi-dark-default-text"}
-                            style={{
-                                maxHeight : fieldValueContainerHeight
-                            }}
-                        >
+                <a 
+                    className={`ji-field-value-manage-block ${infoNotProvided ? (isFieldRequired ? "error-red-bc" : "add-blue-bc") : ""}`}
+                    onClick={onEditClick}>
+                    {fieldValue.length == 0 ?
+                        <JobDataNotProvidedNotifier isRequired={isFieldRequired}/>
+                        :
+                        (<div className={"ji-value-info-layout"}>
                             <div
-                                ref={fieldValueRef}
+                                className={"ji-value-container semi-dark-default-text"}
+                                style={{
+                                    maxHeight: fieldValueContainerHeight
+                                }}
                             >
-                                {fieldValue}
-                            </div>
-                        </div>
-                        {showShowMoreButton &&
-                            <div>
-                                <div className={"bold-navigation-link ji-show-full-value"} onClick={manageFieldValueHeight}>
-                                    {showMoreOptions ?
-                                        <>
-                                            <span>Hide full {jobInfoLabel}</span>
-                                            <FontAwesomeIcon className={"svg1rem ml05rem"} icon={faChevronUp}/>
-                                        </>
-                                        :
-                                        <>
-                                            <span>Show full {jobInfoLabel}</span>
-                                            <FontAwesomeIcon className={"svg1rem ml05rem"} icon={faChevronDown}/>
-                                        </>
-                                    }
+                                <div
+                                    ref={fieldValueRef}
+                                >
+                                    {fieldValue}
                                 </div>
                             </div>
-                        }
-                    </div>
+                            {showShowMoreButton &&
+                                <div>
+                                    <div className={"bold-navigation-link ji-show-full-value"}
+                                         onClick={manageFieldValueHeight}>
+                                        {showMoreOptions ?
+                                            <>
+                                                <span>Hide full {jobInfoLabel}</span>
+                                                <FontAwesomeIcon className={"svg1rem ml05rem"} icon={faChevronUp}/>
+                                            </>
+                                            :
+                                            <>
+                                                <span>Show full {jobInfoLabel}</span>
+                                                <FontAwesomeIcon className={"svg1rem ml05rem"} icon={faChevronDown}/>
+                                            </>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>)}
                     <div className={"dark-blue-color ml05rem mt025rem"}>
                         <FontAwesomeIcon className={"svg1rem"} icon={faPen}/>
                     </div>

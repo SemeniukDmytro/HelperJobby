@@ -3,7 +3,13 @@ import './ReviewJobComponent.scss';
 import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import SvgReview from "../../../../../Components/Icons/Review";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
+import {
+    faArrowLeftLong,
+    faArrowRightLong,
+    faCircleExclamation,
+    faPlus,
+    faTriangleExclamation
+} from "@fortawesome/free-solid-svg-icons";
 import useJobCreation from "../../../../../hooks/useJobCreation";
 import {useNavigate, useParams} from "react-router-dom";
 import {
@@ -19,8 +25,6 @@ import {
 } from "../../../../../utils/convertLogic/enumToStringConverter";
 import {formatJobSalaryDisplay} from "../../../../../utils/convertLogic/formatJobSalaryDisplay";
 import {resumeRequirementOptionsMapData} from "../../../../../AppConstData/ResumeRequirements";
-import JobCreateNavigationButtons
-    from "../../../SharedComponents/JobCreateNavigationButtons/JobCreateNavigationButtons";
 import EditJobTitleDialog from "../EditJobTitleDialog/EditJobTitleDialog";
 import EditNumberOfOpeningsDialog from "../EditNumberOfOpeningsDialog/EditNumberOfOpeningsDialog";
 import EditLanguageAndCountryDialog from "../EditLanguageAndCountryDialog/EditLanguageAndCountryDialog";
@@ -35,21 +39,25 @@ import EditApplicationMethodDialog from "../EditApplicationMethodDialog/EditAppl
 import EditResumeRequirementsDialog from "../EditResumeRequirementsDialog/EditResumeRequirementsDialog";
 import EditContactEmailDialog from "../EditContactEmailDialog/EditContactEmailDialog";
 import EditContactPhoneDialog from "../EditContactPhoneDialog/EditContactPhoneDialog";
+import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
+import ProvideRequiredDataLink from "../../../../../Components/ProvideRequiredDataLink/ProvideRequiredDataLink";
+import {logErrorInfo} from "../../../../../utils/logErrorInfo";
+import {JobService} from "../../../../../services/jobService";
 
 
-interface ReviewJobComponentProps {}
+interface ReviewJobComponentProps {
+}
 
 const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
-    const [jobPostMissingInformation, setJobPostMissingInfo] = useState(true);
     const {incompleteJob, setIncompleteJob} = useJobCreation();
-    const {jobId} = useParams<{jobId : string}>();
-    const {fetchJobAndSetJobCreation} =  useJobLoaderForSettingCurrentIncompleteJob(jobId ? parseInt(jobId) : 0, incompleteJob, setIncompleteJob);
+    const {jobId} = useParams<{ jobId: string }>();
+    const {fetchJobAndSetJobCreation} = useJobLoaderForSettingCurrentIncompleteJob(jobId ? parseInt(jobId) : 0, incompleteJob, setIncompleteJob);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
     const [showEditJobTitleDialog, setShowEditJobTitleDialog] = useState(false);
     const [showEditNumberOfOpeningsDialog, setShowEditNumberOfOpeningsDialog] = useState(false);
-    const [showEditLanguageAndCountryDialog, setShowEditLanguageAndCountryDialog] = useState(false);    
+    const [showEditLanguageAndCountryDialog, setShowEditLanguageAndCountryDialog] = useState(false);
     const [showEditLocationDialog, setShowEditLocationDialog] = useState(false);
     const [showEditJobTypeDialog, setShowEditJobTypeDialog] = useState(false);
     const [showEditScheduleDialog, setShowEditScheduleDialog] = useState(false);
@@ -60,18 +68,32 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
     const [showEditResumeRequirementsDialog, setShowEditResumeRequirementsDialog] = useState(false);
     const [showEditContactEmailDialog, setShowEditContactEmailDialog] = useState(false);
     const [showEditContactPhoneDialog, setShowEditContactPhoneDialog] = useState(false);
-    
+    const [isHighlightedFooter, setIsHighlightedFooter] = useState(true);
+    const [requiredInfoMissing, setRequiredInfoMissing] = useState(checkIfRequiredInfoMissing);
+    const [additionalInfoIsMissing, setAdditionalInfoIsMissing] = useState(checkIfAdditionalInfoIsMissing);
+    const jobService = new JobService();
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight;
+            setIsHighlightedFooter(!atBottom);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     useEffect(() => {
         fetchInitialPageData()
     }, []);
 
     useEffect(() => {
-        if (incompleteJob){
+        if (incompleteJob) {
+            checkIfJobInfoIsMissing();
             setLoading(false);
         }
     }, [incompleteJob]);
 
-    async function fetchInitialPageData(){
+    async function fetchInitialPageData() {
         await fetchJobAndSetJobCreation();
     }
 
@@ -79,8 +101,43 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
         navigate(`${employerPagesPaths.DESCRIPTION_AND_APPLICATION_DETAILS}/${jobId}`);
     }
 
-    function confirmJobCreation() {
-        
+    async function confirmJobCreation() {
+        const requiredJobInfoMissing = checkIfRequiredInfoMissing();
+        if (requiredJobInfoMissing){
+            setRequiredInfoMissing(requiredJobInfoMissing);
+            return;
+        }
+        try {
+            setRequestInProgress(true);
+            await jobService.createJob(incompleteJob!.id);
+        }
+        catch (err){
+            logErrorInfo(err)
+        }
+        finally {
+            setRequestInProgress(false);
+        }
+    }
+    
+    
+    
+    function checkIfJobInfoIsMissing() {
+        const requiredInfoIsMissing = checkIfRequiredInfoMissing();
+        const additionalInfoIsMissing = checkIfAdditionalInfoIsMissing();
+        if (requiredInfoIsMissing){
+            setRequiredInfoMissing(true);
+        }
+        if (additionalInfoIsMissing){
+            setAdditionalInfoIsMissing(true)
+        }
+    }
+    function checkIfRequiredInfoMissing(){
+        return (!incompleteJob?.jobTitle || !incompleteJob?.description || !incompleteJob?.numberOfOpenings ||
+            !incompleteJob?.location || !incompleteJob?.contactEmail || (!incompleteJob?.jobType || incompleteJob.jobType.length === 0));
+    }
+    function checkIfAdditionalInfoIsMissing() : boolean{
+        return !incompleteJob?.salary || (!incompleteJob?.schedule || incompleteJob.schedule.length === 0) ||
+            (!incompleteJob?.benefits || incompleteJob.benefits.length === 0) || !incompleteJob.contactEmail;
     }
 
     return (
@@ -116,7 +173,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                     <PageTitleWithImage imageElement={<SvgReview/>} title={"Review"}/>
                     <div className={'emp-form-fb'}>
                         <form className={"emp-form"}>
-                            {jobPostMissingInformation &&
+                            {(requiredInfoMissing || additionalInfoIsMissing) &&
                                 <div className={"info-notify-container orange-notify-container"}>
                                     <div className={"horizontal-title mt05rem mb05rem"}>
                                         <div className={"warning-pop-up-icon mr1rem"}>
@@ -143,26 +200,32 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                 <JobReviewJobInfoBlock
                                     jobInfoLabel={"Job title"}
                                     fieldValue={incompleteJob!.jobTitle}
+                                    isFieldRequired={true}
                                     onEditClick={() => setShowEditJobTitleDialog(true)}
                                 />
                                 <JobReviewJobInfoBlock
                                     jobInfoLabel={"Number of openings"}
                                     fieldValue={incompleteJob!.numberOfOpenings.toString()}
+                                    isFieldRequired={true}
                                     onEditClick={() => setShowEditNumberOfOpeningsDialog(true)}
                                 />
                                 <JobReviewJobInfoBlock
                                     jobInfoLabel={"Country and language"}
                                     fieldValue={`${incompleteJob!.locationCountry} ${incompleteJob!.language}`}
+                                    isFieldRequired={true}
                                     onEditClick={() => setShowEditLanguageAndCountryDialog(true)}
                                 />
                                 <JobReviewJobInfoBlock
                                     jobInfoLabel={"Location"}
                                     fieldValue={incompleteJob!.location}
+                                    isFieldRequired={true}
                                     onEditClick={() => setShowEditLocationDialog(true)}
                                 />
                                 <MultipleRowsReviewBlock
                                     fieldLabel={"Job type"}
                                     onEditClick={() => setShowEditJobTypeDialog(true)}
+                                    isFieldRequired={true}
+                                    childCount={incompleteJob?.jobType?.length || 0}
                                 >
                                     {(incompleteJob?.jobType && incompleteJob.jobType.length != 0) ?
                                         (incompleteJob.jobType.map((jt, index) => (
@@ -176,6 +239,8 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                 <MultipleRowsReviewBlock
                                     fieldLabel={"Schedule"}
                                     onEditClick={() => setShowEditScheduleDialog(true)}
+                                    isFieldRequired={false}
+                                    childCount={incompleteJob?.schedule?.length || 0}
                                 >
                                     {(incompleteJob?.schedule && incompleteJob.schedule.length != 0) ?
                                         (incompleteJob.schedule.map((s, index) => (
@@ -190,10 +255,13 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                     jobInfoLabel={"Pay"}
                                     fieldValue={formatJobSalaryDisplay(incompleteJob!)}
                                     onEditClick={() => setShowEditSalaryDialog(true)}
+                                    isFieldRequired={true}
                                 />
                                 <MultipleRowsReviewBlock
                                     fieldLabel={"Benefits"}
-                                    onEditClick={()=> setShowEditBenefitsDialog(true)}
+                                    onEditClick={() => setShowEditBenefitsDialog(true)}
+                                    isFieldRequired={false}
+                                    childCount={incompleteJob?.benefits?.length || 0}
                                 >
                                     {(incompleteJob?.benefits && incompleteJob.benefits.length != 0) ?
                                         (incompleteJob.benefits.map((b, index) => (
@@ -207,6 +275,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                 <JobReviewJobInfoBlock
                                     jobInfoLabel={"Job description"}
                                     fieldValue={incompleteJob!.description || ""}
+                                    isFieldRequired={true}
                                     onEditClick={() => setShowEditJobDescriptionDialog(true)}
                                 />
                             </div>
@@ -216,32 +285,96 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                             <JobReviewJobInfoBlock
                                 jobInfoLabel={"Application method"}
                                 fieldValue={`Email ${incompleteJob?.contactPhoneNumber ? "and phone number" : ""}`}
+                                isFieldRequired={true}
                                 onEditClick={() => setShowEditApplicationMethodDialog(true)}
                             />
                             <JobReviewJobInfoBlock
                                 jobInfoLabel={"Require resume"}
+                                isFieldRequired={false}
                                 fieldValue={resumeRequirementOptionsMapData.find(r => r.enumValue == incompleteJob!.resumeRequired)?.stringValue || resumeRequirementOptionsMapData[0].stringValue}
                                 onEditClick={() => setShowEditResumeRequirementsDialog(true)}
                             />
                             <JobReviewJobInfoBlock
                                 jobInfoLabel={"Candidates contact you (e-mail)"}
+                                isFieldRequired={true}
                                 fieldValue={incompleteJob!.contactEmail || ""}
                                 onEditClick={() => setShowEditContactEmailDialog(true)}
                             />
                             <JobReviewJobInfoBlock
+                                isFieldRequired={false}
                                 jobInfoLabel={"Candidates contact you (phone number)"}
                                 fieldValue={incompleteJob!.contactPhoneNumber || ""}
                                 onEditClick={() => setShowEditContactPhoneDialog(true)}
                             />
-                            <JobCreateNavigationButtons
-                                backButtonOnClick={goToPreviousPage}
-                                nextPageButtonClick={confirmJobCreation}
-                                requestInProgress={requestInProgress}
-                            />
                         </form>
+                        {requiredInfoMissing &&
+                            <div className={"info-notify-container red-notify-container mt1rem"}>
+                                <div className={"horizontal-title mt05rem mb05rem"}>
+                                    <div className={"message-pop-up-icon mr1rem"}>
+                                        <FontAwesomeIcon icon={faCircleExclamation}/>
+                                    </div>
+                                    <div className={"ntf-msg-with-ttl-container"}>
+                                        <div className={"dark-small-text bold-text"}>
+                                            There are items above that need your attention to continue.
+                                        </div>
+                                        <div className={"flex-column"}>
+                                            <div className={"mb05rem"}></div>
+                                            {!incompleteJob?.jobTitle &&
+                                                <ProvideRequiredDataLink linkLabel={"Job title"}
+                                                                         setShowEditDataWindow={setShowEditJobTitleDialog}/>}
+                                            {!incompleteJob?.description &&
+                                                <ProvideRequiredDataLink linkLabel={"Job description"}
+                                                                         setShowEditDataWindow={setShowEditJobDescriptionDialog}/>}
+                                            {!incompleteJob?.numberOfOpenings &&
+                                                <ProvideRequiredDataLink linkLabel={"Number of people needed"}
+                                                                         setShowEditDataWindow={setShowEditNumberOfOpeningsDialog}/>}
+
+                                            {!incompleteJob?.location &&
+                                                <ProvideRequiredDataLink linkLabel={"Location"}
+                                                                         setShowEditDataWindow={setShowEditLocationDialog}/>}
+
+                                            {(!incompleteJob?.jobType || incompleteJob.jobType.length === 0)  &&
+                                                <ProvideRequiredDataLink linkLabel={"Job type"}
+                                                                         setShowEditDataWindow={setShowEditJobTypeDialog}/>}
+
+                                            {!incompleteJob?.contactEmail &&
+                                                <ProvideRequiredDataLink linkLabel={"Application method"}
+                                                                         setShowEditDataWindow={setShowEditApplicationMethodDialog}/>}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
-        </>
+                <div className={`${isHighlightedFooter ? "rj-highlighted-footer" : "default-footer"}`}>
+                    <div className={"rj-footer-content-fb"}>
+                        <div className={"rj-footer-disclaimer mb1rem dark-default-text"}>
+                            <span>By selecting <b>Confirm</b>, you agree that this job post reflects your requirements, and agree 
+                                it will be posted and applications will be processed.</span>
+                        </div>
+                        <div className={"rj-footer-buttons"}>
+                            <button className={"light-button-with-margin"} onClick={goToPreviousPage}>
+                                <FontAwesomeIcon className={'svg1rem mr05rem'} icon={faArrowLeftLong}/>
+                                <span>Back</span>
+                            </button>
+                            <button className={"blue-button"}
+                                    disabled={requiredInfoMissing}
+                                    onClick={confirmJobCreation }
+                            >
+                                {requestInProgress ? <WhiteLoadingSpinner/>
+                                    :
+                                    <>
+                                        <span>Confirm</span>
+                                        <FontAwesomeIcon className={'svg1rem ml05rem'} icon={faArrowRightLong}/>
+                                    </>
+                                }
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </>
     )
 }
 

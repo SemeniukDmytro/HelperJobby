@@ -59,7 +59,7 @@
 }
 
 .red-field-focus {
-  border-color: global-variables.$error-color !important;
+  border-color: global-variables.$dark-red !important;
 }
 
 .field-label-subtitle {
@@ -127,5 +127,5 @@
 }
 
 .error-text {
-  color: rgb(169, 37, 43) !important;
+  color: global-variables.$dark-red !important;
 }

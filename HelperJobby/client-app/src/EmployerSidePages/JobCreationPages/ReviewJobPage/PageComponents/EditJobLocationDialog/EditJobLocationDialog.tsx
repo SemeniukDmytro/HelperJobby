@@ -12,8 +12,6 @@ import {AutocompleteWindowTypes} from "../../../../../enums/utilityEnums/Autocom
 import EditJobPostDialog from "../EditJobPostDialog/EditJobPostDialog";
 import JobLocationSelectionComponent
     from "../../../SharedComponents/JobLocationSelectionComponent/JobLocationSelectionComponent";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 
 interface EditJobLocationDialogProps {
     showDialog: boolean;
@@ -44,11 +42,14 @@ const EditJobLocationDialog: FC<EditJobLocationDialogProps> = ({
     const incompleteJobService = new IncompleteJobService();
 
     useEffect(() => {
-        if (incompleteJob?.location){
-            setLocationSelectedFromSuggests(true);
-            getCurrentJobLocationInputProp(jobLocationType).setInputValue(incompleteJob?.location || "");
+        if (showDialog){
+            if (incompleteJob?.location){
+                setLocationSelectedFromSuggests(true);
+                getCurrentJobLocationInputProp(jobLocationType).setInputValue(incompleteJob?.location || "");
+            }
         }
-    }, []);
+        
+    }, [showDialog]);
 
     async function editLocation() {
         if (!getCurrentJobLocationInputProp(jobLocationType).inputValue) {
@@ -82,7 +83,7 @@ const EditJobLocationDialog: FC<EditJobLocationDialogProps> = ({
         <>
             {showStreetsAutocomplete && <AutocompleteResultsWindow
                 inputFieldRef={locationInputRef}
-                windowMaxWidth={"550px"}
+                windowMaxWidth={"702px"}
                 inputValue={getCurrentJobLocationInputProp(jobLocationType).inputValue}
                 setInputValue={getCurrentJobLocationInputProp(jobLocationType).setInputValue}
                 country={incompleteJob?.locationCountry || ""}
@@ -95,7 +96,7 @@ const EditJobLocationDialog: FC<EditJobLocationDialogProps> = ({
             />}
             {showCityAutoComplete && <AutocompleteResultsWindow
                 inputFieldRef={locationInputRef}
-                windowMaxWidth={"550px"}
+                windowMaxWidth={"702px"}
                 inputValue={getCurrentJobLocationInputProp(jobLocationType).inputValue}
                 setInputValue={getCurrentJobLocationInputProp(jobLocationType).setInputValue}
                 country={incompleteJob?.locationCountry || ""}
