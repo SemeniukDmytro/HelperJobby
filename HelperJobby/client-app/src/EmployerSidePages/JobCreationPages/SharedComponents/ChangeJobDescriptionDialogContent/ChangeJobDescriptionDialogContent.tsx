@@ -44,6 +44,17 @@ const ChangeJobDescriptionDialogContent: FC<ChangeJobDescriptionDialogContentPro
         setJobDescription(event.currentTarget.innerHTML);
     }
 
+    function handlePaste(event: React.ClipboardEvent<HTMLDivElement>) {
+        event.preventDefault();
+
+        const text = event.clipboardData.getData('text/plain');
+
+        document.execCommand('insertText', false, text);
+
+        isValidDescription(text, setDescriptionError, setIsInvalidDescription);
+        setJobDescription(text);
+    }
+
 
     async function editJobDescription(){
         if (!isValidDescription(jobDescription, setDescriptionError, setIsInvalidDescription)){
@@ -86,6 +97,7 @@ const ChangeJobDescriptionDialogContent: FC<ChangeJobDescriptionDialogContentPro
                         className={`description-input ${isInvalidDescription ? "red-field-focus" : ""}`}
                         onInput={changeDescriptionValue}
                         onBlur={() => isValidDescription(jobDescription, setDescriptionError, setIsInvalidDescription)}
+                        onPaste={handlePaste}
                     >
                     </div>
                     <div className={`description-focused ${isInvalidDescription ? "red-field-focus" : ""}`}></div>

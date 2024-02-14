@@ -9,6 +9,8 @@ import {salaryRatesMapData, showPayByOptionsMapData} from "../../AppConstData/Pa
 import {ShowPayByOptions} from "../../enums/modelDataEnums/ShowPayByOptions";
 import {ResumeRequirementOptions} from "../../enums/modelDataEnums/ResumeRequirementOptions";
 import {resumeRequirementOptionsMapData} from "../../AppConstData/ResumeRequirements";
+import {JobLocationTypes} from "../../enums/modelDataEnums/JobLocationTypes";
+import {jobLocationTypesArr} from "../../AppConstData/JobLocationTypesArr";
 
 
 export const jobTypesEnumToStringMap = (jobType: JobTypes): string => {
@@ -72,4 +74,11 @@ export const resumeRequirementOptionsEnumToStringMap = (resumeRequirementOptionE
     if (resumeRequirementByOptionStringMap) {
         return resumeRequirementByOptionStringMap.stringValue;
     } else return ResumeRequirementOptions[resumeRequirementOptionEnumValue];
+};
+
+export const jobLocationTypesEnumToStringMap = (jobLocationTypeEnumValue: JobLocationTypes): string => {
+    const jobLocationTypeStringMap = jobLocationTypesArr.find((jlt) => jlt.enumValue === jobLocationTypeEnumValue);
+    if (jobLocationTypeStringMap) {
+        return jobLocationTypeStringMap.type;
+    } else return ResumeRequirementOptions[jobLocationTypeEnumValue];
 };

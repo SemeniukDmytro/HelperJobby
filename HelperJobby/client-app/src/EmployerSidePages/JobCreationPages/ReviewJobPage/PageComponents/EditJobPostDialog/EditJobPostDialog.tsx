@@ -41,7 +41,7 @@ const EditJobPostDialog: FC<EditJobPostDialogProps> = ({
             <div className={"dialog-window"}>
                 <div className={"dialog-content-container job-post-dialog"}>
                     <div className={"dialog-header-box"}>
-                        <span>Edit the job post</span>
+                        <span className={"bold-text"}>Edit the job post</span>
                         <button className={"small-interaction-button"} onClick={closeDialog}>
                             <FontAwesomeIcon className={"svg1rem"} icon={faXmark}/>
                         </button>

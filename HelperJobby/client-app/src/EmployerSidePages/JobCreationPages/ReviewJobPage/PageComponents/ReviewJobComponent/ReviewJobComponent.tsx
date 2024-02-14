@@ -6,7 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
     faArrowLeftLong,
     faArrowRightLong,
-    faCircleExclamation,
+    faCircleExclamation, faEye,
     faPlus,
     faTriangleExclamation
 } from "@fortawesome/free-solid-svg-icons";
@@ -45,6 +45,7 @@ import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {JobService} from "../../../../../services/jobService";
 import {JobProperties} from "../../../../../enums/utilityEnums/JobProperties";
 import AddJobMissingInfoDialog from "../AddJobMissingInfoDialog/AddJobMissingInfoDialog";
+import JobPreviewDialog from "../JobPreviewDialog/JobPreviewDialog";
 
 
 interface ReviewJobComponentProps {
@@ -75,6 +76,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
     const [additionalInfoIsMissing, setAdditionalInfoIsMissing] = useState(false);
     const [missingJobProperties, setMissingJobProperties] = useState<JobProperties[]>([]);
     const [showAddMissingInfoDialog, setShowAddMissingInfoDialog] = useState(false);
+    const [showPreviewDialog, setShowPreviewDialog] = useState(false);
     const jobService = new JobService();
 
     useEffect(() => {
@@ -96,7 +98,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
             setLoading(false);
         }
     }, [incompleteJob, showAddMissingInfoDialog]);
-    
+
     async function fetchInitialPageData() {
         await fetchJobAndSetJobCreation();
     }
@@ -111,66 +113,65 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
             setRequestInProgress(true);
             await jobService.createJob(incompleteJob!.id);
             navigate(`${employerPagesPaths.JOB_POSTING}`)
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
-    
-    
-    
+
+
     function checkIfJobInfoIsMissing() {
-        if (showAddMissingInfoDialog){
+        if (showAddMissingInfoDialog) {
             return;
         }
         setMissingJobProperties([]);
         checkIfRequiredInfoMissing();
         checkIfAdditionalInfoIsMissing();
     }
-    function checkIfRequiredInfoMissing(){
-        let tempMissingProperties : JobProperties[] = [];
+
+    function checkIfRequiredInfoMissing() {
+        let tempMissingProperties: JobProperties[] = [];
         setRequiredInfoMissing(false);
-        if (!incompleteJob?.jobTitle){
+        if (!incompleteJob?.jobTitle) {
             tempMissingProperties.push(JobProperties.jobTitle);
             setRequiredInfoMissing(true);
         }
-        if (!incompleteJob?.jobType || incompleteJob.jobType.length == 0){
+        if (!incompleteJob?.jobType || incompleteJob.jobType.length == 0) {
             tempMissingProperties.push(JobProperties.jobType);
             setRequiredInfoMissing(true);
         }
-        if (!incompleteJob?.description){
+        if (!incompleteJob?.description) {
             tempMissingProperties.push(JobProperties.jobDescription);
             setRequiredInfoMissing(true);
         }
-        if (!incompleteJob?.contactEmail){
+        if (!incompleteJob?.contactEmail) {
             tempMissingProperties.push(JobProperties.contactEmail);
             setRequiredInfoMissing(true);
         }
-        if (!incompleteJob?.numberOfOpenings){
+        if (!incompleteJob?.numberOfOpenings) {
             tempMissingProperties.push(JobProperties.numberOfOpenings);
             setRequiredInfoMissing(true);
         }
-        if (!incompleteJob?.jobLocationType){
+        if (!incompleteJob?.jobLocationType) {
             tempMissingProperties.push(JobProperties.jobLocation);
             setRequiredInfoMissing(true);
         }
         setMissingJobProperties(prev => [...prev, ...tempMissingProperties]);
     }
-    function checkIfAdditionalInfoIsMissing(){
-        let tempMissingProperties : JobProperties[] = [];
+
+    function checkIfAdditionalInfoIsMissing() {
+        let tempMissingProperties: JobProperties[] = [];
         setAdditionalInfoIsMissing(false);
-        if (!incompleteJob?.salary){
+        if (!incompleteJob?.salary) {
             tempMissingProperties.push(JobProperties.jobSalary);
             setAdditionalInfoIsMissing(true);
         }
-        if (!incompleteJob?.schedule || incompleteJob.schedule.length == 0){
+        if (!incompleteJob?.schedule || incompleteJob.schedule.length == 0) {
             tempMissingProperties.push(JobProperties.schedule);
             setAdditionalInfoIsMissing(true);
         }
-        if (!incompleteJob?.benefits || incompleteJob.benefits.length == 0){
+        if (!incompleteJob?.benefits || incompleteJob.benefits.length == 0) {
             tempMissingProperties.push(JobProperties.benefits);
             setAdditionalInfoIsMissing(true);
         }
@@ -211,6 +212,8 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                         setShowDialog={setShowEditContactEmailDialog}/>
                 <EditContactPhoneDialog showDialog={showEditContactPhoneDialog}
                                         setShowDialog={setShowEditContactPhoneDialog}/>
+                <JobPreviewDialog showDialog={showPreviewDialog}
+                                  setShowDialog={setShowPreviewDialog}/>
                 <div className={"employers-centralized-page-layout"}>
                     <PageTitleWithImage imageElement={<SvgReview/>} title={"Review"}/>
                     <div className={'emp-form-fb'}>
@@ -231,7 +234,8 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={"bold-navigation-link"} onClick={() => setShowAddMissingInfoDialog(true)}>
+                                    <div className={"bold-navigation-link"}
+                                         onClick={() => setShowAddMissingInfoDialog(true)}>
                                         <FontAwesomeIcon className={"svg1rem icon-right-margin"} icon={faPlus}/>
                                         <span>Add info</span>
                                     </div>
@@ -375,7 +379,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                                 <ProvideRequiredDataLink linkLabel={"Location"}
                                                                          setShowEditDataWindow={setShowEditLocationDialog}/>}
 
-                                            {(!incompleteJob?.jobType || incompleteJob.jobType.length === 0)  &&
+                                            {(!incompleteJob?.jobType || incompleteJob.jobType.length === 0) &&
                                                 <ProvideRequiredDataLink linkLabel={"Job type"}
                                                                          setShowEditDataWindow={setShowEditJobTypeDialog}/>}
 
@@ -401,18 +405,28 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                 <FontAwesomeIcon className={'svg1rem mr05rem'} icon={faArrowLeftLong}/>
                                 <span>Back</span>
                             </button>
-                            <button className={"blue-button min-7chr-arrow-btn-width"}
-                                    disabled={requestInProgress}
-                                    onClick={confirmJobCreation }
-                            >
-                                {requestInProgress ? <WhiteLoadingSpinner/>
-                                    :
-                                    <>
-                                        <span>Confirm</span>
-                                        <FontAwesomeIcon className={'svg1rem ml05rem'} icon={faArrowRightLong}/>
-                                    </>
+                            <div className={"flex-row"}>
+                                {(incompleteJob?.description && incompleteJob.jobTitle) &&
+                                    <button className={"light-button-with-margin"}
+                                            onClick={() => setShowPreviewDialog(true)}
+                                            disabled={showPreviewDialog}>
+                                        <span>Preview</span>
+                                        <FontAwesomeIcon className={"ml05rem svg1rem"} icon={faEye}/>
+                                    </button>
                                 }
-                            </button>
+                                <button className={"blue-button min-7chr-arrow-btn-width"}
+                                        disabled={requestInProgress}
+                                        onClick={confirmJobCreation}
+                                >
+                                    {requestInProgress ? <WhiteLoadingSpinner/>
+                                        :
+                                        <>
+                                            <span>Confirm</span>
+                                            <FontAwesomeIcon className={'svg1rem ml05rem'} icon={faArrowRightLong}/>
+                                        </>
+                                    }
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

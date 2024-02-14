@@ -48,7 +48,7 @@ const DialogWindow: FC<DialogWindowProps> = ({
             <div className={"dialog-window"}>
                 <div className={"dialog-content-container"}>
                     <div className={"dialog-header-box"}>
-                        <span>{titleText}</span>
+                        <span className={"bold-text"}>{titleText}</span>
                         <button className={"small-interaction-button"} onClick={closeDialog}>
                             <FontAwesomeIcon className={"svg1rem"} icon={faXmark}/>
                         </button>

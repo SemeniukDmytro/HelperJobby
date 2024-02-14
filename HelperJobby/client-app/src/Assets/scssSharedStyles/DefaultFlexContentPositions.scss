@@ -1,33 +1,33 @@
 ﻿/* Primary Axis Alignment */
 .ai-center{
   display: flex;
-  align-items: center;
+  align-items: center !important;
 }
 
 .ai-start {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-start !important;
 }
 
 .ai-end {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-end !important;
 }
 
 /* Secondary Axis Justification */
 .jc-center {
   display: flex;
-  justify-content: center;
+  justify-content: center !important;
 }
 
 .jc-start {
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-start !important;
 }
 
 .jc-end {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end !important;
 }
 
 
