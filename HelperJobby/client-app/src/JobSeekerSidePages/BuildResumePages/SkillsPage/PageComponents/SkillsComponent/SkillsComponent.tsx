@@ -160,7 +160,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
                 </button>
             </div>
             <div className={"form-and-buttons-divider"}>
-                <button className={"blue-button min-continue-button-size"} onClick={saveSkills}>
+                <button className={"blue-button min-8chr-btn-width"} onClick={saveSkills}>
                     {savingProcess ?
                         <WhiteLoadingSpinner/>
                         :

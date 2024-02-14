@@ -43,6 +43,8 @@ import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/W
 import ProvideRequiredDataLink from "../../../../../Components/ProvideRequiredDataLink/ProvideRequiredDataLink";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {JobService} from "../../../../../services/jobService";
+import {JobProperties} from "../../../../../enums/utilityEnums/JobProperties";
+import AddJobMissingInfoDialog from "../AddJobMissingInfoDialog/AddJobMissingInfoDialog";
 
 
 interface ReviewJobComponentProps {
@@ -69,8 +71,10 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
     const [showEditContactEmailDialog, setShowEditContactEmailDialog] = useState(false);
     const [showEditContactPhoneDialog, setShowEditContactPhoneDialog] = useState(false);
     const [isHighlightedFooter, setIsHighlightedFooter] = useState(true);
-    const [requiredInfoMissing, setRequiredInfoMissing] = useState(checkIfRequiredInfoMissing);
-    const [additionalInfoIsMissing, setAdditionalInfoIsMissing] = useState(checkIfAdditionalInfoIsMissing);
+    const [requiredInfoMissing, setRequiredInfoMissing] = useState(false);
+    const [additionalInfoIsMissing, setAdditionalInfoIsMissing] = useState(false);
+    const [missingJobProperties, setMissingJobProperties] = useState<JobProperties[]>([]);
+    const [showAddMissingInfoDialog, setShowAddMissingInfoDialog] = useState(false);
     const jobService = new JobService();
 
     useEffect(() => {
@@ -91,8 +95,8 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
             checkIfJobInfoIsMissing();
             setLoading(false);
         }
-    }, [incompleteJob]);
-
+    }, [incompleteJob, showAddMissingInfoDialog]);
+    
     async function fetchInitialPageData() {
         await fetchJobAndSetJobCreation();
     }
@@ -102,14 +106,11 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
     }
 
     async function confirmJobCreation() {
-        const requiredJobInfoMissing = checkIfRequiredInfoMissing();
-        if (requiredJobInfoMissing){
-            setRequiredInfoMissing(requiredJobInfoMissing);
-            return;
-        }
+        checkIfRequiredInfoMissing();
         try {
             setRequestInProgress(true);
             await jobService.createJob(incompleteJob!.id);
+            navigate(`${employerPagesPaths.JOB_POSTING}`)
         }
         catch (err){
             logErrorInfo(err)
@@ -122,29 +123,70 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
     
     
     function checkIfJobInfoIsMissing() {
-        const requiredInfoIsMissing = checkIfRequiredInfoMissing();
-        const additionalInfoIsMissing = checkIfAdditionalInfoIsMissing();
-        if (requiredInfoIsMissing){
-            setRequiredInfoMissing(true);
+        if (showAddMissingInfoDialog){
+            return;
         }
-        if (additionalInfoIsMissing){
-            setAdditionalInfoIsMissing(true)
-        }
+        setMissingJobProperties([]);
+        checkIfRequiredInfoMissing();
+        checkIfAdditionalInfoIsMissing();
     }
     function checkIfRequiredInfoMissing(){
-        return (!incompleteJob?.jobTitle || !incompleteJob?.description || !incompleteJob?.numberOfOpenings ||
-            !incompleteJob?.location || !incompleteJob?.contactEmail || (!incompleteJob?.jobType || incompleteJob.jobType.length === 0));
+        let tempMissingProperties : JobProperties[] = [];
+        setRequiredInfoMissing(false);
+        if (!incompleteJob?.jobTitle){
+            tempMissingProperties.push(JobProperties.jobTitle);
+            setRequiredInfoMissing(true);
+        }
+        if (!incompleteJob?.jobType || incompleteJob.jobType.length == 0){
+            tempMissingProperties.push(JobProperties.jobType);
+            setRequiredInfoMissing(true);
+        }
+        if (!incompleteJob?.description){
+            tempMissingProperties.push(JobProperties.jobDescription);
+            setRequiredInfoMissing(true);
+        }
+        if (!incompleteJob?.contactEmail){
+            tempMissingProperties.push(JobProperties.contactEmail);
+            setRequiredInfoMissing(true);
+        }
+        if (!incompleteJob?.numberOfOpenings){
+            tempMissingProperties.push(JobProperties.numberOfOpenings);
+            setRequiredInfoMissing(true);
+        }
+        if (!incompleteJob?.jobLocationType){
+            tempMissingProperties.push(JobProperties.jobLocation);
+            setRequiredInfoMissing(true);
+        }
+        setMissingJobProperties(prev => [...prev, ...tempMissingProperties]);
     }
-    function checkIfAdditionalInfoIsMissing() : boolean{
-        return !incompleteJob?.salary || (!incompleteJob?.schedule || incompleteJob.schedule.length === 0) ||
-            (!incompleteJob?.benefits || incompleteJob.benefits.length === 0) || !incompleteJob.contactEmail;
+    function checkIfAdditionalInfoIsMissing(){
+        let tempMissingProperties : JobProperties[] = [];
+        setAdditionalInfoIsMissing(false);
+        if (!incompleteJob?.salary){
+            tempMissingProperties.push(JobProperties.jobSalary);
+            setAdditionalInfoIsMissing(true);
+        }
+        if (!incompleteJob?.schedule || incompleteJob.schedule.length == 0){
+            tempMissingProperties.push(JobProperties.schedule);
+            setAdditionalInfoIsMissing(true);
+        }
+        if (!incompleteJob?.benefits || incompleteJob.benefits.length == 0){
+            tempMissingProperties.push(JobProperties.benefits);
+            setAdditionalInfoIsMissing(true);
+        }
+        setMissingJobProperties(prev => [...prev, ...tempMissingProperties]);
     }
 
     return (
         loading ? <LoadingPage/> :
             <>
-                <EditJobTitleDialog showEditJobTitleDialog={showEditJobTitleDialog}
-                                    setShowEditJobTitleDialog={setShowEditJobTitleDialog}/>
+                <AddJobMissingInfoDialog
+                    showDialog={showAddMissingInfoDialog}
+                    setShowDialog={setShowAddMissingInfoDialog}
+                    missingJobProperties={missingJobProperties}
+                />
+                <EditJobTitleDialog showDialog={showEditJobTitleDialog}
+                                    setShowDialog={setShowEditJobTitleDialog}/>
                 <EditNumberOfOpeningsDialog showDialog={showEditNumberOfOpeningsDialog}
                                             setShowDialog={setShowEditNumberOfOpeningsDialog}/>
                 <EditLanguageAndCountryDialog showDialog={showEditLanguageAndCountryDialog}
@@ -189,7 +231,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={"bold-navigation-link"}>
+                                    <div className={"bold-navigation-link"} onClick={() => setShowAddMissingInfoDialog(true)}>
                                         <FontAwesomeIcon className={"svg1rem icon-right-margin"} icon={faPlus}/>
                                         <span>Add info</span>
                                     </div>
@@ -255,7 +297,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                     jobInfoLabel={"Pay"}
                                     fieldValue={formatJobSalaryDisplay(incompleteJob!)}
                                     onEditClick={() => setShowEditSalaryDialog(true)}
-                                    isFieldRequired={true}
+                                    isFieldRequired={false}
                                 />
                                 <MultipleRowsReviewBlock
                                     fieldLabel={"Benefits"}
@@ -303,7 +345,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                             <JobReviewJobInfoBlock
                                 isFieldRequired={false}
                                 jobInfoLabel={"Candidates contact you (phone number)"}
-                                fieldValue={incompleteJob!.contactPhoneNumber || ""}
+                                fieldValue={incompleteJob!.contactPhoneNumber || "No"}
                                 onEditClick={() => setShowEditContactPhoneDialog(true)}
                             />
                         </form>
@@ -359,8 +401,8 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                 <FontAwesomeIcon className={'svg1rem mr05rem'} icon={faArrowLeftLong}/>
                                 <span>Back</span>
                             </button>
-                            <button className={"blue-button"}
-                                    disabled={requiredInfoMissing}
+                            <button className={"blue-button min-7chr-arrow-btn-width"}
+                                    disabled={requestInProgress}
                                     onClick={confirmJobCreation }
                             >
                                 {requestInProgress ? <WhiteLoadingSpinner/>

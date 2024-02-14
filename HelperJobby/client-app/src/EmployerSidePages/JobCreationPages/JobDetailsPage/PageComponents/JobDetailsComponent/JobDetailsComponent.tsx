@@ -11,7 +11,7 @@ import {faChevronDown, faChevronUp, faCircleExclamation} from "@fortawesome/free
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import JobCreateNavigationButtons
     from "../../../SharedComponents/JobCreateNavigationButtons/JobCreateNavigationButtons";
-import {useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import JobTypes from "../../../../../enums/modelDataEnums/JobTypes";
 import Schedules from "../../../../../enums/modelDataEnums/Schedules";
@@ -43,8 +43,10 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
     const incompleteJobService = new IncompleteJobService();
+    const location = useLocation();
 
     useEffect(() => {
+        console.log(location.pathname)
         fetchInitialPageData()
     }, []);
 

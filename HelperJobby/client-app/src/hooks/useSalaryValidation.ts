@@ -52,7 +52,7 @@ export function useSalaryValidation(
 
         if (!isValidNumber(maxSalaryAmountValue)) {
             setIsInvalidMaxSalary(true);
-            setMaxSalaryInputError(invalidNumberError)
+            setMaxSalaryInputError(invalidNumberError);
             return;
         }
         isValidSalaryRangeProvided(minSalaryAmountValue, maxSalaryAmountValue)

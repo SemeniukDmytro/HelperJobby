@@ -11,6 +11,8 @@ import {
     faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import {faCalendar} from "@fortawesome/free-regular-svg-icons";
+import {useNavigate} from "react-router-dom";
+import employerPagesPaths from "../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface EmployersSidebarProps {
 }
@@ -20,6 +22,7 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [showCreateOptions, setShowCreateOptions] = useState(false);
+    const navigate = useNavigate();
     function handleNavBarSizeButtonClick() {
         setIsExpanded(!isExpanded);
         if (isExpanded){
@@ -57,6 +60,10 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
         setShowCreateOptions(false);
     }
 
+    function navigateToJobPostingPage() {
+        navigate(employerPagesPaths.JOB_POSTING);
+    }
+
     return (
         <>
             <nav 
@@ -90,12 +97,12 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                             </button>
                         </div>
                         <ul className="nav-buttons-list">
-                            <li className={"nav-list-component"}>
+                            <li className={"nav-list-component"}
+                                onMouseEnter={handleShowCreateOptionsMouseEnter}
+                                onMouseLeave={handelShowCreateOptionsMouseLeave}  >
                                 <div className={"nav-bar-button-container"}>
                                     <div 
-                                        className={"white-nav-link-container"}
-                                        onMouseEnter={handleShowCreateOptionsMouseEnter}
-                                        onMouseLeave={handelShowCreateOptionsMouseLeave}   
+                                        className={"white-nav-link-container"} 
                                     >
                                         <a className={"nav-link"}>
                                             <div className="nav-icon-container">
@@ -118,7 +125,7 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                                     <div className={"create-new-options-layout"}>
                                         <div className={"create-new-options-text"}>
                                             <ul className={"nav-buttons-list"}>
-                                                <li className={"nav-list-component"}>
+                                                <li className={"nav-list-component"} onClick={navigateToJobPostingPage}>
                                                     <div className={"nav-bar-button-container"}>
                                                         <div className={"nav-link-container"}>
                                                             <a className={"nav-link"}>

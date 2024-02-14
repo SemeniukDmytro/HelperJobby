@@ -111,6 +111,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
         setExecuteFormValidation(true);
         if (!jobTitle) {
             jobTitleInputRef.current?.focus();
+            console.log("dasdas")
             return;
         }
         if (isNanAfterIntParse(numberOfOpenings) || invalidNumberOfOpenings) {
@@ -120,7 +121,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             setLocationError("Add an address")
             return;
         }
-        if (!locationSelectedFromSuggests) {
+        if (!locationSelectedFromSuggests && jobLocationTypeEnumValue != JobLocationTypes.Remote) {
             setLocationError("We don't recognize this address. Please select address from suggestions window")
             return;
         }
@@ -145,7 +146,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             }
             const jobCreationResponse = await incompleteJobService.startJobCreation(createdIncompleteJob);
             setIncompleteJob(jobCreationResponse);
-            navigate(`${employerPagesPaths.JOB_DETAILS}/${jobId}`)
+            navigate(`${employerPagesPaths.JOB_DETAILS}/${jobCreationResponse.id}`)
         } catch (err) {
             logErrorInfo(err)
         } finally {
@@ -166,7 +167,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             }
             const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJob);
             setIncompleteJob(retrievedIncompleteJob);
-            navigate(`${employerPagesPaths.JOB_DETAILS}/${jobId}`)
+            navigate(`${employerPagesPaths.JOB_DETAILS}/${retrievedIncompleteJob.id}`)
         } catch (error) {
             logErrorInfo(error)
         } finally {
@@ -269,11 +270,11 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                                 setLocationSelectedFromSuggests={setLocationSelectedFromSuggests}
                                 locationError={locationError}
                                 setLocationError={setLocationError}
-                                includeWindowScroll={false}
+                                includeWindowScroll={true}
                             />
 
                             <button
-                                className="blue-button br-corner-button min-continue-button-size"
+                                className="blue-button br-corner-button min-8chr-btn-width"
                                 type={'submit'}
                                 disabled={requestInProgress}
                                 onClick={handleJobBasicsSubmit}

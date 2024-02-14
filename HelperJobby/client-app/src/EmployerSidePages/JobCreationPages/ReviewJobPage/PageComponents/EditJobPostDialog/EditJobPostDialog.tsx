@@ -59,7 +59,7 @@ const EditJobPostDialog: FC<EditJobPostDialogProps> = ({
                             Close
                         </button>
                         <button
-                            className={"blue-button mib-done-button-width"}
+                            className={"blue-button min-4chr-btn-width"}
                             onClick={executeJobEditing}
                             disabled={requestInProgress}
                         >

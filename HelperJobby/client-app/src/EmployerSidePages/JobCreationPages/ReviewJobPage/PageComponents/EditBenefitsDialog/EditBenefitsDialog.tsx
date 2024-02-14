@@ -12,6 +12,8 @@ import {handleJobFeaturesListAppearance} from "../../../../../utils/handleJobFea
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import {addBenefit} from "../../../../../utils/manageJobFeatureSelect";
+import ChangeJobBenefitsDialogContent
+    from "../../../SharedComponents/ChangeJobBenefitsDialogContent/ChangeJobBenefitsDialogContent";
 
 interface EditBenefitsDialogProps {
     showDialog: boolean;
@@ -22,40 +24,9 @@ const EditBenefitsDialog: FC<EditBenefitsDialogProps> = ({
                                                              showDialog,
                                                              setShowDialog
                                                          }) => {
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
-    const [selectedBenefits, setSelectedBenefits] = useState(incompleteJob?.benefits || []);
     const [requestInProgress, setRequestInProgress] = useState(false);
-    const [benefitsBoxHeight, setBenefitsBoxHeight] = useState("78px");
-    const benefitsListRef = useRef<HTMLUListElement>(null);
-    const [showFullBenefitsList, setShowFullBenefitsList] = useState(false);
-    const incompleteJobService = new IncompleteJobService();
-
-    useEffect(() => {
-        if (showDialog){
-            setSelectedBenefits(incompleteJob?.benefits || []);
-            setShowFullBenefitsList(false);
-            setBenefitsBoxHeight("78px");
-        }
-    }, [showDialog]);
-
-    async function editIncompleteJobBenefits() {
-        try {
-            setRequestInProgress(true)
-            const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
-                ...incompleteJob,
-                benefits : selectedBenefits
-            }
-            const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJob);
-            setIncompleteJob(retrievedIncompleteJob);
-            setShowDialog(false);
-        }
-        catch (err){
-            logErrorInfo(err)
-        }
-        finally {
-            setRequestInProgress(false);
-        }
-    }
+    const [editFunction, setEditFunction] = useState<() => void>(async () => {
+    });
     
     
     return (
@@ -63,42 +34,11 @@ const EditBenefitsDialog: FC<EditBenefitsDialogProps> = ({
             showDialog={showDialog}
             setShowDialog={setShowDialog}
             requestInProgress={requestInProgress}
-            executeJobEditing={editIncompleteJobBenefits}>
-            <div className={"small-title"}>
-                Benefits
-            </div>
-            <div
-                className={"job-features-fb"}
-                style={{
-                    height: benefitsBoxHeight
-                }}
-            >
-                <ul
-                    className={"job-features-list"}
-                    ref={benefitsListRef}
-                >
-                    {benefitsStringValues.map((benefits, index) => (
-                        <JobFeature
-                            key={index}
-                            featureName={benefits}
-                            isSelected={selectedBenefits.includes(benefitStringToEnumMap(benefits)!)}
-                            onClick={() => addBenefit(benefits, selectedBenefits, setSelectedBenefits)}
-                        />
-                    ))}
-                </ul>
-            </div>
-            <div className={"mt05rem"}>
-                   <span className={"bold-navigation-link"}
-                         onClick={() => handleJobFeaturesListAppearance(showFullBenefitsList,
-                             setShowFullBenefitsList, setBenefitsBoxHeight, benefitsListRef)}>
-                        <span>{`${showFullBenefitsList ? "Show less" : "Show more"}`}</span>
-                       {showFullBenefitsList ?
-                           <FontAwesomeIcon className={'svg1rem ml1rem'} icon={faChevronUp}/>
-                           :
-                           <FontAwesomeIcon className={'svg1rem ml1rem'} icon={faChevronDown}/>
-                       }
-                    </span>
-            </div>
+            executeJobEditing={() => editFunction()}>
+            <ChangeJobBenefitsDialogContent showDialog={showDialog}
+                                            setShowDialog={setShowDialog}
+                                            setRequestInProgress={setRequestInProgress}
+                                            setEditFunction={setEditFunction}/>
         </EditJobPostDialog>
     )
 }

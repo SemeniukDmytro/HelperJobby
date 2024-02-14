@@ -20,6 +20,7 @@ interface AutocompleteResultsWindowProps {
     locationSelected?: boolean;
     setLocationSelected?: Dispatch<SetStateAction<boolean>>;
     windowZIndex? : number;
+    includeWindowScroll? : boolean;
 }
 
 const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) => {
@@ -31,7 +32,8 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
     const [delayedInputValue, setDelayedInputValue] = useState("");
     const [autocompleteResults, setAutocompleteResults] = useState<string[][]>([]);
     const [loading, setLoading] = useState(true);
-    const getAutocompleteWindowPosition = useSelectWindowPosition(props.inputFieldRef, autoCompleteRef, props.setShowResult, true);
+    const getAutocompleteWindowPosition = useSelectWindowPosition(props.inputFieldRef, autoCompleteRef, props.setShowResult, 
+        props.includeWindowScroll !== undefined ? props.includeWindowScroll : true);
 
     useEffect(() => {
         getAutocompleteWindowPosition();

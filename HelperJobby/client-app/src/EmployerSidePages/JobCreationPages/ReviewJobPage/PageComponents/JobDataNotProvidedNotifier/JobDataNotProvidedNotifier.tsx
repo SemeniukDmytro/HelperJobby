@@ -11,12 +11,12 @@ const JobDataNotProvidedNotifier: FC<JobDataNotProvidedNotifierProps> = ({
                                                                              isRequired
                                                                          }) => (
     (isRequired ?
-            <span className={'error-text centralized-content'}>
+            <span className={'error-text ai-center'}>
                 <FontAwesomeIcon className={`error-text mr025rem svg125rem`} icon={faCircleExclamation}/>
                 <span className={"error-text"}>Required information is missing</span>
             </span>
             :
-            <span className={"dark-blue-color centralized-content"}>
+            <span className={"dark-blue-color ai-center"}>
                 <FontAwesomeIcon className={`svg125rem mr025rem`} icon={faCirclePlus}/>
                 <span className={""}>Add optional information</span>
             </span>

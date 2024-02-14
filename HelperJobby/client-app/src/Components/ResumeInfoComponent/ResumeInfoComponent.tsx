@@ -182,7 +182,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                 <>
                     <div style={{marginBottom: "1rem"}} className={"content-separation-line"}></div>
                     <div className={"form-and-buttons-divider"}>
-                        <button className={"blue-button min-continue-button-size"} onClick={navigateToProfilePage}>
+                        <button className={"blue-button min-8chr-btn-width"} onClick={navigateToProfilePage}>
                             <span>Continue</span>
                         </button>
                     </div>

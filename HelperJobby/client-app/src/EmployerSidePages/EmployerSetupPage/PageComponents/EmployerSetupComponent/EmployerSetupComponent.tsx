@@ -198,7 +198,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                     />
                     <div className="mb2rem"></div>
                     <button
-                        className="blue-button br-corner-button min-continue-button-size"
+                        className="blue-button br-corner-button min-8chr-btn-width"
                         type={'submit'}
                         onClick={handleFormSubmit}
                     >

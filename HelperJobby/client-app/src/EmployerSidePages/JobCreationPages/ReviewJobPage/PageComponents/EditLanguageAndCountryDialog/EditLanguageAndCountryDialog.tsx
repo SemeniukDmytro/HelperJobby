@@ -22,11 +22,11 @@ const EditLanguageAndCountryDialog: FC<EditLanguageAndCountryDialogProps> = ({
     setShowDialog
                                                                              }) => {
     
+    const [requestInProgress, setRequestInProgress] = useState(false);
     const {incompleteJob, setIncompleteJob} = useJobCreation();
     const [language, setLanguage] = useState(incompleteJob?.language || "English");
     const [country, setCountry] = useState(incompleteJob?.locationCountry || "Canada");
     const [executeFormValidation, setExecuteFormValidation] = useState(false);
-    const [requestInProgress, setRequestInProgress] = useState(false);
     const isInvalidLanguage = false;
     const countrySelectorRef = useRef<HTMLSelectElement>(null);
     const incompleteJobService = new IncompleteJobService();
@@ -97,7 +97,7 @@ const EditLanguageAndCountryDialog: FC<EditLanguageAndCountryDialogProps> = ({
                             <div className={"warning-pop-up-icon mr1rem"}>
                                 <FontAwesomeIcon icon={faTriangleExclamation}/>
                             </div>
-                            <div className={"dark-small-text centralized-content"}>
+                            <div className={"dark-small-text ai-center"}>
                                 If you change the job's language or country now, you may need to enter additional
                                 information before posting your job.
                             </div>

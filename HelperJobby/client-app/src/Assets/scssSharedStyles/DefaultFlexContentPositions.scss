@@ -1,7 +1,35 @@
-﻿.centralized-content{
+﻿/* Primary Axis Alignment */
+.ai-center{
   display: flex;
   align-items: center;
 }
+
+.ai-start {
+  display: flex;
+  align-items: flex-start;
+}
+
+.ai-end {
+  display: flex;
+  align-items: flex-end;
+}
+
+/* Secondary Axis Justification */
+.jc-center {
+  display: flex;
+  justify-content: center;
+}
+
+.jc-start {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.jc-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
 
 .flex-column{
   display: flex;
