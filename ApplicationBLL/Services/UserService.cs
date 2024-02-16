@@ -42,7 +42,7 @@ public class UserService : IUserService
     public async Task<User> UpdateUser(int id, User updatedUser)
     {
         if (GetCurrentUserId() != id) throw new Exception("Invalid user");
-        var userEntity = await _userQueryRepository.GetUserByIdPlain(id);
+        var userEntity = await _userQueryRepository.GetUserById(id);
 
         if (!string.IsNullOrEmpty(updatedUser.AccountType) && userEntity.AccountType != updatedUser.AccountType)
             userEntity.AccountType = updatedUser.AccountType;
@@ -52,7 +52,7 @@ public class UserService : IUserService
     public async Task<User> UpdateUserVulnerableInfo(int userId, User updatedUser, string userPassword)
     {
         if (GetCurrentUserId() != userId) throw new Exception("Invalid user");
-        var userEntity = await _userQueryRepository.GetUserByIdPlain(userId);
+        var userEntity = await _userQueryRepository.GetUserById(userId);
         if (!_passwordHandler.Verify(userPassword, userEntity.PasswordHash))
             throw new UserNotFoundException("Password provided for specified email is wrong");
 

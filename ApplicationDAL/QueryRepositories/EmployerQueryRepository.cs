@@ -1,5 +1,4 @@
 using ApplicationDAL.Context;
-using ApplicationDAL.DALHelpers;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
@@ -10,48 +9,28 @@ namespace ApplicationDAL.QueryRepositories;
 public class EmployerQueryRepository : IEmployerQueryRepository
 {
     private readonly ApplicationContext _applicationContext;
-    private readonly EntityInclusionHandler _entityInclusionHandler;
 
-    public EmployerQueryRepository(ApplicationContext applicationContext,
-        EntityInclusionHandler entityInclusionHandler)
+    public EmployerQueryRepository(ApplicationContext applicationContext)
     {
         _applicationContext = applicationContext;
-        _entityInclusionHandler = entityInclusionHandler;
+    }
+    
+    public async Task<Employer> GetEmployerById(int employerId)
+    {
+        return  await GetEmployerAccount(employerId);;
     }
 
-    public async Task<Employer> GetEmployer(int userId)
+    public async Task<Employer> GetEmployerByIdWithOrganization(int employerId)
     {
-        return await GetUserWithEmployerAccount(userId, q => q.Include(u => u.Employer));
+        return await GetEmployerAccount(employerId, q => q.Include(e => e.Organization));
     }
 
-    public async Task<Employer> GetEmployerWithOrganization(int userId)
+    private async Task<Employer> GetEmployerAccount(int employerId,
+        Func<IQueryable<Employer>, IQueryable<Employer>> includeFunc = null)
     {
-        var employerWithOrganization = await _applicationContext.Employers
-            .Where(e => e.UserId == userId)
-            .Select(e => new Employer()
-            {
-                Id = e.Id,
-                Email = e.Email,
-                FullName = e.FullName,
-                ContactNumber = e.ContactNumber,
-                UserId = e.UserId,
-                HasPostedFirstJob = e.HasPostedFirstJob,
-                OrganizationId = e.OrganizationId,
-                Organization = e.Organization
-            }).FirstOrDefaultAsync();
-        if (employerWithOrganization == null)
-        {
-            throw new EmployerAccountNotFoundException();
-        }
-
-        return employerWithOrganization;
-    }
-
-    private async Task<Employer> GetUserWithEmployerAccount(int userId,
-        Func<IQueryable<User>, IQueryable<User>> includeFunc = null)
-    {
-        var user = await _entityInclusionHandler.GetUser(userId, includeFunc);
-        var employer = user.Employer;
+        var query = _applicationContext.Employers.AsQueryable();
+        query = includeFunc == null ? query : includeFunc(query);
+        var employer = await query.FirstOrDefaultAsync(e => e.Id == employerId);
 
         if (employer == null) throw new EmployerAccountNotFoundException();
 

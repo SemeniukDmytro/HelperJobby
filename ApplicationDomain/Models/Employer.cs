@@ -13,10 +13,12 @@ public class Employer
     [Required] [MaxLength(50)] public string Email { get; set; }
 
     [MaxLength(15)] public string ContactNumber { get; set; }
-    
-    [DefaultValue(false)]
-    public bool HasPostedFirstJob { get; set; }
 
+    [DefaultValue(false)] public bool HasPostedFirstJob { get; set; }
+
+    [Required]
+    [DefaultValue(false)]
+    public bool IsOrganizationOwner { get; set; }
     [ForeignKey("User")] public int UserId { get; set; }
 
     [Required] public User User { get; set; }

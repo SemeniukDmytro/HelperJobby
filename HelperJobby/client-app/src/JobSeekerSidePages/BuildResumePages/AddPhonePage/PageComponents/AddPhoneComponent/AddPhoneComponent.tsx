@@ -7,7 +7,6 @@ import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/W
 import {updateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {JobSeekerService} from "../../../../../services/jobSeekerService";
-import {useAuth} from "../../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
 import {JobSeekerDTO} from "../../../../../DTOs/accountDTOs/JobSeekerDTO";
@@ -21,7 +20,6 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
     const {setProgressPercentage, setSaveFunc} = useResumeBuild();
     const jobSeekerService = new JobSeekerService();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
-    const {authUser} = useAuth();
     const navigate = useNavigate();
     const [phoneNumber, setPhoneNumber] = useState(jobSeeker!.phoneNumber);
     const phoneNumberInputRef = useRef<HTMLInputElement>(null);
@@ -58,7 +56,7 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
             setSavingInfo(true);
             const updatedJobSeeker = updateJobSeekerDTO(jobSeeker!.firstName,
                 jobSeeker!.lastName, phoneNumber, jobSeeker!.address);
-            const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
+            const response = await jobSeekerService.putJobSeekerAccount(jobSeeker!.id, updatedJobSeeker);
             setJobSeeker((prevState) => {
                 if (prevState) {
 

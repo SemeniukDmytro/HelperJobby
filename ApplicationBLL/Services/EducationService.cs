@@ -8,38 +8,36 @@ namespace ApplicationBLL.Services;
 
 public class EducationService : IEducationService
 {
-    private readonly IEducationQueryRepository _educationQueryRepository;
     private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
-    private readonly IJobSeekerQueryRepository _jobSeekerQueryRepository;
-    private readonly IUserService _userService;
+    private readonly IJobSeekerService _jobSeekerService;
+    private readonly IResumeQueryRepository _resumeQueryRepository;
 
-    public EducationService(IEducationQueryRepository educationQueryRepository,
-        IJobSeekerQueryRepository jobSeekerQueryRepository, IUserService userService,
-        IEnqueuingTaskHelper enqueuingTaskHelper)
+    public EducationService(IEnqueuingTaskHelper enqueuingTaskHelper, IJobSeekerService jobSeekerService,
+        IResumeQueryRepository resumeQueryRepository)
     {
-        _educationQueryRepository = educationQueryRepository;
-        _jobSeekerQueryRepository = jobSeekerQueryRepository;
-        _userService = userService;
         _enqueuingTaskHelper = enqueuingTaskHelper;
+        _jobSeekerService = jobSeekerService;
+        _resumeQueryRepository = resumeQueryRepository;
     }
 
     public async Task<Education> AddEducation(int resumeId, Education education)
     {
-        var currentUserId = _userService.GetCurrentUserId();
-        var jobSeeker = await _jobSeekerQueryRepository.GetJobSeekerWithResume(currentUserId);
-        if (jobSeeker.Resume.Id != resumeId)
+        var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
+        var resume = await _resumeQueryRepository.GetResumeByJobSeekerId(currentJobSeekerId);
+        if (resume.Id != resumeId)
             throw new ForbiddenException("You can not add education to this resume");
-
         education.ResumeId = resumeId;
         return education;
     }
 
     public async Task<Education> UpdateEducation(int educationId, Education updatedEducation)
     {
-        var currentUserId = _userService.GetCurrentUserId();
-        var jobSeeker = await _jobSeekerQueryRepository.GetJobSeekerWithResume(currentUserId);
-        var educationEntity = await _educationQueryRepository.GetEducationById(educationId);
-        if (educationEntity.ResumeId != jobSeeker.Resume.Id) throw new ForbiddenException();
+        var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
+        var resume = await _resumeQueryRepository.GetResumeByJobSeekerId(currentJobSeekerId);
+        var educationEntity = resume.Educations.FirstOrDefault(e => e.Id == educationId);
+
+        if (educationEntity == null) throw new EducationNotFoundException();
+
         var oldEducationFieldOfStudy = educationEntity.FieldOfStudy;
         educationEntity = UpdateEducation(educationEntity, updatedEducation);
         await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
@@ -53,17 +51,18 @@ public class EducationService : IEducationService
     public async Task<(Education educationToDelete, bool isResumeNeedToBeDeleted)> DeleteEducation(int educationId)
     {
         var isInvalidResume = false;
-        var currentUserId = _userService.GetCurrentUserId();
-        var jobSeeker = await _jobSeekerQueryRepository.GetJobSeekerWithResume(currentUserId);
-        if (jobSeeker.Resume == null) throw new ResumeNotFoundException();
-        var educationEntity = jobSeeker.Resume.Educations.FirstOrDefault(e => e.Id == educationId);
+        var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
+        var resume = await _resumeQueryRepository.GetResumeByJobSeekerId(currentJobSeekerId);
+        var educationEntity = resume.Educations.FirstOrDefault(e => e.Id == educationId);
         if (educationEntity == null) throw new ForbiddenException();
 
-        if (jobSeeker.Resume.Educations.Count <= 1 && jobSeeker.Resume.WorkExperiences.Count == 0
-                                                          && jobSeeker.Resume.Skills.Count == 0)
+        if (resume.Educations.Count <= 1 && resume.WorkExperiences.Count == 0
+                                         && resume.Skills.Count == 0)
+        {
             isInvalidResume = true;
+        }
 
-        educationEntity.Resume = jobSeeker.Resume;
+        educationEntity.Resume = resume;
 
         return (educationEntity, isInvalidResume);
     }

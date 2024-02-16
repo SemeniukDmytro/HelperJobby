@@ -30,17 +30,17 @@ public class IncompleteJobController : ExtendedBaseController
 
     // GET: api/IncompleteJob/1/incomplete-jobs
     [HttpGet("{employerId}/incomplete-jobs")]
-    public async Task<IEnumerable<IncompleteJobDTO>> GetEmployerIncompleteJobs(int employerId)
+    public async Task<IEnumerable<IncompleteJobDTO>> GetIncompleteJobsByEmployerId(int employerId)
     {
-        return _mapper.Map<IEnumerable<IncompleteJobDTO>>(await
-            _incompleteJobQueryRepository.GetIncompleteJobsByEmployerId(employerId));
+        var retrievedIncompleteJob = await _incompleteJobService.GetEmployerIncompleteJobs(employerId);
+        return _mapper.Map<IEnumerable<IncompleteJobDTO>>(retrievedIncompleteJob);
     }
 
     [HttpGet("{incompleteJobId}")]
     public async Task<IncompleteJobDTO> GetIncompleteJobById(int incompleteJobId)
     {
-        return _mapper.Map<IncompleteJobDTO>(
-            await _incompleteJobQueryRepository.GetIncompleteJobById(incompleteJobId));
+        var incompleteJob = await _incompleteJobService.GetIncompleteJobById(incompleteJobId);
+        return _mapper.Map<IncompleteJobDTO>(incompleteJob);
     }
 
     // POST: api/IncompleteJob

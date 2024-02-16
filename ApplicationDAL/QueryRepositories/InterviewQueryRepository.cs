@@ -15,7 +15,7 @@ public class InterviewQueryRepository : IInterviewQueryRepository
         _applicationContext = applicationContext;
     }
 
-    public async Task<Interview> GetInterviewByJobIdAndJobSeeker(int jobId, int jobSeekerId)
+    public async Task<Interview> GetInterviewByJobIdAndJobSeekerId(int jobId, int jobSeekerId)
     {
         return await GetInterview(jobId, jobSeekerId, q => q
             .Include(i => i.JobSeeker));
@@ -29,6 +29,36 @@ public class InterviewQueryRepository : IInterviewQueryRepository
     public async Task<Interview> GetInterviewWithJob(int jobId, int jobSeekerId)
     {
         return await GetInterview(jobId, jobSeekerId, q => q.Include(i => i.Job));
+    }
+
+    public async Task<IEnumerable<Interview>> GetInterviewsByJobSeekerId(int jobSeekerId)
+    {
+        var interviews = await _applicationContext.Interviews.Where(i => i.JobSeekerId == jobSeekerId)
+            .Select(i => new Interview
+            {
+                JobId = i.JobId,
+                JobSeekerId = i.JobSeekerId,
+                InterviewStart = i.InterviewStart,
+                InterviewEnd = i.InterviewEnd,
+                InterviewType = i.InterviewType,
+                AppointmentInfo = i.AppointmentInfo,
+                Job = new Job
+                {
+                    Id = i.JobId,
+                    JobTitle = i.Job.JobTitle,
+                    Employer = new Employer
+                    {
+                        Id = i.Job.EmployerId,
+                        Organization = new Organization
+                        {
+                            Id = i.Job.Employer.OrganizationId,
+                            Name = i.Job.Employer.Organization.Name
+                        }
+                    },
+                    Location = i.Job.Location
+                }
+            }).ToListAsync();
+        return interviews;
     }
 
     private async Task<Interview> GetInterview(int jobId, int jobSeekerId,

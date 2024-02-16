@@ -4,6 +4,6 @@ namespace ApplicationDomain.Abstraction.IQueryRepositories;
 
 public interface IEmployerQueryRepository
 {
-    public Task<Employer> GetEmployer(int userId);
-    public Task<Employer> GetEmployerWithOrganization(int userId);
+    public Task<Employer> GetEmployerById(int employerId);
+    public Task<Employer> GetEmployerByIdWithOrganization(int employerId);
 }

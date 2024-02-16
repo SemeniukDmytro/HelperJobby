@@ -40,7 +40,7 @@ export function JobSeekerProvider({children}: { children: ReactNode }) {
             if (jobSeekerWasLoaded || !authUser) {
                 return;
             }
-            const retrievedJobSeeker = await jobSeekerService.getCurrentJobSeekerAllInfo();
+            const retrievedJobSeeker = await jobSeekerService.getCurrentJobSeeker();
             setJobSeeker(prev => {
                 if (!prev) {
                     return retrievedJobSeeker;

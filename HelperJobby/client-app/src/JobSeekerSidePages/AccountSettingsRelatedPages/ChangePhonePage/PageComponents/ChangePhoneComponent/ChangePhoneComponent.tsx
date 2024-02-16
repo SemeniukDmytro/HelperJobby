@@ -45,7 +45,7 @@ const ChangePhoneComponent: FC<ChangePhoneComponentProps> = () => {
                 lastName: jobSeeker!.lastName,
                 address: jobSeeker!.address
             }
-            const retrievedJobSeeker = await jobSeekerService.putJobSeekerAccount(jobSeeker!.userId, updatedJobSeeker);
+            const retrievedJobSeeker = await jobSeekerService.putJobSeekerAccount(jobSeeker!.id, updatedJobSeeker);
             setJobSeeker((prev) => {
                 return prev ? {
                     ...prev,

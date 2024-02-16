@@ -23,7 +23,7 @@ const JobPreviewDialog: FC<JobPreviewDialogProps> = ({
                                                          showDialog,
                                                          setShowDialog
                                                      }) => {
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
+    const {incompleteJob} = useJobCreation();
     const {employer} = useEmployer();
 
     function closeDialog() {

@@ -1,7 +1,6 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import "./EditContactInfoForm.scss";
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
-import {useAuth} from "../../../../hooks/useAuth";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobSeekerService} from "../../../../services/jobSeekerService";
@@ -22,7 +21,6 @@ interface EditContactInfoFormProps {
 }
 
 const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
-    const {authUser} = useAuth();
     const navigate = useNavigate();
     const {jobSeeker, setJobSeeker, fetchJobSeeker} = useJobSeeker();
     const [firstName, setFirstName] = useState("");
@@ -129,7 +127,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
         };
 
         try {
-            const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updateJobSeekerInfo);
+            const response = await jobSeekerService.putJobSeekerAccount(jobSeeker!.id, updateJobSeekerInfo);
             setJobSeeker((prevState) => {
                 if (prevState) {
 

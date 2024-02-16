@@ -33,10 +33,10 @@ public class JobController : ExtendedBaseController
         _enqueuingTaskHelper = enqueuingTaskHelper;
     }
 
-    [HttpGet("jobs/{userId}")]
-    public async Task<IEnumerable<JobDTO>> GetJobsByUserId(int userId)
+    [HttpGet("jobs/{employerId}")]
+    public async Task<IEnumerable<JobDTO>> GetJobsByEmployerId(int employerId)
     {
-        return _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByUserId(userId));
+        return _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByEmployerId(employerId));
     }
 
     [HttpGet("organization-jobs/{organizationId}")]

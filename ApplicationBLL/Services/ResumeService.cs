@@ -7,31 +7,30 @@ namespace ApplicationBLL.Services;
 
 public class ResumeService : IResumeService
 {
-    private readonly IJobSeekerQueryRepository _jobSeekerQueryRepository;
-    private readonly IUserService _userService;
+    private readonly IResumeQueryRepository _resumeQueryRepository;
+    private readonly IJobSeekerService _jobSeekerService;
 
-    public ResumeService(IUserService userService,
-        IJobSeekerQueryRepository jobSeekerQueryRepository)
+    public ResumeService(IResumeQueryRepository resumeQueryRepository, IJobSeekerService jobSeekerService)
     {
-        _userService = userService;
-        _jobSeekerQueryRepository = jobSeekerQueryRepository;
+        _resumeQueryRepository = resumeQueryRepository;
+        _jobSeekerService = jobSeekerService;
     }
 
     public async Task<Resume> CreateResume(Resume createdResume)
     {
-        var currentUserId = _userService.GetCurrentUserId();
-        var jobSeeker = await _jobSeekerQueryRepository.GetJobSeekerWithResume(currentUserId);
-        if (jobSeeker.Resume != null) throw new ForbiddenException("Resume already exists");
-        createdResume.JobSeekerId = jobSeeker.Id;
+        var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
+        var resume = await _resumeQueryRepository.GetResumeByJobSeekerId(currentJobSeekerId);
+        if (resume != null) throw new ForbiddenException("Resume already exists");
+        createdResume.JobSeekerId = currentJobSeekerId;
         return createdResume;
     }
 
 
     public async Task<Resume> DeleteResume(int resumeId)
     {
-        var currentUserId = _userService.GetCurrentUserId();
-        var jobSeeker = await _jobSeekerQueryRepository.GetJobSeekerWithResume(currentUserId);
-        if (resumeId != jobSeeker.Resume.Id) throw new ForbiddenException();
-        return jobSeeker.Resume;
+        var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
+        var resume = await _resumeQueryRepository.GetResumeByJobSeekerId(currentJobSeekerId);
+        if (resumeId != resume.Id) throw new ForbiddenException();
+        return resume;
     }
 }

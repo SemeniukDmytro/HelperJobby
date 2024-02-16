@@ -6,7 +6,6 @@ import {useNavigate} from "react-router-dom";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
 import {JobSeekerService} from "../../../../../services/jobSeekerService";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
-import {useAuth} from "../../../../../hooks/useAuth";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {updateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
@@ -23,7 +22,6 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
     } = useResumeBuild();
     const jobSeekerService = new JobSeekerService();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
-    const {authUser} = useAuth();
     const navigate = useNavigate();
     const [firstName, setFirstName] = useState(jobSeeker!.firstName);
     const [lastName, setLastName] = useState(jobSeeker!.lastName)
@@ -81,7 +79,7 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
             setSavingInfo(true);
             const updatedJobSeeker = updateJobSeekerDTO(firstName, lastName, jobSeeker!.phoneNumber,
                 jobSeeker!.address);
-            const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
+            const response = await jobSeekerService.putJobSeekerAccount(jobSeeker!.id, updatedJobSeeker);
             setJobSeeker((prevState) => {
                 if (prevState) {
 

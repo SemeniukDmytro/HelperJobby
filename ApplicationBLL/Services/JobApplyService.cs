@@ -11,25 +11,27 @@ public class JobApplyService : IJobApplyService
     private readonly IJobApplyQueryRepository _jobApplyQueryRepository;
     private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IJobSeekerQueryRepository _jobSeekerQueryRepository;
-    private readonly IUserService _userService;
+    private readonly IEmployerService _employerService;
+    private readonly IJobSeekerService _jobSeekerService;
 
-    public JobApplyService(IUserService userService, IJobSeekerQueryRepository jobSeekerQueryRepository,
+    public JobApplyService(IJobSeekerQueryRepository jobSeekerQueryRepository,
         IJobApplyQueryRepository jobApplyQueryRepository,
-        IEmployerQueryRepository employerQueryRepository, IJobQueryRepository jobQueryRepository)
+        IEmployerQueryRepository employerQueryRepository, IJobQueryRepository jobQueryRepository, IEmployerService employerService,
+        IJobSeekerService jobSeekerService)
     {
-        _userService = userService;
         _jobSeekerQueryRepository = jobSeekerQueryRepository;
         _jobApplyQueryRepository = jobApplyQueryRepository;
         _employerQueryRepository = employerQueryRepository;
         _jobQueryRepository = jobQueryRepository;
+        _employerService = employerService;
+        _jobSeekerService = jobSeekerService;
     }
 
     public async Task<Job> GetJobAppliesForSpecificJob(int jobId)
     {
-        var currentUserId = _userService.GetCurrentUserId();
-        var currentEmployer = await _employerQueryRepository.GetEmployer(currentUserId);
+        var currentEmployerId = _employerService.GetCurrentEmployerId();
         var job = await _jobQueryRepository.GetJobById(jobId);
-        if (job.EmployerId != currentEmployer.Id)
+        if (job.EmployerId != currentEmployerId)
             throw new ForbiddenException("You can not have access to this information");
 
         return job;
@@ -37,12 +39,11 @@ public class JobApplyService : IJobApplyService
 
     public async Task<JobApply> PostJobApply(int jobId)
     {
-        var currentUserId = _userService.GetCurrentUserId();
-        var currentJobSeeker = await _jobSeekerQueryRepository.GetJobSeekerByUserId(currentUserId);
+        var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
         JobApply jobApply = null;
         try
         {
-            jobApply = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, currentJobSeeker.Id);
+            jobApply = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, currentJobSeekerId);
         }
         catch (Exception e)
         {
@@ -53,7 +54,7 @@ public class JobApplyService : IJobApplyService
         var createdJobApply = new JobApply
         {
             JobId = jobId,
-            JobSeekerId = currentJobSeeker.Id,
+            JobSeekerId = currentJobSeekerId,
             DateApplied = DateOnly.FromDateTime(DateTime.UtcNow)
         };
         return createdJobApply;
@@ -61,9 +62,8 @@ public class JobApplyService : IJobApplyService
 
     public async Task<JobApply> DeleteJobApply(int jobId)
     {
-        var currentUserId = _userService.GetCurrentUserId();
-        var currentJobSeeker = await _jobSeekerQueryRepository.GetJobSeekerByUserId(currentUserId);
-        var jobApplyEntity = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, currentJobSeeker.Id);
+        var currentJobSeekerId = _employerService.GetCurrentEmployerId();
+        var jobApplyEntity = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, currentJobSeekerId);
         return jobApplyEntity;
     }
 }

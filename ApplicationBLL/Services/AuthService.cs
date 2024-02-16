@@ -29,7 +29,7 @@ public class AuthService : IAuthService
     }
 
 
-    public string CreateAuthToken(int userId, string userEmail)
+    public string CreateAuthToken(int userId, string userEmail, int jobSeekerId, int? employerId)
     {
         var identity = new ClaimsIdentity(new GenericIdentity(userEmail, "Token"), new[]
         {
@@ -40,8 +40,14 @@ public class AuthService : IAuthService
         {
             new(JwtRegisteredClaimNames.Email, userEmail),
             new(JwtRegisteredClaimNames.Sub, userId.ToString()),
+            new Claim("jobSeekerId", jobSeekerId.ToString()),
             identity.FindFirst("id")
         };
+
+        if (employerId.HasValue)
+        {
+            claims.Add(new Claim("employerId", employerId.ToString()));
+        }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]!));
 
@@ -88,7 +94,7 @@ public class AuthService : IAuthService
         if (!_passwordHandler.Verify(loginUser.PasswordHash, userEntity.PasswordHash))
             throw new UserNotFoundException("Password provided for specified email is wrong");
 
-        var token = CreateAuthToken(userEntity.Id, userEntity.Email);
+        var token = CreateAuthToken(userEntity.Id, userEntity.Email, userEntity.JobSeeker.Id, userEntity.Employer?.Id);
         return (userEntity, token);
     }
 

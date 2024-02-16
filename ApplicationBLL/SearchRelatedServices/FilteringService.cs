@@ -41,7 +41,8 @@ public class FilteringService : IFilteringService
 
     public IQueryable<ProcessedJobWord> FilterByLocation(IQueryable<ProcessedJobWord> query, string location)
     {
-        return !string.IsNullOrEmpty(location) ? query.Where(p => p.Job.Location.Contains(location)) : query;
+        return !string.IsNullOrEmpty(location) ? query.Where(p => p.Job.Location.ToLower().Contains(location.ToLower()) 
+                                                                  || p.Job.LocationCountry.ToLower().Contains(location.ToLower())) : query;
     }
 
     public IQueryable<ProcessedJobWord> FilterByLanguage(IQueryable<ProcessedJobWord> query, string language)

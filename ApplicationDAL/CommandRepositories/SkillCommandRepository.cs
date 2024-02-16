@@ -33,10 +33,9 @@ public class SkillCommandRepository : ISkillCommandRepository
         return skills;
     }
 
-    public async Task RemoveResumeSkills(int resumeId)
+    public async Task RemoveResumeSkills(List<Skill> skills)
     {
-        var skillsToRemove = _applicationContext.Skills.Where(s => s.ResumeId == resumeId);
-        _applicationContext.Skills.RemoveRange(skillsToRemove);
+        _applicationContext.Skills.RemoveRange(skills);
         await _applicationContext.SaveChangesAsync();
     }
 }

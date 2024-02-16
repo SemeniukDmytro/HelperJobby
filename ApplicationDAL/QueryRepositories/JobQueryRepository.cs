@@ -33,10 +33,10 @@ public class JobQueryRepository : IJobQueryRepository
         return job;
     }
 
-    public async Task<IEnumerable<Job>> GetJobsByUserId(int userId)
+    public async Task<IEnumerable<Job>> GetJobsByEmployerId(int employerId)
     {
-        var jobs = await _applicationContext.Jobs.Where(j => j.Employer.UserId == userId)
-            .Include(j => j.Salary).ToListAsync();
+        var jobs = await _applicationContext.Jobs
+            .Include(j => j.Salary).Where(j=> j.EmployerId == employerId).ToListAsync();
         return jobs;
     }
 

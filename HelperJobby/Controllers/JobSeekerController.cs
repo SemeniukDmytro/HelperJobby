@@ -20,34 +20,26 @@ public class JobSeekerController : ExtendedBaseController
     private readonly IJobSeekerQueryRepository _jobSeekerQueryRepository;
     private readonly IJobSeekerService _jobSeekerService;
     private readonly ISavedJobCommandRepository _savedJobCommandRepository;
-    private readonly IUserService _userService;
+    private readonly ISavedJobQueryRepository _savedJobQueryRepository;
 
     public JobSeekerController(IJobSeekerService jobSeekerService,
         IJobSeekerCommandRepository jobSeekerCommandRepository, IMapper mapper,
-        ISavedJobCommandRepository savedJobCommandRepository, IUserService userService,
-        IJobSeekerQueryRepository jobSeekerQueryRepository) : base(mapper)
+        ISavedJobCommandRepository savedJobCommandRepository,
+        IJobSeekerQueryRepository jobSeekerQueryRepository, ISavedJobQueryRepository savedJobQueryRepository) : base(mapper)
     {
         _jobSeekerService = jobSeekerService;
         _jobSeekerCommandRepository = jobSeekerCommandRepository;
         _savedJobCommandRepository = savedJobCommandRepository;
-        _userService = userService;
         _jobSeekerQueryRepository = jobSeekerQueryRepository;
+        _savedJobQueryRepository = savedJobQueryRepository;
     }
 
     [HttpGet("current-job-seeker")]
     public async Task<JobSeekerDTO> GetCurrentJobSeeker()
     {
         var jobSeeker =
-            await _jobSeekerQueryRepository.GetJobSeekerByUserId(_userService.GetCurrentUserId());
-        return _mapper.Map<JobSeekerDTO>(jobSeeker);
-    }
-
-    [HttpGet("current-job-seeker-all-info")]
-    public async Task<JobSeekerDTO> GetCurrentJobSeekerAllInfo()
-    {
-        var jobSeeker =
-            await _jobSeekerQueryRepository.GetJobSeekerWithAddressAndResume(
-                _userService.GetCurrentUserId());
+            await _jobSeekerQueryRepository.GetJobSeekerByIdWithAddressAndResume(
+                _jobSeekerService.GetCurrentJobSeekerId());
         return _mapper.Map<JobSeekerDTO>(jobSeeker);
     }
 
@@ -55,7 +47,7 @@ public class JobSeekerController : ExtendedBaseController
     public async Task<JobSeekerDTO> GetCurrentJobSeekerWithHisJobInteractions()
     {
         var jobSeeker =
-            await _jobSeekerQueryRepository.GetJobSeekerWithJobInteractions(_userService.GetCurrentUserId());
+            await _jobSeekerQueryRepository.GetJobSeekerByIdWithJobInteractions(_jobSeekerService.GetCurrentJobSeekerId());
         return _mapper.Map<JobSeekerDTO>(jobSeeker);
     }
 
@@ -63,16 +55,16 @@ public class JobSeekerController : ExtendedBaseController
     public async Task<IEnumerable<SavedJobDTO>> GetSavedJobsOfCurrentJobSeeker()
     {
         var savedJobs =
-            await _jobSeekerQueryRepository.GetJobSeekerSavedJobs(_userService.GetCurrentUserId());
+            await _savedJobQueryRepository.GetSavedJobsByJobSeekerId(_jobSeekerService.GetCurrentJobSeekerId());
         return _mapper.Map<IEnumerable<SavedJobDTO>>(savedJobs);
     }
 
-    [HttpPut("{userId}")]
-    public async Task<JobSeekerDTO> PutJobSeeker(int userId,
+    [HttpPut("{jobSeekerId}")]
+    public async Task<JobSeekerDTO> PutJobSeeker(int jobSeekerId,
         [FromBody] UpdatedJobSeekerDTO updatedJobSeekerDTO)
     {
         UpdateJobSeekerDTOValidator.ValidateAccount(updatedJobSeekerDTO);
-        var updatedJobSeeker = await _jobSeekerService.UpdateJobSeeker(userId, _mapper.Map<JobSeeker>(updatedJobSeekerDTO));
+        var updatedJobSeeker = await _jobSeekerService.UpdateJobSeeker(jobSeekerId, _mapper.Map<JobSeeker>(updatedJobSeekerDTO));
         updatedJobSeeker = await _jobSeekerCommandRepository.UpdateJobSeeker(updatedJobSeeker);
         var jobSeekerDTO = _mapper.Map<JobSeekerDTO>(updatedJobSeeker);
         return jobSeekerDTO;

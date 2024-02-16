@@ -6,7 +6,6 @@ using ApplicationBLL.RatingSystem;
 using ApplicationBLL.SearchRelatedServices;
 using ApplicationBLL.Services;
 using ApplicationDAL.CommandRepositories;
-using ApplicationDAL.DALHelpers;
 using ApplicationDAL.QueryRepositories;
 using ApplicationDAL.SearchCommandRepositories;
 using ApplicationDAL.SearchQueryRepositories;
@@ -33,7 +32,7 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IUserService, UserService>();
         serviceProvider.AddScoped<IUserQueryRepository, UserQueryRepository>();
         serviceProvider.AddScoped<IUserCommandRepository, UserCommandRepository>();
-        serviceProvider.AddScoped<IEmployerAccountService, EmployerService>();
+        serviceProvider.AddScoped<IEmployerService, EmployerService>();
         serviceProvider.AddScoped<IEmployerQueryRepository, EmployerQueryRepository>();
         serviceProvider.AddScoped<IEmployerCommandRepository, EmployerCommandRepository>();
         serviceProvider.AddScoped<IOrganizationService, OrganizationService>();
@@ -42,7 +41,6 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IJobService, JobService>();
         serviceProvider.AddScoped<IJobQueryRepository, JobQueryRepository>();
         serviceProvider.AddScoped<IJobCommandRepository, JobCommandRepository>();
-        serviceProvider.AddScoped<EntityInclusionHandler>();
         serviceProvider.AddScoped<IIncompleteJobQueryRepository, IncompleteJobQueryRepository>();
         serviceProvider.AddScoped<IIncompleteJobCommandRepository, IncompleteJobCommandRepository>();
         serviceProvider.AddScoped<IIncompleteJobService, IncompleteJobService>();

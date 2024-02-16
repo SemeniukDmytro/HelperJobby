@@ -83,7 +83,7 @@ public class SkillController : ExtendedBaseController
     [HttpDelete("{resumeId}/remove-skills")]
     public async Task RemoveSkillsFromResume(int resumeId)
     {
-        await _skillService.RemoveSkillsFromResume(resumeId);
-        await _skillCommandRepository.RemoveResumeSkills(resumeId);
+        var skillsToRemove =  await _skillService.RemoveSkillsFromResume(resumeId);
+        await _skillCommandRepository.RemoveResumeSkills(skillsToRemove);
     }
 }

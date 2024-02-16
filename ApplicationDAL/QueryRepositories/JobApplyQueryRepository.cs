@@ -24,4 +24,31 @@ public class JobApplyQueryRepository : IJobApplyQueryRepository
 
         return jobApply;
     }
+
+    public async Task<IEnumerable<JobApply>> GetJobAppliesByJobSeekerId(int jobSeekerId)
+    {
+        var jobApplies = await _applicationContext.JobApplies.Where(i => i.JobSeekerId == jobSeekerId)
+            .Select(ja => new JobApply
+            {
+                JobId = ja.JobId,
+                JobSeekerId = ja.JobSeekerId,
+                DateApplied = ja.DateApplied,
+                Job = new Job
+                {
+                    Id = ja.JobId,
+                    JobTitle = ja.Job.JobTitle,
+                    Employer = new Employer
+                    {
+                        Id = ja.Job.EmployerId,
+                        Organization = new Organization
+                        {
+                            Id = ja.Job.Employer.OrganizationId,
+                            Name = ja.Job.Employer.Organization.Name
+                        }
+                    },
+                    Location = ja.Job.Location
+                }
+            }).ToListAsync();
+        return jobApplies;
+    }
 }

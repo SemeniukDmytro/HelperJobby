@@ -18,29 +18,26 @@ public class InterviewController : ExtendedBaseController
     private readonly IInterviewQueryRepository _interviewQueryRepository;
     private readonly IInterviewService _interviewService;
     private readonly IJobQueryRepository _jobQueryRepository;
-    private readonly IJobSeekerQueryRepository _jobSeekerQueryRepository;
-    private readonly IUserService _userService;
+    private readonly IJobSeekerService _jobSeekerService;
 
 
     public InterviewController(IMapper mapper, IJobQueryRepository jobQueryRepository,
-        IJobSeekerQueryRepository jobSeekerQueryRepository, IUserService userService,
         IInterviewService interviewService, IInterviewCommandRepository interviewCommandRepository,
-        IInterviewQueryRepository interviewQueryRepository) : base(mapper)
+        IInterviewQueryRepository interviewQueryRepository, IJobSeekerService jobSeekerService) : base(mapper)
     {
         _jobQueryRepository = jobQueryRepository;
-        _jobSeekerQueryRepository = jobSeekerQueryRepository;
-        _userService = userService;
         _interviewService = interviewService;
         _interviewCommandRepository = interviewCommandRepository;
         _interviewQueryRepository = interviewQueryRepository;
+        _jobSeekerService = jobSeekerService;
     }
 
     // GET: api/Interview/my-interviews
     [HttpGet("my-interviews")]
     public async Task<IEnumerable<InterviewDTO>> GetCurrentJobSeekerInterviews()
     {
-        var currentJobSeeker = await _jobSeekerQueryRepository.GetJobSeekerWithInterviews(
-            _userService.GetCurrentUserId());
+        var currentJobSeeker = await _interviewQueryRepository.GetInterviewsByJobSeekerId(
+            _jobSeekerService.GetCurrentJobSeekerId());
         return _mapper.Map<IEnumerable<InterviewDTO>>(currentJobSeeker);
     }
 
@@ -57,7 +54,7 @@ public class InterviewController : ExtendedBaseController
     [HttpGet("{jobId}/job-seeker/{jobSeekerId}")]
     public async Task<InterviewDTO> Get(int jobId, int jobSeekerId)
     {
-        var interview = await _interviewQueryRepository.GetInterviewByJobIdAndJobSeeker(jobId, jobSeekerId);
+        var interview = await _interviewQueryRepository.GetInterviewByJobIdAndJobSeekerId(jobId, jobSeekerId);
         return _mapper.Map<InterviewDTO>(interview);
     }
 

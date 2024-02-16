@@ -1,7 +1,6 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import './AddAddressComponent.scss';
 import useResumeBuild from "../../../../../hooks/useResumeBuild";
-import {useAuth} from "../../../../../hooks/useAuth";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import {JobSeekerService} from "../../../../../services/jobSeekerService";
 import CountrySelector from "../../../../EditContactInfoPage/PageComponents/CountrySelector/CountrySelector";
@@ -26,7 +25,6 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
         setProgressPercentage, setSaveFunc,
         setShowDialogWindow
     } = useResumeBuild();
-    const {authUser} = useAuth();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const jobSeekerService = new JobSeekerService();
     const navigate = useNavigate();
@@ -91,7 +89,7 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
             }
             const updatedJobSeeker = updateJobSeekerDTO(jobSeeker!.firstName,
                 jobSeeker!.lastName, jobSeeker!.phoneNumber, updatedAddress);
-            const response = await jobSeekerService.putJobSeekerAccount(authUser!.user.id, updatedJobSeeker);
+            const response = await jobSeekerService.putJobSeekerAccount(jobSeeker!.id, updatedJobSeeker);
             setJobSeeker((prevState) => {
                 if (prevState) {
 

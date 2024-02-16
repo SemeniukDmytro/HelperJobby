@@ -21,6 +21,34 @@ public class SavedJobQueryRepository : ISavedJobQueryRepository
         return await GetSavedJob(jobId, jobSeekerId);
     }
 
+    public async Task<IEnumerable<SavedJob>> GetSavedJobsByJobSeekerId(int jobSeekerId)
+    {
+        var savedJobs = await _applicationContext.SavedJobs
+            .Where(sj => sj.JobSeekerId == jobSeekerId)
+            .Select(sj => new SavedJob
+            {
+                JobId = sj.JobId,
+                JobSeekerId = sj.JobSeekerId,
+                Job = new Job
+                {
+                    Id = sj.JobId,
+                    JobTitle = sj.Job.JobTitle,
+                    Employer = new Employer
+                    {
+                        Id = sj.Job.EmployerId,
+                        Organization = new Organization
+                        {
+                            Id = sj.Job.Employer.OrganizationId,
+                            Name = sj.Job.Employer.Organization.Name
+                        }
+                    },
+                    Location = sj.Job.Location
+                },
+                DateSaved = sj.DateSaved
+            }).ToListAsync();
+        return savedJobs;
+    }
+
     public async Task<SavedJob> GetSavedJobWithJob(int jobId, int jobSeekerId)
     {
         return await GetSavedJob(jobId, jobSeekerId, q => q.Include(s => s.Job));
