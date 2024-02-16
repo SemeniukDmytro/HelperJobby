@@ -10,15 +10,12 @@ public class JobSeekerService : IJobSeekerService
 {
     private readonly IJobSeekerQueryRepository _jobSeekerQueryRepository;
     private readonly ISavedJobQueryRepository _savedJobQueryRepository;
-    private readonly IUserService _userService;
     private readonly IUserIdGetter _userIdGetter;
 
     public JobSeekerService(IJobSeekerQueryRepository jobSeekerQueryRepository,
-        IUserService userService,
         ISavedJobQueryRepository savedJobQueryRepository, IUserIdGetter userIdGetter)
     {
         _jobSeekerQueryRepository = jobSeekerQueryRepository;
-        _userService = userService;
         _savedJobQueryRepository = savedJobQueryRepository;
         _userIdGetter = userIdGetter;
     }

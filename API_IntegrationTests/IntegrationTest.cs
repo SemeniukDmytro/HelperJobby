@@ -51,9 +51,16 @@ public class IntegrationTest
         return authUserDTO.User;
     }
 
+    protected async Task UpdateAuthToken(LoginUserDTO loginUserDTO)
+    {
+        var loginResponse = await TestClient.PostAsJsonAsync("api/auth/sign-in", loginUserDTO);
+        var authUser = await loginResponse.Content.ReadAsAsync<AuthUserDTO>();
+        TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authUser.Token);
+    }
+
     protected async Task<EmployerDTO> CreateEmployerWithNewOrganizationForAuthUser()
     {
-        await AuthenticateAsync();
+        var createdUser = await AuthenticateAsync();
         var requestUri = "/api/employer";
         var createdEmployer = new CreateEmployerDTO
         {
@@ -65,6 +72,13 @@ public class IntegrationTest
         };
         var response = await TestClient.PostAsJsonAsync(requestUri, createdEmployer);
         var employerWithCreatedOrganization = await response.Content.ReadAsAsync<EmployerDTO>();
+        var loginUserDTO = new LoginUserDTO()
+        {
+            Email = createdUser.Email,
+            Password = "randomPwd"
+        };
+        await UpdateAuthToken(loginUserDTO);
+        employerWithCreatedOrganization.User = createdUser;
         return employerWithCreatedOrganization;
     }
 

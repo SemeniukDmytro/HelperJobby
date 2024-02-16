@@ -67,7 +67,7 @@ public class JobSeekerControllerTests : IntegrationTest
     {
         //Arrange
         var currentJobSeekerAccount = await GetCurrentJobSeekerAccount();
-        var requestUri = $"{_baseUri}/{currentJobSeekerAccount.UserId}";
+        var requestUri = $"{_baseUri}/{currentJobSeekerAccount.Id}";
         var updatedJobSeekerAccountDTO = new UpdatedJobSeekerDTO
         {
             FirstName = "FirstName",

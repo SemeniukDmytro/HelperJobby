@@ -118,6 +118,6 @@ public class IncompleteJobService : IIncompleteJobService
 
     private void CheckIfEmployerHasAccessToPerformAnAction(IncompleteJob incompleteJob)
     {
-        if (incompleteJob.Employer.UserId != _employerService.GetCurrentEmployerId()) throw new ForbiddenException();
+        if (incompleteJob.EmployerId != _employerService.GetCurrentEmployerId()) throw new ForbiddenException();
     }
 }

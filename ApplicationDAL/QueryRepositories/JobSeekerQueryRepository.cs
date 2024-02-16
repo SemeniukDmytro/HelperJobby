@@ -17,26 +17,26 @@ public class JobSeekerQueryRepository : IJobSeekerQueryRepository
 
     
 
-    public async Task<JobSeeker> GetJobSeeker(int jobSeekerId)
+    public async Task<JobSeeker> GetJobSeekerById(int jobSeekerId)
     {
-        return await GetJobSeekerWithIncludes(jobSeekerId);
+        return await GetJobSeeker(jobSeekerId);
     }
 
     public async Task<JobSeeker> GetJobSeekerByIdWithResume(int jobSeekerId)
     {
-        return await GetJobSeekerWithIncludes(jobSeekerId, q => q
+        return await GetJobSeeker(jobSeekerId, q => q
             .Include(js => js.Resume));
     }
 
     public async Task<JobSeeker> GetJobSeekerByIdWithAddress(int jobSeekerId)
     {
-        return await GetJobSeekerWithIncludes(jobSeekerId, q => q
+        return await GetJobSeeker(jobSeekerId, q => q
             .Include(js => js.Address));
     }
 
     public async Task<JobSeeker> GetJobSeekerByIdWithAddressAndResume(int jobSeekerId)
     {
-        return await GetJobSeekerWithIncludes(jobSeekerId, q => q
+        return await GetJobSeeker(jobSeekerId, q => q
             .Include(js => js.Address).Include(js => js.Resume));
     }
     
@@ -58,7 +58,7 @@ public class JobSeekerQueryRepository : IJobSeekerQueryRepository
         return retrievedJobSeeker;
     }
     
-    private async Task<JobSeeker> GetJobSeekerWithIncludes(int jobSeekerId,
+    private async Task<JobSeeker> GetJobSeeker(int jobSeekerId,
         Func<IQueryable<JobSeeker>, IQueryable<JobSeeker>> includeFunc = null)
     {
         var query = _applicationContext.JobSeekers.AsQueryable();

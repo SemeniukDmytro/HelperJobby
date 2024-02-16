@@ -7,21 +7,16 @@ namespace ApplicationBLL.Services;
 
 public class JobApplyService : IJobApplyService
 {
-    private readonly IEmployerQueryRepository _employerQueryRepository;
     private readonly IJobApplyQueryRepository _jobApplyQueryRepository;
     private readonly IJobQueryRepository _jobQueryRepository;
-    private readonly IJobSeekerQueryRepository _jobSeekerQueryRepository;
     private readonly IEmployerService _employerService;
     private readonly IJobSeekerService _jobSeekerService;
 
-    public JobApplyService(IJobSeekerQueryRepository jobSeekerQueryRepository,
-        IJobApplyQueryRepository jobApplyQueryRepository,
-        IEmployerQueryRepository employerQueryRepository, IJobQueryRepository jobQueryRepository, IEmployerService employerService,
+    public JobApplyService(IJobApplyQueryRepository jobApplyQueryRepository, IJobQueryRepository jobQueryRepository,
+        IEmployerService employerService,
         IJobSeekerService jobSeekerService)
     {
-        _jobSeekerQueryRepository = jobSeekerQueryRepository;
         _jobApplyQueryRepository = jobApplyQueryRepository;
-        _employerQueryRepository = employerQueryRepository;
         _jobQueryRepository = jobQueryRepository;
         _employerService = employerService;
         _jobSeekerService = jobSeekerService;
@@ -62,7 +57,7 @@ public class JobApplyService : IJobApplyService
 
     public async Task<JobApply> DeleteJobApply(int jobId)
     {
-        var currentJobSeekerId = _employerService.GetCurrentEmployerId();
+        var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
         var jobApplyEntity = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, currentJobSeekerId);
         return jobApplyEntity;
     }

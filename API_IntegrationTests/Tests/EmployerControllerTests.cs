@@ -67,7 +67,7 @@ public class EmployerControllerTests : IntegrationTest
     {
         //Arrange
         var currentEmployer = await CreateEmployerWithNewOrganizationForAuthUser();
-        var requestUri = $"/api/employer/{currentEmployer.UserId}";
+        var requestUri = $"/api/employer/{currentEmployer.Id}";
         var updateEmployerAccountDTO = new UpdateEmployerDTO
         {
             Email = "newemail@gmail.com",
@@ -88,25 +88,7 @@ public class EmployerControllerTests : IntegrationTest
     }
 
     [Fact]
-    public async Task GetEmployerByUserId_ShouldReturnEmployer()
-    {
-        //Arrange
-        var createdEmployer = await CreateEmployerWithNewOrganizationForAuthUser();
-        var requestUri = $"/api/Employer/{createdEmployer.UserId}";
-
-        //Act
-        var getEmployerResponse = await TestClient.GetAsync(requestUri);
-        await ExceptionsLogHelper.LogNotSuccessfulResponse(getEmployerResponse, TestOutputHelper);
-
-        //Assert
-        Assert.Equal(HttpStatusCode.OK, getEmployerResponse.StatusCode);
-        var employer = await getEmployerResponse.Content.ReadAsAsync<EmployerDTO>();
-        Assert.Equal(createdEmployer.Id, employer.Id);
-        Assert.Equal(createdEmployer.Email, employer.Email);
-    }
-
-    [Fact]
-    public async Task GetCurrenEmployer_ShouldReturnEmployerAccount()
+    public async Task GetCurrentEmployer_ShouldReturnEmployerAccount()
     {
         //Arrange
         var createdEmployer = await CreateEmployerWithNewOrganizationForAuthUser();

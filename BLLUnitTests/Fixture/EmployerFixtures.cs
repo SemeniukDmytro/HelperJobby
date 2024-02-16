@@ -2,7 +2,7 @@ using ApplicationDomain.Models;
 
 namespace BLLUnitTests.Fixture;
 
-public static class EmployerAccountFixtures
+public static class EmployerFixtures
 {
     public static Employer EmployerEntity = new()
     {
@@ -16,8 +16,11 @@ public static class EmployerAccountFixtures
         },
         Organization = new Organization
         {
+            Id = 1,
             Name = "newOrganization"
         },
+        OrganizationId = 1,
+        IsOrganizationOwner = true,
         HasPostedFirstJob = true
     };
 

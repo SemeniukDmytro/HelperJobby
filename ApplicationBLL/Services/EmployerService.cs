@@ -38,8 +38,6 @@ public class EmployerService : IEmployerService
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
         }
 
         if (currentEmployerId != 0) throw new ForbiddenException("Employer account has already been created");

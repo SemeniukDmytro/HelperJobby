@@ -37,13 +37,13 @@ public class JobControllerTests : IntegrationTest
     }
 
     [Fact]
-    public async Task GetJobsByUserId_ShouldReturnIEnumerableOfJobs()
+    public async Task GetJobsByEmployerId_ShouldReturnIEnumerableOfJobs()
     {
         //Arrange
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
         var firstCreatedJob = await CreateJob();
         var secondCreatedJob = await CreateJob();
-        var requestUri = $"{_baseUri}/jobs/{employer.UserId}";
+        var requestUri = $"{_baseUri}/jobs/{employer.Id}";
 
         //Act
         var getJobsResponse = await TestClient.GetAsync(requestUri);

@@ -19,7 +19,15 @@ public class ResumeService : IResumeService
     public async Task<Resume> CreateResume(Resume createdResume)
     {
         var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
-        var resume = await _resumeQueryRepository.GetResumeByJobSeekerId(currentJobSeekerId);
+        Resume resume = null;
+        try
+        {
+            resume = await _resumeQueryRepository.GetResumeByJobSeekerId(currentJobSeekerId);
+        }
+        catch (Exception e)
+        {
+            
+        }
         if (resume != null) throw new ForbiddenException("Resume already exists");
         createdResume.JobSeekerId = currentJobSeekerId;
         return createdResume;

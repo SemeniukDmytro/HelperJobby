@@ -18,16 +18,13 @@ public class EmployerController : ExtendedBaseController
     private readonly IEmployerCommandRepository _commandRepository;
     private readonly IEmployerQueryRepository _queryRepository;
     private readonly IEmployerService _employerService;
-    private readonly IUserService _userService;
 
     public EmployerController(IMapper mapper, IEmployerCommandRepository commandRepository,
-        IEmployerService employerService, IEmployerQueryRepository queryRepository,
-        IUserService userService) : base(mapper)
+        IEmployerService employerService, IEmployerQueryRepository queryRepository) : base(mapper)
     {
         _commandRepository = commandRepository;
         _employerService = employerService;
         _queryRepository = queryRepository;
-        _userService = userService;
     }
 
 

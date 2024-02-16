@@ -10,12 +10,12 @@ namespace ApplicationBLL.Services;
 public class JobService : IJobService
 {
     private readonly IJobQueryRepository _jobQueryRepository;
-    private readonly IUserService _userService;
+    private readonly IEmployerService _employerService;
 
-    public JobService(IJobQueryRepository jobQueryRepository, IUserService userService)
+    public JobService(IJobQueryRepository jobQueryRepository, IEmployerService employerService)
     {
         _jobQueryRepository = jobQueryRepository;
-        _userService = userService;
+        _employerService = employerService;
     }
 
     public async Task<Job> CreateJob(Job job)
@@ -96,6 +96,6 @@ public class JobService : IJobService
 
     private void CheckIfUserHasAccessToPerformAnAction(Job job)
     {
-        if (job.Employer.UserId != _userService.GetCurrentUserId()) throw new ForbiddenException();
+        if (job.Employer.Id != _employerService.GetCurrentEmployerId()) throw new ForbiddenException();
     }
 }

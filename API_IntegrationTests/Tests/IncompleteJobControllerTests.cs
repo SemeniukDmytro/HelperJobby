@@ -68,7 +68,8 @@ public class IncompleteJobControllerTests : IntegrationTest
             {
                 MinimalAmount = 0,
                 SalaryRate = SalaryRates.PerYear,
-                ShowPayByOption = ShowPayByOptions.StartingAmount
+                ShowPayByOption = ShowPayByOptions.StartingAmount,
+                MeetsMinSalaryRequirement = true,
             },
             Schedule = new List<Schedules>(),
             Benefits = new List<EmployeeBenefits>(),

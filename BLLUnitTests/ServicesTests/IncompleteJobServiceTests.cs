@@ -9,18 +9,15 @@ using Moq;
 
 namespace BLLUnitTests.ServicesTests;
 
-public class CurrentJobCreationServiceTests
+public class IncompleteJobServiceTests
 {
-    private readonly Mock<IIncompleteJobQueryRepository> _currentJobCreationQueryRepository = new();
     private readonly IncompleteJobService _incompleteJobService;
-    private readonly Mock<IEmployerQueryRepository> _employerAccountQueryRepositoryMock = new();
-    private readonly Mock<IUserService> _userServiceMock = new();
+    private readonly Mock<IIncompleteJobQueryRepository> _incompleteJobQueryRepository = new();
+    private readonly Mock<IEmployerService> _employerServiceMock = new();
 
-    public CurrentJobCreationServiceTests()
+    public IncompleteJobServiceTests()
     {
-        _incompleteJobService = new IncompleteJobService(_userServiceMock.Object,
-            _employerAccountQueryRepositoryMock.Object,
-            _currentJobCreationQueryRepository.Object);
+        _incompleteJobService = new IncompleteJobService(_incompleteJobQueryRepository.Object, _employerServiceMock.Object);
     }
 
 
@@ -35,15 +32,13 @@ public class CurrentJobCreationServiceTests
             Language = "English",
             Location = "random street, random city"
         };
-        var userId = 1;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _employerAccountQueryRepositoryMock.Setup(eqr => eqr.GetEmployer(userId))
-            .ReturnsAsync(EmployerAccountFixtures.EmployerEntity);
+        var employerId = 1;
+        _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
         //Act
         var job = await _incompleteJobService.StartIncompleteJobCreation(newJob);
         //Assert
         Assert.Equal(newJob.NumberOfOpenings, job.NumberOfOpenings);
-        Assert.Equal(EmployerAccountFixtures.EmployerEntity.Id, job.EmployerId);
+        Assert.Equal(employerId, job.EmployerId);
     }
     
 
@@ -61,11 +56,10 @@ public class CurrentJobCreationServiceTests
             },
             Benefits = (EmployeeBenefits)3
         };
-        var userId = 1;
         var jobId = 1;
-        var employerAccountId = 1;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _currentJobCreationQueryRepository.Setup(r => r.GetIncompleteJobWithEmployer(jobId))
+        var employerId = 1;
+        _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
+        _incompleteJobQueryRepository.Setup(r => r.GetIncompleteJobWithEmployer(jobId))
             .ReturnsAsync(new IncompleteJob
             {
                 Id = jobId,
@@ -73,15 +67,15 @@ public class CurrentJobCreationServiceTests
                 NumberOfOpenings = 4,
                 Language = "English",
                 Location = "random street, random city",
-                EmployerId = employerAccountId,
-                Employer = EmployerAccountFixtures.EmployerEntity
+                EmployerId = employerId,
+                Employer = EmployerFixtures.EmployerEntity
             });
         //Act
         var job = await _incompleteJobService.UpdateIncompleteJob(jobId, newJob);
         //Assert
         Assert.Equal("new Job", job.JobTitle);
         Assert.Equal(newJob.Salary.MinimalAmount, job.Salary.MinimalAmount);
-        Assert.Equal(employerAccountId, job.EmployerId);
+        Assert.Equal(employerId, job.EmployerId);
         Assert.Equal(jobId, job.Id);
     }
 
@@ -93,11 +87,10 @@ public class CurrentJobCreationServiceTests
         {
             Benefits = (EmployeeBenefits)3
         };
-        var userId = 1;
         var jobId = 1;
-        var employerAccountId = 1;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _currentJobCreationQueryRepository.Setup(r => r.GetIncompleteJobWithEmployer(jobId))
+        var employerId = 1;
+        _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
+        _incompleteJobQueryRepository.Setup(r => r.GetIncompleteJobWithEmployer(jobId))
             .ReturnsAsync(new IncompleteJob
             {
                 Id = jobId,
@@ -106,7 +99,7 @@ public class CurrentJobCreationServiceTests
                 Language = "English",
                 Location = "random street, random city",
                 EmployerId = 2,
-                Employer = EmployerAccountFixtures.SecondEmployerEntity
+                Employer = EmployerFixtures.SecondEmployerEntity
             });
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
@@ -118,17 +111,15 @@ public class CurrentJobCreationServiceTests
     {
         //Arrange
         var jobId = 1;
-        var userId = 1;
-        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
-        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployer(userId)).ReturnsAsync(
-            EmployerAccountFixtures.EmployerEntity);
-        _currentJobCreationQueryRepository.Setup(r => r.GetIncompleteJobWithEmployer(jobId)).ReturnsAsync(
+        var employerId = 1;
+        _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
+        _incompleteJobQueryRepository.Setup(r => r.GetIncompleteJobWithEmployer(jobId)).ReturnsAsync(
             new IncompleteJob
             {
                 Id = jobId,
                 JobTitle = "Test",
                 EmployerId = 1,
-                Employer = EmployerAccountFixtures.EmployerEntity
+                Employer = EmployerFixtures.EmployerEntity
             });
 
         //Act
@@ -144,15 +135,15 @@ public class CurrentJobCreationServiceTests
     {
         //Arrange
         var jobId = 1;
-        var userId = 1;
-        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
-        _currentJobCreationQueryRepository.Setup(r => r.GetIncompleteJobWithEmployer(jobId)).ReturnsAsync(
+        var employerId = 1;
+        _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
+        _incompleteJobQueryRepository.Setup(r => r.GetIncompleteJobWithEmployer(jobId)).ReturnsAsync(
             new IncompleteJob
             {
                 Id = jobId,
                 JobTitle = "Test",
                 EmployerId = 2,
-                Employer = EmployerAccountFixtures.SecondEmployerEntity
+                Employer = EmployerFixtures.SecondEmployerEntity
             });
 
         //Act
