@@ -5,6 +5,8 @@ namespace ApplicationBLL.Logic;
 public class CurrentUserIdProvider : IUserIdSetter, IUserIdGetter
 {
     private int _id;
+    private int _jobSeekerId;
+    private int _employerId;
 
     public int CurrentId
     {
@@ -12,10 +14,22 @@ public class CurrentUserIdProvider : IUserIdSetter, IUserIdGetter
         set => _id = value;
     }
 
+    public int CurrentJobSeekerId
+    {
+        get => ValidateId(_jobSeekerId);
+        set => _jobSeekerId = value;
+    }
+
+    public int CurrentEmployerId
+    {
+        get => ValidateId(_employerId);
+        set => _employerId = value;
+    }
+
     private int ValidateId(int id)
     {
-        if (_id == 0) throw new Exception("No token passed");
+        if (id == 0) throw new Exception("No token passed");
 
-        return _id;
+        return id;
     }
 }
