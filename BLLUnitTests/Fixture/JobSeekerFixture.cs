@@ -2,7 +2,7 @@ using ApplicationDomain.Models;
 
 namespace BLLUnitTests.Fixture;
 
-public static class JobSeekerAccountFixture
+public static class JobSeekerFixture
 {
     public static readonly JobSeeker UpdatedJobSeeker = new()
     {

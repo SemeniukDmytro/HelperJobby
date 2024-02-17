@@ -27,7 +27,7 @@ public class InterviewService : IInterviewService
     public async Task<Job> GetInterviewsForSpecificJob(int jobId)
     {
         var currentEmployerId = _employerService.GetCurrentEmployerId();
-        var job = await _jobQueryRepository.GetJobById(jobId);
+        var job = await _jobQueryRepository.GetJobWithInterviews(jobId);
         if (job.EmployerId != currentEmployerId)
         {
             throw new ForbiddenException("You do not have access to this information");

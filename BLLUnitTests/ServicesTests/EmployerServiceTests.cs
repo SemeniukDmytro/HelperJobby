@@ -137,8 +137,7 @@ public class EmployerServiceTests
                 Name = "createdOrganization"
             }
         };
-        var userId = 1;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(1);
+        _userIdGetter.Setup(u => u.CurrentEmployerId).Returns(1);
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _employerService.CreateEmployer(createdAccount));
     }
@@ -153,8 +152,9 @@ public class EmployerServiceTests
             Email = "test@gmail.com"
         };
         var userId = 1;
-        var accountId = 1;
-        _employerQueryRepositoryMock.Setup(r => r.GetEmployerById(accountId)).ReturnsAsync(
+        var employerId = 1;
+        _userIdGetter.Setup(ug => ug.CurrentEmployerId).Returns(1);
+        _employerQueryRepositoryMock.Setup(r => r.GetEmployerById(employerId)).ReturnsAsync(
             new Employer
             {
                 UserId = userId,
@@ -162,7 +162,7 @@ public class EmployerServiceTests
                 Email = "oldContactEmail"
             });
         //Act
-        var account = await _employerService.UpdateEmployer(accountId, updatedAccount);
+        var account = await _employerService.UpdateEmployer(employerId, updatedAccount);
         //Assert
         Assert.Equal(updatedAccount.Email, account.Email);
         Assert.Equal(userId, account.UserId);

@@ -2,6 +2,7 @@ using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using AutoMapper;
+using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.UserJobInteractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ public class JobApplyController : ExtendedBaseController
 
     // GET: api/JobApply
     [HttpGet("my-job-applies")]
-    public async Task<IEnumerable<JobApplyDTO>> GetUserJobApplies()
+    public async Task<IEnumerable<JobApplyDTO>> GetJobSeekerJobApplies()
     {
         var jobApplies =
             await _jobApplyQueryRepository.GetJobAppliesByJobSeekerId(_jobSeekerService.GetCurrentJobSeekerId());
@@ -40,11 +41,10 @@ public class JobApplyController : ExtendedBaseController
     }
 
     [HttpGet("{jobId}/job-applies")]
-    public async Task<IEnumerable<JobApplyDTO>> GetJobAppliesByJobId(int jobId)
+    public async Task<JobDTO> GetJobWithAppliesByJobId(int jobId)
     {
         var job = await _jobApplyService.GetJobAppliesForSpecificJob(jobId);
-        job = await _jobQueryRepository.GetJobWithJobApplies(job);
-        return _mapper.Map<IEnumerable<JobApplyDTO>>(job.JobApplies);
+        return _mapper.Map<JobDTO>(job);
     }
 
     // GET: api/JobApply/5

@@ -20,11 +20,14 @@ import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import Company from "../../../../Components/Icons/Company";
 import PageTitleWithImage from "../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import {ServerError} from "../../../../DTOs/errorDTOs/ServerErrorDTO";
+import AuthService from "../../../../services/authService";
+import {setAuthToken} from "../../../../utils/authTokenInteraction";
 
 interface EmployerSetupComponentProps {
 }
 
 const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
+    const authService = new AuthService();
     const {employer, setEmployer} = useEmployer();
     const [companyName, setCompanyName] = useState(employer?.organization.name || "");
     const companyInputRef = useRef<HTMLInputElement>(null);
@@ -43,7 +46,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
     const [showPopupWindow, setShowPopupWindow] = useState(false);
     
     const employerService = new EmployerService();
-    const {authUser} = useAuth();
+    const {authUser, setAuthUser} = useAuth();
     const navigate = useNavigate();
 
     async function handleFormSubmit(e: FormEvent) {
@@ -107,6 +110,9 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                 }
                 retrievedEmployer = await employerService.createEmployerAccount(createEmployerDTO);
                 setEmployer(retrievedEmployer);
+                const userWithRefreshedToken = await authService.refreshToken();
+                setAuthToken(userWithRefreshedToken.token);
+                setAuthUser(authUser);
             }
             navigate(employerPagesPaths.ADD_JOB_BASICS)
 

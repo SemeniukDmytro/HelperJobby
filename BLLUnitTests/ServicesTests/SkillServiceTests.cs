@@ -10,28 +10,29 @@ namespace BLLUnitTests.ServicesTests;
 
 public class SkillServiceTests
 {
-    private readonly Mock<IJobSeekerQueryRepository> _jobSeekerAccountRepository = new();
     private readonly ISkillService _skillService;
-    private readonly Mock<IUserService> _userServiceMock = new();
+    private readonly Mock<IJobSeekerService> _jobSeekerServiceMock = new();
+    private readonly Mock<IResumeQueryRepository> _resumeQueryRepositoryMock = new();
 
     public SkillServiceTests()
     {
-        _skillService = new SkillService(_jobSeekerAccountRepository.Object,
-            _userServiceMock.Object);
+        _skillService = new SkillService(_resumeQueryRepositoryMock.Object,
+            _jobSeekerServiceMock.Object);
     }
 
     [Fact]
     public async Task CreateSkillShouldReturnEducation()
     {
         //Arrange
-        var userId = 1;
+        var jobSeekerId = 1;
         var resumeId = 1;
-        var jobSeekerAccount = JobSeekerAccountFixture.JobSeekerEntity;
+        var jobSeekerAccount = JobSeekerFixture.JobSeekerEntity;
         var resume = ResumeFixtures.ResumeEntity;
         jobSeekerAccount.Resume = resume;
         var skill = SkillFixtures.CreatedSkill;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId)).ReturnsAsync(jobSeekerAccount);
+        _jobSeekerServiceMock.Setup(us => us.GetCurrentJobSeekerId()).Returns(jobSeekerId);
+        _resumeQueryRepositoryMock.Setup(r => r.GetResumeByJobSeekerId(jobSeekerId))
+            .ReturnsAsync(resume);
         //Act
         var createSkill = await _skillService.AddSkill(resumeId, skill);
         //Assert
@@ -43,14 +44,15 @@ public class SkillServiceTests
     public async Task CreateWorkExperienceShouldThrowAnExceptionIfInvalidResumeIdProvided()
     {
         //Arrange
-        var userId = 1;
+        var jobSeekerId = 1;
         var resumeId = 2;
-        var jobSeekerAccount = JobSeekerAccountFixture.JobSeekerEntity;
+        var jobSeekerAccount = JobSeekerFixture.JobSeekerEntity;
         var resume = ResumeFixtures.ResumeEntity;
         jobSeekerAccount.Resume = resume;
         var skill = SkillFixtures.CreatedSkill;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId)).ReturnsAsync(jobSeekerAccount);
+        _jobSeekerServiceMock.Setup(us => us.GetCurrentJobSeekerId()).Returns(jobSeekerId);
+        _resumeQueryRepositoryMock.Setup(r => r.GetResumeByJobSeekerId(jobSeekerId))
+            .ReturnsAsync(resume);
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _skillService.AddSkill(resumeId, skill));
@@ -60,13 +62,13 @@ public class SkillServiceTests
     public async Task DeleteWorkExperienceShouldReturnEducationToDelete()
     {
         //Arrange
-        var userId = 1;
+        var jobSeekerId = 1;
         var skillId = 1;
         var skillEntity = SkillFixtures.SkillEntity;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerEntity;
-        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId))
-            .ReturnsAsync(jobSeekerAccountEntity);
+        var resume = ResumeFixtures.ResumeEntity;
+        _jobSeekerServiceMock.Setup(us => us.GetCurrentJobSeekerId()).Returns(jobSeekerId);
+        _resumeQueryRepositoryMock.Setup(r => r.GetResumeByJobSeekerId(jobSeekerId))
+            .ReturnsAsync(resume);
         //Act
         var skill = await _skillService.DeleteSkill(skillId);
         //Assert
@@ -74,16 +76,16 @@ public class SkillServiceTests
     }
 
     [Fact]
-    public async Task DeleteWorkExperienceShouldThrowForbiddenExceptionIfSkillDoesNotExist()
+    public async Task DeleteSkillShouldThrowNotFoundExceptionIfSkillDoesNotExist()
     {
         //Arrange
-        var userId = 1;
+        var jobSeekerId = 1;
         var skillId = 10;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.JobSeekerEntity;
-        _userServiceMock.Setup(s => s.GetCurrentUserId()).Returns(userId);
-        _jobSeekerAccountRepository.Setup(r => r.GetJobSeekerWithResume(userId))
-            .ReturnsAsync(jobSeekerAccountEntity);
+        var resume = ResumeFixtures.ResumeEntity;
+        _jobSeekerServiceMock.Setup(us => us.GetCurrentJobSeekerId()).Returns(jobSeekerId);
+        _resumeQueryRepositoryMock.Setup(r => r.GetResumeByJobSeekerId(jobSeekerId))
+            .ReturnsAsync(resume);
         //Act % Assert
-        await Assert.ThrowsAsync<ForbiddenException>(async () => await _skillService.DeleteSkill(skillId));
+        await Assert.ThrowsAsync<SkillNotFoundException>(async () => await _skillService.DeleteSkill(skillId));
     }
 }

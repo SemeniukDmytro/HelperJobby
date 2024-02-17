@@ -25,7 +25,7 @@ public class JobApplyService : IJobApplyService
     public async Task<Job> GetJobAppliesForSpecificJob(int jobId)
     {
         var currentEmployerId = _employerService.GetCurrentEmployerId();
-        var job = await _jobQueryRepository.GetJobById(jobId);
+        var job = await _jobQueryRepository.GetJobWithJobApplies(jobId);
         if (job.EmployerId != currentEmployerId)
             throw new ForbiddenException("You can not have access to this information");
 

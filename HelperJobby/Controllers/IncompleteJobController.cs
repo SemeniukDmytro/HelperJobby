@@ -15,16 +15,13 @@ namespace HelperJobby.Controllers;
 public class IncompleteJobController : ExtendedBaseController
 {
     private readonly IIncompleteJobCommandRepository _incompleteJobCommandRepository;
-    private readonly IIncompleteJobQueryRepository _incompleteJobQueryRepository;
     private readonly IIncompleteJobService _incompleteJobService;
 
     public IncompleteJobController(IMapper mapper,
         IIncompleteJobCommandRepository incompleteJobCommandRepository,
-        IIncompleteJobQueryRepository incompleteJobQueryRepository,
         IIncompleteJobService incompleteJobService) : base(mapper)
     {
         _incompleteJobCommandRepository = incompleteJobCommandRepository;
-        _incompleteJobQueryRepository = incompleteJobQueryRepository;
         _incompleteJobService = incompleteJobService;
     }
 

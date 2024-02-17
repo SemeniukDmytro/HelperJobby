@@ -10,15 +10,15 @@ namespace BLLUnitTests.ServicesTests;
 
 public class OrganizationServiceTests
 {
-    private readonly Mock<IEmployerQueryRepository> _employerAccountQueryRepositoryMock = new();
-    private readonly Mock<IOrganizationQueryRepository> _organizationQueryRepositoryMock = new();
     private readonly OrganizationService _organizationService;
-    private readonly Mock<IUserService> _userServiceMock = new();
+    private readonly Mock<IEmployerQueryRepository> _employerQueryRepositoryMock = new();
+    private readonly Mock<IOrganizationQueryRepository> _organizationQueryRepositoryMock = new();
+    private readonly Mock<IEmployerService> _employerServiceMock = new();
 
     public OrganizationServiceTests()
     {
-        _organizationService = new OrganizationService(_userServiceMock.Object,
-            _organizationQueryRepositoryMock.Object, _employerAccountQueryRepositoryMock.Object);
+        _organizationService = new OrganizationService(_organizationQueryRepositoryMock.Object, _employerQueryRepositoryMock.Object,
+            _employerServiceMock.Object);
     }
 
     [Fact]
@@ -30,15 +30,11 @@ public class OrganizationServiceTests
             PhoneNumber = "+123456789",
             NumberOfEmployees = 14
         };
-        var userId = 1;
+        var employerId = 1;
         var organizationId = 1;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationPlain(organizationId)).ReturnsAsync(
-            new Organization
-            {
-                PhoneNumber = "+987654321",
-                NumberOfEmployees = 16
-            });
+        _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
+        _employerQueryRepositoryMock.Setup(r => r.GetEmployerByIdWithOrganization(employerId))
+            .ReturnsAsync(EmployerFixtures.EmployerEntity);
         //Act
         var organization = await _organizationService.UpdateOrganization(organizationId, updatedOrganization);
         //Assert
@@ -47,7 +43,7 @@ public class OrganizationServiceTests
     }
 
     [Fact]
-    public async Task UpdateShouldThrowForbiddenExceptionIfCurrentUserIsNotOrganizationOwner()
+    public async Task UpdateShouldThrowForbiddenExceptionIfCurrentEmployerIsNotOrganizationOwner()
     {
         //Arrange
         var updatedOrganization = new Organization
@@ -55,15 +51,11 @@ public class OrganizationServiceTests
             PhoneNumber = "+123456789",
             NumberOfEmployees = 14
         };
-        var userId = 1;
-        var organizationId = 1;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationPlain(organizationId)).ReturnsAsync(
-            new Organization
-            {
-                PhoneNumber = "+987654321",
-                NumberOfEmployees = 16
-            });
+        var employerId = 1;
+        var organizationId = 2;
+        _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
+        _employerQueryRepositoryMock.Setup(r => r.GetEmployerByIdWithOrganization(employerId))
+            .ReturnsAsync(EmployerFixtures.SecondEmployerEntity);
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _organizationService.UpdateOrganization(organizationId, updatedOrganization));
@@ -78,13 +70,13 @@ public class OrganizationServiceTests
         {
             Email = "test@gmail.com"
         };
-        var userId = 1;
+        var employerId = 1;
         var organization = new Organization
         {
         };
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationPlain(organizationId)).ReturnsAsync(
-            organization);
+        _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
+        _employerQueryRepositoryMock.Setup(eq => eq.GetEmployerById(employerId))
+            .ReturnsAsync(EmployerFixtures.EmployerEntity);
         _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmailByOrganizationId(organizationId,
             employeeEmail.Email)).ReturnsAsync((OrganizationEmployeeEmail?)null);
         //Act
@@ -104,12 +96,10 @@ public class OrganizationServiceTests
         {
             Email = "test@gmail.com"
         };
-        var userId = 1;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationPlain(organizationId)).ReturnsAsync(
-            new Organization
-            {
-            });
+        var employerId = 1;
+        _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
+        _employerQueryRepositoryMock.Setup(r => r.GetEmployerById(employerId))
+            .ReturnsAsync(EmployerFixtures.SecondEmployerEntity);
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _organizationService.AddEmployeeEmail(organizationId, employeeEmail));
@@ -120,16 +110,14 @@ public class OrganizationServiceTests
     {
         //Arrange
         var organizationId = 1;
-        var userId = 1;
+        var employerId = 1;
         var employeeEmail = new OrganizationEmployeeEmail
         {
             Email = "test@gmail.com"
         };
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _organizationQueryRepositoryMock.Setup(r => r.GetOrganizationPlain(organizationId)).ReturnsAsync(
-            new Organization
-            {
-            });
+        _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
+        _employerQueryRepositoryMock.Setup(r => r.GetEmployerById(employerId))
+            .ReturnsAsync(EmployerFixtures.EmployerEntity);
         _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmailByOrganizationId(organizationId,
             employeeEmail.Email)).ReturnsAsync(employeeEmail);
         //Act & Assert
@@ -142,22 +130,19 @@ public class OrganizationServiceTests
     {
         //Arrange
         var emailId = 1;
-        var userId = 1;
-        var organization = new Organization
-        {
-        };
+        var employerId = 1;
         var employeeEmail = new OrganizationEmployeeEmail
         {
             Id = emailId,
-            Email = "test@gmail.com",
-            Organization = organization
+            Email = "testToRemove@gmail.com",
+            OrganizationId = 1
         };
-
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
+        
+        _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
         _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmail(emailId))
             .ReturnsAsync(employeeEmail);
-        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployer(userId))
-            .ReturnsAsync(EmployerAccountFixtures.SecondEmployerEntity);
+        _employerQueryRepositoryMock.Setup(r => r.GetEmployerById(employerId))
+            .ReturnsAsync(EmployerFixtures.EmployerEntity);
         //Act
         var result = await _organizationService.RemoveEmployeeEmail(emailId);
         // Assert
@@ -171,7 +156,7 @@ public class OrganizationServiceTests
     {
         //Arrange
         var employeeEmailId = 1;
-        var userId = 1;
+        var employerId = 1;
         var employeeEmail = new OrganizationEmployeeEmail
         {
             Email = "test@gmail.com",
@@ -180,9 +165,12 @@ public class OrganizationServiceTests
             {
             }
         };
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
+        
+        _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
         _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmail(employeeEmailId))
             .ReturnsAsync(employeeEmail);
+        _employerQueryRepositoryMock.Setup(r => r.GetEmployerById(employerId))
+            .ReturnsAsync(EmployerFixtures.SecondEmployerEntity);
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _organizationService.RemoveEmployeeEmail(employeeEmailId));
@@ -193,7 +181,7 @@ public class OrganizationServiceTests
     {
         //Arrange
         var emailId = 1;
-        var userId = 1;
+        var employerId = 1;
         var organization = new Organization
         {
         };
@@ -204,11 +192,12 @@ public class OrganizationServiceTests
             Organization = organization
         };
 
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
+
+        _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
         _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmail(emailId))
             .ReturnsAsync(employeeEmail);
-        _employerAccountQueryRepositoryMock.Setup(r => r.GetEmployer(userId))
-            .ReturnsAsync(EmployerAccountFixtures.EmployerEntity);
+        _employerQueryRepositoryMock.Setup(r => r.GetEmployerById(employerId))
+            .ReturnsAsync(EmployerFixtures.EmployerEntity);
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(
             async () => await _organizationService.RemoveEmployeeEmail(emailId));

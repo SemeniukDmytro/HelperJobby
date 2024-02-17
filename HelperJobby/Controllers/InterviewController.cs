@@ -3,6 +3,7 @@ using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Models;
 using AutoMapper;
+using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.UserJobInteractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,11 +44,10 @@ public class InterviewController : ExtendedBaseController
 
     // GET: api/Interview/{jobId}/interviews
     [HttpGet("{jobId}/interviews")]
-    public async Task<IEnumerable<InterviewDTO>> GetInterviewsByJobId(int jobId)
+    public async Task<JobDTO> GetJobInterviewsByJobId(int jobId)
     {
         var job = await _interviewService.GetInterviewsForSpecificJob(jobId);
-        job = await _jobQueryRepository.GetJobWithInterviews(job);
-        return _mapper.Map<IEnumerable<InterviewDTO>>(job.Interviews);
+        return _mapper.Map<JobDTO>(job);
     }
 
     // GET: api/Interview/{jobId}/job-seeker/{jobSeekerId}

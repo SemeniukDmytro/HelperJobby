@@ -1,3 +1,4 @@
+using ApplicationBLL.Interfaces;
 using ApplicationBLL.Services;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
@@ -8,32 +9,32 @@ using Moq;
 
 namespace BLLUnitTests.ServicesTests;
 
-public class JobSeekerAccountServiceTests
+public class JobSeekerServiceTests
 {
     private readonly JobSeekerService _jobSeekerService;
     private readonly Mock<IJobSeekerQueryRepository> _jobSeekerQueryRepositoryMock = new();
     private readonly Mock<ISavedJobQueryRepository> _savedJobQueryRepository = new();
-    private readonly Mock<IUserService> _userServiceMock = new();
+    private readonly Mock<IUserIdGetter> _userIdGetter = new();
 
-    public JobSeekerAccountServiceTests()
+    public JobSeekerServiceTests()
     {
         _jobSeekerService =
-            new JobSeekerService(_jobSeekerQueryRepositoryMock.Object, _userServiceMock.Object,
-                _savedJobQueryRepository.Object);
+            new JobSeekerService(_jobSeekerQueryRepositoryMock.Object,
+                _savedJobQueryRepository.Object, _userIdGetter.Object);
     }
 
     [Fact]
     public async Task UpdateJobSeekerAccountShouldReturnUpdatedJobSeekerAccount()
     {
         //Arrange
-        var updatedAccount = JobSeekerAccountFixture.UpdatedJobSeeker;
-        var accountEntity = JobSeekerAccountFixture.JobSeekerEntity;
-        var userId = 1;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerWithAddress(userId)).ReturnsAsync(
-            accountEntity);
+        var updatedAccount = JobSeekerFixture.UpdatedJobSeeker;
+        var accountEntity = JobSeekerFixture.JobSeekerEntity;
+        var jobSeekerId = 1;
         //Act
-        var result = await _jobSeekerService.UpdateJobSeeker(userId, updatedAccount);
+        _userIdGetter.Setup(u => u.CurrentJobSeekerId).Returns(jobSeekerId);
+        _jobSeekerQueryRepositoryMock.Setup(jsr => jsr.GetJobSeekerByIdWithAddress(jobSeekerId))
+            .ReturnsAsync(accountEntity);
+        var result = await _jobSeekerService.UpdateJobSeeker(jobSeekerId, updatedAccount);
         //Assert
         Assert.Equal(updatedAccount.FirstName, result.FirstName);
         Assert.Equal(updatedAccount.Address.City, result.Address.City);
@@ -44,9 +45,13 @@ public class JobSeekerAccountServiceTests
     public async Task UpdateJobSeekerAccountShouldThrowForbiddenExceptionIfNotCurrentUserTriesToUpdate()
     {
         //Arrange
-        var updatedAccount = JobSeekerAccountFixture.UpdatedJobSeeker;
+        var updatedAccount = JobSeekerFixture.UpdatedJobSeeker;
         var userId = 1;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(2);
+        var accountEntity = JobSeekerFixture.JobSeekerEntity;
+        var jobSeekerId = 2;
+        _userIdGetter.Setup(u => u.CurrentJobSeekerId).Returns(jobSeekerId);
+        _jobSeekerQueryRepositoryMock.Setup(jsr => jsr.GetJobSeekerByIdWithAddress(jobSeekerId))
+            .ReturnsAsync(accountEntity);
         //Act & Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
             await _jobSeekerService.UpdateJobSeeker(userId, updatedAccount));
@@ -56,13 +61,10 @@ public class JobSeekerAccountServiceTests
     public async Task SaveJobShouldReturnSavedJob()
     {
         //Arrange
-        var userId = 1;
-        var jobId = 2;
         var jobSeekerId = 1;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.SecondJobSeekerEntity;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerByUserId(userId))
-            .ReturnsAsync(jobSeekerAccountEntity);
+        var jobId = 2;
+        var jobSeekerAccountEntity = JobSeekerFixture.SecondJobSeekerEntity;
+        _userIdGetter.Setup(u => u.CurrentJobSeekerId).Returns(jobSeekerId);
         _savedJobQueryRepository.Setup(r => r.GetSavedJobByJobIdAndJobSeekerId(jobId, jobSeekerId))
             .ThrowsAsync(new JobSavingException("Saved job not found"));
         //Act
@@ -77,13 +79,9 @@ public class JobSeekerAccountServiceTests
     public async Task SaveJobShouldThrowJobSavingExceptionIfJobAlreadySaved()
     {
         //Arrange
-        var userId = 1;
-        var jobId = 1;
         var jobSeekerId = 1;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.SecondJobSeekerEntity;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerByUserId(userId))
-            .ReturnsAsync(jobSeekerAccountEntity);
+        var jobId = 1;
+        _userIdGetter.Setup(u => u.CurrentJobSeekerId).Returns(jobSeekerId);
         _savedJobQueryRepository.Setup(r => r.GetSavedJobByJobIdAndJobSeekerId(jobId, jobSeekerId))
             .ReturnsAsync(new SavedJob());
         //Act & Assert
@@ -95,13 +93,10 @@ public class JobSeekerAccountServiceTests
     public async Task RemoveJobFromSavedShouldReturnSavedJob()
     {
         //Arrange
-        var userId = 1;
         var jobId = 1;
         var jobSeekerId = 1;
-        var jobSeekerAccountEntity = JobSeekerAccountFixture.SecondJobSeekerEntity;
-        _userServiceMock.Setup(us => us.GetCurrentUserId()).Returns(userId);
-        _jobSeekerQueryRepositoryMock.Setup(r => r.GetJobSeekerByUserId(userId))
-            .ReturnsAsync(jobSeekerAccountEntity);
+        var jobSeekerAccountEntity = JobSeekerFixture.JobSeekerEntity;
+        _userIdGetter.Setup(u => u.CurrentJobSeekerId).Returns(jobSeekerId);
         _savedJobQueryRepository.Setup(r => r.GetSavedJobByJobIdAndJobSeekerId(jobId, jobSeekerId))
             .ReturnsAsync(new SavedJob
             {

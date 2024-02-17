@@ -5,6 +5,7 @@ using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
+using BLLUnitTests.Fixture;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit.Abstractions;
@@ -32,15 +33,20 @@ public class AuthServiceTests
         //Arrange
         var id = 1;
         var email = "test@gmail.com";
+        var jobSeekerId = 1;
+        var employerId = 1;
 
         _configurationMock.Setup(c => c["JwtKey"])
             .Returns("Super secret key that will be stored somewhere secretly, so you will never know its real value");
         //Act
-        var token = _authService.CreateAuthToken(id, email);
+        var token = _authService.CreateAuthToken(id, email, jobSeekerId, employerId);
         var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(token);
         //Assert
         Assert.Equal(jwtToken.Claims.FirstOrDefault(c => c.Type == "sub")?.Value, id.ToString());
         Assert.Equal(jwtToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value, email);
+        Assert.Equal(jwtToken.Claims.FirstOrDefault(c => c.Type == "jobSeekerId")?.Value, jobSeekerId.ToString());
+        Assert.Equal(jwtToken.Claims.FirstOrDefault(c => c.Type == "employerId")?.Value, employerId.ToString());
+
     }
 
 
@@ -85,8 +91,11 @@ public class AuthServiceTests
         //Arrange
         var loginUser = new User
         {
+            Id = 1,
             Email = "correct@gmail.com",
-            PasswordHash = "correctPassword"
+            PasswordHash = "correctPassword",
+            Employer = EmployerFixtures.EmployerEntity,
+            JobSeeker = JobSeekerFixture.JobSeekerEntity
         };
 
         _userQueryRepostitoryMock.Setup(c => c.GetUserByEmailWithRefreshToken(It.IsAny<string>())).ReturnsAsync(
@@ -98,6 +107,8 @@ public class AuthServiceTests
         _configurationMock.Setup(c => c["JwtKey"])
             .Returns("Super secret key that will be stored somewhere secretly, so you will never know its real value");
         _passwordHandlerMock.Setup(h => h.Verify(loginUser.PasswordHash, "correctPassword")).Returns(true);
+        _userQueryRepostitoryMock.Setup(uq => uq.GetUserByEmailWithRefreshToken("correct@gmail.com"))
+            .ReturnsAsync(loginUser);
         //Act
         var result = _authService.AuthUser(loginUser).Result;
         //Assert

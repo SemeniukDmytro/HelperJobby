@@ -33,12 +33,7 @@ public static class ResumeFixtures
         JobSeekerId = 1,
         Educations = new List<Education>
         {
-            new()
-            {
-                Id = 1,
-                LevelOfEducation = "Bachelor's",
-                FieldOfStudy = "Software Engineering"
-            }
+            EducationFixtures.FirstEducationEntity
         },
         WorkExperiences = new List<WorkExperience>()
         {

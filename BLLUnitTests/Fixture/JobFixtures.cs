@@ -24,7 +24,7 @@ public static class JobFixtures
         ContactEmail = "test@gmail.com",
         Description = "test description",
         EmployerId = 1,
-        Employer = EmployerAccountFixtures.EmployerEntity
+        Employer = EmployerFixtures.EmployerEntity
     };
 
     public static readonly Job InvalidCreatedJob = new()
@@ -66,7 +66,7 @@ public static class JobFixtures
         ContactEmail = "test@gmail.com",
         Description = "test description",
         EmployerId = 1,
-        Employer = EmployerAccountFixtures.EmployerEntity
+        Employer = EmployerFixtures.EmployerEntity
     };
 
     public static readonly Job SecondJobEntity = new()
@@ -88,7 +88,7 @@ public static class JobFixtures
         ContactEmail = "test@gmail.com",
         Description = "test description",
         EmployerId = 2,
-        Employer = EmployerAccountFixtures.SecondEmployerEntity
+        Employer = EmployerFixtures.SecondEmployerEntity
     };
 
     public static readonly Job UpdatedJob = new()
@@ -109,6 +109,6 @@ public static class JobFixtures
         ContactEmail = "test@gmail.com",
         Description = "test description",
         EmployerId = 1,
-        Employer = EmployerAccountFixtures.EmployerEntity
+        Employer = EmployerFixtures.EmployerEntity
     };
 }

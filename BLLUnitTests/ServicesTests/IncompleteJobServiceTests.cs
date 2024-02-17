@@ -59,7 +59,7 @@ public class IncompleteJobServiceTests
         var jobId = 1;
         var employerId = 1;
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
-        _incompleteJobQueryRepository.Setup(r => r.GetIncompleteJobWithEmployer(jobId))
+        _incompleteJobQueryRepository.Setup(r => r.GetIncompleteJobById(jobId))
             .ReturnsAsync(new IncompleteJob
             {
                 Id = jobId,
@@ -90,7 +90,7 @@ public class IncompleteJobServiceTests
         var jobId = 1;
         var employerId = 1;
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
-        _incompleteJobQueryRepository.Setup(r => r.GetIncompleteJobWithEmployer(jobId))
+        _incompleteJobQueryRepository.Setup(r => r.GetIncompleteJobById(jobId))
             .ReturnsAsync(new IncompleteJob
             {
                 Id = jobId,
@@ -113,7 +113,7 @@ public class IncompleteJobServiceTests
         var jobId = 1;
         var employerId = 1;
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
-        _incompleteJobQueryRepository.Setup(r => r.GetIncompleteJobWithEmployer(jobId)).ReturnsAsync(
+        _incompleteJobQueryRepository.Setup(r => r.GetIncompleteJobById(jobId)).ReturnsAsync(
             new IncompleteJob
             {
                 Id = jobId,
@@ -137,7 +137,7 @@ public class IncompleteJobServiceTests
         var jobId = 1;
         var employerId = 1;
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
-        _incompleteJobQueryRepository.Setup(r => r.GetIncompleteJobWithEmployer(jobId)).ReturnsAsync(
+        _incompleteJobQueryRepository.Setup(r => r.GetIncompleteJobById(jobId)).ReturnsAsync(
             new IncompleteJob
             {
                 Id = jobId,

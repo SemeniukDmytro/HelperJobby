@@ -36,7 +36,7 @@ public class JobQueryRepository : IJobQueryRepository
     public async Task<IEnumerable<Job>> GetJobsByEmployerId(int employerId)
     {
         var jobs = await _applicationContext.Jobs
-            .Include(j => j.Salary).Where(j=> j.EmployerId == employerId).ToListAsync();
+            .Include(j => j.Salary).Where(j => j.EmployerId == employerId).ToListAsync();
         return jobs;
     }
 
@@ -44,7 +44,7 @@ public class JobQueryRepository : IJobQueryRepository
     public async Task<IEnumerable<Job>> GetJobsByOrganizationId(int organizationId)
     {
         var jobs = await _applicationContext.Jobs.Where(j => j.Employer.OrganizationId == organizationId)
-            .Include(j => j.Salary)
+            .Include(j => j.Salary).Select(JobProjections.JobForJobSeekers())
             .ToListAsync();
 
         return jobs;
@@ -53,23 +53,33 @@ public class JobQueryRepository : IJobQueryRepository
     public async Task<IEnumerable<Job>> GetJobsByJobIds(List<int> jobIds)
     {
         var jobs = await _applicationContext
-            .Jobs.Where(j => jobIds.Contains(j.Id)).Select(JobProjections.JobWithOrganizationName())
+            .Jobs.Where(j => jobIds.Contains(j.Id)).Select(JobProjections.JobForJobSeekers())
             .ToListAsync();
         return jobs;
     }
 
-    public async Task<Job> GetJobWithJobApplies(Job job)
+    public async Task<Job> GetJobWithJobApplies(int jobId)
     {
-        await _applicationContext.Entry(job).Collection(j => j.JobApplies).LoadAsync();
-        if (job == null) throw new JobNotFoundException();
-        return job;
+        var jobEntity = await _applicationContext.Jobs.Where(j => j.Id == jobId)
+            .Select(JobProjections.JobWithJobApplies()).FirstOrDefaultAsync();
+        if (jobEntity == null)
+        {
+            throw new JobNotFoundException();
+        }
+
+        return jobEntity;
     }
 
-    public async Task<Job> GetJobWithInterviews(Job job)
+    public async Task<Job> GetJobWithInterviews(int jobId)
     {
-        await _applicationContext.Entry(job).Collection(j => j.Interviews).LoadAsync();
-        if (job == null) throw new JobNotFoundException();
-        return job;
+        var jobEntity = await _applicationContext.Jobs.Where(j => j.Id == jobId)
+            .Select(JobProjections.JobWithInterviews()).FirstOrDefaultAsync();
+        if (jobEntity == null)
+        {
+            throw new JobNotFoundException();
+        }
+
+        return jobEntity;
     }
 
     public async Task<IEnumerable<Job>> GetRandomJobs()
@@ -77,7 +87,7 @@ public class JobQueryRepository : IJobQueryRepository
         var jobsCount = _applicationContext.Jobs.Count();
         var startingPoint = Math.Max(new Random().Next(jobsCount) - 10, 0);
         return await _applicationContext.Jobs.Skip(startingPoint).Take(RandomJobsToTake)
-            .Select(JobProjections.JobWithOrganizationName())
+            .Select(JobProjections.JobForJobSeekers())
             .ToListAsync();
     }
 
@@ -85,7 +95,7 @@ public class JobQueryRepository : IJobQueryRepository
     {
         var job = await _applicationContext
             .Jobs.Where(j => j.Id == jobId)
-            .Select(JobProjections.JobWithOrganizationName())
+            .Select(JobProjections.JobForJobSeekers())
             .FirstOrDefaultAsync();
         if (job == null) throw new JobNotFoundException();
         return job;
