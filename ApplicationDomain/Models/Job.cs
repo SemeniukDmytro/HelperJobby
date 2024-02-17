@@ -32,7 +32,7 @@ public class Job
 
     [Required] [Column(TypeName = "text")] public string Description { get; set; }
 
-    [Required] public DateOnly DatePosted { get; set; }
+    [ExcludeFromUpdate] [Required] public DateOnly DatePosted { get; set; }
     [ExcludeFromUpdate] public JobSalary? Salary { get; set; }
 
     [ExcludeFromUpdate]

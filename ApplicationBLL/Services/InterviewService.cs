@@ -49,7 +49,7 @@ public class InterviewService : IInterviewService
 
         if (interview != null) throw new InterviewOperatingException("This interview is already created");
         var currentEmployerId = _employerService.GetCurrentEmployerId();
-        var job = await _jobQueryRepository.GetJobById(jobId);
+        var job = await _jobQueryRepository.GetJobByIdForEmployers(jobId);
         if (job.EmployerId != currentEmployerId)
             throw new ForbiddenException(
                 "You can't create interview for this job. Job was created by another employer");

@@ -43,7 +43,7 @@ public class JobControllerTests : IntegrationTest
         var employer = await CreateEmployerWithNewOrganizationForAuthUser();
         var firstCreatedJob = await CreateJob();
         var secondCreatedJob = await CreateJob();
-        var requestUri = $"{_baseUri}/jobs/{employer.Id}";
+        var requestUri = $"{_baseUri}/employer-jobs/{employer.Id}";
 
         //Act
         var getJobsResponse = await TestClient.GetAsync(requestUri);

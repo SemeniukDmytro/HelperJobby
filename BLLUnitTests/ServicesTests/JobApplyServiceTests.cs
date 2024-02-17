@@ -31,7 +31,7 @@ public class JobApplyServiceTests
         var job = JobFixtures.FirstJobEntity;
         var employerId = 1;
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
-        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(job);
+        _jobQueryRepositoryMock.Setup(r => r.GetJobWithJobApplies(jobId)).ReturnsAsync(job);
 
         //Act
         var jobForJobApplies = await _jobApplyService.GetJobAppliesForSpecificJob(jobId);
@@ -49,7 +49,7 @@ public class JobApplyServiceTests
         var job = JobFixtures.SecondJobEntity;
         var employerId = 1;
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
-        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(job);
+        _jobQueryRepositoryMock.Setup(r => r.GetJobWithJobApplies(jobId)).ReturnsAsync(job);
 
         //Act && Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>

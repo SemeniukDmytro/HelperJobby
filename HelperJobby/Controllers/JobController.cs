@@ -32,24 +32,32 @@ public class JobController : ExtendedBaseController
         _incompleteJobQueryRepository = incompleteJobQueryRepository;
         _enqueuingTaskHelper = enqueuingTaskHelper;
     }
-
-    [HttpGet("jobs/{employerId}")]
+    
+    [HttpGet("{jobId}")]
+    [AllowAnonymous]
+    public async Task<JobDTO> GetJobForJobSeekersById(int jobId)
+    {
+        return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobByIdForJobSeekers(jobId));
+    }
+    
+    [HttpGet("employer-job/{jobId}")]
+    public async Task<JobDTO> GetJobForJobEmployerById(int jobId)
+    {
+        var job = await _jobService.GetJobForEmployerById(jobId);
+        return _mapper.Map<JobDTO>(job);
+    }
+    
+    [HttpGet("employer-jobs/{employerId}")]
     public async Task<IEnumerable<JobDTO>> GetJobsByEmployerId(int employerId)
     {
-        return _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByEmployerId(employerId));
+        var jobs = await _jobService.GetEmployerJobsByEmployerId(employerId);
+        return _mapper.Map<IEnumerable<JobDTO>>(jobs);
     }
 
     [HttpGet("organization-jobs/{organizationId}")]
     public async Task<IEnumerable<JobDTO>> GetJobsByOrganizationId(int organizationId)
     {
         return _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByOrganizationId(organizationId));
-    }
-
-    [HttpGet("{jobId}")]
-    [AllowAnonymous]
-    public async Task<JobDTO> GetJobById(int jobId)
-    {
-        return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobWithOrganizationInfo(jobId));
     }
 
     [HttpPost("{incompleteJobId}")]

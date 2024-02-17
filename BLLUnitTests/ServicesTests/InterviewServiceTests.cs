@@ -28,7 +28,7 @@ public class InterviewServiceTests
 
 
     [Fact]
-    public async Task GetJobAppliesForSpecifiedShouldReturnJob()
+    public async Task GetInterviewForSpecifiedShouldReturnJob()
     {
         //Arrange
         var jobId = 1;
@@ -36,7 +36,7 @@ public class InterviewServiceTests
         var employerId = 1;
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
         
-        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(job);
+        _jobQueryRepositoryMock.Setup(r => r.GetJobWithInterviews(jobId)).ReturnsAsync(job);
 
         //Act
         var jobForInterviews = await _interviewService.GetInterviewsForSpecificJob(jobId);
@@ -47,7 +47,7 @@ public class InterviewServiceTests
     }
 
     [Fact]
-    public async Task GetJobAppliesShouldThrowAnExceptionIfNotJobEmployerTriesToGet()
+    public async Task GetInterviewsShouldThrowAnExceptionIfNotJobEmployerTriesToGet()
     {
         //Arrange
         var jobId = 2;
@@ -55,7 +55,7 @@ public class InterviewServiceTests
 
         var employerId = 1;
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
-        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(job);
+        _jobQueryRepositoryMock.Setup(r => r.GetJobWithInterviews(jobId)).ReturnsAsync(job);
 
         //Act && Assert
         await Assert.ThrowsAsync<ForbiddenException>(async () =>
@@ -77,7 +77,7 @@ public class InterviewServiceTests
         _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, jobSeekerId))
             .ThrowsAsync(new InterviewOperatingException("Interview not found"));
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
-        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(JobFixtures.FirstJobEntity);
+        _jobQueryRepositoryMock.Setup(r => r.GetJobByIdForEmployers(jobId)).ReturnsAsync(JobFixtures.FirstJobEntity);
         //Act
         var createdInterview = await _interviewService.PostInterview(jobId, jobSeekerId, createdInterviewInfo);
         //Assert
@@ -99,7 +99,7 @@ public class InterviewServiceTests
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
         _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, jobSeekerId))
             .ThrowsAsync(new InterviewOperatingException("Interview not found"));
-        _jobQueryRepositoryMock.Setup(r => r.GetJobById(jobId)).ReturnsAsync(JobFixtures.SecondJobEntity);
+        _jobQueryRepositoryMock.Setup(r => r.GetJobByIdForEmployers(jobId)).ReturnsAsync(JobFixtures.SecondJobEntity);
         //Act & Assert
         await Assert.ThrowsAsync
             <ForbiddenException>(async () =>

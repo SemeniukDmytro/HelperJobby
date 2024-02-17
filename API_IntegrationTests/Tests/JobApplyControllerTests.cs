@@ -1,5 +1,6 @@
 using System.Net;
 using API_IntegrationTests.TestHelpers;
+using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.UserJobInteractions;
 using Xunit.Abstractions;
 
@@ -36,13 +37,13 @@ public class JobApplyControllerTests : IntegrationTest
         //Assert
         Assert.Equal(HttpStatusCode.OK, getJobAppliesResponse.StatusCode);
 
-        var jobApplies = (await getJobAppliesResponse.Content.ReadAsAsync<IEnumerable<JobApplyDTO>>()).ToList();
+        var jobDTO = await getJobAppliesResponse.Content.ReadAsAsync<JobDTO>();
 
-        Assert.Equal(expectedJobCount, jobApplies.Count);
-        Assert.Equal(createdJob.Id, jobApplies[0].JobId);
-        Assert.Equal(createdJob.Id, jobApplies[1].JobId);
-        Assert.Equal(firstJobSeeker.Id, jobApplies[0].JobSeekerId);
-        Assert.Equal(secondJobSeeker.Id, jobApplies[1].JobSeekerId);
+        Assert.Equal(expectedJobCount, jobDTO.JobApplies.Count);
+        Assert.Equal(createdJob.Id, jobDTO.JobApplies[0].JobId);
+        Assert.Equal(createdJob.Id, jobDTO.JobApplies[1].JobId);
+        Assert.Equal(firstJobSeeker.Id, jobDTO.JobApplies[0].JobSeekerId);
+        Assert.Equal(secondJobSeeker.Id, jobDTO.JobApplies[1].JobSeekerId);
     }
 
     [Fact]

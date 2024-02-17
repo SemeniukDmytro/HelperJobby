@@ -18,6 +18,25 @@ public class JobService : IJobService
         _employerService = employerService;
     }
 
+    public async Task<Job> GetJobForEmployerById(int jobId)
+    {
+        var job = await _jobQueryRepository.GetJobByIdForEmployers(jobId);
+        CheckIfUserHasAccessToPerformAnAction(job);
+        return job;
+    }
+
+    public async Task<IEnumerable<Job>> GetEmployerJobsByEmployerId(int employerId)
+    {
+        var currentEmployerId = _employerService.GetCurrentEmployerId();
+        if (employerId != currentEmployerId)
+        {
+            throw new ForbiddenException("You can retrieve only your jobs");
+        }
+
+        var jobs = await _jobQueryRepository.GetJobsByEmployerId(employerId);
+        return jobs;
+    }
+
     public async Task<Job> CreateJob(Job job)
     {
         if (!Validator.TryValidateObject(job, new ValidationContext(job), null, true)) throw new InvalidJobException();
@@ -86,7 +105,6 @@ public class JobService : IJobService
     
     private void CheckIfValidSalaryProvided(JobSalary? salary)
     {
-        Console.WriteLine(salary);
         if (salary != null && !salary.MeetsMinSalaryRequirement)
         {
             if (!SalaryRateHelper.CheckMinimalSalary(salary.MinimalAmount, salary.SalaryRate))
@@ -96,6 +114,6 @@ public class JobService : IJobService
 
     private void CheckIfUserHasAccessToPerformAnAction(Job job)
     {
-        if (job.Employer.Id != _employerService.GetCurrentEmployerId()) throw new ForbiddenException();
+        if (job.EmployerId != _employerService.GetCurrentEmployerId()) throw new ForbiddenException();
     }
 }

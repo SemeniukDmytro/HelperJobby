@@ -3,6 +3,7 @@ using API_IntegrationTests.Fixtures;
 using API_IntegrationTests.TestHelpers;
 using ApplicationDomain.Enums;
 using HelperJobby.DTOs.Account;
+using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.UserJobInteractions;
 using Xunit.Abstractions;
 
@@ -17,7 +18,7 @@ public class InterviewControllerTests : IntegrationTest
     }
 
     [Fact]
-    public async Task GetInterviewsByJobId_ShouldReturnJobAllInterviews()
+    public async Task GetJobInterviewsByJobId_ShouldReturnJobAllInterviews()
     {
         //Arrange
         var jobSeekersAmount = 2; //change if created more jobSeekers
@@ -35,12 +36,12 @@ public class InterviewControllerTests : IntegrationTest
 
         //Assert
         Assert.Equal(HttpStatusCode.OK, getJobSeekerInterviewsResponse.StatusCode);
-        var interviews =
-            (await getJobSeekerInterviewsResponse.Content.ReadAsAsync<IEnumerable<InterviewDTO>>()).ToList();
-        Assert.Equal(jobSeekersAmount, interviews.Count);
-        Assert.Equal(createdJob.JobTitle, interviews[0].Job.JobTitle);
-        Assert.Equal(firstInterview.JobSeekerId, interviews[0].JobSeekerId);
-        Assert.Equal(secondInterview.JobSeekerId, interviews[1].JobSeekerId);
+        var jobDTO =
+            (await getJobSeekerInterviewsResponse.Content.ReadAsAsync<JobDTO>());
+        Assert.Equal(jobSeekersAmount, jobDTO.Interviews.Count);
+        Assert.Equal(createdJob.JobTitle, jobDTO.JobTitle);
+        Assert.Equal(firstInterview.JobSeekerId, jobDTO.Interviews[0].JobSeekerId);
+        Assert.Equal(secondInterview.JobSeekerId, jobDTO.Interviews[1].JobSeekerId);
     }
 
     [Fact]

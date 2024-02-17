@@ -16,11 +16,21 @@ public class JobQueryRepository : IJobQueryRepository
         _applicationContext = applicationContext;
     }
 
-    public async Task<Job> GetJobById(int jobId)
+    public async Task<Job> GetJobByIdForEmployers(int jobId)
     {
         var job = await _applicationContext.Jobs.Include(j => j.Salary).FirstOrDefaultAsync(j => j.Id == jobId);
         if (job == null) throw new JobNotFoundException();
 
+        return job;
+    }
+    
+    public async Task<Job> GetJobByIdForJobSeekers(int jobId)
+    {
+        var job = await _applicationContext
+            .Jobs.Where(j => j.Id == jobId)
+            .Select(JobProjections.JobForJobSeekers())
+            .FirstOrDefaultAsync();
+        if (job == null) throw new JobNotFoundException();
         return job;
     }
 
@@ -91,13 +101,5 @@ public class JobQueryRepository : IJobQueryRepository
             .ToListAsync();
     }
 
-    public async Task<Job> GetJobWithOrganizationInfo(int jobId)
-    {
-        var job = await _applicationContext
-            .Jobs.Where(j => j.Id == jobId)
-            .Select(JobProjections.JobForJobSeekers())
-            .FirstOrDefaultAsync();
-        if (job == null) throw new JobNotFoundException();
-        return job;
-    }
+    
 }
