@@ -99,9 +99,9 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
                         <div className={"fji-job-header-block"}>
                             <div className={"fji-job-title bold-text"}>{job.jobTitle}</div>
                             <div className={"fji-organization-name"}>{job.employer.organization.name}</div>
-                            <div className={"dark-default-text mb25rem"}>{job.location}</div>
+                            <div className={"semi-dark-default-text mb25rem"}>{job.location}</div>
                             <div
-                                className={"dark-default-text mb1rem"}
+                                className={"semi-dark-default-text mb1rem"}
                             >{formatJobSalaryDisplay(job)}</div>
                             <div className={"header-job-interactions-box"}>
                                 <button
@@ -121,7 +121,7 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
                                                 onClick={handleRemoveSavedJobClick}
                                             >
                                                 <FontAwesomeIcon className={"svg125rem"} icon={faBookmark}/>
-                                                <span className={"dark-default-text bold-text ml05rem"}>Saved</span>
+                                                <span className={"semi-dark-default-text bold-text ml05rem"}>Saved</span>
                                             </button>)
                                     ) :
                                     (<button
@@ -129,7 +129,7 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
                                         onClick={handleSaveJobClick}
                                     >
                                         <FontAwesomeIcon className={"svg125rem mr05rem"} icon={faBookmark}/>
-                                        {isApplied && <span className={"dark-default-text bold-text"}>Applied</span>}
+                                        {isApplied && <span className={"semi-dark-default-text bold-text"}>Applied</span>}
                                     </button>)
                                 }
 

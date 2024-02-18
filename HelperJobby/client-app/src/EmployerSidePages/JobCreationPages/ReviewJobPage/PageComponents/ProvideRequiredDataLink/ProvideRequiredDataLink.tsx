@@ -14,10 +14,10 @@ const ProvideRequiredDataLink: FC<ProvideRequiredDataLinkProps> = ({
                                                                    }) =>
     (
         <div className={"flex-row mb05rem"}>
-            <a className={"bold-navigation-link"} onClick={() => setShowEditDataWindow(true)}>
+            <span className={"bold-navigation-link"} onClick={() => setShowEditDataWindow(true)}>
                 <span>{linkLabel}</span>
                 <FontAwesomeIcon className={"svg1rem ml05rem"} icon={faPen}/>
-            </a>
+            </span>
         </div>
 
     );

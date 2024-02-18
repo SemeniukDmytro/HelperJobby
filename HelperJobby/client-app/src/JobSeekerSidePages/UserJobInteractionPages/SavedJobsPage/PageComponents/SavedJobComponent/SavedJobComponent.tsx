@@ -88,8 +88,8 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
                     (
                         <div className={"job-interaction-deleted-box"}>
                             <div>
-                                <span className={"semi-dark-default-text bold-text"}>{job.jobTitle}&nbsp;</span>
-                                <span className={"light-dark-default-text"}>has been unsaved.&nbsp;</span>
+                                <span className={"light-dark-default-text bold-text"}>{job.jobTitle}&nbsp;</span>
+                                <span className={"grey-default-text"}>has been unsaved.&nbsp;</span>
                                 <a className={"bold-navigation-link"} onClick={handleSaveJobClick}>Undo</a>
                             </div>
                             <div>

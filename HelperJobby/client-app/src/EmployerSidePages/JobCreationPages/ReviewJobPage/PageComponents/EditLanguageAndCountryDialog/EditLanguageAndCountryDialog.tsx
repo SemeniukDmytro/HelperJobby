@@ -97,7 +97,7 @@ const EditLanguageAndCountryDialog: FC<EditLanguageAndCountryDialogProps> = ({
                             <div className={"warning-pop-up-icon mr1rem"}>
                                 <FontAwesomeIcon icon={faTriangleExclamation}/>
                             </div>
-                            <div className={"dark-small-text ai-center"}>
+                            <div className={"semi-dark-small-text ai-center"}>
                                 If you change the job's language or country now, you may need to enter additional
                                 information before posting your job.
                             </div>

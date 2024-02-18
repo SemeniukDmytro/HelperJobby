@@ -32,7 +32,7 @@ const MultipleRowsReviewBlock: FC<MultipleRowsReviewBlockProps> = ({
                    onClick={onEditClick}>
                     <div className={"ji-value-info-layout"}>
                         <div
-                            className={"ji-value-container semi-dark-default-text"}
+                            className={"ji-value-container light-dark-default-text"}
                         >
                             <div>
                                 {childCount == 0 ?

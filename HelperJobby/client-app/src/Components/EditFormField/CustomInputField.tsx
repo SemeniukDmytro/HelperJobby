@@ -15,6 +15,7 @@ interface EditFormFieldProps {
     setExecuteValidation?: Dispatch<SetStateAction<boolean>>;
     customErrorMessage?: string;
     setCustomErrorMessage?: Dispatch<SetStateAction<string>>;
+    placeholderText?: string;
 }
 
 const CustomInputField: FC<EditFormFieldProps> = ({
@@ -27,7 +28,8 @@ const CustomInputField: FC<EditFormFieldProps> = ({
                                                       executeValidation,
                                                       setExecuteValidation,
                                                       customErrorMessage,
-                                                      setCustomErrorMessage
+                                                      setCustomErrorMessage,
+                                                      placeholderText
                                                   }) => {
 
     const [isInvalidValue, setIsInvalidValue] = useState(false);
@@ -51,7 +53,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({
         }
     }, [executeValidation]);
 
-    function validateInputValue(inputValue : string) {
+    function validateInputValue(inputValue: string) {
         if (!inputValue && isRequired && !customErrorMessage) {
             setIsInvalidValue(true);
             setRequiredMessage(`${fieldLabel} is required`);
@@ -100,6 +102,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({
                     onChange={changeInputFieldValue}
                     onBlur={() => validateInputValue(inputFieldValue)}
                     ref={inputRef}
+                    placeholder={placeholderText}
                 />
                 {showEraseJobBtn && <div className={"input-button-box"} onClick={eraseInput}>
                     <button type={"button"} className={"input-field-button"}>

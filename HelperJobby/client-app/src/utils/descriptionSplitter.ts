@@ -1,5 +1,13 @@
 function filterLines(lines: string[]): string[] {
-    return lines.filter(line => !line.includes("?") && line.length >= 30 && !line.includes(':'));
+    const wordsToExclude = ['why', 'when', 'who', 'what', 'where', 'how'];
+
+    return lines.filter(line => {
+        const lowerCaseLine = line.toLowerCase();
+        return !lowerCaseLine.includes("?") &&
+            lowerCaseLine.length >= 30 &&
+            !lowerCaseLine.includes(':') &&
+            !wordsToExclude.some(word => lowerCaseLine.includes(word));
+    });
 }
 
 function generateSentences(filteredLines: string[]): string[] {
@@ -48,7 +56,7 @@ function handleLengthConstraint(sentences: string[]): string[] {
 }
 
 export function descriptionSplitter(description: string): string[] {
-    const lines = description.split('\n');
+    const lines = description.split(/[\n.]/);
     const filteredLines = filterLines(lines);
     const sentences = generateSentences(filteredLines);
     const result = handleLengthConstraint(sentences);

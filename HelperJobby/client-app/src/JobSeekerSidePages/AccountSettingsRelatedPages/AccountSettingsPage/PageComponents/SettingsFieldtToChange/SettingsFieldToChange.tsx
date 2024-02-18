@@ -29,7 +29,7 @@ const SettingsFieldToChange: FC<SettingsFieldToChangeProps> = ({
                     <div className={"field-label"}>
                         <span>{fieldLabel}</span>
                     </div>
-                    <div className={"semi-dark-default-text"}>
+                    <div className={"light-dark-default-text"}>
                         <span>{fieldValue}</span>
                     </div>
                 </div>

@@ -146,7 +146,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
             />
             <PageTitleWithImage imageElement={<Company/>} title={"Create employer account"}/>
             <div className={"ems-content"}>
-                <span className={"dark-default-text ems-sub-title"}>You haven't posted a job before, so you'll need to create an employer account.</span>
+                <span className={"semi-dark-default-text ems-sub-title"}>You haven't posted a job before, so you'll need to create an employer account.</span>
                 <div className={"mt1rem"}>
                     <span className={"bold-navigation-link"}>Not here to post a job</span>
                 </div>

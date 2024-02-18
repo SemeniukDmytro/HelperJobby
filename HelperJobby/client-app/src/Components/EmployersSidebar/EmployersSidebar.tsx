@@ -63,6 +63,10 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
     function navigateToJobPostingPage() {
         navigate(employerPagesPaths.JOB_POSTING);
     }
+    
+    function navigateToJobsPage(){
+        navigate(employerPagesPaths.JOBS);
+    }
 
     return (
         <>
@@ -106,7 +110,7 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                                     >
                                         <a className={"nav-link"}>
                                             <div className="nav-icon-container">
-                                                <FontAwesomeIcon className={"svg1rem dark-small-text"} icon={faPlus}/>
+                                                <FontAwesomeIcon className={"svg1rem semi-dark-small-text"} icon={faPlus}/>
                                             </div>
                                             {(isHovered || isExpanded) &&
                                                 <div className="nav-link-text dark-nav-link-text">
@@ -116,7 +120,7 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                                         </a>
                                         {(isHovered || isExpanded) && 
                                             <div className={"nav-icon-container"}>
-                                                <FontAwesomeIcon className={"svg075rem mr05rem dark-default-text"} icon={faChevronRight}/>
+                                                <FontAwesomeIcon className={"svg075rem mr05rem semi-dark-default-text"} icon={faChevronRight}/>
                                             </div>
                                         }
                                     </div>
@@ -158,7 +162,9 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                                     </div>
                                 </div>}
                             </li>
-                            <li className={"nav-list-component"}>
+                            <li className={"nav-list-component"}
+                                onClick={navigateToJobsPage}
+                            >
                                 <div className={"nav-bar-button-container"}>
                                     <div className={"nav-link-container"}>
                                         <a className={"nav-link"}>

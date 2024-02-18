@@ -98,7 +98,7 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
             <div className={"emp-form-fb"}>
                 <form className={"emp-form"}>
                     <div className={"small-title horizontal-title"}>
-                        <span className={`dark-default-text bold-text ${isInvalidForm ? "error-text" : ""}`}>Job type</span>
+                        <span className={`semi-dark-default-text bold-text ${isInvalidForm ? "error-text" : ""}`}>Job type</span>
                         <span className={"error-text"}>&nbsp;*</span>
                     </div>
                     <ul className={"job-features-list"}>

@@ -8,7 +8,7 @@
 }
 
 .dark-default-text {
-  color: global-variables.$neutral-color-900;
+  color: global-variables.$neutral-color-1000;
   font-size: 1rem;
   line-height: 1.5;
   overflow-wrap: break-word;
@@ -16,6 +16,14 @@
 }
 
 .semi-dark-default-text {
+  color: global-variables.$neutral-color-900;
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.light-dark-default-text {
   color: global-variables.$neutral-color-800;
   font-size: 1rem;
   line-height: 1.5;
@@ -23,10 +31,43 @@
   word-break: break-word; 
 }
 
-.light-dark-default-text {
+.grey-default-text {
   color: global-variables.$neutral-color-700;
   font-size: 1rem;
   line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.dark-small-text {
+  color: global-variables.$neutral-color-1000;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.semi-dark-small-text {
+  color: global-variables.$neutral-color-900;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.light-dark-small-text {
+  color: global-variables.$neutral-color-800;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+
+.grey-small-text {
+  color: global-variables.$neutral-color-700;
+  line-height: 1.5;
+  font-size: 0.875rem;
   overflow-wrap: break-word;
   word-break: break-word;
 }

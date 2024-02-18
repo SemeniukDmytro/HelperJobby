@@ -157,7 +157,7 @@ const JobSalaryBlock: FC<JobSalaryBlockProps> = ({
                                     </div>
 
                                     <span
-                                        className={"salary-input-box dark-default-text mt1rem"}
+                                        className={"salary-input-box semi-dark-default-text mt1rem"}
                                         style={{
                                             alignSelf: "center"
                                         }}
@@ -229,10 +229,10 @@ const JobSalaryBlock: FC<JobSalaryBlockProps> = ({
                         <FontAwesomeIcon icon={faTriangleExclamation}/>
                     </div>
                     <div className={"ntf-msg-with-ttl-container"}>
-                        <div className={"dark-small-text bold-text"}>
+                        <div className={"semi-dark-small-text bold-text"}>
                             Missing pay information
                         </div>
-                        <div className={"dark-small-text"}>
+                        <div className={"semi-dark-small-text"}>
                             If you do not provide pay information, job seekers won't see job offer if they
                             will decide to sort jobs by pay.
                             Jobs without employer-provided pay have lower visibility

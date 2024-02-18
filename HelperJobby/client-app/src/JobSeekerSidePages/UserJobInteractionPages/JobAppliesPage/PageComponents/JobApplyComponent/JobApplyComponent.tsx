@@ -99,8 +99,8 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
                     (
                         <div className={"job-interaction-deleted-box"}>
                             <div>
-                                <span className={"semi-dark-default-text bold-text"}>{job.jobTitle}&nbsp;</span>
-                                <span className={"light-dark-default-text"}>apply was removed.&nbsp;</span>
+                                <span className={"light-dark-default-text bold-text"}>{job.jobTitle}&nbsp;</span>
+                                <span className={"grey-default-text"}>apply was removed.&nbsp;</span>
                                 <a className={"bold-navigation-link"} onClick={reApply}>Undo</a>
                             </div>
                             <div>

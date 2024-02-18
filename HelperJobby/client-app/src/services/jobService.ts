@@ -10,15 +10,19 @@ export class JobService {
         this.customFetchService = new CustomFetchService();
     }
 
+    public async getJobForEmployerById(jobId: number): Promise<JobDTO> {
+        return this.customFetchService.get<JobDTO>(`${this.baseURI}/employer-job/${jobId}`);
+    }
+
     public async getJobsByEmployerId(employerId: number): Promise<JobDTO[]> {
-        return await this.customFetchService.get<JobDTO[]>(`${this.baseURI}/jobs/${employerId}`);
+        return this.customFetchService.get<JobDTO[]>(`${this.baseURI}/employer-jobs/${employerId}`);
     }
 
     public async getJobsByOrganizationId(organizationId: number): Promise<JobDTO[]> {
-        return await this.customFetchService.get<JobDTO[]>(`${this.baseURI}/organization-jobs/${organizationId}`);
+        return this.customFetchService.get<JobDTO[]>(`${this.baseURI}/organization-jobs/${organizationId}`);
     }
 
-    public async getJobById(jobId: number): Promise<JobDTO> {
+    public async getJobForJobSeekersById(jobId: number): Promise<JobDTO> {
         return await this.customFetchService.get<JobDTO>(`${this.baseURI}/${jobId}`);
     }
 

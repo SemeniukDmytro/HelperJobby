@@ -19,7 +19,7 @@
   border-radius: 0.5rem;
   border: 1px solid global-variables.$neutral-color-800;
   transition: border-bottom 0.2s;
-
+  background-color: white;
   &:focus-within {
     border-color: global-variables.$dark-blue;
     .border-lining{

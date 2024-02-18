@@ -1,0 +1,96 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.emp-jobs-layout {
+  min-width: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: 100%;
+}
+
+.emp-jobs-header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-connected-button {
+  border-bottom-right-radius: 0rem;
+  border-top-right-radius: 0rem;
+}
+
+.right-connected-button {
+  border-bottom-left-radius: 0rem;
+  border-top-left-radius: 0rem;
+}
+
+.job-table-filters-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.filter-params-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-basis: 40%;
+}
+
+.sort-jobs-by-container {
+  flex-basis: 50%;
+}
+
+.jobs-order-container {
+  flex-basis: 50%;
+}
+
+.filters-unexpanded-dropdown {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  border: 1px solid global-variables.$neutral-color-700;
+  cursor: pointer;
+  transition: border 0.2s;
+  user-select: none;
+  &:hover{
+    border-color: global-variables.$dark-blue;
+  }
+}
+
+.filter-dropdown-container {
+  position: relative;
+  display: flex;
+  flex-basis: 40%;
+}
+
+.emp-job-search-filters-form{
+  position: absolute;
+  z-index: 2;
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.expanded-job-search-filters-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background-color: white;
+  border-radius: 0.25rem;
+  box-shadow: global-variables.$small-box-shadow;
+  box-sizing: border-box;
+  padding: 1rem;
+}
+
+.expanded-job-search-filters{
+}
+

@@ -86,7 +86,7 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
                             {showMoreOptions && <div className="emh-more-options-block" ref={moreOptionsWindow}>
                                 <div className={"emh-option-container"}>
                                     <span
-                                        className={"dark-default-text bold-text emh-employer-name"}
+                                        className={"semi-dark-default-text bold-text emh-employer-name"}
                                     >{employer?.organization.name || "No account name"} </span>
                                 </div>
                                 <div className={"emh-option-container"}>
@@ -103,7 +103,7 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
                                 </div>
                                 <div className={"content-separation-line mb075rem mt075rem"}></div>
                                 <div className={"emh-option-container"}>
-                                    <span className={"dark-default-text bold-text"}>{authUser?.user.email} </span>
+                                    <span className={"semi-dark-default-text bold-text"}>{authUser?.user.email} </span>
                                 </div>
                                 <div className={"emh-option-container"}>
                                     <button className={"emh-option"} onClick={navigateToAccountSettingPage}>

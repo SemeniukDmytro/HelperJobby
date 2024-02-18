@@ -33,7 +33,7 @@ const ViewJobComponent: FC<JobComponentProps> = () => {
         try {
             setLoading(true);
             const jobId = Number.parseInt(jid!);
-            const retrievedJob = await jobService.getJobById(jobId);
+            const retrievedJob = await jobService.getJobForJobSeekersById(jobId);
             setJob(retrievedJob);
         } catch (err) {
             logErrorInfo(err)

@@ -59,7 +59,7 @@ const JobLocationTypeSelector: FC<JobLocationTypeSelectorProps> = ({
                                                  icon={faCheck}/>
                             </div>
                         <span className={"multi-row-opt"}>
-                                <span className="dark-default-text unset-line-height mb025rem">
+                                <span className="semi-dark-default-text unset-line-height mb025rem">
                                     {jobLocationType.type}
                                 </span>
                                 <span className="light-dark-svg">

@@ -81,19 +81,19 @@ const WorkExperienceReview: FC<WorkExperienceReviewProps> = ({workExperience}) =
                     <div className={"required-info"}>
                         <span>{workExperience.jobTitle} </span>
                     </div>
-                    <div className={"semi-dark-small-text"}>
+                    <div className={"light-dark-small-text"}>
                         <span>{workExperience.company}</span>
                         {workExperience.company && workExperience.cityOrProvince && <span>&nbsp;-&nbsp;</span>}
                         <span>{workExperience.cityOrProvince}</span>
                     </div>
                     {(fromYear || workExperience.currentlyWorkHere) &&
                         <div>
-                            <div className={"light-dark-small-text"}>
+                            <div className={"grey-small-text"}>
                                 <span>{workExperience.from ? `${fromMonth} ${fromYear} to ` : ""} {workExperience.currentlyWorkHere ? "Present" : `${toMonth} ${toYear}`}</span>
                             </div>
                         </div>}
                     {workExperience.description &&
-                        <div className={"dark-small-text"}>
+                        <div className={"semi-dark-small-text"}>
                             {workExperience.description}
                             <div className={"between-lines-spacing"}></div>
                         </div>}

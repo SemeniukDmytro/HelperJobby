@@ -51,8 +51,8 @@ const JobPreviewDialog: FC<JobPreviewDialogProps> = ({
                             <JobPreview/>
                             <div className={"flex-column"}>
                                 <span
-                                    className={"dark-default-text bold-text"}>This is a preview of what people may see</span>
-                                <span className={"dark-default-text"}>Your job post may look slightly different when it goes live.</span>
+                                    className={"semi-dark-default-text bold-text"}>This is a preview of what people may see</span>
+                                <span className={"semi-dark-default-text"}>Your job post may look slightly different when it goes live.</span>
                             </div>
                         </div>
                         <div style={{alignSelf: "flex-start"}}>
@@ -67,7 +67,7 @@ const JobPreviewDialog: FC<JobPreviewDialogProps> = ({
                             <div className={"j-pr-header-container flex-column"}>
                                 <span className={"small-title mb0"}>{incompleteJob?.jobTitle}</span>
                                 <span
-                                    className={"light-dark-small-text mb05rem"}>{employer?.organization.name} - {incompleteJob?.location}</span>
+                                    className={"grey-small-text mb05rem"}>{employer?.organization.name} - {incompleteJob?.location}</span>
                                 <div className={"flex-row"}>
                                     <button className={"blue-button mr1rem"}
                                             disabled={true}
@@ -82,7 +82,7 @@ const JobPreviewDialog: FC<JobPreviewDialogProps> = ({
                             </div>
                             <div className={"content-separation-line"}/>
                             <div className={"j-pr-full-info-container"}>
-                                <span className={"semi-dark-default-text flex-column"}>
+                                <span className={"light-dark-default-text flex-column"}>
                                     <span className={"mb1rem"}>{incompleteJob?.description}</span>
                                     {(incompleteJob?.jobType && incompleteJob.jobType.length !== 0) &&
                                         <div className={"flex-row mb1rem"}>

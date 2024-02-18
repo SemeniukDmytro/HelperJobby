@@ -14,5 +14,5 @@ export interface EmployerDTO {
     organizationId: number;
     organization: OrganizationDTO;
     jobs: JobDTO[];
-    incompleteJob : IncompleteJobDTO[];
+    incompleteJobs : IncompleteJobDTO[];
 }

@@ -10,6 +10,7 @@ interface CustomSelectWindowProps {
     setSelectedValue: Dispatch<SetStateAction<string>>;
     optionsArr: string[];
     includeWindowScroll: boolean;
+    innerLabel?: string;
     windowZIndex?: number;
 }
 
@@ -19,6 +20,7 @@ const CustomSelectWindow: FC<CustomSelectWindowProps> = ({
                                                              setSelectedValue,
                                                              optionsArr,
                                                              includeWindowScroll,
+                                                             innerLabel,
                                                              windowZIndex
                                                          }) => {
 
@@ -47,7 +49,7 @@ const CustomSelectWindow: FC<CustomSelectWindowProps> = ({
                 ref={selectWindowRef}
                 style={{
                     width: selectedValueButtonRef.current?.getBoundingClientRect().width,
-                    zIndex : windowZIndex
+                    zIndex: windowZIndex
                 }}
 
             >
@@ -66,7 +68,7 @@ const CustomSelectWindow: FC<CustomSelectWindowProps> = ({
                             />
                         </div>
                         <div>
-                            <span className="dark-default-text unset-line-height mb025rem">
+                            <span className="semi-dark-default-text unset-line-height mb025rem">
                                 {option}
                             </span>
                         </div>
@@ -74,9 +76,9 @@ const CustomSelectWindow: FC<CustomSelectWindowProps> = ({
                 ))}
             </div>}
             <div className={"edit-form-field"}>
-                <div className={`field-label`}>
+                {fieldLabel.length != 0 && <div className={`field-label`}>
                     <span>{fieldLabel}</span>
-                </div>
+                </div>}
                 <div className={`field-input-container`}>
                     <div className={`border-lining`}/>
                     <button
@@ -85,7 +87,10 @@ const CustomSelectWindow: FC<CustomSelectWindowProps> = ({
                         onClick={handleLocationTypesClick}
                         ref={selectedValueButtonRef}
                     >
-                        <span>{selectedValue}</span>
+                        <div className={"dark-default-text"}>
+                            <b>{innerLabel}</b>
+                            <span>{selectedValue}</span>
+                        </div>
                         {showOptions ?
                             (<FontAwesomeIcon className={"svg1rem light-dark-svg"} icon={faChevronUp}/>)
                             :

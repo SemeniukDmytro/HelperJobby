@@ -129,9 +129,10 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                     </button>}
             </div>}
             <div className={"full-description-box"}>
-                <div style={{whiteSpace: "pre-wrap"}}>
-                    {job.description}
-                </div>
+                <div
+                    style={{whiteSpace: "pre-wrap"}}
+                    dangerouslySetInnerHTML={{__html: job.description}}
+                />
             </div>
         </div>
     )

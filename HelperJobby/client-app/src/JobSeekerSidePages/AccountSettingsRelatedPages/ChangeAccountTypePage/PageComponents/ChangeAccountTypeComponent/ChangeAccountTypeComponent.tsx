@@ -76,7 +76,7 @@ const ChangeAccountTypeComponent: FC<ChangeAccountTypeComponentProps> = () => {
                         onChange={setJobSeekerAccountType}
                     >
                     </input>
-                    <span className={"semi-dark-default-text"}>
+                    <span className={"light-dark-default-text"}>
                         Job seeker (looking for a job)
                     </span>
                 </div>
@@ -90,7 +90,7 @@ const ChangeAccountTypeComponent: FC<ChangeAccountTypeComponentProps> = () => {
                         onChange={setEmployerAccountType}
                     >
                     </input>
-                    <span className={"semi-dark-default-text"}>
+                    <span className={"light-dark-default-text"}>
                         Employer (hiring, sourcing candidates, or advertising jobs)
                     </span>
                 </div>

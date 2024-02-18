@@ -179,7 +179,7 @@ const TimePeriod: FC<TimePeriodProps> = (props) => {
                     </div>}
                 </>)
                 :
-                (<span className={"light-dark-small-text"}>Present</span>)
+                (<span className={"grey-small-text"}>Present</span>)
             }
             <div className={"input-field-spacing"}></div>
         </>

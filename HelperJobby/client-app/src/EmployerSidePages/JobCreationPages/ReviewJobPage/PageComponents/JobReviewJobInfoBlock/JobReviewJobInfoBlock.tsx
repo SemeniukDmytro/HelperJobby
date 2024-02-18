@@ -60,7 +60,7 @@ const JobReviewJobInfoBlock: FC<JobReviewJobInfoBlockProps> = (
                         :
                         (<div className={"ji-value-info-layout"}>
                             <div
-                                className={"ji-value-container semi-dark-default-text"}
+                                className={"ji-value-container light-dark-default-text"}
                                 style={{
                                     maxHeight: fieldValueContainerHeight
                                 }}

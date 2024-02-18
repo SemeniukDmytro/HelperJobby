@@ -60,8 +60,8 @@ const JobPostingComponent: FC<JobPostingComponentProps> = () => {
                             >
                             </input>
                             <div className={"create-job-option-text"}>
-                                <span className={"dark-default-text"}>Use a previous job as a template</span>
-                                <span className={"light-dark-small-text"}>Save time by copying a previous job post</span>
+                                <span className={"semi-dark-default-text"}>Use a previous job as a template</span>
+                                <span className={"grey-small-text"}>Save time by copying a previous job post</span>
                             </div>
 
                         </div>
@@ -74,8 +74,8 @@ const JobPostingComponent: FC<JobPostingComponentProps> = () => {
                             >
                             </input>
                             <div className={"create-job-option-text"}>
-                                <span className={"dark-default-text"}>Create a new post</span>
-                                <span className={"light-dark-small-text"}>We'll offer smart tips along the way.</span>
+                                <span className={"semi-dark-default-text"}>Create a new post</span>
+                                <span className={"grey-small-text"}>We'll offer smart tips along the way.</span>
                             </div>
                         </div>
                         <button 

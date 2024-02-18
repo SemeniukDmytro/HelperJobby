@@ -89,7 +89,7 @@ const AccountSettingsComponent: FC<AccountSettingsComponentProps> = () => {
                                         <div className={"successful-pop-up-icon"}>
                                             <FontAwesomeIcon icon={faCircleCheck}/>
                                         </div>
-                                        <div className={"dark-default-text bold-text"}>
+                                        <div className={"semi-dark-default-text bold-text"}>
                                             {changedInfoMsg}
                                         </div>
                                     </div>
@@ -131,7 +131,7 @@ const AccountSettingsComponent: FC<AccountSettingsComponentProps> = () => {
                         />
                         <div className={"content-separation-margin"}/>
                         <div className={"settings-field-layout"}>
-                            <div className={"semi-dark-default-text"}>
+                            <div className={"light-dark-default-text"}>
                                 {authUser?.user.email}
                             </div>
                             <button className={"light-button-with-margin button-without-margin"} onClick={signOut}>

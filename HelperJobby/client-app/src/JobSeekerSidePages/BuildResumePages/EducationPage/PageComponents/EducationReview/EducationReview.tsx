@@ -78,14 +78,14 @@ const EducationReview: FC<EducationReviewProps> = ({education}) => {
                         <span>{education.levelOfEducation} </span>
                         {education.fieldOfStudy && <span>in {education.fieldOfStudy}</span>}
                     </div>
-                    <div className={"semi-dark-small-text"}>
+                    <div className={"light-dark-small-text"}>
                         <span>{education.schoolName}</span>
                         {education.schoolName && education.city && <span>&nbsp;-&nbsp;</span>}
                         <span>{education.city}</span>
                     </div>
                     {fromYear &&
                         <div>
-                            <div className={"light-dark-small-text"}>
+                            <div className={"grey-small-text"}>
                                 <span>{fromMonth} {fromYear} to {toMonth} {toYear}</span>
                             </div>
                         </div>}

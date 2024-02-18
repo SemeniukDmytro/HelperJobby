@@ -78,10 +78,10 @@ const UserJobInteractionShortJobInfo: FC<UserJobInteractionShortJobInfoProps> = 
             </div>
             <div className={"ji-job-info-box"} onClick={navigateToJobPage}>
                 <span className={"ji-job-title"}>{job.jobTitle}</span>
-                <span className={"dark-default-text"}>{job.employer.organization.name}</span>
-                <span className={"dark-default-text"}>{job.location}</span>
+                <span className={"semi-dark-default-text"}>{job.employer.organization.name}</span>
+                <span className={"semi-dark-default-text"}>{job.location}</span>
                 <span
-                    className={"semi-dark-small-text"}
+                    className={"light-dark-small-text"}
                 >{interactionInfo == "Today" ? `${jobInteractionTimePretext} ${interactionInfo}` : `${jobInteractionTimePretext} on ${interactionInfo}`}</span>
             </div>
         </div>

@@ -217,10 +217,10 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                     <div className={"emp-form-fb"}>
                         <form className={"emp-form"}>
                             <div className={"mb2rem"}>
-                                <span className={"dark-default-text"}>Job post will be in&nbsp;</span>
-                                <span className={"dark-default-text bold-text"}>{jobPostLanguage}</span>
-                                <span className={"dark-default-text"}>&nbsp;in&nbsp;</span>
-                                <span className={"dark-default-text bold-text"}>{jobPostingCountry}</span>
+                                <span className={"semi-dark-default-text"}>Job post will be in&nbsp;</span>
+                                <span className={"semi-dark-default-text bold-text"}>{jobPostLanguage}</span>
+                                <span className={"semi-dark-default-text"}>&nbsp;in&nbsp;</span>
+                                <span className={"semi-dark-default-text bold-text"}>{jobPostingCountry}</span>
                                 <button
                                     className={"small-interaction-button dark-blue-color ml1rem"}
                                     type={"button"}
@@ -274,7 +274,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                             />
 
                             <button
-                                className="blue-button br-corner-button min-8chr-btn-width"
+                                className="blue-button br-corner-button min-8chr-arrow-btn-width"
                                 type={'submit'}
                                 disabled={requestInProgress}
                                 onClick={handleJobBasicsSubmit}

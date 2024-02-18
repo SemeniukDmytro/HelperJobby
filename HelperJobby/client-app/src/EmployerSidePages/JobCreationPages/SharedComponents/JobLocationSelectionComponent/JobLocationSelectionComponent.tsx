@@ -93,7 +93,7 @@ const JobLocationSelectionComponent: FC<JobLocationSelectionComponentProps> = ({
             {jobLocationTypeEnumValue === JobLocationTypes.Remote ?
                 <div className={"info-notify-container blue-notify-container mb15rem"}>
                     <FontAwesomeIcon className={"svg1rem dark-blue-color mr1rem"} icon={faCircleInfo}/>
-                    <span className={"dark-small-text"}>{jobLocationFieldLabel}</span>
+                    <span className={"semi-dark-small-text"}>{jobLocationFieldLabel}</span>
                 </div>
                 :
                 (jobLocationTypeEnumValue === JobLocationTypes.InPerson ?

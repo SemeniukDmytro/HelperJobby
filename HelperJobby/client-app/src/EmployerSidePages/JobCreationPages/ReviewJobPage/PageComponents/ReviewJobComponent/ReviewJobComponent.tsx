@@ -40,12 +40,12 @@ import EditResumeRequirementsDialog from "../EditResumeRequirementsDialog/EditRe
 import EditContactEmailDialog from "../EditContactEmailDialog/EditContactEmailDialog";
 import EditContactPhoneDialog from "../EditContactPhoneDialog/EditContactPhoneDialog";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
-import ProvideRequiredDataLink from "../../../../../Components/ProvideRequiredDataLink/ProvideRequiredDataLink";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {JobService} from "../../../../../services/jobService";
 import {JobProperties} from "../../../../../enums/utilityEnums/JobProperties";
 import AddJobMissingInfoDialog from "../AddJobMissingInfoDialog/AddJobMissingInfoDialog";
 import JobPreviewDialog from "../JobPreviewDialog/JobPreviewDialog";
+import ProvideRequiredDataLink from "../ProvideRequiredDataLink/ProvideRequiredDataLink";
 
 
 interface ReviewJobComponentProps {
@@ -225,10 +225,10 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                             <FontAwesomeIcon icon={faTriangleExclamation}/>
                                         </div>
                                         <div className={"ntf-msg-with-ttl-container"}>
-                                            <div className={"dark-small-text bold-text"}>
+                                            <div className={"semi-dark-small-text bold-text"}>
                                                 Job post has missing information
                                             </div>
-                                            <div className={"dark-small-text"}>
+                                            <div className={"semi-dark-small-text"}>
                                                 To improve this post, add information that’s important to people
                                                 applying.
                                             </div>
@@ -360,7 +360,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                                         <FontAwesomeIcon icon={faCircleExclamation}/>
                                     </div>
                                     <div className={"ntf-msg-with-ttl-container"}>
-                                        <div className={"dark-small-text bold-text"}>
+                                        <div className={"semi-dark-small-text bold-text"}>
                                             There are items above that need your attention to continue.
                                         </div>
                                         <div className={"flex-column"}>
@@ -396,7 +396,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
                 </div>
                 <div className={`${isHighlightedFooter ? "rj-highlighted-footer" : "default-footer"}`}>
                     <div className={"rj-footer-content-fb"}>
-                        <div className={"rj-footer-disclaimer mb1rem dark-default-text"}>
+                        <div className={"rj-footer-disclaimer mb1rem semi-dark-default-text"}>
                             <span>By selecting <b>Confirm</b>, you agree that this job post reflects your requirements, and agree 
                                 it will be posted and applications will be processed.</span>
                         </div>
