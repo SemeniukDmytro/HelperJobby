@@ -15,6 +15,7 @@ public class JobApplyCommandRepository : IJobApplyCommandRepository
 
     public async Task<JobApply> CreateJobApply(JobApply jobApply)
     {
+        _applicationContext.Jobs.Entry(jobApply.Job).Property(j => j.NumberOfJobApplies).IsModified = true;
         _applicationContext.JobApplies.Add(jobApply);
         await _applicationContext.SaveChangesAsync();
         return jobApply;
@@ -22,6 +23,7 @@ public class JobApplyCommandRepository : IJobApplyCommandRepository
 
     public async Task DeleteJobApply(JobApply jobApply)
     {
+        _applicationContext.Jobs.Entry(jobApply.Job).Property(j => j.NumberOfJobApplies).IsModified = true;
         _applicationContext.JobApplies.Remove(jobApply);
         await _applicationContext.SaveChangesAsync();
     }

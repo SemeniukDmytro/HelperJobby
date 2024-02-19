@@ -17,17 +17,15 @@ public class JobApplyController : ExtendedBaseController
     private readonly IJobApplyCommandRepository _jobApplyCommandRepository;
     private readonly IJobApplyQueryRepository _jobApplyQueryRepository;
     private readonly IJobApplyService _jobApplyService;
-    private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IJobSeekerService _jobSeekerService;
 
     public JobApplyController(IMapper mapper, IJobApplyCommandRepository jobApplyCommandRepository,
         IJobApplyQueryRepository jobApplyQueryRepository, IJobApplyService jobApplyService,
-        IJobQueryRepository jobQueryRepository, IJobSeekerService jobSeekerService) : base(mapper)
+        IJobSeekerService jobSeekerService) : base(mapper)
     {
         _jobApplyCommandRepository = jobApplyCommandRepository;
         _jobApplyQueryRepository = jobApplyQueryRepository;
         _jobApplyService = jobApplyService;
-        _jobQueryRepository = jobQueryRepository;
         _jobSeekerService = jobSeekerService;
     }
 

@@ -22,6 +22,9 @@ public class JobDTO
     public ResumeRequirementOptions ResumeRequired { get; set; }
     public string Description { get; set; }
     public DateOnly DatePosted { get; set; }
+    public int NumberOfPeopleHired { get; set; }
+    public int NumberOfJobApplies { get; set; }
+    public int NumberOfInterviews { get; set; }
     public int EmployerId { get; set; }
     public EmployerDTO Employer { get; set; }
     public List<InterviewDTO> Interviews { get; set; }

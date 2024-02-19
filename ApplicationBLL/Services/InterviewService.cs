@@ -50,6 +50,7 @@ public class InterviewService : IInterviewService
         if (interview != null) throw new InterviewOperatingException("This interview is already created");
         var currentEmployerId = _employerService.GetCurrentEmployerId();
         var job = await _jobQueryRepository.GetJobByIdForEmployers(jobId);
+        job.NumberOfInterviews++;
         if (job.EmployerId != currentEmployerId)
             throw new ForbiddenException(
                 "You can't create interview for this job. Job was created by another employer");
@@ -72,6 +73,7 @@ public class InterviewService : IInterviewService
     public async Task<Interview> CancelInterviewFromEmployerAccount(int jobId, int jobSeekerId)
     {
         var interviewEntity = await _interviewQueryRepository.GetInterviewWithJob(jobId, jobSeekerId);
+        interviewEntity.Job.NumberOfInterviews--;
         var currentEmployerId = _employerService.GetCurrentEmployerId();
         if (interviewEntity.Job.EmployerId != currentEmployerId)
             throw new ForbiddenException("You can't delete interview. Because it was created by another employer");
@@ -83,7 +85,8 @@ public class InterviewService : IInterviewService
     {
         var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
         var interviewEntity =
-            await _interviewQueryRepository.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, currentJobSeekerId);
+            await _interviewQueryRepository.GetInterviewWithJob(jobId, currentJobSeekerId);
+        interviewEntity.Job.NumberOfInterviews--;
         return interviewEntity;
     }
 }

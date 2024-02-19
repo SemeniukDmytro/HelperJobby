@@ -25,6 +25,9 @@ export interface JobDTO {
     resumeRequired: ResumeRequirementOptions;
     description: string;
     datePosted: string;
+    numberOfPeopleHired : number;
+    numberOfJobApplies : number;
+    numberOfInterviews : number;
     employerId: number;
     employer: EmployerDTO;
     interviews: InterviewDTO[];

@@ -1,5 +1,7 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ApplicationDomain.Enums;
 
 namespace ApplicationDomain.Models;
 
@@ -14,7 +16,10 @@ public class JobApply
     [Column(Order = 1)]
     [ForeignKey("JobSeeker")]
     public int JobSeekerId { get; set; }
-
+    
+    [Required]
+    [DefaultValue(JobApplyStatuses.NotSpecified)]
+    public JobApplyStatuses JobApplyStatus { get; set; }
     public Job Job { get; set; }
 
     public JobSeeker JobSeeker { get; set; }

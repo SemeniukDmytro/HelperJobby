@@ -1,5 +1,6 @@
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
+using ApplicationDomain.Enums;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 
@@ -45,12 +46,14 @@ public class JobApplyService : IJobApplyService
         }
 
         if (jobApply != null) throw new JobApplyingException("You have already applied");
-
+        var job = await _jobQueryRepository.GetJobByIdForEmployers(jobId);
+        job.NumberOfJobApplies++;
         var createdJobApply = new JobApply
         {
             JobId = jobId,
             JobSeekerId = currentJobSeekerId,
-            DateApplied = DateOnly.FromDateTime(DateTime.UtcNow)
+            DateApplied = DateOnly.FromDateTime(DateTime.UtcNow),
+            JobApplyStatus = JobApplyStatuses.NotSpecified
         };
         return createdJobApply;
     }
@@ -59,6 +62,7 @@ public class JobApplyService : IJobApplyService
     {
         var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
         var jobApplyEntity = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, currentJobSeekerId);
+        jobApplyEntity.Job.NumberOfJobApplies--;
         return jobApplyEntity;
     }
 }

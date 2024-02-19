@@ -34,6 +34,18 @@ public class Job
 
     [ExcludeFromUpdate] [Required] public DateOnly DatePosted { get; set; }
     [ExcludeFromUpdate] public JobSalary? Salary { get; set; }
+    
+    [Required]
+    [DefaultValue(0)]
+    public int NumberOfPeopleHired { get; set; }
+    
+    [Required]
+    [DefaultValue(0)]
+    public int NumberOfJobApplies { get; set; }
+    
+    [Required]
+    [DefaultValue(0)]
+    public int NumberOfInterviews { get; set; }
 
     [ExcludeFromUpdate]
     [Required]

@@ -18,8 +18,9 @@ public class JobApplyQueryRepository : IJobApplyQueryRepository
     public async Task<JobApply> GetJobApplyByJobIdAndJobSeekerId(int jobId, int jobSeekerId)
     {
         var jobApply =
-            await _applicationContext.JobApplies.FirstOrDefaultAsync(j =>
+            await _applicationContext.JobApplies.Include(ja => ja.Job).FirstOrDefaultAsync(j =>
                 j.JobId == jobId && j.JobSeekerId == jobSeekerId);
+        
         if (jobApply == null) throw new JobApplyingException("Job apply wasn't found");
 
         return jobApply;
