@@ -58,6 +58,49 @@ public class JobApplyService : IJobApplyService
         return createdJobApply;
     }
 
+    public async Task<JobApply> UpdateJobApply(int jobSeekerId, int jobId, JobApply updatedJobApply)
+    {
+        var currentEmployerId = _employerService.GetCurrentEmployerId();
+        var jobApplyEntity = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, jobSeekerId);
+        if (jobApplyEntity.Job.EmployerId != currentEmployerId)
+        {
+            throw new ForbiddenException("You can not update this job apply");
+        }
+
+        switch (jobApplyEntity.JobApplyStatus)
+        {
+            case JobApplyStatuses.Rejected:
+                jobApplyEntity.Job.NumberOfRejectedCandidates--;
+                break;
+            case JobApplyStatuses.NotSpecified:
+                break;
+            case JobApplyStatuses.Interested:
+                jobApplyEntity.Job.NumberOfContactingCandidates--;
+                break;
+            case JobApplyStatuses.Hired:
+                throw new JobApplyingException(
+                    "You have already hired this candidate you can not change job apply status");
+        }
+        
+        switch (updatedJobApply.JobApplyStatus)
+        {
+            case JobApplyStatuses.Rejected:
+                jobApplyEntity.Job.NumberOfRejectedCandidates++;
+                break;
+            case JobApplyStatuses.NotSpecified:
+                break;
+            case JobApplyStatuses.Interested:
+                jobApplyEntity.Job.NumberOfContactingCandidates++;
+                break;
+            case JobApplyStatuses.Hired:
+                jobApplyEntity.Job.NumberOfPeopleHired++;
+                break;
+        }
+
+        jobApplyEntity.JobApplyStatus = updatedJobApply.JobApplyStatus;
+        return jobApplyEntity;
+    }
+
     public async Task<JobApply> DeleteJobApply(int jobId)
     {
         var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();

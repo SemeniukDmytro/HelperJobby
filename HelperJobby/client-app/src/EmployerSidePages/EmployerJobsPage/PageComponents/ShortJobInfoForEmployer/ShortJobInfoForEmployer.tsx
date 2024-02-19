@@ -67,7 +67,7 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
             <div className={"emp-job-candidates-info-container"}>
                 <div className={"candidates-info-block"}>
                     <span className={"bold-text dark-small-text"}>
-                        {job.numberOfJobApplies - job.numberOfInterviews}
+                        {job.numberOfJobApplies - job.NumberOfContactingCandidates - job.numberOfRejectedCandidates - job.numberOfPeopleHired}
                     </span>
                     <span className={"dark-small-text bold-text"}>
                         Awaiting
@@ -75,10 +75,10 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
                 </div>
                 <div className={"candidates-info-block"}>
                     <span className={"bold-text dark-small-text"}>
-                        {job.numberOfInterviews}
+                        {job.NumberOfContactingCandidates}
                     </span>
                     <span className={"dark-small-text bold-text"}>
-                        Interviewing
+                        Contacting
                     </span>
                 </div>
                 <div className={"candidates-info-block"}>

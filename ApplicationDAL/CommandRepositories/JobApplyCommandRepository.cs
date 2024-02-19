@@ -21,6 +21,14 @@ public class JobApplyCommandRepository : IJobApplyCommandRepository
         return jobApply;
     }
 
+    public async Task<JobApply> UpdateJobApply(JobApply jobApply)
+    {
+        _applicationContext.Jobs.Entry(jobApply.Job).Property(j => j.NumberOfJobApplies).IsModified = true;
+        _applicationContext.JobApplies.Update(jobApply);
+        await _applicationContext.SaveChangesAsync();
+        return jobApply;
+    }
+
     public async Task DeleteJobApply(JobApply jobApply)
     {
         _applicationContext.Jobs.Entry(jobApply.Job).Property(j => j.NumberOfJobApplies).IsModified = true;

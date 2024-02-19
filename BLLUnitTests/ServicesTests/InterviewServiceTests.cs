@@ -13,7 +13,6 @@ public class InterviewServiceTests
     private readonly IInterviewService _interviewService;
     private readonly Mock<IInterviewQueryRepository> _interviewQueryRepositoryMock = new();
     private readonly Mock<IJobQueryRepository> _jobQueryRepositoryMock = new();
-    private readonly Mock<IJobSeekerQueryRepository> _jobSeekerQueryRepositoryMock = new();
     private readonly Mock<IEmployerService> _employerServiceMock = new();
     private readonly Mock<IJobSeekerService> _jobSeekerServiceMock = new();
 
@@ -21,7 +20,6 @@ public class InterviewServiceTests
     {
         _interviewService = new InterviewService(_jobQueryRepositoryMock.Object,
             _interviewQueryRepositoryMock.Object,
-            _jobSeekerQueryRepositoryMock.Object,
             _employerServiceMock.Object,
             _jobSeekerServiceMock.Object);
     }

@@ -1,6 +1,7 @@
 using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
+using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.UserJobInteractions;
@@ -61,6 +62,16 @@ public class JobApplyController : ExtendedBaseController
         var jobApply = await _jobApplyService.PostJobApply(jobId);
         jobApply = await _jobApplyCommandRepository.CreateJobApply(jobApply);
         return _mapper.Map<JobApplyDTO>(jobApply);
+    }
+    
+    // PUT api/JobApply/job-seeker/3/job/4
+    [HttpPut("job-seeker/{jobSeekerId}/job-apply/{jobId}")]
+    public async Task<JobApplyDTO> UpdateJobApply(int jobSeekerId, int jobId, UpdateJobApplyDTO updateJobApplyDTO)
+    {
+        var updatedJobApplyEntity =
+            await _jobApplyService.UpdateJobApply(jobSeekerId, jobId, _mapper.Map<JobApply>(updateJobApplyDTO));
+        updatedJobApplyEntity = await _jobApplyCommandRepository.UpdateJobApply(updatedJobApplyEntity);
+        return _mapper.Map<JobApplyDTO>(updatedJobApplyEntity);
     }
 
     // DELETE: api/JobApply/5

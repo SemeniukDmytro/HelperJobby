@@ -27,7 +27,8 @@ export interface JobDTO {
     datePosted: string;
     numberOfPeopleHired : number;
     numberOfJobApplies : number;
-    numberOfInterviews : number;
+    NumberOfContactingCandidates : number;
+    numberOfRejectedCandidates : number;
     employerId: number;
     employer: EmployerDTO;
     interviews: InterviewDTO[];

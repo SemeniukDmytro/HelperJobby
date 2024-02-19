@@ -14,8 +14,7 @@ public class InterviewCommandRepository : IInterviewCommandRepository
     }
 
     public async Task<Interview> CreateInterview(Interview interview)
-    {           
-        _applicationContext.Jobs.Entry(interview.Job).Property(j => j.NumberOfInterviews).IsModified = true;
+    {  
         _applicationContext.Interviews.Add(interview);
         await _applicationContext.SaveChangesAsync();
         return interview;
@@ -23,7 +22,6 @@ public class InterviewCommandRepository : IInterviewCommandRepository
 
     public async Task DeleteInterview(Interview interview)
     {
-        _applicationContext.Jobs.Entry(interview.Job).Property(j => j.NumberOfInterviews).IsModified = true;
         _applicationContext.Interviews.Remove(interview);
         await _applicationContext.SaveChangesAsync();
     }

@@ -21,5 +21,7 @@ public class JobApplyProfile : Profile
             dest.JobSeeker = context.Mapper.Map<JobSeekerDTO, JobSeeker>(src.JobSeeker);
             dest.Job = context.Mapper.Map<JobDTO, Job>(src.Job);
         });
+
+        CreateMap<UpdateJobApplyDTO, JobApply>();
     }
 }

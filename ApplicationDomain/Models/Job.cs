@@ -45,7 +45,11 @@ public class Job
     
     [Required]
     [DefaultValue(0)]
-    public int NumberOfInterviews { get; set; }
+    public int NumberOfContactingCandidates { get; set; }
+    
+    [Required]
+    [DefaultValue(0)]
+    public int NumberOfRejectedCandidates { get; set; }
 
     [ExcludeFromUpdate]
     [Required]
