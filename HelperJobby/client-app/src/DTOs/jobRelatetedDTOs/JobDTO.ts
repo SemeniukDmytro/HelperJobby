@@ -24,7 +24,7 @@ export interface JobDTO {
     contactPhoneNumber? : string;
     resumeRequired: ResumeRequirementOptions;
     description: string;
-    datePosted: Date;
+    datePosted: string;
     employerId: number;
     employer: EmployerDTO;
     interviews: InterviewDTO[];

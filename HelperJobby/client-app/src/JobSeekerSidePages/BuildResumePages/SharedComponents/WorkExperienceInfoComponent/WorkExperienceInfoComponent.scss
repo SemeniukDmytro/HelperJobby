@@ -21,7 +21,7 @@
   height: 1.5rem;
   border: 1px solid global-variables.$neutral-color-800;
   border-radius: 0.25rem;
-  transition: 0.2s;
+  transition: background-color 0.2s;
   cursor: pointer;
   &:hover {
     background-color: global-variables.$light-blue;
@@ -32,11 +32,11 @@
     background-color: global-variables.$dark-blue;
     background-repeat: no-repeat;
     border-color: global-variables.$dark-blue;
-    background-image: url("../../../../Assets/pictures/check-solid.svg");
+    background-image: url("../../../../Assets/pictures/tick.svg");
     block-size: 1.5rem;
     inline-size: 1.5rem;
-    background-size: auto;
-
+    background-position: center;
+    background-size: 1rem;
     &:hover {
       background-color: global-variables.$dark-blue-hover;
     }

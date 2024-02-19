@@ -80,13 +80,11 @@
   transition: 0.2s;
 
   &:hover {
-    background-color: global-variables.$light-red;
-    color: global-variables.$dark-red-hover;
+    background-color: global-variables.$dark-red-hover;
   }
 
   &:active {
-    background-color: global-variables.$light-red-active;
-    color: global-variables.$dark-red-active;
+    background-color: global-variables.$dark-red-active;
     box-shadow: global-variables.$button-inner-shadow;
   }
 

@@ -16,8 +16,6 @@ const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
     const profileButtonRef = useRef<HTMLButtonElement | null>(null);
     const moreOptionsComponentRef = useRef<HTMLDivElement | null>(null);
     const {signOut} = useSignOut(setAuthUser);
-
-    const authService = new AuthService();
     const navigate = useNavigate();
 
     useEffect(() => {
