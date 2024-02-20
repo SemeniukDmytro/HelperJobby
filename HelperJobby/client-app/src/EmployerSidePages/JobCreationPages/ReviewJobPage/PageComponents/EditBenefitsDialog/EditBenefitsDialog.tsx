@@ -1,7 +1,7 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './EditBenefitsDialog.scss';
 import EditJobPostDialog from "../EditJobPostDialog/EditJobPostDialog";
-import useJobCreation from "../../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";

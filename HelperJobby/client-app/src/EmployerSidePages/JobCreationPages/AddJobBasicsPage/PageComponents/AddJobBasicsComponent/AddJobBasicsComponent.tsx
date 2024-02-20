@@ -17,10 +17,8 @@ import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
 import {CreateIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/CreateIncompleteJobDTO";
 import {isNanAfterIntParse} from "../../../../../utils/validationLogic/numbersValidators";
-import useJobCreation from "../../../../../hooks/useJobCreation";
-import {
-    useJobLoaderForSettingCurrentIncompleteJob
-} from "../../../../../hooks/useJobLoaderForSettingCurrentIncompleteJob";
+import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
+import {useJobLoaderToSetCurrentJob} from "../../../../../hooks/useJobLoaderToSetCurrentJob";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {JobLocationTypes} from "../../../../../enums/modelDataEnums/JobLocationTypes";
@@ -28,13 +26,14 @@ import {useJobLocationType} from "../../../../../hooks/useJobLocationType";
 import JobLocationSelectionComponent
     from "../../../SharedComponents/JobLocationSelectionComponent/JobLocationSelectionComponent";
 import employerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
+import {JobCreationStates} from "../../../../../enums/utilityEnums/JobCreationStates";
 
 
 interface AddJobBasicsComponentProps {
 }
 
 const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
+    const {currentJob, setCurrentJob} = useCurrentEmployerJob();
     const [jobPostLanguage, setJobPostLanguage] = useState("English");
     const [jobPostingCountry, setJobPostingCountry] = useState("Canada");
     const [showLanguageDialog, setShowLanguageDialog] = useState(false);
@@ -63,7 +62,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
     const incompleteJobService = new IncompleteJobService();
     const [loading, setLoading] = useState(true);
     const {jobId} = useParams<{ jobId: string }>();
-    const {fetchJobAndSetJobCreation} = useJobLoaderForSettingCurrentIncompleteJob(jobId ? parseInt(jobId) : 0, incompleteJob, setIncompleteJob);
+    const {fetchJobAndSetJobCreation} = useJobLoaderToSetCurrentJob(jobId ? parseInt(jobId) : 0, currentJob, setCurrentJob, JobCreationStates.incompleteJob);
     const [isSettingFromIncompleteJob, setIsSettingFromIncompleteJob] = useState(false);
 
     useEffect(() => {
@@ -76,19 +75,19 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             setLoading(false);
             return;
         }
-        if (incompleteJob) {
+        if (currentJob) {
             setIsSettingFromIncompleteJob(true);
-            setJobTitle(incompleteJob.jobTitle);
-            setNumberOfOpenings(incompleteJob.numberOfOpenings.toString())
-            setJobPostLanguage(incompleteJob.language);
-            setJobPostingCountry(incompleteJob.locationCountry);
-            getCurrentJobLocationInputProp(incompleteJob.jobLocationType).setInputValue(incompleteJob.location);
-            setJobLocationTypeEnumValue(incompleteJob.jobLocationType);
+            setJobTitle(currentJob.jobTitle);
+            setNumberOfOpenings(currentJob.numberOfOpenings.toString())
+            setJobPostLanguage(currentJob.language);
+            setJobPostingCountry(currentJob.locationCountry);
+            getCurrentJobLocationInputProp(currentJob.jobLocationType).setInputValue(currentJob.location);
+            setJobLocationTypeEnumValue(currentJob.jobLocationType);
             setLocationSelectedFromSuggests(true);
             setInvalidNumberOfOpenings(false);
             setLoading(false);
         }
-    }, [incompleteJob, []]);
+    }, [currentJob, []]);
 
     async function fetchPageInitialData() {
         await fetchJobAndSetJobCreation();
@@ -125,7 +124,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             setLocationError("We don't recognize this address. Please select address from suggestions window")
             return;
         }
-        if (incompleteJob && jobId) {
+        if (currentJob && jobId) {
             await updateIncompleteJob();
         } else {
             await createIncompleteJob();
@@ -145,7 +144,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
 
             }
             const jobCreationResponse = await incompleteJobService.startJobCreation(createdIncompleteJob);
-            setIncompleteJob(jobCreationResponse);
+            setCurrentJob(jobCreationResponse);
             navigate(`${employerPagesPaths.JOB_DETAILS}/${jobCreationResponse.id}`)
         } catch (err) {
             logErrorInfo(err)
@@ -165,8 +164,8 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                 jobLocationType: jobLocationTypeEnumValue,
                 location: getCurrentJobLocationInputProp(jobLocationTypeEnumValue).inputValue,
             }
-            const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJob);
-            setIncompleteJob(retrievedIncompleteJob);
+            const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
+            setCurrentJob(retrievedIncompleteJob);
             navigate(`${employerPagesPaths.JOB_DETAILS}/${retrievedIncompleteJob.id}`)
         } catch (error) {
             logErrorInfo(error)

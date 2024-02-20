@@ -2,7 +2,7 @@ import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './EditResumeRequirementsDialog.scss';
 import {resumeRequirementOptionsEnumToStringMap} from "../../../../../utils/convertLogic/enumToStringConverter";
 import {resumeRequirementOptionsMapData} from "../../../../../AppConstData/ResumeRequirements";
-import useJobCreation from "../../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
@@ -18,16 +18,16 @@ const EditResumeRequirementsDialog: FC<EditResumeRequirementsDialogProps> = ({
                                                                                  showDialog,
                                                                                  setShowDialog
                                                                              }) => {
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
+    const {currentJob, setCurrentJob} = useCurrentEmployerJob();
     const [isResumeRequired, setIsResumeRequired] =
-        useState(incompleteJob?.resumeRequired ?  resumeRequirementOptionsEnumToStringMap(incompleteJob?.resumeRequired)
+        useState(currentJob?.resumeRequired ?  resumeRequirementOptionsEnumToStringMap(currentJob?.resumeRequired)
             : resumeRequirementOptionsMapData[0].stringValue);
     const [requestInProgress, setRequestInProgress] = useState(false);
     const incompleteJobService = new IncompleteJobService();
 
     useEffect(() => {
         if (showDialog){
-            setIsResumeRequired(incompleteJob?.resumeRequired ?  resumeRequirementOptionsEnumToStringMap(incompleteJob?.resumeRequired)
+            setIsResumeRequired(currentJob?.resumeRequired ?  resumeRequirementOptionsEnumToStringMap(currentJob?.resumeRequired)
                 : resumeRequirementOptionsMapData[0].stringValue);
         }
     }, [showDialog]);
@@ -38,8 +38,8 @@ const EditResumeRequirementsDialog: FC<EditResumeRequirementsDialogProps> = ({
             const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
                 resumeRequired : resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)?.enumValue
             }
-            const  retrievedIncompleteJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJob);
-            setIncompleteJob(retrievedIncompleteJob);
+            const  retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
+            setCurrentJob(retrievedIncompleteJob);
             setShowDialog(false)
         }
         catch (err){

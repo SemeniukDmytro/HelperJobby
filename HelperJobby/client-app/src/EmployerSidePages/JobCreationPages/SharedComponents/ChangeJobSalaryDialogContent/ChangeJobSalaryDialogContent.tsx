@@ -1,6 +1,6 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './ChangeJobSalaryDialogContent.scss';
-import useJobCreation from "../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../hooks/useCurrentEmployerJob";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {useSalaryValidation} from "../../../../hooks/useSalaryValidation";
 import {useShowPayByOption} from "../../../../hooks/comnonentsSharedHooks/useShowPayByOption";
@@ -8,11 +8,13 @@ import {
     salaryRatesEnumToStringMap,
     showPayByOptionsEnumToStringMap
 } from "../../../../utils/convertLogic/enumToStringConverter";
+import {logErrorInfo} from "../../../../utils/logErrorInfo";
+import JobSalaryBlock from "../JobSalaryBlock/JobSalaryBlock";
+import {JobService} from "../../../../services/jobService";
+import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationStates";
 import {CreateUpdateSalaryDTO} from "../../../../DTOs/jobRelatetedDTOs/CreateUpdateSalaryDTO";
 import {getValidFloatNumberFromString} from "../../../../utils/validationLogic/numbersValidators";
 import {salaryRatesMapData, showPayByOptionsMapData} from "../../../../AppConstData/PayRelatedData";
-import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import JobSalaryBlock from "../JobSalaryBlock/JobSalaryBlock";
 
 interface ChangeJobSalaryDialogContentProps {
     showDialog : boolean;
@@ -27,7 +29,7 @@ const ChangeJobSalaryDialogContent: FC<ChangeJobSalaryDialogContentProps> = ({
                                                                                  setEditFunction,
                                                                                  setShowDialog
                                                                              }) => {
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
+    const {currentJob, setCurrentJob, jobCreationState} = useCurrentEmployerJob();
     const [showPayBy, setShowPayBy] = useState("Range");
     const [salaryRate, setSalaryRate] = useState("per hour");
     const [rangeMinSalaryAmount, setRangeMinSalaryAmount] = useState("");
@@ -43,7 +45,8 @@ const ChangeJobSalaryDialogContent: FC<ChangeJobSalaryDialogContentProps> = ({
     const [minSalaryMeetsRequirement, setMinSalaryMeetsRequirement] = useState(false);
     const [showMissingSalaryWarning, setShowMissingSalaryWarning] = useState(false);
     const incompleteJobService = new IncompleteJobService();
-
+    const jobService = new JobService();
+    
     const {isValidSalaryValueProvided, validateMaxSalaryInput} =
         useSalaryValidation(
             setIsInvalidMinSalary,
@@ -74,12 +77,12 @@ const ChangeJobSalaryDialogContent: FC<ChangeJobSalaryDialogContentProps> = ({
 
 
     function setExistingSalaryValues(){
-        if (incompleteJob?.salary){
-            setSalaryRate(salaryRatesEnumToStringMap(incompleteJob.salary.salaryRate));
-            setShowPayBy(showPayByOptionsEnumToStringMap(incompleteJob.salary.showPayByOption));
-            setRangeMaxSalaryAmount(incompleteJob.salary.maximalAmount?.toString() || "");
-            getSalaryInputProp(showPayByOptionsEnumToStringMap(incompleteJob.salary.showPayByOption)).setSalaryInput(incompleteJob.salary.minimalAmount.toString());
-            setMinSalaryMeetsRequirement(incompleteJob.salary.meetsMinSalaryRequirement);
+        if (currentJob?.salary){
+            setSalaryRate(salaryRatesEnumToStringMap(currentJob.salary.salaryRate));
+            setShowPayBy(showPayByOptionsEnumToStringMap(currentJob.salary.showPayByOption));
+            setRangeMaxSalaryAmount(currentJob.salary.maximalAmount?.toString() || "");
+            getSalaryInputProp(showPayByOptionsEnumToStringMap(currentJob.salary.showPayByOption)).setSalaryInput(currentJob.salary.minimalAmount.toString());
+            setMinSalaryMeetsRequirement(currentJob.salary.meetsMinSalaryRequirement);
         }
     }
 
@@ -99,18 +102,37 @@ const ChangeJobSalaryDialogContent: FC<ChangeJobSalaryDialogContentProps> = ({
         }
         try {
             setRequestInProgress(true);
-            let updatedSalary : CreateUpdateSalaryDTO | null = null;
-            if (currentSalaryValue){
-                updatedSalary = {
-                    minimalAmount: getValidFloatNumberFromString(currentSalaryValue),
-                    maximalAmount: showPayBy == "Range" ? getValidFloatNumberFromString(rangeMaxSalaryAmount) : undefined,
-                    salaryRate: salaryRatesMapData.find(sr => sr.stringValue == salaryRate)!.enumValue,
-                    showPayByOption: showPayByOptionsMapData.find(spo => spo.stringValue == showPayBy)!.enumValue,
-                    meetsMinSalaryRequirement : minSalaryMeetsRequirement
+            
+            if (jobCreationState == JobCreationStates.incompleteJob){
+                let updatedSalary : CreateUpdateSalaryDTO | null = null;
+                if (currentSalaryValue){
+                    updatedSalary = {
+                        minimalAmount: getValidFloatNumberFromString(currentSalaryValue),
+                        maximalAmount: showPayBy == "Range" ? getValidFloatNumberFromString(rangeMaxSalaryAmount) : undefined,
+                        salaryRate: salaryRatesMapData.find(sr => sr.stringValue == salaryRate)!.enumValue,
+                        showPayByOption: showPayByOptionsMapData.find(spo => spo.stringValue == showPayBy)!.enumValue,
+                        meetsMinSalaryRequirement : minSalaryMeetsRequirement
+                    }
                 }
+                const retrievedIncompleteJob = await incompleteJobService.updateIncompleteJobSalary(currentJob!.id, updatedSalary);
+                setCurrentJob(retrievedIncompleteJob);
             }
-            const retrievedIncompleteJob = await incompleteJobService.updateIncompleteJobSalary(incompleteJob!.id, updatedSalary);
-            setIncompleteJob(retrievedIncompleteJob);
+            else {
+                let updatedSalary : CreateUpdateSalaryDTO | null = null;
+                if (currentSalaryValue){
+                    updatedSalary = {
+                        minimalAmount: getValidFloatNumberFromString(currentSalaryValue),
+                        maximalAmount: showPayBy == "Range" ? getValidFloatNumberFromString(rangeMaxSalaryAmount) : undefined,
+                        salaryRate: salaryRatesMapData.find(sr => sr.stringValue == salaryRate)!.enumValue,
+                        showPayByOption: showPayByOptionsMapData.find(spo => spo.stringValue == showPayBy)!.enumValue,
+                        meetsMinSalaryRequirement : minSalaryMeetsRequirement
+                    }
+                }
+                const retrievedIncompleteJob = await jobService.putJobSalary(currentJob!.id, updatedSalary);
+                setCurrentJob(retrievedIncompleteJob);
+            }
+            
+            
             setShowDialog && setShowDialog(false);
         }
         catch (err)

@@ -1,6 +1,6 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './ChangeJobTypeDialogContent.scss';
-import useJobCreation from "../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../hooks/useCurrentEmployerJob";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {UpdatedIncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
@@ -9,6 +9,11 @@ import JobTypeContainerInDialog
     from "../../ReviewJobPage/PageComponents/JobTypeContainerInDialog/JobTypeContainerInDialog";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
+import {JobService} from "../../../../services/jobService";
+import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationStates";
+import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
+import {IncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
 
 interface ChangeJobTypeDialogContentProps {
     showDialog: boolean;
@@ -23,15 +28,16 @@ const ChangeJobTypeDialogContent: FC<ChangeJobTypeDialogContentProps> = ({
                                                                              setEditFunction,
                                                                              setShowDialog
                                                                          }) => {
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
-    const [selectedJobTypes, setSelectedJobTypes] = useState(incompleteJob?.jobType || []);
+    const {currentJob, setCurrentJob, jobCreationState} = useCurrentEmployerJob();
+    const [selectedJobTypes, setSelectedJobTypes] = useState(currentJob?.jobType || []);
     const [isInvalidForm, setIsInvalidForm] = useState(selectedJobTypes.length > 0);
     const incompleteJobService = new IncompleteJobService();
+    const jobService = new JobService();
 
     useEffect(() => {
         if (showDialog) {
-            setSelectedJobTypes(incompleteJob?.jobType || []);
-            if (incompleteJob?.jobType && incompleteJob.jobType.length > 0) {
+            setSelectedJobTypes(currentJob?.jobType || []);
+            if (currentJob?.jobType && currentJob.jobType.length > 0) {
                 setIsInvalidForm(false);
             }
         }
@@ -48,12 +54,25 @@ const ChangeJobTypeDialogContent: FC<ChangeJobTypeDialogContentProps> = ({
         }
         try {
             setRequestInProgress(true);
-            const updatedIncompleteJobDTO: UpdatedIncompleteJobDTO = {
-                ...incompleteJob,
-                jobType: selectedJobTypes
+            if (jobCreationState == JobCreationStates.incompleteJob){
+                const job = currentJob as IncompleteJobDTO;
+                const updatedIncompleteJobDTO: UpdatedIncompleteJobDTO = {
+                    ...job,
+                    jobType: selectedJobTypes
+                }
+                const retrievedJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJobDTO);
+                setCurrentJob(retrievedJob);
             }
-            const retrievedJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJobDTO);
-            setIncompleteJob(retrievedJob);
+            else {
+                const job = currentJob as JobDTO;
+                const updatedJob: UpdatedJobDTO = {
+                    ...job,
+                    jobType : selectedJobTypes
+                };
+                const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
+                setCurrentJob(retrievedJob);
+            }
+            
             setShowDialog && setShowDialog(false);
         } catch (err) {
             logErrorInfo(err)

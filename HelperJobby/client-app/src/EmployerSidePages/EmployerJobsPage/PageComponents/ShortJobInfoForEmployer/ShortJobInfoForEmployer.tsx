@@ -2,6 +2,8 @@ import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './ShortJobInfoForEmployer.scss';
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {months} from "../../../../AppConstData/Months";
+import {useNavigate} from "react-router-dom";
+import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface ShortJobInfoForEmployerProps {
     job : JobDTO;
@@ -17,10 +19,13 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
     isAllSelected = false
                                                                    }) => {
     const [isSelected, setIsSelected] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setIsSelected(isAllSelected || selectedJobIds.includes(job.id));
     }, [isAllSelected, selectedJobIds, job.id]);
+    
+    console.log(job)
     
     function toggleIsSelected() {
         setIsSelected(!isSelected)
@@ -31,6 +36,10 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
                 return prev.filter(jobId => jobId !== job.id);
             });
         }
+    }
+    
+    function navigateToEditJobPage(){
+        navigate(`${EmployerPagesPaths.EDIT_JOB}/${job.id}`);
     }
     
     function getFormattedMonthName_DD_YYYYDate(dateAsString: string){
@@ -67,7 +76,7 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
             <div className={"emp-job-candidates-info-container"}>
                 <div className={"candidates-info-block"}>
                     <span className={"bold-text dark-small-text"}>
-                        {job.numberOfJobApplies - job.NumberOfContactingCandidates - job.numberOfRejectedCandidates - job.numberOfPeopleHired}
+                        {job.numberOfJobApplies - job.numberOfContactingCandidates - job.numberOfRejectedCandidates - job.numberOfPeopleHired}
                     </span>
                     <span className={"dark-small-text bold-text"}>
                         Awaiting
@@ -75,7 +84,7 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
                 </div>
                 <div className={"candidates-info-block"}>
                     <span className={"bold-text dark-small-text"}>
-                        {job.NumberOfContactingCandidates}
+                        {job.numberOfRejectedCandidates}
                     </span>
                     <span className={"dark-small-text bold-text"}>
                         Contacting
@@ -91,7 +100,7 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
                 </div>
             </div>
             <div className={"job-operations-container"}>
-                <button className={'blue-button'}>
+                <button className={'blue-button'} onClick={navigateToEditJobPage}>
                     Update job
                 </button>
                 <button className={"red-button"}>

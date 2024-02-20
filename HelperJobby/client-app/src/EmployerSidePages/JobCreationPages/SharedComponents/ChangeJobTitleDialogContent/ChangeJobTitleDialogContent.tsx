@@ -1,10 +1,15 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './ChangeJobTitleDialogContent.scss';
-import useJobCreation from "../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../hooks/useCurrentEmployerJob";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {UpdatedIncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
+import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationStates";
+import {IncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
+import {JobService} from "../../../../services/jobService";
+import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
 
 interface ChangeJobTitleDialogContentProps {
     showDialog : boolean;
@@ -20,16 +25,17 @@ const ChangeJobTitleDialogContent: FC<ChangeJobTitleDialogContentProps> = ({
                                                                                setShowDialog
                                                                            }) => {
     
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
+    const {currentJob, setCurrentJob, jobCreationState} = useCurrentEmployerJob();
 
-    const [currentJobTitle, setCurrentJobTitle] = useState(incompleteJob?.jobTitle || "");
+    const [currentJobTitle, setCurrentJobTitle] = useState(currentJob?.jobTitle || "");
     const currentJobTitleRef = useRef<HTMLInputElement>(null);
     const [executeValidation, setExecuteValidation] = useState(false);
     const incompleteJobService = new IncompleteJobService();
+    const jobService = new JobService();
 
     useEffect(() => {
         if (showDialog){
-            setCurrentJobTitle(incompleteJob?.jobTitle || "")
+            setCurrentJobTitle(currentJob?.jobTitle || "")
         }
     }, [showDialog]);
 
@@ -47,12 +53,26 @@ const ChangeJobTitleDialogContent: FC<ChangeJobTitleDialogContentProps> = ({
 
         try {
             setRequestInProgress(true);
-            const updatedJob: UpdatedIncompleteJobDTO = {
-                ...incompleteJob,
-                jobTitle: currentJobTitle
-            };
-            const retrievedJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedJob);
-            setIncompleteJob(retrievedJob);
+            
+            if (jobCreationState == JobCreationStates.incompleteJob){
+                const job = currentJob as IncompleteJobDTO;
+                const updatedJob: UpdatedIncompleteJobDTO = {
+                    ...job,
+                    jobTitle: currentJobTitle
+                };
+                const retrievedJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedJob);
+                setCurrentJob(retrievedJob);
+            }
+            else {
+                const job = currentJob as JobDTO;
+                const updatedJob: UpdatedJobDTO = {
+                    ...job,
+                    jobTitle: currentJobTitle
+                };
+                const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
+                setCurrentJob(retrievedJob);
+            }
+            
             setShowDialog && setShowDialog(false);
         } catch (err) {
             logErrorInfo(err)

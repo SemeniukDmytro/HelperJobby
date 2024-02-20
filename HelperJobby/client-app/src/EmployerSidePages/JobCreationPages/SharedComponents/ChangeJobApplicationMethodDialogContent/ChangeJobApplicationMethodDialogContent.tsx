@@ -2,13 +2,17 @@ import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from '
 import './ChangeJobApplicationMethodDialogContent.scss';
 import CommunicationPreferencesBlock from "../CommunicationPreferencesBlock/CommunicationPreferencesBlock";
 import {useEmployer} from "../../../../hooks/useEmployer";
-import useJobCreation from "../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../hooks/useCurrentEmployerJob";
 import {resumeRequirementOptionsEnumToStringMap} from "../../../../utils/convertLogic/enumToStringConverter";
 import {resumeRequirementOptionsMapData} from "../../../../AppConstData/ResumeRequirements";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {IsValidEmail, validatePhoneNumber} from "../../../../utils/validationLogic/authFormValidators";
 import {UpdatedIncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
+import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationStates";
+import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
+import {JobService} from "../../../../services/jobService";
 
 interface ChangeJobApplicationMethodDialogContentProps {
     showDialog : boolean;
@@ -24,32 +28,33 @@ const ChangeJobApplicationMethodDialogContent: FC<ChangeJobApplicationMethodDial
     setShowDialog
                                                                                                    }) => {
     const {employer} = useEmployer();
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
-    const [contactEmail, setContactEmail] = useState(incompleteJob?.contactEmail || employer!.email);
+    const {currentJob, setCurrentJob, jobCreationState} = useCurrentEmployerJob();
+    const [contactEmail, setContactEmail] = useState(currentJob?.contactEmail || employer!.email);
     const [emailError, setEmailError] = useState("");
     const emailInputRef = useRef<HTMLInputElement>(null);
     const [contactPhoneNumber, setContactPhoneNumber] =
-        useState(incompleteJob?.contactPhoneNumber || employer!.contactNumber);
+        useState(currentJob?.contactPhoneNumber || employer!.contactNumber);
     const phoneNumberInputRef = useRef<HTMLInputElement>(null);
     const [phoneError, setPhoneError] = useState("");
     const [executeFormValidation, setExecuteFormValidation] = useState(false);
     const [isContactPhoneAvailable, setIsContactPhoneAvailable] =
-        useState(incompleteJob?.contactPhoneNumber !== undefined);
+        useState(currentJob?.contactPhoneNumber !== undefined);
     const [isResumeRequired, setIsResumeRequired] =
-        useState(incompleteJob?.resumeRequired ?  resumeRequirementOptionsEnumToStringMap(incompleteJob?.resumeRequired)
+        useState(currentJob?.resumeRequired ?  resumeRequirementOptionsEnumToStringMap(currentJob?.resumeRequired)
             : resumeRequirementOptionsMapData[0].stringValue);
     
     const incompleteJobService = new IncompleteJobService();
+    const jobService = new JobService();
 
     useEffect(() => {
         if (showDialog){
-            setContactEmail(incompleteJob?.contactEmail || employer!.email);
+            setContactEmail(currentJob?.contactEmail || employer!.email);
             setEmailError("");
-            setContactPhoneNumber(incompleteJob?.contactPhoneNumber || employer!.contactNumber);
+            setContactPhoneNumber(currentJob?.contactPhoneNumber || employer!.contactNumber);
             setPhoneError("");
-            setIsResumeRequired(incompleteJob?.resumeRequired ?  resumeRequirementOptionsEnumToStringMap(incompleteJob?.resumeRequired)
+            setIsResumeRequired(currentJob?.resumeRequired ?  resumeRequirementOptionsEnumToStringMap(currentJob?.resumeRequired)
                 : resumeRequirementOptionsMapData[0].stringValue);
-            setIsContactPhoneAvailable(incompleteJob?.contactPhoneNumber !== undefined);
+            setIsContactPhoneAvailable(currentJob?.contactPhoneNumber !== undefined);
         }
     }, [showDialog]);
 
@@ -76,13 +81,27 @@ const ChangeJobApplicationMethodDialogContent: FC<ChangeJobApplicationMethodDial
         }
         try {
             setRequestInProgress(true);
-            const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
-                contactEmail : contactEmail,
-                contactPhoneNumber : isContactPhoneAvailable ? contactPhoneNumber : "",
-                resumeRequired : resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)?.enumValue
+            if (jobCreationState == JobCreationStates.incompleteJob){
+                const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
+                    ...currentJob,
+                    contactEmail : contactEmail,
+                    contactPhoneNumber : isContactPhoneAvailable ? contactPhoneNumber : "",
+                    resumeRequired : resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)?.enumValue
+                }
+                const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
+                setCurrentJob(retrievedIncompleteJob);
             }
-            const  retrievedIncompleteJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJob);
-            setIncompleteJob(retrievedIncompleteJob);
+            else {
+                const job = currentJob as JobDTO;
+                const updatedJob: UpdatedJobDTO = {
+                    ...job,
+                    contactEmail : contactEmail,
+                    contactPhoneNumber : isContactPhoneAvailable ? contactPhoneNumber : "",
+                    resumeRequired : resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)!.enumValue
+                };
+                const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
+                setCurrentJob(retrievedJob);
+            }
             setShowDialog && setShowDialog(false);
         }
         catch (err){

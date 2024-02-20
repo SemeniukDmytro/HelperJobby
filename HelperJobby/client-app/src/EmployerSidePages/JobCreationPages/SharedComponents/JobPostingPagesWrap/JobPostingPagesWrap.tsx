@@ -5,7 +5,7 @@ import EmployersSidebar from "../../../../Components/EmployersSidebar/EmployersS
 import EmployersPagesHeader from "../../../../EmployersSideComponents/EmployersPagesHeader/EmployersPagesHeader";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {Outlet} from "react-router-dom";
-import {JobCreationProvider} from "../../../../contexts/JobCreationContext";
+import {CurrentEmployerJobProvider} from "../../../../contexts/CurrentEmployerJobContext";
 
 interface JobPostingPagesWrapProps {}
 
@@ -21,9 +21,9 @@ const JobPostingPagesWrap: FC<JobPostingPagesWrapProps> = () => {
             <div className={"emp-main-content-layout"}>
                 <EmployersPagesHeader loading={loading} setLoading={setLoading}/>
                 {loading ? <LoadingPage/> : 
-                    <JobCreationProvider>
+                    <CurrentEmployerJobProvider>
                         <Outlet/>
-                    </JobCreationProvider>
+                    </CurrentEmployerJobProvider>
                 }
             </div>
         </div>

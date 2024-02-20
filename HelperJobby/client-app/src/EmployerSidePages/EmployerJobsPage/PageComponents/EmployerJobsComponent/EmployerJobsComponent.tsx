@@ -7,11 +7,6 @@ import {JobService} from "../../../../services/jobService";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {useEmployer} from "../../../../hooks/useEmployer";
 import ShortJobInfoForEmployer from "../ShortJobInfoForEmployer/ShortJobInfoForEmployer";
-import {orderOptions, sortByOptions} from "../../../../EmployerJobFilteringData";
-import CustomSelectWindow from "../../../../EmployersSideComponents/CustomSelectWindow/CustomSelectWindow";
-import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronDown, faSliders} from "@fortawesome/free-solid-svg-icons";
 import SearchWithinEmployerJobs from "../SearchWithinEmployerJobs/SearchWithinEmployerJobs";
 
 interface EmployerJobsComponentProps {

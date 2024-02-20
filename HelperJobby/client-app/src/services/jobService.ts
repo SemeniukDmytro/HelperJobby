@@ -1,6 +1,7 @@
 import CustomFetchService from "./customFetchService";
 import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
 import {UpdatedJobDTO} from "../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
+import {CreateUpdateSalaryDTO} from "../DTOs/jobRelatetedDTOs/CreateUpdateSalaryDTO";
 
 export class JobService {
     private readonly baseURI: string = "api/Job";
@@ -32,6 +33,10 @@ export class JobService {
 
     public async putJob(jobId: number, updatedJob: UpdatedJobDTO): Promise<JobDTO> {
         return await this.customFetchService.put<JobDTO>(`${this.baseURI}/${jobId}`, updatedJob);
+    }
+    
+    public async putJobSalary(jobId : number, updatedSalary : CreateUpdateSalaryDTO | null) : Promise<JobDTO>{
+        return await this.customFetchService.put<JobDTO>(`${this.baseURI}/${jobId}/salary-update`, updatedSalary);
     }
 
     public async deleteJob(jobId: number): Promise<void> {

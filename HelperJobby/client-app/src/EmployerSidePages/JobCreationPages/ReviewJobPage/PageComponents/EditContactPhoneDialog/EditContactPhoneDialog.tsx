@@ -1,7 +1,7 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './EditContactPhoneDialog.scss';
 import {useEmployer} from "../../../../../hooks/useEmployer";
-import useJobCreation from "../../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
 import {validatePhoneNumber} from "../../../../../utils/validationLogic/authFormValidators";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
@@ -20,10 +20,10 @@ const EditContactPhoneDialog: FC<EditContactPhoneDialogProps> = ({
                                                                  }) => {
 
     const {employer} = useEmployer();
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
+    const {currentJob, setCurrentJob} = useCurrentEmployerJob();
     const [requestInProgress, setRequestInProgress] = useState(false);
     const [contactPhoneNumber, setContactPhoneNumber] =
-        useState(incompleteJob?.contactPhoneNumber || employer!.contactNumber);
+        useState(currentJob?.contactPhoneNumber || employer!.contactNumber);
     const phoneNumberInputRef = useRef<HTMLInputElement>(null);
     const [phoneError, setPhoneError] = useState("");
     const [executeFormValidation, setExecuteFormValidation] = useState(false);
@@ -31,7 +31,7 @@ const EditContactPhoneDialog: FC<EditContactPhoneDialogProps> = ({
 
     useEffect(() => {
         if (showDialog){
-            setContactPhoneNumber(incompleteJob?.contactPhoneNumber || employer!.contactNumber);
+            setContactPhoneNumber(currentJob?.contactPhoneNumber || employer!.contactNumber);
             setPhoneError("");
         }
     }, [showDialog]);
@@ -52,8 +52,8 @@ const EditContactPhoneDialog: FC<EditContactPhoneDialogProps> = ({
             const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
                 contactPhoneNumber : contactPhoneNumber,
             }
-            const  retrievedIncompleteJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJob);
-            setIncompleteJob(retrievedIncompleteJob);
+            const  retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
+            setCurrentJob(retrievedIncompleteJob);
             setShowDialog(false)
         }
         catch (err){

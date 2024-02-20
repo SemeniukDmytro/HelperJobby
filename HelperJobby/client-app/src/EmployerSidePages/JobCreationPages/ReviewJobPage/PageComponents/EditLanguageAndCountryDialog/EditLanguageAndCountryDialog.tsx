@@ -1,6 +1,6 @@
 import React, {Dispatch, FC, SetStateAction, useRef, useState} from 'react';
 import './EditLanguageAndCountryDialog.scss';
-import useJobCreation from "../../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTriangleExclamation, faXmark} from "@fortawesome/free-solid-svg-icons";
 import CustomSelectField from "../../../../../Components/CustomSelectField/CustomSelectField";
@@ -11,6 +11,11 @@ import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
+import {JobService} from "../../../../../services/jobService";
+import {UpdatedJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
+import {JobCreationStates} from "../../../../../enums/utilityEnums/JobCreationStates";
+import {JobDTO} from "../../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import {IncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
 
 interface EditLanguageAndCountryDialogProps {
     showDialog : boolean;
@@ -23,13 +28,14 @@ const EditLanguageAndCountryDialog: FC<EditLanguageAndCountryDialogProps> = ({
                                                                              }) => {
     
     const [requestInProgress, setRequestInProgress] = useState(false);
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
-    const [language, setLanguage] = useState(incompleteJob?.language || "English");
-    const [country, setCountry] = useState(incompleteJob?.locationCountry || "Canada");
+    const {currentJob, setCurrentJob, jobCreationState} = useCurrentEmployerJob();
+    const [language, setLanguage] = useState(currentJob?.language || "English");
+    const [country, setCountry] = useState(currentJob?.locationCountry || "Canada");
     const [executeFormValidation, setExecuteFormValidation] = useState(false);
     const isInvalidLanguage = false;
     const countrySelectorRef = useRef<HTMLSelectElement>(null);
     const incompleteJobService = new IncompleteJobService();
+    const jobService = new JobService();
 
 
     function closeDialog() {
@@ -47,13 +53,27 @@ const EditLanguageAndCountryDialog: FC<EditLanguageAndCountryDialogProps> = ({
         
         try {
             setRequestInProgress(true);
-            const updatedJob : UpdatedIncompleteJobDTO = {
-                ...incompleteJob,
-                language : language,
-                locationCountry : country
+            if (jobCreationState == JobCreationStates.completeJob){
+                const job =  currentJob as JobDTO;
+                const updatedJob : UpdatedJobDTO = {
+                    ...job,
+                    language : language,
+                    locationCountry : country
+                }
+                const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
+                setCurrentJob(retrievedJob);
             }
-            const retrievedJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedJob);
-            setIncompleteJob(retrievedJob);
+            else if (jobCreationState == JobCreationStates.incompleteJob){
+                const job = currentJob as IncompleteJobDTO;
+                const updatedJob : UpdatedIncompleteJobDTO = {
+                    ...job,
+                    language : language,
+                    locationCountry : country
+                }
+                const retrievedJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedJob);
+                setCurrentJob(retrievedJob);
+            }
+            
             closeDialog();
             
         }

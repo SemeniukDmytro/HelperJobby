@@ -6,7 +6,7 @@ export interface JobSalaryDTO {
     id: number;
     showPayByOption: ShowPayByOptions;
     minimalAmount: number;
-    maximalAmount?: number | null;
+    maximalAmount?: number;
     salaryRate: SalaryRates;
     meetsMinSalaryRequirement : boolean;
     jobId: number;

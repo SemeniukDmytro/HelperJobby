@@ -2,7 +2,7 @@ import React, {Dispatch, FC, SetStateAction, useEffect} from 'react';
 import './JobPreviewDialog.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
-import useJobCreation from "../../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
 import JobPreview from "../../../../../Components/Icons/JobPreview";
 import {useEmployer} from "../../../../../hooks/useEmployer";
 import {faHeart} from "@fortawesome/free-regular-svg-icons";
@@ -23,7 +23,7 @@ const JobPreviewDialog: FC<JobPreviewDialogProps> = ({
                                                          showDialog,
                                                          setShowDialog
                                                      }) => {
-    const {incompleteJob} = useJobCreation();
+    const {currentJob} = useCurrentEmployerJob();
     const {employer} = useEmployer();
 
     function closeDialog() {
@@ -65,9 +65,9 @@ const JobPreviewDialog: FC<JobPreviewDialogProps> = ({
                     <div className={"dialog-main-content"}>
                         <div className={"j-pr-content-container"}>
                             <div className={"j-pr-header-container flex-column"}>
-                                <span className={"small-title mb0"}>{incompleteJob?.jobTitle}</span>
+                                <span className={"small-title mb0"}>{currentJob?.jobTitle}</span>
                                 <span
-                                    className={"grey-small-text mb05rem"}>{employer?.organization.name} - {incompleteJob?.location}</span>
+                                    className={"grey-small-text mb05rem"}>{employer?.organization.name} - {currentJob?.location}</span>
                                 <div className={"flex-row"}>
                                     <button className={"blue-button mr1rem"}
                                             disabled={true}
@@ -83,45 +83,45 @@ const JobPreviewDialog: FC<JobPreviewDialogProps> = ({
                             <div className={"content-separation-line"}/>
                             <div className={"j-pr-full-info-container"}>
                                 <span className={"light-dark-default-text flex-column"}>
-                                    <span className={"mb1rem"}>{incompleteJob?.description}</span>
-                                    {(incompleteJob?.jobType && incompleteJob.jobType.length !== 0) &&
+                                    <span className={"mb1rem"}>{currentJob?.description}</span>
+                                    {(currentJob?.jobType && currentJob.jobType.length !== 0) &&
                                         <div className={"flex-row mb1rem"}>
                                             <span>Job type:&nbsp;</span>
                                             {
-                                                incompleteJob.jobType.map((jt, index) => (
+                                                currentJob.jobType.map((jt, index) => (
                                                     <>
                                                         <span key={index}>{jobTypesEnumToStringMap(jt)}</span>
-                                                        {index != incompleteJob.jobType!.length - 1 &&
+                                                        {index != currentJob.jobType!.length - 1 &&
                                                             <span>,&nbsp;</span>}
                                                     </>
                                                 ))
                                             }
                                         </div>
                                     }
-                                    {incompleteJob?.salary &&
+                                    {currentJob?.salary &&
                                         <div className={"flex-row mb1rem"}>
                                             <span>Salary:&nbsp;</span>
-                                            <span>{formatJobSalaryDisplay(incompleteJob)}</span>
+                                            <span>{formatJobSalaryDisplay(currentJob)}</span>
                                         </div>
                                     }
-                                    {(incompleteJob?.schedule && incompleteJob.schedule.length !== 0) &&
+                                    {(currentJob?.schedule && currentJob.schedule.length !== 0) &&
                                         <>
                                             <span className={"ml0"}>Schedule:</span>
                                             <ul className={"j-pr-features-list"}>
                                                 {
-                                                    incompleteJob.schedule.map((sch, index) => (
+                                                    currentJob.schedule.map((sch, index) => (
                                                         <li key={index}>{schedulesEnumToStringMap(sch)}</li>
                                                     ))
                                                 }
                                             </ul>
                                         </>
                                     }
-                                    {(incompleteJob?.benefits && incompleteJob.benefits.length !== 0) &&
+                                    {(currentJob?.benefits && currentJob.benefits.length !== 0) &&
                                         <>
                                             <span className={"ml0"}>Benefits:</span>
                                             <ul className={"j-pr-features-list"}>
                                                 {
-                                                    incompleteJob.benefits.map((b, index) => (
+                                                    currentJob.benefits.map((b, index) => (
                                                         <li key={index}>{benefitsEnumToStringMap(b)}</li>
                                                     ))
                                                 }
@@ -129,7 +129,7 @@ const JobPreviewDialog: FC<JobPreviewDialogProps> = ({
                                         </>
                                     }
                                     <span
-                                        className={"mb1rem"}>Work Location : {jobLocationTypesEnumToStringMap(incompleteJob?.jobLocationType || JobLocationTypes.InPerson)}</span>
+                                        className={"mb1rem"}>Work Location : {jobLocationTypesEnumToStringMap(currentJob?.jobLocationType || JobLocationTypes.InPerson)}</span>
                                     
                                 </span>
                             </div>

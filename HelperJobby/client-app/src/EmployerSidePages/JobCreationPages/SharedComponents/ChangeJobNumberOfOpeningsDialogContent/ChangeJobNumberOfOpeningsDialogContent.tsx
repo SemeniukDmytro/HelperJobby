@@ -1,11 +1,15 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './ChangeJobNumberOfOpeningsDialogContent.scss';
-import useJobCreation from "../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../hooks/useCurrentEmployerJob";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {UpdatedIncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {numberOfOpeningsOptions} from "../../../../AppConstData/NumberOfOpeningsOptions";
 import CustomSelectField from "../../../../Components/CustomSelectField/CustomSelectField";
+import {JobService} from "../../../../services/jobService";
+import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationStates";
+import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
 
 interface ChangeJobNumberOfOpeningsDialogContentProps {
     showDialog : boolean;
@@ -20,15 +24,16 @@ const ChangeJobNumberOfOpeningsDialogContent: FC<ChangeJobNumberOfOpeningsDialog
                                                                                                      setEditFunction,
                                                                                                      setShowDialog
                                                                                                  }) => {
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
-    const [numberOfOpenings, setNumberOfOpenings] = useState(incompleteJob?.numberOfOpenings.toString() || "");
+    const {currentJob, setCurrentJob, jobCreationState} = useCurrentEmployerJob();
+    const [numberOfOpenings, setNumberOfOpenings] = useState(currentJob?.numberOfOpenings.toString() || "");
     const [isInvalidSelect, setIsInvalidSelect] = useState(numberOfOpenings.length > 0);
     const [executeValidation, setExecuteValidation] = useState(false);
     const incompleteJobService = new IncompleteJobService();
+    const jobService = new JobService();
 
     useEffect(() => {
         if (showDialog){
-            setNumberOfOpenings(incompleteJob?.numberOfOpenings.toString() || "")
+            setNumberOfOpenings(currentJob?.numberOfOpenings.toString() || "")
         }
     }, [showDialog]);
 
@@ -44,12 +49,23 @@ const ChangeJobNumberOfOpeningsDialogContent: FC<ChangeJobNumberOfOpeningsDialog
 
         try {
             setRequestInProgress(true);
-            const updatedJob : UpdatedIncompleteJobDTO = {
-                ...incompleteJob,
-                numberOfOpenings : parseInt(numberOfOpenings)
+            if (jobCreationState == JobCreationStates.incompleteJob){
+                const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
+                    ...currentJob,
+                    numberOfOpenings : parseInt(numberOfOpenings)
+                }
+                const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
+                setCurrentJob(retrievedIncompleteJob);
             }
-            const retrievedJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedJob);
-            setIncompleteJob(retrievedJob);
+            else {
+                const job = currentJob as JobDTO;
+                const updatedJob: UpdatedJobDTO = {
+                    ...job,
+                    numberOfOpenings : parseInt(numberOfOpenings)
+                };
+                const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
+                setCurrentJob(retrievedJob);
+            }
             setShowDialog && setShowDialog(false);
         }
         catch (err){

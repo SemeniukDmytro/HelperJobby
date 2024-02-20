@@ -15,16 +15,17 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import JobTypes from "../../../../../enums/modelDataEnums/JobTypes";
 import Schedules from "../../../../../enums/modelDataEnums/Schedules";
-import useJobCreation from "../../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
 import {
-    useJobLoaderForSettingCurrentIncompleteJob
-} from "../../../../../hooks/useJobLoaderForSettingCurrentIncompleteJob";
+    useJobLoaderToSetCurrentJob
+} from "../../../../../hooks/useJobLoaderToSetCurrentJob";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
 import {addJobType, addSchedule} from "../../../../../utils/manageJobFeatureSelect";
 import {handleJobFeaturesListAppearance} from "../../../../../utils/handleJobFeaturesListHeight";
+import {JobCreationStates} from "../../../../../enums/utilityEnums/JobCreationStates";
 
 interface JobDetailsComponentProps {
 }
@@ -35,10 +36,10 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
     const [scheduleBoxHeight, setScheduleBoxHeight] = useState("78px");
     const scheduleListRef = useRef<HTMLUListElement>(null);
     const [showFullScheduleList, setShowFullScheduleList] = useState(false);
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
+    const {currentJob, setCurrentJob} = useCurrentEmployerJob();
     const {jobId} = useParams<{jobId : string}>();
-    const {fetchJobAndSetJobCreation} =  useJobLoaderForSettingCurrentIncompleteJob(jobId ? parseInt(jobId) : 0, incompleteJob, setIncompleteJob);
     const [loading, setLoading] = useState(false);
+    const {fetchJobAndSetJobCreation} = useJobLoaderToSetCurrentJob(jobId ? parseInt(jobId) : 0, currentJob, setCurrentJob, JobCreationStates.incompleteJob);
     const [isInvalidForm, setIsInvalidForm] = useState(false);
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
@@ -51,12 +52,12 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
     }, []);
 
     useEffect(() => {
-        if (incompleteJob){
-            setSelectedJobType(incompleteJob.jobType || []);
-            setSelectedSchedule(incompleteJob.schedule || []);
+        if (currentJob){
+            setSelectedJobType(currentJob.jobType || []);
+            setSelectedSchedule(currentJob.schedule || []);
             setLoading(false);
         }
-    }, [incompleteJob]);
+    }, [currentJob]);
     
     async function fetchInitialPageData(){
         await fetchJobAndSetJobCreation();
@@ -79,7 +80,7 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
                 schedule : selectedSchedule,
             }
             const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(parseInt(jobId!), updatedIncompleteJob);
-            setIncompleteJob(retrievedIncompleteJob);
+            setCurrentJob(retrievedIncompleteJob);
             navigate(`${EmployerPagesPaths.COMPENSATION_DETAILS}/${retrievedIncompleteJob.id}`)
         }
         catch (error){

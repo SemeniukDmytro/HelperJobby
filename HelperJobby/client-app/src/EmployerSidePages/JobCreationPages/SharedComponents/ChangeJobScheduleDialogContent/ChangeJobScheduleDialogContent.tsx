@@ -1,6 +1,6 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './ChangeJobScheduleDialogContent.scss';
-import useJobCreation from "../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../hooks/useCurrentEmployerJob";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {UpdatedIncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
@@ -11,6 +11,10 @@ import {addSchedule} from "../../../../utils/manageJobFeatureSelect";
 import {handleJobFeaturesListAppearance} from "../../../../utils/handleJobFeaturesListHeight";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationStates";
+import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
+import {JobService} from "../../../../services/jobService";
 
 interface ChangeJobScheduleDialogContentProps {
     showDialog : boolean;
@@ -26,16 +30,17 @@ const ChangeJobScheduleDialogContent: FC<ChangeJobScheduleDialogContentProps> = 
                                                                                      setShowDialog
                                                                                  }) => {
 
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
-    const [selectedSchedule, setSelectedSchedule] = useState(incompleteJob?.schedule || []);
+    const {currentJob, setCurrentJob, jobCreationState} = useCurrentEmployerJob();
+    const [selectedSchedule, setSelectedSchedule] = useState(currentJob?.schedule || []);
     const [scheduleBoxHeight, setScheduleBoxHeight] = useState("78px");
     const scheduleListRef = useRef<HTMLUListElement>(null);
     const [showFullScheduleList, setShowFullScheduleList] = useState(false);
     const incompleteJobService = new IncompleteJobService();
+    const jobService = new JobService();
 
     useEffect(() => {
         if (showDialog){
-            setSelectedSchedule(incompleteJob?.schedule || []);
+            setSelectedSchedule(currentJob?.schedule || []);
             setShowFullScheduleList(false);
             setScheduleBoxHeight("78px");
         }
@@ -48,12 +53,24 @@ const ChangeJobScheduleDialogContent: FC<ChangeJobScheduleDialogContentProps> = 
     async function editIncompleteJobSchedule() {
         try {
             setRequestInProgress(true)
-            const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
-                ...incompleteJob,
-                schedule : selectedSchedule
+
+            if (jobCreationState == JobCreationStates.incompleteJob){
+                const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
+                    ...currentJob,
+                    schedule : selectedSchedule
+                }
+                const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
+                setCurrentJob(retrievedIncompleteJob);
             }
-            const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJob);
-            setIncompleteJob(retrievedIncompleteJob);
+            else {
+                const job = currentJob as JobDTO;
+                const updatedJob: UpdatedJobDTO = {
+                    ...job,
+                    schedule : selectedSchedule
+                };
+                const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
+                setCurrentJob(retrievedJob);
+            }
             setShowDialog && setShowDialog(false);
         }
         catch (err){

@@ -10,7 +10,8 @@ const createPath = (path : string) => `${basePath}${path}`;
     COMPENSATION_DETAILS : createPath('/posting/compensation-details'),
     DESCRIPTION_AND_APPLICATION_DETAILS : createPath('/posting/description-and-application-settings'),
     REVIEW_JOB_PAGE : createPath('/posting/review-job'),
-    JOBS : createPath("/jobs")
+    JOBS : createPath("/jobs"),
+    EDIT_JOB : createPath("/editing")
 };
 
 export default employerPagesPaths;

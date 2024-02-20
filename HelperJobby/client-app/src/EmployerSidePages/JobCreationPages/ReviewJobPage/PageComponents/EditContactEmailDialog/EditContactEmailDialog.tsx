@@ -1,7 +1,7 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './EditContactEmailDialog.scss';
 import {useEmployer} from "../../../../../hooks/useEmployer";
-import useJobCreation from "../../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
 import EditJobPostDialog from "../EditJobPostDialog/EditJobPostDialog";
 import {IsValidEmail, validatePhoneNumber} from "../../../../../utils/validationLogic/authFormValidators";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
@@ -20,9 +20,9 @@ const EditContactEmailDialog: FC<EditContactEmailDialogProps> = ({
                                                                      setShowDialog
                                                                  }) => {
     const {employer} = useEmployer();
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
+    const {currentJob, setCurrentJob} = useCurrentEmployerJob();
     const [requestInProgress, setRequestInProgress] = useState(false);
-    const [contactEmail, setContactEmail] = useState(incompleteJob?.contactEmail || employer!.email);
+    const [contactEmail, setContactEmail] = useState(currentJob?.contactEmail || employer!.email);
     const [emailError, setEmailError] = useState("");
     const emailInputRef = useRef<HTMLInputElement>(null);
     const [executeFormValidation, setExecuteFormValidation] = useState(false);
@@ -30,7 +30,7 @@ const EditContactEmailDialog: FC<EditContactEmailDialogProps> = ({
 
     useEffect(() => {
         if (showDialog){
-            setContactEmail(incompleteJob?.contactEmail || employer!.email);
+            setContactEmail(currentJob?.contactEmail || employer!.email);
             setEmailError("");
         }
     }, [showDialog]);
@@ -49,8 +49,8 @@ const EditContactEmailDialog: FC<EditContactEmailDialogProps> = ({
             const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
                 contactEmail : contactEmail,
             }
-            const  retrievedIncompleteJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJob);
-            setIncompleteJob(retrievedIncompleteJob);
+            const  retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
+            setCurrentJob(retrievedIncompleteJob);
             setShowDialog(false)
         }
         catch (err){

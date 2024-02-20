@@ -1,6 +1,6 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './ChangeJobBenefitsDialogContent.scss';
-import useJobCreation from "../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../hooks/useCurrentEmployerJob";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {UpdatedIncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
@@ -11,6 +11,10 @@ import {addBenefit} from "../../../../utils/manageJobFeatureSelect";
 import {handleJobFeaturesListAppearance} from "../../../../utils/handleJobFeaturesListHeight";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import {JobService} from "../../../../services/jobService";
+import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationStates";
+import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
 
 interface ChangeJobBenefitsDialogContentProps {
     showDialog: boolean;
@@ -26,16 +30,17 @@ const ChangeJobBenefitsDialogContent: FC<ChangeJobBenefitsDialogContentProps> = 
                                                                                      setShowDialog
                                                                                  }) => {
 
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
-    const [selectedBenefits, setSelectedBenefits] = useState(incompleteJob?.benefits || []);
+    const {currentJob, setCurrentJob, jobCreationState} = useCurrentEmployerJob();
+    const [selectedBenefits, setSelectedBenefits] = useState(currentJob?.benefits || []);
     const [benefitsBoxHeight, setBenefitsBoxHeight] = useState("78px");
     const benefitsListRef = useRef<HTMLUListElement>(null);
     const [showFullBenefitsList, setShowFullBenefitsList] = useState(false);
     const incompleteJobService = new IncompleteJobService();
+    const jobService = new JobService();
 
     useEffect(() => {
         if (showDialog) {
-            setSelectedBenefits(incompleteJob?.benefits || []);
+            setSelectedBenefits(currentJob?.benefits || []);
             setShowFullBenefitsList(false);
             setBenefitsBoxHeight("78px");
         }
@@ -47,13 +52,25 @@ const ChangeJobBenefitsDialogContent: FC<ChangeJobBenefitsDialogContentProps> = 
 
     async function editIncompleteJobBenefits() {
         try {
-            setRequestInProgress(true)
-            const updatedIncompleteJob: UpdatedIncompleteJobDTO = {
-                ...incompleteJob,
-                benefits: selectedBenefits
+            setRequestInProgress(true);
+
+            if (jobCreationState == JobCreationStates.incompleteJob){
+                const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
+                    ...currentJob,
+                    benefits: selectedBenefits
+                }
+                const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
+                setCurrentJob(retrievedIncompleteJob);
             }
-            const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJob);
-            setIncompleteJob(retrievedIncompleteJob);
+            else {
+                const job = currentJob as JobDTO;
+                const updatedJob: UpdatedJobDTO = {
+                    ...job,
+                    benefits: selectedBenefits
+                };
+                const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
+                setCurrentJob(retrievedJob);
+            }
             setShowDialog && setShowDialog(false);
         } catch (err) {
             logErrorInfo(err)

@@ -1,12 +1,16 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './ChangeJobDescriptionDialogContent.scss';
-import useJobCreation from "../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../hooks/useCurrentEmployerJob";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {isValidDescription} from "../../../../utils/validationLogic/isValidDescription";
 import {UpdatedIncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
+import {JobService} from "../../../../services/jobService";
+import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationStates";
+import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
 
 interface ChangeJobDescriptionDialogContentProps {
     showDialog : boolean;
@@ -21,21 +25,22 @@ const ChangeJobDescriptionDialogContent: FC<ChangeJobDescriptionDialogContentPro
                                                                                            setEditFunction,
                                                                                            setShowDialog
                                                                                        }) => {
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
-    const [jobDescription, setJobDescription] = useState(incompleteJob?.description || "");
+    const {currentJob, setCurrentJob, jobCreationState} = useCurrentEmployerJob();
+    const [jobDescription, setJobDescription] = useState(currentJob?.description || "");
     const descriptionInputRef = useRef<HTMLInputElement>(null);
     const [isInvalidDescription, setIsInvalidDescription] = useState(false);
     const [descriptionError, setDescriptionError] = useState("");
     const incompleteJobService = new IncompleteJobService();
+    const jobService = new JobService();
 
     useEffect(() => {
         setEditFunction(() => editJobDescription)
     }, [jobDescription]);
     
     useEffect(() => {
-        if (descriptionInputRef.current && incompleteJob){
-            descriptionInputRef.current.innerText = incompleteJob.description || "";
-            setJobDescription(incompleteJob.description || "");
+        if (descriptionInputRef.current && currentJob){
+            descriptionInputRef.current.innerText = currentJob.description || "";
+            setJobDescription(currentJob.description || "");
         }
     }, [showDialog]);
 
@@ -50,9 +55,6 @@ const ChangeJobDescriptionDialogContent: FC<ChangeJobDescriptionDialogContentPro
         const text = event.clipboardData.getData('text/plain');
 
         document.execCommand('insertText', false, text);
-
-        isValidDescription(text, setDescriptionError, setIsInvalidDescription);
-        setJobDescription(text);
     }
 
 
@@ -64,12 +66,23 @@ const ChangeJobDescriptionDialogContent: FC<ChangeJobDescriptionDialogContentPro
         }
         try {
             setRequestInProgress(true);
-            const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
-                ...incompleteJob,
-                description : jobDescription
+            if (jobCreationState == JobCreationStates.incompleteJob){
+                const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
+                    ...currentJob,
+                    description : jobDescription
+                }
+                const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
+                setCurrentJob(retrievedIncompleteJob);
             }
-            const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(incompleteJob!.id, updatedIncompleteJob);
-            setIncompleteJob(retrievedIncompleteJob);
+            else {
+                const job = currentJob as JobDTO;
+                const updatedJob: UpdatedJobDTO = {
+                    ...job,
+                    description : jobDescription
+                };
+                const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
+                setCurrentJob(retrievedJob);
+            }
             setShowDialog && setShowDialog(false);
         }
         catch (err){

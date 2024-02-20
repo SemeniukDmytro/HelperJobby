@@ -4,18 +4,16 @@ import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitle
 import TeamAnalysis from "../../../../../Components/Icons/TeamAnalysis";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
-import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
 import {useEmployer} from "../../../../../hooks/useEmployer";
 import {resumeRequirementOptionsMapData} from "../../../../../AppConstData/ResumeRequirements";
 import JobCreateNavigationButtons
     from "../../../SharedComponents/JobCreateNavigationButtons/JobCreateNavigationButtons";
 import {useNavigate, useParams} from "react-router-dom";
 import employerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
-import CustomSelectWindow from "../../../../../EmployersSideComponents/CustomSelectWindow/CustomSelectWindow";
-import useJobCreation from "../../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
 import {
-    useJobLoaderForSettingCurrentIncompleteJob
-} from "../../../../../hooks/useJobLoaderForSettingCurrentIncompleteJob";
+    useJobLoaderToSetCurrentJob
+} from "../../../../../hooks/useJobLoaderToSetCurrentJob";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
 import {IsValidEmail, validatePhoneNumber} from "../../../../../utils/validationLogic/authFormValidators";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
@@ -25,6 +23,7 @@ import {isValidDescription} from "../../../../../utils/validationLogic/isValidDe
 import CommunicationPreferencesBlock
     from "../../../SharedComponents/CommunicationPreferencesBlock/CommunicationPreferencesBlock";
 import {resumeRequirementOptionsEnumToStringMap} from "../../../../../utils/convertLogic/enumToStringConverter";
+import {JobCreationStates} from "../../../../../enums/utilityEnums/JobCreationStates";
 
 interface JobDescriptionAndPreferencesComponentProps {}
 
@@ -44,10 +43,10 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
     const [isContactPhoneAvailable, setIsContactPhoneAvailable] = useState(false);
     const [isResumeRequired, setIsResumeRequired] = useState(resumeRequirementOptionsMapData[0].stringValue);
 
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
+    const {currentJob, setCurrentJob} = useCurrentEmployerJob();
     const {jobId} = useParams<{jobId : string}>();
-    const {fetchJobAndSetJobCreation} =  useJobLoaderForSettingCurrentIncompleteJob(jobId ? parseInt(jobId) : 0, incompleteJob, setIncompleteJob);
     const [loading, setLoading] = useState(false);
+    const {fetchJobAndSetJobCreation} = useJobLoaderToSetCurrentJob(jobId ? parseInt(jobId) : 0, currentJob, setCurrentJob, JobCreationStates.incompleteJob);
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
     const incompleteJobService = new IncompleteJobService();
@@ -57,25 +56,25 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
     }, []);
 
     useEffect(() => {
-        if (incompleteJob){
+        if (currentJob){
             if (descriptionInputRef.current){
-                descriptionInputRef.current.innerText = incompleteJob.description || "";
-                setJobDescription(incompleteJob.description || "");
+                descriptionInputRef.current.innerText = currentJob.description || "";
+                setJobDescription(currentJob.description || "");
             }
-            if (incompleteJob.contactPhoneNumber){
+            if (currentJob.contactPhoneNumber){
                 setIsContactPhoneAvailable(true);
-                setContactPhoneNumber(incompleteJob.contactPhoneNumber);
+                setContactPhoneNumber(currentJob.contactPhoneNumber);
             }
-            if (incompleteJob.contactEmail){
-                setContactEmail(incompleteJob.contactEmail);
+            if (currentJob.contactEmail){
+                setContactEmail(currentJob.contactEmail);
             }
-            if (incompleteJob.resumeRequired){
-                setIsResumeRequired(resumeRequirementOptionsEnumToStringMap(incompleteJob.resumeRequired));
+            if (currentJob.resumeRequired){
+                setIsResumeRequired(resumeRequirementOptionsEnumToStringMap(currentJob.resumeRequired));
             }
             
             setLoading(false);
         }
-    }, [incompleteJob]);
+    }, [currentJob]);
 
     async function fetchInitialPageData(){
         await fetchJobAndSetJobCreation();
@@ -115,7 +114,7 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
                 resumeRequired : resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)?.enumValue
             }
             const  retrievedIncompleteJob = await incompleteJobService.updateJobCreation(parseInt(jobId!), updatedIncompleteJob);
-            setIncompleteJob(retrievedIncompleteJob);
+            setCurrentJob(retrievedIncompleteJob);
             navigate(`${employerPagesPaths.REVIEW_JOB_PAGE}/${jobId}`)
         }
         catch (err){
@@ -125,16 +124,12 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
             setRequestInProgress(false);
         }
     }
-
     function handlePaste(event: React.ClipboardEvent<HTMLDivElement>) {
         event.preventDefault();
 
         const text = event.clipboardData.getData('text/plain');
 
         document.execCommand('insertText', false, text);
-
-        isValidDescription(text, setDescriptionError, setIsInvalidDescription);
-        setJobDescription(text);
     }
 
     function navigateToPreviousPage() {

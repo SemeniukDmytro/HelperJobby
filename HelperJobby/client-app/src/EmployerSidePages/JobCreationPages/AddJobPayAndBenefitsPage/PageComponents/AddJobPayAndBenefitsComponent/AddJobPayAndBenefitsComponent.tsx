@@ -22,10 +22,10 @@ import {useNavigate, useParams} from "react-router-dom";
 import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import EmployeeBenefits from "../../../../../enums/modelDataEnums/EmployeeBenefits";
 import {ShowPayByOptions} from "../../../../../enums/modelDataEnums/ShowPayByOptions";
-import useJobCreation from "../../../../../hooks/useJobCreation";
+import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
 import {
-    useJobLoaderForSettingCurrentIncompleteJob
-} from "../../../../../hooks/useJobLoaderForSettingCurrentIncompleteJob";
+    useJobLoaderToSetCurrentJob
+} from "../../../../../hooks/useJobLoaderToSetCurrentJob";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
 import {minimalSalaryIsTooLowError, useSalaryValidation} from "../../../../../hooks/useSalaryValidation";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
@@ -37,6 +37,7 @@ import JobSalaryBlock from "../../../SharedComponents/JobSalaryBlock/JobSalaryBl
 import {useShowPayByOption} from "../../../../../hooks/comnonentsSharedHooks/useShowPayByOption";
 import {handleJobFeaturesListAppearance} from "../../../../../utils/handleJobFeaturesListHeight";
 import {addBenefit} from "../../../../../utils/manageJobFeatureSelect";
+import {JobCreationStates} from "../../../../../enums/utilityEnums/JobCreationStates";
 
 interface AddJobPayAndBenefitsComponentProps {
 }
@@ -61,10 +62,10 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     const benefitsListRef = useRef<HTMLUListElement>(null);
     const [showFullBenefitsList, setShowFullBenefitsList] = useState(false);
 
-    const {incompleteJob, setIncompleteJob} = useJobCreation();
+    const {currentJob, setCurrentJob} = useCurrentEmployerJob();
     const {jobId} = useParams<{jobId : string}>();
-    const {fetchJobAndSetJobCreation} =  useJobLoaderForSettingCurrentIncompleteJob(jobId ? parseInt(jobId) : 0, incompleteJob, setIncompleteJob);
     const [loading, setLoading] = useState(false);
+    const {fetchJobAndSetJobCreation} = useJobLoaderToSetCurrentJob(jobId ? parseInt(jobId) : 0, currentJob, setCurrentJob, JobCreationStates.incompleteJob);
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
     const incompleteJobService = new IncompleteJobService();
@@ -92,28 +93,28 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     }, []);
 
     useEffect(() => {
-        if (incompleteJob){
-            if (incompleteJob.salary){
-                const incompleteJobShowPayOption = showPayByOptionsMapData.find(spo => spo.enumValue == incompleteJob.salary?.showPayByOption)?.stringValue || "Range";
+        if (currentJob){
+            if (currentJob.salary){
+                const incompleteJobShowPayOption = showPayByOptionsMapData.find(spo => spo.enumValue == currentJob.salary?.showPayByOption)?.stringValue || "Range";
                 setShowPayBy(incompleteJobShowPayOption);
-                setSalaryRate(salaryRatesEnumToStringMap(incompleteJob.salary.salaryRate));
-                getSalaryInputProp(incompleteJobShowPayOption).setSalaryInput(incompleteJob.salary.minimalAmount.toString());
-                if (incompleteJob.salary.showPayByOption == ShowPayByOptions.Range){
-                    setRangeMaxSalaryAmount(incompleteJob.salary.maximalAmount?.toString() || "")
+                setSalaryRate(salaryRatesEnumToStringMap(currentJob.salary.salaryRate));
+                getSalaryInputProp(incompleteJobShowPayOption).setSalaryInput(currentJob.salary.minimalAmount.toString());
+                if (currentJob.salary.showPayByOption == ShowPayByOptions.Range){
+                    setRangeMaxSalaryAmount(currentJob.salary.maximalAmount?.toString() || "")
                 }
-                if (incompleteJob.salary.meetsMinSalaryRequirement && !checkMinimalSalary(incompleteJob.salary.minimalAmount,
-                    salaryRatesEnumToStringMap(incompleteJob.salary.salaryRate)))
+                if (currentJob.salary.meetsMinSalaryRequirement && !checkMinimalSalary(currentJob.salary.minimalAmount,
+                    salaryRatesEnumToStringMap(currentJob.salary.salaryRate)))
                 {
                     setMinSalaryMeetsRequirement(true);
                     setMinSalaryInputError(minimalSalaryIsTooLowError);
                 }
             }
             
-            setSelectedBenefits(incompleteJob.benefits || []);
-            setCurrency(countriesWithCurrencies.find(c => c.country === incompleteJob.locationCountry)?.currency || "")
+            setSelectedBenefits(currentJob.benefits || []);
+            setCurrency(countriesWithCurrencies.find(c => c.country === currentJob.locationCountry)?.currency || "")
             setLoading(false);
         }
-    }, [incompleteJob]);
+    }, [currentJob]);
 
     async function fetchInitialPageData(){
         await fetchJobAndSetJobCreation();
@@ -151,7 +152,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                 }
             }
             const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(parseInt(jobId!), updatedIncompleteJob);
-            setIncompleteJob(retrievedIncompleteJob);
+            setCurrentJob(retrievedIncompleteJob);
             navigate(`${EmployerPagesPaths.DESCRIPTION_AND_APPLICATION_DETAILS}/${jobId}`)
         }
         catch (err){
