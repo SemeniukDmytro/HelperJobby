@@ -39,7 +39,7 @@
   justify-content: center;
   box-sizing: border-box;
   padding: 0.5rem 1rem;
-  border: none;
+  border: 1px solid global-variables.$dark-blue;
   border-radius: 0.5rem;
   background-color: global-variables.$dark-blue;
   cursor: pointer;
@@ -48,7 +48,6 @@
   font-size: 1rem;
   line-height: 1.5;
   transition: 0.2s;
-
   &:hover {
     background-color: global-variables.$dark-blue-hover;
   }
