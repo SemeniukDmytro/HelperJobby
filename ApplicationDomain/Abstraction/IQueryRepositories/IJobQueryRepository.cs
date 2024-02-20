@@ -13,4 +13,5 @@ public interface IJobQueryRepository
     public Task<Job> GetJobWithInterviews(int jobId);
     public Task<IEnumerable<Job>> GetRandomJobs();
     public Task<Job> GetJobByIdForJobSeekers(int jobId);
+    public Task<List<Job>> GetJobsByIdsForEmployer(List<int> jobIds);
 }

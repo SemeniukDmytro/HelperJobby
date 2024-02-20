@@ -62,6 +62,7 @@ const BuildResumeLayout: FC<BuildResumeLayoutProps> = () => {
                         firstButtonText={firstDialogButtonText}
                         secondButtonText={secondDialogButtonText}
                         positiveDialog={isPositiveDialog}
+                        requestInProgress={false}
                     ></DialogWindow>
                     <div className={"build-resume-sticky-panel"}>
                         <nav className={"build-resume-navigation"}>

@@ -10,13 +10,15 @@ interface ShortJobInfoForEmployerProps {
     selectedJobIds : number[];
     setSelectedJobIds : Dispatch<SetStateAction<number[]>>;
     isAllSelected?: boolean;
+    onDeleteClick : () => void;
 }
 
 const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
     job,
     selectedJobIds,
     setSelectedJobIds,
-    isAllSelected = false
+    isAllSelected = false,
+    onDeleteClick
                                                                    }) => {
     const [isSelected, setIsSelected] = useState(false);
     const navigate = useNavigate();
@@ -101,7 +103,7 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
                 <button className={'blue-button'} onClick={navigateToEditJobPage}>
                     Update job
                 </button>
-                <button className={"red-button"}>
+                <button className={"red-button"} onClick={onDeleteClick}>
                     Delete job
                 </button>
             </div>

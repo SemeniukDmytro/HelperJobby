@@ -91,6 +91,7 @@ const InterviewComponent: FC<InterviewComponentProps> = ({interview}) => {
                 secondButtonText={secondDialogButtonText}
                 positiveDialog={false}
                 secondButtonOnClick={cancelInterview}
+                requestInProgress={requestInProcess}
             />
             <div className={"ji-job-block"}>
                 <div className={"ji-job-layout"}>

@@ -107,6 +107,18 @@ public class IncompleteJobService : IIncompleteJobService
         return incompleteJobEntity;
     }
 
+    public async Task<List<IncompleteJob>> DeleteIncompleteJobRange(List<int> incompleteJobIds)
+    {
+        var currentEmployerId = _employerService.GetCurrentEmployerId();
+        var incompleteJobEntities = await _incompleteJobQueryRepository.GetIncompleteJobByIds(incompleteJobIds);
+        if (incompleteJobEntities.Any(ij => ij.EmployerId != currentEmployerId))
+        {
+            throw new ForbiddenException();
+        }
+
+        return incompleteJobEntities;
+    }
+
     private void CheckIfValidSalaryProvided(IncompleteJobSalary? salary)
     {
         if (salary != null && !salary.MeetsMinSalaryRequirement)

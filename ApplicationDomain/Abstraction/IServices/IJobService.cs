@@ -10,4 +10,5 @@ public interface IJobService
     public Task<Job> UpdateJob(int jobId, Job updatedJob);
     public Task<Job> UpdateJobSalary(int jobId, JobSalary updatedSalary);
     public Task<Job> DeleteJob(int jobId);
+    public Task<List<Job>> DeleteJobRange(List<int> jobIds);
 }

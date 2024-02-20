@@ -85,4 +85,11 @@ public class IncompleteJobController : ExtendedBaseController
         var jobCreation = await _incompleteJobService.DeleteIncompleteJob(incompleteJobId);
         await _incompleteJobCommandRepository.DeleteIncompleteJob(jobCreation);
     }
+    
+    [HttpDelete("delete-incomplete-job-range")]
+    public async Task DeleteJobByIds([FromBody] List<int> jobIds)
+    {
+        var jobsToDelete = await _incompleteJobService.DeleteIncompleteJobRange(jobIds);
+        await _incompleteJobCommandRepository.DeleteIncompleteJobsRange(jobsToDelete);
+    }
 }

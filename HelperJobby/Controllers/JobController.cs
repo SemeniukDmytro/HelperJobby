@@ -107,4 +107,11 @@ public class JobController : ExtendedBaseController
         var job = await _jobService.DeleteJob(jobId);
         await _jobCommandRepository.DeleteJob(job);
     }
+    
+    [HttpDelete("delete-job-range")]
+    public async Task DeleteJobByIds([FromBody] List<int> jobIds)
+    {
+        var jobsToDelete = await _jobService.DeleteJobRange(jobIds);
+        await _jobCommandRepository.DeleteJobRange(jobsToDelete);
+    }
 }

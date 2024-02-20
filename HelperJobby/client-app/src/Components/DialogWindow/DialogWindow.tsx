@@ -3,6 +3,7 @@ import './DialogWindow.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
 import '../../Assets/scssSharedStyles/DefaultButtons.scss'
+import WhiteLoadingSpinner from "../WhiteLoadingSpinner/WhiteLoadingSpinner";
 
 interface DialogWindowProps {
     firstButtonOnClick?: () => void | Promise<void>;
@@ -14,6 +15,7 @@ interface DialogWindowProps {
     firstButtonText: string;
     secondButtonText: string;
     positiveDialog: boolean;
+    requestInProgress: boolean;
 }
 
 const DialogWindow: FC<DialogWindowProps> = ({
@@ -25,7 +27,8 @@ const DialogWindow: FC<DialogWindowProps> = ({
                                                  mainText,
                                                  firstButtonText,
                                                  secondButtonText,
-                                                 positiveDialog
+                                                 positiveDialog,
+                                                 requestInProgress
                                              }) => {
 
     useEffect(() => {
@@ -69,7 +72,9 @@ const DialogWindow: FC<DialogWindowProps> = ({
                             className={`${positiveDialog ? "blue-button" : "red-button"}`}
                             onClick={secondButtonOnClick ? secondButtonOnClick : closeDialog}
                         >
-                            {secondButtonText}
+                            {requestInProgress ? <WhiteLoadingSpinner/> :
+                                secondButtonText
+                            }
                         </button>
                     </div>
                 </div>

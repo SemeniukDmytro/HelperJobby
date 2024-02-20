@@ -35,6 +35,14 @@ public class IncompleteJobQueryRepository : IIncompleteJobQueryRepository
             .Include(ij => ij.Employer));
     }
 
+    public async Task<List<IncompleteJob>> GetIncompleteJobByIds(List<int> incompleteJobIds)
+    {
+        var jobs = await _applicationContext
+            .IncompleteJobs.Where(j => incompleteJobIds.Contains(j.Id))
+            .ToListAsync();
+        return jobs;
+    }
+
     private async Task<IncompleteJob> GetIncompleteJob(int jobCreationId,
         Func<IQueryable<IncompleteJob>, IQueryable<IncompleteJob>> includeQuery = null)
     {

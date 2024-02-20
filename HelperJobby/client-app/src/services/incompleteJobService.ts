@@ -41,7 +41,11 @@ export class IncompleteJobService {
             updatedSalaryDTO
         );
     }
-    public async deleteJobCreation(incompleteJobId: number): Promise<void> {
+    public async deleteIncompleteJob(incompleteJobId: number): Promise<void> {
         await this.customFetchService.delete<void>(`${this.baseURI}/${incompleteJobId}`);
+    }
+
+    public async deleteIncompleteJobRange(jobIds : number[]) : Promise<void>{
+        return await this.customFetchService.delete<void>(`${this.baseURI}/delete-incomplete-job-range`, jobIds);
     }
 }

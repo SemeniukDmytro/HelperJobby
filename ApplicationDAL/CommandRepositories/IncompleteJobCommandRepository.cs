@@ -33,4 +33,10 @@ public class IncompleteJobCommandRepository : IIncompleteJobCommandRepository
         _applicationContext.IncompleteJobs.Remove(job);
         await _applicationContext.SaveChangesAsync();
     }
+
+    public async Task DeleteIncompleteJobsRange(List<IncompleteJob> incompleteJobs)
+    {
+        _applicationContext.IncompleteJobs.RemoveRange(incompleteJobs);
+        await _applicationContext.SaveChangesAsync();
+    }
 }

@@ -34,6 +34,14 @@ public class JobQueryRepository : IJobQueryRepository
         return job;
     }
 
+    public async Task<List<Job>> GetJobsByIdsForEmployer(List<int> jobIds)
+    {
+        var jobs = await _applicationContext
+            .Jobs.Where(j => jobIds.Contains(j.Id))
+            .ToListAsync();
+        return jobs;
+    }
+
     public async Task<Job> GetJobByIdWithEmployer(int jobId)
     {
         var job = await _applicationContext.Jobs.Include(j => j.Salary)

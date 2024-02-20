@@ -14,4 +14,6 @@ public interface IIncompleteJobService
         IncompleteJobSalary? incompleteJobSalary);
 
     public Task<IncompleteJob> DeleteIncompleteJob(int incompleteJobId);
+
+    public Task<List<IncompleteJob>> DeleteIncompleteJobRange(List<int> incompleteJobIds);
 }

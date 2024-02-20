@@ -102,7 +102,19 @@ public class JobService : IJobService
 
         return jobEntity;
     }
-    
+
+    public async Task<List<Job>> DeleteJobRange(List<int> jobIds)
+    {
+        var currentEmployerId = _employerService.GetCurrentEmployerId();
+        var jobEntities = await _jobQueryRepository.GetJobsByIdsForEmployer(jobIds);
+        if (jobEntities.Any(ij => ij.EmployerId != currentEmployerId))
+        {
+            throw new ForbiddenException();
+        }
+
+        return jobEntities;
+    }
+
     private void CheckIfValidSalaryProvided(JobSalary? salary)
     {
         if (salary != null && !salary.MeetsMinSalaryRequirement)

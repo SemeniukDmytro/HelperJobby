@@ -34,4 +34,10 @@ public class JobCommandRepository : IJobCommandRepository
         _applicationContext.Jobs.Remove(job);
         await _applicationContext.SaveChangesAsync();
     }
+
+    public async Task DeleteJobRange(List<Job> jobs)
+    {
+        _applicationContext.Jobs.RemoveRange(jobs);
+        await _applicationContext.SaveChangesAsync();
+    }
 }

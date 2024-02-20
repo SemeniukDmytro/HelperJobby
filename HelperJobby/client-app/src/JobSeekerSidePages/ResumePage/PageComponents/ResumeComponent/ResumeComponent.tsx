@@ -104,6 +104,7 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
                 firstButtonText={firstDialogButtonText}
                 secondButtonText={secondDialogButtonText}
                 positiveDialog={isPositiveDialog}
+                requestInProgress={deleteProcess}
             />
             {deleteProcess ?
                 <LoadingPage/>

@@ -3,7 +3,7 @@ import './ShortIncompleteJobInfoForEmployer.scss';
 import {useNavigate} from "react-router-dom";
 import {IncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleCheck, faCircleExclamation, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faCircleExclamation, faXmark} from "@fortawesome/free-solid-svg-icons";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface ShortIncompleteJobInfoForEmployerProps {
@@ -12,13 +12,15 @@ interface ShortIncompleteJobInfoForEmployerProps {
     selectedJobIds: number[];
     setSelectedJobIds: Dispatch<SetStateAction<number[]>>;
     isAllSelected?: boolean;
+    onDeleteClick: () => void;
 }
 
 const ShortIncompleteJobInfoForEmployer: FC<ShortIncompleteJobInfoForEmployerProps> = ({
                                                                                            job,
                                                                                            selectedJobIds,
                                                                                            setSelectedJobIds,
-                                                                                           isAllSelected = false
+                                                                                           isAllSelected = false,
+                                                                                           onDeleteClick
                                                                                        }
 ) => {
     const [isSelected, setIsSelected] = useState(false);
@@ -75,7 +77,7 @@ const ShortIncompleteJobInfoForEmployer: FC<ShortIncompleteJobInfoForEmployerPro
                 Draft
             </div>
             <div className={"job-operations-container"}>
-                <button className={"red-button"}>
+                <button className={"red-button"} onClick={onDeleteClick}>
                     Delete
                 </button>
             </div>
