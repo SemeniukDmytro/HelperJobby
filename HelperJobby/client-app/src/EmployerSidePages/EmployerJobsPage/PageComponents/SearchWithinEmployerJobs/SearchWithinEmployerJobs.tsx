@@ -1,30 +1,91 @@
-import React, {ChangeEvent, FC, useRef, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './SearchWithinEmployerJobs.scss';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronDown, faSliders, faXmark} from "@fortawesome/free-solid-svg-icons";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 import CustomSelectWindow from "../../../../EmployersSideComponents/CustomSelectWindow/CustomSelectWindow";
 import {orderOptions, sortByOptions} from "../../../../EmployerJobFilteringData";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {IncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
 import FiltersAndSearch from "../FiltersAndSearch/FiltersAndSearch";
+import {useEmployer} from "../../../../hooks/useEmployer";
 
 interface SearchWithinEmployerJobsProps {
-    jobs: JobDTO[] | IncompleteJobDTO[];
+    jobSearchResults: JobDTO[];
+    setJobSearchResults: Dispatch<SetStateAction<JobDTO[]>>;
+    filteringInProgress: boolean;
+    setFilteringInProcess: Dispatch<SetStateAction<boolean>>;
 }
 
 const SearchWithinEmployerJobs: FC<SearchWithinEmployerJobsProps> = ({
-                                                                         jobs
+                                                                         jobSearchResults,
+                                                                         setJobSearchResults,
+                                                                         filteringInProgress,
+                                                                         setFilteringInProcess
                                                                      }) => {
+    const {employer} = useEmployer();
     const [showExpandedFiltersDropdown, setShowExpandedFiltersDropdown] = useState(false);
     const [sortBySelectedOption, setSortBySelectedOption] = useState(sortByOptions[0]);
     const [orderSelectedOption, setOrderSelectedOption] = useState(orderOptions[0]);
     const [jobTitleSearch, setJobTitleSearch] = useState("");
     const [jobLocationSearch, setJobLocationSearch] = useState("");
-    const jobLocationInputRef = useRef<HTMLInputElement>(null);
 
-    function onLocationSearchChange(e : ChangeEvent<HTMLInputElement>) {
-        setJobLocationSearch(e.target.value)
+    useEffect(() => {
+        let sortedAndOrderedJobs = sortJobs(jobSearchResults, sortBySelectedOption, orderSelectedOption);
+        setJobSearchResults(sortedAndOrderedJobs);
+    }, [sortBySelectedOption, orderSelectedOption]);
+
+    useEffect(() => {
+        if(filteringInProgress){
+            setFilteringInProcess(false);
+        }
+    }, [filteringInProgress]);
+
+
+    function sortJobs(jobs: JobDTO[], sortBy: string, order: string) {
+        setFilteringInProcess(true);
+        return jobs.sort((a: JobDTO, b: JobDTO) => {
+            let valueA: string | number;
+            let valueB: string | number;
+            switch (sortBy) {
+                case "Job title":
+                    valueA = a.jobTitle.toLowerCase();
+                    valueB = b.jobTitle.toLowerCase();
+                    break;
+                case "Posting date":
+                    valueA = new Date(a.datePosted).getTime();
+                    valueB = new Date(b.datePosted).getTime();
+                    break;
+                default:
+                    return 0;
+            }
+
+            if (order === "Ascending") {
+                return valueA < valueB ? -1 : 1;
+            } else {
+                return valueA > valueB ? -1 : 1;
+            }
+        });
+    }
+
+    function filterJobs(jobs: JobDTO[], title: string, location: string) {
+        setFilteringInProcess(true);
+        return jobs.filter((job: JobDTO | IncompleteJobDTO) => {
+            const titleMatch = job.jobTitle.toLowerCase().includes(title.toLowerCase());
+            const locationMatch = job.location.toLowerCase().includes(location.toLowerCase());
+            return titleMatch && locationMatch;
+        });
+    }
+
+    function handleViewResultsClick() {
+        let filteredJobs = filterJobs(employer!.jobs, jobTitleSearch, jobLocationSearch);
+        let sortedAndOrderedJobs = sortJobs(filteredJobs, sortBySelectedOption, orderSelectedOption);
+        setJobSearchResults(sortedAndOrderedJobs);
+    }
+
+    function eraseFilters(event: React.MouseEvent) {
+        event.stopPropagation();
+        setJobSearchResults(employer!.jobs);
+        setJobTitleSearch("");
+        setJobLocationSearch("");
     }
 
     return (
@@ -34,21 +95,19 @@ const SearchWithinEmployerJobs: FC<SearchWithinEmployerJobsProps> = ({
                     {!showExpandedFiltersDropdown ?
                         <FiltersAndSearch
                             jobTitle={jobTitleSearch}
-                            setJobTitle={setJobTitleSearch}
                             location={jobLocationSearch}
-                            setLocation={setJobLocationSearch}
                             showExpandedFiltersDropdown={showExpandedFiltersDropdown}
                             setShowExpandedFiltersDropdown={setShowExpandedFiltersDropdown}
+                            onEraseFiltersClick={eraseFilters}
                         />
                         :
                         <div className={"expanded-job-search-filters-container mb1rem"}>
                             <FiltersAndSearch
                                 jobTitle={jobTitleSearch}
-                                setJobTitle={setJobTitleSearch}
                                 location={jobLocationSearch}
-                                setLocation={setJobLocationSearch}
                                 showExpandedFiltersDropdown={showExpandedFiltersDropdown}
                                 setShowExpandedFiltersDropdown={setShowExpandedFiltersDropdown}
+                                onEraseFiltersClick={eraseFilters}
                             />
                             <CustomInputField
                                 fieldLabel={"Job title"}
@@ -57,25 +116,15 @@ const SearchWithinEmployerJobs: FC<SearchWithinEmployerJobsProps> = ({
                                 setInputFieldValue={setJobTitleSearch}
                                 placeholderText={"E.g. nurse, manager, nights, part-time"}
                             />
-                            <div className={'field-label'}>
-                                Location
-                            </div>
-                            <div className={"flex-column"}>
-                                <div className={`field-input-container`}>
-                                    <div className={`border-lining`}>
-                                    </div>
-                                    <input
-                                        className={`field-input`}
-                                        value={jobLocationSearch}
-                                        type={"text"}
-                                        onChange={onLocationSearchChange}
-                                        ref={jobLocationInputRef}
-                                        placeholder={"Type to search"}
-                                    />
-                                </div>
-                            </div>
+                            <CustomInputField fieldLabel={"Location"}
+                                              isRequired={false}
+                                              inputFieldValue={jobLocationSearch}
+                                              setInputFieldValue={setJobLocationSearch}
+                                              placeholderText={"Type to search"}
+                            />
                             <div className={"mb1rem"}></div>
-                            <button className={"br-corner-button blue-button"}>View results
+                            <button className={"br-corner-button blue-button"} onClick={handleViewResultsClick}>
+                                View results
                             </button>
                         </div>
                     }

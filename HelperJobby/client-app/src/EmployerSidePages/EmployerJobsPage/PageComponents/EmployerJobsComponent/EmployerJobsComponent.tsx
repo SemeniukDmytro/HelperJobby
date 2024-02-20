@@ -8,6 +8,7 @@ import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {useEmployer} from "../../../../hooks/useEmployer";
 import ShortJobInfoForEmployer from "../ShortJobInfoForEmployer/ShortJobInfoForEmployer";
 import SearchWithinEmployerJobs from "../SearchWithinEmployerJobs/SearchWithinEmployerJobs";
+import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 
 interface EmployerJobsComponentProps {
 }
@@ -18,62 +19,67 @@ const EmployerJobsComponent: FC<EmployerJobsComponentProps> = () => {
     const [searchParams] = useSearchParams();
     const [selectedJobIds, setSelectedJobIds] = useState<number[]>([]);
     const jobService = new JobService();
-    const incompleteJobService =  new IncompleteJobService();
-    
+    const incompleteJobService = new IncompleteJobService();
+    const [jobSearchResults, setJobSearchResults] = useState<JobDTO[]>([]);
+    const [filteringInProcess, setFilteringInProcess] = useState(false);
+    console.log(filteringInProcess)
+
+
     useEffect(() => {
         const incompleteJobParam = searchParams.get("incompleteJobs");
-        if (incompleteJobParam){
+        if (incompleteJobParam) {
             fetchInitialEmployerIncompleteJobsData()
-        }
-        else {
+        } else {
             fetchInitialEmployerJobsData();
         }
     }, []);
-    
-    async function fetchInitialEmployerJobsData(){
+
+    useEffect(() => {
+        if (employer?.jobs) {
+            setJobSearchResults(employer.jobs)
+        }
+    }, [employer?.jobs]);
+
+    async function fetchInitialEmployerJobsData() {
         try {
             setInitialLoading(true);
             const retrievedJobs = await jobService.getJobsByEmployerId(employer!.id);
             setEmployer((prev) => {
-                return  prev &&
+                return prev &&
                     {
                         ...prev,
-                        jobs : retrievedJobs
-                    }    
+                        jobs: retrievedJobs
+                    }
             })
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setInitialLoading(false);
         }
     }
-    
-    async function fetchInitialEmployerIncompleteJobsData(){
+
+    async function fetchInitialEmployerIncompleteJobsData() {
         try {
             setInitialLoading(true);
             const retrievedJobs = await incompleteJobService.getEmployerIncompleteJobs(employer!.id)
             setEmployer((prev) => {
-                return  prev &&
+                return prev &&
                     {
                         ...prev,
                         incompleteJobs: retrievedJobs
                     }
             })
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setInitialLoading(false);
         }
     }
 
     function toggleSelectAllJobs() {
         if (employer && employer.jobs) {
-            const allJobIds = employer.jobs.map(job => job.id); 
-            const areAllJobsSelected = allJobIds.length === selectedJobIds.length; 
+            const allJobIds = employer.jobs.map(job => job.id);
+            const areAllJobsSelected = allJobIds.length === selectedJobIds.length;
 
             if (areAllJobsSelected) {
                 setSelectedJobIds([]);
@@ -125,18 +131,22 @@ const EmployerJobsComponent: FC<EmployerJobsComponentProps> = () => {
                             </div>)
                             :
                             (
-                                <SearchWithinEmployerJobs jobs={employer!.jobs}/>
+                                <SearchWithinEmployerJobs jobSearchResults={jobSearchResults}
+                                                          filteringInProgress={filteringInProcess}
+                                                          setJobSearchResults={setJobSearchResults}
+                                                          setFilteringInProcess={setFilteringInProcess}/>
                             )
                         }
-                        {(employer?.jobs && employer?.jobs.length != 0) &&
-                            employer.jobs.map((job, index) => (
+                        {!filteringInProcess ?
+                            jobSearchResults.map((job, index) => (
                                 <ShortJobInfoForEmployer job={job}
                                                          selectedJobIds={selectedJobIds}
                                                          setSelectedJobIds={setSelectedJobIds}
-                                                         isAllSelected={selectedJobIds.length === employer.jobs.length}
-                                                         key={index}
+                                                         isAllSelected={selectedJobIds.length === employer!.jobs.length}
                                 />
                             ))
+                            :
+                            <LoadingPage/>
                         }
                     </div>
             }

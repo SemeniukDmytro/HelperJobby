@@ -25,8 +25,6 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
         setIsSelected(isAllSelected || selectedJobIds.includes(job.id));
     }, [isAllSelected, selectedJobIds, job.id]);
     
-    console.log(job)
-    
     function toggleIsSelected() {
         setIsSelected(!isSelected)
         if (!isSelected){
