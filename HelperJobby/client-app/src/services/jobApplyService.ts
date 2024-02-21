@@ -28,7 +28,7 @@ export class JobApplyService {
     }
 
     public async UpdateJobApply(jobId: number, jobSeekerId : number, updatedJobApply : UpdateJobApplyDTO): Promise<JobApplyDTO> {
-        return await this.customFetchService.post<JobApplyDTO>(`${this.baseURI}/job-seeker/${jobSeekerId}/job-apply/${jobId}`, updatedJobApply);
+        return await this.customFetchService.put<JobApplyDTO>(`${this.baseURI}/job-seeker/${jobSeekerId}/job-apply/${jobId}`, updatedJobApply);
     }
 
     public async deleteJobApply(jobId: number): Promise<void> {

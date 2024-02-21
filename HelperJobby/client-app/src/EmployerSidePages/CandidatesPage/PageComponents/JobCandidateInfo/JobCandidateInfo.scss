@@ -48,3 +48,18 @@
 .middle-connected-button {
   border-radius: 0;
 }
+
+.more-candidate-options-block {
+  display: block;
+  position: relative;
+}
+
+.candidate-more-options {
+  right: 0;
+  min-width: 10rem;
+}
+
+.green-button {
+  background-color: rgb(42, 134, 59);
+  color: white;
+}

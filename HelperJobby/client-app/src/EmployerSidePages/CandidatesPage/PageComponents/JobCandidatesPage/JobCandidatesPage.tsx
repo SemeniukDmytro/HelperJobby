@@ -53,7 +53,7 @@ const JobCandidatesPage: FC<JobCandidatesPageProps> = () => {
                         
                     </div>
                     {job!.jobApplies.map((jobApply, index) => (
-                        <JobCandidateInfo job={job!} jobApply={jobApply} key={index}/>
+                        <JobCandidateInfo job={job!} setJob={setJob} jobApply={jobApply} key={index}/>
                     ))}
                 </div>
                 :
