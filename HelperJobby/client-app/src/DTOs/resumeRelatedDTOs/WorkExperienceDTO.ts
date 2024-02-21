@@ -6,8 +6,8 @@ export interface WorkExperienceDTO {
     company?: string;
     country?: string;
     cityOrProvince?: string;
-    from?: Date;
-    to?: Date;
+    from?: string;
+    to?: string;
     currentlyWorkHere?: boolean;
     description?: string;
     resumeId: number;

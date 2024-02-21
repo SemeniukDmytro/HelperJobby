@@ -2,4 +2,5 @@
 
 export interface UpdateJobApplyDTO{
     jobApplyStatus : JobApplyStatuses;
+    isReviewed : boolean;
 }

@@ -13,7 +13,7 @@ import {UserJobInteractionsTypes} from "../../../../../enums/utilityEnums/UserJo
 
 interface JobApplyComponentProps {
     job: JobDTO;
-    dateApplied: Date;
+    dateApplied: string;
 }
 
 const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {

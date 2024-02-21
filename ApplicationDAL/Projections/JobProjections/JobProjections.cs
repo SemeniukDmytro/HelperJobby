@@ -49,17 +49,25 @@ public static class JobProjections
                 JobSeekerId = ja.JobSeekerId,
                 DateApplied = ja.DateApplied,
                 JobApplyStatus = ja.JobApplyStatus,
+                IsReviewed = ja.IsReviewed,
                 JobSeeker = new JobSeeker()
                 {
                     Id = ja.JobSeeker.Id,
+                    FirstName = ja.JobSeeker.FirstName,
+                    LastName = ja.JobSeeker.LastName,
                     Resume = ja.JobSeeker.Resume != null ? new Resume() 
                     {
                         WorkExperiences = ja.JobSeeker.Resume.WorkExperiences.Select(we => new WorkExperience()
                         {
-                            JobTitle = we.JobTitle
+                            JobTitle = we.JobTitle,
+                            Company = we.Company,
+                            From = we.From,
+                            To = we.To,
+                            CurrentlyWorkHere = we.CurrentlyWorkHere
                         }).ToList(),
                         Educations = ja.JobSeeker.Resume.Educations.Select(e => new Education()
                         {
+                            LevelOfEducation = e.LevelOfEducation,
                             FieldOfStudy = e.FieldOfStudy
                         }).ToList(),
                         Skills = ja.JobSeeker.Resume.Skills
@@ -88,22 +96,7 @@ public static class JobProjections
                 InterviewEnd = i.InterviewEnd,
                 InterviewType = i.InterviewType,
                 AppointmentInfo = i.AppointmentInfo,
-                JobSeeker = new JobSeeker()
-                {
-                    Id = i.JobSeeker.Id,
-                    Resume = i.JobSeeker.Resume != null ? new Resume() 
-                    {
-                        WorkExperiences = i.JobSeeker.Resume.WorkExperiences.Select(we => new WorkExperience()
-                        {
-                            JobTitle = we.JobTitle
-                        }).ToList(),
-                        Educations = i.JobSeeker.Resume.Educations.Select(e => new Education()
-                        {
-                            FieldOfStudy = e.FieldOfStudy
-                        }).ToList(),
-                        Skills = i.JobSeeker.Resume.Skills
-                    } : null
-                }
+                JobSeeker = i.JobSeeker
             }).ToList()
         };
     }

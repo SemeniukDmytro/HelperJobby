@@ -4,6 +4,7 @@ import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {months} from "../../../../AppConstData/Months";
 import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
+import {getFormattedMonthName_DD_YYYYDate} from "../../../../utils/convertLogic/getFormattedMonthName_DD_YYYYDate";
 
 interface ShortJobInfoForEmployerProps {
     job : JobDTO;
@@ -40,15 +41,6 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
     
     function navigateToEditJobPage(){
         navigate(`${EmployerPagesPaths.EDIT_JOB}/${job.id}`);
-    }
-    
-    function getFormattedMonthName_DD_YYYYDate(dateAsString: string){
-        const date = new Date(dateAsString);
-        const year = date.getFullYear();
-        const month = months[date.getMonth()].name;
-        const day = date.getDate().toString().padStart(2, '0');
-        
-        return `${month} ${day} ${year}`
     }
 
     return (

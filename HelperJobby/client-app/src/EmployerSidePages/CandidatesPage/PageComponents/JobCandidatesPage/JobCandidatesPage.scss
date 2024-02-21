@@ -1,1 +1,28 @@
-.JobCandidatesPage {}
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.no-job-candidates-container {
+  box-sizing: border-box;
+  margin-block: 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  margin: 1.5rem;
+}
+
+
+.job-candidates-container {
+  box-sizing: border-box;
+  margin-block: 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
+  background-color: white;
+  border-radius: 0.5rem;
+  margin: 1.5rem;
+}
+
+.job-candidate-table-titles-container {
+  display: flex;
+}

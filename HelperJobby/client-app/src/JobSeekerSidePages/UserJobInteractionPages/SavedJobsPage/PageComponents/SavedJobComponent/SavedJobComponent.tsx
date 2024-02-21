@@ -20,7 +20,7 @@ import {UserJobInteractionsTypes} from "../../../../../enums/utilityEnums/UserJo
 
 interface SavedJobComponentProps {
     job: JobDTO;
-    interactionTime: Date;
+    interactionTime: string;
 }
 
 const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) => {

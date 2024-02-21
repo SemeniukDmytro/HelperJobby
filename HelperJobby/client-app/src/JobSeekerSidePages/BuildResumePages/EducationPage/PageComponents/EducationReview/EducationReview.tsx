@@ -110,10 +110,10 @@ const EducationReview: FC<EducationReviewProps> = ({education}) => {
                 </div>
                 <div className={"small-buttons-container"}>
                     <button className={"small-interaction-button"} onClick={navigateToEditEducationPage}>
-                        <FontAwesomeIcon className={"svg125rem"} icon={faPen}/>
+                        <FontAwesomeIcon className={"svg1rem"} icon={faPen}/>
                     </button>
                     <button className={"small-interaction-button"} onClick={deleteEducation}>
-                        <FontAwesomeIcon className={"svg125rem"}  icon={faTrash}/>
+                        <FontAwesomeIcon className={"svg1rem"}  icon={faTrash}/>
                     </button>
                 </div>
 

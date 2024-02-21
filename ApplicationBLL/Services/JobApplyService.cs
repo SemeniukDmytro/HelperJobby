@@ -53,7 +53,8 @@ public class JobApplyService : IJobApplyService
             JobId = jobId,
             JobSeekerId = currentJobSeekerId,
             DateApplied = DateOnly.FromDateTime(DateTime.UtcNow),
-            JobApplyStatus = JobApplyStatuses.NotSpecified
+            JobApplyStatus = JobApplyStatuses.NotSpecified,
+            Job = job
         };
         return createdJobApply;
     }
@@ -66,6 +67,8 @@ public class JobApplyService : IJobApplyService
         {
             throw new ForbiddenException("You can not update this job apply");
         }
+
+        jobApplyEntity.IsReviewed = updatedJobApply.IsReviewed;
 
         switch (jobApplyEntity.JobApplyStatus)
         {

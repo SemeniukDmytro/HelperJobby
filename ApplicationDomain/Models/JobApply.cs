@@ -20,6 +20,9 @@ public class JobApply
     [Required]
     [DefaultValue(JobApplyStatuses.NotSpecified)]
     public JobApplyStatuses JobApplyStatus { get; set; }
+    [Required]
+    [DefaultValue(false)]
+    public bool IsReviewed { get; set; }
     public Job Job { get; set; }
 
     public JobSeeker JobSeeker { get; set; }

@@ -28,7 +28,6 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
     const [currentSkill, setCurrentSkill] = useState("");
     const [skills, setSkills] = useState<CreateSkillDTO[]>([]);
     const [savingProcess, setSavingProcess] = useState(false);
-    const [skillsRemoved, setSkillsRemoved] = useState(false);
 
     useEffect(() => {
         setProgressPercentage(ProgressPercentPerPage * 6);
@@ -51,11 +50,12 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
         });
         setCurrentSkill("");
     }
+    
+    console.log(skills)
 
     function removeSkill(indexToRemove: number) {
         setSkills((prevState) => {
-            const updatedSkills = prevState.filter((_, index) => index !== indexToRemove);
-            return updatedSkills;
+            return prevState.filter((_, index) => index !== indexToRemove);
         });
     }
 
@@ -71,19 +71,13 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
         setSavingProcess(true);
         if (jobSeeker?.resume) {
             await removeSkillsFromExistingResume();
+            await addNewSkillsResume();
+            navigate(nextPageUrl);
         } else {
             await createNewResume();
+            navigate(nextPageUrl);
         }
-        navigate(nextPageUrl);
-
     }
-
-    useEffect(() => {
-        if (skillsRemoved) {
-            addNewSkillsResume();
-        }
-
-    }, [skillsRemoved]);
 
     async function createNewResume() {
         try {
@@ -106,6 +100,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
 
     async function addNewSkillsResume() {
         try {
+            console.log(skills)
             const retrievedSkills = await skillService.addSkillsToResume(jobSeeker!.resume!.id, skills);
             const updatedJobSeeker = jobSeeker;
             if (updatedJobSeeker?.resume) {
@@ -123,10 +118,8 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
     async function removeSkillsFromExistingResume() {
         try {
             await skillService.removeSkillsFromResume(jobSeeker!.resume!.id);
-            setSkillsRemoved(true);
         } catch (err) {
             logErrorInfo(err)
-        } finally {
         }
     }
 

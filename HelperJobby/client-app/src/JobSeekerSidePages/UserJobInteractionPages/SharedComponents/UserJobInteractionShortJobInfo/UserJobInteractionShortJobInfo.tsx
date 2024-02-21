@@ -8,7 +8,7 @@ import {UserJobInteractionsTypes} from "../../../../enums/utilityEnums/UserJobIn
 
 interface UserJobInteractionShortJobInfoProps {
     job: JobDTO;
-    interactionTime: Date;
+    interactionTime: string;
     jobInteractionType: UserJobInteractionsTypes;
 }
 

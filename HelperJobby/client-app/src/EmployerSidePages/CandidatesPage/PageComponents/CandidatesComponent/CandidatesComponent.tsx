@@ -61,6 +61,7 @@ const CandidatesComponent: FC<CandidatesComponentProps> = () => {
                 })
             }
             if (retrievedJobs.length !== 0) {
+                setJobTitleSearchQuery(retrievedJobs[0].jobTitle);
                 navigate(`${EmployerPagesPaths.CANDIDATES}?jobId=${retrievedJobs[0].id}`);
             }
         } catch (err) {
