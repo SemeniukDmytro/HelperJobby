@@ -19,6 +19,8 @@ import JobPostingPagesWrap
 import ReviewJobPage from "../../EmployerSidePages/JobCreationPages/ReviewJobPage/ReviewJobPage";
 import EmployerJobsPage from "../../EmployerSidePages/EmployerJobsPage/EmployerJobsPage";
 import EditJobPage from "../../EmployerSidePages/EditJobPage/EditJobPage";
+import CandidatesComponent
+    from "../../EmployerSidePages/CandidatesPage/PageComponents/CandidatesComponent/CandidatesComponent";
 
 interface EmployerSideRoutesProps {
 }
@@ -44,6 +46,7 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
                 </Route>
                 <Route path={"/jobs"} element={<EmployerJobsPage/>}/>
                 <Route path={"/editing/:employerJobId"} element={<EditJobPage/>}/>
+                <Route path={"/candidates"} element={<CandidatesComponent/>}/>
             </Route>
         </Route>
     </Routes>

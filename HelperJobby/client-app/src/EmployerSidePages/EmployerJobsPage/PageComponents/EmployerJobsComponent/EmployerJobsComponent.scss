@@ -1,6 +1,6 @@
 @use "../../../../Assets/scssSharedStyles/global-variables";
 
-.emp-jobs-layout {
+.emp-pages-layout {
   min-width: 0px;
   margin: 0px;
   box-sizing: border-box;
@@ -9,7 +9,7 @@
   width: 100%;
 }
 
-.emp-jobs-header-container {
+.emp-pages-header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;

@@ -37,6 +37,18 @@ public class JobService : IJobService
         return jobs;
     }
 
+    public async Task<IEnumerable<Job>> GetEmployerJobTitles(int employerId)
+    {
+        var currentEmployerId = _employerService.GetCurrentEmployerId();
+        if (employerId != currentEmployerId)
+        {
+            throw new ForbiddenException("You can not retrieve this job information");
+        }
+
+        var jobs = await _jobQueryRepository.GetEmployerJobTitles(employerId);
+        return jobs;
+    }
+
     public async Task<Job> CreateJob(Job job)
     {
         if (!Validator.TryValidateObject(job, new ValidationContext(job), null, true)) throw new InvalidJobException();

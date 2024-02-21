@@ -94,10 +94,10 @@ const EmployerJobsComponent: FC<EmployerJobsComponentProps> = () => {
     }
 
     return (
-        <div className={"form-page-background"}>
+        <div className={"light-grey-page-background"}>
             {
-                <div className={"emp-jobs-layout"}>
-                    <div className={"emp-jobs-header-container mt1rem mb1rem"}>
+                <div className={"emp-pages-layout"}>
+                    <div className={"emp-pages-header mt1rem mb1rem"}>
                         <span className={"small-title mb0"}>Jobs</span>
                         <button className={"blue-button"}>Post a job</button>
                     </div>

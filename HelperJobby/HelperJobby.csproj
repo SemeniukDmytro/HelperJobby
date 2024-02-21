@@ -46,6 +46,7 @@
         <Folder Include="client-app\src\CommonPages\"/>
         <Folder Include="client-app\src\Components\Header\"/>
         <Folder Include="client-app\src\Components\Icons\" />
+        <Folder Include="client-app\src\EmployerSidePages\CandidatesPage\PageComponents\" />
         <Folder Include="client-app\src\EmployerSidePages\EditJobPage\PageComponents\" />
         <Folder Include="client-app\src\EmployerSidePages\EmployerJobsPage\PageComponents\" />
         <Folder Include="client-app\src\EmployerSidePages\EmployerSetupPage\PageComponents\"/>

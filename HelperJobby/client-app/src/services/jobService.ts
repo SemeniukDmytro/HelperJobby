@@ -19,6 +19,10 @@ export class JobService {
         return this.customFetchService.get<JobDTO[]>(`${this.baseURI}/employer-jobs/${employerId}`);
     }
 
+    public async getEmployerJobTitles(employerId: number): Promise<JobDTO[]> {
+        return this.customFetchService.get<JobDTO[]>(`${this.baseURI}/employer-job-titles/${employerId}`);
+    } 
+
     public async getJobsByOrganizationId(organizationId: number): Promise<JobDTO[]> {
         return this.customFetchService.get<JobDTO[]>(`${this.baseURI}/organization-jobs/${organizationId}`);
     }

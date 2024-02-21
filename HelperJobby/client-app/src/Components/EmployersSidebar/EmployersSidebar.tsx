@@ -68,6 +68,10 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
         navigate(employerPagesPaths.JOBS);
     }
 
+    function navigateToCandidatesPage() {
+        navigate(employerPagesPaths.CANDIDATES);
+    }
+
     return (
         <>
             <nav 
@@ -180,7 +184,8 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                                     </div>
                                 </div>
                             </li>
-                            <li className={"nav-list-component"}>
+                            <li className={"nav-list-component"} 
+                                onClick={navigateToCandidatesPage}>
                                 <div className={"nav-bar-button-container"}>
                                     <div className={"nav-link-container"}>
                                         <a className={"nav-link"}>

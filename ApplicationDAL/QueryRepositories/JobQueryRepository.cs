@@ -42,6 +42,17 @@ public class JobQueryRepository : IJobQueryRepository
         return jobs;
     }
 
+    public async Task<IEnumerable<Job>> GetEmployerJobTitles(int employerId)
+    {
+        var jobs = await _applicationContext.Jobs
+            .Where(j => j.EmployerId == employerId).Select(j => new Job()
+            {
+                Id = j.Id,
+                JobTitle = j.JobTitle
+            }).ToListAsync();
+        return jobs;
+    }
+
     public async Task<Job> GetJobByIdWithEmployer(int jobId)
     {
         var job = await _applicationContext.Jobs.Include(j => j.Salary)

@@ -54,6 +54,13 @@ public class JobController : ExtendedBaseController
         return _mapper.Map<IEnumerable<JobDTO>>(jobs);
     }
 
+    [HttpGet("employer-job-titles/{employerId}")]
+    public async Task<IEnumerable<JobDTO>> GetEmployerJobTitles(int employerId)
+    {
+        var jobs = await _jobService.GetEmployerJobTitles(employerId);
+        return _mapper.Map<IEnumerable<JobDTO>>(jobs);
+    }
+
     [HttpGet("organization-jobs/{organizationId}")]
     public async Task<IEnumerable<JobDTO>> GetJobsByOrganizationId(int organizationId)
     {

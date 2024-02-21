@@ -68,7 +68,7 @@ const SearchWithinEmployerJobs: FC<SearchWithinEmployerJobsProps> = ({
 
     function filterJobs(jobs: JobDTO[], title: string, location: string) {
         setFilteringInProcess(true);
-        return jobs.filter((job: JobDTO | IncompleteJobDTO) => {
+        return jobs.filter((job) => {
             const titleMatch = job.jobTitle.toLowerCase().includes(title.toLowerCase());
             const locationMatch = job.location.toLowerCase().includes(location.toLowerCase());
             return titleMatch && locationMatch;

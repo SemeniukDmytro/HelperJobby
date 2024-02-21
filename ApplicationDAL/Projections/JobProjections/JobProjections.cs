@@ -48,7 +48,23 @@ public static class JobProjections
                 JobId = ja.JobId,
                 JobSeekerId = ja.JobSeekerId,
                 DateApplied = ja.DateApplied,
-                JobSeeker = ja.JobSeeker
+                JobApplyStatus = ja.JobApplyStatus,
+                JobSeeker = new JobSeeker()
+                {
+                    Id = ja.JobSeeker.Id,
+                    Resume = ja.JobSeeker.Resume != null ? new Resume() 
+                    {
+                        WorkExperiences = ja.JobSeeker.Resume.WorkExperiences.Select(we => new WorkExperience()
+                        {
+                            JobTitle = we.JobTitle
+                        }).ToList(),
+                        Educations = ja.JobSeeker.Resume.Educations.Select(e => new Education()
+                        {
+                            FieldOfStudy = e.FieldOfStudy
+                        }).ToList(),
+                        Skills = ja.JobSeeker.Resume.Skills
+                    } : null
+                }
             }).ToList()
         };
     }
@@ -72,7 +88,22 @@ public static class JobProjections
                 InterviewEnd = i.InterviewEnd,
                 InterviewType = i.InterviewType,
                 AppointmentInfo = i.AppointmentInfo,
-                JobSeeker = i.JobSeeker
+                JobSeeker = new JobSeeker()
+                {
+                    Id = i.JobSeeker.Id,
+                    Resume = i.JobSeeker.Resume != null ? new Resume() 
+                    {
+                        WorkExperiences = i.JobSeeker.Resume.WorkExperiences.Select(we => new WorkExperience()
+                        {
+                            JobTitle = we.JobTitle
+                        }).ToList(),
+                        Educations = i.JobSeeker.Resume.Educations.Select(e => new Education()
+                        {
+                            FieldOfStudy = e.FieldOfStudy
+                        }).ToList(),
+                        Skills = i.JobSeeker.Resume.Skills
+                    } : null
+                }
             }).ToList()
         };
     }

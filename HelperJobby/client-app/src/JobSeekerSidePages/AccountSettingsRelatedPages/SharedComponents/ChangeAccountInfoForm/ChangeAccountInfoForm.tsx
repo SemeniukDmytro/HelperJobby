@@ -7,7 +7,7 @@ interface ChangeAccountInfoFormProps {
 }
 
 const ChangeAccountInfoForm: FC<ChangeAccountInfoFormProps> = ({children}) => (
-    <div className={"form-page-background"}>
+    <div className={"light-grey-page-background"}>
         <PageWrapWithHeader>
             <div className={"passpage-container"}>
                 <div className={"passpage-form-layout"}>
