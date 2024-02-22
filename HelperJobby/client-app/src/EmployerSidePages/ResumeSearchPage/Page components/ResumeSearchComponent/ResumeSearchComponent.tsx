@@ -3,6 +3,8 @@ import './ResumeSearchComponent.scss';
 import {useNavigate, useSearchParams} from "react-router-dom"
 import ResumeSearchResults from "../ResumeSearchResults/ResumeSearchResults";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
+import PageTitleWithImage from "../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
+import ResumeSearch from "../../../../Components/Icons/ResumeSearch";
 
 interface ResumeSearchComponentProps {}
 
@@ -66,6 +68,10 @@ const ResumeSearchComponent: FC<ResumeSearchComponentProps> = () => {
                             </div>  
                         </div>
                         <ResumeSearchResults/>
+                        {!searchParams.get("q") &&
+                        <PageTitleWithImage imageElement={<ResumeSearch/>}
+                                            title={"Find your future employees"}/>
+                        }
                     </div>
                 </div>
             </>

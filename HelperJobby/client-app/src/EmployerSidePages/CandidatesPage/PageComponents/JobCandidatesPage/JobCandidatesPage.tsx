@@ -59,7 +59,7 @@ const JobCandidatesPage: FC<JobCandidatesPageProps> = () => {
                         <div className="candidate-skills-container">
                             <span className="bold-text semi-dark-default-text">Candidate skills</span>
                         </div>
-                        <div className="candidate-work-experience-container">
+                        <div className="candidate-qualifications-container">
                             <span className="bold-text semi-dark-default-text">Recent experience</span>
                         </div>
                         <div className="">

@@ -50,12 +50,28 @@ public class ResumeQueryRepository : IResumeQueryRepository
             .Select(r => new Resume
             {
                 Id = r.Id,
+                JobSeeker = new JobSeeker()
+                {
+                    Id = r.JobSeekerId,
+                    Address = r.JobSeeker.Address,
+                    User = new User()
+                    {
+                        Email = r.JobSeeker.User.Email
+                    }
+                },
                 Educations = r.Educations
                     .Select(e => new Education { FieldOfStudy = e.FieldOfStudy, LevelOfEducation = e.LevelOfEducation })
                     .ToList(),
 
                 WorkExperiences = r.WorkExperiences
-                    .Select(w => new WorkExperience { JobTitle = w.JobTitle })
+                    .Select(w => new WorkExperience
+                    {
+                        JobTitle = w.JobTitle,
+                        Company = w.Company,
+                        CurrentlyWorkHere = w.CurrentlyWorkHere,
+                        From = w.From,
+                        To = w.To   
+                    })
                     .ToList(),
 
                 Skills = r.Skills

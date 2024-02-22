@@ -24,6 +24,7 @@ const ResumeSearchResults: FC<ResumeSearchResultsProps> = () => {
     useEffect(() => {
         if (!jobQuery || (start && isNanAfterIntParse(start))){
             navigate(EmployerPagesPaths.RESUMES)
+            setResumeLoadingProcess(false);
             return;
         }
         getMatchingResumes();
@@ -48,12 +49,29 @@ const ResumeSearchResults: FC<ResumeSearchResultsProps> = () => {
         resumeLoadingProcess ? <LoadingPage/> :
         matchingResumes.length == 0 ? <></>
             :
-            <div>
+            <div className={"job-candidates-container"}>
+                <div className={"job-candidate-table-titles-container"}>
+                    <div className={"candidate-credentials-container"}>
+                        <span className={"bold-text semi-dark-default-text"}>Name</span>
+                    </div>
+                    <div className={"review-status-box"}>
+                        <span className={"bold-text semi-dark-default-text"}>Job seeker email</span>
+                    </div>
+                    <div className="candidate-skills-container">
+                        <span className="bold-text semi-dark-default-text">Skills</span>
+                    </div>
+                    <div className="candidate-qualifications-container">
+                        <span className="bold-text semi-dark-default-text">Recent experience</span>
+                    </div>
+                    <div className="candidate-qualifications-container">
+                        <span className="bold-text semi-dark-default-text">Educations</span>
+                    </div>
+                </div>
                 {matchingResumes.map((resume, index) => (
                     <ResumeSearchInfoBlock resume={resume} key={index}/>
                 ))}
             </div>
-            
+
     )
 }
 

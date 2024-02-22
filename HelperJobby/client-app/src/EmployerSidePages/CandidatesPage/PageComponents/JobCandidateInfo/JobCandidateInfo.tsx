@@ -120,7 +120,7 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
                 <div>
                     {(jobApply.jobSeeker.resume?.workExperiences && jobApply.jobSeeker.resume?.workExperiences.length != 0) ?
                         jobApply.jobSeeker.resume.workExperiences.map((workExperience, index) => (
-                            <div className={"candidate-work-experience-container"}>
+                            <div className={"candidate-qualifications-container"}>
                                 <span className={"dark-default-text"}>{workExperience.jobTitle}</span>
                                 <div className={"grey-small-text"}>
                                     <span>{workExperience.company} -&nbsp;</span>
@@ -135,7 +135,7 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
                         :
                         (jobApply.jobSeeker.resume?.educations && jobApply.jobSeeker.resume?.educations.length != 0) ?
                             jobApply.jobSeeker.resume.educations.map((education, index) => (
-                                <div className={"candidate-work-experience-container"}>
+                                <div className={"candidate-qualifications-container"}>
                                     <div className={"dark-default-text"}>
                                         {education.levelOfEducation}
                                     </div>
