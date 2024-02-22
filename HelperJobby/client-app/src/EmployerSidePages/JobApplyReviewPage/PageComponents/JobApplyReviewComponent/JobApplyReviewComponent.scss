@@ -1,0 +1,34 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+
+.create-interview-layout {
+  padding: 1rem;
+}
+
+.padding-top-remove {
+  padding-top: 0rem;
+}
+
+.interview-time-fb {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+}
+
+.selected-light-button {
+  border: 1px solid;
+}
+
+.job-review-page-header {
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.job-review-candidate-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: global-variables.$neutral-color-1000;
+}

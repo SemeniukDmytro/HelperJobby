@@ -50,7 +50,7 @@ public class JobApplyController : ExtendedBaseController
     [HttpGet("{jobId}/job-seeker/{jobSeekerId}")]
     public async Task<JobApplyDTO> GetJobApplyByJobSeekerIdAndJobId(int jobId, int jobSeekerId)
     {
-        var jobApply = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, jobSeekerId);
+        var jobApply = await _jobApplyService.GetJobApplyByJobSeekerAndJobIds(jobSeekerId, jobId);
         var jobApplyDTO = _mapper.Map<JobApplyDTO>(jobApply);
         return jobApplyDTO;
     }

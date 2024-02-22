@@ -23,6 +23,18 @@ public class JobApplyService : IJobApplyService
         _jobSeekerService = jobSeekerService;
     }
 
+    public async Task<JobApply> GetJobApplyByJobSeekerAndJobIds(int jobSeekerId, int jobId)
+    {
+        var currentEmployerId = _employerService.GetCurrentEmployerId();
+        var jobApply = await _jobApplyQueryRepository.GetJobApplyForReview(jobSeekerId, jobId);
+        if (jobApply.Job.EmployerId != currentEmployerId)
+        {
+            throw new ForbiddenException();
+        }
+
+        return jobApply;
+    }
+
     public async Task<Job> GetJobAppliesForSpecificJob(int jobId)
     {
         var currentEmployerId = _employerService.GetCurrentEmployerId();

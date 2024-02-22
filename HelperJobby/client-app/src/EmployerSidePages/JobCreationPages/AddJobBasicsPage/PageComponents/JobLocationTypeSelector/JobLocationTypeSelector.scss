@@ -17,6 +17,7 @@
   overflow-y: auto;
   margin: 0 auto;
   box-shadow: global-variables.$field-box-shadow;
+  max-height: 270px;
 
   .select-option:first-child {
     border-top-right-radius: 0.5rem;

@@ -48,7 +48,7 @@ const JobCandidatesPage: FC<JobCandidatesPageProps> = () => {
             :
 
             job?.jobApplies.length != 0 ?
-                <div className={"job-candidates-container"}>
+                <div className={"emp-white-info-container"}>
                     <div className={"job-candidate-table-titles-container"}>
                         <div className={"candidate-credentials-container"}>
                             <span className={"bold-text semi-dark-default-text"}>Name</span>

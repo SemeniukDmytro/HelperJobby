@@ -13,6 +13,8 @@ import {JobApplyService} from "../../../../services/jobApplyService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {UpdateJobApplyDTO} from "../../../../DTOs/userJobInteractionsDTOs/UpdateJobApplyDTO";
 import DialogWindow from "../../../../Components/DialogWindow/DialogWindow";
+import {useNavigate} from "react-router-dom";
+import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface JobCandidateInfoProps {
     job: JobDTO;
@@ -26,6 +28,7 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
     const [showHiredDialog, setShowHiredDialog] = useState(false);
     const [requestInProgress, setRequestInProgress] = useState(false);
     const jobApplyService = new JobApplyService();
+    const navigate = useNavigate();
 
     const handleClickOutside = (event: MouseEvent) => {
         if (moreOptionsWindowRef.current && !moreOptionsWindowRef.current.contains(event.target as Node)) {
@@ -59,7 +62,6 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
                     jobApplies: updatedJobApplies,
                 };
             });
-            setShowHiredDialog(false);
         } catch (err) {
             logErrorInfo(err)
         } finally {
@@ -69,6 +71,11 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
 
     async function submitCandidateHiring() {
         await changeJobApplyStatus(JobApplyStatuses.Hired, true);
+        setShowHiredDialog(false);
+    }
+    
+    function navigateToJobApplyReviewComponent(){
+        navigate(`${EmployerPagesPaths.JOB_APPLY_REVIEW}/${jobApply.jobSeekerId}/${jobApply.jobId}`)
     }
 
     useEffect(() => {
@@ -190,7 +197,7 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
                     {showMoreOptions && <div className={"select-window-relative-bar"}
                                              ref={moreOptionsWindowRef}>
                         <div className={"select-window-container candidate-more-options"}>
-                            <div className={"select-option"}>
+                            <div className={"select-option"} onClick={navigateToJobApplyReviewComponent}>
                                 Review job apply
                             </div>
                             <div className={"select-option"} onClick={() => setShowHiredDialog(true)}>

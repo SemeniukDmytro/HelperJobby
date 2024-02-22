@@ -18,15 +18,13 @@ public class InterviewController : ExtendedBaseController
     private readonly IInterviewCommandRepository _interviewCommandRepository;
     private readonly IInterviewQueryRepository _interviewQueryRepository;
     private readonly IInterviewService _interviewService;
-    private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IJobSeekerService _jobSeekerService;
 
 
-    public InterviewController(IMapper mapper, IJobQueryRepository jobQueryRepository,
+    public InterviewController(IMapper mapper,
         IInterviewService interviewService, IInterviewCommandRepository interviewCommandRepository,
         IInterviewQueryRepository interviewQueryRepository, IJobSeekerService jobSeekerService) : base(mapper)
     {
-        _jobQueryRepository = jobQueryRepository;
         _interviewService = interviewService;
         _interviewCommandRepository = interviewCommandRepository;
         _interviewQueryRepository = interviewQueryRepository;

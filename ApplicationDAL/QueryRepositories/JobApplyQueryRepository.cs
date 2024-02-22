@@ -15,6 +15,61 @@ public class JobApplyQueryRepository : IJobApplyQueryRepository
         _applicationContext = applicationContext;
     }
 
+    public async Task<JobApply> GetJobApplyForReview(int jobId, int JobSeekerId)
+    {
+        var jobApply = await _applicationContext.JobApplies
+            .Where(ja => ja.JobId == jobId && ja.JobSeekerId == JobSeekerId)
+            .Select(ja => new JobApply()
+            {
+                JobId = ja.JobId,
+                JobSeekerId = ja.JobSeekerId,
+                DateApplied = ja.DateApplied,
+                JobApplyStatus = ja.JobApplyStatus,
+                IsReviewed = ja.IsReviewed,
+                Job = new Job()
+                {
+                    EmployerId = ja.Job.EmployerId,
+                    JobTitle = ja.Job.JobTitle,
+                    Location = ja.Job.Location
+                },
+                JobSeeker = new JobSeeker()
+                {
+                    Id = ja.JobSeeker.Id,
+                    FirstName = ja.JobSeeker.FirstName,
+                    LastName = ja.JobSeeker.LastName,
+                    Resume = ja.JobSeeker.Resume != null
+                        ? new Resume()
+                        {
+                            WorkExperiences = ja.JobSeeker.Resume.WorkExperiences.Select(we => new WorkExperience()
+                            {
+                                JobTitle = we.JobTitle,
+                                Company = we.Company,
+                                From = we.From,
+                                To = we.To,
+                                CurrentlyWorkHere = we.CurrentlyWorkHere
+                            }).ToList(),
+                            Educations = ja.JobSeeker.Resume.Educations.Select(e => new Education()
+                            {
+                                LevelOfEducation = e.LevelOfEducation,
+                                FieldOfStudy = e.FieldOfStudy
+                            }).ToList(),
+                            Skills = ja.JobSeeker.Resume.Skills
+                        }
+                        : null,
+                    User = new User()
+                    {
+                        Email = ja.JobSeeker.User.Email
+                    }
+                }
+            }).FirstOrDefaultAsync();
+        if (jobApply == null)
+        {
+            throw new JobApplyingException("Job apply not found");
+        }
+
+        return jobApply;
+    }
+
     public async Task<JobApply> GetJobApplyByJobIdAndJobSeekerId(int jobId, int jobSeekerId)
     {
         var jobApply =
