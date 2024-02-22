@@ -50,7 +50,24 @@ const JobCandidatesPage: FC<JobCandidatesPageProps> = () => {
             job?.jobApplies.length != 0 ?
                 <div className={"job-candidates-container"}>
                     <div className={"job-candidate-table-titles-container"}>
-                        
+                        <div className={"candidate-credentials-container"}>
+                            <span className={"bold-text semi-dark-default-text"}>Name</span>
+                        </div>
+                        <div className={"review-status-box"}>
+                            <span className={"bold-text semi-dark-default-text"}>Status</span>
+                        </div>
+                        <div className="candidate-skills-container">
+                            <span className="bold-text semi-dark-default-text">Candidate skills</span>
+                        </div>
+                        <div className="candidate-work-experience-container">
+                            <span className="bold-text semi-dark-default-text">Recent experience</span>
+                        </div>
+                        <div className="">
+                            <span className="bold-text semi-dark-default-text">Interested?</span>
+                        </div>
+                        <div className={"more-candidate-options-block"}>
+                            
+                        </div>
                     </div>
                     {job!.jobApplies.map((jobApply, index) => (
                         <JobCandidateInfo job={job!} setJob={setJob} jobApply={jobApply} key={index}/>

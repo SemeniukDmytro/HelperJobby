@@ -35,7 +35,6 @@ const CandidatesComponent: FC<CandidatesComponentProps> = () => {
         loadEmployerJobTitles();
         document.addEventListener("mousedown", handleClickOutside);
 
-        // Detach when component unmounts
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };

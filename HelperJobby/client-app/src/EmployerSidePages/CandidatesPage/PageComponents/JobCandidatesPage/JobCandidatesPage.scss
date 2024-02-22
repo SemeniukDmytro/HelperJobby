@@ -25,4 +25,10 @@
 
 .job-candidate-table-titles-container {
   display: flex;
+  flex-direction: row;
+  background-color: global-variables.$neutral-color-100;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  padding: 1rem;
+  justify-content: space-between;
 }

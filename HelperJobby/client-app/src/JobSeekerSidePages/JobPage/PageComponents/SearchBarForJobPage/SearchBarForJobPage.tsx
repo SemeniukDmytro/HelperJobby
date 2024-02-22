@@ -55,9 +55,9 @@ const SearchBarForJobPage: FC<SearchBarForJobPageProps> = () => {
     };
 
     return (
-        <div className={"jsb-layout"}>
+        <div className={"search-block-layout"}>
             <div className={"jsb-block"}>
-                <form className={"jsb-form"}>
+                <form className={"search-block-form"}>
                     <div className={`field-input-container mr05rem`} style={{flexGrow: "1"}} onClick={handleJobFocus}>
                         <div className={`border-lining ${jobFocus ? "field-focus" : ""}`}>
                         </div>
