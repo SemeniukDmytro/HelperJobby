@@ -78,6 +78,7 @@
         <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\SkillsPage\PageComponents\"/>
         <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\WorkExperiencePage\PageComponents\"/>
         <Folder Include="client-app\src\JobSeekerSidePages\EditContactInfoPage\PageComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\EditEmployerInfoPage\PageComponents\" />
         <Folder Include="client-app\src\JobSeekerSidePages\HomePage\PageComponents\"/>
         <Folder Include="client-app\src\JobSeekerSidePages\JobPage\PageComponents\"/>
         <Folder Include="client-app\src\JobSeekerSidePages\JobSeekerProfilePage\PageComponents\"/>

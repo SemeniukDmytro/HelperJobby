@@ -15,8 +15,8 @@ export class EmployerService {
         return await this.customFetchService.get<EmployerDTO>(`${this.baseURI}/my-employer-account`);
     }
 
-    public async getUserEmployerAccount(userId: number): Promise<EmployerDTO> {
-        return await this.customFetchService.get<EmployerDTO>(`${this.baseURI}/${userId}`);
+    public async getUserEmployerAccount(employerId: number): Promise<EmployerDTO> {
+        return await this.customFetchService.get<EmployerDTO>(`${this.baseURI}/${employerId}`);
     }
 
     public async createEmployerAccount(createdEmployerDTO: CreateEmployerDTO): Promise<EmployerDTO> {

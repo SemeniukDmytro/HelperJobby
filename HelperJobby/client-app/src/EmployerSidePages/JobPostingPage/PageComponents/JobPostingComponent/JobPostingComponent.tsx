@@ -51,20 +51,6 @@ const JobPostingComponent: FC<JobPostingComponentProps> = () => {
                             <span>How would you like to post your job?</span>
                             <span className={"error-text"}>&nbsp;*</span>
                         </div>
-                        <div className={"radio-input-info mb1rem"} onClick={handleFromPreviousJobPostClick}>
-                            <input
-                                type={"radio"}
-                                className={"custom-radio-input"}
-                                checked={jobPostingMethod === JobPostingMethods.fromPreviousPost}
-                                onChange={handleFromPreviousJobPostClick}
-                            >
-                            </input>
-                            <div className={"create-job-option-text"}>
-                                <span className={"semi-dark-default-text"}>Use a previous job as a template</span>
-                                <span className={"grey-small-text"}>Save time by copying a previous job post</span>
-                            </div>
-
-                        </div>
                         <div className={"radio-input-info"} onClick={handleNewTemplateClick}>
                             <input
                                 type={"radio"}

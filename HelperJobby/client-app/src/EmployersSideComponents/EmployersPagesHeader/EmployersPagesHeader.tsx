@@ -13,6 +13,7 @@ import {
 import {useEmployer} from "../../hooks/useEmployer";
 import {useSignOut} from "../../hooks/useSignOut";
 import {useNavigate} from "react-router-dom";
+import employerPagesPaths from "../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface EmployersPagesHeaderProps {
     loading: boolean;
@@ -57,6 +58,14 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
         setShowMoreOptions(false);
         navigate("/settings")
     }
+    
+    function navigateToEditEmployerPage(){
+        navigate(employerPagesPaths.EDIT_EMPLOYER)
+    }
+    
+    function navigateToOrganizationUserPage(){
+        navigate(employerPagesPaths.USERS)
+    }
 
     return (
         <div className={"emh-layout"}>
@@ -90,13 +99,13 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
                                     >{employer?.organization.name || "No account name"} </span>
                                 </div>
                                 <div className={"emh-option-container"}>
-                                    <button className={"emh-option"}>
+                                    <button className={"emh-option"} onClick={navigateToEditEmployerPage}>
                                         <FontAwesomeIcon className={"icon-right-margin svg1rem"} icon={faGear}/>
                                         <span>Employer settings</span>
                                     </button>
                                 </div>
                                 <div className={"emh-option-container"}>
-                                    <button className={"emh-option"}>
+                                    <button className={"emh-option"} onClick={navigateToOrganizationUserPage}>
                                         <FontAwesomeIcon className={"icon-right-margin svg1rem"} icon={faUser}/>
                                         <span>Users</span>
                                     </button>

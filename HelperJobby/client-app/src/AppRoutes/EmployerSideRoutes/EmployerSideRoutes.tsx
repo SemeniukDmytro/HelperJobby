@@ -25,6 +25,7 @@ import ResumeSearchPage from "../../EmployerSidePages/ResumeSearchPage/ResumeSea
 import JobApplyReviewPage from "../../EmployerSidePages/JobApplyReviewPage/JobApplyReviewPage";
 import EmployerInterviewsPage from "../../EmployerSidePages/EmployerInterviwesPage/EmployerInterviewsPage";
 import OrganizationUsersPage from "../../EmployerSidePages/OrganizationUsersPage/OrganizationUsersPage";
+import EditEmployerInfoPage from "../../JobSeekerSidePages/EditEmployerInfoPage/EditEmployerInfoPage";
 
 interface EmployerSideRoutesProps {
 }
@@ -55,6 +56,7 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
                 <Route path={"/review-job-apply/:candidateId/:jobId"} element={<JobApplyReviewPage/>}/>
                 <Route path={"/interviews"} element={<EmployerInterviewsPage/>}/>
                 <Route path={"/organization/users"} element={<OrganizationUsersPage/>}/>
+                <Route path={"/employer-edit"} element={<EditEmployerInfoPage/>}/>
             </Route>
         </Route>
     </Routes>
