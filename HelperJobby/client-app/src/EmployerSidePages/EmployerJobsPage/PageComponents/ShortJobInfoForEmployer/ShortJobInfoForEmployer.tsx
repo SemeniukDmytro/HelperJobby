@@ -76,7 +76,7 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
                 </div>
                 <div className={"candidates-info-block"}>
                     <span className={"bold-text dark-small-text"}>
-                        {job.numberOfRejectedCandidates}
+                        {job.numberOfRejectedCandidates > 0 ? job.numberOfContactingCandidates : 0}
                     </span>
                     <span className={"dark-small-text bold-text"}>
                         Contacting

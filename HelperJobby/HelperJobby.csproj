@@ -58,6 +58,7 @@
         <Folder Include="client-app\src\EmployerSidePages\JobCreationPages\ReviewJobPage\PageComponents\" />
         <Folder Include="client-app\src\EmployerSidePages\JobCreationPages\SharedComponents\" />
         <Folder Include="client-app\src\EmployerSidePages\JobPostingPage\PageComponents\"/>
+        <Folder Include="client-app\src\EmployerSidePages\OrganizationUsersPage\PageComponents\" />
         <Folder Include="client-app\src\EmployerSidePages\ResumeSearchPage\Page components\" />
         <Folder Include="client-app\src\EmployersSideComponents\"/>
         <Folder Include="client-app\src\hooks\contextHooks\" />

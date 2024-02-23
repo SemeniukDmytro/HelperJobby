@@ -34,7 +34,7 @@ public class OrganizationController : ExtendedBaseController
     [HttpGet("{id}")]
     public async Task<OrganizationDTO> GetOrganizationById(int id)
     {
-        var organization = await _organizationQueryRepository.GetOrganizationWithEmployees(id);
+        var organization = await _organizationQueryRepository.GetOrganizationWithEmployeeEmails(id);
         return _mapper.Map<OrganizationDTO>(organization);
     }
 

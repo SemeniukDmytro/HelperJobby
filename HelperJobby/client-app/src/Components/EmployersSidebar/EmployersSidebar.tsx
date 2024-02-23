@@ -79,6 +79,10 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
     function navigateToInterviewsPage(){
         navigate(employerPagesPaths.EMPLOYER_INTERVIEWS)
     }
+    
+    function navigateToCreateUsersPage(){
+        navigate(employerPagesPaths.USERS)
+    }
 
     return (
         <>
@@ -155,7 +159,7 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li className={"nav-list-component"}>
+                                                <li className={"nav-list-component"} onClick={navigateToCreateUsersPage}>
                                                     <div className={"nav-bar-button-container"}>
                                                         <div className={"nav-link-container"}>
                                                             <a className={"nav-link"}>
