@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import AddAddressComponent from "./PageComponents/AddAddressComponent/AddAddressComponent";
 
-interface ResumeAddressPageProps {}
+interface ResumeAddressPageProps {
+}
 
 const ResumeAddressPage: FC<ResumeAddressPageProps> = () => (
-  <AddAddressComponent/>
+    <AddAddressComponent/>
 );
 
 export default ResumeAddressPage;

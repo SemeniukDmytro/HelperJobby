@@ -3,12 +3,12 @@ import {EmailProvider} from "../../contexts/EmailContext";
 import {AccountTypeProvider} from "../../contexts/AccountTypeContext";
 import EmailForm from "./PageComponents/EmailForm/EmailForm";
 
-interface AuthPageProps{
-    
+interface AuthPageProps {
+
 }
 
 const AuthPage: FC<AuthPageProps> = () => {
-    return(
+    return (
         <EmailProvider>
             <AccountTypeProvider>
                 <EmailForm/>

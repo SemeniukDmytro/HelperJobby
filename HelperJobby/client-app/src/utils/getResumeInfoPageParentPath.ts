@@ -1,11 +1,9 @@
-export function getResumeInfoPageParentPath(currentPath : string) : string {
-    if (currentPath.includes("/preview")){
+export function getResumeInfoPageParentPath(currentPath: string): string {
+    if (currentPath.includes("/preview")) {
         return "/build/preview";
-    }
-    else if (currentPath.includes("/resume")){
+    } else if (currentPath.includes("/resume")) {
         return "/resume";
-    }
-    else {
+    } else {
         return "/build";
     }
 }

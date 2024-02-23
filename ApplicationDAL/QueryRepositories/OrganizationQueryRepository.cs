@@ -14,13 +14,11 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
     {
         _applicationContext = applicationContext;
     }
+
     public async Task<Organization> GetOrganizationPlain(int organizationId)
     {
         var organization = await _applicationContext.Organizations.FirstOrDefaultAsync(o => o.Id == organizationId);
-        if (organization == null)
-        {
-            throw new OrganizationNotFoundException();
-        }
+        if (organization == null) throw new OrganizationNotFoundException();
 
         return organization;
     }
@@ -36,12 +34,10 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
     {
         var employeeEmail = await _applicationContext.OrganizationEmployeeEmails.Include(e => e.Organization)
             .FirstOrDefaultAsync(e => e.Id == employeeEmailId);
-        if (employeeEmail == null)
-        {
-            throw new EmployeeEmailNotFoundException("Employee email not found");
-        }
+        if (employeeEmail == null) throw new EmployeeEmailNotFoundException("Employee email not found");
         return employeeEmail;
     }
+
     public async Task<OrganizationEmployeeEmail?> GetEmployeeEmailByOrganizationId(int organizationId, string email)
     {
         var employeeEmail = await _applicationContext.OrganizationEmployeeEmails.Where(e =>
@@ -50,20 +46,17 @@ public class OrganizationQueryRepository : IOrganizationQueryRepository
         return employeeEmail;
     }
 
-    public async  Task<Organization> GetOrganizationWithEmployees(int organizationId)
+    public async Task<Organization> GetOrganizationWithEmployees(int organizationId)
     {
         var organization = await GetOrganizationPlain(organizationId);
-        await _applicationContext.Entry(organization).Collection(o => o.EmployeeAccounts).LoadAsync();
+        await _applicationContext.Entry(organization).Collection(o => o.Employees).LoadAsync();
         return organization;
     }
 
     public async Task<Organization?> GetOrganizationByName(string organizationName)
     {
         var organization = await _applicationContext.Organizations.FirstOrDefaultAsync(o => o.Name == organizationName);
-        if (organization == null)
-        {
-            return null;
-        }
+        if (organization == null) return null;
         return organization;
     }
 }

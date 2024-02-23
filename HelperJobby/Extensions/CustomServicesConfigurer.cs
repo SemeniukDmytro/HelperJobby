@@ -6,7 +6,6 @@ using ApplicationBLL.RatingSystem;
 using ApplicationBLL.SearchRelatedServices;
 using ApplicationBLL.Services;
 using ApplicationDAL.CommandRepositories;
-using ApplicationDAL.DALHelpers;
 using ApplicationDAL.QueryRepositories;
 using ApplicationDAL.SearchCommandRepositories;
 using ApplicationDAL.SearchQueryRepositories;
@@ -17,9 +16,7 @@ using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Abstraction.SearchICommandRepositories;
 using ApplicationDomain.Abstraction.SearchIQueryRepositories;
 using ApplicationDomain.Abstraction.SearchRelatedIServices;
-using ApplicationDomain.Models;
 using FluentValidation;
-using HelperJobby.DTOs.Resume;
 using HelperJobby.DTOs.User;
 using HelperJobby.Validators;
 
@@ -35,22 +32,21 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IUserService, UserService>();
         serviceProvider.AddScoped<IUserQueryRepository, UserQueryRepository>();
         serviceProvider.AddScoped<IUserCommandRepository, UserCommandRepository>();
-        serviceProvider.AddScoped<IEmployerAccountService, EmployerAccountService>();
-        serviceProvider.AddScoped<IEmployerAccountQueryRepository, EmployerAccountQueryRepository>();
-        serviceProvider.AddScoped<IEmployerAccountCommandRepository, EmployerAccountCommandRepository>();
+        serviceProvider.AddScoped<IEmployerService, EmployerService>();
+        serviceProvider.AddScoped<IEmployerQueryRepository, EmployerQueryRepository>();
+        serviceProvider.AddScoped<IEmployerCommandRepository, EmployerCommandRepository>();
         serviceProvider.AddScoped<IOrganizationService, OrganizationService>();
         serviceProvider.AddScoped<IOrganizationCommandRepository, OrganizationCommandRepository>();
         serviceProvider.AddScoped<IOrganizationQueryRepository, OrganizationQueryRepository>();
         serviceProvider.AddScoped<IJobService, JobService>();
         serviceProvider.AddScoped<IJobQueryRepository, JobQueryRepository>();
         serviceProvider.AddScoped<IJobCommandRepository, JobCommandRepository>();
-        serviceProvider.AddScoped<EntityInclusionHandler>();
-        serviceProvider.AddScoped<ICurrentJobCreationQueryRepository, CurrentJobCreationQueryRepository>();
-        serviceProvider.AddScoped<ICurrentJobCreationCommandRepository, CurrentJobCreationCommandRepository>();
-        serviceProvider.AddScoped<ICurrentJobCreationService, CurrentJobCreationService>();
-        serviceProvider.AddScoped<IJobSeekerAccountService, JobSeekerAccountService>();
-        serviceProvider.AddScoped<IJobSeekerAccountCommandRepository, JobSeekerAccountCommandRepository>();
-        serviceProvider.AddScoped<IJobSeekerAccountQueryRepository, JobSeekerAccountQueryRepository>();
+        serviceProvider.AddScoped<IIncompleteJobQueryRepository, IncompleteJobQueryRepository>();
+        serviceProvider.AddScoped<IIncompleteJobCommandRepository, IncompleteJobCommandRepository>();
+        serviceProvider.AddScoped<IIncompleteJobService, IncompleteJobService>();
+        serviceProvider.AddScoped<IJobSeekerService, JobSeekerService>();
+        serviceProvider.AddScoped<IJobSeekerCommandRepository, JobSeekerCommandRepository>();
+        serviceProvider.AddScoped<IJobSeekerQueryRepository, JobSeekerQueryRepository>();
         serviceProvider.AddScoped<ISavedJobCommandRepository, SavedJobCommandRepository>();
         serviceProvider.AddScoped<ISavedJobQueryRepository, SavedJobQueryRepository>();
         serviceProvider.AddScoped<IResumeService, ResumeService>();
@@ -85,9 +81,10 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IRecentUserSearchService, RecentUserSearchService>();
         serviceProvider.AddScoped<IRecommendationService, RecommendationService>();
         serviceProvider.AddScoped<ILocationService, LocationService>();
-        
+        serviceProvider.AddScoped<IFilteringService, FilteringService>();
+
         //background related
-        serviceProvider.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>(); 
+        serviceProvider.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
         serviceProvider.AddHostedService<QueuedHostedService>();
         serviceProvider.AddScoped<IEnqueuingTaskHelper, EnqueuingTaskHelper>();
 

@@ -10,5 +10,4 @@ public interface IOrganizationQueryRepository
     public Task<OrganizationEmployeeEmail?> GetEmployeeEmailByOrganizationId(int organizationId, string email);
     public Task<Organization> GetOrganizationWithEmployees(int organizationId);
     public Task<Organization?> GetOrganizationByName(string organizationName);
-
 }

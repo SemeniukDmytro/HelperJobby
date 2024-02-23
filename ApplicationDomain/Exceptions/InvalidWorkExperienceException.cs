@@ -5,6 +5,5 @@ public class InvalidWorkExperienceException : InvalidModelExceptionBase
     public InvalidWorkExperienceException(string? message) :
         base(message)
     {
-        
     }
 }

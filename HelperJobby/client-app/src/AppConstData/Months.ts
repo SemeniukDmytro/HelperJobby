@@ -1,7 +1,7 @@
-import {MonthNameAndNumberDTO} from "../DTOs/DateDTO/MonthNameAndNumberDTO";
+import {MonthNameAndNumberDTO} from "../DTOs/dateDTO/MonthNameAndNumberDTO";
 
 export const months: MonthNameAndNumberDTO[] = [
     'January', 'February', 'March', 'April',
     'May', 'June', 'July', 'August',
     'September', 'October', 'November', 'December',
-].map((name, index) => ({ name : name, monthNumber: index + 1 }));
+].map((name, index) => ({name: name, monthNumber: index + 1}));

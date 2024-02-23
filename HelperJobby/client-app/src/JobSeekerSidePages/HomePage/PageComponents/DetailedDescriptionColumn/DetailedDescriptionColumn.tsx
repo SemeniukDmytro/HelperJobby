@@ -49,14 +49,18 @@ const DetailedDescriptionColumn: FC<DetailedDescriptionColumnProps> = ({
         <div className={"detailed-description-column"}>
             <div style={{height: `${stickyHeight}px`}} className={"detailed-description-sticky"}>
                 <div className={"detailed-description-content-box"}>
-                    <JobDescriptionHeader selectedJob={selectedJob} isFullHeaderGridTemplate={isFullHeaderGridTemplate}
-                                          setIsFullHeaderGridTemplate={setIsFullHeaderGridTemplate}
-                                          isShortHeaderGridTemplate={isShortHeaderGridTemplate}
-                                          setIsShortHeaderGridTemplate={setIsShortHeaderGridTemplate}></JobDescriptionHeader>
-                    <JobDetailsScrollWindow selectedJob={selectedJob}
-                                            setIsFullHeaderGridTemplate={setIsFullHeaderGridTemplate}
-                                            setIsShortHeaderGridTemplate={setIsShortHeaderGridTemplate}
-                                            mainContentReference={mainContentReference}></JobDetailsScrollWindow>
+                    <JobDescriptionHeader
+                        selectedJob={selectedJob} isFullHeaderGridTemplate={isFullHeaderGridTemplate}
+                        setIsFullHeaderGridTemplate={setIsFullHeaderGridTemplate}
+                        isShortHeaderGridTemplate={isShortHeaderGridTemplate}
+                        setIsShortHeaderGridTemplate={setIsShortHeaderGridTemplate}
+                    ></JobDescriptionHeader>
+                    <JobDetailsScrollWindow
+                        selectedJob={selectedJob}
+                        setIsFullHeaderGridTemplate={setIsFullHeaderGridTemplate}
+                        setIsShortHeaderGridTemplate={setIsShortHeaderGridTemplate}
+                        mainContentReference={mainContentReference}
+                    ></JobDetailsScrollWindow>
                 </div>
             </div>
         </div>

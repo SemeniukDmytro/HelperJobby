@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import JobComponent from "./PageComponents/ViewJobComponent/ViewJobComponent";
 
-interface JobPageProps {}
+interface JobPageProps {
+}
 
 const JobPage: FC<JobPageProps> = () => (
-  <JobComponent/>
+    <JobComponent/>
 );
 export default JobPage;

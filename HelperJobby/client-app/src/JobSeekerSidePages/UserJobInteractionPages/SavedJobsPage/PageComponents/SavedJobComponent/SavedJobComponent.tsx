@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import './SavedJobComponent.scss';
 import UserJobInteractionShortJobInfo
     from "../../../SharedComponents/UserJobInteractionShortJobInfo/UserJobInteractionShortJobInfo";
@@ -6,10 +6,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBookmark, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {JobDTO} from "../../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
-import {JobSeekerAccountService} from "../../../../../services/jobSeekerAccountService";
+import {JobSeekerService} from "../../../../../services/jobSeekerService";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {useJobSeekerJobInteractions} from "../../../../../hooks/useJobSeekerJobInteractions";
-import {UserJobInteractionsTypes} from "../../../../../enums/UserJobInteractionsTypes";
 import {
     JobActionFunction,
     ShowRemoveFromSavedSetter
@@ -17,24 +16,33 @@ import {
 import {useAuth} from "../../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import {useJobActions} from "../../../../../hooks/useJobActions";
+import {UserJobInteractionsTypes} from "../../../../../enums/utilityEnums/UserJobInteractionsTypes";
 
 interface SavedJobComponentProps {
-    job : JobDTO;
-    interactionTime : Date;
+    job: JobDTO;
+    interactionTime: string;
 }
 
 const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) => {
-    const {setSavedJobs} = useJobSeekerJobInteractions();
+    const {setSavedJobs, jobApplies, setJobApplies} = useJobSeekerJobInteractions();
     const {setJobSeeker} = useJobSeeker();
-    const jobSeekerService = new JobSeekerAccountService();
+    const jobSeekerService = new JobSeekerService();
     const [showRemoveFromSaved, setShowRemoveFromSaved] = useState(false);
     const [showUndoRemoveWindow, setShowUndoRemoveWindow] = useState(true);
     const {authUser} = useAuth();
     const navigate = useNavigate();
-    const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeeker, job);
+    const {saveJob, removeSavedJob, applyForJob} = useJobActions(jobSeekerService, setJobSeeker, job);
+    const [isApplied, setIsApplied] = useState(false);
+    const [requestInProgress, setRequestInProgress] = useState(false);
 
-    async function handleJobInteraction(actionFunction : JobActionFunction, setShowRemoveFromSavedValue : ShowRemoveFromSavedSetter) {
+    useEffect(() => {
+        if (jobApplies){
+            setIsApplied(jobApplies?.some(application => application.jobId === job.id) || false);
+        }
+    }, [jobApplies]);
+    async function handleJobInteraction(actionFunction: JobActionFunction, setShowRemoveFromSavedValue: ShowRemoveFromSavedSetter) {
         try {
+            setRequestInProgress(true)
             if (!authUser) {
                 navigate("/auth-page");
                 return;
@@ -45,6 +53,9 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
         } catch (err) {
             logErrorInfo(err);
         }
+        finally {
+            setRequestInProgress(false)
+        }
     }
 
     async function handleRemoveSavedJobClick() {
@@ -54,52 +65,72 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
     async function handleSaveJobClick() {
         await handleJobInteraction(saveJob, setShowRemoveFromSaved);
     }
-    
-    function closeUndoActionWindow(){
+
+    function closeUndoActionWindow() {
         setShowUndoRemoveWindow(false);
         setSavedJobs((prevSavedJobs) => prevSavedJobs!
             .filter(savedJob => savedJob.jobId !== job.id));
     }
-    
+
+    async function handleJobApply() {
+        try {
+            setRequestInProgress(true)
+            await applyForJob(job.id, setJobApplies);
+            setIsApplied(true)
+        }
+        catch (err){
+            logErrorInfo(err)
+        }
+        finally {
+            setRequestInProgress(false)
+        }
+    }
+
     return (
         !showUndoRemoveWindow ? null : <>
-        <div className={"ji-job-block"}>
-            {!showRemoveFromSaved ?
-                (<div className={"ji-job-layout"}>
-                    <UserJobInteractionShortJobInfo job={job}
-                                                    interactionTime={interactionTime}
-                                                    jobInteractionType={UserJobInteractionsTypes.saved}/>
-                    <div className={"ji-apply-fb"}>
-                        <div>
-                            <button className={"blue-button"}>
-                                Apply now
+            <div className={"ji-job-block"}>
+                {!showRemoveFromSaved ?
+                    (<div className={"ji-job-layout"}>
+                        <UserJobInteractionShortJobInfo
+                            job={job}
+                            interactionTime={interactionTime}
+                            jobInteractionType={UserJobInteractionsTypes.saved}
+                        />
+                        <div className={"ji-apply-fb"}>
+                            <div>
+                                <button className={"blue-button"}
+                                        onClick={handleJobApply}
+                                        disabled={isApplied || requestInProgress}>
+                                    {isApplied ? "Applied" : "Apply now"}
+                                </button>
+                            </div>
+                        </div>
+                        <div className={"ml1rem"}>
+                            <button className={"medium-tr-btn-with-icon"}
+                                    disabled={requestInProgress}
+                                    onClick={handleRemoveSavedJobClick}>
+                                <FontAwesomeIcon className={"svg"} icon={faBookmark}/>
                             </button>
                         </div>
-                    </div>
-                    <div className={"ml1rem"}>
-                        <button className={"medium-tr-btn-with-icon"} onClick={handleRemoveSavedJobClick}>
-                            <FontAwesomeIcon icon={faBookmark}/>
-                        </button>
-                    </div>
-                </div>)
-                :
-                (
-                    <div className={"job-interaction-deleted-box"}>
-                        <div>
-                            <span className={"semi-dark-default-text bold-text"}>{job.jobTitle}&nbsp;</span>
-                            <span className={"light-dark-default-text"}>has been unsaved.&nbsp;</span>
-                            <a className={"bold-navigation-link"} onClick={handleSaveJobClick}>Undo</a>
+                    </div>)
+                    :
+                    (
+                        <div className={"job-interaction-deleted-box"}>
+                            <div>
+                                <span className={"light-dark-default-text bold-text"}>{job.jobTitle}&nbsp;</span>
+                                <span className={"grey-default-text"}>has been unsaved.&nbsp;</span>
+                                <a className={"bold-navigation-link"} onClick={handleSaveJobClick}>Undo</a>
+                            </div>
+                            <div>
+                                <button className={"medium-tr-btn-with-icon"} onClick={closeUndoActionWindow}>
+                                    <FontAwesomeIcon className={"svg125rem"} icon={faXmark}/>
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <button className={"medium-tr-btn-with-icon"} onClick={closeUndoActionWindow}>
-                                <FontAwesomeIcon className={"medium-svg"} icon={faXmark}/>
-                            </button>
-                        </div>
-                    </div>
-                )}
-        </div>
-        <div className={"content-separation-line"}/>
-    </>)
+                    )}
+            </div>
+            <div className={"content-separation-line"}/>
+        </>)
 }
 
 export default SavedJobComponent;

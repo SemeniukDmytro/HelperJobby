@@ -2,28 +2,27 @@
 
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ApplicationDAL.AppContextMigrations
+namespace ApplicationDAL.AppContextMigrations;
+
+/// <inheritdoc />
+public partial class NumberOfEmployeesAddedInOrganization : Migration
 {
     /// <inheritdoc />
-    public partial class NumberOfEmployeesAddedInOrganization : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<int>(
-                name: "NumberOfEmployees",
-                table: "Organizations",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
-        }
+        migrationBuilder.AddColumn<int>(
+            "NumberOfEmployees",
+            "Organizations",
+            "int",
+            nullable: false,
+            defaultValue: 0);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "NumberOfEmployees",
-                table: "Organizations");
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropColumn(
+            "NumberOfEmployees",
+            "Organizations");
     }
 }

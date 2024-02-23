@@ -20,11 +20,9 @@ public class RecentUserSearchQueryRepository : IRecentUserSearchQueryRepository
 
     public async Task<RecentUserSearch> GetRecentUserSearchById(int searchId)
     {
-        var recentSearchEntity = await _applicationContext.RecentUserSearches.FirstOrDefaultAsync(s => s.Id == searchId);
-        if (recentSearchEntity == null)
-        {
-            throw new RecentSearchNotFoundException();
-        }
+        var recentSearchEntity =
+            await _applicationContext.RecentUserSearches.FirstOrDefaultAsync(s => s.Id == searchId);
+        if (recentSearchEntity == null) throw new RecentSearchNotFoundException();
 
         return recentSearchEntity;
     }

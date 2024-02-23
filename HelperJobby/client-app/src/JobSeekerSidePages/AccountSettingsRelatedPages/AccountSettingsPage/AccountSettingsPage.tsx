@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import AccountSettingsComponent from "./PageComponents/AccountSettingsComponent/AccountSettingsComponent";
 
-interface AccountSettingsPageProps {}
+interface AccountSettingsPageProps {
+}
 
 const AccountSettingsPage: FC<AccountSettingsPageProps> = () => (
-  <AccountSettingsComponent/>
+    <AccountSettingsComponent/>
 );
 
 export default AccountSettingsPage;

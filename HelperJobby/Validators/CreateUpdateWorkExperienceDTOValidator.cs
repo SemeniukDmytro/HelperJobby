@@ -8,19 +8,16 @@ public class CreateUpdateWorkExperienceDTOValidator : AbstractValidator<CreateUp
 {
     public CreateUpdateWorkExperienceDTOValidator()
     {
-        RuleFor(we => we.JobTitle).Cascade(FluentValidation.CascadeMode.Stop)
+        RuleFor(we => we.JobTitle).Cascade(CascadeMode.Stop)
             .NotEmpty().WithMessage("You can not provide an empty job title")
             .MaximumLength(100).WithMessage("Maximum length of job title field exceeded");
     }
-    
+
     public static void ValidateCreatedWorkExperience(CreateUpdateWorkExperienceDTO updateWorkExperience)
     {
         var validator = new CreateUpdateWorkExperienceDTOValidator();
         var validationResult = validator.Validate(updateWorkExperience);
 
-        if (!validationResult.IsValid)
-        {
-            throw new InvalidWorkExperienceException(validationResult.ToString());
-        }
+        if (!validationResult.IsValid) throw new InvalidWorkExperienceException(validationResult.ToString());
     }
 }

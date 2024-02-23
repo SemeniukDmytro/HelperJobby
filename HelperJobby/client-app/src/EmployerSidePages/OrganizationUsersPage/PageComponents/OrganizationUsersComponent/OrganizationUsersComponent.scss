@@ -1,0 +1,24 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.organization-owner {
+  font-size: 0.75rem;
+}
+
+.employee-email-box {
+  display: flex;
+  flex-basis: 70%;
+}
+
+.organization-user-table-header {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  background-color: global-variables.$neutral-color-400;
+  padding: 1rem;
+}
+
+.employee-info {
+  padding: 1rem;
+  border-right: 1px solid global-variables.$neutral-color-400;
+  border-left: 1px solid global-variables.$neutral-color-400;
+}

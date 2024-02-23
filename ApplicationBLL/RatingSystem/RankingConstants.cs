@@ -9,9 +9,9 @@ internal class RankingConstants
     internal const decimal DescriptionCoefficient = 1.1m;
     internal const decimal JobFeatureCoefficient = 1.3m;
     internal const decimal TitleCoefficient = 1.7m;
-    
+
     internal const decimal CoefficientForResumeContent = 1.7m;
-    
+
     internal const decimal QueryResultFrequencyWeight = 0.7m;
     internal const decimal QueryResultTotalRankWeight = 0.3m;
 }

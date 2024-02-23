@@ -1,31 +1,41 @@
 body {
-  margin: 0;
-  font-family: "Noto Sans", Noto, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: "Noto Sans", Noto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
-svg {
-  height: 1.5rem;
-  width: 1.5rem;
-}
 
 .svg-inline--fa{
-  height: 1.5rem;
+    height: 1.5rem;
 }
 
-.small-svg{
-  height: 1rem;
-  width: 1rem;
+.svg125rem {
+    height: 1.25rem;
+    width: 1.25rem;
 }
 
-.medium-svg{
-  height: 1.25rem;
-  width: 1.25rem;
+.svg1rem {
+    height: 1rem;
+    width: 1rem;
 }
+
+.svg075rem {
+    height: 0.75rem;
+    width: 0.75rem;
+}
+
+.svg05rem {
+    height: 0.5rem;
+    width: 0.5rem;
+}
+
+
+
+
 

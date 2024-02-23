@@ -1,6 +1,5 @@
-using System.Diagnostics;
 using ApplicationDAL.Context;
-using ApplicationDAL.DALHelpers;
+using ApplicationDAL.Projections.UserProjections;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.AuthRelatedModels;
 using ApplicationDomain.Exceptions;
@@ -9,42 +8,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationDAL.QueryRepositories;
 
-public class UserQueryRepository :  IUserQueryRepository
+public class UserQueryRepository : IUserQueryRepository
 {
     private readonly ApplicationContext _applicationContext;
-    private readonly EntityInclusionHandler _entityInclusionHandler;
-    
-    public UserQueryRepository(ApplicationContext applicationContext, EntityInclusionHandler entityInclusionHandler)
+
+    public UserQueryRepository(ApplicationContext applicationContext)
     {
         _applicationContext = applicationContext;
-        _entityInclusionHandler = entityInclusionHandler;
-    }
-    
-
-    public async Task<User> GetUserByIdPlain(int userId)
-    {
-        return await _entityInclusionHandler.GetUser(userId);
     }
 
-    public async Task<User> GetUserByIdWithRefreshToken(int userId)
-    {
-        return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.RefreshToken));
-    }
-
-    public async Task<User> GetUserWithEmployerAccount(int userId)
-    {
-        return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.EmployerAccount));
-    }
-
-    public async Task<User> GetUserWithJobSeekerAccount(int userId)
-    {
-        return await _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.JobSeekerAccount));
-    }
 
     public async Task<User> GetUserById(int userId)
     {
-        return await  _entityInclusionHandler.GetUser(userId, q => q.Include(u => u.EmployerAccount)
-            .Include(u => u.JobSeekerAccount));
+        return await GetUser(userId);
+    }
+
+    public async Task<User> GetUserWithEmployer(int userId)
+    {
+        return await GetUser(userId, q => q.Include(u => u.Employer));
+    }
+
+    public async Task<User> GetUserWithJobSeeker(int userId)
+    {
+        return await GetUser(userId, q => q.Include(u => u.JobSeeker));
     }
 
     public async Task<bool> IsEmailAvailable(string email)
@@ -55,32 +41,45 @@ public class UserQueryRepository :  IUserQueryRepository
     public async Task<User> GetUserByEmail(string email)
     {
         var user = await _applicationContext.Users.FirstOrDefaultAsync(u => u.Email == email);
-        if (user == null)
-        {
-            throw new UserNotFoundException("User with specified email doesn't exist");
-        }
+        if (user == null) throw new UserNotFoundException("User with specified email doesn't exist");
 
         return user;
     }
 
     public async Task<User> GetUserByEmailWithRefreshToken(string email)
     {
-        var user = await _applicationContext.Users.Include(u => u.RefreshToken).FirstOrDefaultAsync(u => u.Email == email);
-        if (user == null)
-        {
-            throw new UserNotFoundException("User with provided email is not found");
-        }
-        return user;
+        var userEntity = await _applicationContext.Users.Where(u => u.Email == email)
+            .Select(UserProjections.UserWithRefreshTokenAndAccountIds()).FirstOrDefaultAsync();
+        if (userEntity == null) throw new UserNotFoundException("User with provided email is not found");
+        return userEntity;
+    }
+    
+    public async Task<User> GetUserByIdWithRefreshToken(int userId)
+    {
+        var userEntity = await _applicationContext.Users.Where(u => u.Id == userId)
+            .Select(UserProjections.UserWithRefreshTokenAndAccountIds()).FirstOrDefaultAsync();
+        if (userEntity == null) throw new UserNotFoundException("User with provided email is not found");
+        return userEntity;
     }
 
     public async Task<RefreshToken> GetRefreshTokenByUserId(int userId)
     {
         var token = await _applicationContext.RefreshTokens.FirstOrDefaultAsync(t => t.UserId == userId);
-        if (token == null)
-        {
-            throw new UnauthorizedException();
-        }
+        if (token == null) throw new UnauthorizedException();
 
         return token;
+    }
+    
+    private async Task<User> GetUser(int userId, Func<IQueryable<User>, IQueryable<User>> includeQuery = null)
+    {
+        var query = _applicationContext.Users.AsQueryable();
+
+        if (includeQuery != null) query = includeQuery(query);
+
+        var userEntity = await query.FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (userEntity == null) throw new UserNotFoundException("User with specified id doesn't exist");
+
+        return userEntity;
     }
 }

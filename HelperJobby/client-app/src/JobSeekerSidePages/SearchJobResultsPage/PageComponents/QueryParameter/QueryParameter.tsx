@@ -2,7 +2,7 @@ import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from '
 import './QueryParameter.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSortDown, faXmark} from "@fortawesome/free-solid-svg-icons";
-import {JobQueryParams} from "../../../../enums/JobQueryParams";
+import {JobQueryParams} from "../../../../enums/utilityEnums/JobQueryParams";
 
 interface QueryParameterProps {
     queryParam: JobQueryParams;
@@ -50,14 +50,16 @@ const QueryParameter: FC<QueryParameterProps> = ({
 
 
     return (
-        <button className={`query-param-box ${isSelected ? "selected-query-box" : ""}`}
-                ref={queryParamButtonRef} onClick={onClick}>
+        <button
+            className={`query-param-box ${isSelected ? "selected-query-box" : ""}`}
+            ref={queryParamButtonRef} onClick={onClick}
+        >
             <span className={"param-name"}>
                 {paramName}
             </span>
-            {!isSelected ? (<FontAwesomeIcon className={"select-query-param small-svg"} icon={faSortDown}/>)
+            {!isSelected ? (<FontAwesomeIcon className={"select-query-param svg1rem"} icon={faSortDown}/>)
                 :
-                (<FontAwesomeIcon className={"remove-query-param small-svg"} icon={faXmark}/>)}
+                (<FontAwesomeIcon className={"remove-query-param svg1rem"} icon={faXmark}/>)}
         </button>
     )
 };

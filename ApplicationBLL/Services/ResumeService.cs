@@ -1,4 +1,3 @@
-using ApplicationBLL.Interfaces;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
@@ -8,37 +7,38 @@ namespace ApplicationBLL.Services;
 
 public class ResumeService : IResumeService
 {
-    private readonly IUserService _userService;
-    private readonly IJobSeekerAccountQueryRepository _jobSeekerAccountQueryRepository;
+    private readonly IResumeQueryRepository _resumeQueryRepository;
+    private readonly IJobSeekerService _jobSeekerService;
 
-    public ResumeService(IUserService userService, 
-        IJobSeekerAccountQueryRepository jobSeekerAccountQueryRepository)
+    public ResumeService(IResumeQueryRepository resumeQueryRepository, IJobSeekerService jobSeekerService)
     {
-        _userService = userService;
-        _jobSeekerAccountQueryRepository = jobSeekerAccountQueryRepository;
+        _resumeQueryRepository = resumeQueryRepository;
+        _jobSeekerService = jobSeekerService;
     }
 
-    public async Task<Resume> CreateResume(Resume resume)
+    public async Task<Resume> CreateResume(Resume createdResume)
     {
-        var currentUserId = _userService.GetCurrentUserId();
-        var jobSeekerAccount = await  _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        if (jobSeekerAccount.Resume != null)
+        var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
+        Resume resume = null;
+        try
         {
-            throw new ForbiddenException("Resume already exists");
+            resume = await _resumeQueryRepository.GetResumeByJobSeekerId(currentJobSeekerId);
         }
-        resume.JobSeekerAccountId = jobSeekerAccount.Id;
-        return resume;
+        catch (Exception e)
+        {
+            
+        }
+        if (resume != null) throw new ForbiddenException("Resume already exists");
+        createdResume.JobSeekerId = currentJobSeekerId;
+        return createdResume;
     }
 
 
     public async Task<Resume> DeleteResume(int resumeId)
     {
-        var currentUserId = _userService.GetCurrentUserId();
-        var jobSeekerAccount = await  _jobSeekerAccountQueryRepository.GetJobSeekerAccountWithResume(currentUserId);
-        if (resumeId != jobSeekerAccount.Resume.Id)
-        {
-            throw new ForbiddenException();
-        }
-        return jobSeekerAccount.Resume;
+        var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
+        var resume = await _resumeQueryRepository.GetResumeByJobSeekerId(currentJobSeekerId);
+        if (resumeId != resume.Id) throw new ForbiddenException();
+        return resume;
     }
 }

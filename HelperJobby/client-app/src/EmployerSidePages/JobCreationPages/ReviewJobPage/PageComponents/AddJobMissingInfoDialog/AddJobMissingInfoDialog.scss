@@ -1,0 +1,23 @@
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+
+.add-m-inf-footer {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-m-inf-footer-block {
+  box-sizing: border-box;
+  flex: 1 1 0px;
+}
+
+.page-step-indicator {
+  width: 0.625rem;
+  height: 0.625rem;
+  color: global-variables.$neutral-color-300;
+}
+
+.current-page-step-indicator{
+  color: global-variables.$dark-blue;
+}

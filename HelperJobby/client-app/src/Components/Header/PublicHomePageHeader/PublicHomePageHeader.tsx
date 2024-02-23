@@ -1,16 +1,17 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import {useNavigate} from "react-router-dom";
 import "./PublicHomePageHeader.scss";
 
-interface PublicHomePageHeaderProps {}
+interface PublicHomePageHeaderProps {
+}
 
 const PublicHomePageHeader: FC<PublicHomePageHeaderProps> = () => {
     const navigate = useNavigate();
 
-    function navigateToAuthPage(){
+    function navigateToAuthPage() {
         navigate("/auth-page")
     }
-    
+
     return (
         <div className={"sign-in-block"} onClick={navigateToAuthPage}>
             <button className={"sign-in-button"}>

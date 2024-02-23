@@ -2,77 +2,76 @@
 
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ApplicationDAL.AppContextMigrations
+namespace ApplicationDAL.AppContextMigrations;
+
+/// <inheritdoc />
+public partial class CurrentJobCreationsTableAdded : Migration
 {
     /// <inheritdoc />
-    public partial class CurrentJobCreationsTableAdded : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(
-                name: "FK_CurrentJobCreation_EmployerAccounts_EmployerAccountId",
-                table: "CurrentJobCreation");
+        migrationBuilder.DropForeignKey(
+            "FK_CurrentJobCreation_EmployerAccounts_EmployerAccountId",
+            "CurrentJobCreation");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_CurrentJobCreation",
-                table: "CurrentJobCreation");
+        migrationBuilder.DropPrimaryKey(
+            "PK_CurrentJobCreation",
+            "CurrentJobCreation");
 
-            migrationBuilder.RenameTable(
-                name: "CurrentJobCreation",
-                newName: "CurrentJobCreations");
+        migrationBuilder.RenameTable(
+            "CurrentJobCreation",
+            newName: "CurrentJobCreations");
 
-            migrationBuilder.RenameIndex(
-                name: "IX_CurrentJobCreation_EmployerAccountId",
-                table: "CurrentJobCreations",
-                newName: "IX_CurrentJobCreations_EmployerAccountId");
+        migrationBuilder.RenameIndex(
+            "IX_CurrentJobCreation_EmployerAccountId",
+            table: "CurrentJobCreations",
+            newName: "IX_CurrentJobCreations_EmployerAccountId");
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_CurrentJobCreations",
-                table: "CurrentJobCreations",
-                column: "Id");
+        migrationBuilder.AddPrimaryKey(
+            "PK_CurrentJobCreations",
+            "CurrentJobCreations",
+            "Id");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_CurrentJobCreations_EmployerAccounts_EmployerAccountId",
-                table: "CurrentJobCreations",
-                column: "EmployerAccountId",
-                principalTable: "EmployerAccounts",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-        }
+        migrationBuilder.AddForeignKey(
+            "FK_CurrentJobCreations_EmployerAccounts_EmployerAccountId",
+            "CurrentJobCreations",
+            "EmployerAccountId",
+            "EmployerAccounts",
+            principalColumn: "Id",
+            onDelete: ReferentialAction.Cascade);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(
-                name: "FK_CurrentJobCreations_EmployerAccounts_EmployerAccountId",
-                table: "CurrentJobCreations");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropForeignKey(
+            "FK_CurrentJobCreations_EmployerAccounts_EmployerAccountId",
+            "CurrentJobCreations");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_CurrentJobCreations",
-                table: "CurrentJobCreations");
+        migrationBuilder.DropPrimaryKey(
+            "PK_CurrentJobCreations",
+            "CurrentJobCreations");
 
-            migrationBuilder.RenameTable(
-                name: "CurrentJobCreations",
-                newName: "CurrentJobCreation");
+        migrationBuilder.RenameTable(
+            "CurrentJobCreations",
+            newName: "CurrentJobCreation");
 
-            migrationBuilder.RenameIndex(
-                name: "IX_CurrentJobCreations_EmployerAccountId",
-                table: "CurrentJobCreation",
-                newName: "IX_CurrentJobCreation_EmployerAccountId");
+        migrationBuilder.RenameIndex(
+            "IX_CurrentJobCreations_EmployerAccountId",
+            table: "CurrentJobCreation",
+            newName: "IX_CurrentJobCreation_EmployerAccountId");
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_CurrentJobCreation",
-                table: "CurrentJobCreation",
-                column: "Id");
+        migrationBuilder.AddPrimaryKey(
+            "PK_CurrentJobCreation",
+            "CurrentJobCreation",
+            "Id");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_CurrentJobCreation_EmployerAccounts_EmployerAccountId",
-                table: "CurrentJobCreation",
-                column: "EmployerAccountId",
-                principalTable: "EmployerAccounts",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-        }
+        migrationBuilder.AddForeignKey(
+            "FK_CurrentJobCreation_EmployerAccounts_EmployerAccountId",
+            "CurrentJobCreation",
+            "EmployerAccountId",
+            "EmployerAccounts",
+            principalColumn: "Id",
+            onDelete: ReferentialAction.Cascade);
     }
 }

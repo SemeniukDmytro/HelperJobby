@@ -1,0 +1,28 @@
+
+.emp-pages-layout {
+  min-width: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: 100%;
+}
+
+.emp-pages-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-connected-button {
+  border-bottom-right-radius: 0rem;
+  border-top-right-radius: 0rem;
+}
+
+.right-connected-button {
+  border-bottom-left-radius: 0rem;
+  border-top-left-radius: 0rem;
+}
+
+

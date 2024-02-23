@@ -12,9 +12,10 @@ import {
 } from "../../utils/convertLogic/enumToStringConverter";
 import JobDetailsFeatureBox
     from "../../JobSeekerSidePages/HomePage/PageComponents/JobDetailsFeatureBox/JobDetailsFeatureBox";
+import {formatJobSalaryDisplay} from "../../utils/convertLogic/formatJobSalaryDisplay";
 
 interface DetailedJobInfoProps {
-    job : JobDTO
+    job: JobDTO
 }
 
 const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
@@ -24,26 +25,27 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
 
     useEffect(() => {
         if (job.benefits.length < 6) {
-            setDisplayedBenefits(job.benefits);
+            setDisplayedBenefits(job.benefits.map(b => benefitsEnumToStringMap(b)));
         } else {
-            setDisplayedBenefits(job.benefits.slice(0, 6));
+            setDisplayedBenefits(job.benefits.map(b => benefitsEnumToStringMap(b).slice(0, 6)));
             setShowAllBenefits(false);
             setBenefitsButtonText("Show more")
         }
     }, [job]);
+
     function displayAllBenefits() {
         if (!showAllBenefits) {
             setBenefitsButtonText("Show less")
-            setDisplayedBenefits(job.benefits);
+            setDisplayedBenefits(job.benefits.map(b => benefitsEnumToStringMap(b)));
             setShowAllBenefits(true);
         } else {
             setBenefitsButtonText("Show more")
-            setDisplayedBenefits(job.benefits.slice(0, 6));
+            setDisplayedBenefits(job.benefits.map(b => benefitsEnumToStringMap(b).slice(0, 6)));
             setShowAllBenefits(false);
         }
     }
-    
-    
+
+
     return (
         <div>
             <div className={"job-details-header"}>
@@ -52,7 +54,7 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                 </div>
                 <div className={"short-main-info"}>
                     <div className={"job-details-icon-box"}>
-                        <FontAwesomeIcon className={"medium-svg"} icon={faMoneyBillAlt}/>
+                        <FontAwesomeIcon className={"svg125rem"} icon={faMoneyBillAlt}/>
                     </div>
                     <div className={"job-details-header-info-box"}>
                         <div className={"job-details-info"}>
@@ -60,13 +62,14 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                         </div>
                         <div className={"detailed-job-features"}>
                             <JobDetailsFeatureBox
-                                featureText={`$${thousandsDisplayHelper(job.salary)} ${job.salaryRate}`}/>
+                                featureText={formatJobSalaryDisplay(job)}
+                            />
                         </div>
                     </div>
                 </div>
                 {job.jobType.length > 0 && <div className={"short-main-info"}>
                     <div className={"job-details-icon-box"}>
-                        <FontAwesomeIcon className={"medium-svg"} icon={faBriefcase}/>
+                        <FontAwesomeIcon className={"svg125rem"} icon={faBriefcase}/>
                     </div>
                     <div className={"job-details-header-info-box"}>
                         <div className={"job-details-info"}>
@@ -74,15 +77,17 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                         </div>
                         <div className={"detailed-job-features"}>
                             {job.jobType.map((jobType, index) => (
-                                <JobDetailsFeatureBox key={index}
-                                                      featureText={jobTypesEnumToStringMap(jobType)}></JobDetailsFeatureBox>
+                                <JobDetailsFeatureBox
+                                    key={index}
+                                    featureText={jobTypesEnumToStringMap(jobType)}
+                                ></JobDetailsFeatureBox>
                             ))}
                         </div>
                     </div>
                 </div>}
                 {job.schedule.length > 0 && <div className={"short-main-info"}>
                     <div className={"job-details-icon-box"}>
-                        <FontAwesomeIcon className={"small-svg"} icon={faClock}/>
+                        <FontAwesomeIcon className={"svg1rem"} icon={faClock}/>
                     </div>
                     <div className={"job-details-header-info-box"}>
                         <div className={"job-details-info"}>
@@ -90,8 +95,10 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                         </div>
                         <div className={"detailed-job-features"}>
                             {job.schedule.map((schedule, index) => (
-                                <JobDetailsFeatureBox key={index}
-                                                      featureText={schedulesEnumToStringMap(schedule)}></JobDetailsFeatureBox>
+                                <JobDetailsFeatureBox
+                                    key={index}
+                                    featureText={schedulesEnumToStringMap(schedule)}
+                                ></JobDetailsFeatureBox>
                             ))}
                         </div>
                     </div>
@@ -107,7 +114,7 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                 <div className={"benefits-box"}>
                     <ul className={"benefits"}>
                         {displayedBenefits.map((benefit, index) => (
-                            <li key={index}>{benefitsEnumToStringMap(benefit)}</li>
+                            <li key={index}>{benefit}</li>
                         ))}
                     </ul>
                     {(!showAllBenefits && job.benefits.length > 6) &&
@@ -116,14 +123,16 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                 {job.benefits.length > 6 &&
                     <button className={"show-more-benefits-button"} onClick={displayAllBenefits}>
                         <span>{benefitsButtonText}</span>
-                        {!showAllBenefits && <FontAwesomeIcon className={"show-more-arrow small-svg"} icon={faChevronDown}/>}
-                        {showAllBenefits && <FontAwesomeIcon className={"show-more-arrow small-svg"} icon={faChevronUp}/>}
+                        {!showAllBenefits &&
+                            <FontAwesomeIcon className={"show-more-arrow svg1rem"} icon={faChevronDown}/>}
+                        {showAllBenefits && <FontAwesomeIcon className={"show-more-arrow svg1rem"} icon={faChevronUp}/>}
                     </button>}
             </div>}
             <div className={"full-description-box"}>
-                <div style={{whiteSpace: "pre-wrap"}}>
-                    {job.description}
-                </div>
+                <div
+                    style={{whiteSpace: "pre-wrap"}}
+                    dangerouslySetInnerHTML={{__html: job.description}}
+                />
             </div>
         </div>
     )

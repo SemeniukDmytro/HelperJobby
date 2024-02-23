@@ -1,11 +1,9 @@
-import React, {ChangeEvent, ChangeEventHandler, FC, useRef, useState} from 'react';
+import React, {ChangeEvent, FC, useRef, useState} from 'react';
 import './SearchBarForJobPage.scss';
-import GoogleImage from "../../../../Assets/pictures/google_on_white_hdpi.png";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleExclamation, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
 
-interface SearchBarForJobPageProps {}
+interface SearchBarForJobPageProps {
+}
 
 const SearchBarForJobPage: FC<SearchBarForJobPageProps> = () => {
     const [job, setJob] = useState("");
@@ -32,11 +30,12 @@ const SearchBarForJobPage: FC<SearchBarForJobPageProps> = () => {
     function changeLocationValue(e: ChangeEvent<HTMLInputElement>) {
         setLocation(e.target.value);
     }
-    
+
     function handleLocationFocus() {
         setLocationFocus(true);
         locationRef.current?.focus();
     }
+
     function handleLocationBlur() {
         setLocationFocus(false);
     }
@@ -56,45 +55,54 @@ const SearchBarForJobPage: FC<SearchBarForJobPageProps> = () => {
     };
 
     return (
-  <div className={"jsb-layout"}>
-    <div className={"jsb-block"}>
-        <form className={"jsb-form"}>
-            <div className={`field-input-container mr05rem`} style={{flexGrow : "1"}} onClick={handleJobFocus}>
-                <div className={`border-lining ${jobFocus ? "field-focus" : ""}`}>
-                </div>
-                <div className={"jsb-input-label bold-text"}>What</div>
-                <input className={`field-input jsb-input`}
-                       value={job}
-                       type={"text"}
-                       onChange={changeJob}
-                       onFocus={handleJobFocus}
-                       onBlur={handleJobBlur}
-                       placeholder={"Job title, keywords or company"}
-                       ref={jobRef}
-                       onKeyDown={handleEnterKeyPress}/>
-            </div>
-            <div className={"field-input-container mr1rem"} style={{flexGrow : "1"}} onClick={handleLocationFocus}>
-                <div className={`border-lining ${locationFocus ? "field-focus" : ""}`}>
+        <div className={"search-block-layout"}>
+            <div className={"jsb-block"}>
+                <form className={"search-block-form"}>
+                    <div className={`field-input-container mr05rem`} style={{flexGrow: "1"}} onClick={handleJobFocus}>
+                        <div className={`border-lining ${jobFocus ? "field-focus" : ""}`}>
+                        </div>
+                        <div className={"jsb-input-label bold-text"}>What</div>
+                        <input
+                            className={`field-input jsb-input`}
+                            value={job}
+                            type={"text"}
+                            onChange={changeJob}
+                            onFocus={handleJobFocus}
+                            onBlur={handleJobBlur}
+                            placeholder={"Job title, keywords or company"}
+                            ref={jobRef}
+                            onKeyDown={handleEnterKeyPress}
+                        />
+                    </div>
+                    <div
+                        className={"field-input-container mr1rem"}
+                        style={{flexGrow: "1"}}
+                        onClick={handleLocationFocus}
+                    >
+                        <div className={`border-lining ${locationFocus ? "field-focus" : ""}`}>
 
-                </div>
-                <div className={"jsb-input-label bold-text"}>Where</div>
-                <input className={`field-input`}
-                       value={location}
-                       type={"text"}
-                       onChange={changeLocationValue}
-                       onFocus={handleLocationFocus}
-                       onBlur={handleLocationBlur}
-                       placeholder={"City, state or zip code"}
-                       ref={locationRef}
-                       onKeyDown={handleEnterKeyPress}/>
+                        </div>
+                        <div className={"jsb-input-label bold-text"}>Where</div>
+                        <input
+                            className={`field-input`}
+                            value={location}
+                            type={"text"}
+                            onChange={changeLocationValue}
+                            onFocus={handleLocationFocus}
+                            onBlur={handleLocationBlur}
+                            placeholder={"City, state or zip code"}
+                            ref={locationRef}
+                            onKeyDown={handleEnterKeyPress}
+                        />
+                    </div>
+                    <button className={"blue-button"} onClick={navigateToSearchResultsPage}>
+                        Find jobs
+                    </button>
+
+                </form>
             </div>
-            <button className={"blue-button"} onClick={navigateToSearchResultsPage}>
-                Find jobs
-            </button>
-            
-        </form>
-    </div>
-  </div>
-)};
+        </div>
+    )
+};
 
 export default SearchBarForJobPage;

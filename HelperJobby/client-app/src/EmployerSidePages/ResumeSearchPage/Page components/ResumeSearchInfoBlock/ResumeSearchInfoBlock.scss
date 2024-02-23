@@ -1,0 +1,11 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.job-seeker-email {
+  color: global-variables.$dark-blue;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}

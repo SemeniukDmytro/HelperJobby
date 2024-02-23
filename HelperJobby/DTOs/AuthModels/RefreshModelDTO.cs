@@ -1,5 +1,3 @@
-using ApplicationDomain.AuthRelatedModels;
-
 namespace HelperJobby.DTOs.AuthModels;
 
 public class RefreshModelDTO

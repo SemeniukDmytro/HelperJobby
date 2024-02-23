@@ -1,8 +1,8 @@
-.header-left-side{
+.header-left-side {
   display: flex;
 }
 
-.logo-block{
+.logo-block {
   display: flex;
   height: 1rem;
   line-height: 1.25rem;
@@ -11,7 +11,7 @@
   cursor: pointer;
 }
 
-.logo-button{
+.logo-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,19 +24,19 @@
   color: #2557a7;
 }
 
-.logo-text{
+.logo-text {
 }
 
-.logo-content-divider{
+.logo-content-divider {
   width: 2rem;
 }
 
-.home-link-block{
+.home-link-block {
   position: relative;
   display: flex;
 }
 
-.home-link{
+.home-link {
   display: flex;
   position: relative;
   justify-content: center;
@@ -49,7 +49,7 @@
   color: #2d2d2d;
 }
 
-.underline{
+.underline {
   position: absolute;
   width: 0%;
   height: 2px;

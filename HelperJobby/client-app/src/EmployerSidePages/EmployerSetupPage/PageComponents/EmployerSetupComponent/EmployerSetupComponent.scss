@@ -1,0 +1,71 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.employers-centralized-page-layout {
+  display: flex;
+  margin: 0 auto;
+  padding: 3rem;
+  width: 48rem;
+  flex-direction: column;
+}
+
+.ems-title-with-img-fb {
+  display: flex;
+  flex-grow: 1;
+  background-color: global-variables.$neutral-color-100;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+}
+
+.ems-title-fb {
+  padding-left: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-basis: 50%;
+  align-items: center;
+}
+
+.ems-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: unset;
+}
+
+.ems-image-fb {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.ems-sub-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: unset;
+}
+
+.ems-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.br-corner-button {
+  display: flex; 
+  align-self: end;
+}
+
+.emp-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.emh-option-with-multiple-icons {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.emh-option-children-fb{
+  display: flex;
+  align-items: center;
+}

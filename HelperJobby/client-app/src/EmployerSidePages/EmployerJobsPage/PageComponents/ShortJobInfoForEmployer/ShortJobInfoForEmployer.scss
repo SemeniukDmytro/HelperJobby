@@ -1,0 +1,99 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.emp-row-cont-1pad {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: white;
+  border-radius: 0.5rem;
+  border: none;
+  box-sizing: border-box;
+  padding: 1rem;
+  justify-content: space-between;
+}
+
+.medium-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  &:checked{
+    block-size: 1.25rem;
+    inline-size: 1.25rem;
+    background-size: 0.75rem;
+  }
+}
+
+.select-all-checkbox {
+  appearance: none;
+  margin: 0 0.5rem 0 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: global-variables.$dark-blue;
+  background-image: url("../../../../Assets/pictures/minus.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 1rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  &:hover {
+    background-color: global-variables.$dark-blue-hover;
+  }
+
+  &:checked {
+    background-color: global-variables.$dark-blue;
+    background-repeat: no-repeat;
+    border-color: global-variables.$dark-blue;
+    background-image: url("../../../../Assets/pictures/tick.svg");
+    background-position: center;
+    background-size: 0.75rem;
+
+    &:hover {
+      background-color: global-variables.$dark-blue-hover;
+    }
+  }
+}
+
+.job-select-and-info-container{
+  display: flex;
+  flex-direction: row;
+  flex-basis: 20%;
+}
+
+.emp-job-info-container {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+}
+
+.emp-job-candidates-info-container {
+  display: flex;
+  flex-direction: row;
+  flex-basis: 40%;
+  background-color: global-variables.$neutral-color-100;
+  justify-content: space-around;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.candidates-info-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  flex-basis: 20%;
+  white-space: pre-wrap;
+}
+
+.candidate-separate-block{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: pre-wrap;
+}
+
+.job-operations-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}

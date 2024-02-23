@@ -1,0 +1,23 @@
+.AddJobPayAndBenefitsComponent {}
+
+.pb-pay-info-fb {
+  grid-template-columns: 30% auto 20%;
+  display: grid;
+  gap: 1rem;
+}
+
+.pi-salary-amount-container {
+  grid-auto-columns: auto;
+  display: grid;
+  column-gap: 1rem;
+}
+
+.salary-input-box{
+  min-inline-size: 0px;
+  grid-row: 1;
+}
+
+.ntf-msg-with-ttl-container {
+  display: flex;
+  flex-direction: column;
+}

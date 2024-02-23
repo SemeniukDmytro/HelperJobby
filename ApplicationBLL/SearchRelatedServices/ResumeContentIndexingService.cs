@@ -9,11 +9,12 @@ namespace ApplicationBLL.SearchRelatedServices;
 
 public class ResumeContentIndexingService : IResumeContentIndexingService
 {
-    private readonly IResumeIndexingQueryRepository _resumeIndexingQueryRepository;
-    private readonly IResumeIndexingCommandRepository _resumeIndexingCommandRepository;
     private readonly IRankingService _rankingService;
+    private readonly IResumeIndexingCommandRepository _resumeIndexingCommandRepository;
+    private readonly IResumeIndexingQueryRepository _resumeIndexingQueryRepository;
 
-    public ResumeContentIndexingService(IResumeIndexingQueryRepository resumeIndexingQueryRepository, IResumeIndexingCommandRepository resumeIndexingCommandRepository, IRankingService rankingService)
+    public ResumeContentIndexingService(IResumeIndexingQueryRepository resumeIndexingQueryRepository,
+        IResumeIndexingCommandRepository resumeIndexingCommandRepository, IRankingService rankingService)
     {
         _resumeIndexingQueryRepository = resumeIndexingQueryRepository;
         _resumeIndexingCommandRepository = resumeIndexingCommandRepository;
@@ -22,20 +23,12 @@ public class ResumeContentIndexingService : IResumeContentIndexingService
 
     public async Task IndexResumeContent(Resume resume)
     {
-        foreach (var education in resume.Educations)
-        {
-            await IndexResumeRelatedContent(education.FieldOfStudy, resume.Id);
-        }
+        foreach (var education in resume.Educations) await IndexResumeRelatedContent(education.FieldOfStudy, resume.Id);
 
         foreach (var workExperience in resume.WorkExperiences)
-        {
             await IndexResumeRelatedContent(workExperience.JobTitle, resume.Id);
-        }
 
-        foreach (var skill in resume.Skills)
-        {
-            await IndexResumeRelatedContent(skill.Name, resume.Id);
-        }
+        foreach (var skill in resume.Skills) await IndexResumeRelatedContent(skill.Name, resume.Id);
     }
 
     public async Task RemoveResumeIndexedContent(Resume resume)
@@ -47,7 +40,7 @@ public class ResumeContentIndexingService : IResumeContentIndexingService
     {
         var processedContent = ProcessAndValidateContent(content);
         if (processedContent == null) return;
-        
+
         await AddNewResumeIndexedContent(processedContent, resumeId);
     }
 
@@ -55,14 +48,14 @@ public class ResumeContentIndexingService : IResumeContentIndexingService
     {
         var oldProcessedContent = ProcessAndValidateContent(oldContent);
         if (oldProcessedContent == null) return;
-        
+
         var updatedProcessedContent = ProcessAndValidateContent(updatedContent);
         if (updatedProcessedContent == null) return;
-        
+
         var wordsToDelete = oldProcessedContent.Select(keyValuePair => keyValuePair.Key).ToList();
         await _resumeIndexingCommandRepository.RemoveProcessedResumeWordsByResumeId(resumeId, wordsToDelete);
-        
-        
+
+
         await AddNewResumeIndexedContent(updatedProcessedContent, resumeId);
     }
 
@@ -70,7 +63,7 @@ public class ResumeContentIndexingService : IResumeContentIndexingService
     {
         var processedContent = ProcessAndValidateContent(content);
         if (processedContent == null) return;
-        
+
         var wordsToDelete = processedContent.Select(keyValuePair => keyValuePair.Key).ToList();
         await _resumeIndexingCommandRepository.RemoveProcessedResumeWordsByResumeId(resumeId, wordsToDelete);
     }
@@ -90,7 +83,7 @@ public class ResumeContentIndexingService : IResumeContentIndexingService
             {
                 possibleWordEntity.ResumesCount++;
                 await _resumeIndexingCommandRepository.UpdateIndexedWordResumeCount(possibleWordEntity);
-                newProcessedResumeWords.Add(new ProcessedResumeWord()
+                newProcessedResumeWords.Add(new ProcessedResumeWord
                 {
                     ResumeId = resumeId,
                     ResumeIndexedWordId = possibleWordEntity.Id,
@@ -99,11 +92,11 @@ public class ResumeContentIndexingService : IResumeContentIndexingService
             }
             else
             {
-                newIndexedResumeWords.Add(new ResumeIndexedWord()
+                newIndexedResumeWords.Add(new ResumeIndexedWord
                 {
                     ResumesCount = 1,
                     Word = weightedWord.Key,
-                    ProcessedResumeWords = new List<ProcessedResumeWord>()
+                    ProcessedResumeWords = new List<ProcessedResumeWord>
                     {
                         new()
                         {
@@ -118,31 +111,22 @@ public class ResumeContentIndexingService : IResumeContentIndexingService
         await _resumeIndexingCommandRepository.SaveIndexedResumeWords(newIndexedResumeWords);
         await _resumeIndexingCommandRepository.SaveProcessedResumeWords(newProcessedResumeWords);
     }
-    
+
     private Dictionary<string, int> GetWordsCount(string[] words)
     {
         var result = new Dictionary<string, int>();
         foreach (var word in words)
-        {
-            if (result.TryGetValue(word, out int wordCount))
-            {
+            if (result.TryGetValue(word, out var wordCount))
                 result[word]++;
-            }
             else
-            {
                 result.Add(word, 1);
-            }
-        }
 
         return result;
     }
-    
+
     private Dictionary<string, int>? ProcessAndValidateContent(string content)
     {
-        if (string.IsNullOrEmpty(content))
-        {
-            return null;
-        }
+        if (string.IsNullOrEmpty(content)) return null;
 
         return GetWordsCount(TextSplitter.TextNormalization(content));
     }

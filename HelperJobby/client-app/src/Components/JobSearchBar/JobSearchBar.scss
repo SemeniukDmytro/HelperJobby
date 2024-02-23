@@ -1,6 +1,6 @@
 @use "../../Assets/scssSharedStyles/global-variables";
 
-.search-container{
+.search-container {
   position: relative;
   display: flex;
   max-width: 900px;
@@ -10,7 +10,8 @@
   margin-right: auto;
   margin-bottom: 1.5rem;
 }
-.search-boxes{
+
+.search-boxes {
   display: flex;
   flex-direction: row;
   border: 1px solid #949494;
@@ -19,19 +20,19 @@
   box-shadow: global-variables.$field-box-shadow;
 }
 
-.search-form{
+.search-form {
   width: 100%;
   display: flex;
 }
 
-.input-fields-box{
+.input-fields-box {
   display: flex;
   flex-grow: 1;
   flex-direction: row;
   box-sizing: border-box;
 }
 
-.query-box{
+.query-box {
   display: flex;
   flex-direction: row;
   position: relative;
@@ -40,28 +41,21 @@
   box-sizing: border-box;
 }
 
-.border-lining{
-  display: flex;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  transition: 0.1s;
-}
+
 
 .job-query-box-focus {
   border-radius: 0.5rem 0 0 0.5rem;
-  border:solid #2557a7;
+  border: solid #2557a7;
   border-width: 1px 1px 0.25rem 1px;
 }
 
 .location-query-box-focus {
   border-radius: 0 0.5rem 0.5rem 0;
-  border:solid #2557a7;
+  border: solid #2557a7;
   border-width: 1px 1px 0.25rem 1px;
 }
 
-.icon-box{
+.icon-box {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,12 +63,12 @@
   min-width: 3rem;
 }
 
-.query-box-icon{
+.query-box-icon {
   color: global-variables.$neutral-color-1000;;
   font-size: 1.25rem;
 }
 
-.query-input{
+.query-input {
   box-sizing: border-box;
   position: relative;
   height: 60px;
@@ -84,12 +78,13 @@
   font-size: 1rem;
   overflow: hidden;
   background-color: transparent;
-  &:focus{
+
+  &:focus {
     outline: none;
   }
 }
 
-.separator{
+.separator {
   display: flex;
   position: relative;
   margin-top: 1.250rem;
@@ -99,7 +94,7 @@
   background-color: #e4e2e0;
 }
 
-.cross-icon-box{
+.cross-icon-box {
   position: absolute;
   top: 0.5rem;
   background-color: white;
@@ -119,18 +114,19 @@
   cursor: pointer;
   background: transparent;
   border: none;
+
   &:hover {
     background-color: #eef1fe;
   }
 }
 
-.search-button-box{
+.search-button-box {
   display: flex;
   margin: 0.5rem;
 }
 
 .cross-outline:hover .cross-icon {
-  color: global-variables.$dark-blue ;
+  color: global-variables.$dark-blue;
 }
 
 .cross-icon {
@@ -138,7 +134,7 @@
   color: #949494;
 }
 
-.location-search-autocomplete-window{
+.location-search-autocomplete-window {
   position: absolute;
   z-index: 4;
   box-shadow: global-variables.$field-box-shadow;
@@ -149,12 +145,13 @@
   background: white;
   width: 100%;
   overflow: auto;
-  .autocomplete-result:first-child {
+
+  .select-option:first-child {
     border-top-right-radius: 0.5rem;
     border-top-left-radius: 0.5rem;
   }
 
-  .autocomplete-result:last-child {
+  .select-option:last-child {
     border-bottom-right-radius: 0.5rem;
     border-bottom-left-radius: 0.5rem;
   }

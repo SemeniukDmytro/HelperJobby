@@ -1,22 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#nullable disable
 
-#nullable disable
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ApplicationDAL.AppContextMigrations
+namespace ApplicationDAL.AppContextMigrations;
+
+/// <inheritdoc />
+public partial class RequiredAddedForDatePostedAttribute : Migration
 {
     /// <inheritdoc />
-    public partial class RequiredAddedForDatePostedAttribute : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+    }
 
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
     }
 }

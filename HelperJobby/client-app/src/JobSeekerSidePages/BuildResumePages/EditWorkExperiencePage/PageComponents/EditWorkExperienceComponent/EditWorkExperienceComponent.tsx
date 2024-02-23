@@ -21,21 +21,21 @@ const EditWorkExperienceComponent: FC<EditWorkExperienceComponentProps> = () => 
     useEffect(() => {
         const currentPath = window.location.pathname;
         let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
-        if (parentPathFirstPart == "/build"){
+        if (parentPathFirstPart == "/build") {
             parentPathFirstPart = "/build/experience"
         }
         setParentPagePath(parentPathFirstPart);
     }, []);
 
     useEffect(() => {
-        if (parentPagePath){
-            if (!id){
+        if (parentPagePath) {
+            if (!id) {
                 navigate(parentPagePath)
                 return;
             }
             const workExperience = jobSeeker?.resume?.workExperiences
-                .find((we) => we.workExperienceId == Number.parseInt(id))
-            if (!workExperience){
+                .find((we) => we.id == Number.parseInt(id))
+            if (!workExperience) {
                 navigate(parentPagePath)
                 return;
             }
@@ -45,7 +45,7 @@ const EditWorkExperienceComponent: FC<EditWorkExperienceComponentProps> = () => 
     }, [parentPagePath]);
 
 
-    return(
+    return (
         loading ? <></>
             :
             <WorkExperienceInfoComponent workExperience={workExperience!}/>

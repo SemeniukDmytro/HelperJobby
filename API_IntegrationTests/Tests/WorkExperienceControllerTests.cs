@@ -8,18 +8,18 @@ namespace API_IntegrationTests.Tests;
 public class WorkExperienceControllerTests : IntegrationTest
 {
     private readonly string _baseUri = "/api/WorkExperience";
-    
+
     public WorkExperienceControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {
     }
-    
+
     [Fact]
     public async Task GetWorkExperience_ShouldReturnWorkExperience()
     {
         // Arrange
         await AuthenticateAsync();
         var createdWorkExperience = await CreateWorkExperience();
-        var requestUri = $"{_baseUri}/{createdWorkExperience.WorkExperienceId}";
+        var requestUri = $"{_baseUri}/{createdWorkExperience.Id}";
 
         // Act
         var getWorkExperienceResponse = await TestClient.GetAsync(requestUri);
@@ -27,7 +27,7 @@ public class WorkExperienceControllerTests : IntegrationTest
         // Assert
         Assert.Equal(HttpStatusCode.OK, getWorkExperienceResponse.StatusCode);
         var receivedWorkExperience = await getWorkExperienceResponse.Content.ReadAsAsync<WorkExperienceDTO>();
-        Assert.Equal(createdWorkExperience.WorkExperienceId, receivedWorkExperience.WorkExperienceId);
+        Assert.Equal(createdWorkExperience.Id, receivedWorkExperience.Id);
         Assert.Equal(createdWorkExperience.ResumeId, receivedWorkExperience.ResumeId);
         Assert.Equal(createdWorkExperience.JobTitle, receivedWorkExperience.JobTitle);
     }
@@ -57,14 +57,14 @@ public class WorkExperienceControllerTests : IntegrationTest
         // Arrange
         await AuthenticateAsync();
         var createdWorkExperience = await CreateWorkExperience();
-        var requestUri = $"{_baseUri}/{createdWorkExperience.WorkExperienceId}";
-        var updatedWorkExperienceDTO = new CreateUpdateWorkExperienceDTO()
+        var requestUri = $"{_baseUri}/{createdWorkExperience.Id}";
+        var updatedWorkExperienceDTO = new CreateUpdateWorkExperienceDTO
         {
             JobTitle = "Product Manager",
             Company = "NewCompany Inc.",
             Country = "USA",
             CityOrProvince = "San Francisco",
-            From = null, 
+            From = null,
             To = new DateOnly(2022, 12, 31),
             CurrentlyWorkHere = true,
             Description = "Managed product development and strategy."
@@ -78,7 +78,7 @@ public class WorkExperienceControllerTests : IntegrationTest
         var updatedWorkExperience = await updateWorkExperienceResponse.Content.ReadAsAsync<WorkExperienceDTO>();
         Assert.Equal(updatedWorkExperienceDTO.JobTitle, updatedWorkExperience.JobTitle);
         Assert.Equal(updatedWorkExperienceDTO.From, updatedWorkExperience.From);
-        Assert.Equal(createdWorkExperience.WorkExperienceId, updatedWorkExperience.WorkExperienceId);
+        Assert.Equal(createdWorkExperience.Id, updatedWorkExperience.Id);
     }
 
     [Fact]
@@ -87,7 +87,7 @@ public class WorkExperienceControllerTests : IntegrationTest
         // Arrange
         await AuthenticateAsync();
         var createdWorkExperience = await CreateWorkExperience();
-        var requestUri = $"{_baseUri}/{createdWorkExperience.WorkExperienceId}";
+        var requestUri = $"{_baseUri}/{createdWorkExperience.Id}";
 
         // Act
         var deleteWorkExperienceResponse = await TestClient.DeleteAsync(requestUri);

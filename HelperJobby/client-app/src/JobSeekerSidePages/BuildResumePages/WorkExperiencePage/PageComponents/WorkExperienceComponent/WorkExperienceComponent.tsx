@@ -5,26 +5,31 @@ import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentP
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import {useNavigate} from "react-router-dom";
 import WorkExperienceReview from "../WorkExperienceReview/WorkExperienceReview";
-import EducationReview from "../../../EducationPage/PageComponents/EducationReview/EducationReview";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
-interface WorkExperienceComponentProps {}
+interface WorkExperienceComponentProps {
+}
 
 const WorkExperienceComponent: FC<WorkExperienceComponentProps> = () => {
     const {setProgressPercentage, setSaveFunc} = useResumeBuild();
     const {jobSeeker} = useJobSeeker();
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         setProgressPercentage(ProgressPercentPerPage * 5);
-        if (jobSeeker?.resume!.workExperiences.length == 0){
-            navigate("/build/experience/add")
+        if (!jobSeeker?.resume){
+            navigate("/build/experience/add");
+            return;
+        }
+        if (jobSeeker?.resume.workExperiences.length == 0) {
+            navigate("/build/experience/add");
+            return;
         }
         setSaveFunc(() => customSaveFunc)
     }, []);
-    
-    async function customSaveFunc(){
+
+    async function customSaveFunc() {
         navigate("/my-profile")
     }
 
@@ -47,7 +52,7 @@ const WorkExperienceComponent: FC<WorkExperienceComponentProps> = () => {
                     <div>
                         {jobSeeker!.resume!.workExperiences.map((workExperience, index) => (
                             <WorkExperienceReview key={index} workExperience={workExperience}/>
-                        )) }
+                        ))}
                     </div>
                 }
                 <div className={"form-and-buttons-divider"}>
@@ -62,7 +67,7 @@ const WorkExperienceComponent: FC<WorkExperienceComponentProps> = () => {
                     </button>
                 </div>
                 <div className={"bottom-page-margin"}/>
-                
+
             </>
     )
 }

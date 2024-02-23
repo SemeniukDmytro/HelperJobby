@@ -3,7 +3,6 @@ import './WorkExperienceInfoComponent.scss';
 import TimePeriod from "../TimePeriod/TimePeriod";
 import AutocompleteResultsWindow
     from "../../../EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
-import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes";
 import {WorkExperienceDTO} from "../../../../DTOs/resumeRelatedDTOs/WorkExperienceDTO";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 import CountrySelector from "../../../EditContactInfoPage/PageComponents/CountrySelector/CountrySelector";
@@ -11,21 +10,21 @@ import useResumeBuild from "../../../../hooks/useResumeBuild";
 import {ProgressPercentPerPage} from "../ProgressPercentPerPage";
 import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {CreateResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import dateToStringConverter from "../../../../utils/convertLogic/dateToStringConverter";
 import {CreateUpdateWorkExperienceDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateUpdateWorkExperienceDTO";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {WorkExperienceService} from "../../../../services/workExperienceService";
 import {ResumeService} from "../../../../services/resumeService";
-import {JobSeekerAccountDTO} from "../../../../DTOs/accountDTOs/JobSeekerAccountDTO";
-import {isNotEmpty} from "../../../../utils/validationLogic/isNotEmptyString";
+import {JobSeekerDTO} from "../../../../DTOs/accountDTOs/JobSeekerDTO";
 import {useNavigate} from "react-router-dom";
 import {months} from "../../../../AppConstData/Months";
 import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
+import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
+import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/AutocompleteWindowTypes";
 
 interface WorkExperienceInfoComponentProps {
-    workExperience? : WorkExperienceDTO
+    workExperience?: WorkExperienceDTO
 }
 
 const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({workExperience}) => {
@@ -34,7 +33,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     const workExperienceService = new WorkExperienceService();
     const resumeService = new ResumeService();
     const navigate = useNavigate();
-    
+
     const [jobTitle, setJobTitle] = useState("");
     const jobTitleInputRef = useRef<HTMLInputElement>(null);
     const [company, setCompany] = useState("");
@@ -52,7 +51,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     const [currentlyWorkingHere, setCurrentlyWorkingHere] = useState(false);
     const [showCityAutoComplete, setShowCityAutoComplete] = useState(false);
     const [savingProcess, setSavingProcess] = useState(false);
-    const [validateJobTitle, setValidateJobTitle] = useState(false);
+    const [validateJobTitle, setExecuteValidation] = useState(false);
     const [parentPagePath, setParentPagePath] = useState("");
 
 
@@ -61,13 +60,13 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             descriptionInputRef.current.innerText = workExperience?.description || "";
         }
         setProgressPercentage(ProgressPercentPerPage * 5);
-        if (workExperience){
+        if (workExperience) {
             setPassedWorkExperienceValues();
         }
-        
+
         const currentPath = window.location.pathname;
         let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
-        if (parentPathFirstPart == "/build"){
+        if (parentPathFirstPart == "/build") {
             parentPathFirstPart = "/build/experience"
         }
         setParentPagePath(parentPathFirstPart);
@@ -76,20 +75,20 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     useEffect(() => {
         setSaveFunc(() => CustomSaveFunc);
     }, [jobTitle, company, country, city, fromMonth,
-    fromYear, toMonth, toYear, description, currentlyWorkingHere]);
+        fromYear, toMonth, toYear, description, currentlyWorkingHere]);
 
     function changeDescriptionValue(event: React.FormEvent<HTMLDivElement>) {
         setDescription(event.currentTarget.innerHTML);
     }
 
-    function toggleCurrentlyWorkHere(){
+    function toggleCurrentlyWorkHere() {
         setCurrentlyWorkingHere(!currentlyWorkingHere)
     }
-    
+
     async function CustomSaveFunc() {
         await handleWorkExperienceCreation("/my-profile", true)
     }
-    
+
     function navigateToSkillsPage() {
         navigate("/build/skills")
     }
@@ -104,16 +103,14 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     }
 
     async function handleWorkExperienceCreation(nextPageRoute: string, isSaveAndExitAction: boolean) {
-        if (!isNotEmpty(jobTitle)) {
-            setValidateJobTitle(true);
-            if (jobTitleInputRef.current) {
-                jobTitleInputRef.current.focus();
-                jobTitleInputRef.current.scrollIntoView({block : "end", behavior: "smooth" });
-                if (isSaveAndExitAction) {
-                    setShowDialogWindow(true);
-                }
-                return;
+        if (!jobTitle) {
+            setExecuteValidation(true);
+            jobTitleInputRef.current?.focus();
+            jobTitleInputRef.current?.scrollIntoView({block: "end", behavior: "smooth"});
+            if (isSaveAndExitAction) {
+                setShowDialogWindow(true);
             }
+            return;
         }
         if (invalidValuesProvided) {
             if (isSaveAndExitAction) {
@@ -121,6 +118,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             }
             return;
         }
+        
         if (workExperience) {
             await updateWorkExperience();
         } else if (jobSeeker?.resume) {
@@ -141,19 +139,18 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             }
             const retrievedResume = await resumeService.postResume(createdResume);
             setJobSeeker((prev) => {
-                if (prev){
-                    const updatedJobSeeker : JobSeekerAccountDTO = {
+                if (prev) {
+                    const updatedJobSeeker: JobSeekerDTO = {
                         ...prev,
-                        resume : retrievedResume
+                        resume: retrievedResume
                     }
                     return updatedJobSeeker;
                 }
-                return prev;});
-            
+                return prev;
+            });
+
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err);
         } finally {
             setSavingProcess(false);
         }
@@ -167,9 +164,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             updatedJobSeeker?.resume!.workExperiences.push(retrievedWorkExperience);
             setJobSeeker(updatedJobSeeker);
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err)
         } finally {
             setSavingProcess(false);
         }
@@ -178,18 +173,16 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     async function updateWorkExperience() {
         try {
             setSavingProcess(true);
-            const retrievedWorkExperience = await workExperienceService.updateWorkExperience(workExperience!.workExperienceId, fillWorkExperienceDTO());
+            const retrievedWorkExperience = await workExperienceService.updateWorkExperience(workExperience!.id, fillWorkExperienceDTO());
             const updatedJobSeeker = jobSeeker;
-            const workExperienceIndex = updatedJobSeeker!.resume!.educations.findIndex(e => e.id === retrievedWorkExperience.workExperienceId);
+            const workExperienceIndex = updatedJobSeeker!.resume!.educations.findIndex(e => e.id === retrievedWorkExperience.id);
 
             if (workExperienceIndex !== -1) {
                 updatedJobSeeker!.resume!.workExperiences[workExperienceIndex] = retrievedWorkExperience;
                 setJobSeeker(updatedJobSeeker);
             }
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err)
         } finally {
             setSavingProcess(false);
         }
@@ -203,12 +196,12 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             jobTitle,
             company,
             country,
-            cityOrProvince : city,
-            from : fromDate,
-            description : description,
-            currentlyWorkHere : currentlyWorkingHere
+            cityOrProvince: city,
+            from: fromDate,
+            description: description,
+            currentlyWorkHere: currentlyWorkingHere
         };
-        if (!currentlyWorkingHere){
+        if (!currentlyWorkingHere) {
             createUpdateWorkExperienceDTO.to = toDate;
         }
         return createUpdateWorkExperienceDTO;
@@ -230,12 +223,12 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
         if (educationFormattedFromDate) {
             const convertedFromMonth = months
                 .find((m) => m.monthNumber == Number.parseInt(educationFormattedFromDate[1]))?.name;
-            
+
 
             setFromMonth(convertedFromMonth || "");
             setFromYear(educationFormattedFromDate[0]);
         }
-        if (educationFormattedToDate){
+        if (educationFormattedToDate) {
             const convertedToMonth = months
                 .find((m) => m.monthNumber == Number.parseInt(educationFormattedToDate[1]))?.name;
             setToMonth(convertedToMonth || "");
@@ -243,61 +236,65 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
         }
     }
 
-    return(
+    return (
         <>
-            {showCityAutoComplete && <AutocompleteResultsWindow inputFieldRef={cityInputRef}
-                                                                inputValue={city}
-                                                                setInputValue={setCity}
-                                                                country={country || "Canada"}
-                                                                showResult={showCityAutoComplete}
-                                                                setShowResult={setShowCityAutoComplete}
-                                                                autocompleteWindowType={AutocompleteWindowTypes.city}/>}
+            {showCityAutoComplete && <AutocompleteResultsWindow
+                inputFieldRef={cityInputRef}
+                windowMaxWidth={"calc(602px - 2rem)"}
+                inputValue={city}
+                setInputValue={setCity}
+                country={country || "Canada"}
+                showResult={showCityAutoComplete}
+                setShowResult={setShowCityAutoComplete}
+                autocompleteWindowType={AutocompleteWindowTypes.city}
+            />}
 
             <form className={"build-resume-form"}>
                 {savingProcess && <div className={"request-in-process-surface"}></div>}
                 <div className={"build-page-header"}>
                     {workExperience ? <span>Edit work experience</span> : <span>Add work experience</span>}
                 </div>
-                <CustomInputField 
+                <CustomInputField
                     fieldLabel={"Job title"}
                     isRequired={true}
                     inputFieldValue={jobTitle}
                     setInputFieldValue={setJobTitle}
                     inputRef={jobTitleInputRef}
-                    notShowErrorInitially={true}
                     executeValidation={validateJobTitle}
-                    setExecuteValidation={setValidateJobTitle}/>
-                
+                    setExecuteValidation={setExecuteValidation}
+                />
+
                 <CustomInputField
                     fieldLabel={"Company"}
                     isRequired={false}
                     inputFieldValue={company}
-                    setInputFieldValue={setCompany}/>
+                    setInputFieldValue={setCompany}
+                />
 
                 <CountrySelector
                     country={country}
                     setCountry={setCountry}
-                    selectRef={countryInputRef}/>
+                    selectRef={countryInputRef}
+                />
 
-                <CustomInputField
-                    fieldLabel={"City, Province/Territory"}
-                    isRequired={false}
-                    inputFieldValue={city}
-                    setInputFieldValue={setCity}
-                    displayGoogleLogo={true}
+                <LocationCustomInputField
+                    fieldLabel={"City, Province / Territory"}
+                    inputValue={city}
+                    setInputValue={setCity}
                     inputRef={cityInputRef}
-                    setShowAutocompleteWindow={setShowCityAutoComplete}/>
-                
+                    isRequired={false}
+                    setShowAutocompleteResults={setShowCityAutoComplete}/>
+
                 <div className={"is-current"}>
                     <div className={"field-label"}>
                         Time period
                     </div>
-                    <div className={"checkbox-container"}>
+                <div className={"checkbox-container mt05rem"}>
                         <input className={"checkbox"} type={"checkbox"} onChange={toggleCurrentlyWorkHere}/>
                         <span>I currently work here</span>
                     </div>
                 </div>
-                
+
                 <TimePeriod
                     fromMonth={fromMonth}
                     setFromMonth={setFromMonth}
@@ -309,19 +306,21 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                     setToYear={setToYear}
                     invalidValuesProvided={invalidValuesProvided}
                     setInvalidValuesProvided={setInvalidValuesProvided}
-                    currentlyEnrolledSelected={currentlyWorkingHere}/>
-                
+                    currentlyEnrolledSelected={currentlyWorkingHere}
+                />
+
                 <div className={"description-container"}>
                     <div className={"field-label"}>
                         <span>Description</span>
                     </div>
-                    <div style={{position : "relative", marginTop: "0.5rem"}}>
+                    <div style={{position: "relative", marginTop: "0.5rem"}}>
                         <div
                             role={"textbox"}
                             contentEditable={true}
                             className={"description-input"}
                             onInput={changeDescriptionValue}
-                            ref={descriptionInputRef}>
+                            ref={descriptionInputRef}
+                        >
                         </div>
                         <div className={"description-focused"}></div>
                     </div>
@@ -347,7 +346,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                 </div>
             </form>
         </>
-        
+
     )
 }
 

@@ -30,36 +30,39 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
     const currentPath = window.location.pathname;
 
     useEffect(() => {
-        
-        setProgressPercentage(ProgressPercentPerPage*7);
-        setSaveFunc(() => navigateToProfilePage)
+        if (!jobSeeker?.resume){
+            navigate("/build/name");
+            return;
+        }
+        setProgressPercentage(ProgressPercentPerPage * 7);
+        setSaveFunc(() => navigateToProfilePage);
     }, []);
-    
-    async function navigateToProfilePage(){
+
+    async function navigateToProfilePage() {
         navigate("/my-profile")
     }
-    
-    async function removeResumeSkill(skill : SkillDTO, index : number) {
+
+    async function removeResumeSkill(skill: SkillDTO, index: number) {
         try {
             setNumberOfSkillToRemove(index);
             await skillService.deleteSkill(skill.id);
-            if (jobSeeker?.resume){
-                const updatedResume = { ...jobSeeker.resume };
+            if (jobSeeker?.resume) {
+                const updatedResume = {...jobSeeker.resume};
                 updatedResume.skills = updatedResume.skills.filter(
                     (currentSkill) => currentSkill.id !== skill.id
                 );
-                setJobSeeker((prev)=>{
-                    return  prev ? 
-                        {...prev,
-                        resume : updatedResume }
+                setJobSeeker((prev) => {
+                    return prev ?
+                        {
+                            ...prev,
+                            resume: updatedResume
+                        }
                         : null
                 })
             }
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setNumberOfSkillToRemove(null);
         }
     }
@@ -67,8 +70,8 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
     function navigateToEditContactInfoPage() {
         navigate("/resume/contact")
     }
-    
-    function addResumeInfo(infoType : string){
+
+    function addResumeInfo(infoType: string) {
         navigate(`${currentPath}/${infoType}/add`)
     }
 
@@ -83,10 +86,13 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                                 {jobSeeker?.firstName} {jobSeeker?.lastName}
                             </div>
                             :
-                            <a className={"job-seeker-add-name small-header-font-size"} onClick={navigateToEditContactInfoPage}> Add name  
+                            <a
+                                className={"job-seeker-add-name small-header-font-size"}
+                                onClick={navigateToEditContactInfoPage}
+                            > Add name
                             </a>
                         }
-                        
+
                         <div className={"gray-text small-margin-bottom"}>
                             {authUser?.user.email}
                         </div>
@@ -95,8 +101,11 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                         </div>
                     </div>
                     <div className={"small-buttons-container"}>
-                        <button className={"small-interaction-button medium-margin-right"} onClick={navigateToEditContactInfoPage}>
-                            <FontAwesomeIcon icon={faPen}/>
+                        <button
+                            className={"small-interaction-button medium-margin-right"}
+                            onClick={navigateToEditContactInfoPage}
+                        >
+                            <FontAwesomeIcon className={"svg1rem"} icon={faPen}/>
                         </button>
                     </div>
                 </div>
@@ -107,7 +116,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                         Work experience
                     </div>
                     <button className={"small-interaction-button"} onClick={() => addResumeInfo("experience")}>
-                        <FontAwesomeIcon icon={faPlus}/>
+                        <FontAwesomeIcon className={"svg125rem"} icon={faPlus}/>
                     </button>
                 </div>
                 {jobSeeker?.resume?.workExperiences.length == 0 ?
@@ -116,8 +125,10 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                     </div>)
                     :
                     (jobSeeker?.resume?.workExperiences.map((experience, index) => (
-                        <WorkExperienceReview key={index}
-                                              workExperience={experience} />)))
+                        <WorkExperienceReview
+                            key={index}
+                            workExperience={experience}
+                        />)))
                 }
             </div>
             <div className={"resume-info-block"}>
@@ -126,7 +137,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                         Education
                     </div>
                     <button className={"small-interaction-button"} onClick={() => addResumeInfo("education")}>
-                        <FontAwesomeIcon icon={faPlus}/>
+                        <FontAwesomeIcon className={"svg125rem"} icon={faPlus}/>
                     </button>
                 </div>
                 {jobSeeker?.resume?.educations.length == 0 ?
@@ -135,8 +146,10 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                     </div>)
                     :
                     (jobSeeker?.resume?.educations.map((education, index) => (
-                        <EducationReview key={index}
-                                         education={education}/>)))
+                        <EducationReview
+                            key={index}
+                            education={education}
+                        />)))
                 }
             </div>
             <div className={"resume-info-block"}>
@@ -145,7 +158,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                         Skills
                     </div>
                     <button className={"small-interaction-button"} onClick={() => addResumeInfo("skills")}>
-                        <FontAwesomeIcon icon={faPlus}/>
+                        <FontAwesomeIcon className={"svg125rem"} icon={faPlus}/>
                     </button>
                 </div>
                 {jobSeeker?.resume?.skills.length == 0 ?
@@ -155,28 +168,28 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                     :
                     (jobSeeker?.resume?.skills.map((skill, index) => (
                         <div key={index} className={"skill-container"}>
-                            {numberOfSkillToRemove === index && <div   className={"request-in-process-surface"}></div>}
+                            {numberOfSkillToRemove === index && <div className={"request-in-process-surface"}></div>}
                             <div className={"skill-name"}>
                                 {skill.name}
                             </div>
                             <button className={"remove-skill-button"} onClick={() => removeResumeSkill(skill, index)}>
-                                <FontAwesomeIcon icon={faTrashCan} />
+                                <FontAwesomeIcon className={"svg125rem"} icon={faTrashCan}/>
                             </button>
                         </div>)))
                 }
             </div>
-            {currentPath != "/resume" && 
+            {currentPath != "/resume" &&
                 <>
-                    <div style={{marginBottom : "1rem"}} className={"content-separation-line"}></div>
+                    <div style={{marginBottom: "1rem"}} className={"content-separation-line"}></div>
                     <div className={"form-and-buttons-divider"}>
-                        <button className={"blue-button min-continue-button-size"} onClick={navigateToProfilePage}>
+                        <button className={"blue-button min-8chr-btn-width"} onClick={navigateToProfilePage}>
                             <span>Continue</span>
                         </button>
                     </div>
-                </> 
+                </>
             }
             <div className={"bottom-page-margin"}>
-                
+
             </div>
         </>
     )

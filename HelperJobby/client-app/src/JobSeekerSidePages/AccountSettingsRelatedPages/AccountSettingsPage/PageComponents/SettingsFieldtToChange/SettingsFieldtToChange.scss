@@ -1,0 +1,73 @@
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+.settings-field-layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.dark-default-text {
+  color: global-variables.$neutral-color-1000;
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.semi-dark-default-text {
+  color: global-variables.$neutral-color-900;
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.light-dark-default-text {
+  color: global-variables.$neutral-color-800;
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word; 
+}
+
+.grey-default-text {
+  color: global-variables.$neutral-color-700;
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.dark-small-text {
+  color: global-variables.$neutral-color-1000;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.semi-dark-small-text {
+  color: global-variables.$neutral-color-900;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.light-dark-small-text {
+  color: global-variables.$neutral-color-800;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+
+.grey-small-text {
+  color: global-variables.$neutral-color-700;
+  line-height: 1.5;
+  font-size: 0.875rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}

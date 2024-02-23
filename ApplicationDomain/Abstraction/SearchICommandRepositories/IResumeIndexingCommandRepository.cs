@@ -10,5 +10,4 @@ public interface IResumeIndexingCommandRepository
 
     public Task RemoveProcessedResumeWordsByResumeId(int resumeId, List<string> words);
     public Task RemoveProcessedResumeWords(int resumeId);
-
 }

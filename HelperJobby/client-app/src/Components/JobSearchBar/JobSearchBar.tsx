@@ -6,17 +6,17 @@ import GoogleImage from "../../Assets/pictures/google_on_white_hdpi.png";
 import {useNavigate} from "react-router-dom";
 import {LocationAutocompleteService} from "../../services/locationAutocompleteService";
 import {useJobSeeker} from "../../hooks/useJobSeeker";
-import {ServerError} from "../../ErrorDTOs/ServerErrorDTO";
+
 import {logErrorInfo} from "../../utils/logErrorInfo";
 import useJobQueryParams from "../../hooks/useQueryParams";
 
 interface JobSearchBarProps {
-    jobInitial : string;
-    locationInitial : string;
+    jobInitial: string;
+    locationInitial: string;
 }
 
 const JobSearchBar: FC<JobSearchBarProps> = (props) => {
-    const [job, setJob]= useState(props.jobInitial);
+    const [job, setJob] = useState(props.jobInitial);
     const [location, setLocation] = useState(props.locationInitial);
     const [jobFocus, setJobFocus] = useState(false);
     const [locationFocus, setLocationFocus] = useState(false);
@@ -30,24 +30,26 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
     const jobRef = useRef<HTMLInputElement>(null);
     const eraseLocationButtonRef = useRef<HTMLDivElement>(null);
     const eraseJobButtonRef = useRef<HTMLDivElement>(null);
-    
+
     const locationAutocompleteService = new LocationAutocompleteService();
     const {jobSeeker} = useJobSeeker();
-    const {query,
+    const {
+        query,
         setQuery,
         jobLocation,
-        setJobLocation} = useJobQueryParams();
+        setJobLocation
+    } = useJobQueryParams();
     const navigate = useNavigate();
 
 
     useEffect(() => {
         const handleDocumentClick = (e: MouseEvent) => {
             const clickedElement = e.target as HTMLElement;
-            if (eraseLocationButtonRef.current?.contains(clickedElement)){
+            if (eraseLocationButtonRef.current?.contains(clickedElement)) {
                 setLocation("");
                 setShowEraseLocationBtn(false);
             }
-            if (eraseJobButtonRef.current?.contains(clickedElement)){
+            if (eraseJobButtonRef.current?.contains(clickedElement)) {
                 setJob("");
                 setShowEraseLocationBtn(false);
             }
@@ -55,7 +57,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
                 setShowAutoComplete(false);
                 setShowEraseLocationBtn(false);
             }
-            if (!jobRef.current?.contains(clickedElement)){
+            if (!jobRef.current?.contains(clickedElement)) {
                 setShowEraseJobBtn(false);
             }
         };
@@ -66,12 +68,12 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
     }, []);
 
     useEffect(() => {
-        if (!props.locationInitial && jobSeeker?.address?.city){
+        if (!props.locationInitial && jobSeeker?.address?.city) {
             setLocation(jobSeeker?.address.city)
         }
     }, [jobSeeker]);
-    
-    
+
+
     useEffect(() => {
         const timeout = setTimeout(() => {
             setDelayedLocationValue(location);
@@ -91,7 +93,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
                 const response = await locationAutocompleteService.GetAutocompletesForJobLocation(
                     delayedLocationValue
                 );
-                
+
                 const separatedValues = response.map((result) => result.split(', '));
                 const autocompleteResultsSlices = separatedValues.map((values) => {
                     if (values.length > 1) {
@@ -100,26 +102,23 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
                         return values;
                     }
                 });
-                if ("remote".includes(delayedLocationValue.toLowerCase())){
+                if ("remote".includes(delayedLocationValue.toLowerCase())) {
                     autocompleteResultsSlices.push(["Remote"]);
                 }
                 setAutocompleteResults(autocompleteResultsSlices);
-                if (autocompleteResultsSlices.length == 0){
+                if (autocompleteResultsSlices.length == 0) {
                     setShowAutoComplete(false);
                 }
             } catch (error) {
-                if (error instanceof ServerError) {
-                    logErrorInfo(error);
-                }
-            }
-            finally {
+                logErrorInfo(error)
+            } finally {
                 setLoading(false);
             }
         }
         fetchData();
     }, [delayedLocationValue]);
-    
-    
+
+
     function handleCitySelect(locationResult: string[]) {
         setLocation(locationResult.join(", "))
         setShowAutoComplete(false);
@@ -128,24 +127,23 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
     function handleJobInput(e: ChangeEvent<HTMLInputElement>) {
         setJob(e.target.value);
         setQuery(e.target.value);
-        if (e.target.value.length > 0){
+        if (e.target.value.length > 0) {
             setShowEraseJobBtn(true);
-        }
-        else {
+        } else {
             setShowEraseJobBtn(false);
         }
     }
 
-    function eraseJobInput(e : React.MouseEvent<HTMLDivElement>) {
+    function eraseJobInput(e: React.MouseEvent<HTMLDivElement>) {
         e.preventDefault();
         setJob("");
         setQuery("");
         setShowEraseJobBtn(false);
-        if (jobRef.current){
+        if (jobRef.current) {
             jobRef.current.focus();
         }
     }
-    
+
     function handleJobFocus() {
         setJobFocus(true);
         setShowEraseJobBtn(true);
@@ -155,10 +153,9 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
         setJobFocus(false);
     }
 
-    
 
     function handleJobInputHover() {
-        if (job){
+        if (job) {
             setShowEraseJobBtn(true)
         }
     }
@@ -167,13 +164,11 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
         setShowEraseJobBtn(false)
     }
 
-    
 
     function handleLocationInput(e: ChangeEvent<HTMLInputElement>) {
-        if (e.target.value.length > 0){
-          setShowEraseLocationBtn(true)  
-        }
-        else {
+        if (e.target.value.length > 0) {
+            setShowEraseLocationBtn(true)
+        } else {
             setShowEraseLocationBtn(false)
         }
         setLocation(e.target.value);
@@ -182,36 +177,36 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
         setShowAutoComplete(true);
     }
 
-    
 
     function eraseLocationInput(e: React.MouseEvent<HTMLDivElement>) {
         e.preventDefault();
         setLocation("");
         setJobLocation("");
         setShowEraseLocationBtn(false);
-        if (locationRef.current){
+        if (locationRef.current) {
             locationRef.current.focus();
         }
     }
 
     function handleLocationFocus() {
-        if (location){
+        if (location) {
             setShowEraseLocationBtn(true);
         }
         setLocationFocus(true);
     }
+
     function handleLocationBlur() {
         setLocationFocus(false);
     }
 
     function handleLocationInputHover() {
-        if (location){
+        if (location) {
             setShowEraseLocationBtn(true);
         }
     }
 
     function handleLocationInputLeave() {
-        if (!locationFocus){
+        if (!locationFocus) {
             setShowEraseLocationBtn(false);
         }
     }
@@ -230,63 +225,76 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
         }
     };
 
-    return(
+    return (
         <div className={"search-container"}>
             <div className={"search-boxes"}>
                 <form className={"search-form"}>
                     <div className={"input-fields-box"}>
-                        <div className={`query-box`}
-                             onMouseEnter={handleJobInputHover}
-                             onMouseLeave={handleJobInputLeave}>
+                        <div
+                            className={`query-box`}
+                            onMouseEnter={handleJobInputHover}
+                            onMouseLeave={handleJobInputLeave}
+                        >
                             <div className={`border-lining ${jobFocus ? "job-query-box-focus" : ""}`}/>
                             <div className={"icon-box"}>
-                                <FontAwesomeIcon className={"medium-svg"} icon={faMagnifyingGlass}/>
+                                <FontAwesomeIcon className={"svg125rem"} icon={faMagnifyingGlass}/>
                             </div>
-                            <input className={`query-input`}
-                                   value={job}
-                                   onChange={handleJobInput}
-                                   placeholder={"Job title, keywords or company"}
-                                   ref={jobRef}
-                                   onFocus={handleJobFocus}
-                                   onBlur={handleJobInputBlur}
-                                   onKeyDown={handleEnterKeyPress}/>
-                            {showEraseJobBtn &&<div className={"cross-icon-box"} onClick={eraseJobInput} ref={eraseJobButtonRef}>
-                                 <button className={"cross-outline"}>
-                                    <FontAwesomeIcon className={"cross-icon small-svg"} icon={faXmark}/>
-                                </button>
-                            </div>}
+                            <input
+                                className={`query-input`}
+                                value={job}
+                                onChange={handleJobInput}
+                                placeholder={"Job title, keywords or company"}
+                                ref={jobRef}
+                                onFocus={handleJobFocus}
+                                onBlur={handleJobInputBlur}
+                                onKeyDown={handleEnterKeyPress}
+                            />
+                            {showEraseJobBtn &&
+                                <div className={"cross-icon-box"} onClick={eraseJobInput} ref={eraseJobButtonRef}>
+                                    <button className={"cross-outline"}>
+                                        <FontAwesomeIcon className={"cross-icon svg1rem"} icon={faXmark}/>
+                                    </button>
+                                </div>}
                         </div>
                         <div className={"separator"}></div>
-                        <div className={`query-box`} 
-                             onMouseEnter={handleLocationInputHover}
-                             onMouseLeave={handleLocationInputLeave}>
+                        <div
+                            className={`query-box`}
+                            onMouseEnter={handleLocationInputHover}
+                            onMouseLeave={handleLocationInputLeave}
+                        >
                             <div className={`border-lining ${locationFocus ? "location-query-box-focus" : ""}`}/>
                             <div className={"icon-box"}>
-                                <FontAwesomeIcon className={"query-box-icon medium-svg"} icon={faLocationDot} />
+                                <FontAwesomeIcon className={"query-box-icon svg125rem"} icon={faLocationDot}/>
                             </div>
                             <div style={{position: "relative", display: "flex", flexGrow: 1}}>
-                                <input className={"query-input"}
-                                       value={location}
-                                       onChange={handleLocationInput}
-                                       placeholder={`City, province, or "remote"`}
-                                       onFocus={handleLocationFocus}
-                                       onBlur={handleLocationBlur}
-                                       ref = {locationRef}
-                                       onKeyDown={handleEnterKeyPress}/>
+                                <input
+                                    className={"query-input"}
+                                    value={location}
+                                    onChange={handleLocationInput}
+                                    placeholder={`City, province, or "remote"`}
+                                    onFocus={handleLocationFocus}
+                                    onBlur={handleLocationBlur}
+                                    ref={locationRef}
+                                    onKeyDown={handleEnterKeyPress}
+                                />
                                 <img className={"google-logo"} src={GoogleImage} alt={""}></img>
                             </div>
-                            {showEraseLocationBtn && <div className={"cross-icon-box"} onClick={eraseLocationInput} ref={eraseLocationButtonRef} >
+                            {showEraseLocationBtn && <div
+                                className={"cross-icon-box"}
+                                onClick={eraseLocationInput}
+                                ref={eraseLocationButtonRef}
+                            >
                                 <button className={"cross-outline"}>
-                                    <FontAwesomeIcon className={"cross-icon small-svg"} icon={faXmark}/>
+                                    <FontAwesomeIcon className={"cross-icon svg1rem"} icon={faXmark}/>
                                 </button>
                             </div>}
-                            
+
                             {!showAutoComplete ? null : (
                                 !loading ? (
                                     <div className={"location-search-autocomplete-window"}>
                                         {autocompleteResults.map((locationResult, index) => (
                                             <div
-                                                className={"autocomplete-result"}
+                                                className={"select-option"}
                                                 key={index}
                                                 onClick={() => handleCitySelect(locationResult)}
                                             >
@@ -307,7 +315,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
             </div>
         </div>
     )
-    
+
 }
 
 export default JobSearchBar;

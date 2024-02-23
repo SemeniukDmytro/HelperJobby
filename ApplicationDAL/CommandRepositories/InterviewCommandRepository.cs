@@ -14,7 +14,7 @@ public class InterviewCommandRepository : IInterviewCommandRepository
     }
 
     public async Task<Interview> CreateInterview(Interview interview)
-    {
+    {  
         _applicationContext.Interviews.Add(interview);
         await _applicationContext.SaveChangesAsync();
         return interview;

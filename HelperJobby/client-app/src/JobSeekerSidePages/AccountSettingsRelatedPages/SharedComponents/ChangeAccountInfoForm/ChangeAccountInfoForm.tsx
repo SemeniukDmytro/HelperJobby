@@ -3,11 +3,11 @@ import './ChangeAccountInfoForm.scss';
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 
 interface ChangeAccountInfoFormProps {
-    children : ReactNode
+    children: ReactNode
 }
 
 const ChangeAccountInfoForm: FC<ChangeAccountInfoFormProps> = ({children}) => (
-    <div className={"form-page-background"}>
+    <div className={"light-grey-page-background"}>
         <PageWrapWithHeader>
             <div className={"passpage-container"}>
                 <div className={"passpage-form-layout"}>

@@ -5,25 +5,23 @@ import "./AuthUserHomePageHeader.scss";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../hooks/useAuth";
 import AuthService from "../../../services/authService";
-import {removeAuthToken} from "../../../utils/authTokenInteraction";
-import {logErrorInfo} from "../../../utils/logErrorInfo";
-import {ServerError} from "../../../ErrorDTOs/ServerErrorDTO";
+import {useSignOut} from "../../../hooks/useSignOut";
 
-interface AuthUserHomePageHeaderProps {}
+interface AuthUserHomePageHeaderProps {
+}
 
 const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
     const {authUser, setAuthUser} = useAuth();
     const [displayMoreOptions, setDisplayMoreOptions] = useState(false);
     const profileButtonRef = useRef<HTMLButtonElement | null>(null);
     const moreOptionsComponentRef = useRef<HTMLDivElement | null>(null);
-    
-    const authService = new AuthService();
+    const {signOut} = useSignOut(setAuthUser);
     const navigate = useNavigate();
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (profileButtonRef.current && !profileButtonRef.current.contains(event.target as Node) &&
-            moreOptionsComponentRef.current && !moreOptionsComponentRef.current?.contains(event.target as Node)) {
+                moreOptionsComponentRef.current && !moreOptionsComponentRef.current?.contains(event.target as Node)) {
                 setDisplayMoreOptions(false);
             }
         }
@@ -34,34 +32,20 @@ const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
             document.removeEventListener('click', handleClickOutside);
         };
     }, [profileButtonRef]);
+
     function showProfileOptions() {
         setDisplayMoreOptions(!displayMoreOptions);
-    }
-
-    async function signOut() {
-        try {
-            await authService.revokeToken();
-            removeAuthToken();
-            window.location.reload();
-            setAuthUser(null);
-            
-        }
-        catch (error){
-            if (error instanceof ServerError){
-                logErrorInfo(error);
-            }
-        }
     }
 
     function navigateToJobSeekerProfile() {
         navigate("/my-profile");
     }
-    
+
     function navigateToSettingsPage() {
         navigate("/settings")
     }
-    
-    function navigateToSavedJobsPage(){
+
+    function navigateToSavedJobsPage() {
         navigate("/saved")
     }
 
@@ -69,13 +53,13 @@ const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
         <div className={"nav-buttons-block"}>
             <div className={"nav-button-box"}>
                 <button className={"nav-button"}>
-                    <FontAwesomeIcon className={"medium-svg"} icon={faMessage} />
+                    <FontAwesomeIcon className={"svg125rem"} icon={faMessage}/>
                 </button>
                 <div className={"underline"}></div>
             </div>
             <div className={"nav-button-box"}>
                 <button className={"nav-button"} onClick={showProfileOptions} ref={profileButtonRef}>
-                    <FontAwesomeIcon className={"medium-svg"} icon={faUser} />
+                    <FontAwesomeIcon className={"svg125rem"} icon={faUser}/>
                 </button>
                 <div className={"underline"}></div>
                 {displayMoreOptions && <div className={"profile-more-options-line"}>

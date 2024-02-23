@@ -1,13 +1,13 @@
-import {JobSeekerAccountDTO} from "../accountDTOs/JobSeekerAccountDTO";
+import {JobSeekerDTO} from "../accountDTOs/JobSeekerDTO";
 import {JobDTO} from "../jobRelatetedDTOs/JobDTO";
 
 export interface InterviewDTO {
     jobId: number;
-    jobSeekerAccountId: number;
+    jobSeekerId: number;
     job: JobDTO;
-    jobSeekerAccount: JobSeekerAccountDTO;
+    jobSeeker: JobSeekerDTO;
     interviewStart: string;
-    interviewEnd : string;
-    interviewType : string;
-    appointmentInfo : string;
+    interviewEnd: string;
+    interviewType: string;
+    appointmentInfo: string;
 }

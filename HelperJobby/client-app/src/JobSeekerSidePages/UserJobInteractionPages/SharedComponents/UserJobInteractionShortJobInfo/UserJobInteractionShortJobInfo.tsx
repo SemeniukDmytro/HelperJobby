@@ -3,16 +3,20 @@ import './UserJobInteractionShortJobInfo.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBuilding} from "@fortawesome/free-solid-svg-icons";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {UserJobInteractionsTypes} from "../../../../enums/UserJobInteractionsTypes";
 import {useNavigate} from "react-router-dom";
+import {UserJobInteractionsTypes} from "../../../../enums/utilityEnums/UserJobInteractionsTypes";
 
 interface UserJobInteractionShortJobInfoProps {
     job: JobDTO;
-    interactionTime : Date;
-    jobInteractionType : UserJobInteractionsTypes;
+    interactionTime: string;
+    jobInteractionType: UserJobInteractionsTypes;
 }
 
-const UserJobInteractionShortJobInfo: FC<UserJobInteractionShortJobInfoProps> = ({job, interactionTime, jobInteractionType}) => {
+const UserJobInteractionShortJobInfo: FC<UserJobInteractionShortJobInfoProps> = ({
+                                                                                     job,
+                                                                                     interactionTime,
+                                                                                     jobInteractionType
+                                                                                 }) => {
     const [interactionInfo, setInteractionInfo] = useState("");
     const [jobInteractionTimePretext, setJobInteractionTimePretext] = useState("");
     const navigate = useNavigate();
@@ -20,13 +24,13 @@ const UserJobInteractionShortJobInfo: FC<UserJobInteractionShortJobInfoProps> = 
     useEffect(() => {
         setJobInteractionText();
     }, []);
-    
+
     useEffect(() => {
         setInteractionInfo(getInteractionInfo());
     }, [interactionTime]);
 
     function setJobInteractionText() {
-        switch (jobInteractionType){
+        switch (jobInteractionType) {
             case UserJobInteractionsTypes.saved:
                 setJobInteractionTimePretext("Saved");
                 return;
@@ -34,8 +38,9 @@ const UserJobInteractionShortJobInfo: FC<UserJobInteractionShortJobInfoProps> = 
                 setJobInteractionTimePretext("Applied")
                 return;
         }
-        
+
     }
+
     function getInteractionInfo() {
         const interactionDate = new Date(interactionTime);
         const now = new Date();
@@ -62,7 +67,7 @@ const UserJobInteractionShortJobInfo: FC<UserJobInteractionShortJobInfoProps> = 
         }
     }
 
-    function navigateToJobPage(){
+    function navigateToJobPage() {
         navigate(`/viewjob/${job.id}`);
     }
 
@@ -73,10 +78,11 @@ const UserJobInteractionShortJobInfo: FC<UserJobInteractionShortJobInfoProps> = 
             </div>
             <div className={"ji-job-info-box"} onClick={navigateToJobPage}>
                 <span className={"ji-job-title"}>{job.jobTitle}</span>
-                <span className={"dark-default-text"}>{job.employerAccount.organization.name}</span>
-                <span className={"dark-default-text"}>{job.location}</span>
+                <span className={"semi-dark-default-text"}>{job.employer.organization.name}</span>
+                <span className={"semi-dark-default-text"}>{job.location}</span>
                 <span
-                    className={"semi-dark-small-text"}>{interactionInfo == "Today" ? `${jobInteractionTimePretext} ${interactionInfo}` : `${jobInteractionTimePretext} on ${interactionInfo}`}</span>
+                    className={"light-dark-small-text"}
+                >{interactionInfo == "Today" ? `${jobInteractionTimePretext} ${interactionInfo}` : `${jobInteractionTimePretext} on ${interactionInfo}`}</span>
             </div>
         </div>
     )

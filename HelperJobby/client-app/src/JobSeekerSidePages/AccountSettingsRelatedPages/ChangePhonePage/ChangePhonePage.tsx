@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import ChangePhoneComponent from "./PageComponents/ChangePhoneComponent/ChangePhoneComponent";
 
-interface ChangePhonePageProps {}
+interface ChangePhonePageProps {
+}
 
 const ChangePhonePage: FC<ChangePhonePageProps> = () => (
     <ChangePhoneComponent/>

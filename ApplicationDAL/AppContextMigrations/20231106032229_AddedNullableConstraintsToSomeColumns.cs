@@ -2,186 +2,185 @@
 
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ApplicationDAL.AppContextMigrations
+namespace ApplicationDAL.AppContextMigrations;
+
+/// <inheritdoc />
+public partial class AddedNullableConstraintsToSomeColumns : Migration
 {
     /// <inheritdoc />
-    public partial class AddedNullableConstraintsToSomeColumns : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(
-                name: "FK_JobSeekerAccounts_Addresses_AddressId",
-                table: "JobSeekerAccounts");
+        migrationBuilder.DropForeignKey(
+            "FK_JobSeekerAccounts_Addresses_AddressId",
+            "JobSeekerAccounts");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "PhoneNumber",
-                table: "Organizations",
-                type: "varchar(15)",
+        migrationBuilder.AlterColumn<string>(
+                "PhoneNumber",
+                "Organizations",
+                "varchar(15)",
                 maxLength: 15,
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "varchar(15)",
                 oldMaxLength: 15)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4")
+            .OldAnnotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "PhoneNumber",
-                table: "JobSeekerAccounts",
-                type: "varchar(15)",
+        migrationBuilder.AlterColumn<string>(
+                "PhoneNumber",
+                "JobSeekerAccounts",
+                "varchar(15)",
                 maxLength: 15,
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "varchar(15)",
                 oldMaxLength: 15)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4")
+            .OldAnnotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "LastName",
-                table: "JobSeekerAccounts",
-                type: "varchar(30)",
+        migrationBuilder.AlterColumn<string>(
+                "LastName",
+                "JobSeekerAccounts",
+                "varchar(30)",
                 maxLength: 30,
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "varchar(30)",
                 oldMaxLength: 30)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4")
+            .OldAnnotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "FirstName",
-                table: "JobSeekerAccounts",
-                type: "varchar(30)",
+        migrationBuilder.AlterColumn<string>(
+                "FirstName",
+                "JobSeekerAccounts",
+                "varchar(30)",
                 maxLength: 30,
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "varchar(30)",
                 oldMaxLength: 30)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4")
+            .OldAnnotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AlterColumn<int>(
-                name: "AddressId",
-                table: "JobSeekerAccounts",
-                type: "int",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "int");
+        migrationBuilder.AlterColumn<int>(
+            "AddressId",
+            "JobSeekerAccounts",
+            "int",
+            nullable: true,
+            oldClrType: typeof(int),
+            oldType: "int");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_JobSeekerAccounts_Addresses_AddressId",
-                table: "JobSeekerAccounts",
-                column: "AddressId",
-                principalTable: "Addresses",
-                principalColumn: "Id");
-        }
+        migrationBuilder.AddForeignKey(
+            "FK_JobSeekerAccounts_Addresses_AddressId",
+            "JobSeekerAccounts",
+            "AddressId",
+            "Addresses",
+            principalColumn: "Id");
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(
-                name: "FK_JobSeekerAccounts_Addresses_AddressId",
-                table: "JobSeekerAccounts");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropForeignKey(
+            "FK_JobSeekerAccounts_Addresses_AddressId",
+            "JobSeekerAccounts");
 
-            migrationBuilder.UpdateData(
-                table: "Organizations",
-                keyColumn: "PhoneNumber",
-                keyValue: null,
-                column: "PhoneNumber",
-                value: "");
+        migrationBuilder.UpdateData(
+            "Organizations",
+            "PhoneNumber",
+            null,
+            "PhoneNumber",
+            "");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "PhoneNumber",
-                table: "Organizations",
-                type: "varchar(15)",
+        migrationBuilder.AlterColumn<string>(
+                "PhoneNumber",
+                "Organizations",
+                "varchar(15)",
                 maxLength: 15,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "varchar(15)",
                 oldMaxLength: 15,
                 oldNullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4")
+            .OldAnnotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.UpdateData(
-                table: "JobSeekerAccounts",
-                keyColumn: "PhoneNumber",
-                keyValue: null,
-                column: "PhoneNumber",
-                value: "");
+        migrationBuilder.UpdateData(
+            "JobSeekerAccounts",
+            "PhoneNumber",
+            null,
+            "PhoneNumber",
+            "");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "PhoneNumber",
-                table: "JobSeekerAccounts",
-                type: "varchar(15)",
+        migrationBuilder.AlterColumn<string>(
+                "PhoneNumber",
+                "JobSeekerAccounts",
+                "varchar(15)",
                 maxLength: 15,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "varchar(15)",
                 oldMaxLength: 15,
                 oldNullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4")
+            .OldAnnotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.UpdateData(
-                table: "JobSeekerAccounts",
-                keyColumn: "LastName",
-                keyValue: null,
-                column: "LastName",
-                value: "");
+        migrationBuilder.UpdateData(
+            "JobSeekerAccounts",
+            "LastName",
+            null,
+            "LastName",
+            "");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "LastName",
-                table: "JobSeekerAccounts",
-                type: "varchar(30)",
+        migrationBuilder.AlterColumn<string>(
+                "LastName",
+                "JobSeekerAccounts",
+                "varchar(30)",
                 maxLength: 30,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "varchar(30)",
                 oldMaxLength: 30,
                 oldNullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4")
+            .OldAnnotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.UpdateData(
-                table: "JobSeekerAccounts",
-                keyColumn: "FirstName",
-                keyValue: null,
-                column: "FirstName",
-                value: "");
+        migrationBuilder.UpdateData(
+            "JobSeekerAccounts",
+            "FirstName",
+            null,
+            "FirstName",
+            "");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "FirstName",
-                table: "JobSeekerAccounts",
-                type: "varchar(30)",
+        migrationBuilder.AlterColumn<string>(
+                "FirstName",
+                "JobSeekerAccounts",
+                "varchar(30)",
                 maxLength: 30,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "varchar(30)",
                 oldMaxLength: 30,
                 oldNullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4")
+            .OldAnnotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AlterColumn<int>(
-                name: "AddressId",
-                table: "JobSeekerAccounts",
-                type: "int",
-                nullable: false,
-                defaultValue: 0,
-                oldClrType: typeof(int),
-                oldType: "int",
-                oldNullable: true);
+        migrationBuilder.AlterColumn<int>(
+            "AddressId",
+            "JobSeekerAccounts",
+            "int",
+            nullable: false,
+            defaultValue: 0,
+            oldClrType: typeof(int),
+            oldType: "int",
+            oldNullable: true);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_JobSeekerAccounts_Addresses_AddressId",
-                table: "JobSeekerAccounts",
-                column: "AddressId",
-                principalTable: "Addresses",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-        }
+        migrationBuilder.AddForeignKey(
+            "FK_JobSeekerAccounts_Addresses_AddressId",
+            "JobSeekerAccounts",
+            "AddressId",
+            "Addresses",
+            principalColumn: "Id",
+            onDelete: ReferentialAction.Cascade);
     }
 }

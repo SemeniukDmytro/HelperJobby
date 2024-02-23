@@ -1,8 +1,9 @@
 using System.Net;
+using API_IntegrationTests.Fixtures;
 using API_IntegrationTests.TestHelpers;
+using ApplicationDomain.Enums;
 using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Job;
-using HelperJobby.DTOs.User;
 using HelperJobby.DTOs.UserJobInteractions;
 using Xunit.Abstractions;
 
@@ -11,13 +12,13 @@ namespace API_IntegrationTests.Tests;
 public class InterviewControllerTests : IntegrationTest
 {
     private readonly string _baseUri = "/api/Interview";
-    
+
     public InterviewControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {
     }
 
     [Fact]
-    public async Task GetInterviewsByJobId_ShouldReturnJobAllInterviews()
+    public async Task GetJobInterviewsByJobId_ShouldReturnJobAllInterviews()
     {
         //Arrange
         var jobSeekersAmount = 2; //change if created more jobSeekers
@@ -27,20 +28,20 @@ public class InterviewControllerTests : IntegrationTest
         var createdJob = await CreateJob();
         var firstInterview = await CreateInterview(createdJob.Id, firstJobSeeker.Id);
         var secondInterview = await CreateInterview(createdJob.Id, secondJobSeeker.Id);
-        var requestUri = $"api/Interview/{createdJob.Id}/interviews"; 
+        var requestUri = $"api/Interview/{createdJob.Id}/interviews";
 
         //Act
         var getJobSeekerInterviewsResponse = await TestClient.GetAsync(requestUri);
         await ExceptionsLogHelper.LogNotSuccessfulResponse(getJobSeekerInterviewsResponse, TestOutputHelper);
-        
+
         //Assert
         Assert.Equal(HttpStatusCode.OK, getJobSeekerInterviewsResponse.StatusCode);
-        var interviews = (await getJobSeekerInterviewsResponse.Content.ReadAsAsync<IEnumerable<InterviewDTO>>()).ToList();
-        Assert.Equal(jobSeekersAmount, interviews.Count);
-        Assert.Equal(createdJob.JobTitle, interviews[0].Job.JobTitle);
-        Assert.Equal(firstInterview.JobSeekerAccountId, interviews[0].JobSeekerAccountId);
-        Assert.Equal(secondInterview.JobSeekerAccountId, interviews[1].JobSeekerAccountId);
-
+        var jobDTO =
+            (await getJobSeekerInterviewsResponse.Content.ReadAsAsync<JobDTO>());
+        Assert.Equal(jobSeekersAmount, jobDTO.Interviews.Count);
+        Assert.Equal(createdJob.JobTitle, jobDTO.JobTitle);
+        Assert.Equal(firstInterview.JobSeekerId, jobDTO.Interviews[0].JobSeekerId);
+        Assert.Equal(secondInterview.JobSeekerId, jobDTO.Interviews[1].JobSeekerId);
     }
 
     [Fact]
@@ -58,7 +59,7 @@ public class InterviewControllerTests : IntegrationTest
     {
         //Arrange
         var createdInterview = await CreateInterviewByAuthEmployer();
-        var requestUri = $"{_baseUri}/{createdInterview.JobId}/job-seeker/{createdInterview.JobSeekerAccountId}";
+        var requestUri = $"{_baseUri}/{createdInterview.JobId}/job-seeker/{createdInterview.JobSeekerId}";
         //Act
         var getInterviewResponse =
             await TestClient.GetAsync(requestUri);
@@ -67,30 +68,30 @@ public class InterviewControllerTests : IntegrationTest
         Assert.Equal(HttpStatusCode.OK, getInterviewResponse.StatusCode);
         var receivedInterview = await getInterviewResponse.Content.ReadAsAsync<InterviewDTO>();
         Assert.Equal(createdInterview.JobId, receivedInterview.JobId);
-        Assert.Equal(createdInterview.JobSeekerAccountId, receivedInterview.JobSeekerAccountId);
-        Assert.Equal(createdInterview.JobSeekerAccountId, receivedInterview.JobSeekerAccount.Id);
-
+        Assert.Equal(createdInterview.JobSeekerId, receivedInterview.JobSeekerId);
+        Assert.Equal(createdInterview.JobSeekerId, receivedInterview.JobSeeker.Id);
     }
-    
+
     [Fact]
     public async Task CreateInterview_ShouldReturnCreatedInterview()
     {
         //Arrange
         var user = await AuthenticateAsync();
-        var getJobSeekerResponse = await TestClient.GetAsync("api/JobSeekerAccount/current-job-seeker");
-        var newJobSeeker = await getJobSeekerResponse.Content.ReadAsAsync<JobSeekerAccountDTO>();
+        var getJobSeekerResponse = await TestClient.GetAsync("api/JobSeeker/current-job-seeker");
+        var newJobSeeker = await getJobSeekerResponse.Content.ReadAsAsync<JobSeekerDTO>();
         var employerAccount = await CreateEmployerWithNewOrganizationForAuthUser();
-        var createdJob = await CreateJob(); 
-        var requestUri = $"{_baseUri}/{createdJob.Id}/job-seeker/{newJobSeeker.Id}"; 
-        
+        var createdJob = await CreateJob();
+        var requestUri = $"{_baseUri}/{createdJob.Id}/job-seeker/{newJobSeeker.Id}";
+        var createInterviewDTO = InterviewFixtures.createInterviewDTO;
+
         //Act
-        var createInterviewResponse = await TestClient.PostAsJsonAsync(requestUri, "");
-        
+        var createInterviewResponse = await TestClient.PostAsJsonAsync(requestUri, createInterviewDTO);
+
         //Assert
         Assert.Equal(HttpStatusCode.OK, createInterviewResponse.StatusCode);
         var interview = await createInterviewResponse.Content.ReadAsAsync<InterviewDTO>();
         Assert.Equal(createdJob.Id, interview.JobId);
-        Assert.Equal(newJobSeeker.Id, interview.JobSeekerAccountId);
+        Assert.Equal(newJobSeeker.Id, interview.JobSeekerId);
     }
 
     [Fact]
@@ -98,7 +99,7 @@ public class InterviewControllerTests : IntegrationTest
     {
         //Arrange
         var createdInterview = await CreateInterviewByAuthEmployer();
-        var requestUri = $"{_baseUri}/{createdInterview.JobId}/job-seeker/{createdInterview.JobSeekerAccountId}";
+        var requestUri = $"{_baseUri}/{createdInterview.JobId}/job-seeker/{createdInterview.JobSeekerId}";
         //Act
         var deleteInterviewResponse =
             await TestClient.DeleteAsync(requestUri);
@@ -108,6 +109,5 @@ public class InterviewControllerTests : IntegrationTest
         var getInterviewResponse =
             await TestClient.GetAsync(requestUri);
         Assert.Equal(HttpStatusCode.Conflict, getInterviewResponse.StatusCode);
-        
     }
 }

@@ -1,6 +1,6 @@
 export interface UpdateUserWIthCurrentPasswordDTO {
-    email : string;
+    email: string;
     password: string;
-    accountType : string;
-    currentPassword : string;
+    accountType: string;
+    currentPassword: string;
 }

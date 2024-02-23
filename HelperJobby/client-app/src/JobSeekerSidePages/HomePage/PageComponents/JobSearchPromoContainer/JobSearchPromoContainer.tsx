@@ -1,24 +1,26 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import "./JobSearchPromoContainer.scss";
 import {useAuth} from "../../../../hooks/useAuth";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {useNavigate} from "react-router-dom";
 
-interface JobSearchPromoContainerProps {}
+interface JobSearchPromoContainerProps {
+}
 
 const JobSearchPromoContainer: FC<JobSearchPromoContainerProps> = () => {
     const {authUser} = useAuth();
     const {jobSeeker} = useJobSeeker();
     const navigate = useNavigate();
-    function navigateToBuildResumePage(){
-        if (!authUser){
+
+    function navigateToBuildResumePage() {
+        if (!authUser) {
             navigate("/auth-page");
             return;
         }
         navigate("/build/name")
     }
-    
-    
+
+
     return (
         <div className={"job-search-promo-container"}>
             {!jobSeeker?.resume && <div className={"promo-container"}>

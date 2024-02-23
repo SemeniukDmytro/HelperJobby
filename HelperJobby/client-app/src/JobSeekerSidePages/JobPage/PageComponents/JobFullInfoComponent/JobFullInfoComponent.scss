@@ -1,29 +1,29 @@
 @use "../../../../Assets/scssSharedStyles/global-variables";
 
-.fji-layout{
+.fji-layout {
   display: block;
   max-width: 1280px;
   min-width: 0px;
   margin: 0px;
 }
 
-.fji-job-title{
+.fji-job-title {
   font-size: 1.5rem;
   padding-bottom: 1rem;
 }
 
-.fji-fb{
+.fji-fb {
   display: flex;
   box-sizing: border-box;
   min-width: 0px;
 }
 
-.fji-job-container{
+.fji-job-container {
   margin-left: 16.67%;
   width: 53.33%;
 }
 
-.fji-job-header-block{
+.fji-job-header-block {
   position: sticky;
   top: 0;
   padding-bottom: 2rem;
@@ -32,11 +32,12 @@
   z-index: 1;
 }
 
-.fji-organization-name{
+.fji-organization-name {
   color: global-variables.$dark-blue;
   text-decoration: underline;
   cursor: pointer;
-  &:hover{
+
+  &:hover {
     color: global-variables.$dark-blue-hover;
   }
 }

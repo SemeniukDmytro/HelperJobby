@@ -20,13 +20,14 @@ public class ResumeIndexingQueryRepository : IResumeIndexingQueryRepository
             .Where(w => words.Contains(w.Word))
             .ToListAsync();
     }
-    
-    public async Task<IEnumerable<ResumeIndexedWord>> GetProcessedAndIndexedWordsByResumeId(int resumeId, List<string> words)
+
+    public async Task<IEnumerable<ResumeIndexedWord>> GetProcessedAndIndexedWordsByResumeId(int resumeId,
+        List<string> words)
     {
         var resumeIndexedWords = await _applicationContext.IndexedResumeWords
             .Include(w => w.ProcessedResumeWords)
             .Where(w => words.Contains(w.Word) && w.ProcessedResumeWords.Any(pw => pw.ResumeId == resumeId))
-            .Select(w => new ResumeIndexedWord()
+            .Select(w => new ResumeIndexedWord
             {
                 Id = w.Id,
                 Word = w.Word,
@@ -36,7 +37,7 @@ public class ResumeIndexingQueryRepository : IResumeIndexingQueryRepository
             .ToListAsync();
         return resumeIndexedWords;
     }
-    
+
     public async Task<IEnumerable<ProcessedResumeWord>> GetProcessedResumeWordsByResumeId(int resumeId)
     {
         var receivedWords = await _applicationContext.ProcessedResumesWords.Include(w => w.ResumeIndexedWord)

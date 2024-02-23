@@ -2,7 +2,7 @@ namespace ApplicationDomain.Enums;
 
 public enum InterviewTypes
 {
-    Video,
+    Video = 1,
     Phone,
     InPerson
 }

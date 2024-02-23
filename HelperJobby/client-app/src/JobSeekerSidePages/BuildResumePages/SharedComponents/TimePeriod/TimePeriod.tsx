@@ -1,29 +1,29 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './TimePeriod.scss';
 import DateSelector from "../../../../Components/DateSelector/DateSelector";
-import {TimeStamps} from "../../../../enums/TimeStamps";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
-import {isNanAfterIntParse} from "../../../../utils/validationLogic/isNanAfterIntParse";
+import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValidators";
 import {months} from "../../../../AppConstData/Months";
+import {TimeStamps} from "../../../../enums/utilityEnums/TimeStamps";
 
 interface TimePeriodProps {
-    fromMonth : string;
-    setFromMonth : Dispatch<SetStateAction<string>>;
-    fromYear : string;
-    setFromYear : Dispatch<SetStateAction<string>>;
-    toMonth : string;
-    setToMonth : Dispatch<SetStateAction<string>>;
-    toYear : string;
-    setToYear : Dispatch<SetStateAction<string>>;
-    invalidValuesProvided : boolean;
-    setInvalidValuesProvided : Dispatch<SetStateAction<boolean>>;
-    currentlyEnrolledSelected? : boolean;
+    fromMonth: string;
+    setFromMonth: Dispatch<SetStateAction<string>>;
+    fromYear: string;
+    setFromYear: Dispatch<SetStateAction<string>>;
+    toMonth: string;
+    setToMonth: Dispatch<SetStateAction<string>>;
+    toYear: string;
+    setToYear: Dispatch<SetStateAction<string>>;
+    invalidValuesProvided: boolean;
+    setInvalidValuesProvided: Dispatch<SetStateAction<boolean>>;
+    currentlyEnrolledSelected?: boolean;
 }
 
 const TimePeriod: FC<TimePeriodProps> = (props) => {
     const [fromYearFirstValue, setFromYearFirstValue] = useState(getCurrentYear() - 100);
-    const [toYearFirstValue, setToYearFirstValue] = 
+    const [toYearFirstValue, setToYearFirstValue] =
         useState(getToYearFirstValue);
     const [monthWithoutYearFromError, setMonthWithoutYearFromError] = useState("");
     const [monthWithoutYearToError, setMonthWithoutYearToError] = useState("");
@@ -33,109 +33,101 @@ const TimePeriod: FC<TimePeriodProps> = (props) => {
     const monthWithoutYearError = "Cannot specify a month without a year.";
     const endDateNanError = "End date must be after start date";
     const startDateNanError = "Start date must be after end date";
-    
+
     useEffect(() => {
-        if (!props.currentlyEnrolledSelected){
+        if (!props.currentlyEnrolledSelected) {
             isInvalidYearsProvided();
         }
-    }, [ props.toYear, props.fromYear]);
+    }, [props.toYear, props.fromYear]);
 
 
     useEffect(() => {
         isMonthWithoutYearProvided();
-        if (props.currentlyEnrolledSelected){
+        if (props.currentlyEnrolledSelected) {
             isInvalidFromYearProvided();
         }
     }, [props.toMonth, props.fromYear, props.toYear, props.fromMonth]);
 
     useEffect(() => {
-        if (monthWithoutYearFromError || monthWithoutYearToError || invalidYearFromError || invalidYearToError){
+        if (monthWithoutYearFromError || monthWithoutYearToError || invalidYearFromError || invalidYearToError) {
             props.setInvalidValuesProvided(true);
-        }
-        else {
+        } else {
             props.setInvalidValuesProvided(false);
         }
     }, [monthWithoutYearFromError, monthWithoutYearToError, invalidYearFromError, invalidYearToError]);
-    
+
 
     useEffect(() => {
         setToYearFirstValue(getToYearFirstValue());
     }, [props.fromYear]);
-    
-    function getCurrentYear(){
+
+    function getCurrentYear() {
         return new Date().getFullYear();
     }
-    
+
     function getToYearFirstValue() {
-        if (Number.parseInt(props.fromYear)){
+        if (Number.parseInt(props.fromYear)) {
             return Number.parseInt(props.fromYear);
-        }
-        else {
+        } else {
             return getCurrentYear() - 100;
         }
     }
-    
-    function isInvalidYearsProvided(){
-        if ((isNanAfterIntParse(props.toYear) && !isNanAfterIntParse(props.fromYear))){
+
+    function isInvalidYearsProvided() {
+        if ((isNanAfterIntParse(props.toYear) && !isNanAfterIntParse(props.fromYear))) {
             setInvalidYearToError(endDateNanError);
             setMonthWithoutYearToError("");
-        }
-        else {
+        } else {
             setInvalidYearToError("")
         }
 
-        if (!isNanAfterIntParse(props.toYear) && isNanAfterIntParse(props.fromYear)){
+        if (!isNanAfterIntParse(props.toYear) && isNanAfterIntParse(props.fromYear)) {
             setInvalidYearFromError(startDateNanError);
             setMonthWithoutYearFromError("");
-        }
-        else {
+        } else {
             setInvalidYearFromError("")
         }
-        if (!isNanAfterIntParse(props.toYear) && !isNanAfterIntParse(props.fromYear)){
-            if (Number.parseInt(props.toYear) < Number.parseInt(props.fromYear)){
+        if (!isNanAfterIntParse(props.toYear) && !isNanAfterIntParse(props.fromYear)) {
+            if (Number.parseInt(props.toYear) < Number.parseInt(props.fromYear)) {
                 setInvalidYearToError(endDateNanError);
                 setMonthWithoutYearToError("");
-            }
-            else {
+            } else {
                 setInvalidYearToError("");
             }
         }
     }
-    
-    function isInvalidFromYearProvided(){
+
+    function isInvalidFromYearProvided() {
         const currentDate = new Date().toISOString().split("-");
         const selectedMonth = months
             .find((m) => m.name == props.fromMonth)?.monthNumber;
-        if (!isNanAfterIntParse(props.fromYear) && selectedMonth){
-            if (selectedMonth > Number.parseInt(currentDate[1]) && 
-            Number.parseInt(props.fromYear) >= Number.parseInt(currentDate[0])){
+        if (!isNanAfterIntParse(props.fromYear) && selectedMonth) {
+            if (selectedMonth > Number.parseInt(currentDate[1]) &&
+                Number.parseInt(props.fromYear) >= Number.parseInt(currentDate[0])) {
                 setInvalidYearFromError("Start date cannot be later than the current date");
             }
-        }
-        else {
+        } else {
             setInvalidYearFromError("")
         }
     }
-    
-    function isMonthWithoutYearProvided(){
-        if ( isNanAfterIntParse(props.fromYear) && props.fromMonth !== "Month" && props.fromMonth){
+
+    function isMonthWithoutYearProvided() {
+        if (isNanAfterIntParse(props.fromYear) && props.fromMonth !== "Month" && props.fromMonth) {
             setMonthWithoutYearFromError(monthWithoutYearError)
             setInvalidYearFromError("");
-        }
-        else {
+        } else {
             setMonthWithoutYearFromError("");
 
         }
 
-        if (isNanAfterIntParse(props.toYear) && props.toMonth !== "Month" && props.toMonth){
+        if (isNanAfterIntParse(props.toYear) && props.toMonth !== "Month" && props.toMonth) {
             setMonthWithoutYearToError(monthWithoutYearError)
             setInvalidYearToError("");
-        }
-        else {
+        } else {
             setMonthWithoutYearToError("");
         }
     }
-    
+
     return (
         <>
             <div className={"time-stamp-container"}>
@@ -144,13 +136,15 @@ const TimePeriod: FC<TimePeriodProps> = (props) => {
                     <DateSelector
                         selectValue={props.fromMonth}
                         setSelectValue={props.setFromMonth}
-                        timeStamp={TimeStamps.Month}/>
-                    <DateSelector 
-                        selectValue={props.fromYear} 
+                        timeStamp={TimeStamps.Month}
+                    />
+                    <DateSelector
+                        selectValue={props.fromYear}
                         setSelectValue={props.setFromYear}
                         timeStamp={TimeStamps.Year}
                         firstYear={fromYearFirstValue}
-                        lastYear={getCurrentYear()}/>
+                        lastYear={getCurrentYear()}
+                    />
                 </div>
             </div>
             {(monthWithoutYearFromError || invalidYearFromError) && <div className={"error-box"}>
@@ -167,13 +161,15 @@ const TimePeriod: FC<TimePeriodProps> = (props) => {
                             <DateSelector
                                 selectValue={props.toMonth}
                                 setSelectValue={props.setToMonth}
-                                timeStamp={TimeStamps.Month}/>
+                                timeStamp={TimeStamps.Month}
+                            />
                             <DateSelector
                                 selectValue={props.toYear}
                                 setSelectValue={props.setToYear}
                                 timeStamp={TimeStamps.Year}
                                 firstYear={toYearFirstValue}
-                                lastYear={getCurrentYear() + 15}/>
+                                lastYear={getCurrentYear() + 15}
+                            />
                         </div>
                     </div>
                     {(monthWithoutYearToError || invalidYearToError) && <div className={"error-box"}>
@@ -183,7 +179,7 @@ const TimePeriod: FC<TimePeriodProps> = (props) => {
                     </div>}
                 </>)
                 :
-                (<span className={"light-dark-small-text"}>Present</span>)
+                (<span className={"grey-small-text"}>Present</span>)
             }
             <div className={"input-field-spacing"}></div>
         </>

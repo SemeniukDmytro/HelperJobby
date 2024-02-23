@@ -1,0 +1,13 @@
+.JobTypeContainerInDialog {}
+
+.jt-container-in-dialog {
+  display: flex;
+  width: 49%;
+}
+
+.jt-dialog-button {
+  margin: 0;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  justify-content: flex-start;
+}

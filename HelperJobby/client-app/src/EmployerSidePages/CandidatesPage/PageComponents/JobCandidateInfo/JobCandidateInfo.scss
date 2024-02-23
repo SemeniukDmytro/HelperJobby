@@ -1,0 +1,66 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.candidate-info-container {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.candidate-credentials-container {
+  display: flex;
+  flex-basis: 10%;
+}
+
+.review-status-box {
+  flex-basis: 10%;
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+  font-size: 0.875rem;
+}
+
+.candidate-skills-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-basis: 20%;
+}
+
+.candidate-skill-container {
+  border: 1px solid global-variables.$neutral-color-400;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.candidate-qualifications-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex-basis: 20%;
+}
+
+.middle-connected-button {
+  border-radius: 0;
+}
+
+.more-candidate-options-block {
+  min-width: 44px;
+  display: block;
+  position: relative;
+}
+
+.candidate-more-options {
+  right: 0;
+  min-width: 10rem;
+}
+
+.green-button {
+  background-color: rgb(42, 134, 59);
+  color: white;
+}

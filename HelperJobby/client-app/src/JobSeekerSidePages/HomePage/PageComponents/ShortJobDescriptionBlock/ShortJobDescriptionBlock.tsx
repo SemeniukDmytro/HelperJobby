@@ -1,29 +1,27 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEllipsisVertical} from "@fortawesome/free-solid-svg-icons";
+import {faBookmark as solidBookmark, faEllipsisVertical} from "@fortawesome/free-solid-svg-icons";
 import {faBookmark as regularBookmark} from "@fortawesome/free-regular-svg-icons";
-import {faBookmark as solidBookmark} from "@fortawesome/free-solid-svg-icons"
 import "./ShortJobDescriptionBlock.scss";
 import JobFeatureBox from "../JobFeatureBox/JobFeatureBox";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../../hooks/useAuth";
-import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
+import {JobSeekerService} from "../../../../services/jobSeekerService";
 import {descriptionSplitter} from "../../../../utils/descriptionSplitter";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
-import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {jobTypesEnumToStringMap, schedulesEnumToStringMap} from "../../../../utils/convertLogic/enumToStringConverter";
+import {formatJobSalaryDisplay} from "../../../../utils/convertLogic/formatJobSalaryDisplay";
 
 interface ShortJobDescriptionBlockProps {
-    job : JobDTO;
-    selectedJob : JobDTO | null;
-    setSelectedJob : Dispatch<SetStateAction<JobDTO | null>>;
+    job: JobDTO;
+    selectedJob: JobDTO | null;
+    setSelectedJob: Dispatch<SetStateAction<JobDTO | null>>;
 }
 
-const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : ShortJobDescriptionBlockProps) => {
+const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props: ShortJobDescriptionBlockProps) => {
     const {job, selectedJob, setSelectedJob} = props;
     const currentComponentRef = useRef<HTMLDivElement | null>(null);
 
@@ -42,30 +40,29 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
     const [saveJobButtonText, setSaveJobButtonText] = useState("");
     const [isSelected, setIsSelected] = useState(false);
 
-    const jobSeekerService = new JobSeekerAccountService();
+    const jobSeekerService = new JobSeekerService();
 
     useEffect(() => {
         setShortDescription(descriptionSplitter(job.description));
         checkIsNewJob();
-        
+
     }, []);
 
     useEffect(() => {
-        if (job.id == selectedJob?.id){
+        if (job.id == selectedJob?.id) {
             setIsSelected(true);
-        }
-        else {
+        } else {
             setIsSelected(false)
         }
     }, [selectedJob]);
-    
+
 
     useEffect(() => {
         setShortDescription(descriptionSplitter(job.description));
         checkIsNewJob();
         checkIsJobSaved();
     }, [job, jobSeeker?.savedJobs]);
-    
+
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -80,9 +77,9 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
             document.removeEventListener('click', handleClickOutside);
         };
     }, [currentComponentRef]);
-    
-    
-    function checkIsNewJob() : void {
+
+
+    function checkIsNewJob(): void {
         const currentDate = new Date();
         const postedDate = new Date(job.datePosted);
         const timeDifference = currentDate.getTime() - postedDate.getTime();
@@ -97,22 +94,21 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
         if (jobSeeker?.savedJobs) {
             const isSaved = jobSeeker.savedJobs.some(savedJob => savedJob.jobId === props.job.id);
             setIsJobSaved(isSaved);
-            if (isSaved){
+            if (isSaved) {
                 setSaveJobButtonText("Remove from saved");
-            }
-            else {
+            } else {
                 setSaveJobButtonText("Save job")
             }
         }
     }
 
     async function saveJob() {
-        if (authUser === undefined || authUser === null){
+        if (authUser === undefined || authUser === null) {
             navigate('/auth-page')
             return;
         }
         try {
-            if (isJobSaved){
+            if (isJobSaved) {
                 await jobSeekerService.deleteSavedJob(job.id);
                 setSaveJobButtonText("Save job");
                 setIsJobSaved(!isJobSaved);
@@ -122,9 +118,8 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
                         savedJobs: prevJobSeeker.savedJobs.filter(savedJob => savedJob.jobId !== job.id)
                     }
                 });
-            }
-            else {
-                const retrievedSavedJob =  await jobSeekerService.saveJob(job.id);
+            } else {
+                const retrievedSavedJob = await jobSeekerService.saveJob(job.id);
                 setSaveJobButtonText("Remove job from saved")
                 setIsJobSaved(!isJobSaved);
                 setIsSuccessfulPopup(true);
@@ -137,11 +132,8 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
                     };
                 });
             }
-        }
-        catch (error){
-            if (error instanceof ServerError){
-                logErrorInfo(error)
-            }
+        } catch (error) {
+            logErrorInfo(error)
         }
     }
 
@@ -161,62 +153,80 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props : Sho
     }
 
     return (
-       <div ref={currentComponentRef} className={`short-job-description-component-box ${isSelected ? "job-selected-border" : ""}`} onClick={handleJobClick}>
-           {showPopup && <NotifyPopupWindow
-               isSuccessful={isSuccessfulPopup}
-               text={popUpText}
-               showNotify={showPopup}
-               setShowNotify={setShowPopup}/>}
-           <div className={"more-options-absolute-container"}>
-               <button className={"more-options-button"} onClick={showMoreOptions}>
-                   <FontAwesomeIcon className={"medium-svg"} icon={faEllipsisVertical}/>
-               </button>
-               {moreOptionsVisible && <div className={"more-options-bar"}>
-                   <div className={"more-options-window-absolute-container"}>
-                       <div className={"more-options-window"}>
-                           <button className={"first-option"} onClick={saveJob}>
-                               {!isJobSaved ? (<FontAwesomeIcon className={"medium-svg icon-right-margin"} icon={regularBookmark} />) :
-                                   (<FontAwesomeIcon className={"medium-svg icon-right-margin"} icon={solidBookmark} />)}
-                               <span className={"save-job-text"}>{saveJobButtonText}</span>
-                           </button>
-                       </div>
-                   </div>
-               </div>}
-           </div>
-           <div className={"short-description-content-box"}>
-               <div className={"description-content"}>
-                   {isNewJob && <div className={"new-job-container"}>
-                       <span>New</span>
-                   </div>}
-                   <a className={"job-title"}>
-                       {job.jobTitle}
-                   </a>
-                   <a className={"medium-description-text"}>
-                       {job.employerAccount.organization.name}
-                   </a>
+        <div
+            ref={currentComponentRef}
+            className={`short-job-description-component-box ${isSelected ? "job-selected-border" : ""}`}
+            onClick={handleJobClick}
+        >
+            {showPopup && <NotifyPopupWindow
+                isSuccessful={isSuccessfulPopup}
+                text={popUpText}
+                showNotify={showPopup}
+                setShowNotify={setShowPopup}
+            />}
+            <div className={"more-options-absolute-container"}>
+                <button className={"more-options-button"} onClick={showMoreOptions}>
+                    <FontAwesomeIcon className={"svg125rem"} icon={faEllipsisVertical}/>
+                </button>
+                {moreOptionsVisible && <div className={"more-options-bar"}>
+                    <div className={"more-options-window-absolute-container"}>
+                        <div className={"more-options-window"}>
+                            <button className={"first-option"} onClick={saveJob}>
+                                {!isJobSaved ? (<FontAwesomeIcon
+                                        className={"svg125rem icon-right-margin"}
+                                        icon={regularBookmark}
+                                    />) :
+                                    (<FontAwesomeIcon className={"svg125rem icon-right-margin"} icon={solidBookmark}/>)}
+                                <span className={"save-job-text"}>{saveJobButtonText}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>}
+            </div>
+            <div className={"short-description-content-box"}>
+                <div className={"description-content"}>
+                    {isNewJob && <div className={"new-job-container"}>
+                        <span>New</span>
+                    </div>}
+                    <a className={"job-title"}>
+                        {job.jobTitle}
+                    </a>
+                    <a className={"medium-description-text"}>
+                        {job.employer.organization.name}
+                    </a>
 
-                   <div className={"medium-description-text"}>
-                       <span >{job.location}</span>
-                   </div>
+                    <div className={"medium-description-text"}>
+                        <span>{job.location}</span>
+                    </div>
 
-                   <div className={"job-features-info"}>
-                       <JobFeatureBox featureName={`$${thousandsDisplayHelper(job.salary)} ${job.salaryRate}`} moreFeaturesAmount={0}/>
-                       {job.jobType.length != 0 && <JobFeatureBox featureName={`${jobTypesEnumToStringMap(job.jobType[0])}`} moreFeaturesAmount={job.jobType.length - 1}/>}
-                       {job.schedule.length != 0 && <JobFeatureBox featureName={`${schedulesEnumToStringMap(job.schedule[0])}`} moreFeaturesAmount={job.schedule.length - 1}/>}
-                   </div>
-                   <div className={"short-description-content"}>
-                       <ul className={"short-description-list"}>
-                           {shortDescription.map((item, index) => (
-                               <li key={index}>{item}</li>
-                           ))}
-                       </ul>
-                   </div>
-                   {isNewJob && <div className={"date-posted"}>
-                       <span>Posted {jobPostDaysDifference} days ago</span>
-                   </div>}
-               </div>
-           </div>
-       </div>
-)};
+                    <div className={"job-features-info"}>
+                        <JobFeatureBox
+                            featureName={formatJobSalaryDisplay(job)}
+                            moreFeaturesAmount={0}
+                        />
+                        {job.jobType.length != 0 && <JobFeatureBox
+                            featureName={`${jobTypesEnumToStringMap(job.jobType[0])}`}
+                            moreFeaturesAmount={job.jobType.length - 1}
+                        />}
+                        {job.schedule.length != 0 && <JobFeatureBox
+                            featureName={`${schedulesEnumToStringMap(job.schedule[0])}`}
+                            moreFeaturesAmount={job.schedule.length - 1}
+                        />}
+                    </div>
+                    <div className={"short-description-content"}>
+                        <ul className={"short-description-list"}>
+                            {shortDescription.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
+                    {isNewJob && <div className={"date-posted"}>
+                        <span>{jobPostDaysDifference == 0 ? "Just posted" : `Posted ${jobPostDaysDifference} days ago`}</span>
+                    </div>}
+                </div>
+            </div>
+        </div>
+    )
+};
 
 export default ShortJobDescriptionBlock;

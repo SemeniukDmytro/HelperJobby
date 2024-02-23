@@ -1,0 +1,90 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.job-table-filters-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.filter-params-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-basis: 40%;
+}
+
+.sort-jobs-by-container {
+  flex-basis: 50%;
+}
+
+.jobs-order-container {
+  flex-basis: 50%;
+}
+
+.filters-unexpanded-dropdown {
+  box-sizing: border-box;
+  margin-block: 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
+  inline-size: 100%;
+  display: grid;
+  grid-template-columns: 2rem 1fr 2rem;
+  place-items: center start;
+  text-align: start;
+  text-overflow: ellipsis;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding-inline: 0.75rem;
+  padding-block: 0.5rem;
+  min-block-size: 2.5rem;
+  border: 1px solid white;
+  transition: border 0.2s;
+  cursor: pointer;
+  &:hover{
+    border: 1px solid global-variables.$dark-blue;
+  }
+}
+
+.filters-dropdown-with-filters{
+  grid-template-columns: 2rem 1fr 2rem 2rem;
+}
+
+.filter-dropdown-container {
+  position: relative;
+  display: flex;
+  flex-basis: 40%;
+}
+
+.emp-job-search-filters-form{
+  position: absolute;
+  z-index: 2;
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.expanded-job-search-filters-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background-color: white;
+  border-radius: 0.25rem;
+  box-shadow: global-variables.$small-box-shadow;
+  box-sizing: border-box;
+  padding: 1rem;
+}
+
+
+.emp-job-filters-container {
+  box-sizing: border-box;
+  margin-block: 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
+  white-space: nowrap;
+  padding-inline-start: 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline;
+  font-size: 0.875rem;
+  color: global-variables.$neutral-color-800;
+}

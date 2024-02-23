@@ -1,8 +1,11 @@
-export function thousandsDisplayHelper(number : number): string{
-    const numberAsString : string = number.toString();
-    if (numberAsString.includes(",") || numberAsString.includes(".")){
+export function thousandsDisplayHelper(number: number): string {
+    if (!number){
+        return  "";
+    }
+    const numberAsString: string = number.toString();
+    if (numberAsString.includes(",") || numberAsString.includes(".")) {
         return numberAsString;
     }
-    return number.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 3 });
+    return number.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 3});
 
 }

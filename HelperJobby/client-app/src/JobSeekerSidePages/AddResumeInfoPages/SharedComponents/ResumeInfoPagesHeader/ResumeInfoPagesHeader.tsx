@@ -5,36 +5,33 @@ import NavigateBackHeader from "../../../../Components/NavigateBackHeader/Naviga
 import {useNavigate} from "react-router-dom";
 
 interface PreviewPagesHeaderProps {
-    children : ReactNode
+    children: ReactNode
 }
 
 const ResumeInfoPagesHeader: FC<PreviewPagesHeaderProps> = ({children}) => {
     const navigate = useNavigate();
     const [previousPagePath, setPreviousPagePath] = useState("");
-    
+
     useEffect(() => {
         const currentPath = window.location.pathname;
-        if (currentPath.includes("/preview")){
+        if (currentPath.includes("/preview")) {
             setPreviousPagePath("/build/preview")
-        }
-        else if (currentPath.includes("/resume")){
+        } else if (currentPath.includes("/resume")) {
             setPreviousPagePath("/resume")
         }
     }, []);
-    
+
     function navigateToParentPage() {
-        navigate(previousPagePath)   
+        navigate(previousPagePath)
     }
-    
+
     return (
-        <PageWrapWithHeader>
-            <div className={"page-with-centered-content-layout"}>
-                <NavigateBackHeader onBackButtonClick={navigateToParentPage}/>
-                <div className={"form-layout"}>
-                    {children}
-                </div>
+        <div className={"page-with-centered-content-layout"}>
+            <NavigateBackHeader onBackButtonClick={navigateToParentPage}/>
+            <div className={"form-layout"}>
+                {children}
             </div>
-        </PageWrapWithHeader>
+        </div>
     )
 }
 

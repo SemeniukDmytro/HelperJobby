@@ -1,7 +1,7 @@
-import React, {FC, useContext, useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import './EmailForm.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowRightLong, faCircleExclamation} from '@fortawesome/free-solid-svg-icons';
+import {faArrowRightLong} from '@fortawesome/free-solid-svg-icons';
 import SignInForm from "../SignInForm/SignInForm";
 import AccountTypeForm from "../AccountTypeForm/AccountTypeForm";
 import AppLogo from "../AppLogo/AppLogo";
@@ -10,36 +10,35 @@ import AuthService from "../../../../services/authService";
 import {IsValidEmail} from "../../../../utils/validationLogic/authFormValidators";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 
-interface AuthComponentProps {}
+interface AuthComponentProps {
+}
 
 const EmailForm: FC<AuthComponentProps> = () => {
     const {email, setEmail} = useEmail();
     const [error, setError] = useState("");
     const [isEmailInvalid, setIsEmailInvalid] = useState(false);
     const [isEmailRegistered, setIsEmailRegistered] = useState<boolean | null>(null);
-    
+
     const [renderAuthPage, setRenderAuthPage] = useState(true);
     const [renderSignInPage, setRenderSignInPage] = useState(false);
     const [renderAccountTypeForm, setRenderAccountTypeForm] = useState(false);
     const [isFormInvalid, setIsFormInvalid] = useState(true);
 
     useEffect(() => {
-        if (email.trim().length == 0){
+        if (email.trim().length == 0) {
             setIsFormInvalid(true);
-        }
-        else {
+        } else {
             setIsFormInvalid(false);
         }
     }, [email]);
-    
-    
-    useEffect(() => { 
-        if (isEmailRegistered != null){
+
+
+    useEffect(() => {
+        if (isEmailRegistered != null) {
             setRenderAuthPage(false);
             if (isEmailRegistered) {
                 setRenderSignInPage(true);
-            }
-            else{
+            } else {
                 setRenderAccountTypeForm(true);
             }
         }
@@ -66,7 +65,6 @@ const EmailForm: FC<AuthComponentProps> = () => {
         }
     };
 
-    
 
     return (
         <>
@@ -82,24 +80,26 @@ const EmailForm: FC<AuthComponentProps> = () => {
                             </div>
                             <div className={"content-separation-margin"}></div>
                             <form className="passpage-form" onSubmit={onFormSubmit}>
-                                <CustomInputField fieldLabel={"Email address"}
-                                                  isRequired={true}
-                                                  inputFieldValue={email}
-                                                  setInputFieldValue={setEmail} 
-                                                  customErrorMessage={error}
-                                                  setCustomErrorMessage={setError}/>
+                                <CustomInputField
+                                    fieldLabel={"Email address"}
+                                    isRequired={true}
+                                    inputFieldValue={email}
+                                    setInputFieldValue={setEmail}
+                                    customErrorMessage={error}
+                                    setCustomErrorMessage={setError}
+                                />
                                 <button className="blue-button" type={"submit"} disabled={isFormInvalid}>
                                     <span>Continue</span>
-                                    <FontAwesomeIcon className="continue-arrow medium-svg" icon={faArrowRightLong} />
+                                    <FontAwesomeIcon className="continue-arrow svg125rem" icon={faArrowRightLong}/>
                                 </button>
                             </form>
                         </div>
                     </div>
                 </AppLogo>
-                )
+            )
             }
-            { renderSignInPage && <SignInForm/>}
-            { renderAccountTypeForm && <AccountTypeForm/>}
+            {renderSignInPage && <SignInForm/>}
+            {renderAccountTypeForm && <AccountTypeForm/>}
         </>
     )
 };

@@ -4,6 +4,7 @@ using HelperJobby.Extensions;
 using HelperJobby.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,7 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 
 builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson(options =>
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
     );
 
 builder.Services.AddAuthentication().AddJwtBearer(options =>
@@ -37,19 +38,18 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
     };
 });
 
-builder.Services.AddCors(options => options.AddPolicy("Frontend", policy =>
-{
-    policy.WithOrigins().WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-}));
+builder.Services.AddCors(options => options.AddPolicy("Frontend",
+    policy =>
+    {
+        policy.WithOrigins().WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+    }));
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
-{
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -60,8 +60,8 @@ app.UseMiddleware<CurrentUserIdSetterMiddleware>();
 app.UseMiddleware<ExceptionsHandlingMiddleware>();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
+    "default",
+    "{controller}/{action=Index}/{id?}");
 
 app.MapFallbackToFile("index.html");
 

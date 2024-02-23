@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import NotFoundComponent from "./PageComponents/NotFoundComponent/NotFoundComponent";
 
-interface NotFoundPageProps {}
+interface NotFoundPageProps {
+}
 
 const NotFoundPage: FC<NotFoundPageProps> = () => (
-  <NotFoundComponent/>
+    <NotFoundComponent/>
 );
 
 export default NotFoundPage;

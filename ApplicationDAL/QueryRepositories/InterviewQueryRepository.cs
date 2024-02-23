@@ -1,6 +1,4 @@
-using System.Linq.Expressions;
 using ApplicationDAL.Context;
-using ApplicationDomain.Abstraction.ICommandRepositories;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
@@ -17,12 +15,12 @@ public class InterviewQueryRepository : IInterviewQueryRepository
         _applicationContext = applicationContext;
     }
 
-    public async Task<Interview> GetInterviewByJobIdAndJobSeeker(int jobId, int jobSeekerId)
+    public async Task<Interview> GetInterviewByJobIdAndJobSeekerId(int jobId, int jobSeekerId)
     {
         return await GetInterview(jobId, jobSeekerId, q => q
-            .Include(i => i.JobSeekerAccount));
+            .Include(i => i.JobSeeker));
     }
-    
+
     public async Task<Interview> GetInterviewByJobIdAndJobSeekerIdPlain(int jobId, int jobSeekerId)
     {
         return await GetInterview(jobId, jobSeekerId);
@@ -33,21 +31,46 @@ public class InterviewQueryRepository : IInterviewQueryRepository
         return await GetInterview(jobId, jobSeekerId, q => q.Include(i => i.Job));
     }
 
-    private async Task<Interview> GetInterview(int jobId, int jobSeekerId, Func<IQueryable<Interview>, IQueryable<Interview>> includeFunc = null)
+    public async Task<IEnumerable<Interview>> GetInterviewsByJobSeekerId(int jobSeekerId)
     {
-        var query = _applicationContext.Interviews.Where(j => j.JobId == jobId && j.JobSeekerAccountId == jobSeekerId);
+        var interviews = await _applicationContext.Interviews.Where(i => i.JobSeekerId == jobSeekerId)
+            .Select(i => new Interview
+            {
+                JobId = i.JobId,
+                JobSeekerId = i.JobSeekerId,
+                InterviewStart = i.InterviewStart,
+                InterviewEnd = i.InterviewEnd,
+                InterviewType = i.InterviewType,
+                AppointmentInfo = i.AppointmentInfo,
+                Job = new Job
+                {
+                    Id = i.JobId,
+                    JobTitle = i.Job.JobTitle,
+                    Employer = new Employer
+                    {
+                        Id = i.Job.EmployerId,
+                        Organization = new Organization
+                        {
+                            Id = i.Job.Employer.OrganizationId,
+                            Name = i.Job.Employer.Organization.Name
+                        }
+                    },
+                    Location = i.Job.Location
+                }
+            }).ToListAsync();
+        return interviews;
+    }
 
-        if (includeFunc != null)
-        {
-            query = includeFunc(query);
-        }
+    private async Task<Interview> GetInterview(int jobId, int jobSeekerId,
+        Func<IQueryable<Interview>, IQueryable<Interview>> includeFunc = null)
+    {
+        var query = _applicationContext.Interviews.Where(j => j.JobId == jobId && j.JobSeekerId == jobSeekerId);
+
+        if (includeFunc != null) query = includeFunc(query);
 
         var interview = await query.FirstOrDefaultAsync();
 
-        if (interview == null)
-        {
-            throw new InterviewOperatingException("Interview wasn't found");
-        }
+        if (interview == null) throw new InterviewOperatingException("Interview wasn't found");
 
         return interview;
     }

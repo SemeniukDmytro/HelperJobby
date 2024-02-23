@@ -3,7 +3,6 @@ import './SkillsComponent.scss';
 import useResumeBuild from "../../../../../hooks/useResumeBuild";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
 import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
-import {SkillDTO} from "../../../../../DTOs/resumeRelatedDTOs/SkillDTO";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
@@ -13,11 +12,11 @@ import {SkillService} from "../../../../../services/skillService";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {ResumeService} from "../../../../../services/resumeService";
 import {CreateResumeDTO} from "../../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
-import {ServerError} from "../../../../../ErrorDTOs/ServerErrorDTO";
 import {useNavigate} from "react-router-dom";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 
-interface SkillsComponentProps {}
+interface SkillsComponentProps {
+}
 
 const SkillsComponent: FC<SkillsComponentProps> = () => {
     const {setProgressPercentage, setSaveFunc} = useResumeBuild();
@@ -25,15 +24,14 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
     const skillService = new SkillService();
     const resumeService = new ResumeService();
     const navigate = useNavigate();
-    
+
     const [currentSkill, setCurrentSkill] = useState("");
     const [skills, setSkills] = useState<CreateSkillDTO[]>([]);
     const [savingProcess, setSavingProcess] = useState(false);
-    const [skillsRemoved, setSkillsRemoved] = useState(false);
 
     useEffect(() => {
         setProgressPercentage(ProgressPercentPerPage * 6);
-        if (jobSeeker?.resume){
+        if (jobSeeker?.resume) {
             setSkills(jobSeeker.resume.skills);
         }
     }, []);
@@ -43,8 +41,8 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
     }, [skills]);
 
     function addSkill() {
-        const skillToAdd : CreateSkillDTO = {
-            name : currentSkill
+        const skillToAdd: CreateSkillDTO = {
+            name: currentSkill
         }
         setSkills((prevState) => {
             prevState.push(skillToAdd);
@@ -52,41 +50,34 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
         });
         setCurrentSkill("");
     }
+    
+    console.log(skills)
 
     function removeSkill(indexToRemove: number) {
         setSkills((prevState) => {
-            const updatedSkills = prevState.filter((_, index) => index !== indexToRemove);
-            return updatedSkills;
+            return prevState.filter((_, index) => index !== indexToRemove);
         });
     }
-    
-    async function customSaveFunc(){
+
+    async function customSaveFunc() {
         await handleSkillsSaving("/my-profile")
     }
-    
+
     async function saveSkills() {
-       await handleSkillsSaving("/build/preview");   
-    }
-    
-    async function handleSkillsSaving(nextPageUrl : string)
-    {
-        setSavingProcess(true);
-        if (jobSeeker?.resume){
-            await removeSkillsFromExistingResume();
-        }
-        else {
-            await createNewResume();
-        }
-        navigate(nextPageUrl);
-        
+        await handleSkillsSaving("/build/preview");
     }
 
-    useEffect(() => {
-        if (skillsRemoved){
-            addNewSkillsResume();
+    async function handleSkillsSaving(nextPageUrl: string) {
+        setSavingProcess(true);
+        if (jobSeeker?.resume) {
+            await removeSkillsFromExistingResume();
+            await addNewSkillsResume();
+            navigate(nextPageUrl);
+        } else {
+            await createNewResume();
+            navigate(nextPageUrl);
         }
-        
-    }, [skillsRemoved]);
+    }
 
     async function createNewResume() {
         try {
@@ -101,41 +92,34 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
             updatedJobSeeker!.resume = retrievedResume;
             setJobSeeker(updatedJobSeeker);
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err);
         } finally {
             setSavingProcess(false);
         }
     }
 
-    async function addNewSkillsResume(){
+    async function addNewSkillsResume() {
         try {
+            console.log(skills)
             const retrievedSkills = await skillService.addSkillsToResume(jobSeeker!.resume!.id, skills);
             const updatedJobSeeker = jobSeeker;
-            if (updatedJobSeeker?.resume){
+            if (updatedJobSeeker?.resume) {
                 updatedJobSeeker.resume.skills = retrievedSkills;
             }
             setJobSeeker(updatedJobSeeker);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setSavingProcess(false);
-            
+
         }
     }
-    
-    async function removeSkillsFromExistingResume(){
+
+    async function removeSkillsFromExistingResume() {
         try {
             await skillService.removeSkillsFromResume(jobSeeker!.resume!.id);
-            setSkillsRemoved(true);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
         }
     }
 
@@ -154,21 +138,22 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
                         Your skills will appear here
                     </div>
                 }
-                
+
             </div>
             <div className={"add-skills-separation-line"}/>
             <div className={"add-skill-container"}>
-                <CustomInputField 
+                <CustomInputField
                     fieldLabel={"Add skill"}
                     isRequired={false}
                     inputFieldValue={currentSkill}
-                    setInputFieldValue={setCurrentSkill}/>
+                    setInputFieldValue={setCurrentSkill}
+                />
                 <button className={"add-skill-button"} disabled={!currentSkill} onClick={addSkill}>
-                    <FontAwesomeIcon icon={faPlus} />
+                    <FontAwesomeIcon className={"svg125rem"} icon={faPlus}/>
                 </button>
             </div>
-            <div className={"form-and-buttons-divider"} >
-                <button className={"blue-button min-continue-button-size"} onClick={saveSkills}>
+            <div className={"form-and-buttons-divider"}>
+                <button className={"blue-button min-8chr-btn-width"} onClick={saveSkills}>
                     {savingProcess ?
                         <WhiteLoadingSpinner/>
                         :
@@ -178,7 +163,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
             </div>
             <div className={"bottom-page-margin"}/>
         </>
-        
+
     )
 }
 

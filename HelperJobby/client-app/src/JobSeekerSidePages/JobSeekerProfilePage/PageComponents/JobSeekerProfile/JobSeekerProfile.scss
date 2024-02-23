@@ -1,13 +1,13 @@
 @use "../../../../Assets/scssSharedStyles/global-variables";
 
-.profile-info-layout{
+.profile-info-layout {
   display: flex;
   position: relative;
   width: 602px;
   margin: 0 auto;
 }
 
-.profile-info-container{
+.profile-info-container {
   display: flex;
   flex-direction: column;
   position: relative;
@@ -15,14 +15,14 @@
   flex-grow: 1;
 }
 
-.profile-header-info{
+.profile-header-info {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
 
-.job-seeker-add-name{
+.job-seeker-add-name {
   margin-bottom: 0.5rem;
   font-size: 2.25rem;
   font-weight: 700;
@@ -31,14 +31,14 @@
   text-decoration: underline;
 }
 
-.job-seeker-full-name{
+.job-seeker-full-name {
   margin-bottom: 0.5rem;
   font-size: 2.25rem;
   font-weight: 700;
   color: global-variables.$neutral-color-1000;
 }
 
-.job-seeker-avatar{
+.job-seeker-avatar {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -52,7 +52,7 @@
   background-color: global-variables.$neutral-color-900;
 }
 
-.change-job-seeker-info-section{
+.change-job-seeker-info-section {
   margin: 1rem 0rem;
   cursor: pointer;
   display: flex;
@@ -61,7 +61,7 @@
   align-items: center;
 }
 
-.change-job-seeker-info-button{
+.change-job-seeker-info-button {
   display: flex;
   flex-grow: 1;
   flex-direction: column;
@@ -72,13 +72,13 @@
   border: none;
 }
 
-.change-info-button-arrow{
+.change-info-button-arrow {
   font-size: 1rem;
   color: global-variables.$neutral-color-900;
   margin-right: 1.5rem;
 }
 
-.job-seeker-info-line{
+.job-seeker-info-line {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -87,32 +87,32 @@
   margin-bottom: 1rem;
 }
 
-.numeric-info{
+.numeric-info {
   font-size: 0.875rem;
 }
 
-.last-of-type{
+.last-of-type {
   margin-bottom: 0rem;
 }
 
-.job-seeker-info-underline{
+.job-seeker-info-underline {
   text-decoration: underline;
 }
 
-.start-of-line-icon{
+.start-of-line-icon {
   font-size: 1.25rem;
   margin-right: 1rem;
   width: 20px;
 }
 
-.resume-section{
+.resume-section {
   margin-top: 2rem;
   display: flex;
   flex-grow: 1;
   flex-direction: column;
 }
 
-.resume-section-header{
+.resume-section-header {
   display: flex;
   margin-bottom: 0.5rem;
   font-size: 1.25rem;
@@ -120,13 +120,13 @@
   color: global-variables.$neutral-color-1000;
 }
 
-.add-resume-buttons-box{
+.add-resume-buttons-box {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.add-resume-button{
+.add-resume-button {
   width: 49%;
   padding: 1rem 0;
   border: 1px solid global-variables.$neutral-color-400;
@@ -137,19 +137,20 @@
   color: global-variables.$dark-blue;
   font-weight: 700;
   font-size: 1rem;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
     border-color: global-variables.$dark-blue;
   }
-  &:active{
+
+  &:active {
     background-color: global-variables.$light-blue-active;
     box-shadow: global-variables.$button-inner-shadow;
   }
 }
 
 
-
-.resume-container{
+.resume-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -159,12 +160,13 @@
   border-radius: 0.5rem;
   cursor: pointer;
   transition: 0.2s;
-  &:hover{
+
+  &:hover {
     box-shadow: global-variables.$field-box-shadow;
   }
 }
 
-.resume-container-info{
+.resume-container-info {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -172,7 +174,7 @@
   color: global-variables.$neutral-color-1000;
 }
 
-.resume-icon{
+.resume-icon {
   color: global-variables.$neutral-color-500;
   font-size: 3rem;
   height: 3rem;
@@ -180,6 +182,6 @@
   margin-right: 1rem;
 }
 
-.right-margin-remove{
+.right-margin-remove {
   margin-right: 0 !important;
 }

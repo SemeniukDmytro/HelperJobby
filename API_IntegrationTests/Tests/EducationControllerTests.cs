@@ -8,7 +8,7 @@ namespace API_IntegrationTests.Tests;
 public class EducationControllerTests : IntegrationTest
 {
     private readonly string _baseUri = "/api/education";
-    
+
     public EducationControllerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
     {
     }
@@ -20,7 +20,7 @@ public class EducationControllerTests : IntegrationTest
         await AuthenticateAsync();
         var createdEducation = await CreateEducation();
         var requestUri = $"{_baseUri}/{createdEducation.Id}";
-        
+
         //Act
         var getEducationResponse = await TestClient.GetAsync(requestUri);
 
@@ -31,8 +31,8 @@ public class EducationControllerTests : IntegrationTest
         Assert.Equal(createdEducation.ResumeId, receivedEducation.ResumeId);
         Assert.Equal(createdEducation.LevelOfEducation, createdEducation.LevelOfEducation);
     }
-    
-    
+
+
     [Fact]
     public async Task CreateEducation_ShouldReturnCreatedEducation()
     {
@@ -41,7 +41,7 @@ public class EducationControllerTests : IntegrationTest
         var createdResume = await CreateResume();
         var requestUri = $"{_baseUri}/{createdResume.Id}";
         var createdEducation = EducationFixtures.FirstEducation;
-        
+
         //Act
         var createEducationResponse = await TestClient.PostAsJsonAsync(requestUri, createdEducation);
 
@@ -59,7 +59,7 @@ public class EducationControllerTests : IntegrationTest
         await AuthenticateAsync();
         var createdEducation = await CreateEducation();
         var requestUri = $"{_baseUri}/{createdEducation.Id}";
-        var updatedEducationDTO = new CreateUpdateEducationDTO()
+        var updatedEducationDTO = new CreateUpdateEducationDTO
         {
             LevelOfEducation = "Master's",
             FieldOfStudy = "Computer Science",
@@ -69,7 +69,7 @@ public class EducationControllerTests : IntegrationTest
             From = null,
             To = new DateOnly(2014, 5, 30)
         };
-        
+
         //Act
         var updateEducationResponse = await TestClient.PutAsJsonAsync(requestUri, updatedEducationDTO);
 
@@ -79,9 +79,8 @@ public class EducationControllerTests : IntegrationTest
         Assert.Equal(updatedEducationDTO.LevelOfEducation, updatedEducation.LevelOfEducation);
         Assert.Equal(updatedEducationDTO.From, updatedEducation.From);
         Assert.Equal(createdEducation.Id, updatedEducation.Id);
-
     }
-    
+
     [Fact]
     public async Task DeleteEducation_ShouldDeleteEducation()
     {
@@ -89,7 +88,7 @@ public class EducationControllerTests : IntegrationTest
         await AuthenticateAsync();
         var createdEducation = await CreateEducation();
         var requestUri = $"{_baseUri}/{createdEducation.Id}";
-        
+
         //Act
         var deleteEducationResponse = await TestClient.DeleteAsync(requestUri);
 

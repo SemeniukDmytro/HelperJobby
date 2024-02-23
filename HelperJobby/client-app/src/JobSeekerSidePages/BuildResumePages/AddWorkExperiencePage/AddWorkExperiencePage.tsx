@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import WorkExperienceInfoComponent from "../SharedComponents/WorkExperienceInfoComponent/WorkExperienceInfoComponent";
 
-interface AddWorkExperiencePageProps {}
+interface AddWorkExperiencePageProps {
+}
 
 
 const AddWorkExperiencePage: FC<AddWorkExperiencePageProps> = () => (
-  <WorkExperienceInfoComponent/>
+    <WorkExperienceInfoComponent/>
 );
 
 export default AddWorkExperiencePage;

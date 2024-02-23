@@ -1,10 +1,15 @@
-import {JobSeekerAccountDTO} from "../accountDTOs/JobSeekerAccountDTO";
+import {JobSeekerDTO} from "../accountDTOs/JobSeekerDTO";
 import {JobDTO} from "../jobRelatetedDTOs/JobDTO";
+import {JobApplyStatuses} from "../../enums/modelDataEnums/JobApplyStatuses";
+import {ResumeDTO} from "../resumeRelatedDTOs/ResumeDTO";
 
 export interface JobApplyDTO {
     jobId: number;
-    jobSeekerAccountId: number;
+    jobSeekerId: number;
     job: JobDTO;
-    jobSeekerAccount: JobSeekerAccountDTO;
-    dateApplied: Date;
+    jobSeeker: JobSeekerDTO;
+    resume : ResumeDTO;
+    dateApplied: string;
+    jobApplyStatus : JobApplyStatuses;
+    isReviewed : boolean;
 }

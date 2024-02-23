@@ -4,6 +4,5 @@ namespace ApplicationDomain.LocationRelatedModels;
 
 public class Prediction
 {
-    [JsonProperty("description")]
-    public string Description { get; set; }
+    [JsonProperty("description")] public string Description { get; set; }
 }

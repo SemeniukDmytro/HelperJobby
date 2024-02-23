@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
-import PreviewEditEducationComponent
-    from "./PageComponents/ResumeEditEducationComponent/ResumeEditEducationComponent";
+import React, {FC} from 'react';
+import PreviewEditEducationComponent from "./PageComponents/ResumeEditEducationComponent/ResumeEditEducationComponent";
 
-interface PreviewEditEducationPageProps {}
+interface PreviewEditEducationPageProps {
+}
 
 const ResumeEditEducationPage: FC<PreviewEditEducationPageProps> = () => (
-  <PreviewEditEducationComponent/>
+    <PreviewEditEducationComponent/>
 );
 
 export default ResumeEditEducationPage;

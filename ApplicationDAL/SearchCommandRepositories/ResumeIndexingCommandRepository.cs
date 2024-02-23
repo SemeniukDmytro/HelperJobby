@@ -10,12 +10,13 @@ public class ResumeIndexingCommandRepository : IResumeIndexingCommandRepository
     private readonly ApplicationContext _applicationContext;
     private readonly IResumeIndexingQueryRepository _resumeIndexingQueryRepository;
 
-    public ResumeIndexingCommandRepository(ApplicationContext applicationContext, IResumeIndexingQueryRepository resumeIndexingQueryRepository)
+    public ResumeIndexingCommandRepository(ApplicationContext applicationContext,
+        IResumeIndexingQueryRepository resumeIndexingQueryRepository)
     {
         _applicationContext = applicationContext;
         _resumeIndexingQueryRepository = resumeIndexingQueryRepository;
     }
-    
+
     public async Task SaveIndexedResumeWords(List<ResumeIndexedWord> indexedResumeWords)
     {
         _applicationContext.IndexedResumeWords.AddRange(indexedResumeWords);
@@ -39,35 +40,23 @@ public class ResumeIndexingCommandRepository : IResumeIndexingCommandRepository
         var wordsToDelete = await _resumeIndexingQueryRepository.GetProcessedAndIndexedWordsByResumeId(resumeId, words);
         foreach (var word in wordsToDelete)
         {
-            if (--word.ResumesCount <= 0)
-            {
-                _applicationContext.Remove(word);
-            }
+            if (--word.ResumesCount <= 0) _applicationContext.Remove(word);
             await UpdateIndexedWordResumeCount(word);
             _applicationContext.Remove(word.ProcessedResumeWords[0]);
         }
 
         await _applicationContext.SaveChangesAsync();
     }
-    
+
     public async Task RemoveProcessedResumeWords(int resumeId)
     {
         var wordsToRemove = (await _resumeIndexingQueryRepository.GetProcessedResumeWordsByResumeId(resumeId)).ToList();
-        if (wordsToRemove.Count == 0)
-        {
-            return;
-        }
+        if (wordsToRemove.Count == 0) return;
         foreach (var processedResumeWord in wordsToRemove)
-        {
             if (--processedResumeWord.ResumeIndexedWord.ResumesCount <= 0)
-            {
                 _applicationContext.IndexedResumeWords.Remove(processedResumeWord.ResumeIndexedWord);
-            }
             else
-            {
                 await UpdateIndexedWordResumeCount(processedResumeWord.ResumeIndexedWord);
-            }
-        }
         _applicationContext.ProcessedResumesWords.RemoveRange(wordsToRemove);
         await _applicationContext.SaveChangesAsync();
     }

@@ -1,0 +1,181 @@
+@use "../../Assets/scssSharedStyles/global-variables";
+
+.employer-pages-navigation {
+  box-sizing: border-box;
+  position: sticky;
+  top: 0px;
+  z-index: 5;
+  height: 100vh;
+}
+
+.nav-bar-layout {
+  box-sizing: border-box;
+  transition: width 200ms cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
+  width: 3.5rem;
+}
+
+.nav-bar-container{
+  box-sizing: border-box;
+  background-color: global-variables.$neutral-color-1000;
+  block-size: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 3.5rem;
+  transition: width 200ms cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
+}
+
+.nav-bar-button-container {
+  display: flex;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 0.375rem;
+}
+
+.nav-bar-size-button {
+  align-items: center;
+  background-color: transparent;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  min-height: 2.75rem;
+  overflow: hidden;
+  padding-inline: 0.5rem;
+  transition: 0.2s;
+  border: 1px transparent;
+  &:hover{
+    background-color: global-variables.$neutral-color-900;
+  }
+}
+
+.nav-icon-container {
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  border-radius: 0.5rem;
+  color: white;
+  block-size: 1.5rem;
+  justify-content: center;
+  inline-size: 1.5rem;
+  cursor: pointer;
+}
+
+.nav-buttons-list {
+  display: flex;
+  box-sizing: border-box;
+  margin: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+  list-style: none;
+  padding: 0px;
+}
+
+.white-nav-link-container {
+  display: flex;
+  box-sizing: border-box;
+  min-inline-size: 0px;
+  -webkit-box-align: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 0.5rem;
+  justify-content: space-between;
+  overflow: hidden;
+  position: relative;
+  transition: 0.2s;
+  inline-size: 100%;
+}
+
+.nav-link {
+  align-items: center;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  flex-shrink: 0;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  min-block-size: 2.75rem;
+  overflow: hidden;
+  padding-inline: 0.5rem;
+  transition: 0.2s;
+  border: 1px solid transparent;
+}
+
+.nav-list-component {
+  box-sizing: border-box;
+  margin-block: 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
+  position: relative;
+}
+
+.nav-link-container {
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  background-color: transparent;
+  border-radius: 0.5rem;
+  justify-content: space-between;
+  overflow: hidden;
+  position: relative;
+  transition: 0.2s;
+  width: 100%;
+  &:hover{
+    background-color: global-variables.$neutral-color-800;
+  }
+}
+
+.nav-link-text {
+  display: flex;
+  box-sizing: border-box;
+  min-inline-size: 0px;
+  align-items: flex-start;
+  color: white;
+  white-space: nowrap;
+  font-size: 0.875rem;
+}
+
+.dark-nav-link-text {
+  color: global-variables.$neutral-color-1000;
+}
+
+.create-new-option-container {
+  box-sizing: border-box;
+  margin-block: -0.375rem 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
+  left: 100%;
+  position: absolute;
+  top: 0px;
+  animation: fadeIn 0.5s ease;
+}
+
+.create-new-options-layout{
+}
+
+.create-new-options-text{
+  box-sizing: border-box;
+  overflow: hidden;
+  padding-inline-end: 0.375rem;
+  background-color: rgb(45, 45, 45);
+  border-radius: 0.5rem;
+  min-width: 13.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  transform: translateX(0.375rem);
+  transition: transform 100ms cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
+}
+
+.pink-icon-container {
+  background-color: rgb(199, 66, 137);
+}
+
+.green-icon-container{
+  background-color: rgb(53, 130, 113);
+}

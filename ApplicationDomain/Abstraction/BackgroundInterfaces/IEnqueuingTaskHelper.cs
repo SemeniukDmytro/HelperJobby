@@ -1,6 +1,5 @@
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Abstraction.SearchRelatedIServices;
-using ApplicationDomain.Models;
 
 namespace ApplicationDomain.Abstraction.BackgroundInterfaces;
 
@@ -10,5 +9,4 @@ public interface IEnqueuingTaskHelper
     public Task EnqueueResumeIndexingTaskAsync(Func<IResumeContentIndexingService, Task> indexingAction);
 
     public Task EnqueueAddingRecentSearchTask(Func<IRecentUserSearchService, Task> addingRecentSearchAction);
-
 }

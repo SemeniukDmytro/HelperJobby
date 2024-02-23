@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import './ResumeAddWorkExperienceComponent.scss';
 import PreviewPagesHeader from "../../../SharedComponents/ResumeInfoPagesHeader/ResumeInfoPagesHeader";
 import WorkExperienceInfoComponent

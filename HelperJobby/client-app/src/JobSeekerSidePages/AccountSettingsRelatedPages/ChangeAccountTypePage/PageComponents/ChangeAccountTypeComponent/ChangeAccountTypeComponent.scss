@@ -1,25 +1,32 @@
 @use "../../../../../Assets/scssSharedStyles/global-variables";
 
-.radio-input-option-box{
+.radio-input-option-box {
   padding: 1rem;
   border: 1px solid global-variables.$neutral-color-400;
   border-radius: 0.5rem;
 }
 
-.radio-input-info{
+.radio-input-info {
   display: flex;
   flex-direction: row;
-  align-items: end;
+  align-items: flex-end;
   cursor: pointer;
-  &:hover{
-    .custom-radio-input{
+
+  &:hover {
+    .custom-radio-input {
       background-color: global-variables.$light-blue;
       border-color: global-variables.$dark-blue;
     }
   }
+  &:active{
+    .custom-radio-input {
+      background-color: global-variables.$light-blue-active;
+      border-color: global-variables.$dark-blue-active;
+    }
+  }
 }
 
-.custom-radio-input{
+.custom-radio-input {
   appearance: none;
   width: 1.5rem;
   height: 1.5rem;
@@ -31,16 +38,24 @@
   cursor: pointer;
   position: relative;
   align-self: start;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
     border-color: global-variables.$dark-blue;
   }
-  &:checked{
-    &::after{
+  
+  &:active{
+    background-color: global-variables.$light-blue-active;
+    border-color: global-variables.$dark-blue;
+  }
+
+  &:checked {
+    &::after {
       background-color: global-variables.$dark-blue;
     }
   }
-  &::after{
+
+  &::after {
     content: "";
     position: absolute;
     top: 50%;
@@ -54,7 +69,7 @@
   }
 }
 
-.passpage-button-container{
+.passpage-button-container {
   display: flex;
   flex-direction: row;
 }

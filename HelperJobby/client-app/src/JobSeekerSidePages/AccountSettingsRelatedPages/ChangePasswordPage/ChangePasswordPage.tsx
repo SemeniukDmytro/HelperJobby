@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import ChangePasswordComponent from "./PageComponents/ChangePasswordComponent/ChangePasswordComponent";
 
-interface ChangePasswordPageProps {}
+interface ChangePasswordPageProps {
+}
 
 const ChangePasswordPage: FC<ChangePasswordPageProps> = () => (
-  <ChangePasswordComponent/>
+    <ChangePasswordComponent/>
 );
 
 export default ChangePasswordPage;

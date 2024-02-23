@@ -7,21 +7,20 @@ import {ResumeService} from "../../../../services/resumeService";
 import {EducationService} from "../../../../services/educationService";
 import {useNavigate} from "react-router-dom";
 import {ProgressPercentPerPage} from "../ProgressPercentPerPage";
-import {isNotEmpty} from "../../../../utils/validationLogic/isNotEmptyString";
 import {CreateResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import dateToStringConverter from "../../../../utils/convertLogic/dateToStringConverter";
 import {CreateUpdateEducationDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateUpdateEducationDTO";
 import {months} from "../../../../AppConstData/Months";
 import AutocompleteResultsWindow
     from "../../../EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
-import {AutocompleteWindowTypes} from "../../../../enums/AutocompleteWindowTypes";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 import CountrySelector from "../../../EditContactInfoPage/PageComponents/CountrySelector/CountrySelector";
 import TimePeriod from "../TimePeriod/TimePeriod";
 import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
+import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
+import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/AutocompleteWindowTypes";
 
 
 interface AddEducationComponentProps {
@@ -60,7 +59,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
     useEffect(() => {
         const currentPath = window.location.pathname;
         let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
-        if (parentPathFirstPart == "/build"){
+        if (parentPathFirstPart == "/build") {
             parentPathFirstPart = "/build/education"
         }
         setParentPagePath(parentPathFirstPart);
@@ -88,24 +87,23 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
     }
 
     async function handleEducationCreation(nextPageRoute: string, isSaveAndExitAction: boolean) {
-        if (!isNotEmpty(levelOfEducation)) {
-            setExecuteInputValidations(true);
-            if (levelOfEducationInputRef.current) {
-                levelOfEducationInputRef.current.focus();
-                levelOfEducationInputRef.current.scrollIntoView({block: "end", behavior: "smooth"});
-                if (isSaveAndExitAction) {
-                    setShowDialogWindow(true);
-                }
-                return;
-            }
-        }
-        if (invalidTimeProvided) {
-            setExecuteInputValidations(true);
+        setExecuteInputValidations(true);
+        if (!levelOfEducation) {
+            levelOfEducationInputRef.current?.scrollIntoView({block: "end", behavior: "smooth"});
+            levelOfEducationInputRef.current?.focus();
             if (isSaveAndExitAction) {
                 setShowDialogWindow(true);
             }
             return;
         }
+        if (invalidTimeProvided) {
+            if (isSaveAndExitAction) {
+                setShowDialogWindow(true);
+            }
+            return;
+        }
+        
+        
         if (education) {
             await updateEducation();
         } else if (jobSeeker?.resume) {
@@ -129,9 +127,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
             updatedJobSeeker!.resume = retrievedResume;
             setJobSeeker(updatedJobSeeker);
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err)
         } finally {
             setSavingProcess(false);
         }
@@ -145,9 +141,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
             updatedJobSeeker?.resume!.educations.push(retrievedEducation);
             setJobSeeker(updatedJobSeeker);
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err)
         } finally {
             setSavingProcess(false);
         }
@@ -165,19 +159,17 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                 setJobSeeker(updatedJobSeeker);
             }
         } catch (err) {
-            if (err instanceof ServerError) {
-                logErrorInfo(err)
-            }
+            logErrorInfo(err)
         } finally {
             setSavingProcess(false);
         }
     }
-    
-    function cancelEditing(){
+
+    function cancelEditing() {
         navigate(parentPagePath)
     }
-    
-    function navigateToWorkExperiencePage(){
+
+    function navigateToWorkExperiencePage() {
         navigate("/build/experience")
     }
 
@@ -224,24 +216,30 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
 
     return (
         <>
-            {showCityAutoComplete && <AutocompleteResultsWindow inputFieldRef={cityInputRef}
-                                                                inputValue={city}
-                                                                setInputValue={setCity}
-                                                                country={country || "Canada"}
-                                                                showResult={showCityAutoComplete}
-                                                                setShowResult={setShowCityAutoComplete}
-                                                                autocompleteWindowType={AutocompleteWindowTypes.city}/>}
+            {showCityAutoComplete && <AutocompleteResultsWindow
+                inputFieldRef={cityInputRef}
+                windowMaxWidth={"calc(602px - 2rem)"}
+                inputValue={city}
+                setInputValue={setCity}
+                country={country || "Canada"}
+                showResult={showCityAutoComplete}
+                setShowResult={setShowCityAutoComplete}
+                autocompleteWindowType={AutocompleteWindowTypes.city}
+            />}
             <form className={"build-resume-form"}>
                 {savingProcess && <div className={"request-in-process-surface"}></div>}
                 <div className={"build-page-header"}>
                     {education ? <span>Edit education</span> : <span>Add Education</span>}
                 </div>
-                <CustomInputField fieldLabel={"Level of education"}
-                                  isRequired={true}
-                                  inputFieldValue={levelOfEducation}
-                                  setInputFieldValue={setLevelOfEducation}
-                                  inputRef={levelOfEducationInputRef}
-                                  notShowErrorInitially={true} executeValidation={executeInputsValidation} setExecuteValidation={setExecuteInputValidations}/>
+                <CustomInputField
+                    fieldLabel={"Level of education"}
+                    isRequired={true}
+                    inputFieldValue={levelOfEducation}
+                    setInputFieldValue={setLevelOfEducation}
+                    inputRef={levelOfEducationInputRef}
+                    executeValidation={executeInputsValidation}
+                    setExecuteValidation={setExecuteInputValidations}
+                />
 
                 <CustomInputField
                     fieldLabel={'Field of study'}
@@ -258,22 +256,22 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     setInputFieldValue={setSchoolName}
                     inputRef={schoolNameInputRef}
                 />
-                
-                <CountrySelector 
+
+                <CountrySelector
                     country={country}
                     setCountry={setCountry}
-                    selectRef={countryInputRef}/>
-                
+                    selectRef={countryInputRef}
+                />
 
-                <CustomInputField
-                    fieldLabel={"City, Province/Territory"}
-                    isRequired={false}
-                    inputFieldValue={city}
-                    setInputFieldValue={setCity}
-                    displayGoogleLogo={true}
+
+                <LocationCustomInputField
+                    fieldLabel={"City, Province / Territory"}
+                    inputValue={city}
+                    setInputValue={setCity}
                     inputRef={cityInputRef}
-                    setShowAutocompleteWindow={setShowCityAutoComplete}/>
-                
+                    isRequired={false}
+                    setShowAutocompleteResults={setShowCityAutoComplete}/>
+
                 <TimePeriod
                     fromMonth={fromMonth}
                     setFromMonth={setFromMonth}
@@ -284,7 +282,8 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     toYear={toYear}
                     setToYear={setToYear}
                     invalidValuesProvided={invalidTimeProvided}
-                    setInvalidValuesProvided={setInvalidTimeProvided}/>
+                    setInvalidValuesProvided={setInvalidTimeProvided}
+                />
                 <div className={"form-buttons-row-container"}>
                     <button className={"submit-form-button"} onClick={addEducation}>
                         {savingProcess ?
@@ -293,14 +292,14 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                             <span>Save</span>
                         }
                     </button>
-                    {parentPagePath == "/build/education" ? 
-                    <button className={"skip-form-button"} onClick={navigateToWorkExperiencePage}>
-                        Skip
-                    </button>
+                    {parentPagePath == "/build/education" ?
+                        <button className={"skip-form-button"} onClick={navigateToWorkExperiencePage}>
+                            Skip
+                        </button>
                         :
-                    <button className={"skip-form-button"} onClick={cancelEditing}>
-                        Cancel
-                    </button>
+                        <button className={"skip-form-button"} onClick={cancelEditing}>
+                            Cancel
+                        </button>
                     }
                 </div>
             </form>

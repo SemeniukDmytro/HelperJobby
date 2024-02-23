@@ -1,3 +1,4 @@
+using ApplicationDomain.Enums;
 using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Job;
 
@@ -7,11 +8,11 @@ public class JobApplyDTO
 {
     public int JobId { get; set; }
 
-    public int JobSeekerAccountId { get; set; }
-
+    public int JobSeekerId { get; set; }
+    public JobApplyStatuses JobApplyStatus { get; set; }
     public JobDTO Job { get; set; }
 
-    public JobSeekerAccountDTO JobSeekerAccount { get; set; }
+    public JobSeekerDTO JobSeeker { get; set; }
 
     public DateOnly DateApplied { get; set; }
 }

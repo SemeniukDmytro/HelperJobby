@@ -7,8 +7,8 @@ namespace HelperJobby.Middlewares;
 
 public class ExceptionsHandlingMiddleware
 {
-    private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionsHandlingMiddleware> _logger;
+    private readonly RequestDelegate _next;
 
     public ExceptionsHandlingMiddleware(RequestDelegate next, ILogger<ExceptionsHandlingMiddleware> logger)
     {
@@ -36,7 +36,7 @@ public class ExceptionsHandlingMiddleware
                 Detail = notFoundException.Message
             };
 
-            string json = JsonSerializer.Serialize(errorResponse);
+            var json = JsonSerializer.Serialize(errorResponse);
 
             await context.Response.WriteAsync(json);
         }
@@ -49,12 +49,12 @@ public class ExceptionsHandlingMiddleware
             ProblemDetails errorResponse = new()
             {
                 Status = (int)HttpStatusCode.BadRequest,
-                Type = $"Validation error",
+                Type = "Validation error",
                 Title = $"{invalidModelExceptionBase.EntityName} provided with invalid data",
                 Detail = invalidModelExceptionBase.Message
             };
 
-            string json = JsonSerializer.Serialize(errorResponse);
+            var json = JsonSerializer.Serialize(errorResponse);
 
             await context.Response.WriteAsync(json);
         }
@@ -68,11 +68,11 @@ public class ExceptionsHandlingMiddleware
             {
                 Status = (int)HttpStatusCode.Forbidden,
                 Type = "ForbiddenException",
-                Title = $"You can not perform this action",
+                Title = "You can not perform this action",
                 Detail = forbiddenException.Message
             };
 
-            string json = JsonSerializer.Serialize(errorResponse);
+            var json = JsonSerializer.Serialize(errorResponse);
 
             await context.Response.WriteAsync(json);
         }
@@ -86,11 +86,11 @@ public class ExceptionsHandlingMiddleware
             {
                 Status = (int)HttpStatusCode.Conflict,
                 Type = "EmailIsNotAvailableException",
-                Title = $"Email Already in Use",
+                Title = "Email Already in Use",
                 Detail = emailIsNotAvailableException.Message
             };
 
-            string json = JsonSerializer.Serialize(errorResponse);
+            var json = JsonSerializer.Serialize(errorResponse);
 
             await context.Response.WriteAsync(json);
         }
@@ -108,7 +108,7 @@ public class ExceptionsHandlingMiddleware
                 Detail = jobApplyingException.Message
             };
 
-            string json = JsonSerializer.Serialize(errorResponse);
+            var json = JsonSerializer.Serialize(errorResponse);
 
             await context.Response.WriteAsync(json);
         }
@@ -126,7 +126,7 @@ public class ExceptionsHandlingMiddleware
                 Detail = interviewOperatingException.Message
             };
 
-            string json = JsonSerializer.Serialize(errorResponse);
+            var json = JsonSerializer.Serialize(errorResponse);
 
             await context.Response.WriteAsync(json);
         }
@@ -144,7 +144,7 @@ public class ExceptionsHandlingMiddleware
                 Detail = jobSavingException.Message
             };
 
-            string json = JsonSerializer.Serialize(errorResponse);
+            var json = JsonSerializer.Serialize(errorResponse);
 
             await context.Response.WriteAsync(json);
         }
@@ -162,7 +162,7 @@ public class ExceptionsHandlingMiddleware
                 Detail = ex.Message
             };
 
-            string json = JsonSerializer.Serialize(errorResponse);
+            var json = JsonSerializer.Serialize(errorResponse);
 
             await context.Response.WriteAsync(json);
         }

@@ -1,28 +1,20 @@
-import React, {Dispatch, FC, MutableRefObject, SetStateAction, useEffect, useRef, useState} from 'react';
+import React, {Dispatch, FC, MutableRefObject, SetStateAction, useEffect, useRef} from 'react';
 import "./JobDetailScrollWindow.scss";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMoneyBillAlt} from "@fortawesome/free-regular-svg-icons";
-import {faBriefcase, faChevronDown, faChevronUp, faClock} from "@fortawesome/free-solid-svg-icons";
-import JobDetailsFeatureBox from "../JobDetailsFeatureBox/JobDetailsFeatureBox";
-import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {
-    benefitsEnumToStringMap,
-    jobTypesEnumToStringMap,
-    schedulesEnumToStringMap
-} from "../../../../utils/convertLogic/enumToStringConverter";
 import DetailedJobInfo from "../../../../Components/DetailedJobInfo/DetailedJobInfo";
 
 interface JobDetailsScrollWindowProps {
     selectedJob: JobDTO | null;
     setIsFullHeaderGridTemplate: Dispatch<SetStateAction<number | null>>;
     setIsShortHeaderGridTemplate: Dispatch<SetStateAction<number | null>>;
-    mainContentReference : MutableRefObject<HTMLDivElement | null> | null;
+    mainContentReference: MutableRefObject<HTMLDivElement | null> | null;
 }
 
 const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = ({
-                                                                     selectedJob, setIsFullHeaderGridTemplate
-                                                                     , setIsShortHeaderGridTemplate, mainContentReference
+                                                                     selectedJob,
+                                                                     setIsFullHeaderGridTemplate,
+                                                                     setIsShortHeaderGridTemplate,
+                                                                     mainContentReference
                                                                  }) => {
 
 
@@ -38,7 +30,7 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = ({
                 focusOnInnerContent()
             }
         };
-
+        
         if (jobDetailsScrollWindowRef.current) {
             jobDetailsScrollWindowRef.current.addEventListener('scroll', handleScroll);
         }
@@ -50,10 +42,9 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = ({
         };
     }, [mainContentReference]);
 
-    
 
     function focusOnInnerContent() {
-
+        console.log('das')
         const scrollTop = jobDetailsScrollWindowRef.current?.scrollTop;
         if (scrollTop! !== 0) {
             setIsFullHeaderGridTemplate(0);
@@ -64,7 +55,6 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = ({
         }
     }
 
-     
 
     return (
         <div className={"job-details-scroll-window"} ref={jobDetailsScrollWindowRef}>

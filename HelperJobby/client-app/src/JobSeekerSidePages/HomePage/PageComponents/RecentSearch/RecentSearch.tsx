@@ -5,7 +5,6 @@ import "./RecentSearch.scss"
 import {RecentUserSearchDTO} from "../../../../DTOs/userRelatedDTOs/RecentUserSearchDTO";
 import {useHomePage} from "../../../../hooks/useHomePage";
 import {UserService} from "../../../../services/userService";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 
 interface RecentSearchProps {
@@ -28,9 +27,7 @@ const RecentSearch: FC<RecentSearchProps> = (props) => {
                 )
             );
         } catch (error) {
-            if (error instanceof ServerError) {
-                logErrorInfo(error);
-            }
+            logErrorInfo(error)
         }
     }
 
@@ -45,7 +42,7 @@ const RecentSearch: FC<RecentSearchProps> = (props) => {
                 </div>}
             </div>
             <button className={"delete-search-button"} onClick={deleteRecentUserSearch}>
-                <FontAwesomeIcon className={"medium-svg"} icon={faXmark}/>
+                <FontAwesomeIcon className={"svg125rem"} icon={faXmark}/>
             </button>
         </div>
     )

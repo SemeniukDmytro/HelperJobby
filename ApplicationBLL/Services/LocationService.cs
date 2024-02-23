@@ -9,8 +9,8 @@ public class LocationService : ILocationService
     private const string GoogleMapsApiUrl = "https://maps.googleapis.com/maps/api/";
     private const string StreetAddressType = "address";
     private const string CityAddressType = "(cities)";
-    
-    public async Task<List<string>> GetStreetAddressAutocomplete(string input, string countryCode)
+
+    public async Task<List<string>> GetAddressAutocomplete(string input, string countryCode)
     {
         return await GetLocationsResults(input, countryCode, StreetAddressType);
     }
@@ -27,15 +27,15 @@ public class LocationService : ILocationService
 
     private async Task<List<string>> GetLocationsResults(string input, string countryCode, string resultType)
     {
-        string apiKey = "AIzaSyDxgbh2Mt5Ptnh1oVnPfEWbUWEOFk0cbxU";
+        var apiKey = "AIzaSyDxgbh2Mt5Ptnh1oVnPfEWbUWEOFk0cbxU";
 
-        using (HttpClient client = new HttpClient())
+        using (var client = new HttpClient())
         {
             var regionSpecification = string.IsNullOrEmpty(countryCode) ? "" : $"&components=country:{countryCode}";
             var requestURI =
                 $"{GoogleMapsApiUrl}place/autocomplete/json?input={input}&key={apiKey}&types={resultType}{regionSpecification}";
-            
-            HttpResponseMessage response = await client.GetAsync(requestURI);
+
+            var response = await client.GetAsync(requestURI);
 
             if (response.IsSuccessStatusCode)
             {
@@ -53,7 +53,6 @@ public class LocationService : ILocationService
             }
 
             return new List<string>();
-
         }
     }
 }

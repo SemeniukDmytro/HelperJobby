@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import EditWorkExperienceComponent from "./PageComponents/EditWorkExperienceComponent/EditWorkExperienceComponent";
 
-interface EditWorkExperiencePageProps {}
+interface EditWorkExperiencePageProps {
+}
 
 const EditWorkExperiencePage: FC<EditWorkExperiencePageProps> = () => (
-  <EditWorkExperienceComponent/>
+    <EditWorkExperienceComponent/>
 );
 
 export default EditWorkExperiencePage;

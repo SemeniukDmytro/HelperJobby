@@ -1,4 +1,5 @@
 namespace ApplicationDomain.Enums;
+
 [Flags]
 public enum Schedules
 {

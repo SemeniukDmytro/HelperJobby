@@ -1,13 +1,13 @@
 import {ResumeDTO} from "./ResumeDTO";
 
 export interface WorkExperienceDTO {
-    workExperienceId: number;
+    id: number;
     jobTitle: string;
     company?: string;
     country?: string;
     cityOrProvince?: string;
-    from?: Date;
-    to?: Date;
+    from?: string;
+    to?: string;
     currentlyWorkHere?: boolean;
     description?: string;
     resumeId: number;

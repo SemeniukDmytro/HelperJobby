@@ -1,0 +1,40 @@
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+
+.field-select-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.select-window-container {
+  position: absolute;
+  background-color: white;
+  z-index: 4;
+  border-radius: 0.5rem;
+  border: 1px solid global-variables.$neutral-color-800;
+  overflow-y: auto;
+  margin: 0 auto;
+  box-shadow: global-variables.$field-box-shadow;
+  max-height: 270px;
+
+  .select-option:first-child {
+    border-top-right-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
+  }
+
+  .select-option:last-child {
+    border-bottom-right-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+  }
+}
+
+.multi-row-opt {
+  display: flex;
+  flex-direction: column;
+}
+
+.unset-line-height {
+  line-height: unset;
+}

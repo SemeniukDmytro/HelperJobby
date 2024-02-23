@@ -17,7 +17,7 @@ public class WorkExperienceCommandRepository : IWorkExperienceCommandRepository
     {
         _applicationContext.WorkExperiences.Add(workExperience);
         await _applicationContext.SaveChangesAsync();
-        return workExperience;    
+        return workExperience;
     }
 
     public async Task<WorkExperience> Update(WorkExperience workExperience)

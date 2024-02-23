@@ -1,0 +1,50 @@
+@use "../../Assets/scssSharedStyles/global-variables";
+
+.emps-job-feature-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid global-variables.$neutral-color-700;
+  background-color: global-variables.$neutral-color-100;
+  border-radius: 1rem;
+  padding: 0.185rem 1rem;
+  color: global-variables.$neutral-color-900;
+  cursor: pointer;
+  &:hover{
+    border-color: global-variables.$dark-blue;
+    background-color: global-variables.$light-blue;
+  }
+  &:active{
+    box-shadow: global-variables.$button-inner-shadow;
+    border-color: global-variables.$dark-blue-active;
+    background-color: global-variables.$light-blue-active;
+  }
+}
+
+
+.emps-job-feature-button-selected {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid global-variables.$neutral-color-700;
+  background-color: global-variables.$neutral-color-700;
+  border-radius: 1rem;
+  padding: 0.185rem 1rem;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+  &:hover{
+    background-color: global-variables.$neutral-color-800;
+  }
+  &:active{
+    background-color: global-variables.$neutral-color-900;
+  }
+}

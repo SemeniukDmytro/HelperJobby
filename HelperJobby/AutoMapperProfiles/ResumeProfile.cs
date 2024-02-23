@@ -1,8 +1,7 @@
 using ApplicationDomain.Models;
 using AutoMapper;
+using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Resume;
-using JobSeekerAccountDTO = HelperJobby.DTOs.Account.JobSeekerAccountDTO;
-using ResumeDTO = HelperJobby.DTOs.Resume.ResumeDTO;
 
 namespace HelperJobby.AutoMapperProfiles;
 
@@ -12,12 +11,12 @@ public class ResumeProfile : Profile
     {
         CreateMap<Resume, ResumeDTO>().AfterMap((src, dest, context) =>
         {
-            dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccount, JobSeekerAccountDTO>(src.JobSeekerAccount);
+            dest.JobSeeker = context.Mapper.Map<JobSeeker, JobSeekerDTO>(src.JobSeeker);
         });
-        
+
         CreateMap<ResumeDTO, Resume>().AfterMap((src, dest, context) =>
         {
-            dest.JobSeekerAccount = context.Mapper.Map<JobSeekerAccountDTO, JobSeekerAccount>(src.JobSeekerAccount);
+            dest.JobSeeker = context.Mapper.Map<JobSeekerDTO, JobSeeker>(src.JobSeeker);
         });
         CreateMap<CreateResumeDTO, Resume>();
     }

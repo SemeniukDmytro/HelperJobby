@@ -9,5 +9,5 @@ public interface ISkillService
 
     public Task<List<Skill>> AddSkillsToResume(List<Skill> skills, int resumeId);
 
-    public Task RemoveSkillsFromResume(int resumeId);
+    public Task<List<Skill>> RemoveSkillsFromResume(int resumeId);
 }

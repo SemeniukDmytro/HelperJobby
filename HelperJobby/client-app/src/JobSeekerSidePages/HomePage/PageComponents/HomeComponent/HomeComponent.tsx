@@ -3,15 +3,12 @@ import "./HomeComponent.scss";
 import JobSearchPromoContainer from "../JobSearchPromoContainer/JobSearchPromoContainer";
 import RecommendedJobs from "../RecommendedJobs/RecommendedJobs";
 import RecentSearches from "../RecentSearches/RecentSearches";
-import {SelectedTabs} from "../../../../enums/SelectedTabs";
 import HomePageMainContentWrap from "../HomePageMainContentWrap/HomePageMainContentWrap";
 import JobSearchBar from "../../../../Components/JobSearchBar/JobSearchBar";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
-import {ServerError} from "../../../../ErrorDTOs/ServerErrorDTO";
-import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import {JobSeekerAccountService} from "../../../../services/jobSeekerAccountService";
-import {useAuth} from "../../../../hooks/useAuth";
+import {JobSeekerService} from "../../../../services/jobSeekerService";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
+import {SelectedTabs} from "../../../../enums/utilityEnums/SelectedTabs";
 
 
 interface HomeComponentProps {
@@ -21,18 +18,18 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     const [selectedTab, setSelectedTab] = useState<SelectedTabs>(1);
     const {fetchJobSeekerJobInteractions} = useJobSeeker();
     const [loading, setLoading] = useState(true);
-    
-    const jobSeekerService = new JobSeekerAccountService();
-    
+
+    const jobSeekerService = new JobSeekerService();
+
     useEffect(() => {
         fetchData()
     }, []);
-    
-    async function fetchData(){
+
+    async function fetchData() {
         await fetchJobSeekerJobInteractions();
         setLoading(false);
     }
-    
+
     function showJobFeed() {
         setSelectedTab(1);
     }
@@ -51,12 +48,14 @@ const HomeComponent: FC<HomeComponentProps> = () => {
                     <nav className={"search-results-navbar"}>
                         <button className={"tab-container"} onClick={showJobFeed}>
                                     <span
-                                        className={`home-page-tab-name ${selectedTab === 1 ? "selected-tab-font-weight" : ""}`}>Job feed</span>
+                                        className={`home-page-tab-name ${selectedTab === 1 ? "selected-tab-font-weight" : ""}`}
+                                    >Job feed</span>
                             {selectedTab === 1 && <div className={"search-underline"}></div>}
                         </button>
                         <button className={"tab-container"} onClick={showRecentSearches}>
                             <span
-                                className={`home-page-tab-name ${selectedTab === 2 ? "selected-tab-font-weight" : ""}`}>New results for recent searches</span>
+                                className={`home-page-tab-name ${selectedTab === 2 ? "selected-tab-font-weight" : ""}`}
+                            >New results for recent searches</span>
                             {selectedTab === 2 && <div className={"search-underline"}></div>}
                         </button>
                     </nav>

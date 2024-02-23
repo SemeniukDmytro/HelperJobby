@@ -1,8 +1,22 @@
-.date-select-container{
+@use "../../Assets/scssSharedStyles/global-variables";
+
+.date-select-container {
   display: flex;
   position: relative;
   border-radius: 0.5rem;
-  transition: border-bottom 0.2s;
-  width: 49%;
+  border: 1px solid global-variables.$neutral-color-800;
+  width: 49%; 
+  transition: border 0.2s;
+  &:hover{
+    border-color: global-variables.$dark-blue;
+  }
+
+  &:focus-within {
+    border-color: global-variables.$dark-blue;
+    .border-lining{
+      border-radius: 0.5rem;
+      border-bottom: 4px solid global-variables.$dark-blue;
+    }
+  }
 }
 

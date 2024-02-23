@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import SkillsComponent from "./PageComponents/SkillsComponent/SkillsComponent";
 
-interface SkillsPageProps {}
+interface SkillsPageProps {
+}
 
 const SkillsPage: FC<SkillsPageProps> = () => (
-  <SkillsComponent/>
+    <SkillsComponent/>
 );
 
 export default SkillsPage;
