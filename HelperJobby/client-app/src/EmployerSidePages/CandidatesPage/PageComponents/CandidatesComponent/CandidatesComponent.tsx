@@ -10,6 +10,7 @@ import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import JobCandidatesPage from "../JobCandidatesPage/JobCandidatesPage";
+import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface CandidatesComponentProps {
 }
@@ -97,6 +98,10 @@ const CandidatesComponent: FC<CandidatesComponentProps> = () => {
         setJobTitleSearchQuery(job.jobTitle)
     }
 
+    function navigateToJobPostingPage() {
+        navigate(employerPagesPaths.JOB_POSTING);
+    }
+
     return (
         loading ? <LoadingPage/> :
 
@@ -104,7 +109,7 @@ const CandidatesComponent: FC<CandidatesComponentProps> = () => {
                 <div className={"emp-pages-layout"}>
                     <div className={"emp-pages-header mt1rem mb1rem"}>
                         <span className={"small-title mb0"}>Candidates</span>
-                        <button className={"blue-button"}>Post a job</button>
+                        <button className={"blue-button"} onClick={navigateToJobPostingPage}>Post a job</button>
                     </div>
                     <div className={"search-job-titles-container"}>
                         <div className={`field-input-container`}>

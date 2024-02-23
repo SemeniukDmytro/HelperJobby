@@ -5,6 +5,7 @@ import ResumeSearchResults from "../ResumeSearchResults/ResumeSearchResults";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import PageTitleWithImage from "../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import ResumeSearch from "../../../../Components/Icons/ResumeSearch";
+import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface ResumeSearchComponentProps {}
 
@@ -36,13 +37,17 @@ const ResumeSearchComponent: FC<ResumeSearchComponentProps> = () => {
         }
     };
 
+    function navigateToJobPostingPage() {
+        navigate(employerPagesPaths.JOB_POSTING);
+    }
+
     return (
             <>
                 <div className={"light-grey-page-background"}>
                     <div className={"emp-pages-layout"}>
                         <div className={"emp-pages-header mt1rem mb1rem"}>
                             <span className={"small-title mb0"}>Find candidates</span>
-                            <button className={"blue-button"}>Post a job</button>
+                            <button className={"blue-button"} onClick={navigateToJobPostingPage}>Post a job</button>
                         </div>
                         <div className={"search-block-layout"}>
                             <div className={"resume-search-block-box"}>

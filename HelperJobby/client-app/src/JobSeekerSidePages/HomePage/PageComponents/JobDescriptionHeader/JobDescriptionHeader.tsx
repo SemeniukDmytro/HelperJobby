@@ -56,6 +56,10 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({
     }, [selectedJob, []]);
 
     useEffect(() => {
+        setShowRemoveFromSaved(false)
+    }, [selectedJob?.id]);
+
+    useEffect(() => {
         if (!jobSeeker?.savedJobs) {
             return;
         }

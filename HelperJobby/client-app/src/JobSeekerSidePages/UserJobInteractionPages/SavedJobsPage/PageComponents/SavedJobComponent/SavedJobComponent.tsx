@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import './SavedJobComponent.scss';
 import UserJobInteractionShortJobInfo
     from "../../../SharedComponents/UserJobInteractionShortJobInfo/UserJobInteractionShortJobInfo";
@@ -24,17 +24,25 @@ interface SavedJobComponentProps {
 }
 
 const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) => {
-    const {setSavedJobs} = useJobSeekerJobInteractions();
+    const {setSavedJobs, jobApplies, setJobApplies} = useJobSeekerJobInteractions();
     const {setJobSeeker} = useJobSeeker();
     const jobSeekerService = new JobSeekerService();
     const [showRemoveFromSaved, setShowRemoveFromSaved] = useState(false);
     const [showUndoRemoveWindow, setShowUndoRemoveWindow] = useState(true);
     const {authUser} = useAuth();
     const navigate = useNavigate();
-    const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeeker, job);
+    const {saveJob, removeSavedJob, applyForJob} = useJobActions(jobSeekerService, setJobSeeker, job);
+    const [isApplied, setIsApplied] = useState(false);
+    const [requestInProgress, setRequestInProgress] = useState(false);
 
+    useEffect(() => {
+        if (jobApplies){
+            setIsApplied(jobApplies?.some(application => application.jobId === job.id) || false);
+        }
+    }, [jobApplies]);
     async function handleJobInteraction(actionFunction: JobActionFunction, setShowRemoveFromSavedValue: ShowRemoveFromSavedSetter) {
         try {
+            setRequestInProgress(true)
             if (!authUser) {
                 navigate("/auth-page");
                 return;
@@ -44,6 +52,9 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
             setShowRemoveFromSavedValue(actionFunction === removeSavedJob);
         } catch (err) {
             logErrorInfo(err);
+        }
+        finally {
+            setRequestInProgress(false)
         }
     }
 
@@ -61,6 +72,20 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
             .filter(savedJob => savedJob.jobId !== job.id));
     }
 
+    async function handleJobApply() {
+        try {
+            setRequestInProgress(true)
+            await applyForJob(job.id, setJobApplies);
+            setIsApplied(true)
+        }
+        catch (err){
+            logErrorInfo(err)
+        }
+        finally {
+            setRequestInProgress(false)
+        }
+    }
+
     return (
         !showUndoRemoveWindow ? null : <>
             <div className={"ji-job-block"}>
@@ -73,13 +98,17 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
                         />
                         <div className={"ji-apply-fb"}>
                             <div>
-                                <button className={"blue-button"}>
-                                    Apply now
+                                <button className={"blue-button"}
+                                        onClick={handleJobApply}
+                                        disabled={isApplied || requestInProgress}>
+                                    {isApplied ? "Applied" : "Apply now"}
                                 </button>
                             </div>
                         </div>
                         <div className={"ml1rem"}>
-                            <button className={"medium-tr-btn-with-icon"} onClick={handleRemoveSavedJobClick}>
+                            <button className={"medium-tr-btn-with-icon"}
+                                    disabled={requestInProgress}
+                                    onClick={handleRemoveSavedJobClick}>
                                 <FontAwesomeIcon className={"svg"} icon={faBookmark}/>
                             </button>
                         </div>

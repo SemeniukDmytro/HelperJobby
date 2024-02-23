@@ -14,7 +14,8 @@ const createPath = (path : string) => `${basePath}${path}`;
     EDIT_JOB : createPath("/editing"),
     CANDIDATES : createPath("/candidates"),
     RESUMES : createPath("/resumes"),
-    JOB_APPLY_REVIEW : createPath("/review-job-apply")
+    JOB_APPLY_REVIEW : createPath("/review-job-apply"),
+    EMPLOYER_INTERVIEWS : createPath("/interviews")
 };
 
 export default employerPagesPaths;

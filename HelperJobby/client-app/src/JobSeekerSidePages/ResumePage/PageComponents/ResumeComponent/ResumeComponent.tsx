@@ -9,6 +9,7 @@ import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {ResumeService} from "../../../../services/resumeService";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
+import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface ResumeComponentProps {
 }
@@ -92,6 +93,10 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
             navigate("/my-profile")
         }
     }
+
+    function navigateToJobPostingPage() {
+        navigate(employerPagesPaths.JOB_POSTING);
+    }   
 
     return (
         <>

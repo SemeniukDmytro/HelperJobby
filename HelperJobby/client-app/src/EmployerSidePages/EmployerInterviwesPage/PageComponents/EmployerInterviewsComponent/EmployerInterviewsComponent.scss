@@ -1,0 +1,57 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.interviews-page-layout {
+  box-sizing: border-box;
+  margin-block: 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
+  display: grid;
+  grid-template-columns: 25rem auto;
+  position: relative;
+}
+
+.job-select-for-interviews-container{
+  box-sizing: border-box;
+  width: 25rem;
+  border-radius: 1rem;
+  background-color: white;
+  border: 1px solid global-variables.$neutral-color-400;
+  grid-column-start: 1;
+  position: relative;
+  min-height: 70vh;
+  overflow: hidden;
+}
+
+.job-interviews-container {
+  box-sizing: border-box;
+  border-radius: 1rem;
+  background-color: white;
+  padding: 1.5rem;
+  grid-column-start: 2;
+  grid-row: 1 / 4;
+  margin-left: 1.5rem;
+  border: 1px solid global-variables.$neutral-color-400;;
+}
+
+
+.job-title-for-interviews {
+  box-sizing: border-box;
+  padding: 1rem;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  user-select: none;
+  &:hover{
+    background-color: global-variables.$light-blue;
+  }
+  &:active{
+    background-color: global-variables.$light-blue-active;
+  }
+}
+
+.job-select-for-interviews-header {
+  padding: 1rem;
+  font-weight: 700;
+  color: global-variables.$neutral-color-1000;
+  font-size: 1.125rem;
+}

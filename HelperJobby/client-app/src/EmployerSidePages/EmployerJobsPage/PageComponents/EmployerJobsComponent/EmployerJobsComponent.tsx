@@ -10,6 +10,7 @@ import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationState
 import EmployerCompleteJobs from "../EmployerCompleteJobs/EmployerCompleteJobs";
 import EmployerIncompleteJobs from "../EmployerIncompleteJobs/EmployerIncompleteJobs";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
+import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface EmployerJobsComponentProps {
 }
@@ -93,13 +94,17 @@ const EmployerJobsComponent: FC<EmployerJobsComponentProps> = () => {
         navigate(`${EmployerPagesPaths.JOBS}?incompleteJobs=true`)
     }
 
+    function navigateToJobPostingPage() {
+        navigate(employerPagesPaths.JOB_POSTING);
+    }
+
     return (
         <div className={"light-grey-page-background"}>
             {
                 <div className={"emp-pages-layout"}>
                     <div className={"emp-pages-header mt1rem mb1rem"}>
                         <span className={"small-title mb0"}>Jobs</span>
-                        <button className={"blue-button"}>Post a job</button>
+                        <button className={"blue-button"} onClick={navigateToJobPostingPage}>Post a job</button>
                     </div>
                     <div className={"flex-row mb1rem"}>
                         <button className={`${jobPageType == JobCreationStates.completeJob ? "blue-button" : "light-button-with-margin mr0"} left-connected-button`}

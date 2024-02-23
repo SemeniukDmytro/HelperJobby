@@ -100,10 +100,8 @@ public class AuthController : ExtendedBaseController
     {
         var cookieOptions = new CookieOptions
         {
-            HttpOnly = true,
             Expires = newRefreshToken.Expires,
             Secure = true,
-            SameSite = SameSiteMode.None,
             Domain = "localhost"
         };
         Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);

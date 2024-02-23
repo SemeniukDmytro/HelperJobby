@@ -75,6 +75,10 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
     function navigateToResumeSearchPage(){
         navigate(employerPagesPaths.RESUMES)
     }
+    
+    function navigateToInterviewsPage(){
+        navigate(employerPagesPaths.EMPLOYER_INTERVIEWS)
+    }
 
     return (
         <>
@@ -221,7 +225,9 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                                     </div>
                                 </div>
                             </li>
-                            <li className={"nav-list-component"}>
+                            <li className={"nav-list-component"}
+                                onClick={navigateToInterviewsPage}
+                            >
                                 <div className={"nav-bar-button-container"}>
                                     <div className={"nav-link-container"}>
                                         <a className={"nav-link"}>
