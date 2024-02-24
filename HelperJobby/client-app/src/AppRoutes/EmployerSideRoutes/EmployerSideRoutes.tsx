@@ -26,6 +26,7 @@ import JobApplyReviewPage from "../../EmployerSidePages/JobApplyReviewPage/JobAp
 import EmployerInterviewsPage from "../../EmployerSidePages/EmployerInterviwesPage/EmployerInterviewsPage";
 import OrganizationUsersPage from "../../EmployerSidePages/OrganizationUsersPage/OrganizationUsersPage";
 import EditEmployerInfoPage from "../../JobSeekerSidePages/EditEmployerInfoPage/EditEmployerInfoPage";
+import JobCreationPagesWrap from "../../EmployersSideComponents/JobCreationPagesWrap/JobCreationPagesWrap";
 
 interface EmployerSideRoutesProps {
 }
@@ -40,7 +41,7 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
                 
             </Route>
             <Route element={<JobPostingPagesWrap/>}>
-                <Route path={"/posting"} element={<Outlet/>}>
+                <Route path={"/posting"} element={<JobCreationPagesWrap/>}>
                     <Route index element={<JobPostingPage/>}/>
                     <Route path={"getting-started"} element={<AddJobBasicsPage/>}/>
                     <Route path={"getting-started/:jobId"} element={<AddJobBasicsPage/>}/>

@@ -5,7 +5,7 @@ export const DEFAULT_HEADERS: { [key: string]: string } = {
     "Accept": "application/json",
     "Content-type": "application/json",
 }
-export const DOMAIN = "https://helperjobby.azurewebsites.net/";
+export const DOMAIN = "https://localhost:7214";
 
 class CustomFetchService {
     constructor() {

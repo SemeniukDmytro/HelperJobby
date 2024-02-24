@@ -44,7 +44,6 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = ({
 
 
     function focusOnInnerContent() {
-        console.log('das')
         const scrollTop = jobDetailsScrollWindowRef.current?.scrollTop;
         if (scrollTop! !== 0) {
             setIsFullHeaderGridTemplate(0);
