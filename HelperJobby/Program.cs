@@ -1,7 +1,9 @@
 using System.Text;
 using ApplicationDAL.Context;
 using HelperJobby.Extensions;
+using HelperJobby.Hubs;
 using HelperJobby.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -14,6 +16,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.ConfigureCustomServices();
 builder.Services.AddAutoMapperProfiles();
+builder.Services.AddSignalR();
 
 
 var connectionString = builder.Configuration.GetConnectionString("Default");
@@ -35,6 +38,20 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
         ValidateAudience = false,
         ValidateIssuer = false,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtKey"]!))
+    };
+    
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/Chat"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
     };
 });
 
@@ -62,6 +79,7 @@ app.UseMiddleware<ExceptionsHandlingMiddleware>();
 app.MapControllerRoute(
     "default",
     "{controller}/{action=Index}/{id?}");
+app.MapHub<ChatHub>("/Chat");
 
 app.MapFallbackToFile("index.html");
 

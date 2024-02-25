@@ -82,6 +82,13 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IRecommendationService, RecommendationService>();
         serviceProvider.AddScoped<ILocationService, LocationService>();
         serviceProvider.AddScoped<IFilteringService, FilteringService>();
+        serviceProvider.AddScoped<IConversationQueryRepository, ConversationQueryRepository>();
+        serviceProvider.AddScoped<IConversationCommandRepository, ConversationCommandRepository>();
+        serviceProvider.AddScoped<IConversationService, ConversationService>();
+        serviceProvider.AddScoped<IMessageQueryRepository, MessageQueryRepository>();
+        serviceProvider.AddScoped<IMessageCommandRepository, MessageCommandRepository>();
+        serviceProvider.AddScoped<IMessageService, MessageService>();
+        
 
         //background related
         serviceProvider.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
