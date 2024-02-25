@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using ApplicationDomain.AuthRelatedModels;
+using ApplicationDomain.MessagingRelatedModels;
 
 namespace ApplicationDomain.Models;
 
@@ -19,4 +20,8 @@ public class User
     public Employer? Employer { get; set; }
 
     public RefreshToken RefreshToken { get; set; }
+    
+    public List<ChatMembership> ChatMemberships { get; set; }
+    
+    public List<Message> Messages { get; set; }
 }

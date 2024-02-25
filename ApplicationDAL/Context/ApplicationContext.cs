@@ -1,5 +1,6 @@
 using ApplicationDomain.AuthRelatedModels;
 using ApplicationDomain.IndexedModels;
+using ApplicationDomain.MessagingRelatedModels;
 using ApplicationDomain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,6 +36,10 @@ public class ApplicationContext : DbContext
     public DbSet<RecentUserSearch> RecentUserSearches { get; set; }
     public DbSet<JobSalary> JobSalaries { get; set; }
     public DbSet<IncompleteJobSalary> IncompleteJobSalaries { get; set; }
+    public DbSet<Conversation> Conversations { get; set; }
+    public DbSet<Message> Messages { get; set; }
+    public DbSet<ChatMembership> ChatMemberships { get; set; }
+    
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -196,5 +201,33 @@ public class ApplicationContext : DbContext
             .HasOne(rs => rs.User)
             .WithMany(u => u.RecentUserSearches)
             .HasForeignKey(rs => rs.UserId);
+
+        modelBuilder.Entity<ChatMembership>().HasKey(cm => new { cm.UserId, cm.ConversationId });
+
+        modelBuilder.Entity<Message>()
+            .HasOne<Conversation>(m => m.Conversation)
+            .WithMany(c => c.Messages)
+            .HasForeignKey(m => m.ConversationId)
+            .IsRequired();
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.ChatMemberships)
+            .WithOne(cm => cm.User)
+            .HasForeignKey(cm => cm.UserId)
+            .IsRequired();
+        
+        modelBuilder.Entity<Conversation>()
+            .HasMany(c => c.ConversationUsers)
+            .WithOne(cm => cm.Conversation)
+            .HasForeignKey(cm => cm.ConversationId)
+            .IsRequired();
+
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Sender)
+            .WithMany(u => u.Messages)
+            .HasForeignKey(m => m.SenderId)
+            .IsRequired();
+
+
     }
 }
