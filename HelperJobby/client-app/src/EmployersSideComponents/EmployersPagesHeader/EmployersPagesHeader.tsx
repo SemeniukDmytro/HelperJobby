@@ -66,6 +66,10 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
     function navigateToOrganizationUserPage(){
         navigate(employerPagesPaths.USERS)
     }
+    
+    function navigateToMessagesPage(){
+        navigate(employerPagesPaths.MESSAGES);
+    }
 
     return (
         <div className={"emh-layout"}>
@@ -74,7 +78,7 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
                     HelperJobby
                 </div>
                 {!loading && <div className="emh-right-side">
-                    <button className="neutral-transparent-button">
+                    <button className="neutral-transparent-button" onClick={navigateToMessagesPage}>
                         <FontAwesomeIcon className={"svg1rem icon-right-margin"} icon={faMessage}/>
                         <span>Messages</span>
                     </button>

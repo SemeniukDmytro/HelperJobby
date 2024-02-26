@@ -2,11 +2,11 @@ import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect} from 'react
 import './JobSalaryBlock.scss';
 import CustomSelectWindow from "../../../../EmployersSideComponents/CustomSelectWindow/CustomSelectWindow";
 import {salaryRatesMapData, showPayByOptionsMapData} from "../../../../AppConstData/PayRelatedData";
-import SalaryAmountInputField from "../../../../Components/SalaryAmountInputField/SalaryAmountInputField";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleExclamation, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {minimalSalaryIsTooLowError, useSalaryValidation} from "../../../../hooks/useSalaryValidation";
 import {useShowPayByOption} from "../../../../hooks/comnonentsSharedHooks/useShowPayByOption";
+import SalaryAmountInputField from "../../../../EmployersSideComponents/SalaryAmountInputField/SalaryAmountInputField";
 
 interface JobSalaryBlockProps {
     showPayBy: string;
@@ -28,7 +28,6 @@ interface JobSalaryBlockProps {
     isInvalidMaxSalary: boolean;
     setIsInvalidMaxSalary: Dispatch<SetStateAction<boolean>>;
     currency: string;
-    setCurrency: Dispatch<SetStateAction<string>>;
     minSalaryInputError: string;
     setMinSalaryInputError: Dispatch<SetStateAction<string>>;
     maxSalaryInputError: string;
@@ -61,7 +60,6 @@ const JobSalaryBlock: FC<JobSalaryBlockProps> = ({
                                                      isInvalidMaxSalary,
                                                      setIsInvalidMaxSalary,
                                                      currency,
-                                                     setCurrency,
                                                      minSalaryInputError,
                                                      setMinSalaryInputError,
                                                      maxSalaryInputError,

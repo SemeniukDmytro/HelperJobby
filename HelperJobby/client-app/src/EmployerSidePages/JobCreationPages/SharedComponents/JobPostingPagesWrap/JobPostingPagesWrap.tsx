@@ -1,11 +1,11 @@
 import React, {FC, useState} from 'react';
 import './JobPostingPagesWrap.scss';
 import {useEmployer} from "../../../../hooks/useEmployer";
-import EmployersSidebar from "../../../../Components/EmployersSidebar/EmployersSidebar";
-import EmployersPagesHeader from "../../../../EmployersSideComponents/EmployersPagesHeader/EmployersPagesHeader";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {Outlet} from "react-router-dom";
 import {CurrentEmployerJobProvider} from "../../../../contexts/CurrentEmployerJobContext";
+import EmployersSidebar from "../../../../EmployersSideComponents/EmployersSidebar/EmployersSidebar";
+import EmployersPagesHeader from "../../../../EmployersSideComponents/EmployersPagesHeader/EmployersPagesHeader";
 
 interface JobPostingPagesWrapProps {}
 

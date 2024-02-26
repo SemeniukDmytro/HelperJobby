@@ -111,7 +111,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
             }
             
             setSelectedBenefits(currentJob.benefits || []);
-            setCurrency(countriesWithCurrencies.find(c => c.country === currentJob.locationCountry)?.currency || "")
+            setCurrency(countriesWithCurrencies.find(c => c.country === currentJob.locationCountry)?.currency || "");
             setLoading(false);
         }
     }, [currentJob]);
@@ -190,7 +190,6 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                                     isInvalidMaxSalary={isInvalidMaxSalary}
                                     setIsInvalidMaxSalary={setIsInvalidMaxSalary}
                                     currency={currency}
-                                    setCurrency={setCurrency}
                                     minSalaryInputError={minSalaryInputError}
                                     setMinSalaryInputError={setMinSalaryInputError}
                                     maxSalaryInputError={maxSalaryInputError}

@@ -50,8 +50,8 @@
         <Folder Include="client-app\src\EmployerSidePages\CandidatesPage\PageComponents\" />
         <Folder Include="client-app\src\EmployerSidePages\EditJobPage\PageComponents\" />
         <Folder Include="client-app\src\EmployerSidePages\EmployerJobsPage\PageComponents\" />
+        <Folder Include="client-app\src\EmployerSidePages\EmployerMessagesPage\PageComponents\" />
         <Folder Include="client-app\src\EmployerSidePages\EmployerSetupPage\PageComponents\"/>
-        <Folder Include="client-app\src\EmployerSidePages\EmployerInterviewsPage\PageComponents\" />
         <Folder Include="client-app\src\EmployerSidePages\JobApplyReviewPage\PageComponents\" />
         <Folder Include="client-app\src\EmployerSidePages\JobCreationPages\AddJobPayAndBenefitsPage\PageComponents\" />
         <Folder Include="client-app\src\EmployerSidePages\JobCreationPages\JobDescriptionAndPreferencesPage\PageComponents\" />

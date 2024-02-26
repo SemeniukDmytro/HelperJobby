@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import './EmployerSideRoutes.scss';
-import {Outlet, Route, Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import JobPostingPage from "../../EmployerSidePages/JobPostingPage/JobPostingPage";
 import EmployerSetupPage from "../../EmployerSidePages/EmployerSetupPage/EmployerSetupPage";
 import RequireAuthForEmployersPages
@@ -27,6 +27,7 @@ import EmployerInterviewsPage from "../../EmployerSidePages/EmployerInterviwesPa
 import OrganizationUsersPage from "../../EmployerSidePages/OrganizationUsersPage/OrganizationUsersPage";
 import EditEmployerInfoPage from "../../JobSeekerSidePages/EditEmployerInfoPage/EditEmployerInfoPage";
 import JobCreationPagesWrap from "../../EmployersSideComponents/JobCreationPagesWrap/JobCreationPagesWrap";
+import EmployerMessagesPage from "../../EmployerSidePages/EmployerMessagesPage/EmployerMessagesPage";
 
 interface EmployerSideRoutesProps {
 }
@@ -58,6 +59,7 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
                 <Route path={"/interviews"} element={<EmployerInterviewsPage/>}/>
                 <Route path={"/organization/users"} element={<OrganizationUsersPage/>}/>
                 <Route path={"/employer-edit"} element={<EditEmployerInfoPage/>}/>
+                <Route path={"/messages"} element={<EmployerMessagesPage/>}/>
             </Route>
         </Route>
     </Routes>

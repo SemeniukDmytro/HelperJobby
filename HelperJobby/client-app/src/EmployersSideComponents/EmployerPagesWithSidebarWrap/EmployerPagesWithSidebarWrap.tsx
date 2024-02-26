@@ -3,7 +3,7 @@ import './EmployerPagesWithSidebarWrap.scss';
 import EmployersPagesHeader from "../EmployersPagesHeader/EmployersPagesHeader";
 import LoadingPage from "../../Components/LoadingPage/LoadingPage";
 import {Outlet} from "react-router-dom";
-import EmployersSidebar from "../../Components/EmployersSidebar/EmployersSidebar";
+import EmployersSidebar from "../EmployersSidebar/EmployersSidebar";
 
 interface EmployerPagesWithSidebarWrapProps {}
 

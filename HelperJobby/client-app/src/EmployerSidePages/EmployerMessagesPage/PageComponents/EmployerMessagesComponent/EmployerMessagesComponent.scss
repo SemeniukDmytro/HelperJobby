@@ -1,0 +1,31 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+
+.messages-layout {
+  display: flex;
+  box-sizing: border-box;
+  min-inline-size: 0px;
+  min-height: calc(-8rem + 100vh);
+  max-height: calc(-8rem + 100vh);
+  border-top: 1px solid global-variables.$neutral-color-400;
+  border-bottom: 1px solid global-variables.$neutral-color-400;
+}
+
+.messages-page-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.conversation-layout {
+  flex-basis: 23.75rem;
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  margin-block: 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
+  max-height: 100%;
+  background-color: white;
+  border-right:1px solid global-variables.$neutral-color-400 ;
+}

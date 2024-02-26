@@ -15,6 +15,7 @@ import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationState
 import {CreateUpdateSalaryDTO} from "../../../../DTOs/jobRelatetedDTOs/CreateUpdateSalaryDTO";
 import {getValidFloatNumberFromString} from "../../../../utils/validationLogic/numbersValidators";
 import {salaryRatesMapData, showPayByOptionsMapData} from "../../../../AppConstData/PayRelatedData";
+import {countriesWithCurrencies} from "../../../../AppConstData/CountriesWithCurrencies";
 
 interface ChangeJobSalaryDialogContentProps {
     showDialog : boolean;
@@ -83,6 +84,7 @@ const ChangeJobSalaryDialogContent: FC<ChangeJobSalaryDialogContentProps> = ({
             setRangeMaxSalaryAmount(currentJob.salary.maximalAmount?.toString() || "");
             getSalaryInputProp(showPayByOptionsEnumToStringMap(currentJob.salary.showPayByOption)).setSalaryInput(currentJob.salary.minimalAmount.toString());
             setMinSalaryMeetsRequirement(currentJob.salary.meetsMinSalaryRequirement);
+            setCurrency(countriesWithCurrencies.find(c => c.country === currentJob.locationCountry)?.currency || "");
         }
     }
 
@@ -164,7 +166,6 @@ const ChangeJobSalaryDialogContent: FC<ChangeJobSalaryDialogContentProps> = ({
                         isInvalidMaxSalary={isInvalidMaxSalary}
                         setIsInvalidMaxSalary={setIsInvalidMaxSalary}
                         currency={currency}
-                        setCurrency={setCurrency}
                         minSalaryInputError={minSalaryInputError}
                         setMinSalaryInputError={setMinSalaryInputError}
                         maxSalaryInputError={maxSalaryInputError}
