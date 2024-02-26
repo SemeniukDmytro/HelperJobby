@@ -6,5 +6,7 @@ export function logErrorInfo(error: unknown) {
         const errorText = `\nType: ${error.ServerErrorDTO.type}\nTitle: ${error.ServerErrorDTO.title}\nStatus: ${error.ServerErrorDTO.status}\nDetail: ${error.ServerErrorDTO.detail}`
         console.error(errorText);
     }
-    console.error(error);
+    else {
+        console.error(error);
+    }
 }

@@ -48,11 +48,15 @@ const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
     function navigateToSavedJobsPage() {
         navigate("/saved")
     }
+    
+    function navigateToConversations() {
+        navigate("/conversations")
+    }
 
     return (
         <div className={"nav-buttons-block"}>
             <div className={"nav-button-box"}>
-                <button className={"nav-button"}>
+                <button className={"nav-button"} onClick={navigateToConversations}>
                     <FontAwesomeIcon className={"svg125rem"} icon={faMessage}/>
                 </button>
                 <div className={"underline"}></div>

@@ -4,5 +4,5 @@ namespace ApplicationDomain.Abstraction.IServices;
 
 public interface IMessageService
 {
-    public Task<Message> CreateMessage(Message message, int recipientId);
+    public Task<Message> CreateMessage(string message, int senderId, int conversationId);
 }

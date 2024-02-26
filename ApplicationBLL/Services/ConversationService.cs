@@ -21,11 +21,6 @@ public class ConversationService : IConversationService
 
     public async Task<Conversation> EnsureConversationExists(int senderId, int recipientId)
     {
-        var currentUserId = _userService.GetCurrentUserId();
-        if (senderId != currentUserId)
-        {
-            throw new ForbiddenException("You can not send messages from other user account");
-        }
 
         var conversation =
             await _conversationQueryRepository.GetConversationBySenderAndRecipientIds(senderId, recipientId);

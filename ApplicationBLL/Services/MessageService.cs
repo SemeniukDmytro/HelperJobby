@@ -6,31 +6,28 @@ namespace ApplicationBLL.Services;
 
 public class MessageService : IMessageService
 {
-    private readonly IUserService _userService;
-    private readonly IConversationService _conversationService;
 
-    public MessageService(IUserService userService, IConversationService conversationService)
+    public MessageService()
     {
-        _userService = userService;
-        _conversationService = conversationService;
     }
 
-    public async Task<Message> CreateMessage(Message message, int recipientId)
+    public async Task<Message> CreateMessage(string message, int senderId, int conversationId)
     {
-        var currentUserId = _userService.GetCurrentUserId();
-        if (string.IsNullOrEmpty(message.Content))
+        if (string.IsNullOrEmpty(message))
         {
             throw new InvalidMessageException();
         }
-
-        var conversation = await _conversationService.EnsureConversationExists(currentUserId, recipientId);
-        message.ConversationId = conversation.Id;
-        message.Conversation = conversation;
-        message.SenderId = currentUserId;
-        message.IsRead = false;
-        message.SentAt = DateTime.UtcNow;
-
-        return message;
+        
+        var newMessage = new Message()
+        {
+            Content = message,
+            SenderId = senderId,
+            ConversationId = conversationId,
+            IsRead = false,
+            SentAt = DateTime.UtcNow
+        };
+        
+        return newMessage;
     }
 
 }

@@ -44,6 +44,7 @@ import AuthPage from "../../CommonPages/AuthPage/AuthPage";
 import SearchJobResultsPage from "../../JobSeekerSidePages/SearchJobResultsPage/SearchJobResultsPage";
 import MyJobsPagesWrap from "../../JobSeekerSidePages/UserJobInteractionPages/MyJobsPagesWrap/MyJobsPagesWrap";
 import RequireAuth from "../../JobSeekerSidePages/RequireAuth/RequireAuth";
+import TemporaryChat from "../../Components/TemporaryChat/TemporaryChat";
 
 interface JobSeekerSideRoutesProps {
 }
@@ -111,6 +112,7 @@ const JobSeekerSideRoutes: FC<JobSeekerSideRoutesProps> = () => (
             </Route>
 
             <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
+            <Route path={"/conversations"} element={<TemporaryChat/>}/>
         </Route>
         
         {/*Public routes*/}

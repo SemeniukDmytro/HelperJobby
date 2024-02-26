@@ -4,10 +4,10 @@ using HelperJobby.DTOs.Message;
 
 namespace HelperJobby.AutoMapperProfiles;
 
-public class MessageProfile : Profile
+public class ConversationProfile : Profile
 {
-    public MessageProfile()
+    public ConversationProfile()
     {
-        CreateMap<Message, MessageDTO>().ReverseMap();
+        CreateMap<Conversation, ConversationDTO>().ReverseMap();
     }
 }
