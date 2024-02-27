@@ -38,7 +38,6 @@ public class ApplicationContext : DbContext
     public DbSet<IncompleteJobSalary> IncompleteJobSalaries { get; set; }
     public DbSet<Conversation> Conversations { get; set; }
     public DbSet<Message> Messages { get; set; }
-    public DbSet<ChatMembership> ChatMemberships { get; set; }
     
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -201,31 +200,45 @@ public class ApplicationContext : DbContext
             .HasOne(rs => rs.User)
             .WithMany(u => u.RecentUserSearches)
             .HasForeignKey(rs => rs.UserId);
-
-        modelBuilder.Entity<ChatMembership>().HasKey(cm => new { cm.UserId, cm.ConversationId });
-
+        
+        
         modelBuilder.Entity<Message>()
-            .HasOne<Conversation>(m => m.Conversation)
+            .HasOne(m => m.Conversation)
             .WithMany(c => c.Messages)
             .HasForeignKey(m => m.ConversationId)
             .IsRequired();
 
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.ChatMemberships)
-            .WithOne(cm => cm.User)
-            .HasForeignKey(cm => cm.UserId)
-            .IsRequired();
-        
-        modelBuilder.Entity<Conversation>()
-            .HasMany(c => c.ConversationUsers)
-            .WithOne(cm => cm.Conversation)
-            .HasForeignKey(cm => cm.ConversationId)
-            .IsRequired();
 
         modelBuilder.Entity<Message>()
-            .HasOne(m => m.Sender)
-            .WithMany(u => u.Messages)
-            .HasForeignKey(m => m.SenderId)
+            .HasOne(m => m.Employer)
+            .WithMany()
+            .HasForeignKey(m => m.EmployerId);
+
+
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.JobSeeker)
+            .WithMany()
+            .HasForeignKey(m => m.JobSeekerId);
+
+
+        modelBuilder.Entity<Conversation>()
+            .HasOne(c => c.Employer)
+            .WithMany(e => e.Conversations)
+            .HasForeignKey(c => c.EmployerId)
+            .IsRequired();
+
+
+        modelBuilder.Entity<Conversation>()
+            .HasOne(c => c.JobSeeker)
+            .WithMany(e => e.Conversations)
+            .HasForeignKey(c => c.JobSeekerId)
+            .IsRequired();
+
+
+        modelBuilder.Entity<Conversation>()
+            .HasOne(c => c.Job)
+            .WithMany(e => e.Conversations)
+            .HasForeignKey(c => c.JobId)
             .IsRequired();
 
 

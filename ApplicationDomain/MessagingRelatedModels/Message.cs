@@ -16,10 +16,12 @@ public class Message
     [Required]
     [DefaultValue(false)]
     public bool IsRead { get; set; }
-    [Required]
-    [ForeignKey("User")]
-    public int SenderId { get; set; }
-    public User Sender { get; set; }
+    [ForeignKey("JobSeekerId")]
+    public int? JobSeekerId { get; set; }
+    public JobSeeker? JobSeeker { get; set; }
+    [ForeignKey("EmployerId")]
+    public int? EmployerId { get; set; }
+    public Employer? Employer { get; set; }
     [Required]
     [ForeignKey("Conversation")]
     public int ConversationId { get; set; }

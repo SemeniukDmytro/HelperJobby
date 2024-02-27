@@ -16,11 +16,6 @@ public class ConversationQueryRepository : IConversationQueryRepository
 
     public async Task<Conversation?> GetConversationBySenderAndRecipientIds(int senderId, int recipientId)
     {
-        var conversation = await _applicationContext.Conversations
-            .Where(c => c.ConversationUsers.Any(m => m.UserId == senderId) &&
-                        c.ConversationUsers.Any(m => m.UserId == recipientId))
-            .FirstOrDefaultAsync();
-
-        return conversation;
+        throw new NotImplementedException();
     }
 }

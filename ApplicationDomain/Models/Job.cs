@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ApplicationDomain.Attributes;
 using ApplicationDomain.Enums;
+using ApplicationDomain.MessagingRelatedModels;
 
 namespace ApplicationDomain.Models;
 
@@ -61,4 +62,6 @@ public class Job
     public List<Interview> Interviews { get; set; }
 
     public List<JobApply> JobApplies { get; set; }
+    public List<Conversation> Conversations { get; set; }
+
 }

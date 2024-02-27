@@ -22,24 +22,7 @@ public class ConversationService : IConversationService
     public async Task<Conversation> EnsureConversationExists(int senderId, int recipientId)
     {
 
-        var conversation =
-            await _conversationQueryRepository.GetConversationBySenderAndRecipientIds(senderId, recipientId);
+        throw new NotImplementedException();
 
-        if (conversation == null)
-        {
-            conversation = new Conversation
-            {
-                LastModified = DateTime.UtcNow,
-                ConversationUsers = new List<ChatMembership>
-                {
-                    new ChatMembership { UserId = senderId },
-                    new ChatMembership { UserId = recipientId }
-                },
-                Messages = new List<Message>()
-            };
-            await _conversationCommandRepository.CreateConversation(conversation);
-        }
-
-        return conversation;
     }
 }
