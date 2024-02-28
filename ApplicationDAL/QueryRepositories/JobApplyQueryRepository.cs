@@ -15,10 +15,10 @@ public class JobApplyQueryRepository : IJobApplyQueryRepository
         _applicationContext = applicationContext;
     }
 
-    public async Task<JobApply> GetJobApplyForReview(int jobId, int JobSeekerId)
+    public async Task<JobApply> GetJobApplyForReview(int jobId, int jobSeekerId)
     {
         var jobApply = await _applicationContext.JobApplies
-            .Where(ja => ja.JobId == jobId && ja.JobSeekerId == JobSeekerId)
+            .Where(ja => ja.JobId == jobId && ja.JobSeekerId == jobSeekerId)
             .Select(ja => new JobApply()
             {
                 JobId = ja.JobId,

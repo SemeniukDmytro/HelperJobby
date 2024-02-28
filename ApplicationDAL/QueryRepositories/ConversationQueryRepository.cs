@@ -1,4 +1,5 @@
 ﻿using ApplicationDAL.Context;
+using ApplicationDAL.Projections.MessagingProjections;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.MessagingRelatedModels;
 using ApplicationDomain.Models;
@@ -23,35 +24,34 @@ public class ConversationQueryRepository : IConversationQueryRepository
         return conversation;
     }
 
-    public async Task<IEnumerable<Conversation>> GetConversationsByJobId(int jobId)
+    public async Task<IEnumerable<Conversation>> GetConversationsByJobIdAndEmployerId(int jobId, int employerId)
     {
-        var conversations = await _applicationContext.Conversations.Where(c => c.JobId == jobId)
-            .Select(c => new Conversation()
-            {
-                Id = c.Id,
-                LastModified = c.LastModified,
-                Employer = new Employer()
-                {
-                    Id = c.Employer.Id,
-                    FullName = c.Employer.FullName,
-                    Organization = new Organization()
-                    {
-                        Id = c.Employer.Organization.Id,
-                        Name = c.Employer.Organization.Name
-                    }
-                },
-                JobSeeker =
-                {
-                    Id = c.JobSeeker.Id,
-                    FirstName = c.JobSeeker.FirstName,
-                    LastName = c.JobSeeker.LastName,
-                },
-                Job = new Job()
-                {
-                    Id = c.Job.Id,
-                    JobTitle = c.Job.JobTitle
-                }
-            }).ToListAsync();
+        var conversations = await _applicationContext.Conversations.Where(c => c.JobId == jobId && c.EmployerId == employerId)
+            .Select(ConversationProjections.ShortConversationInfo()).ToListAsync();
+
+        return conversations;
+    }
+
+    public async Task<IEnumerable<Conversation>> GetConversationsByJobIdAndJobSeekerId(int jobId, int jobSeekerId)
+    {
+        var conversations = await _applicationContext.Conversations.Where(c => c.JobId == jobId && c.JobSeekerId == jobSeekerId)
+            .Select(ConversationProjections.ShortConversationInfo()).ToListAsync();
+
+        return conversations;
+    }
+    
+    public async Task<IEnumerable<Conversation>> GetConversationsByEmployerId(int employerId)
+    {
+        var conversations = await _applicationContext.Conversations.Where(c => c.EmployerId == employerId)
+            .Select(ConversationProjections.ShortConversationInfo()).ToListAsync();
+
+        return conversations;
+    }
+
+    public async Task<IEnumerable<Conversation>> GetConversationsByJobSeekerId(int jobSeekerId)
+    {
+        var conversations = await _applicationContext.Conversations.Where(c => c.JobSeekerId == jobSeekerId)
+            .Select(ConversationProjections.ShortConversationInfo()).ToListAsync();
 
         return conversations;
     }
