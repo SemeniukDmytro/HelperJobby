@@ -241,6 +241,9 @@ public class ApplicationContext : DbContext
             .HasForeignKey(c => c.JobId)
             .IsRequired();
 
+        modelBuilder.Entity<Conversation>()
+            .HasIndex(c => new { c.EmployerId, c.JobSeekerId, c.JobId })
+            .IsUnique();
 
     }
 }

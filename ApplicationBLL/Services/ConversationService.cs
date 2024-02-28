@@ -10,19 +10,35 @@ public class ConversationService : IConversationService
 {
     private readonly IConversationQueryRepository _conversationQueryRepository;
     private readonly IConversationCommandRepository _conversationCommandRepository;
-    private readonly IUserService _userService;
 
-    public ConversationService(IConversationQueryRepository conversationQueryRepository, IConversationCommandRepository conversationCommandRepository, IUserService userService)
+    public ConversationService(IConversationQueryRepository conversationQueryRepository, IConversationCommandRepository conversationCommandRepository)
     {
         _conversationQueryRepository = conversationQueryRepository;
         _conversationCommandRepository = conversationCommandRepository;
-        _userService = userService;
     }
 
-    public async Task<Conversation> EnsureConversationExists(int senderId, int recipientId)
+    public async Task<Conversation> EnsureConversationExists(int employerId, int jobSeekerId, int jobId)
     {
 
-        throw new NotImplementedException();
+        var conversation =
+            await _conversationQueryRepository.GetConversationByJobSeekerAndEmployerJobIds(jobSeekerId, employerId,
+                jobId);
+
+        if (conversation == null)
+        {
+            conversation = new Conversation
+            {
+                EmployerId = employerId,
+                JobSeekerId = employerId,
+                JobId = jobId,
+                LastModified = DateTime.UtcNow,
+                Messages = new List<Message>()
+            };
+
+            conversation = await _conversationCommandRepository.CreateConversation(conversation);
+        }
+
+        return conversation;
 
     }
 }

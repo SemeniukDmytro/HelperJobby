@@ -1,6 +1,6 @@
 ﻿using ApplicationDomain.MessagingRelatedModels;
 using AutoMapper;
-using HelperJobby.DTOs.Message;
+using HelperJobby.DTOs.Messaging;
 
 namespace HelperJobby.AutoMapperProfiles;
 

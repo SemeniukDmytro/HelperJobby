@@ -4,5 +4,8 @@ namespace ApplicationDomain.Abstraction.IQueryRepositories;
 
 public interface IConversationQueryRepository
 {
-    public Task<Conversation?> GetConversationBySenderAndRecipientIds(int senderId, int recipientId);
+    public Task<Conversation?> GetConversationByJobSeekerAndEmployerJobIds(int jobSeekerId, int employerId, int jobId);
+    public Task<IEnumerable<Conversation>> GetConversationsByJobId(int jobId);
+
+    public Task<Conversation?> GetConversationWithAllInfo(int conversationId);
 }

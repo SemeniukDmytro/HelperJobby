@@ -4,5 +4,5 @@ namespace ApplicationDomain.Abstraction.IServices;
 
 public interface IConversationService
 {
-    public Task<Conversation> EnsureConversationExists(int senderId, int recipientId);
+    public Task<Conversation> EnsureConversationExists(int employerId, int jobSeekerId, int jobId);
 }

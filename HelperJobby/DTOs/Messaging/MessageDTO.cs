@@ -1,6 +1,7 @@
-﻿using HelperJobby.DTOs.User;
+﻿using ApplicationDomain.MessagingRelatedModels;
+using ApplicationDomain.Models;
 
-namespace HelperJobby.DTOs.Message;
+namespace HelperJobby.DTOs.Messaging;
 
 public class MessageDTO
 {
@@ -8,8 +9,10 @@ public class MessageDTO
     public string Content { get; set; }
     public DateTime SentAt { get; set; }
     public bool IsRead { get; set; }
-    public int SenderId { get; set; }
-    public UserDTO Sender { get; set; }
+    public int? JobSeekerId { get; set; }
+    public JobSeeker? JobSeeker { get; set; }
+    public int? EmployerId { get; set; }
+    public Employer? Employer { get; set; }
     public int ConversationId { get; set; }
-    public ConversationDTO Conversation { get; set; }
+    public Conversation Conversation { get; set; }
 }

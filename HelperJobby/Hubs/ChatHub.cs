@@ -20,7 +20,7 @@ public class ChatHub : Hub
         _conversationService = conversationService;
     }
     
-    public async Task SendMessage(int recipientId, string message, int? conversationId)
+    public async Task SendMessage(int recipientId, string message, int? conversationId, int jobId)
     {
         var senderId = Context.User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
         var userId = 0;
@@ -32,7 +32,7 @@ public class ChatHub : Hub
         Conversation conversation = null;
         if (conversationId == null)
         {
-            conversation = await _conversationService.EnsureConversationExists(userId, recipientId);
+            conversation = await _conversationService.EnsureConversationExists(userId, recipientId, jobId);
             conversationId = conversation.Id;
         }
         
@@ -40,7 +40,7 @@ public class ChatHub : Hub
         await Clients.User(recipientId.ToString()).SendAsync("ReceiveMessage", message, conversationId, senderId);
         await Clients.Caller.SendAsync("ReceiveMessage", message, conversationId);
         
-        var createdMessage = await _messageService.CreateMessage(message, userId, conversationId.Value);
+        var createdMessage = await _messageService.CreateJobSeekerMessage(message, userId, conversationId.Value);
         createdMessage = await _messageCommandRepository.CreateMessage(createdMessage);
     }
 }
