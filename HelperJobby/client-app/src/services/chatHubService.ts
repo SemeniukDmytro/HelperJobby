@@ -1,6 +1,7 @@
 ﻿import {HubConnection, HubConnectionBuilder, LogLevel} from '@microsoft/signalr';
 import {getAuthToken} from "../utils/authTokenInteraction";
 import {logErrorInfo} from "../utils/logErrorInfo";
+import {MessageDTO} from "../DTOs/MessagingDTOs/MessageDTO";
 
 export class ChatHubService {
     private hubConnection: HubConnection | null = null;
@@ -24,20 +25,36 @@ export class ChatHubService {
             logErrorInfo(err)
         }
     };
-    public async sendMessage(recipientId: number, message: string, conversationId : number | null): Promise<void>{
+    public async sendMessageToJobSeeker(jobSeekerId: number, message: string, jobId : number,
+                                        conversationId : number | null): Promise<void>{
         if (this.hubConnection) {
             try {
-                await this.hubConnection.invoke('SendMessage', recipientId, message, conversationId);
+                console.log(this.hubConnection)
+                await this.hubConnection.invoke('SendMessageToJobSeeker', jobSeekerId, message, jobId, conversationId);
             } catch (err) {
                 logErrorInfo(err)
             }
         }
     };
 
-    public registerMessageReceivedHandler(onMessageReceived: (message: string, senderId : string | null, conversationId : number) => void){
+    public async sendMessageToEmployer(employerId: number, message: string, jobId : number,
+                                        conversationId : number | null): Promise<void>{
+        if (this.hubConnection) {
+            try {
+                await this.hubConnection.invoke('SendMessageToEmployer', employerId, message, jobId, conversationId);
+            } catch (err) {
+                logErrorInfo(err)
+            }
+        }
+    };
+
+    public registerMessageReceivedHandler(onMessageReceived: (message: MessageDTO, senderId : number, conversationId : number) => void){
         this.hubConnection?.on('ReceiveMessage', onMessageReceived);
     };
     
+    public registerMessageSent(onMessageSent : (message : MessageDTO, conversationId : number) => void){
+        this.hubConnection?.on("MessageSent", onMessageSent);
+    }
     
 
     public async disconnect() {

@@ -6,22 +6,12 @@ namespace ApplicationBLL.Services;
 
 public class MessageService : IMessageService
 {
-    private readonly IJobSeekerService _jobSeekerService;
-    private readonly IEmployerService _employerService;
-    public MessageService(IJobSeekerService jobSeekerService, IEmployerService employerService)
+    public MessageService()
     {
-        _jobSeekerService = jobSeekerService;
-        _employerService = employerService;
     }
 
-    public async Task<Message> CreateJobSeekerMessage(string message, int jobSeekerId, int conversationId)
+    public async Task<Message> CreateMessageToEmployer(string message, int jobSeekerId, int conversationId)
     {
-        var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
-
-        if (currentJobSeekerId != jobSeekerId)
-        {
-            throw new ForbiddenException();
-        }
         
         var createdMessage = PopulateMessageEntityWithCommonInitialData(message, conversationId);
         createdMessage.EmployerId = jobSeekerId;
@@ -30,14 +20,8 @@ public class MessageService : IMessageService
 
     }
 
-    public async Task<Message> CreateEmployerMessage(string message, int employerId, int conversationId)
+    public async Task<Message> CreateMessageToJobSeeker(string message, int employerId, int conversationId)
     {
-        var currentEmployerId = _employerService.GetCurrentEmployerId();
-
-        if (currentEmployerId != employerId)
-        {
-            throw new ForbiddenException();
-        }
 
         var createdMessage = PopulateMessageEntityWithCommonInitialData(message, conversationId);
         createdMessage.EmployerId = employerId;
@@ -52,8 +36,6 @@ public class MessageService : IMessageService
         {
             throw new InvalidMessageException();
         }
-
-        
 
         var messageEntity = new Message()
         {

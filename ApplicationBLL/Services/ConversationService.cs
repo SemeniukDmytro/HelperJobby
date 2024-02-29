@@ -31,13 +31,6 @@ public class ConversationService : IConversationService
         return conversations;
     }
 
-    public async Task<IEnumerable<Conversation>> GetJobSeekerConversationsByJobId(int jobId)
-    {
-        var jobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
-        var conversations = (await _conversationQueryRepository.GetConversationsByJobIdAndJobSeekerId(jobId, jobSeekerId)).ToList();
-        return conversations;
-    }
-
     public async Task<IEnumerable<Conversation>> GetCurrentEmployerConversations()
     {
         var employerId = _employerService.GetCurrentEmployerId();
@@ -62,16 +55,31 @@ public class ConversationService : IConversationService
 
     }
 
+    public async Task<Conversation?> GetCandidatePotentialConversation(int candidateId, int jobId)
+    {
+        var currentEmployerId = _employerService.GetCurrentEmployerId();
+        
+        var conversation =
+            await _conversationQueryRepository.GetConversationFullInfoByJobSeekerAndEmployerJobIds(candidateId, currentEmployerId, jobId);
+
+        if (conversation == null)
+        {
+            var jobApply = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, candidateId);
+            
+            if (jobApply.Job.EmployerId != currentEmployerId)
+            {
+                throw new ForbiddenException("The job posting was created by another employer");
+            }
+        }
+
+        return conversation;
+
+    }
+
     public async Task<Conversation> EnsureConversationExists(int employerId, int jobSeekerId, int jobId)
     {
-        if (employerId == jobSeekerId)
-        {
-            throw new ForbiddenException("You can not text with yourself");
-        }
-        
-
         var conversation =
-            await _conversationQueryRepository.GetConversationByJobSeekerAndEmployerJobIds(jobSeekerId, employerId,
+            await _conversationQueryRepository.GetConversationPlainByJobSeekerAndEmployerJobIds(jobSeekerId, employerId,
                 jobId);
 
         if (conversation == null)

@@ -35,4 +35,31 @@ public class ConversationProjections
             }
         };
     }
+
+    public static Expression<Func<Conversation, Conversation>> FullConversationInfo()
+    {
+        return c => new Conversation()
+        {
+            Id = c.Id,
+            LastModified = c.LastModified,
+            Messages = c.Messages,
+            Employer = new Employer()
+            {
+                Id = c.Employer.Id,
+                FullName = c.Employer.FullName,
+                Organization = new Organization()
+                {
+                    Id = c.Employer.Organization.Id,
+                    Name = c.Employer.Organization.Name
+                }
+            },
+            JobSeeker = new JobSeeker()
+            {
+                Id = c.JobSeeker.Id,
+                FirstName = c.JobSeeker.FirstName,
+                LastName = c.JobSeeker.LastName,
+            },
+            Job = c.Job
+        };
+    }
 }

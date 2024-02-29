@@ -1,14 +1,12 @@
 import React, {FC, useEffect, useState} from 'react';
 import './EmployerMessagesComponent.scss';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import CustomSelectWindow from "../../../../EmployersSideComponents/CustomSelectWindow/CustomSelectWindow";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobService} from "../../../../services/jobService";
 import {useEmployer} from "../../../../hooks/useEmployer";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBuilding} from "@fortawesome/free-solid-svg-icons";
 import EmployerJobChatComponent from "../EmployerJobChatComponent/EmployerJobChatComponent";
 
 interface EmployerMessagesComponentProps {}

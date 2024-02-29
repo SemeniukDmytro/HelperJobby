@@ -24,13 +24,6 @@ namespace HelperJobby.Controllers
             return _mapper.Map<IEnumerable<ConversationDTO>>(conversations);
         }
         
-        [HttpGet("jobSeeker-job-conversations/{jobId}")]
-        public async Task<IEnumerable<ConversationDTO>> GetJobSeekerConversationByJobId(int jobId)
-        {
-            var conversations = await _conversationService.GetJobSeekerConversationsByJobId(jobId);
-            return _mapper.Map<IEnumerable<ConversationDTO>>(conversations);
-        }
-        
         [HttpGet("employer/my-conversations")]
         public async Task<IEnumerable<ConversationDTO>> GetCurrentEmployerConversations()
         {
@@ -45,13 +38,20 @@ namespace HelperJobby.Controllers
             return _mapper.Map<IEnumerable<ConversationDTO>>(conversations);
         }
         
-        [HttpGet("job-conversation/{conversationId}")]
-        public async Task<ConversationDTO> GetJobConversationById(int conversationId)
+        [HttpGet("{conversationId}")]
+        public async Task<ConversationDTO> GetConversationById(int conversationId)
         {
             var conversation = await _conversationService.GetConversationFullInfo(conversationId);
             return _mapper.Map<ConversationDTO>(conversation);
         }
-        
+    
+        [HttpGet("candidate-conversation/{candidateId}/{jobId}")]
+        public async Task<ConversationDTO?> GetCandidatePotentialConversation(int candidateId, int jobId)
+        {
+            var conversation = await _conversationService.GetCandidatePotentialConversation(candidateId, jobId);
+            Console.WriteLine(conversation);
+            return _mapper.Map<ConversationDTO>(conversation);
+        }
         
     }
 }

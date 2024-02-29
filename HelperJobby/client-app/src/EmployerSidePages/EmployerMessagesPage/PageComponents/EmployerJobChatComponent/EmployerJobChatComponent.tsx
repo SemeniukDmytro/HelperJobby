@@ -1,12 +1,94 @@
-import React, { FC } from 'react';
+import React, {ChangeEvent, ChangeEventHandler, FC, useEffect, useMemo, useState} from 'react';
 import './EmployerJobChatComponent.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBuilding} from "@fortawesome/free-solid-svg-icons";
+import {ChatHubService} from "../../../../services/chatHubService";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
+import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
+import {ConversationService} from "../../../../services/conversationService";
+import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValidators";
+import {logErrorInfo} from "../../../../utils/logErrorInfo";
+import {MessageDTO} from "../../../../DTOs/MessagingDTOs/MessageDTO";
+import {useEmployer} from "../../../../hooks/useEmployer";
+import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 
-interface EmployerJobChatComponentProps {}
+interface EmployerJobChatComponentProps {
+}
 
 const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
-    
+    const {employer} = useEmployer();
+    const chatHubService = useMemo(() => new ChatHubService(), []);
+    const [searchParams] = useSearchParams();
+    const candidateId = searchParams.get("jobSeekerId");
+    const jobId = searchParams.get("jobId");
+    const [messageInput, setMessageInput] = useState("");
+    const navigate = useNavigate();
+    const [conversation, setConversation] = useState<ConversationDTO | null>(null);
+    const conversationService = new ConversationService();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (!jobId || !candidateId || isNanAfterIntParse(jobId) || isNanAfterIntParse(candidateId)) {
+            navigate(EmployerPagesPaths.MESSAGES);
+            return;
+
+        }
+        chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
+
+        chatHubService.registerMessageReceivedHandler((message, senderId, conversationId) => {
+            if (senderId != employer?.id){
+                onMessageSent(message)
+            }
+        });
+        chatHubService.registerMessageSent((message) => {
+            onMessageSent(message);
+        });
+            
+        loadConversationInfo();
+    }, []);
+
+    async function loadConversationInfo() {
+        try {
+            setLoading(true);
+            const retrievedConversation = await conversationService
+                .getCandidatePotentialConversation(parseInt(candidateId!), parseInt(jobId!));
+            setConversation(retrievedConversation);
+        } catch (err) {
+            logErrorInfo(err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    function onMessageSent(message: MessageDTO) {
+        setConversation(prev => {
+            return prev ?
+                {
+                    ...prev,
+                    messages: [...prev.messages, message],
+                    lastModified: message.sentAt
+                }
+                :
+                {
+                    ...message.conversation,
+                    messages: [message],
+                    lastModified: message.sentAt
+                }
+        })
+    }
+
+    async function sendMessage() {
+        const conversationId = conversation?.id || null;
+        await chatHubService.sendMessageToJobSeeker(parseInt(candidateId!), messageInput, parseInt(jobId!), conversationId);
+    }
+
+    function onMessageChange(e: ChangeEvent<HTMLTextAreaElement>) {
+        setMessageInput(e.target.value);
+    }
+
+    console.log(conversation?.messages)
+
     return (
         <div className={"conversation-details"}>
             <div className={"chat-window"}>
@@ -25,17 +107,28 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
                     </span>
                 </div>
                 <div className={"content-separation-line"}>
-                    
+
                 </div>
                 <div className={"messages-window"}>
-                    dsad
+                    {loading ? <LoadingPage/> :
+                        conversation?.messages.map((message, index) => (
+                            <div key={index}>{message.content}</div>
+                        ))
+                    }
                 </div>
                 <div className={"write-message-container"}>
-                    <textarea className={"message-input"} placeholder={"Write your message"}>
+                    <textarea className={"message-input"}
+                              placeholder={"Write your message"}
+                              value={messageInput}
+                              onChange={onMessageChange}>
                         
                     </textarea>
                     <div className={"br-corner-button mr05rem mt05rem mb05rem"}>
-                        <button className={"blue-button"}>
+                        <button
+                            onClick={sendMessage}
+                            className={"blue-button"}
+                            disabled={messageInput.length == 0}
+                        >
                             Send
                         </button>
                     </div>
@@ -79,7 +172,7 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
                     <div className={"semi-dark-small-text mb05rem"}>
                         Job schedule
                     </div>
-                    <div >
+                    <div>
                         <span className={"default-link"}>
                             View full job description
                         </span>
