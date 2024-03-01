@@ -1,4 +1,5 @@
 using HelperJobby.DTOs.Job;
+using HelperJobby.DTOs.Messaging;
 using HelperJobby.DTOs.Organization;
 using HelperJobby.DTOs.User;
 
@@ -17,4 +18,5 @@ public class EmployerDTO
     public OrganizationDTO Organization { get; set; }
     public List<JobDTO> Jobs { get; set; }
     public List<IncompleteJobDTO> IncompleteJobs { get; set; }
+    public List<ConversationDTO> Conversations { get; set; }
 }

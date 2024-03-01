@@ -29,7 +29,6 @@ export class ChatHubService {
                                         conversationId : number | null): Promise<void>{
         if (this.hubConnection) {
             try {
-                console.log(this.hubConnection)
                 await this.hubConnection.invoke('SendMessageToJobSeeker', jobSeekerId, message, jobId, conversationId);
             } catch (err) {
                 logErrorInfo(err)

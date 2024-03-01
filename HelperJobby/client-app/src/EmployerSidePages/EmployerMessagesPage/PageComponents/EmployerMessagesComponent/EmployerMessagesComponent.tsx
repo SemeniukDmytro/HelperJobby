@@ -8,8 +8,11 @@ import {JobService} from "../../../../services/jobService";
 import {useEmployer} from "../../../../hooks/useEmployer";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import EmployerJobChatComponent from "../EmployerJobChatComponent/EmployerJobChatComponent";
+import {ConversationService} from "../../../../services/conversationService";
+import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
 
-interface EmployerMessagesComponentProps {}
+interface EmployerMessagesComponentProps {
+}
 
 const EmployerMessagesComponent: FC<EmployerMessagesComponentProps> = () => {
     const navigate = useNavigate();
@@ -18,13 +21,16 @@ const EmployerMessagesComponent: FC<EmployerMessagesComponentProps> = () => {
     const [filterMessagesBy, setFilterMessagesBy] = useState(employerJobTitles[0]);
     const [loading, setLoading] = useState(true);
     const jobService = new JobService();
+    const conversationService = new ConversationService();
+    const [conversationsToShow, setConversationsToShow] = useState<ConversationDTO[]>([]);
 
     useEffect(() => {
-        loadEmployerJobTitles();
+        loadPageInitialData();
+        loadEmployerAllConversations();
     }, []);
-    
 
-    async function loadEmployerJobTitles() {
+
+    async function loadPageInitialData() {
         try {
             setLoading(true);
             const retrievedJobs = await jobService.getEmployerJobTitles(employer!.id);
@@ -43,12 +49,34 @@ const EmployerMessagesComponent: FC<EmployerMessagesComponentProps> = () => {
             setLoading(false)
         }
     }
-    
+
+    async function loadEmployerAllConversations() {
+        try {
+            setLoading(true);
+            const retrievedConversations = await conversationService.getCurrentEmployerConversations();
+            setEmployer(prev => {
+                return prev && {
+                    ...prev,
+                    conversations: retrievedConversations
+                }
+            });
+            setConversationsToShow(retrievedConversations);
+            if (retrievedConversations.length != 0){
+                navigate(`${EmployerPagesPaths.MESSAGES}?conversationId=${retrievedConversations[0].id}`);
+            }
+        } catch (err) {
+            logErrorInfo(err)
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
     function navigateToJobPostingPage() {
         navigate(EmployerPagesPaths.JOB_POSTING);
     }
 
-    return(
+    return (
         <div className={"light-grey-page-background"}>
             <div className={"messages-page-layout"}>
                 <div className={"emp-pages-layout"}>
@@ -73,8 +101,26 @@ const EmployerMessagesComponent: FC<EmployerMessagesComponentProps> = () => {
                             }
                         </div>
                         <div className={"content-separation-line"}></div>
-                        <div>
-                            dsadasda
+                        <div className={"conversations-container"}>
+                            {
+                                conversationsToShow.map((conversation, index) => (
+                                    <>
+                                        <div key={index} className={"short-conv-info-container"}>
+                                            <div className={"conversation-topic-info"}>
+                                                <div className={"dark-default-text bold-text"}>
+                                                    {conversation.jobSeeker.firstName} {conversation.jobSeeker.lastName}
+                                                </div>
+                                            </div>
+                                            <div className={"dark-small-text"}>
+                                                {conversation.lastModified.toString()}
+                                            </div>
+                                        </div>
+                                        <div>
+
+                                        </div>
+                                    </>
+                                ) )
+                            }
                         </div>
                     </div>
                     <EmployerJobChatComponent/>

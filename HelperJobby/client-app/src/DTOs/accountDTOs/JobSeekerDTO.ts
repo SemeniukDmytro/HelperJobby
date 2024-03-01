@@ -4,6 +4,7 @@ import {JobApplyDTO} from "../userJobInteractionsDTOs/JobApplyDTO";
 import {SavedJobDTO} from "../userJobInteractionsDTOs/SavedJobDTO";
 import {InterviewDTO} from "../userJobInteractionsDTOs/InterviewDTO";
 import {UserDTO} from "../userRelatedDTOs/UserDTO";
+import {ConversationDTO} from "../MessagingDTOs/ConversationDTO";
 
 export interface JobSeekerDTO {
     id: number;
@@ -18,4 +19,5 @@ export interface JobSeekerDTO {
     interviews: InterviewDTO[];
     jobApplies: JobApplyDTO[];
     savedJobs: SavedJobDTO[];
+    conversations : ConversationDTO[];
 }

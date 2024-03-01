@@ -1,3 +1,4 @@
+using ApplicationDomain.MessagingRelatedModels;
 using HelperJobby.DTOs.Address;
 using HelperJobby.DTOs.Resume;
 using HelperJobby.DTOs.User;
@@ -24,4 +25,5 @@ public class JobSeekerDTO
     public List<InterviewDTO> Interviews { get; set; }
     public List<JobApplyDTO> JobApplies { get; set; }
     public List<SavedJobDTO> SavedJobs { get; set; }
+    public List<Conversation> Conversations { get; set; }
 }

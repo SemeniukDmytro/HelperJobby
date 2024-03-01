@@ -1,5 +1,4 @@
-﻿using ApplicationDomain.Models;
-using HelperJobby.DTOs.Account;
+﻿using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Job;
 
 namespace HelperJobby.DTOs.Messaging;

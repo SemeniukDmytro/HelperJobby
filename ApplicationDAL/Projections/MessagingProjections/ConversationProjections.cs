@@ -12,6 +12,7 @@ public class ConversationProjections
         {
             Id = c.Id,
             LastModified = c.LastModified,
+            EmployerId = c.EmployerId,
             Employer = new Employer()
             {
                 Id = c.Employer.Id,
@@ -22,12 +23,14 @@ public class ConversationProjections
                     Name = c.Employer.Organization.Name
                 }
             },
-            JobSeeker =
+            JobSeekerId = c.JobSeekerId,
+            JobSeeker = new JobSeeker()
             {
                 Id = c.JobSeeker.Id,
                 FirstName = c.JobSeeker.FirstName,
                 LastName = c.JobSeeker.LastName,
             },
+            JobId = c.JobId,
             Job = new Job()
             {
                 Id = c.Job.Id,
@@ -43,6 +46,7 @@ public class ConversationProjections
             Id = c.Id,
             LastModified = c.LastModified,
             Messages = c.Messages,
+            EmployerId = c.EmployerId,
             Employer = new Employer()
             {
                 Id = c.Employer.Id,
@@ -53,12 +57,14 @@ public class ConversationProjections
                     Name = c.Employer.Organization.Name
                 }
             },
+            JobSeekerId = c.JobSeekerId,
             JobSeeker = new JobSeeker()
             {
                 Id = c.JobSeeker.Id,
                 FirstName = c.JobSeeker.FirstName,
                 LastName = c.JobSeeker.LastName,
             },
+            JobId = c.JobId,
             Job = c.Job
         };
     }

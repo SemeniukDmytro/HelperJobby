@@ -22,6 +22,7 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
     const [searchParams] = useSearchParams();
     const candidateId = searchParams.get("jobSeekerId");
     const jobId = searchParams.get("jobId");
+    const conversationId = searchParams.get("conversationId");
     const [messageInput, setMessageInput] = useState("");
     const navigate = useNavigate();
     const [conversation, setConversation] = useState<ConversationDTO | null>(null);
@@ -29,10 +30,15 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!jobId || !candidateId || isNanAfterIntParse(jobId) || isNanAfterIntParse(candidateId)) {
+        if ((!jobId || !candidateId || isNanAfterIntParse(jobId) || isNanAfterIntParse(candidateId)) && (!conversationId || isNanAfterIntParse(conversationId)))
+        {
             navigate(EmployerPagesPaths.MESSAGES);
             return;
 
+        }
+        if (conversationId && (jobId || candidateId)){
+            navigate(EmployerPagesPaths.MESSAGES);
+            return;
         }
         chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
 
@@ -51,9 +57,16 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
     async function loadConversationInfo() {
         try {
             setLoading(true);
-            const retrievedConversation = await conversationService
-                .getCandidatePotentialConversation(parseInt(candidateId!), parseInt(jobId!));
-            setConversation(retrievedConversation);
+            if (jobId && candidateId){
+                const retrievedConversation = await conversationService
+                    .getCandidatePotentialConversation(parseInt(candidateId), parseInt(jobId));
+                setConversation(retrievedConversation);
+            }
+            else if (conversationId) {
+                const retrievedConversation = await conversationService.getConversationById(parseInt(conversationId));
+                setConversation(retrievedConversation);
+            }
+            
         } catch (err) {
             logErrorInfo(err);
         } finally {
@@ -79,15 +92,26 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
     }
 
     async function sendMessage() {
+        if (!messageInput.trim()) return;
         const conversationId = conversation?.id || null;
-        await chatHubService.sendMessageToJobSeeker(parseInt(candidateId!), messageInput, parseInt(jobId!), conversationId);
+        await chatHubService.sendMessageToJobSeeker(conversation!.jobSeekerId, messageInput, conversation!.jobId, conversationId);
+        setMessageInput("");
     }
 
     function onMessageChange(e: ChangeEvent<HTMLTextAreaElement>) {
         setMessageInput(e.target.value);
     }
+    
+    console.log(conversation)
 
-    console.log(conversation?.messages)
+    function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            if (messageInput.trim()) {
+                sendMessage();
+            }
+        }
+    }
 
     return (
         <div className={"conversation-details"}>
@@ -120,7 +144,9 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
                     <textarea className={"message-input"}
                               placeholder={"Write your message"}
                               value={messageInput}
-                              onChange={onMessageChange}>
+                              onChange={onMessageChange}
+                              onKeyDown={handleKeyDown} 
+                    >
                         
                     </textarea>
                     <div className={"br-corner-button mr05rem mt05rem mb05rem"}>

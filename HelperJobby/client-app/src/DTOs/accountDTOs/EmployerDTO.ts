@@ -2,6 +2,7 @@ import {OrganizationDTO} from "../organizationDTOs/OrganizationDTO";
 import {JobDTO} from "../jobRelatetedDTOs/JobDTO";
 import {UserDTO} from "../userRelatedDTOs/UserDTO";
 import {IncompleteJobDTO} from "../jobRelatetedDTOs/IncompleteJobDTO";
+import {ConversationDTO} from "../MessagingDTOs/ConversationDTO";
 
 export interface EmployerDTO {
     id: number;
@@ -15,4 +16,5 @@ export interface EmployerDTO {
     organization: OrganizationDTO;
     jobs: JobDTO[];
     incompleteJobs : IncompleteJobDTO[];
+    conversations : ConversationDTO[];
 }
