@@ -3,9 +3,9 @@ import './JobCandidateInfo.scss';
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {JobApplyDTO} from "../../../../DTOs/userJobInteractionsDTOs/JobApplyDTO";
 import {
-    getFormattedDate_DD_MMM,
-    getFormattedMonthName_DD_YYYYDate
-} from "../../../../utils/convertLogic/getFormattedMonthName_DD_YYYYDate";
+    getDate_MMM_DD,
+    getFullDate_MMMM_DD_YYYY
+} from "../../../../utils/convertLogic/GetFullDate_MMMM_DD_YYYY";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faEllipsisVertical, faQuestion, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {JobApplyStatuses} from "../../../../enums/modelDataEnums/JobApplyStatuses";
@@ -108,7 +108,7 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
                 <div className={"review-status-box"}>
                     <span className={"dark-small-text"}>{jobApply.isReviewed ? "Reviewed" : "Awaiting review"}</span>
                     <span
-                        className={"grey-small-text"}>Applied on {getFormattedDate_DD_MMM(jobApply.dateApplied)}
+                        className={"grey-small-text"}>Applied on {getDate_MMM_DD(jobApply.dateApplied)}
                 </span>
                 </div>
                 <div className={"candidate-skills-container"}>
@@ -132,8 +132,8 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
                                 <div className={"grey-small-text"}>
                                     <span>{workExperience.company} -&nbsp;</span>
                                     {workExperience.from && (workExperience.to || workExperience.currentlyWorkHere) &&
-                                        <span>From {getFormattedMonthName_DD_YYYYDate(workExperience.from)} to&nbsp;
-                                            {workExperience.currentlyWorkHere ? "Present" : getFormattedMonthName_DD_YYYYDate(workExperience.to!)}
+                                        <span>From {getFullDate_MMMM_DD_YYYY(workExperience.from)} to&nbsp;
+                                            {workExperience.currentlyWorkHere ? "Present" : getFullDate_MMMM_DD_YYYY(workExperience.to!)}
                                     </span>
                                     }
                                 </div>

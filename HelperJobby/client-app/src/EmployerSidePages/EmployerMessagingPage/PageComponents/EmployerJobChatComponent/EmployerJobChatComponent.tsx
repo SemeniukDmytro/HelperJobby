@@ -1,4 +1,4 @@
-import React, {ChangeEvent, ChangeEventHandler, FC, useEffect, useMemo, useState} from 'react';
+import React, {ChangeEvent, FC, useEffect, useMemo, useRef, useState} from 'react';
 import './EmployerJobChatComponent.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBuilding} from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +12,7 @@ import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {MessageDTO} from "../../../../DTOs/MessagingDTOs/MessageDTO";
 import {useEmployer} from "../../../../hooks/useEmployer";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
+import Message from "../../../../Components/Message/Message";
 
 interface EmployerJobChatComponentProps {
 }
@@ -28,7 +29,15 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
     const [conversation, setConversation] = useState<ConversationDTO | null>(null);
     const conversationService = new ConversationService();
     const [loading, setLoading] = useState(true);
+    const lastMessageRef = useRef<HTMLDivElement>(null);
+    console.log(lastMessageRef)
 
+    useEffect(() => {
+        if (lastMessageRef.current) {
+            lastMessageRef.current.scrollIntoView({ block: "end" });
+        }
+    }, [conversation?.messages]);
+    
     useEffect(() => {
         if ((!jobId || !candidateId || isNanAfterIntParse(jobId) || isNanAfterIntParse(candidateId)) && (!conversationId || isNanAfterIntParse(conversationId)))
         {
@@ -52,7 +61,7 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
         });
             
         loadConversationInfo();
-    }, []);
+    }, [conversationId, candidateId, jobId]);
 
     async function loadConversationInfo() {
         try {
@@ -63,7 +72,7 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
                 setConversation(retrievedConversation);
             }
             else if (conversationId) {
-                const retrievedConversation = await conversationService.getConversationById(parseInt(conversationId));
+                const retrievedConversation = await conversationService.getConversationById(parseInt(conversationId)); 
                 setConversation(retrievedConversation);
             }
             
@@ -94,15 +103,13 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
     async function sendMessage() {
         if (!messageInput.trim()) return;
         const conversationId = conversation?.id || null;
-        await chatHubService.sendMessageToJobSeeker(conversation!.jobSeekerId, messageInput, conversation!.jobId, conversationId);
         setMessageInput("");
+        await chatHubService.sendMessageToJobSeeker(conversation!.jobSeekerId, messageInput, conversation!.jobId, conversationId);
     }
 
     function onMessageChange(e: ChangeEvent<HTMLTextAreaElement>) {
         setMessageInput(e.target.value);
     }
-    
-    console.log(conversation)
 
     function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -136,7 +143,13 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
                 <div className={"messages-window"}>
                     {loading ? <LoadingPage/> :
                         conversation?.messages.map((message, index) => (
-                            <div key={index}>{message.content}</div>
+                            <Message
+                                message={message}
+                                senderName={employer!.fullName}
+                                isMyMessage={message.employerId == employer?.id}
+                                key={index}
+                                messageRef={index === conversation.messages.length - 1 ? lastMessageRef : null}
+                            />
                         ))
                     }
                 </div>

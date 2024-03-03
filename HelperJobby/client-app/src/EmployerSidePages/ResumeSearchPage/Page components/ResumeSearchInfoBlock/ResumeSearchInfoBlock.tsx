@@ -2,9 +2,9 @@ import React, {FC, useState} from 'react';
 import './ResumeSearchInfoBlock.scss';
 import {ResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/ResumeDTO";
 import {
-    getFormattedDate_DD_MMM,
-    getFormattedMonthName_DD_YYYYDate
-} from "../../../../utils/convertLogic/getFormattedMonthName_DD_YYYYDate";
+    getDate_MMM_DD,
+    getFullDate_MMMM_DD_YYYY
+} from "../../../../utils/convertLogic/GetFullDate_MMMM_DD_YYYY";
 import {JobApplyStatuses} from "../../../../enums/modelDataEnums/JobApplyStatuses";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faEllipsisVertical, faQuestion, faXmark} from "@fortawesome/free-solid-svg-icons";
@@ -65,8 +65,8 @@ const ResumeSearchInfoBlock: FC<ResumeSearchInfoBlockProps> = ({
                             <div className={"grey-small-text"}>
                                 <span>{workExperience.company} -&nbsp;</span>
                                 {workExperience.from && (workExperience.to || workExperience.currentlyWorkHere) &&
-                                    <span>From {getFormattedMonthName_DD_YYYYDate(workExperience.from)} to&nbsp;
-                                        {workExperience.currentlyWorkHere ? "Present" : getFormattedMonthName_DD_YYYYDate(workExperience.to!)}
+                                    <span>From {getFullDate_MMMM_DD_YYYY(workExperience.from)} to&nbsp;
+                                        {workExperience.currentlyWorkHere ? "Present" : getFullDate_MMMM_DD_YYYY(workExperience.to!)}
                                     </span>
                                 }
                             </div>

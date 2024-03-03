@@ -9,7 +9,6 @@ import {useNavigate} from "react-router-dom";
 import {ProgressPercentPerPage} from "../ProgressPercentPerPage";
 import {CreateResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import dateToStringConverter from "../../../../utils/convertLogic/dateToStringConverter";
 import {CreateUpdateEducationDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateUpdateEducationDTO";
 import {months} from "../../../../AppConstData/Months";
 import AutocompleteResultsWindow
@@ -21,6 +20,7 @@ import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/Whit
 import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
 import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
 import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/AutocompleteWindowTypes";
+import {MonthAndYearFromJSONToStringConverter} from "../../../../utils/convertLogic/GetFullDate_MMMM_DD_YYYY";
 
 
 interface AddEducationComponentProps {
@@ -174,8 +174,8 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
     }
 
     function fillCreateEducationDTO() {
-        let fromDate = dateToStringConverter(fromMonth, fromYear);
-        let toDate = dateToStringConverter(toMonth, toYear);
+        let fromDate = MonthAndYearFromJSONToStringConverter(fromMonth, fromYear);
+        let toDate = MonthAndYearFromJSONToStringConverter(toMonth, toYear);
 
         const createdEducation: CreateUpdateEducationDTO = {
             levelOfEducation,

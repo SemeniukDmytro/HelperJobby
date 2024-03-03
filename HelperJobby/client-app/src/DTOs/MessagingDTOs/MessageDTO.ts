@@ -5,7 +5,7 @@ import {ConversationDTO} from "./ConversationDTO";
 export interface MessageDTO{
     id : number;
     content : string;
-    sentAt : Date;
+    sentAt : string;
     isRead : boolean;
     jobSeekerId? : number;
     jobSeeker? : JobSeekerDTO;

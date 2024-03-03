@@ -30,7 +30,7 @@ const FiltersAndSearch: FC<FiltersAndSearchProps> = ({
             <FontAwesomeIcon className={"svg1rem icon-right-margin"}
                              icon={faSliders}/>
             {(location.length != 0 || jobTitle.length != 0) ?
-                <div className={"tdasdasdas"}>
+                <div className={"filters-text-box"}>
                     <div className={"emp-job-filters-container"}>
                         {jobTitle.length != 0 &&
                             <span>

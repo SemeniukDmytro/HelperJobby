@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
-import './EmployerMessagesComponent.scss';
-import {useNavigate, useSearchParams} from "react-router-dom";
+import './EmployerMessagingComponent.scss';
+import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import CustomSelectWindow from "../../../../EmployersSideComponents/CustomSelectWindow/CustomSelectWindow";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
@@ -10,11 +10,12 @@ import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import EmployerJobChatComponent from "../EmployerJobChatComponent/EmployerJobChatComponent";
 import {ConversationService} from "../../../../services/conversationService";
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
+import ShortConversationInfo from "../ShortConversationInfo/ShortConversationInfo";
 
 interface EmployerMessagesComponentProps {
 }
 
-const EmployerMessagesComponent: FC<EmployerMessagesComponentProps> = () => {
+const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
     const navigate = useNavigate();
     const {employer, setEmployer} = useEmployer();
     const [employerJobTitles, setEmployerJobTitles] = useState<string[]>(["All jobs"]);
@@ -77,7 +78,7 @@ const EmployerMessagesComponent: FC<EmployerMessagesComponentProps> = () => {
     }
 
     return (
-        <div className={"light-grey-page-background"}>
+        <div className={"light-grey-page-background page-without-scroll"}>
             <div className={"messages-page-layout"}>
                 <div className={"emp-pages-layout"}>
                     <div className={"emp-pages-header mt1rem mb1rem"}>
@@ -104,21 +105,7 @@ const EmployerMessagesComponent: FC<EmployerMessagesComponentProps> = () => {
                         <div className={"conversations-container"}>
                             {
                                 conversationsToShow.map((conversation, index) => (
-                                    <>
-                                        <div key={index} className={"short-conv-info-container"}>
-                                            <div className={"conversation-topic-info"}>
-                                                <div className={"dark-default-text bold-text"}>
-                                                    {conversation.jobSeeker.firstName} {conversation.jobSeeker.lastName}
-                                                </div>
-                                            </div>
-                                            <div className={"dark-small-text"}>
-                                                {conversation.lastModified.toString()}
-                                            </div>
-                                        </div>
-                                        <div>
-
-                                        </div>
-                                    </>
+                                    <ShortConversationInfo conversation={conversation} key={index}/>
                                 ) )
                             }
                         </div>
@@ -131,4 +118,4 @@ const EmployerMessagesComponent: FC<EmployerMessagesComponentProps> = () => {
     )
 }
 
-export default EmployerMessagesComponent;
+export default EmployerMessagingComponent;

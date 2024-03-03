@@ -4,7 +4,7 @@ import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {months} from "../../../../AppConstData/Months";
 import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
-import {getFormattedMonthName_DD_YYYYDate} from "../../../../utils/convertLogic/getFormattedMonthName_DD_YYYYDate";
+import {getFullDate_MMMM_DD_YYYY} from "../../../../utils/convertLogic/GetFullDate_MMMM_DD_YYYY";
 
 interface ShortJobInfoForEmployerProps {
     job : JobDTO;
@@ -54,7 +54,7 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
                     <span className={"bold-navigation-link"}>{job.jobTitle}</span>
                     <span className={"grey-small-text"}>{job.location}</span>
                     <span
-                        className={"grey-small-text"}>Posted on {getFormattedMonthName_DD_YYYYDate(job.datePosted)}</span>
+                        className={"grey-small-text"}>Posted on {getFullDate_MMMM_DD_YYYY(job.datePosted)}</span>
                 </div>
             </div>
             <div className={"candidate-separate-block"}>

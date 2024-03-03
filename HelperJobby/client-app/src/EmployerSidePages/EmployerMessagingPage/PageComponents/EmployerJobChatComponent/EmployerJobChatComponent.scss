@@ -24,6 +24,10 @@
   flex-grow: 1;
   padding-left: 1rem;
   padding-right: 1rem;
+  overflow-y: auto;
+  &::-webkit-scrollbar{
+    display: none;
+  }
 }
 
 .write-message-container {

@@ -27,7 +27,7 @@ import EmployerInterviewsPage from "../../EmployerSidePages/EmployerInterviwesPa
 import OrganizationUsersPage from "../../EmployerSidePages/OrganizationUsersPage/OrganizationUsersPage";
 import EditEmployerInfoPage from "../../JobSeekerSidePages/EditEmployerInfoPage/EditEmployerInfoPage";
 import JobCreationPagesWrap from "../../EmployersSideComponents/JobCreationPagesWrap/JobCreationPagesWrap";
-import EmployerMessagesPage from "../../EmployerSidePages/EmployerMessagesPage/EmployerMessagesPage";
+import EmployerMessagingPage from "../../EmployerSidePages/EmployerMessagingPage/EmployerMessagingPage";
 
 interface EmployerSideRoutesProps {
 }
@@ -59,7 +59,7 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
                 <Route path={"/interviews"} element={<EmployerInterviewsPage/>}/>
                 <Route path={"/organization/users"} element={<OrganizationUsersPage/>}/>
                 <Route path={"/employer-edit"} element={<EditEmployerInfoPage/>}/>
-                <Route path={"/messages"} element={<EmployerMessagesPage/>}/>
+                <Route path={"/messages"} element={<EmployerMessagingPage/>}/>
             </Route>
         </Route>
     </Routes>

@@ -6,9 +6,9 @@ namespace ApplicationDAL.Projections.MessagingProjections;
 
 public class ConversationProjections
 {
-    public static Expression<Func<Conversation, Conversation>> ShortConversationInfo()
+    public static Expression<Func<Conversation, ConversationWithLastMessage>> ShortConversationInfo()
     {
-        return c => new Conversation()
+        return c => new ConversationWithLastMessage()
         {
             Id = c.Id,
             LastModified = c.LastModified,
@@ -35,7 +35,8 @@ public class ConversationProjections
             {
                 Id = c.Job.Id,
                 JobTitle = c.Job.JobTitle
-            }
+            },
+            LastConversationMessage = c.Messages.OrderByDescending(m=> m.SentAt).FirstOrDefault()
         };
     }
 

@@ -6,6 +6,7 @@ using ApplicationBLL.RatingSystem;
 using ApplicationBLL.SearchRelatedServices;
 using ApplicationBLL.Services;
 using ApplicationDAL.CommandRepositories;
+using ApplicationDAL.ProjectionsToEntitiesAutomapperProfiles;
 using ApplicationDAL.QueryRepositories;
 using ApplicationDAL.SearchCommandRepositories;
 using ApplicationDAL.SearchQueryRepositories;
@@ -104,5 +105,6 @@ public static class CustomServicesConfigurer
     public static void AddAutoMapperProfiles(this IServiceCollection services)
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddAutoMapper(typeof(ConversationProfile));
     }
 }

@@ -41,7 +41,7 @@ public class MessageService : IMessageService
         {
             Content = message,
             ConversationId = conversationId,
-            SentAt = DateTime.UtcNow,
+            SentAt = DateTime.Now,
             IsRead = false
         };
 

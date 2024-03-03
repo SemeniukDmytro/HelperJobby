@@ -17,7 +17,7 @@ public class MessageCommandRepository : IMessageCommandRepository
     {
         var conversationStub = new Conversation { Id = message.ConversationId };
         _applicationContext.Conversations.Attach(conversationStub);
-        conversationStub.LastModified = DateTime.UtcNow;
+        conversationStub.LastModified = message.SentAt;
         _applicationContext.Entry(conversationStub).Property(x => x.LastModified).IsModified = true;
         _applicationContext.Messages.Add(message);
         await _applicationContext.SaveChangesAsync();

@@ -11,7 +11,6 @@ import {ProgressPercentPerPage} from "../ProgressPercentPerPage";
 import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {CreateResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import dateToStringConverter from "../../../../utils/convertLogic/dateToStringConverter";
 import {CreateUpdateWorkExperienceDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateUpdateWorkExperienceDTO";
 import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {WorkExperienceService} from "../../../../services/workExperienceService";
@@ -22,6 +21,7 @@ import {months} from "../../../../AppConstData/Months";
 import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
 import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
 import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/AutocompleteWindowTypes";
+import {MonthAndYearFromJSONToStringConverter} from "../../../../utils/convertLogic/GetFullDate_MMMM_DD_YYYY";
 
 interface WorkExperienceInfoComponentProps {
     workExperience?: WorkExperienceDTO
@@ -189,8 +189,8 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     }
 
     function fillWorkExperienceDTO() {
-        let fromDate = dateToStringConverter(fromMonth, fromYear);
-        let toDate = dateToStringConverter(toMonth, toYear);
+        let fromDate = MonthAndYearFromJSONToStringConverter(fromMonth, fromYear);
+        let toDate = MonthAndYearFromJSONToStringConverter(toMonth, toYear);
 
         let createUpdateWorkExperienceDTO: CreateUpdateWorkExperienceDTO = {
             jobTitle,
