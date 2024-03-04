@@ -4,9 +4,8 @@ import CustomInputField from "../../../../Components/EditFormField/CustomInputFi
 import CustomSelectWindow from "../../../../EmployersSideComponents/CustomSelectWindow/CustomSelectWindow";
 import {orderOptions, sortByOptions} from "../../../../EmployerJobFilteringData";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {IncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
 import FiltersAndSearch from "../FiltersAndSearch/FiltersAndSearch";
-import {useEmployer} from "../../../../hooks/useEmployer";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 
 interface SearchWithinEmployerJobsProps {
     jobSearchResults: JobDTO[];

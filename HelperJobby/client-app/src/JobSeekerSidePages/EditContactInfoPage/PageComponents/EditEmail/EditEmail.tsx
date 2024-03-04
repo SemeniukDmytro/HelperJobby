@@ -2,8 +2,8 @@ import React, {FC} from 'react';
 import './EditEmail.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
-import {useAuth} from "../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../../../hooks/contextHooks/useAuth";
 
 interface EditEmailProps {
 }

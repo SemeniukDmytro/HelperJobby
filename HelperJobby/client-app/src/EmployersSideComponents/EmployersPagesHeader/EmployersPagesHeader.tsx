@@ -1,6 +1,5 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './EmployersPagesHeader.scss';
-import {useAuth} from "../../hooks/useAuth";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
     faArrowRightFromBracket,
@@ -10,10 +9,11 @@ import {
     faMessage,
     faUser
 } from "@fortawesome/free-solid-svg-icons";
-import {useEmployer} from "../../hooks/useEmployer";
-import {useSignOut} from "../../hooks/useSignOut";
 import {useNavigate} from "react-router-dom";
 import employerPagesPaths from "../../AppRoutes/Paths/EmployerPagesPaths";
+import {useAuth} from "../../hooks/contextHooks/useAuth";
+import {useEmployer} from "../../hooks/contextHooks/useEmployer";
+import {useSignOut} from "../../hooks/comnonentSharedHooks/useSignOut";
 
 interface EmployersPagesHeaderProps {
     loading: boolean;

@@ -1,8 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import './JobCandidatesPage.scss';
-import {useLocation, useNavigate, useParams, useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {JobService} from "../../../../services/jobService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobApplyService} from "../../../../services/jobApplyService";
 import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValidators";

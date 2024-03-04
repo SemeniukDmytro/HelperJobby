@@ -1,6 +1,5 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './ChangeJobScheduleDialogContent.scss';
-import useCurrentEmployerJob from "../../../../hooks/useCurrentEmployerJob";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {UpdatedIncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
@@ -15,6 +14,7 @@ import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationState
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
 import {JobService} from "../../../../services/jobService";
+import useCurrentEmployerJob from "../../../../hooks/contextHooks/useCurrentEmployerJob";
 
 interface ChangeJobScheduleDialogContentProps {
     showDialog : boolean;

@@ -1,13 +1,13 @@
 import React, {FC, useEffect} from 'react';
 import './EducationComponent.scss';
-import useResumeBuild from "../../../../../hooks/useResumeBuild";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
 import EducationReview from "../EducationReview/EducationReview";
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import {useNavigate} from "react-router-dom";
 import "../../../../../Assets/scssSharedStyles/DefaultButtons.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
+import useResumeBuild from "../../../../../hooks/contextHooks/useResumeBuild";
 
 interface ResumeEducationComponentProps {
 }

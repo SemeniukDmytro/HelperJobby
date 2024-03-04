@@ -3,10 +3,10 @@ import './BuildResumeLayout.scss';
 import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeftLong} from "@fortawesome/free-solid-svg-icons";
-import useResumeBuild from "../../../../hooks/useResumeBuild";
 import DialogWindow from "../../../../Components/DialogWindow/DialogWindow";
-import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
+import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
+import useResumeBuild from "../../../../hooks/contextHooks/useResumeBuild";
 
 interface BuildResumeLayoutProps {
 }

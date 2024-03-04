@@ -1,7 +1,6 @@
 import React, {FC, useState} from 'react';
 import './ChangeEmailComponent.scss';
 import ChangeAccountInfoForm from "../../../SharedComponents/ChangeAccountInfoForm/ChangeAccountInfoForm";
-import {useAuth} from "../../../../../hooks/useAuth";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import CustomPasswordInputField from "../../../../../Components/CustomPasswordInputField/CustomPasswordInputField";
@@ -11,6 +10,7 @@ import {UpdateUserWIthCurrentPasswordDTO} from "../../../../../DTOs/userRelatedD
 import {IsValidEmail} from "../../../../../utils/validationLogic/authFormValidators";
 import {useNavigate} from "react-router-dom";
 import {ChangedInfoTypes} from "../../../../../enums/utilityEnums/ChangedInfoTypes";
+import {useAuth} from "../../../../../hooks/contextHooks/useAuth";
 
 interface ChangeEmailComponentProps {
 }

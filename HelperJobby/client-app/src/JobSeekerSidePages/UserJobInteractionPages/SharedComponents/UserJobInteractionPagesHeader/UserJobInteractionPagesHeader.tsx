@@ -1,9 +1,9 @@
-import React, {FC, ReactNode, useState} from 'react';
+import React, {FC, ReactNode} from 'react';
 import './UserJobInteractionPagesHeader.scss';
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
-import {useJobSeekerJobInteractions} from "../../../../hooks/useJobSeekerJobInteractions";
 import {useNavigate} from "react-router-dom";
 import {UserJobInteractionsTypes} from "../../../../enums/utilityEnums/UserJobInteractionsTypes";
+import {useJobSeekerJobInteractions} from "../../../../hooks/contextHooks/useJobSeekerJobInteractions";
 
 interface UserJobInteractionPagesHeaderProps {
     children: ReactNode;
@@ -14,7 +14,6 @@ const UserJobInteractionPagesHeader: FC<UserJobInteractionPagesHeaderProps> = ({
                                                                                    children,
                                                                                    userJobInteractionType
                                                                                }) => {
-    const [loading, setLoading] = useState(true);
     const {savedJobs, jobApplies, interviews, fetchJobSeekerJobInteractions} = useJobSeekerJobInteractions();
     const navigate = useNavigate();
 

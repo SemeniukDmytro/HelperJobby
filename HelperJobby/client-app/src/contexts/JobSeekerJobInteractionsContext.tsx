@@ -7,7 +7,7 @@ import {JobSeekerService} from "../services/jobSeekerService";
 import {JobApplyService} from "../services/jobApplyService";
 import {InterviewService} from "../services/interviewService";
 import {logErrorInfo} from "../utils/logErrorInfo";
-import {useJobSeeker} from "../hooks/useJobSeeker";
+import {useJobSeeker} from "../hooks/contextHooks/useJobSeeker";
 
 const JobSeekerJobInteractionsContext = createContext<JobSeekerJobInteractionsContextProps>({
     savedJobs: null,

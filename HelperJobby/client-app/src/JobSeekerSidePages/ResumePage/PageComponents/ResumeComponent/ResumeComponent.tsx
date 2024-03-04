@@ -8,8 +8,8 @@ import DialogWindow from "../../../../Components/DialogWindow/DialogWindow";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {ResumeService} from "../../../../services/resumeService";
-import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
+import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 
 interface ResumeComponentProps {
 }

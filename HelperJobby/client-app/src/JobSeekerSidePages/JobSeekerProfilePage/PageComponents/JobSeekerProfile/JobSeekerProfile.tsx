@@ -1,18 +1,18 @@
 import React, {FC, useEffect, useState} from 'react';
 import "./JobSeekerProfile.scss";
-import {useJobSeeker} from "../../../../hooks/useJobSeeker";
-import {useAuth} from "../../../../hooks/useAuth";
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleRight, faEnvelope, faFileLines, faLocationDot, faPhone, faUser} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
+import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
+import {useAuth} from "../../../../hooks/contextHooks/useAuth";
 
 interface JobSeekerProfileProps {
 }
 
 const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
-    const {jobSeeker, setJobSeeker, fetchJobSeeker} = useJobSeeker();
+    const {jobSeeker, fetchJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);

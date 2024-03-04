@@ -4,12 +4,12 @@ import SearchWithinEmployerJobs from "../SearchWithinEmployerJobs/SearchWithinEm
 import ShortJobInfoForEmployer from "../ShortJobInfoForEmployer/ShortJobInfoForEmployer";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {useEmployer} from "../../../../hooks/useEmployer";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {useNavigate} from "react-router-dom";
 import DialogWindow from "../../../../Components/DialogWindow/DialogWindow";
 import {JobService} from "../../../../services/jobService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 
 interface EmployerCompleteJobsProps {
 }
@@ -188,7 +188,7 @@ const EmployerCompleteJobs: FC<EmployerCompleteJobsProps> = () => {
                 )
             }
             {!filteringInProcess ?
-                jobSearchResults.map((job, index) => (
+                jobSearchResults.map((job) => (
                     <ShortJobInfoForEmployer job={job}
                                              selectedJobIds={selectedJobIds}
                                              setSelectedJobIds={setSelectedJobIds}

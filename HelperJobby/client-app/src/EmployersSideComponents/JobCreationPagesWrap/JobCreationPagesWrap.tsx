@@ -1,8 +1,8 @@
 import {FC, useEffect} from 'react';
 import './JobCreationPagesWrap.scss';
-import useCurrentEmployerJob from "../../hooks/useCurrentEmployerJob";
 import {JobCreationStates} from "../../enums/utilityEnums/JobCreationStates";
 import {Outlet} from "react-router-dom";
+import useCurrentEmployerJob from "../../hooks/contextHooks/useCurrentEmployerJob";
 
 interface JobCreationPagesWrapProps {}
 

@@ -1,14 +1,13 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './EditContactEmailDialog.scss';
-import {useEmployer} from "../../../../../hooks/useEmployer";
-import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
 import EditJobPostDialog from "../EditJobPostDialog/EditJobPostDialog";
 import {IsValidEmail, validatePhoneNumber} from "../../../../../utils/validationLogic/authFormValidators";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
-import {resumeRequirementOptionsMapData} from "../../../../../AppConstData/ResumeRequirements";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
+import {useEmployer} from "../../../../../hooks/contextHooks/useEmployer";
+import useCurrentEmployerJob from "../../../../../hooks/contextHooks/useCurrentEmployerJob";
 
 interface EditContactEmailDialogProps {
     showDialog: boolean;

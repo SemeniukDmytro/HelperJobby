@@ -22,22 +22,23 @@ import {useNavigate, useParams} from "react-router-dom";
 import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import EmployeeBenefits from "../../../../../enums/modelDataEnums/EmployeeBenefits";
 import {ShowPayByOptions} from "../../../../../enums/modelDataEnums/ShowPayByOptions";
-import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
-import {
-    useJobLoaderToSetCurrentJob
-} from "../../../../../hooks/useJobLoaderToSetCurrentJob";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
-import {minimalSalaryIsTooLowError, useSalaryValidation} from "../../../../../hooks/useSalaryValidation";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {getValidFloatNumberFromString} from "../../../../../utils/validationLogic/numbersValidators";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {checkMinimalSalary} from "../../../../../utils/validationLogic/checkMinimalSalary";
 import JobSalaryBlock from "../../../SharedComponents/JobSalaryBlock/JobSalaryBlock";
-import {useShowPayByOption} from "../../../../../hooks/comnonentsSharedHooks/useShowPayByOption";
 import {handleJobFeaturesListAppearance} from "../../../../../utils/handleJobFeaturesListHeight";
 import {addBenefit} from "../../../../../utils/manageJobFeatureSelect";
 import {JobCreationStates} from "../../../../../enums/utilityEnums/JobCreationStates";
+import useCurrentEmployerJob from "../../../../../hooks/contextHooks/useCurrentEmployerJob";
+import {useJobLoaderToSetCurrentJob} from "../../../../../hooks/comnonentSharedHooks/useJobLoaderToSetCurrentJob";
+import {
+    minimalSalaryIsTooLowError,
+    useSalaryValidation
+} from "../../../../../hooks/comnonentSharedHooks/useSalaryValidation";
+import {useShowPayByOption} from "../../../../../hooks/comnonentSharedHooks/useShowPayByOption";
 
 interface AddJobPayAndBenefitsComponentProps {
 }

@@ -1,22 +1,18 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './SavedJobComponent.scss';
 import UserJobInteractionShortJobInfo
     from "../../../SharedComponents/UserJobInteractionShortJobInfo/UserJobInteractionShortJobInfo";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBookmark, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {JobDTO} from "../../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
-import {JobSeekerService} from "../../../../../services/jobSeekerService";
-import {logErrorInfo} from "../../../../../utils/logErrorInfo";
-import {useJobSeekerJobInteractions} from "../../../../../hooks/useJobSeekerJobInteractions";
-import {
-    JobActionFunction,
-    ShowRemoveFromSavedSetter
-} from "../../../../../hooks/customHooksTypes/UseJobActionsHookTypes";
-import {useAuth} from "../../../../../hooks/useAuth";
-import {useNavigate} from "react-router-dom";
-import {useJobActions} from "../../../../../hooks/useJobActions";
 import {UserJobInteractionsTypes} from "../../../../../enums/utilityEnums/UserJobInteractionsTypes";
+import {useJobSeekerJobInteractions} from "../../../../../hooks/contextHooks/useJobSeekerJobInteractions";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
+import {JobSeekerService} from "../../../../../services/jobSeekerService";
+import {useAuth} from "../../../../../hooks/contextHooks/useAuth";
+import {useNavigate} from "react-router-dom";
+import {useJobActions} from "../../../../../hooks/comnonentSharedHooks/useJobActions";
+import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 
 interface SavedJobComponentProps {
     job: JobDTO;
@@ -40,7 +36,7 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
             setIsApplied(jobApplies?.some(application => application.jobId === job.id) || false);
         }
     }, [jobApplies]);
-    async function handleJobInteraction(actionFunction: JobActionFunction, setShowRemoveFromSavedValue: ShowRemoveFromSavedSetter) {
+    async function handleJobInteraction(actionFunction: (jobId : number) => void, setShowRemoveFromSavedValue: Dispatch<SetStateAction<boolean>>) {
         try {
             setRequestInProgress(true)
             if (!authUser) {

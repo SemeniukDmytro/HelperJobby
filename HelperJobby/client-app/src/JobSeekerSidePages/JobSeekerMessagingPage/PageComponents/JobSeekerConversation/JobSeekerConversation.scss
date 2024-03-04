@@ -1,0 +1,13 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.js-conversation-fb {
+  border: 0.0625rem solid global-variables.$neutral-color-300;
+  border-radius: 0.5rem 0.5rem 0px 0px;
+  margin-right: 0px;
+  flex-basis: 926px;
+  max-width: 926px;
+  position: relative;
+  width: auto;
+  overflow-y: hidden;
+  background-color: white;
+}

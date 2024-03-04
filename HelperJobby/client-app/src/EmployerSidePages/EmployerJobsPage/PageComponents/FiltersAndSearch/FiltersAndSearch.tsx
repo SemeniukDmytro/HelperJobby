@@ -2,8 +2,6 @@ import React, {Dispatch, FC, SetStateAction} from 'react';
 import './FiltersAndSearch.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronDown, faChevronUp, faSliders, faXmark} from "@fortawesome/free-solid-svg-icons";
-import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {IncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
 
 interface FiltersAndSearchProps {
     jobTitle: string;

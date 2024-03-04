@@ -3,7 +3,7 @@ import './ShortIncompleteJobInfoForEmployer.scss';
 import {useNavigate} from "react-router-dom";
 import {IncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleExclamation, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface ShortIncompleteJobInfoForEmployerProps {

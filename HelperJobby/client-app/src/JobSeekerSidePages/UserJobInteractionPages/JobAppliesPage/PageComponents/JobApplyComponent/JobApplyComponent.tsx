@@ -1,8 +1,6 @@
 import React, {FC, useState} from 'react';
 import './JobApplyComponent.scss';
 import {JobDTO} from "../../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {useJobSeekerJobInteractions} from "../../../../../hooks/useJobSeekerJobInteractions";
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import UserJobInteractionShortJobInfo
     from "../../../SharedComponents/UserJobInteractionShortJobInfo/UserJobInteractionShortJobInfo";
@@ -10,6 +8,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
 import {JobApplyService} from "../../../../../services/jobApplyService";
 import {UserJobInteractionsTypes} from "../../../../../enums/utilityEnums/UserJobInteractionsTypes";
+import {useJobSeekerJobInteractions} from "../../../../../hooks/contextHooks/useJobSeekerJobInteractions";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
 
 interface JobApplyComponentProps {
     job: JobDTO;

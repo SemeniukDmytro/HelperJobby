@@ -1,8 +1,6 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './ChangeJobApplicationMethodDialogContent.scss';
 import CommunicationPreferencesBlock from "../CommunicationPreferencesBlock/CommunicationPreferencesBlock";
-import {useEmployer} from "../../../../hooks/useEmployer";
-import useCurrentEmployerJob from "../../../../hooks/useCurrentEmployerJob";
 import {resumeRequirementOptionsEnumToStringMap} from "../../../../utils/convertLogic/enumToStringConverter";
 import {resumeRequirementOptionsMapData} from "../../../../AppConstData/ResumeRequirements";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
@@ -13,6 +11,8 @@ import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationState
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
 import {JobService} from "../../../../services/jobService";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
+import useCurrentEmployerJob from "../../../../hooks/contextHooks/useCurrentEmployerJob";
 
 interface ChangeJobApplicationMethodDialogContentProps {
     showDialog : boolean;

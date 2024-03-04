@@ -3,7 +3,7 @@ import './AccountTypeForm.scss'
 import CreatePasswordForm from "../CreatePasswordForm/CreatePasswordForm";
 import AppLogo from "../AppLogo/AppLogo";
 import "../../../../Assets/scssSharedStyles/AuthFormBox.scss";
-import {useAccountType} from "../../../../hooks/useAccountType";
+import {useAccountType} from "../../../../hooks/contextHooks/useAccountType";
 
 interface AccountTypeFormProps {
 }

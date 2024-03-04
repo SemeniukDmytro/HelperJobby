@@ -15,10 +15,6 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 import EmployerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import JobTypes from "../../../../../enums/modelDataEnums/JobTypes";
 import Schedules from "../../../../../enums/modelDataEnums/Schedules";
-import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
-import {
-    useJobLoaderToSetCurrentJob
-} from "../../../../../hooks/useJobLoaderToSetCurrentJob";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
@@ -26,6 +22,8 @@ import {IncompleteJobService} from "../../../../../services/incompleteJobService
 import {addJobType, addSchedule} from "../../../../../utils/manageJobFeatureSelect";
 import {handleJobFeaturesListAppearance} from "../../../../../utils/handleJobFeaturesListHeight";
 import {JobCreationStates} from "../../../../../enums/utilityEnums/JobCreationStates";
+import useCurrentEmployerJob from "../../../../../hooks/contextHooks/useCurrentEmployerJob";
+import {useJobLoaderToSetCurrentJob} from "../../../../../hooks/comnonentSharedHooks/useJobLoaderToSetCurrentJob";
 
 interface JobDetailsComponentProps {
 }

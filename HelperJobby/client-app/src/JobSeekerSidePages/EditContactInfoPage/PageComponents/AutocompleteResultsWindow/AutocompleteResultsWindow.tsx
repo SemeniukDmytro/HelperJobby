@@ -3,8 +3,8 @@ import './AutocompleteResultsWindow.scss';
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {LocationAutocompleteService} from "../../../../services/locationAutocompleteService";
 import {mapCountryWithA2Code} from "../../../../utils/convertLogic/countryWithA2CodeMapper";
-import useSelectWindowPosition from "../../../../hooks/useSelectWindowPosition";
 import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/AutocompleteWindowTypes";
+import useSelectWindowPosition from "../../../../hooks/comnonentSharedHooks/useSelectWindowPosition";
 
 interface AutocompleteResultsWindowProps {
     inputFieldRef: RefObject<HTMLInputElement>;

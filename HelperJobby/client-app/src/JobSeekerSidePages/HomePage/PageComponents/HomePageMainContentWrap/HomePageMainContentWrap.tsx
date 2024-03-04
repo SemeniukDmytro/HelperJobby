@@ -1,7 +1,7 @@
 import React, {FC, ReactNode, useEffect, useRef} from 'react';
 import './HomePageMainContentWrap.scss';
-import {useHomePage} from "../../../../hooks/useHomePage";
-import useQueryParams from "../../../../hooks/useQueryParams";
+import useQueryParams from "../../../../hooks/contextHooks/useQueryParams";
+import {useHomePage} from "../../../../hooks/contextHooks/useHomePage";
 
 interface HomePageMainContentWrapProps {
     children: ReactNode

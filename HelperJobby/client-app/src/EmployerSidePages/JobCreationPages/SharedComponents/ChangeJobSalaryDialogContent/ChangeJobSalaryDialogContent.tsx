@@ -1,9 +1,5 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './ChangeJobSalaryDialogContent.scss';
-import useCurrentEmployerJob from "../../../../hooks/useCurrentEmployerJob";
-import {IncompleteJobService} from "../../../../services/incompleteJobService";
-import {useSalaryValidation} from "../../../../hooks/useSalaryValidation";
-import {useShowPayByOption} from "../../../../hooks/comnonentsSharedHooks/useShowPayByOption";
 import {
     salaryRatesEnumToStringMap,
     showPayByOptionsEnumToStringMap
@@ -16,6 +12,10 @@ import {CreateUpdateSalaryDTO} from "../../../../DTOs/jobRelatetedDTOs/CreateUpd
 import {getValidFloatNumberFromString} from "../../../../utils/validationLogic/numbersValidators";
 import {salaryRatesMapData, showPayByOptionsMapData} from "../../../../AppConstData/PayRelatedData";
 import {countriesWithCurrencies} from "../../../../AppConstData/CountriesWithCurrencies";
+import useCurrentEmployerJob from "../../../../hooks/contextHooks/useCurrentEmployerJob";
+import {IncompleteJobService} from "../../../../services/incompleteJobService";
+import {useSalaryValidation} from "../../../../hooks/comnonentSharedHooks/useSalaryValidation";
+import {useShowPayByOption} from "../../../../hooks/comnonentSharedHooks/useShowPayByOption";
 
 interface ChangeJobSalaryDialogContentProps {
     showDialog : boolean;

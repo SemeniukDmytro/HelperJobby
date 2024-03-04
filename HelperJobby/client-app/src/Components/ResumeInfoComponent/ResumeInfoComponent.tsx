@@ -2,13 +2,10 @@ import React, {FC, useEffect, useState} from 'react';
 import './ResumeInfoComponent.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPen, faPlus, faTrashCan} from "@fortawesome/free-solid-svg-icons";
-import {useJobSeeker} from "../../hooks/useJobSeeker";
-import {useAuth} from "../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import {SkillDTO} from "../../DTOs/resumeRelatedDTOs/SkillDTO";
 import {SkillService} from "../../services/skillService";
 import {logErrorInfo} from "../../utils/logErrorInfo";
-import useResumeBuild from "../../hooks/useResumeBuild";
 import {
     ProgressPercentPerPage
 } from "../../JobSeekerSidePages/BuildResumePages/SharedComponents/ProgressPercentPerPage";
@@ -16,6 +13,9 @@ import WorkExperienceReview
     from "../../JobSeekerSidePages/BuildResumePages/WorkExperiencePage/PageComponents/WorkExperienceReview/WorkExperienceReview";
 import EducationReview
     from "../../JobSeekerSidePages/BuildResumePages/EducationPage/PageComponents/EducationReview/EducationReview";
+import useResumeBuild from "../../hooks/contextHooks/useResumeBuild";
+import {useJobSeeker} from "../../hooks/contextHooks/useJobSeeker";
+import {useAuth} from "../../hooks/contextHooks/useAuth";
 
 interface ResumeInfoComponentProps {
 }

@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import "./JobSearchPromoContainer.scss";
-import {useAuth} from "../../../../hooks/useAuth";
-import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../../../hooks/contextHooks/useAuth";
+import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 
 interface JobSearchPromoContainerProps {
 }

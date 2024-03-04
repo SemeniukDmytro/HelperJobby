@@ -2,12 +2,12 @@ import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './EditResumeRequirementsDialog.scss';
 import {resumeRequirementOptionsEnumToStringMap} from "../../../../../utils/convertLogic/enumToStringConverter";
 import {resumeRequirementOptionsMapData} from "../../../../../AppConstData/ResumeRequirements";
-import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
 import EditJobPostDialog from "../EditJobPostDialog/EditJobPostDialog";
 import CustomSelectWindow from "../../../../../EmployersSideComponents/CustomSelectWindow/CustomSelectWindow";
+import useCurrentEmployerJob from "../../../../../hooks/contextHooks/useCurrentEmployerJob";
 
 interface EditResumeRequirementsDialogProps {
     showDialog: boolean;

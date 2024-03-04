@@ -6,7 +6,7 @@ import {JobLocationTypes} from "../../../../enums/modelDataEnums/JobLocationType
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleInfo} from "@fortawesome/free-solid-svg-icons";
 import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
-import {useJobLocationType} from "../../../../hooks/useJobLocationType";
+import {useJobLocationType} from "../../../../hooks/comnonentSharedHooks/useJobLocationType";
 
 interface JobLocationSelectionComponentProps {
     jobLocationTypeEnumValue : JobLocationTypes;

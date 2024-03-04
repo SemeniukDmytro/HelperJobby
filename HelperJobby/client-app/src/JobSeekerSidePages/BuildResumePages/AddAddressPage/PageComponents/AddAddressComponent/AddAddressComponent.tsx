@@ -1,7 +1,5 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import './AddAddressComponent.scss';
-import useResumeBuild from "../../../../../hooks/useResumeBuild";
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import {JobSeekerService} from "../../../../../services/jobSeekerService";
 import CountrySelector from "../../../../EditContactInfoPage/PageComponents/CountrySelector/CountrySelector";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
@@ -16,6 +14,8 @@ import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentP
 import {JobSeekerDTO} from "../../../../../DTOs/accountDTOs/JobSeekerDTO";
 import LocationCustomInputField from "../../../../../Components/LocationCustomInputField/LocationCustomInputField";
 import {AutocompleteWindowTypes} from "../../../../../enums/utilityEnums/AutocompleteWindowTypes";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
+import useResumeBuild from "../../../../../hooks/contextHooks/useResumeBuild";
 
 interface ResumeAddressComponentProps {
 }

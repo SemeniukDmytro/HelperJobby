@@ -5,10 +5,10 @@ import {faArrowRightLong} from '@fortawesome/free-solid-svg-icons';
 import SignInForm from "../SignInForm/SignInForm";
 import AccountTypeForm from "../AccountTypeForm/AccountTypeForm";
 import AppLogo from "../AppLogo/AppLogo";
-import {useEmail} from "../../../../hooks/useEmail";
 import AuthService from "../../../../services/authService";
 import {IsValidEmail} from "../../../../utils/validationLogic/authFormValidators";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
+import {useEmail} from "../../../../hooks/contextHooks/useEmail";
 
 interface AuthComponentProps {
 }

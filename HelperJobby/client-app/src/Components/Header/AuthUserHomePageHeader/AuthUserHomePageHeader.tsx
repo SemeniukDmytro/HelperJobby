@@ -3,9 +3,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBookmark, faFileLines, faGear, faMessage, faUser} from "@fortawesome/free-solid-svg-icons";
 import "./AuthUserHomePageHeader.scss";
 import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../../hooks/useAuth";
-import AuthService from "../../../services/authService";
-import {useSignOut} from "../../../hooks/useSignOut";
+import JobSeekerPagesPaths from "../../../AppRoutes/Paths/JobSeekerPagesPaths";
+import {useAuth} from "../../../hooks/contextHooks/useAuth";
+import {useSignOut} from "../../../hooks/comnonentSharedHooks/useSignOut";
 
 interface AuthUserHomePageHeaderProps {
 }
@@ -50,7 +50,7 @@ const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
     }
     
     function navigateToConversations() {
-        navigate("/conversations")
+        navigate(JobSeekerPagesPaths.CONVERSATIONS)
     }
 
     return (

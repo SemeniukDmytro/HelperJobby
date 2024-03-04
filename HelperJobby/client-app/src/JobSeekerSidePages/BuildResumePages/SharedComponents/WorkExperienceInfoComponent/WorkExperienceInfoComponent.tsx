@@ -6,13 +6,11 @@ import AutocompleteResultsWindow
 import {WorkExperienceDTO} from "../../../../DTOs/resumeRelatedDTOs/WorkExperienceDTO";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 import CountrySelector from "../../../EditContactInfoPage/PageComponents/CountrySelector/CountrySelector";
-import useResumeBuild from "../../../../hooks/useResumeBuild";
 import {ProgressPercentPerPage} from "../ProgressPercentPerPage";
 import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {CreateResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {CreateUpdateWorkExperienceDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateUpdateWorkExperienceDTO";
-import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {WorkExperienceService} from "../../../../services/workExperienceService";
 import {ResumeService} from "../../../../services/resumeService";
 import {JobSeekerDTO} from "../../../../DTOs/accountDTOs/JobSeekerDTO";
@@ -21,7 +19,9 @@ import {months} from "../../../../AppConstData/Months";
 import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
 import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
 import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/AutocompleteWindowTypes";
-import {MonthAndYearFromJSONToStringConverter} from "../../../../utils/convertLogic/GetFullDate_MMMM_DD_YYYY";
+import {MonthAndYearFromJSONToStringConverter} from "../../../../utils/convertLogic/formatDate";
+import useResumeBuild from "../../../../hooks/contextHooks/useResumeBuild";
+import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 
 interface WorkExperienceInfoComponentProps {
     workExperience?: WorkExperienceDTO

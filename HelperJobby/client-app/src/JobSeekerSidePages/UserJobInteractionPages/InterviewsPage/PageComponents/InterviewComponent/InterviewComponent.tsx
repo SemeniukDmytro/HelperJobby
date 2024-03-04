@@ -4,10 +4,10 @@ import {InterviewDTO} from "../../../../../DTOs/userJobInteractionsDTOs/Intervie
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBuilding, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import DialogWindow from "../../../../../Components/DialogWindow/DialogWindow";
-import {useJobSeekerJobInteractions} from "../../../../../hooks/useJobSeekerJobInteractions";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {InterviewService} from "../../../../../services/interviewService";
 import {useNavigate} from "react-router-dom";
+import {useJobSeekerJobInteractions} from "../../../../../hooks/contextHooks/useJobSeekerJobInteractions";
 
 interface InterviewComponentProps {
     interview: InterviewDTO

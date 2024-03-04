@@ -2,10 +2,11 @@ import React, {FC, useEffect, useState} from 'react';
 import './OrganizationUsersComponent.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCirclePlus} from "@fortawesome/free-solid-svg-icons";
-import {useEmployer} from "../../../../hooks/useEmployer";
 import {OrganizationService} from "../../../../services/organizationService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import AddOrganizationUserDialog from "../AddOrganizationUserDialog/AddOrganizationUserDialog";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
+import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 
 interface OrganizationUsersComponentProps {
 }
@@ -39,6 +40,7 @@ const OrganizationUsersComponent: FC<OrganizationUsersComponentProps> = () => {
     }
 
     return (
+        loading ? <LoadingPage/> :
         <>
             <AddOrganizationUserDialog
                 showDialog={showAddOrganizationUserDialog}

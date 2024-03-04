@@ -1,8 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import './SkillsComponent.scss';
-import useResumeBuild from "../../../../../hooks/useResumeBuild";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +12,8 @@ import {ResumeService} from "../../../../../services/resumeService";
 import {CreateResumeDTO} from "../../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
 import {useNavigate} from "react-router-dom";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
+import useResumeBuild from "../../../../../hooks/contextHooks/useResumeBuild";
 
 interface SkillsComponentProps {
 }

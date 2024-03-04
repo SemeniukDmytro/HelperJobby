@@ -2,7 +2,6 @@ import React, {Dispatch, FC, SetStateAction, useState} from 'react';
 import './JobInterviewForEmployer.scss';
 import {InterviewDTO} from "../../../../DTOs/userJobInteractionsDTOs/InterviewDTO";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {useJobSeekerJobInteractions} from "../../../../hooks/useJobSeekerJobInteractions";
 import {InterviewService} from "../../../../services/interviewService";
 import {useNavigate} from "react-router-dom";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
@@ -12,13 +11,11 @@ import {faBuilding, faChevronDown, faChevronUp} from "@fortawesome/free-solid-sv
 
 interface JobInterviewForEmployerProps {
     interview : InterviewDTO;
-    job : JobDTO;
     setJob : Dispatch<SetStateAction<JobDTO | undefined>>;
 }
 
 const JobInterviewForEmployer: FC<JobInterviewForEmployerProps> = ({
     interview,
-    job,
     setJob
                                                                    }) => {
 

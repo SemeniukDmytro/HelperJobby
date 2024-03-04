@@ -2,9 +2,6 @@ import React, {Dispatch, FC, SetStateAction, useEffect} from 'react';
 import './JobPreviewDialog.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
-import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
-import JobPreview from "../../../../../Components/Icons/JobPreview";
-import {useEmployer} from "../../../../../hooks/useEmployer";
 import {faHeart} from "@fortawesome/free-regular-svg-icons";
 import {
     benefitsEnumToStringMap,
@@ -13,6 +10,9 @@ import {
 } from "../../../../../utils/convertLogic/enumToStringConverter";
 import {JobLocationTypes} from "../../../../../enums/modelDataEnums/JobLocationTypes";
 import {formatJobSalaryDisplay} from "../../../../../utils/convertLogic/formatJobSalaryDisplay";
+import useCurrentEmployerJob from "../../../../../hooks/contextHooks/useCurrentEmployerJob";
+import {useEmployer} from "../../../../../hooks/contextHooks/useEmployer";
+import JobPreview from "../../../../../Components/Icons/JobPreview";
 
 interface JobPreviewDialogProps {
     showDialog: boolean;

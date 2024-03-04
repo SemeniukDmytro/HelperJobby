@@ -1,8 +1,8 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './CustomSelectWindow.scss';
-import useSelectWindowPosition from "../../hooks/useSelectWindowPosition";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import useSelectWindowPosition from "../../hooks/comnonentSharedHooks/useSelectWindowPosition";
 
 interface CustomSelectWindowProps {
     fieldLabel: string;

@@ -4,9 +4,12 @@ import CustomSelectWindow from "../../../../EmployersSideComponents/CustomSelect
 import {salaryRatesMapData, showPayByOptionsMapData} from "../../../../AppConstData/PayRelatedData";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleExclamation, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
-import {minimalSalaryIsTooLowError, useSalaryValidation} from "../../../../hooks/useSalaryValidation";
-import {useShowPayByOption} from "../../../../hooks/comnonentsSharedHooks/useShowPayByOption";
 import SalaryAmountInputField from "../../../../EmployersSideComponents/SalaryAmountInputField/SalaryAmountInputField";
+import {
+    minimalSalaryIsTooLowError,
+    useSalaryValidation
+} from "../../../../hooks/comnonentSharedHooks/useSalaryValidation";
+import {useShowPayByOption} from "../../../../hooks/comnonentSharedHooks/useShowPayByOption";
 
 interface JobSalaryBlockProps {
     showPayBy: string;

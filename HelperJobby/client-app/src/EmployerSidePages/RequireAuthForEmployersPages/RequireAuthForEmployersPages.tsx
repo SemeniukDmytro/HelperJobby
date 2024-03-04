@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import './RequireAuthForEmployersPages.scss';
 import {Navigate, Outlet, useLocation} from "react-router-dom";
-import {useAuth} from "../../hooks/useAuth";
 import {EmployerProvider} from "../../contexts/EmployerContext";
+import {useAuth} from "../../hooks/contextHooks/useAuth";
 
 interface RequireAuthForEmployersPagesProps {
 }

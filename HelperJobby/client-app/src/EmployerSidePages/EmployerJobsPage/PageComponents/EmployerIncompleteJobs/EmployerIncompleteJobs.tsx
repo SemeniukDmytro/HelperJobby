@@ -1,9 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
 import './EmployerIncompleteJobs.scss';
-import {useEmployer} from "../../../../hooks/useEmployer";
-import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import SearchWithinEmployerJobs from "../SearchWithinEmployerJobs/SearchWithinEmployerJobs";
-import ShortJobInfoForEmployer from "../ShortJobInfoForEmployer/ShortJobInfoForEmployer";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {IncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
 import SearchWithinEmployerIncompleteJobs
@@ -11,10 +7,10 @@ import SearchWithinEmployerIncompleteJobs
 import ShortIncompleteJobInfoForEmployer from "../ShortIncompleteJobInfoForEmployer/ShortIncompleteJobInfoForEmployer";
 import DialogWindow from "../../../../Components/DialogWindow/DialogWindow";
 import {useNavigate} from "react-router-dom";
-import {JobService} from "../../../../services/jobService";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 
 interface EmployerIncompleteJobsProps {
 }

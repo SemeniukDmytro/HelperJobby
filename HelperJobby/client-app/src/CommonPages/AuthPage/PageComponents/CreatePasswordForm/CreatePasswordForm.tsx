@@ -5,9 +5,6 @@ import "./CreatePasswordForm.scss"
 import AppLogo from "../AppLogo/AppLogo";
 import {useLocation, useNavigate} from "react-router-dom";
 import EmailForm from "../EmailForm/EmailForm";
-import {useEmail} from "../../../../hooks/useEmail";
-import {useAccountType} from "../../../../hooks/useAccountType";
-import {useAuth} from "../../../../hooks/useAuth";
 import AuthService from "../../../../services/authService";
 import {CreateUpdateUserDTO} from "../../../../DTOs/userRelatedDTOs/CreateUpdateUserDTO";
 import {
@@ -15,6 +12,9 @@ import {
     IsValidPasswordMinimalLength
 } from "../../../../utils/validationLogic/authFormValidators";
 import CustomPasswordInputField from "../../../../Components/CustomPasswordInputField/CustomPasswordInputField";
+import {useEmail} from "../../../../hooks/contextHooks/useEmail";
+import {useAccountType} from "../../../../hooks/contextHooks/useAccountType";
+import {useAuth} from "../../../../hooks/contextHooks/useAuth";
 
 
 interface CreatePasswordFormProps {

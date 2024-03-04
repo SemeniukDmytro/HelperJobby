@@ -5,10 +5,9 @@ import "./JobSearchBar.scss"
 import GoogleImage from "../../Assets/pictures/google_on_white_hdpi.png";
 import {useNavigate} from "react-router-dom";
 import {LocationAutocompleteService} from "../../services/locationAutocompleteService";
-import {useJobSeeker} from "../../hooks/useJobSeeker";
-
+import {useJobSeeker} from "../../hooks/contextHooks/useJobSeeker";
 import {logErrorInfo} from "../../utils/logErrorInfo";
-import useJobQueryParams from "../../hooks/useQueryParams";
+import useQueryParams from "../../hooks/contextHooks/useQueryParams";
 
 interface JobSearchBarProps {
     jobInitial: string;
@@ -34,11 +33,9 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
     const locationAutocompleteService = new LocationAutocompleteService();
     const {jobSeeker} = useJobSeeker();
     const {
-        query,
         setQuery,
-        jobLocation,
         setJobLocation
-    } = useJobQueryParams();
+    } = useQueryParams();
     const navigate = useNavigate();
 
 

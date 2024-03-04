@@ -5,7 +5,6 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValidators";
 import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import {InterviewDTO} from "../../../../DTOs/userJobInteractionsDTOs/InterviewDTO";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import JobInterviewForEmployer from "../JobInterviewForEmployer/JobInterviewForEmployer";
@@ -46,8 +45,9 @@ const JobInterviews: FC<JobInterviewsProps> = () => {
             <>
                 {job?.interviews && job.interviews.length > 0 ?
                     job.interviews.map((interview, index) =>
-                        <JobInterviewForEmployer interview={interview}
-                                                 job={job} setJob={setJob}/>
+                        <JobInterviewForEmployer 
+                            key={index}
+                            interview={interview} setJob={setJob}/>
                     )
                     :
                     <div>

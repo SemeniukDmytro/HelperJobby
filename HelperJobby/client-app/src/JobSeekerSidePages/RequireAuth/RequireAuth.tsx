@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Navigate, Outlet, useLocation} from 'react-router-dom';
-import {useAuth} from "../../hooks/useAuth";
 import {JobSeekerProvider} from "../../contexts/JobSeekerContext";
+import {useAuth} from "../../hooks/contextHooks/useAuth";
 
 interface RequireAuthProps {
 }

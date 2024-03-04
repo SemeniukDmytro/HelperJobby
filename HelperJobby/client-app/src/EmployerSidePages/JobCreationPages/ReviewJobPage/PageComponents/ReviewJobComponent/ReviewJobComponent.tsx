@@ -1,16 +1,14 @@
 import React, {FC, useEffect, useState} from 'react';
 import './ReviewJobComponent.scss';
-import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
-import {useNavigate, useParams} from "react-router-dom";
-import {
-    useJobLoaderToSetCurrentJob
-} from "../../../../../hooks/useJobLoaderToSetCurrentJob";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import employerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {JobService} from "../../../../../services/jobService";
 import EmployerJobFullInfo from "../../../../../EmployersSideComponents/EmployerJobFullInfo/EmployerJobFullInfo";
 import {JobCreationStates} from "../../../../../enums/utilityEnums/JobCreationStates";
+import useCurrentEmployerJob from "../../../../../hooks/contextHooks/useCurrentEmployerJob";
+import {useNavigate, useParams} from "react-router-dom";
+import {useJobLoaderToSetCurrentJob} from "../../../../../hooks/comnonentSharedHooks/useJobLoaderToSetCurrentJob";
 
 
 interface ReviewJobComponentProps { 

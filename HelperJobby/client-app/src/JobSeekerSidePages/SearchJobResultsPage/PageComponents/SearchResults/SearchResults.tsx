@@ -4,7 +4,6 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import QueryParameter from "../QueryParameter/QueryParameter";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronLeft, faChevronRight, faXmark} from "@fortawesome/free-solid-svg-icons";
-import useQueryParams from "../../../../hooks/useQueryParams";
 import JobSearchBar from "../../../../Components/JobSearchBar/JobSearchBar";
 import {JobTypesMapData} from "../../../../AppConstData/JobTypesMapData";
 import {mostSpokenLanguages} from "../../../../AppConstData/Languages";
@@ -21,6 +20,7 @@ import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader
 import HomePageMainContentWrap from "../../../HomePage/PageComponents/HomePageMainContentWrap/HomePageMainContentWrap";
 import JobTypes from "../../../../enums/modelDataEnums/JobTypes";
 import {JobQueryParams} from "../../../../enums/utilityEnums/JobQueryParams";
+import useQueryParams from "../../../../hooks/contextHooks/useQueryParams";
 
 interface SearchResultsProps {
 }

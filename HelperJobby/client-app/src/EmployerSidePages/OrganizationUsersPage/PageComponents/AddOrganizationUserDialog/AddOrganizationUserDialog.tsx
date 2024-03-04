@@ -4,10 +4,10 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
 import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
-import {useEmployer} from "../../../../hooks/useEmployer";
 import {OrganizationService} from "../../../../services/organizationService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {IsValidEmail} from "../../../../utils/validationLogic/authFormValidators";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 
 interface AddOrganizationUserDialogProps {
     showDialog : boolean;

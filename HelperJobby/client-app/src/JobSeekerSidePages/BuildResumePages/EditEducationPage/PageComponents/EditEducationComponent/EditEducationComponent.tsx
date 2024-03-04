@@ -2,9 +2,9 @@ import React, {FC, useEffect, useState} from 'react';
 import './EditEducationComponent.scss';
 import {EducationDTO} from "../../../../../DTOs/resumeRelatedDTOs/EducationDTO";
 import {useNavigate, useParams} from "react-router-dom";
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import EducationInfoComponent from "../../../SharedComponents/EducationInfoComponent/EducationInfoComponent";
 import {getResumeInfoPageParentPath} from "../../../../../utils/getResumeInfoPageParentPath";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
 
 interface EditEducationComponentProps {
 }

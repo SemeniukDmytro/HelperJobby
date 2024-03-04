@@ -3,13 +3,13 @@ import './ChangePhoneComponent.scss';
 import ChangeAccountInfoForm from "../../../SharedComponents/ChangeAccountInfoForm/ChangeAccountInfoForm";
 import {validatePhoneNumber} from "../../../../../utils/validationLogic/authFormValidators";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {UpdateJobSeekerDTO} from "../../../../../DTOs/accountDTOs/UpdateJobSeekerDTO";
 import {JobSeekerService} from "../../../../../services/jobSeekerService";
 import {useNavigate} from "react-router-dom";
 import {ChangedInfoTypes} from "../../../../../enums/utilityEnums/ChangedInfoTypes";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
 
 interface ChangePhoneComponentProps {
 }

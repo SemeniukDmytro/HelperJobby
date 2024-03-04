@@ -3,8 +3,8 @@ import "./PageWrapWithHeader.scss";
 import HomePageHeaderLeftSide from "../HomePageHeaderLeftSide/HomePageHeaderLeftSide";
 import AuthUserHomePageHeader from "../AuthUserHomePageHeader/AuthUserHomePageHeader";
 import PublicHomePageHeader from "../PublicHomePageHeader/PublicHomePageHeader";
-import {useAuth} from "../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../../hooks/contextHooks/useAuth";
 
 interface HomePageHeaderProps {
     children: ReactNode;

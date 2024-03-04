@@ -5,12 +5,12 @@ import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import CustomSelectWindow from "../../../../EmployersSideComponents/CustomSelectWindow/CustomSelectWindow";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobService} from "../../../../services/jobService";
-import {useEmployer} from "../../../../hooks/useEmployer";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import EmployerJobChatComponent from "../EmployerJobChatComponent/EmployerJobChatComponent";
 import {ConversationService} from "../../../../services/conversationService";
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
-import ShortConversationInfo from "../ShortConversationInfo/ShortConversationInfo";
+import ShortConversationInfoForEmployer from "../ShortConversationInfoForEmployer/ShortConversationInfoForEmployer";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 
 interface EmployerMessagesComponentProps {
 }
@@ -62,13 +62,12 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
                 }
             });
             setConversationsToShow(retrievedConversations);
-            if (retrievedConversations.length != 0){
+            if (retrievedConversations.length != 0) {
                 navigate(`${EmployerPagesPaths.MESSAGES}?conversationId=${retrievedConversations[0].id}`);
             }
         } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setLoading(false);
         }
     }
@@ -102,13 +101,15 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
                             }
                         </div>
                         <div className={"content-separation-line"}></div>
-                        <div className={"conversations-container"}>
-                            {
-                                conversationsToShow.map((conversation, index) => (
-                                    <ShortConversationInfo conversation={conversation} key={index}/>
-                                ) )
-                            }
-                        </div>
+                        {conversationsToShow.length != 0 &&
+                            <div className={"conversations-container"}>
+                                {
+                                    conversationsToShow.map((conversation, index) => (
+                                        <ShortConversationInfoForEmployer conversationInfo={conversation} key={index}/>
+                                    ))
+                                }
+                            </div>
+                        }
                     </div>
                     <EmployerJobChatComponent/>
                 </div>

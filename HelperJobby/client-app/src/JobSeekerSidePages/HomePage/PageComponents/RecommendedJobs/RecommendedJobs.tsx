@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import ShortJobDescriptionBlock from "../ShortJobDescriptionBlock/ShortJobDescriptionBlock";
 import "./RecommendedJobs.scss";
-import {useHomePage} from "../../../../hooks/useHomePage";
 import DetailedDescriptionColumn from "../DetailedDescriptionColumn/DetailedDescriptionColumn";
+import {useHomePage} from "../../../../hooks/contextHooks/useHomePage";
 
 interface RecommendedJobsProps {
 }

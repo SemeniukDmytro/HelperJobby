@@ -1,10 +1,10 @@
 import {createContext, ReactNode, useEffect, useState} from "react";
 import {ResumeBuildContextProps} from "../contextTypes/ResumeBuildContextProps";
-import {useJobSeeker} from "../hooks/useJobSeeker";
 import {ResumeService} from "../services/resumeService";
 import {logErrorInfo} from "../utils/logErrorInfo";
 import LoadingPage from "../Components/LoadingPage/LoadingPage";
 import PageWrapWithHeader from "../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
+import {useJobSeeker} from "../hooks/contextHooks/useJobSeeker";
 
 
 const ResumeContext = createContext<ResumeBuildContextProps>({

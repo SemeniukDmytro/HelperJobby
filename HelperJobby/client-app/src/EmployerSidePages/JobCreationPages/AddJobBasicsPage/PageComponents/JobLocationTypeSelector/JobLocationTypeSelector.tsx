@@ -2,10 +2,10 @@ import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from '
 import './JobLocationTypeSelector.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
-import useSelectWindowPosition from "../../../../../hooks/useSelectWindowPosition";
 import {jobLocationTypesArr} from "../../../../../AppConstData/JobLocationTypesArr";
 import {JobLocationType} from "../../../../../DTOs/locationDTO/JobLocationType";
 import {JobLocationTypes} from "../../../../../enums/modelDataEnums/JobLocationTypes";
+import useSelectWindowPosition from "../../../../../hooks/comnonentSharedHooks/useSelectWindowPosition";
 
 interface JobLocationTypeSelectorProps {
     jobLocationTypeEnumValue : JobLocationTypes;

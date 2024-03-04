@@ -4,16 +4,11 @@ import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitle
 import TeamAnalysis from "../../../../../Components/Icons/TeamAnalysis";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
-import {useEmployer} from "../../../../../hooks/useEmployer";
 import {resumeRequirementOptionsMapData} from "../../../../../AppConstData/ResumeRequirements";
 import JobCreateNavigationButtons
     from "../../../SharedComponents/JobCreateNavigationButtons/JobCreateNavigationButtons";
 import {useNavigate, useParams} from "react-router-dom";
 import employerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
-import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
-import {
-    useJobLoaderToSetCurrentJob
-} from "../../../../../hooks/useJobLoaderToSetCurrentJob";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
 import {IsValidEmail, validatePhoneNumber} from "../../../../../utils/validationLogic/authFormValidators";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
@@ -24,6 +19,9 @@ import CommunicationPreferencesBlock
     from "../../../SharedComponents/CommunicationPreferencesBlock/CommunicationPreferencesBlock";
 import {resumeRequirementOptionsEnumToStringMap} from "../../../../../utils/convertLogic/enumToStringConverter";
 import {JobCreationStates} from "../../../../../enums/utilityEnums/JobCreationStates";
+import {useEmployer} from "../../../../../hooks/contextHooks/useEmployer";
+import useCurrentEmployerJob from "../../../../../hooks/contextHooks/useCurrentEmployerJob";
+import {useJobLoaderToSetCurrentJob} from "../../../../../hooks/comnonentSharedHooks/useJobLoaderToSetCurrentJob";
 
 interface JobDescriptionAndPreferencesComponentProps {}
 

@@ -1,11 +1,11 @@
 import React, {FC, useEffect, useState} from 'react';
 import './EditWorkExperienceComponent.scss';
 import {useNavigate, useParams} from "react-router-dom";
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import {WorkExperienceDTO} from "../../../../../DTOs/resumeRelatedDTOs/WorkExperienceDTO";
 import WorkExperienceInfoComponent
     from "../../../SharedComponents/WorkExperienceInfoComponent/WorkExperienceInfoComponent";
 import {getResumeInfoPageParentPath} from "../../../../../utils/getResumeInfoPageParentPath";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
 
 interface EditWorkExperienceComponentProps {
 }

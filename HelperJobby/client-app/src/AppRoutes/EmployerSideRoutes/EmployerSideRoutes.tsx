@@ -25,9 +25,10 @@ import ResumeSearchPage from "../../EmployerSidePages/ResumeSearchPage/ResumeSea
 import JobApplyReviewPage from "../../EmployerSidePages/JobApplyReviewPage/JobApplyReviewPage";
 import EmployerInterviewsPage from "../../EmployerSidePages/EmployerInterviwesPage/EmployerInterviewsPage";
 import OrganizationUsersPage from "../../EmployerSidePages/OrganizationUsersPage/OrganizationUsersPage";
-import EditEmployerInfoPage from "../../JobSeekerSidePages/EditEmployerInfoPage/EditEmployerInfoPage";
 import JobCreationPagesWrap from "../../EmployersSideComponents/JobCreationPagesWrap/JobCreationPagesWrap";
 import EmployerMessagingPage from "../../EmployerSidePages/EmployerMessagingPage/EmployerMessagingPage";
+import EditEmployerInfoPage from "../../EmployerSidePages/EditEmployerInfoPage/EditEmployerInfoPage";
+import EmployerMessagingWrap from "../../EmployersSideComponents/EmployerMessagingWrap/EmployerMessagingWrap";
 
 interface EmployerSideRoutesProps {
 }
@@ -59,7 +60,9 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
                 <Route path={"/interviews"} element={<EmployerInterviewsPage/>}/>
                 <Route path={"/organization/users"} element={<OrganizationUsersPage/>}/>
                 <Route path={"/employer-edit"} element={<EditEmployerInfoPage/>}/>
-                <Route path={"/messages"} element={<EmployerMessagingPage/>}/>
+                <Route path={"/messages"} element={<EmployerMessagingWrap/>}>
+                    <Route index element={<EmployerMessagingPage/>}/>
+                </Route>
             </Route>
         </Route>
     </Routes>

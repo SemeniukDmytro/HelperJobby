@@ -8,7 +8,7 @@ import {faArrowRightLong} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {JobPostingMethods} from "../../../../enums/utilityEnums/JobPostingMethods";
-import {useEmployer} from "../../../../hooks/useEmployer";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 
 interface JobPostingComponentProps {
 }

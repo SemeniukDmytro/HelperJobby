@@ -4,13 +4,12 @@ import "./JobDescriptionHeader.scss";
 import {faBookmark} from "@fortawesome/free-solid-svg-icons";
 import {JobSeekerService} from "../../../../services/jobSeekerService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import {useJobSeeker} from "../../../../hooks/useJobSeeker";
-import {useAuth} from "../../../../hooks/useAuth";
-import {useNavigate} from "react-router-dom";
-import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {useJobActions} from "../../../../hooks/useJobActions";
-import {JobActionFunction, ShowRemoveFromSavedSetter} from "../../../../hooks/customHooksTypes/UseJobActionsHookTypes";
 import {formatJobSalaryDisplay} from "../../../../utils/convertLogic/formatJobSalaryDisplay";
+import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
+import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
+import {useAuth} from "../../../../hooks/contextHooks/useAuth";
+import {useNavigate} from "react-router-dom";
+import {useJobActions} from "../../../../hooks/comnonentSharedHooks/useJobActions";
 
 interface JobDescriptionHeaderProps {
     selectedJob: JobDTO | null;
@@ -71,7 +70,7 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({
 
     }, [jobSeeker?.savedJobs, []]);
 
-    async function handleJobInteraction(actionFunction: JobActionFunction, setShowRemoveFromSavedValue: ShowRemoveFromSavedSetter) {
+    async function handleJobInteraction(actionFunction: (jobId : number) => void, setShowRemoveFromSavedValue: Dispatch<SetStateAction<boolean>>) {
         try {
             if (!authUser) {
                 navigate("/auth-page");

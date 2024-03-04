@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import "./RecentSearches.scss";
 import RecentSearch from "../RecentSearch/RecentSearch";
-import {useHomePage} from "../../../../hooks/useHomePage";
+import {useHomePage} from "../../../../hooks/contextHooks/useHomePage";
 
 interface RecentSearchesProps {
 }

@@ -1,19 +1,17 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './JobFullInfoComponent.scss';
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {thousandsDisplayHelper} from "../../../../utils/thousandsDisplayHelper";
 import DetailedJobInfo from "../../../../Components/DetailedJobInfo/DetailedJobInfo";
-import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBookmark} from "@fortawesome/free-solid-svg-icons";
 import {JobSeekerService} from "../../../../services/jobSeekerService";
-import {useJobActions} from "../../../../hooks/useJobActions";
-import {JobActionFunction} from "../../../../hooks/customHooksTypes/UseJobActionsHookTypes";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import {useAuth} from "../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import {formatJobSalaryDisplay} from "../../../../utils/convertLogic/formatJobSalaryDisplay";
+import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
+import {useJobActions} from "../../../../hooks/comnonentSharedHooks/useJobActions";
+import {useAuth} from "../../../../hooks/contextHooks/useAuth";
 
 interface JobFullInfoComponentProps {
     job: JobDTO
@@ -68,7 +66,7 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
         }
     }
 
-    async function handleJobInteraction(actionFunction: JobActionFunction, setIsSaved: Dispatch<SetStateAction<boolean>>) {
+    async function handleJobInteraction(actionFunction: (jobId : number) => void, setIsSaved: Dispatch<SetStateAction<boolean>>) {
         try {
             if (!authUser) {
                 navigate("/auth-page");

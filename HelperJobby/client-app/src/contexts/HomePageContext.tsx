@@ -4,10 +4,10 @@ import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
 import {RecommendationService} from "../services/recommendationService";
 import {RecentUserSearchDTO} from "../DTOs/userRelatedDTOs/RecentUserSearchDTO";
 import {UserService} from "../services/userService";
-import {useAuth} from "../hooks/useAuth";
 import PageWrapWithHeader from "../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import LoadingPage from "../Components/LoadingPage/LoadingPage";
 import {logErrorInfo} from "../utils/logErrorInfo";
+import {useAuth} from "../hooks/contextHooks/useAuth";
 
 const HomePageContext = createContext<HomePageContextProps>(
     {

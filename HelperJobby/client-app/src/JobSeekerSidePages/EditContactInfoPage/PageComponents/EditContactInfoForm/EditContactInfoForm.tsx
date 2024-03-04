@@ -1,7 +1,6 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import "./EditContactInfoForm.scss";
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
-import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobSeekerService} from "../../../../services/jobSeekerService";
 import {JobSeekerDTO} from "../../../../DTOs/accountDTOs/JobSeekerDTO";
@@ -16,6 +15,7 @@ import {validatePhoneNumber} from "../../../../utils/validationLogic/authFormVal
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
 import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/AutocompleteWindowTypes";
+import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 
 interface EditContactInfoFormProps {
 }

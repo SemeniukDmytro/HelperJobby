@@ -2,12 +2,8 @@ import React, {FC, useState} from 'react';
 import './ResumeSearchInfoBlock.scss';
 import {ResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/ResumeDTO";
 import {
-    getDate_MMM_DD,
-    getFullDate_MMMM_DD_YYYY
-} from "../../../../utils/convertLogic/GetFullDate_MMMM_DD_YYYY";
-import {JobApplyStatuses} from "../../../../enums/modelDataEnums/JobApplyStatuses";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck, faEllipsisVertical, faQuestion, faXmark} from "@fortawesome/free-solid-svg-icons";
+    formatDate
+} from "../../../../utils/convertLogic/formatDate";
 import {useSearchParams} from "react-router-dom";
 
 interface ResumeSearchInfoBlockProps {
@@ -48,7 +44,7 @@ const ResumeSearchInfoBlock: FC<ResumeSearchInfoBlockProps> = ({
             <div className={"candidate-skills-container"}>
                 {(resume?.skills && resume.skills.length != 0) ?
                     resume.skills.map((skill, index) => (
-                        <div className={"candidate-skill-container light-dark-small-text bold-text"}>
+                        <div key={index} className={"candidate-skill-container light-dark-small-text bold-text"}>
                             {skill.name}
                         </div>
                     ))
@@ -65,8 +61,8 @@ const ResumeSearchInfoBlock: FC<ResumeSearchInfoBlockProps> = ({
                             <div className={"grey-small-text"}>
                                 <span>{workExperience.company} -&nbsp;</span>
                                 {workExperience.from && (workExperience.to || workExperience.currentlyWorkHere) &&
-                                    <span>From {getFullDate_MMMM_DD_YYYY(workExperience.from)} to&nbsp;
-                                        {workExperience.currentlyWorkHere ? "Present" : getFullDate_MMMM_DD_YYYY(workExperience.to!)}
+                                    <span>From {formatDate(workExperience.from)} to&nbsp;
+                                        {workExperience.currentlyWorkHere ? "Present" : formatDate(workExperience.to!)}
                                     </span>
                                 }
                             </div>

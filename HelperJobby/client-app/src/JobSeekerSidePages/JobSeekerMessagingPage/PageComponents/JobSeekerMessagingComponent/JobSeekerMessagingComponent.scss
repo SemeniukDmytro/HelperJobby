@@ -1,0 +1,48 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.js-msg-page-background {
+  padding: 1rem 64px 0px; 
+  background-color: global-variables.$neutral-color-100;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  position: relative;
+}
+
+.js-msg-page-layout {
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.js-inbox-fb {
+  border: 0.0625rem solid global-variables.$neutral-color-300;
+  border-radius: 0.5rem 0.5rem 0px 0px;
+  margin-right: 1rem;
+  flex-basis: 370px;
+  max-width: 370px;
+  background-color: white;
+  position: relative;
+  overflow-y: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.js-inbox-header {
+  padding: 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: global-variables.$neutral-color-1000;
+}
+
+.js-inbox-conversations-list-box {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}

@@ -1,12 +1,12 @@
 import React, {FC, useEffect} from 'react';
 import './WorkExperienceComponent.scss';
-import useResumeBuild from "../../../../../hooks/useResumeBuild";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import {useNavigate} from "react-router-dom";
 import WorkExperienceReview from "../WorkExperienceReview/WorkExperienceReview";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
+import useResumeBuild from "../../../../../hooks/contextHooks/useResumeBuild";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
 
 interface WorkExperienceComponentProps {
 }

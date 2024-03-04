@@ -1,7 +1,5 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import './AddNameComponent.scss';
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
-import useResumeBuild from "../../../../../hooks/useResumeBuild";
 import {useNavigate} from "react-router-dom";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
 import {JobSeekerService} from "../../../../../services/jobSeekerService";
@@ -10,6 +8,8 @@ import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/W
 import {updateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
 import {JobSeekerDTO} from "../../../../../DTOs/accountDTOs/JobSeekerDTO";
+import useResumeBuild from "../../../../../hooks/contextHooks/useResumeBuild";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
 
 interface ResumeNameComponentProps {
 }

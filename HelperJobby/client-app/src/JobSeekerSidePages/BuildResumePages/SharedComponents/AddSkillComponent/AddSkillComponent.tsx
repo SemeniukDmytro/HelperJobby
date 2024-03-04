@@ -1,9 +1,7 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import './AddSkillComponent.scss';
-import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import NavigateBackHeader from "../../../../Components/NavigateBackHeader/NavigateBackHeader";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
-import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {SkillService} from "../../../../services/skillService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
@@ -12,6 +10,7 @@ import {CreateSkillDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateSkillDTO"
 import {ResumeService} from "../../../../services/resumeService";
 import {CreateResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
 import {JobSeekerDTO} from "../../../../DTOs/accountDTOs/JobSeekerDTO";
+import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 
 interface AddSkillComponentProps {
 }

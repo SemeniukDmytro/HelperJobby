@@ -1,8 +1,6 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import './EducationInfoComponent.scss';
 import {EducationDTO} from "../../../../DTOs/resumeRelatedDTOs/EducationDTO";
-import useResumeBuild from "../../../../hooks/useResumeBuild";
-import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {ResumeService} from "../../../../services/resumeService";
 import {EducationService} from "../../../../services/educationService";
 import {useNavigate} from "react-router-dom";
@@ -20,7 +18,9 @@ import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/Whit
 import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
 import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
 import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/AutocompleteWindowTypes";
-import {MonthAndYearFromJSONToStringConverter} from "../../../../utils/convertLogic/GetFullDate_MMMM_DD_YYYY";
+import {MonthAndYearFromJSONToStringConverter} from "../../../../utils/convertLogic/formatDate";
+import useResumeBuild from "../../../../hooks/contextHooks/useResumeBuild";
+import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 
 
 interface AddEducationComponentProps {

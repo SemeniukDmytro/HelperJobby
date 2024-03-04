@@ -4,9 +4,6 @@ import AutocompleteResultsWindow
     from "../../../../JobSeekerSidePages/EditContactInfoPage/PageComponents/AutocompleteResultsWindow/AutocompleteResultsWindow";
 import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/AutocompleteWindowTypes";
 import JobLocationSelectionComponent from "../JobLocationSelectionComponent/JobLocationSelectionComponent";
-import useCurrentEmployerJob from "../../../../hooks/useCurrentEmployerJob";
-import {JobLocationTypes} from "../../../../enums/modelDataEnums/JobLocationTypes";
-import {useJobLocationType} from "../../../../hooks/useJobLocationType";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {UpdatedIncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
@@ -14,6 +11,9 @@ import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationState
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
 import {JobService} from "../../../../services/jobService";
+import useCurrentEmployerJob from "../../../../hooks/contextHooks/useCurrentEmployerJob";
+import {JobLocationTypes} from "../../../../enums/modelDataEnums/JobLocationTypes";
+import {useJobLocationType} from "../../../../hooks/comnonentSharedHooks/useJobLocationType";
 
 interface ChangeJobLocationDialogContentProps {
     showDialog: boolean;

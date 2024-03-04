@@ -1,17 +1,6 @@
-import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useState} from 'react';
 import './EditBenefitsDialog.scss';
 import EditJobPostDialog from "../EditJobPostDialog/EditJobPostDialog";
-import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
-import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
-import {logErrorInfo} from "../../../../../utils/logErrorInfo";
-import {IncompleteJobService} from "../../../../../services/incompleteJobService";
-import {benefitsStringValues} from "../../../../../AppConstData/JobEnumsToStringsArrays";
-import JobFeature from "../../../../../EmployersSideComponents/JobFeature/JobFeature";
-import {benefitStringToEnumMap} from "../../../../../utils/convertLogic/enumToStringConverter";
-import {handleJobFeaturesListAppearance} from "../../../../../utils/handleJobFeaturesListHeight";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
-import {addBenefit} from "../../../../../utils/manageJobFeatureSelect";
 import ChangeJobBenefitsDialogContent
     from "../../../SharedComponents/ChangeJobBenefitsDialogContent/ChangeJobBenefitsDialogContent";
 

@@ -5,15 +5,15 @@ import {faBookmark as regularBookmark} from "@fortawesome/free-regular-svg-icons
 import "./ShortJobDescriptionBlock.scss";
 import JobFeatureBox from "../JobFeatureBox/JobFeatureBox";
 import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../../../hooks/useAuth";
 import {JobSeekerService} from "../../../../services/jobSeekerService";
 import {descriptionSplitter} from "../../../../utils/descriptionSplitter";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
-import {useJobSeeker} from "../../../../hooks/useJobSeeker";
 import {jobTypesEnumToStringMap, schedulesEnumToStringMap} from "../../../../utils/convertLogic/enumToStringConverter";
 import {formatJobSalaryDisplay} from "../../../../utils/convertLogic/formatJobSalaryDisplay";
+import {useAuth} from "../../../../hooks/contextHooks/useAuth";
+import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 
 interface ShortJobDescriptionBlockProps {
     job: JobDTO;

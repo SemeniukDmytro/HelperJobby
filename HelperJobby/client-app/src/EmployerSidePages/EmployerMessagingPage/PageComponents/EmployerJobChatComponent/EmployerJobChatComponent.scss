@@ -25,9 +25,30 @@
   padding-left: 1rem;
   padding-right: 1rem;
   overflow-y: auto;
-  &::-webkit-scrollbar{
-    display: none;
-  }
+}
+
+.messages-window::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.messages-window::-webkit-scrollbar-track {
+  background: transparent;
+  margin-block: 0.25rem;
+}
+
+.messages-window::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+.messages-window:hover::-webkit-scrollbar-thumb,
+.messages-window.message-window-scroll::-webkit-scrollbar-thumb {
+  background-color: global-variables.$neutral-color-700;
+  border-radius: 9999rem;
+}
+
+.messages-window:hover::-webkit-scrollbar-track,
+.messages-window.message-window-scroll::-webkit-scrollbar-track {
+  background: global-variables.$neutral-color-300;
+  border-radius: 9999rem;
 }
 
 .write-message-container {

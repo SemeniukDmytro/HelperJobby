@@ -3,12 +3,12 @@ import './WorkExperienceReview.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPen, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import {WorkExperienceDTO} from "../../../../../DTOs/resumeRelatedDTOs/WorkExperienceDTO";
 import {convertNumericMonthToStringValue} from "../../../../../utils/convertLogic/convertNumericMonthToStringValue";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {WorkExperienceService} from "../../../../../services/workExperienceService";
 import {getResumeInfoPageParentPath} from "../../../../../utils/getResumeInfoPageParentPath";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
 
 interface WorkExperienceReviewProps {
     workExperience: WorkExperienceDTO;

@@ -1,13 +1,13 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './EditContactPhoneDialog.scss';
-import {useEmployer} from "../../../../../hooks/useEmployer";
-import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
 import {validatePhoneNumber} from "../../../../../utils/validationLogic/authFormValidators";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import EditJobPostDialog from "../EditJobPostDialog/EditJobPostDialog";
 import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
+import {useEmployer} from "../../../../../hooks/contextHooks/useEmployer";
+import useCurrentEmployerJob from "../../../../../hooks/contextHooks/useCurrentEmployerJob";
 
 interface EditContactPhoneDialogProps {
     showDialog: boolean;

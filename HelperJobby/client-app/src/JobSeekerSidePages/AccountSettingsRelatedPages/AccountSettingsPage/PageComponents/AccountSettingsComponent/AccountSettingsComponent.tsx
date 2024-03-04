@@ -2,8 +2,6 @@ import React, {FC, useEffect, useState} from 'react';
 import './AccountSettingsComponent.scss';
 import PageWrapWithHeader from "../../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import SettingsChangeField from "../SettingsFieldtToChange/SettingsFieldToChange";
-import {useAuth} from "../../../../../hooks/useAuth";
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {removeAuthToken} from "../../../../../utils/authTokenInteraction";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
@@ -12,6 +10,8 @@ import {useSearchParams} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleCheck, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {ChangedInfoTypes} from "../../../../../enums/utilityEnums/ChangedInfoTypes";
+import {useAuth} from "../../../../../hooks/contextHooks/useAuth";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
 
 interface AccountSettingsComponentProps {
 }

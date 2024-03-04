@@ -1,8 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import './EditJobComponent.scss';
-import useCurrentEmployerJob from "../../../../hooks/useCurrentEmployerJob";
 import {useNavigate, useParams} from "react-router-dom";
-import {useJobLoaderToSetCurrentJob} from "../../../../hooks/useJobLoaderToSetCurrentJob";
 import {JobService} from "../../../../services/jobService";
 import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
@@ -11,6 +9,8 @@ import EmployerJobFullInfo from "../../../../EmployersSideComponents/EmployerJob
 import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationStates";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
+import useCurrentEmployerJob from "../../../../hooks/contextHooks/useCurrentEmployerJob";
+import {useJobLoaderToSetCurrentJob} from "../../../../hooks/comnonentSharedHooks/useJobLoaderToSetCurrentJob";
 
 interface EditJobComponentProps {}
 

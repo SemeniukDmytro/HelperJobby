@@ -3,7 +3,6 @@ import './DetailedJobInfo.scss';
 import {JobDTO} from "../../DTOs/jobRelatetedDTOs/JobDTO";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMoneyBillAlt} from "@fortawesome/free-regular-svg-icons";
-import {thousandsDisplayHelper} from "../../utils/thousandsDisplayHelper";
 import {faBriefcase, faChevronDown, faChevronUp, faClock} from "@fortawesome/free-solid-svg-icons";
 import {
     benefitsEnumToStringMap,

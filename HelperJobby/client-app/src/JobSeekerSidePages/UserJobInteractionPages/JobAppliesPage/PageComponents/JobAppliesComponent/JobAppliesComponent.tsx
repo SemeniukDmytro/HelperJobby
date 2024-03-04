@@ -2,10 +2,10 @@ import React, {FC, useEffect} from 'react';
 import './JobAppliesComponent.scss';
 import UserJobInteractionPagesHeader
     from "../../../SharedComponents/UserJobInteractionPagesHeader/UserJobInteractionPagesHeader";
-import {useJobSeekerJobInteractions} from "../../../../../hooks/useJobSeekerJobInteractions";
 import JobApplyComponent from "../JobApplyComponent/JobApplyComponent";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {UserJobInteractionsTypes} from "../../../../../enums/utilityEnums/UserJobInteractionsTypes";
+import {useJobSeekerJobInteractions} from "../../../../../hooks/contextHooks/useJobSeekerJobInteractions";
 
 interface JobAppliesComponentProps {
 }

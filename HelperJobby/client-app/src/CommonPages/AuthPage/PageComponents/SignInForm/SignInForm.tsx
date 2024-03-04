@@ -5,8 +5,6 @@ import AppLogo from "../AppLogo/AppLogo";
 import EmailForm from "../EmailForm/EmailForm";
 import "./SignInForm.scss";
 import {useLocation, useNavigate} from "react-router-dom";
-import {useEmail} from "../../../../hooks/useEmail";
-import {useAuth} from "../../../../hooks/useAuth";
 import AuthService from "../../../../services/authService";
 import {LoginUserDTO} from "../../../../DTOs/userRelatedDTOs/LoginUserDTO";
 import {setAuthToken} from "../../../../utils/authTokenInteraction";
@@ -17,6 +15,8 @@ import {
 } from "../../../../utils/validationLogic/authFormValidators";
 import CustomPasswordInputField from "../../../../Components/CustomPasswordInputField/CustomPasswordInputField";
 import {ServerError} from "../../../../DTOs/errorDTOs/ServerErrorDTO";
+import {useEmail} from "../../../../hooks/contextHooks/useEmail";
+import {useAuth} from "../../../../hooks/contextHooks/useAuth";
 
 interface SignInFormProps {
 }

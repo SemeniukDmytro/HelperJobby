@@ -9,12 +9,10 @@ import {EmployerService} from "../../../../services/employerService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {CreateEmployerDTO} from "../../../../DTOs/accountDTOs/CreateEmployerDTO";
-import {useEmployer} from "../../../../hooks/useEmployer";
 import NotifyPopupWindow from "../../../../Components/NotifyPopupWindow/NotifyPopupWindow";
 import {IsValidEmail, validatePhoneNumber} from "../../../../utils/validationLogic/authFormValidators";
 import {UpdateEmployerDTO} from "../../../../DTOs/accountDTOs/UpdateEmployerDTO";
 import {EmployerDTO} from "../../../../DTOs/accountDTOs/EmployerDTO";
-import {useAuth} from "../../../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
 import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import Company from "../../../../Components/Icons/Company";
@@ -22,6 +20,8 @@ import PageTitleWithImage from "../../../../EmployersSideComponents/PageTitleWit
 import {ServerError} from "../../../../DTOs/errorDTOs/ServerErrorDTO";
 import AuthService from "../../../../services/authService";
 import {setAuthToken} from "../../../../utils/authTokenInteraction";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
+import {useAuth} from "../../../../hooks/contextHooks/useAuth";
 
 interface EmployerSetupComponentProps {
 }

@@ -1,12 +1,12 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './SearchWithinEmployerIncompleteJobs.scss';
-import {useEmployer} from "../../../../hooks/useEmployer";
 import {orderOptions, sortByOptions} from "../../../../EmployerJobFilteringData";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {IncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
 import FiltersAndSearch from "../FiltersAndSearch/FiltersAndSearch";
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 import CustomSelectWindow from "../../../../EmployersSideComponents/CustomSelectWindow/CustomSelectWindow";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 
 interface SearchWithinEmployerIncompleteJobsProps {
     jobSearchResults: IncompleteJobDTO[];

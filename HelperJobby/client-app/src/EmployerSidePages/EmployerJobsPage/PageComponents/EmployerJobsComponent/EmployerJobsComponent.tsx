@@ -5,12 +5,12 @@ import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {JobService} from "../../../../services/jobService";
 import {IncompleteJobService} from "../../../../services/incompleteJobService";
-import {useEmployer} from "../../../../hooks/useEmployer";
 import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationStates";
 import EmployerCompleteJobs from "../EmployerCompleteJobs/EmployerCompleteJobs";
 import EmployerIncompleteJobs from "../EmployerIncompleteJobs/EmployerIncompleteJobs";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 
 interface EmployerJobsComponentProps {
 }

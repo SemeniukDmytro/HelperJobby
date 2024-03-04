@@ -1,6 +1,5 @@
 import React, {Dispatch, FC, SetStateAction, useRef, useState} from 'react';
 import './EditLanguageAndCountryDialog.scss';
-import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTriangleExclamation, faXmark} from "@fortawesome/free-solid-svg-icons";
 import CustomSelectField from "../../../../../Components/CustomSelectField/CustomSelectField";
@@ -16,6 +15,7 @@ import {UpdatedJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO"
 import {JobCreationStates} from "../../../../../enums/utilityEnums/JobCreationStates";
 import {JobDTO} from "../../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {IncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
+import useCurrentEmployerJob from "../../../../../hooks/contextHooks/useCurrentEmployerJob";
 
 interface EditLanguageAndCountryDialogProps {
     showDialog : boolean;

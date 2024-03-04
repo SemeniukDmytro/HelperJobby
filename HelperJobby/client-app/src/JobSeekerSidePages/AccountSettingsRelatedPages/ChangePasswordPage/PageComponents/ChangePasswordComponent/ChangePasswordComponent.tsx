@@ -1,13 +1,13 @@
 import React, {FC, useRef, useState} from 'react';
 import './ChangePasswordComponent.scss';
 import ChangeAccountInfoForm from "../../../SharedComponents/ChangeAccountInfoForm/ChangeAccountInfoForm";
-import {useAuth} from "../../../../../hooks/useAuth";
 import CustomPasswordInputField from "../../../../../Components/CustomPasswordInputField/CustomPasswordInputField";
 import {UserService} from "../../../../../services/userService";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {UpdateUserWIthCurrentPasswordDTO} from "../../../../../DTOs/userRelatedDTOs/UpdateUserWIthCurrentPasswordDTO";
 import {useNavigate} from "react-router-dom";
 import {ChangedInfoTypes} from "../../../../../enums/utilityEnums/ChangedInfoTypes";
+import {useAuth} from "../../../../../hooks/contextHooks/useAuth";
 
 interface ChangePasswordComponentProps {
 }

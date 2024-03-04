@@ -3,9 +3,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
 import "./RecentSearch.scss"
 import {RecentUserSearchDTO} from "../../../../DTOs/userRelatedDTOs/RecentUserSearchDTO";
-import {useHomePage} from "../../../../hooks/useHomePage";
 import {UserService} from "../../../../services/userService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
+import {useHomePage} from "../../../../hooks/contextHooks/useHomePage";
 
 interface RecentSearchProps {
     recentUserSearch: RecentUserSearchDTO;

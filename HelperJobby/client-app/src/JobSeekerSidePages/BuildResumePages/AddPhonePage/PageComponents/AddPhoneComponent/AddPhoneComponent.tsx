@@ -1,8 +1,5 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import './AddPhoneComponent.scss';
-import useResumeBuild from "../../../../../hooks/useResumeBuild";
-import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {updateJobSeekerDTO} from "../../../../../utils/jobSeekerDTOsCreator";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
@@ -11,6 +8,9 @@ import {useNavigate} from "react-router-dom";
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
 import {JobSeekerDTO} from "../../../../../DTOs/accountDTOs/JobSeekerDTO";
 import {validatePhoneNumber} from "../../../../../utils/validationLogic/authFormValidators";
+import useResumeBuild from "../../../../../hooks/contextHooks/useResumeBuild";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
+import CustomInputField from "../../../../../Components/EditFormField/CustomInputField";
 
 interface ResumePhoneComponentProps {
 }

@@ -7,8 +7,8 @@ import {convertNumericMonthToStringValue} from "../../../../../utils/convertLogi
 import {useNavigate} from "react-router-dom";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {EducationService} from "../../../../../services/educationService";
-import {useJobSeeker} from "../../../../../hooks/useJobSeeker";
 import {getResumeInfoPageParentPath} from "../../../../../utils/getResumeInfoPageParentPath";
+import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
 
 interface EducationReviewProps {
     education: EducationDTO;

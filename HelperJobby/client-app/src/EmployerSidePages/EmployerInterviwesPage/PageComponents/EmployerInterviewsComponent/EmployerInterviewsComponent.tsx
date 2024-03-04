@@ -1,6 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
 import './EmployerInterviewsComponent.scss';
-import {useEmployer} from "../../../../hooks/useEmployer";
 import {JobService} from "../../../../services/jobService";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
@@ -8,6 +7,7 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import JobInterviews from "../JobInterviews/JobInterviews";
 import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 
 interface InterviewsComponentProps {}
 
@@ -73,6 +73,7 @@ const EmployerInterviewsComponent: FC<InterviewsComponentProps> = () => {
                             employer.jobs.map((job, index) => (
                                 <>
                                     <div 
+                                        key={index}
                                         onClick={() => handleOtherJobSelection(job.id)}
                                         className={`job-title-for-interviews ${jobId && parseInt(jobId)==job.id ? "bold-text" : ""}`}>
                                         {job.jobTitle}

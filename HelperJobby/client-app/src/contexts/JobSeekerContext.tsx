@@ -3,9 +3,9 @@ import {JobSeekerContextProps} from "../contextTypes/JobSeekerContextProps";
 import {JobSeekerDTO} from "../DTOs/accountDTOs/JobSeekerDTO";
 import {logErrorInfo} from "../utils/logErrorInfo";
 import {JobSeekerService} from "../services/jobSeekerService";
-import {useAuth} from "../hooks/useAuth";
 import {JobApplyService} from "../services/jobApplyService";
 import {ResumeDTO} from "../DTOs/resumeRelatedDTOs/ResumeDTO";
+import {useAuth} from "../hooks/contextHooks/useAuth";
 
 const JobSeekerContext = createContext<JobSeekerContextProps>({
     jobSeeker: null,

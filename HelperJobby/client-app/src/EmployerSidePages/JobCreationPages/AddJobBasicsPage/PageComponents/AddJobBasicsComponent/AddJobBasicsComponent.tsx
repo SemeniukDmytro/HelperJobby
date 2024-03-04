@@ -17,16 +17,16 @@ import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
 import {CreateIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/CreateIncompleteJobDTO";
 import {isNanAfterIntParse} from "../../../../../utils/validationLogic/numbersValidators";
-import useCurrentEmployerJob from "../../../../../hooks/useCurrentEmployerJob";
-import {useJobLoaderToSetCurrentJob} from "../../../../../hooks/useJobLoaderToSetCurrentJob";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {JobLocationTypes} from "../../../../../enums/modelDataEnums/JobLocationTypes";
-import {useJobLocationType} from "../../../../../hooks/useJobLocationType";
 import JobLocationSelectionComponent
     from "../../../SharedComponents/JobLocationSelectionComponent/JobLocationSelectionComponent";
 import employerPagesPaths from "../../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {JobCreationStates} from "../../../../../enums/utilityEnums/JobCreationStates";
+import useCurrentEmployerJob from "../../../../../hooks/contextHooks/useCurrentEmployerJob";
+import {useJobLocationType} from "../../../../../hooks/comnonentSharedHooks/useJobLocationType";
+import {useJobLoaderToSetCurrentJob} from "../../../../../hooks/comnonentSharedHooks/useJobLoaderToSetCurrentJob";
 
 
 interface AddJobBasicsComponentProps {

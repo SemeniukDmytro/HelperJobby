@@ -4,8 +4,8 @@ import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {JobApplyDTO} from "../../../../DTOs/userJobInteractionsDTOs/JobApplyDTO";
 import {
     getDate_MMM_DD,
-    getFullDate_MMMM_DD_YYYY
-} from "../../../../utils/convertLogic/GetFullDate_MMMM_DD_YYYY";
+    formatDate
+} from "../../../../utils/convertLogic/formatDate";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faEllipsisVertical, faQuestion, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {JobApplyStatuses} from "../../../../enums/modelDataEnums/JobApplyStatuses";
@@ -132,8 +132,8 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
                                 <div className={"grey-small-text"}>
                                     <span>{workExperience.company} -&nbsp;</span>
                                     {workExperience.from && (workExperience.to || workExperience.currentlyWorkHere) &&
-                                        <span>From {getFullDate_MMMM_DD_YYYY(workExperience.from)} to&nbsp;
-                                            {workExperience.currentlyWorkHere ? "Present" : getFullDate_MMMM_DD_YYYY(workExperience.to!)}
+                                        <span>From {formatDate(workExperience.from)} to&nbsp;
+                                            {workExperience.currentlyWorkHere ? "Present" : formatDate(workExperience.to!)}
                                     </span>
                                     }
                                 </div>

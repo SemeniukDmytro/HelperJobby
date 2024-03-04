@@ -2,8 +2,8 @@ import {createContext, ReactNode, useState} from "react";
 import {EmployerContextProps} from "../contextTypes/EmployerContextProps";
 import {EmployerDTO} from "../DTOs/accountDTOs/EmployerDTO";
 import {EmployerService} from "../services/employerService";
-import {useAuth} from "../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../hooks/contextHooks/useAuth";
 
 const EmployerContext = createContext<EmployerContextProps>({
     employer: null,

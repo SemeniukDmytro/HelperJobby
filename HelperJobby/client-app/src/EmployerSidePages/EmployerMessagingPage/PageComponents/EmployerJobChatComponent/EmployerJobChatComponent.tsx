@@ -5,14 +5,14 @@ import {faBuilding} from "@fortawesome/free-solid-svg-icons";
 import {ChatHubService} from "../../../../services/chatHubService";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
-import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
 import {ConversationService} from "../../../../services/conversationService";
 import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValidators";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {MessageDTO} from "../../../../DTOs/MessagingDTOs/MessageDTO";
-import {useEmployer} from "../../../../hooks/useEmployer";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import Message from "../../../../Components/Message/Message";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
+import {useEmployerMessagingConversation} from "../../../../hooks/contextHooks/useEmployerMessagingConversation";
 
 interface EmployerJobChatComponentProps {
 }
@@ -26,11 +26,35 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
     const conversationId = searchParams.get("conversationId");
     const [messageInput, setMessageInput] = useState("");
     const navigate = useNavigate();
-    const [conversation, setConversation] = useState<ConversationDTO | null>(null);
     const conversationService = new ConversationService();
     const [loading, setLoading] = useState(true);
     const lastMessageRef = useRef<HTMLDivElement>(null);
-    console.log(lastMessageRef)
+    const messagesWindowRef = useRef<HTMLDivElement>(null);
+    const {conversation, setConversation} = useEmployerMessagingConversation();
+
+    useEffect(() => {
+        const messagesWindow = messagesWindowRef.current;
+
+        if (messagesWindow) {
+            let scrollTimeout: ReturnType<typeof setTimeout>;
+
+            const handleScroll = () => {
+                messagesWindow.classList.add('message-window-scroll');
+
+                clearTimeout(scrollTimeout);
+
+                scrollTimeout = setTimeout(() => {
+                    messagesWindow.classList.remove('message-window-scroll');
+                }, 500);
+            };
+
+            messagesWindow.addEventListener('scroll', handleScroll);
+            return () => {
+                messagesWindow.removeEventListener('scroll', handleScroll);
+                clearTimeout(scrollTimeout);
+            };
+        }
+    }, []);
 
     useEffect(() => {
         if (lastMessageRef.current) {
@@ -82,7 +106,6 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
             setLoading(false);
         }
     }
-
     function onMessageSent(message: MessageDTO) {
         setConversation(prev => {
             return prev ?
@@ -140,7 +163,9 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
                 <div className={"content-separation-line"}>
 
                 </div>
-                <div className={"messages-window"}>
+                <div
+                    ref={messagesWindowRef}    
+                    className={"messages-window"}>
                     {loading ? <LoadingPage/> :
                         conversation?.messages.map((message, index) => (
                             <Message

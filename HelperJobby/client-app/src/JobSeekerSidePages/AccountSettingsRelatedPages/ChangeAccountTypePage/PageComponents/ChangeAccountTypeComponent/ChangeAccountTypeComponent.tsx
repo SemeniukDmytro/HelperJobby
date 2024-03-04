@@ -1,12 +1,12 @@
 import React, {FC, useState} from 'react';
 import './ChangeAccountTypeComponent.scss';
 import ChangeAccountInfoForm from "../../../SharedComponents/ChangeAccountInfoForm/ChangeAccountInfoForm";
-import {useAuth} from "../../../../../hooks/useAuth";
 import {UserService} from "../../../../../services/userService";
 import {useNavigate} from "react-router-dom";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {CreateUpdateUserDTO} from "../../../../../DTOs/userRelatedDTOs/CreateUpdateUserDTO";
 import {ChangedInfoTypes} from "../../../../../enums/utilityEnums/ChangedInfoTypes";
+import {useAuth} from "../../../../../hooks/contextHooks/useAuth";
 
 interface ChangeAccountTypeComponentProps {
 }

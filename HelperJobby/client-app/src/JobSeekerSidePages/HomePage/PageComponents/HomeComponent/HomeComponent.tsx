@@ -5,10 +5,9 @@ import RecommendedJobs from "../RecommendedJobs/RecommendedJobs";
 import RecentSearches from "../RecentSearches/RecentSearches";
 import HomePageMainContentWrap from "../HomePageMainContentWrap/HomePageMainContentWrap";
 import JobSearchBar from "../../../../Components/JobSearchBar/JobSearchBar";
-import {useJobSeeker} from "../../../../hooks/useJobSeeker";
-import {JobSeekerService} from "../../../../services/jobSeekerService";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {SelectedTabs} from "../../../../enums/utilityEnums/SelectedTabs";
+import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 
 
 interface HomeComponentProps {
@@ -19,7 +18,6 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     const {fetchJobSeekerJobInteractions} = useJobSeeker();
     const [loading, setLoading] = useState(true);
 
-    const jobSeekerService = new JobSeekerService();
 
     useEffect(() => {
         fetchData()
@@ -40,7 +38,6 @@ const HomeComponent: FC<HomeComponentProps> = () => {
 
     return (
         <HomePageMainContentWrap>
-
             {loading ? <LoadingPage/> : <>
                 <JobSearchBar jobInitial={""} locationInitial={""}/>
                 <JobSearchPromoContainer/>
