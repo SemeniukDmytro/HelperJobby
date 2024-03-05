@@ -144,7 +144,7 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
     }
 
     return (
-        <div className={"conversation-details"}>
+        <div className={"emp-conversation-fb"}>
             <div className={"chat-window"}>
                 <div className={"chat-window-header"}>
                     <div className={"dark-small-text bold-text"}>

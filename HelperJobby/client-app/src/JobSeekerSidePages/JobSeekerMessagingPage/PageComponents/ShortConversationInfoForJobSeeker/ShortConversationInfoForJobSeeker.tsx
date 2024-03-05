@@ -7,33 +7,27 @@ import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
 import JobSeekerPagesPaths from "../../../../AppRoutes/Paths/JobSeekerPagesPaths";
 
 interface ShortConversationInfoForJobSeekerProps {
-    conversation: ConversationDTO
+    conversationInfo: ConversationDTO
 }
 
 const ShortConversationInfoForJobSeeker: FC<ShortConversationInfoForJobSeekerProps> = ({
-                                                                                           conversation
+                                                                                           conversationInfo
                                                                                        }
 ) => {
     const [searchParams] = useSearchParams();
-    const employerId = searchParams.get("employerId");
-    const jobId = searchParams.get("jobId");
     const conversationId = searchParams.get("conversationId");
     const navigate = useNavigate();
     const [isSelectedConversation, setIsSelectedConversation] = useState(getInfoAboutSelectedConversation);
-    const [lastMessageTime, setLastMessageTime] = useState(getConversationLastMessageFormattedTime(conversation.lastModified));
+    const [lastMessageTime, setLastMessageTime] = useState(getConversationLastMessageFormattedTime(conversationInfo.lastModified));
 
     useEffect(() => {
         setIsSelectedConversation(getInfoAboutSelectedConversation);
-    }, [jobId, conversationId, employerId]);
+    }, [conversationId]);
 
 
     function getInfoAboutSelectedConversation() {
-        if (employerId && jobId && !isNanAfterIntParse(employerId) && !isNanAfterIntParse(jobId)) {
-            if (conversation.jobId == parseInt(jobId) && conversation.jobSeekerId == parseInt(jobId)) {
-                return true;
-            }
-        } else if (conversationId && !isNanAfterIntParse(conversationId)) {
-            if (conversation.id == parseInt(conversationId)) {
+        if (conversationId && !isNanAfterIntParse(conversationId)) {
+            if (conversationInfo.id == parseInt(conversationId)) {
                 return true;
             }
         }
@@ -42,7 +36,7 @@ const ShortConversationInfoForJobSeeker: FC<ShortConversationInfoForJobSeekerPro
     }
 
     function navigateToFullConversation() {
-        navigate(`${JobSeekerPagesPaths.CONVERSATIONS}?conversationId=${conversation.id}`);
+        navigate(`${JobSeekerPagesPaths.CONVERSATIONS}?conversationId=${conversationInfo.id}`);
     }
 
     return (
@@ -53,13 +47,13 @@ const ShortConversationInfoForJobSeeker: FC<ShortConversationInfoForJobSeekerPro
                 className="short-conv-info-container">
                 <div className={"conversation-topic-info"}>
                     <div className={"dark-default-text bold-text"}>
-                        {conversation.employer.fullName}
+                        {conversationInfo.employer.fullName}
                     </div>
                     <div className={"dark-small-text"}>
-                        {conversation.job.jobTitle}
+                        {conversationInfo.job.jobTitle}
                     </div>
                     <div className={"last-message-block"}>
-                        {conversation.messages[0].content}
+                        {conversationInfo.messages[0].content}
                     </div>
                 </div>
                 <div className={"last-conversation-interaction"}>

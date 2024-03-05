@@ -33,3 +33,18 @@
 .page-without-scroll {
   height: 100% !important;  
 }
+
+.emp-conversation-fb {
+  margin-right: 0px;
+  flex-basis: 50rem;
+  position: relative;
+  width: auto;
+  display: flex;
+  flex-grow: 1;
+  overflow-y: hidden;
+  background-color: white;
+}
+
+.conversations-header {
+  padding: 1rem;
+}

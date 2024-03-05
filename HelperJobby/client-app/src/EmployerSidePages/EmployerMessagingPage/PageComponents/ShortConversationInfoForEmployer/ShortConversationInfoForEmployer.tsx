@@ -34,8 +34,6 @@ const ShortConversationInfoForEmployer: FC<ShortConversationInfoForEmployerProps
         if (!newLastMessage){
             return;
         }
-        console.log(newLastMessage)
-        console.log(conversation)
         setLastMessage(newLastMessage);
         setLastMessageTime(getConversationLastMessageFormattedTime(newLastMessage.sentAt));
     }, [conversation]);

@@ -1,8 +1,8 @@
 ﻿import {createContext, ReactNode, useState} from "react";
-import {EmployerMessagingConversationProps} from "../contextTypes/EmployerMessagingConversationProps";
 import {ConversationDTO} from "../DTOs/MessagingDTOs/ConversationDTO";
+import {MessagingConversationProps} from "../contextTypes/MessagingConversationProps";
 
-const EmployerMessagingConversationContext = createContext<EmployerMessagingConversationProps>({
+const EmployerMessagingConversationContext = createContext<MessagingConversationProps>({
     conversation : null,
     setConversation : () => {}
 });

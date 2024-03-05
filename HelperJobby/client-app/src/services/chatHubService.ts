@@ -34,7 +34,7 @@ export class ChatHubService {
                 logErrorInfo(err)
             }
         }
-    };
+    };  
 
     public async sendMessageToEmployer(employerId: number, message: string, jobId : number,
                                         conversationId : number | null): Promise<void>{

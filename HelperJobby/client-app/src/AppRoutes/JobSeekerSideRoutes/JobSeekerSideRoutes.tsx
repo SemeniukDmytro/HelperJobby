@@ -44,8 +44,9 @@ import AuthPage from "../../CommonPages/AuthPage/AuthPage";
 import SearchJobResultsPage from "../../JobSeekerSidePages/SearchJobResultsPage/SearchJobResultsPage";
 import MyJobsPagesWrap from "../../JobSeekerSidePages/UserJobInteractionPages/MyJobsPagesWrap/MyJobsPagesWrap";
 import RequireAuth from "../../JobSeekerSidePages/RequireAuth/RequireAuth";
-import JobSeekerMessagingComponent
-    from "../../JobSeekerSidePages/JobSeekerMessagingPage/PageComponents/JobSeekerMessagingComponent/JobSeekerMessagingComponent";
+import JobSeekerMessagingWrap
+    from "../../JobSeekerSidePages/JobSeekerMessagingPage/PageComponents/JobSeekerMessagingWrap/JobSeekerMessagingWrap";
+import JobSeekerMessagingPage from "../../JobSeekerSidePages/JobSeekerMessagingPage/JobSeekerMessagingPage";
 
 interface JobSeekerSideRoutesProps {
 }
@@ -112,9 +113,12 @@ const JobSeekerSideRoutes: FC<JobSeekerSideRoutesProps> = () => (
                 <Route path={"interviews"} element={<InterviewsPage/>}/>
             </Route>
             
-            <Route element={<JobSeekerMessagingComponent/>} path={"/conversations"}/>
+            <Route element={<JobSeekerMessagingWrap/>} path={"/conversations"}>
+                <Route index element={<JobSeekerMessagingPage/>}/>
+            </Route>
 
             <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
+            
         </Route>
         
         {/*Public routes*/}

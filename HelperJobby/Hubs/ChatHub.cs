@@ -44,7 +44,7 @@ public class ChatHub : Hub
         await _messageCommandRepository.CreateMessage(createdMessage);
     }
     
-    public async Task SendMessageToEmployer(int employerId, string message, int? conversationId, int jobId)
+    public async Task SendMessageToEmployer(int employerId, string message, int jobId, int? conversationId)
     {
         var senderId = Context.User.Claims.FirstOrDefault(c => c.Type == "jobSeekerId")?.Value;
         if (string.IsNullOrEmpty(senderId) || !int.TryParse(senderId, out var jobSeekerId))
