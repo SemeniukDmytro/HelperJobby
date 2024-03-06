@@ -46,3 +46,8 @@
   flex-direction: column;
   flex-grow: 1;
 }
+
+.js-messaging-window-container {
+  height: calc(100vh - 5rem);
+  display: flex;
+}

@@ -1,5 +1,5 @@
 import React, {ChangeEvent, FC, useEffect, useMemo, useRef, useState} from 'react';
-import './EmployerJobChatComponent.scss';
+import './EmployerConversation.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBuilding} from "@fortawesome/free-solid-svg-icons";
 import {ChatHubService} from "../../../../services/chatHubService";
@@ -13,11 +13,15 @@ import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import Message from "../../../../Components/Message/Message";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 import {useEmployerMessagingConversation} from "../../../../hooks/contextHooks/useEmployerMessagingConversation";
+import {groupMessagesByDate} from "../../../../utils/groupMessagesByDate";
+import {
+    getConversationMessagesGroupFormattedTime
+} from "../../../../utils/convertLogic/formatDate";
 
 interface EmployerJobChatComponentProps {
 }
 
-const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
+const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
     const {employer} = useEmployer();
     const chatHubService = useMemo(() => new ChatHubService(), []);
     const [searchParams] = useSearchParams();
@@ -33,79 +37,55 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
     const {conversation, setConversation} = useEmployerMessagingConversation();
 
     useEffect(() => {
-        const messagesWindow = messagesWindowRef.current;
-
-        if (messagesWindow) {
-            let scrollTimeout: ReturnType<typeof setTimeout>;
-
-            const handleScroll = () => {
-                messagesWindow.classList.add('message-window-scroll');
-
-                clearTimeout(scrollTimeout);
-
-                scrollTimeout = setTimeout(() => {
-                    messagesWindow.classList.remove('message-window-scroll');
-                }, 500);
-            };
-
-            messagesWindow.addEventListener('scroll', handleScroll);
-            return () => {
-                messagesWindow.removeEventListener('scroll', handleScroll);
-                clearTimeout(scrollTimeout);
-            };
+        if (messagesWindowRef.current) {
+            const messagesContainer = messagesWindowRef.current;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
-    }, []);
+    }, [[], conversation?.messages]);
 
     useEffect(() => {
-        if (lastMessageRef.current) {
-            lastMessageRef.current.scrollIntoView({ block: "end" });
-        }
-    }, [conversation?.messages]);
-    
-    useEffect(() => {
-        if ((!jobId || !candidateId || isNanAfterIntParse(jobId) || isNanAfterIntParse(candidateId)) && (!conversationId || isNanAfterIntParse(conversationId)))
-        {
+        if ((!jobId || !candidateId || isNanAfterIntParse(jobId) || isNanAfterIntParse(candidateId)) && (!conversationId || isNanAfterIntParse(conversationId))) {
             navigate(EmployerPagesPaths.MESSAGES);
             return;
 
         }
-        if (conversationId && (jobId || candidateId)){
+        if (conversationId && (jobId || candidateId)) {
             navigate(EmployerPagesPaths.MESSAGES);
             return;
         }
         chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
 
-        chatHubService.registerMessageReceivedHandler((message, senderId, conversationId) => {
-            if (senderId != employer?.id){
+        chatHubService.registerMessageReceivedHandler((message, senderId) => {
+            if (senderId != employer?.id) {
                 onMessageSent(message)
             }
         });
         chatHubService.registerMessageSent((message) => {
             onMessageSent(message);
         });
-            
+
         loadConversationInfo();
     }, [conversationId, candidateId, jobId]);
 
     async function loadConversationInfo() {
         try {
             setLoading(true);
-            if (jobId && candidateId){
+            if (jobId && candidateId) {
                 const retrievedConversation = await conversationService
                     .getCandidatePotentialConversation(parseInt(candidateId), parseInt(jobId));
                 setConversation(retrievedConversation);
-            }
-            else if (conversationId) {
-                const retrievedConversation = await conversationService.getConversationById(parseInt(conversationId)); 
+            } else if (conversationId) {
+                const retrievedConversation = await conversationService.getConversationById(parseInt(conversationId));
                 setConversation(retrievedConversation);
             }
-            
+
         } catch (err) {
             logErrorInfo(err);
         } finally {
             setLoading(false);
         }
     }
+
     function onMessageSent(message: MessageDTO) {
         setConversation(prev => {
             return prev ?
@@ -143,6 +123,7 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
         }
     }
 
+
     return (
         <div className={"emp-conversation-fb"}>
             <div className={"chat-window"}>
@@ -164,17 +145,28 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
 
                 </div>
                 <div
-                    ref={messagesWindowRef}    
+                    ref={messagesWindowRef}
                     className={"messages-window"}>
                     {loading ? <LoadingPage/> :
-                        conversation?.messages.map((message, index) => (
-                            <Message
-                                message={message}
-                                senderName={employer!.fullName}
-                                isMyMessage={message.employerId == employer?.id}
-                                key={index}
-                                messageRef={index === conversation.messages.length - 1 ? lastMessageRef : null}
-                            />
+                        conversation?.messages &&
+                        Object.entries(groupMessagesByDate(conversation!.messages)).map(([date, messages]) => (
+                            <div key={date}>
+                                <div className={"messages-group-date-container"}>
+                                    <div className="messages-group-date-line"/>
+                                    <span className={"messages-group-date"}>{getConversationMessagesGroupFormattedTime(date)}</span>
+                                    <div className={"messages-group-date-line"}/>
+                                </div>
+                                {messages.map((message, index) => (
+                                    <Message
+                                        message={message}
+                                        senderName={employer!.fullName}
+                                        isMyMessage={message.employerId == employer?.id}
+                                        key={index}
+                                        messageRef={index === conversation!.messages.length - 1 ? lastMessageRef : null}
+                                    />
+                                ))}
+
+                            </div>
                         ))
                     }
                 </div>
@@ -183,7 +175,7 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
                               placeholder={"Write your message"}
                               value={messageInput}
                               onChange={onMessageChange}
-                              onKeyDown={handleKeyDown} 
+                              onKeyDown={handleKeyDown}
                     >
                         
                     </textarea>
@@ -248,4 +240,4 @@ const EmployerJobChatComponent: FC<EmployerJobChatComponentProps> = () => {
     )
 }
 
-export default EmployerJobChatComponent;
+export default EmployerConversation;

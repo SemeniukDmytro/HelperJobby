@@ -6,7 +6,7 @@ import CustomSelectWindow from "../../../../EmployersSideComponents/CustomSelect
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobService} from "../../../../services/jobService";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
-import EmployerJobChatComponent from "../EmployerJobChatComponent/EmployerJobChatComponent";
+import EmployerJobChatComponent from "../EmployerConversation/EmployerConversation";
 import {ConversationService} from "../../../../services/conversationService";
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
 import ShortConversationInfoForEmployer from "../ShortConversationInfoForEmployer/ShortConversationInfoForEmployer";

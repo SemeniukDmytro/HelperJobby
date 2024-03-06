@@ -153,9 +153,7 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = () => {
                         Candidate applied to this position on Date
                     </span>
                     </div>
-                    <div className={"content-separation-line"}>
-
-                    </div>
+                    <div className={"content-separation-line"}/>
                     <div
                         ref={messagesWindowRef}
                         className={"messages-window"}>

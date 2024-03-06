@@ -58,29 +58,30 @@ const JobSeekerMessagingComponent: FC<JobSeekerMessagingComponentProps> = () => 
             <PageWrapWithHeader>
 
                 <div className={"js-msg-page-background"}>
-                    <div className={"js-inbox-fb"}>
-                        <div className="js-inbox-header">
-                            Messages
-                        </div>
-                        <div className={"content-separation-line"}/>
-                        {
-                            loading ?
-                                <LoadingPage/> 
-                                :
-                                conversationsToShow.length != 0 &&
-                                <div className={"conversations-container"}>
-                                    {
-                                        conversationsToShow.map((conversation, index) => (
-                                            <ShortConversationInfoForJobSeeker conversationInfo={conversation}
-                                                                              key={index}/>
-                                        ))
-                                    }
-                                </div>
-                                
-                        }
+                    <div className={"js-messaging-window-container"}>
+                        <div className={"js-inbox-fb"}>
+                            <div className="js-inbox-header">
+                                Messages
+                            </div>
+                            <div className={"content-separation-line"}/>
+                            {
+                                loading ?
+                                    <LoadingPage/>
+                                    :
+                                    conversationsToShow.length != 0 &&
+                                    <div className={"conversations-container"}>
+                                        {
+                                            conversationsToShow.map((conversation, index) => (
+                                                <ShortConversationInfoForJobSeeker conversationInfo={conversation}
+                                                                                   key={index}/>
+                                            ))
+                                        }
+                                    </div>
 
-                    </div>
-                    <JobSeekerConversation/>
+                            }
+
+                        </div>
+                        <JobSeekerConversation/></div>
                 </div>
             </PageWrapWithHeader>
         </div>

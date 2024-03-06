@@ -4,7 +4,8 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import {getConversationLastMessageFormattedTime} from "../../../../utils/convertLogic/formatDate";
 import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValidators";
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
-import JobSeekerPagesPaths from "../../../../AppRoutes/Paths/JobSeekerPagesPaths";
+import JobSeekerPagesPaths from "../../../../AppRoutes/Paths/JobSeekerPagesPaths";  
+import {useJobSeekerMessagingConversation} from "../../../../hooks/contextHooks/useJobSeekerMessagingConversation";
 
 interface ShortConversationInfoForJobSeekerProps {
     conversationInfo: ConversationDTO
@@ -19,10 +20,21 @@ const ShortConversationInfoForJobSeeker: FC<ShortConversationInfoForJobSeekerPro
     const navigate = useNavigate();
     const [isSelectedConversation, setIsSelectedConversation] = useState(getInfoAboutSelectedConversation);
     const [lastMessageTime, setLastMessageTime] = useState(getConversationLastMessageFormattedTime(conversationInfo.lastModified));
-
+    const [lastMessage, setLastMessage] = useState(conversationInfo.messages[conversationInfo.messages.length-1] || null);
+    const {conversation} = useJobSeekerMessagingConversation();
+    
     useEffect(() => {
         setIsSelectedConversation(getInfoAboutSelectedConversation);
     }, [conversationId]);
+
+    useEffect(() => {
+        const newLastMessage = conversation?.messages[conversation.messages.length-1];
+        if (!newLastMessage){
+            return;
+        }
+        setLastMessage(newLastMessage);
+        setLastMessageTime(getConversationLastMessageFormattedTime(newLastMessage.sentAt));
+    }, [conversation]);
 
 
     function getInfoAboutSelectedConversation() {
@@ -53,7 +65,7 @@ const ShortConversationInfoForJobSeeker: FC<ShortConversationInfoForJobSeekerPro
                         {conversationInfo.job.jobTitle}
                     </div>
                     <div className={"last-message-block"}>
-                        {conversationInfo.messages[0].content}
+                        {lastMessage.content || ""}
                     </div>
                 </div>
                 <div className={"last-conversation-interaction"}>

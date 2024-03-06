@@ -64,6 +64,7 @@ public class ConversationProjections
                 Id = c.JobSeeker.Id,
                 FirstName = c.JobSeeker.FirstName,
                 LastName = c.JobSeeker.LastName,
+                JobApplies = c.JobSeeker.JobApplies.Where(j => c.JobSeekerId == j.JobSeekerId && c.JobId == j.JobId).ToList()
             },
             JobId = c.JobId,
             Job = c.Job

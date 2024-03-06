@@ -23,7 +23,7 @@ const ShortConversationInfoForEmployer: FC<ShortConversationInfoForEmployerProps
     const [isSelectedConversation, setIsSelectedConversation] = useState(getInfoAboutSelectedConversation);
     const [lastMessageTime, setLastMessageTime] = useState(getConversationLastMessageFormattedTime(conversationInfo.lastModified) || "");
     const [lastMessage, setLastMessage] = useState(conversationInfo.messages[conversationInfo.messages.length-1] || null);
-    const {conversation, setConversation} = useEmployerMessagingConversation();
+    const {conversation} = useEmployerMessagingConversation();
 
     useEffect(() => {
         setIsSelectedConversation(getInfoAboutSelectedConversation);

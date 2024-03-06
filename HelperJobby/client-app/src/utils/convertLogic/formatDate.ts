@@ -78,6 +78,26 @@ export function getConversationLastMessageFormattedTime(lastModifiedTime : strin
     }
 }
 
+export function getConversationMessagesGroupFormattedTime(lastModifiedTime : string){
+    const date = new Date(lastModifiedTime);
+    const currentDate = new Date();
+
+    if (date.getDay() == currentDate.getDay()){
+        return "Today";
+    }
+
+    if (checkIfDateWithingSameWeek(date, currentDate)) {
+        return date.toLocaleDateString('en-US', { weekday: 'long' });
+    }
+
+    if (date.getFullYear() == currentDate.getFullYear()){
+        return getDate_MMM_DD(lastModifiedTime);
+    }
+    else {
+        return formatDate(lastModifiedTime);
+    }
+}
+
 export function getMessageFormattedTime(sentAt : string){
     const date = new Date(sentAt);
     const currentDate = new Date();

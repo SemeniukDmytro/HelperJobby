@@ -48,3 +48,24 @@
 .conversations-header {
   padding: 1rem;
 }
+
+.messages-group-date-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.messages-group-date-line {
+  display: flex;
+  flex-grow: 1;
+  height: 1px;
+  background-color: global-variables.$neutral-color-400;
+}
+
+.messages-group-date {
+  font-size: 0.825rem;
+  font-weight: 700;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  color: global-variables.$neutral-color-700;
+}
