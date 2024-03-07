@@ -2,6 +2,8 @@
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.MessagingRelatedModels;
+using AutoMapper;
+using HelperJobby.DTOs.Messaging;
 using Microsoft.AspNetCore.SignalR;
 
 namespace HelperJobby.Hubs;
@@ -11,13 +13,15 @@ public class ChatHub : Hub
     private readonly IMessageService _messageService;
     private readonly IMessageCommandRepository _messageCommandRepository;
     private readonly IConversationService _conversationService;
+    private readonly IMapper _mapper;
 
     public ChatHub(IMessageService messageService, IMessageCommandRepository messageCommandRepository,
-        IConversationService conversationService)
+        IConversationService conversationService, IMapper mapper)
     {
         _messageService = messageService;
         _messageCommandRepository = messageCommandRepository;
         _conversationService = conversationService;
+        _mapper = mapper;
     }
 
     public async Task SendMessageToJobSeeker(int jobSeekerId, string message, int jobId, int? conversationId)
@@ -37,11 +41,12 @@ public class ChatHub : Hub
         
         var createdMessage = await _messageService.CreateMessageToJobSeeker(message, employerId, conversationId.Value);
         createdMessage.Conversation = conversation;
-        
-        await Clients.User(jobSeekerId.ToString()).SendAsync("ReceiveMessage", createdMessage, employerId, conversationId.Value);
-        await Clients.Caller.SendAsync("MessageSent", createdMessage, conversationId);
-        
         await _messageCommandRepository.CreateMessage(createdMessage);
+        var messageDTO = _mapper.Map<MessageDTO>(createdMessage);
+        
+        await Clients.User(jobSeekerId.ToString()).SendAsync("ReceiveMessage", messageDTO, employerId, conversationId.Value);
+        await Clients.Caller.SendAsync("MessageSent", messageDTO, conversationId);
+        
     }
     
     public async Task SendMessageToEmployer(int employerId, string message, int jobId, int? conversationId)
@@ -60,11 +65,11 @@ public class ChatHub : Hub
         }
         
         var createdMessage = await _messageService.CreateMessageToEmployer(message, jobSeekerId, conversationId.Value);
+        await _messageCommandRepository.CreateMessage(createdMessage);
         createdMessage.Conversation = conversation;
         
-        await Clients.User(employerId.ToString()).SendAsync("ReceiveMessage", createdMessage, jobSeekerId, conversationId.Value );
-        await Clients.Caller.SendAsync("MessageSent", createdMessage, conversationId.Value);
+        await Clients.User(employerId.ToString()).SendAsync("ReceiveMessage", _mapper.Map<MessageDTO>(createdMessage), jobSeekerId, conversationId.Value );
+        await Clients.Caller.SendAsync("MessageSent", _mapper.Map<MessageDTO>(createdMessage), conversationId.Value);
         
-        await _messageCommandRepository.CreateMessage(createdMessage);
     }
 }

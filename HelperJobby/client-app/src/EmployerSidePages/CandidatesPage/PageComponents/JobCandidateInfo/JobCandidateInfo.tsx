@@ -35,8 +35,8 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
             setShowMoreOptions(false);
         }
     };
-    
-    async function changeJobApplyStatus(jobApplyStatus : JobApplyStatuses, isReviewed : boolean){
+
+    async function changeJobApplyStatus(jobApplyStatus: JobApplyStatuses, isReviewed: boolean) {
         try {
             setRequestInProgress(true);
             const updatedJobApply: UpdateJobApplyDTO = {
@@ -51,7 +51,7 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
                     if (application.jobSeekerId === jobApply.jobSeekerId) {
                         return {
                             ...application,
-                            jobApplyStatus : retrievedJobApply.jobApplyStatus
+                            jobApplyStatus: retrievedJobApply.jobApplyStatus
                         };
                     }
                     return application;
@@ -73,8 +73,8 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
         await changeJobApplyStatus(JobApplyStatuses.Hired, true);
         setShowHiredDialog(false);
     }
-    
-    function navigateToJobApplyReviewComponent(){
+
+    function navigateToJobApplyReviewComponent() {
         navigate(`${EmployerPagesPaths.JOB_APPLY_REVIEW}/${jobApply.jobSeekerId}/${jobApply.jobId}`)
     }
 
@@ -109,12 +109,14 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
                     <span className={"dark-small-text"}>{jobApply.isReviewed ? "Reviewed" : "Awaiting review"}</span>
                     <span
                         className={"grey-small-text"}>Applied on {getDate_MMM_DD(jobApply.dateApplied)}
-                </span>
+                    </span>
                 </div>
                 <div className={"candidate-skills-container"}>
                     {(jobApply.jobSeeker.resume?.skills && jobApply.jobSeeker.resume?.skills.length != 0) ?
                         jobApply.jobSeeker.resume.skills.map((skill, index) => (
-                            <div className={"candidate-skill-container light-dark-small-text bold-text"}>
+                            <div
+                                key={index}    
+                                className={"candidate-skill-container light-dark-small-text bold-text"}>
                                 {skill.name}
                             </div>
                         ))
@@ -124,10 +126,10 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
                         </div>
                     }
                 </div>
-                <div>
+                <div className={"candidate-qualifications-container"}>
                     {(jobApply.jobSeeker.resume?.workExperiences && jobApply.jobSeeker.resume?.workExperiences.length != 0) ?
                         jobApply.jobSeeker.resume.workExperiences.map((workExperience, index) => (
-                            <div className={"candidate-qualifications-container"}>
+                            <>
                                 <span className={"dark-default-text"}>{workExperience.jobTitle}</span>
                                 <div className={"grey-small-text"}>
                                     <span>{workExperience.company} -&nbsp;</span>
@@ -137,19 +139,19 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
                                     </span>
                                     }
                                 </div>
-                            </div>
+                            </>
                         ))
                         :
                         (jobApply.jobSeeker.resume?.educations && jobApply.jobSeeker.resume?.educations.length != 0) ?
                             jobApply.jobSeeker.resume.educations.map((education, index) => (
-                                <div className={"candidate-qualifications-container"}>
+                                <>
                                     <div className={"dark-default-text"}>
                                         {education.levelOfEducation}
                                     </div>
                                     <div className={"grey-small-text"}>
                                         {education.fieldOfStudy}
                                     </div>
-                                </div>
+                                </>
                             ))
                             :
                             <div className={'dark-default-text'}>

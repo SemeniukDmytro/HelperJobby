@@ -13,7 +13,7 @@ import CustomSelectWindow from "../../../../EmployersSideComponents/CustomSelect
 import {dayTimes} from "../../../../AppConstData/DayTimes";
 import {InterviewTypes} from "../../../../enums/modelDataEnums/InterviewTypes";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
+import {faCircleExclamation, faMessage} from "@fortawesome/free-solid-svg-icons";
 import {InterviewService} from "../../../../services/interviewService";
 import {CreateInterviewDTO} from "../../../../DTOs/userJobInteractionsDTOs/CreateInterviewDTO";
 
@@ -122,30 +122,46 @@ const JobApplyReviewComponent: FC<JobApplyReviewComponentProps> = () => {
         navigate(`${EmployerPagesPaths.CANDIDATES}/?jobId=${jobApply!.jobId}`)
     }
 
+    function navigateToConversationWithCandidate() {
+        navigate(`${EmployerPagesPaths.MESSAGES}?jobId=${jobApply!.jobId}&jobSeekerId=${jobApply!.jobSeekerId}`)
+    }
+
     return (
         loading ? <LoadingPage/> :
             !jobApply ? null :
                 <div className={"light-grey-page-background"}>
                     <div className={"emp-pages-layout padding-top-remove"}>
                         <div className={"employers-centralized-page-layout"}>
-                            <div className={"emp-white-info-container"}>
-                                <div className={"job-review-page-header"}>
-                                    <div className={"flex-column"}>
-                                        <div className={"job-review-candidate-name"}>
-                                            {jobApply?.jobSeeker.firstName} {jobApply?.jobSeeker.lastName}
+                            <div className={"emp-main-info-container-with-pdng"}>
+                                <div className={'job-apply-review-header-container'}>
+                                    <div className={"job-review-page-header"}>
+                                        <div className={"flex-column"}>
+                                            <div className={"job-review-candidate-name"}>
+                                                {jobApply?.jobSeeker.firstName} {jobApply?.jobSeeker.lastName}
+                                            </div>
+                                            <div className={"job-seeker-email"}>
+                                                {jobApply?.jobSeeker.user.email}
+                                            </div>
+                                            <div className={"dark-small-text"}>
+                                                Applied to {jobApply?.job.jobTitle} - {jobApply?.job.location}
+                                            </div>
                                         </div>
-                                        <div className={"job-seeker-email"}>
-                                            {jobApply?.jobSeeker.user.email}
-                                        </div>
-                                        <div className={"dark-small-text"}>
-                                            Applied to {jobApply?.job.jobTitle} - {jobApply?.job.location}
-                                        </div>
+                                        <JobApplyStatusButtons jobApply={jobApply!}
+                                                               setJobApply={setJobApply}
+                                                               setRequestInProgress={setRequestInProgress}
+                                        />
                                     </div>
-                                    <JobApplyStatusButtons jobApply={jobApply!}
-                                                           setJobApply={setJobApply}
-                                                           setRequestInProgress={setRequestInProgress}
-                                    />
+                                    <div className={'br-corner-button'}>
+                                        <button 
+                                            onClick={navigateToConversationWithCandidate}
+                                            className={"blue-button"}>
+                                            <FontAwesomeIcon className={"svg1rem icon-right-margin"}
+                                                             icon={faMessage}/>
+                                            Message
+                                        </button>
+                                    </div>
                                 </div>
+
                                 <div className={"content-separation-line mt1rem mb1rem"}/>
                                 <div className={"create-interview-layout"}>
                                     <div className={"small-title"}>

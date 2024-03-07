@@ -1,4 +1,4 @@
-import React, {FC, FormEvent, useRef, useState} from 'react';
+import React, {FC, FormEvent, useEffect, useRef, useState} from 'react';
 import './EmployerSetupComponent.scss';
 import CustomInputField from "../../../../Components/EditFormField/CustomInputField";
 import CustomSelectField from "../../../../Components/CustomSelectField/CustomSelectField";
@@ -22,6 +22,7 @@ import AuthService from "../../../../services/authService";
 import {setAuthToken} from "../../../../utils/authTokenInteraction";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 import {useAuth} from "../../../../hooks/contextHooks/useAuth";
+import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface EmployerSetupComponentProps {
 }
@@ -48,6 +49,12 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
     const employerService = new EmployerService();
     const {authUser, setAuthUser} = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (employer){
+            navigate(EmployerPagesPaths.JOB_POSTING)
+        }
+    }, [employer]);
 
     async function handleFormSubmit(e: FormEvent) {
         e.preventDefault();

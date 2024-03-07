@@ -49,7 +49,7 @@ const ResumeSearchResults: FC<ResumeSearchResultsProps> = () => {
         resumeLoadingProcess ? <LoadingPage/> :
         matchingResumes.length == 0 ? <></>
             :
-            <div className={"emp-white-info-container"}>
+            <div className={"emp-main-info-container-with-pdng"}>
                 <div className={"job-candidate-table-titles-container"}>
                     <div className={"candidate-credentials-container"}>
                         <span className={"bold-text semi-dark-default-text"}>Name</span>

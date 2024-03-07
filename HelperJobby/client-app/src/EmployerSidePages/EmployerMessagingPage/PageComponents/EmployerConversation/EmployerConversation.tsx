@@ -35,6 +35,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
     const lastMessageRef = useRef<HTMLDivElement>(null);
     const messagesWindowRef = useRef<HTMLDivElement>(null);
     const {conversation, setConversation} = useEmployerMessagingConversation();
+    const [sendingMessages, setSendingMessaged] = useState<string[]>([]);
 
     useEffect(() => {
         if (messagesWindowRef.current) {
@@ -55,7 +56,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
         }
         chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
 
-        chatHubService.registerMessageReceivedHandler((message, senderId) => {
+        chatHubService.registerMessageReceivedHandler((message, senderId, conversationId) => {
             if (senderId != employer?.id) {
                 onMessageSent(message)
             }
@@ -81,6 +82,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
 
         } catch (err) {
             logErrorInfo(err);
+            setConversation(null);
         } finally {
             setLoading(false);
         }
@@ -102,12 +104,22 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
                 }
         })
     }
+    
+    
 
     async function sendMessage() {
         if (!messageInput.trim()) return;
         const conversationId = conversation?.id || null;
         setMessageInput("");
-        await chatHubService.sendMessageToJobSeeker(conversation!.jobSeekerId, messageInput, conversation!.jobId, conversationId);
+        setSendingMessaged(prev => [...prev, messageInput]);
+        try {
+            await chatHubService.sendMessageToJobSeeker(conversation?.jobSeekerId || parseInt(candidateId!)
+                , messageInput, conversation?.jobId || parseInt(jobId!), conversationId);
+            setSendingMessaged(prev => prev.slice(0, -1));
+        }
+        catch (err){
+            logErrorInfo(err)
+        }
     }
 
     function onMessageChange(e: ChangeEvent<HTMLTextAreaElement>) {
@@ -165,10 +177,12 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
                                         messageRef={index === conversation!.messages.length - 1 ? lastMessageRef : null}
                                     />
                                 ))}
-
                             </div>
                         ))
                     }
+                    {sendingMessages.map((msg, index) => (
+                        <div key={index}>{msg}</div>
+                    ))}
                 </div>
                 <div className={"write-message-container"}>
                     <textarea className={"message-input"}

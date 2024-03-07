@@ -62,9 +62,6 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
                 }
             });
             setConversationsToShow(retrievedConversations);
-            if (retrievedConversations.length != 0) {
-                navigate(`${EmployerPagesPaths.MESSAGES}?conversationId=${retrievedConversations[0].id}`);
-            }
         } catch (err) {
             logErrorInfo(err)
         } finally {

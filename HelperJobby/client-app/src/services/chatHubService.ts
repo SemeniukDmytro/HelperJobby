@@ -30,8 +30,9 @@ export class ChatHubService {
         if (this.hubConnection) {
             try {
                 await this.hubConnection.invoke('SendMessageToJobSeeker', jobSeekerId, message, jobId, conversationId);
-            } catch (err) {
-                logErrorInfo(err)
+            }
+            catch (err){
+                throw err;
             }
         }
     };  
@@ -41,8 +42,9 @@ export class ChatHubService {
         if (this.hubConnection) {
             try {
                 await this.hubConnection.invoke('SendMessageToEmployer', employerId, message, jobId, conversationId);
-            } catch (err) {
-                logErrorInfo(err)
+            }
+            catch (err){
+                throw err;
             }
         }
     };

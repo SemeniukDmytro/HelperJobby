@@ -94,7 +94,7 @@ public class ConversationService : IConversationService
             conversation = new Conversation
             {
                 EmployerId = employerId,
-                JobSeekerId = employerId,
+                JobSeekerId = jobSeekerId,
                 JobId = jobId,
                 LastModified = DateTime.UtcNow,
                 Messages = new List<Message>()

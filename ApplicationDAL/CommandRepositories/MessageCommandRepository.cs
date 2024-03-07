@@ -15,10 +15,14 @@ public class MessageCommandRepository : IMessageCommandRepository
 
     public async Task<Message> CreateMessage(Message message)
     {
-        var conversationStub = new Conversation { Id = message.ConversationId };
-        _applicationContext.Conversations.Attach(conversationStub);
-        conversationStub.LastModified = message.SentAt;
-        _applicationContext.Entry(conversationStub).Property(x => x.LastModified).IsModified = true;
+        if (message.Conversation == null)
+        {
+            var conversationStub = new Conversation { Id = message.ConversationId };
+            _applicationContext.Conversations.Attach(conversationStub);
+            conversationStub.LastModified = message.SentAt;
+            _applicationContext.Entry(conversationStub).Property(x => x.LastModified).IsModified = true;
+        }
+        
         _applicationContext.Messages.Add(message);
         await _applicationContext.SaveChangesAsync();
         return message;
