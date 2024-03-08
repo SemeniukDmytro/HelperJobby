@@ -6,6 +6,18 @@ import {MessageDTO} from "../DTOs/MessagingDTOs/MessageDTO";
 export class ChatHubService {
     private hubConnection: HubConnection | null = null;
 
+    private static instance: ChatHubService;
+
+    private constructor() {
+    }
+
+    public static getInstance(): ChatHubService {
+        if (!ChatHubService.instance) {
+            ChatHubService.instance = new ChatHubService();
+        }
+        return ChatHubService.instance;
+    }
+
     public async startConnection(): Promise<void>{
         const accessToken = getAuthToken(); 
         if (!accessToken){

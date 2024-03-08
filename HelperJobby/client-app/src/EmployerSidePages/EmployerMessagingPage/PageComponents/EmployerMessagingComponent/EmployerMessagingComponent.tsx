@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useMemo, useState} from 'react';
 import './EmployerMessagingComponent.scss';
 import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
@@ -11,6 +11,8 @@ import {ConversationService} from "../../../../services/conversationService";
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
 import ShortConversationInfoForEmployer from "../ShortConversationInfoForEmployer/ShortConversationInfoForEmployer";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
+import {ChatHubService} from "../../../../services/chatHubService";
+import {MessageDTO} from "../../../../DTOs/MessagingDTOs/MessageDTO";
 
 interface EmployerMessagesComponentProps {
 }
@@ -24,10 +26,23 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
     const jobService = new JobService();
     const conversationService = new ConversationService();
     const [conversationsToShow, setConversationsToShow] = useState<ConversationDTO[]>([]);
+    const chatHubService = ChatHubService.getInstance();
 
     useEffect(() => {
         loadPageInitialData();
         loadEmployerAllConversations();
+    }, []);
+
+    useEffect(() => {
+        chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
+
+        chatHubService.registerMessageReceivedHandler((message, senderId, conversationId) => {
+            onConversationNewMessage(message)
+        });
+        chatHubService.registerMessageSent((message) => {
+            onConversationNewMessage(message);
+        });
+
     }, []);
 
 
@@ -49,6 +64,20 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
         } finally {
             setLoading(false)
         }
+    }
+
+    function onConversationNewMessage(message: MessageDTO) {
+        setConversationsToShow(prevConversations => {
+            const updatedConversations = [...prevConversations];
+            const conversationIndex = updatedConversations.findIndex(conversation => conversation.id === message.conversationId);
+
+            if (conversationIndex > -1) {
+                const [updatedConversation] = updatedConversations.splice(conversationIndex, 1);
+                updatedConversations.unshift(updatedConversation);
+            }
+            console.log(updatedConversations)
+            return updatedConversations;
+        });
     }
 
     async function loadEmployerAllConversations() {

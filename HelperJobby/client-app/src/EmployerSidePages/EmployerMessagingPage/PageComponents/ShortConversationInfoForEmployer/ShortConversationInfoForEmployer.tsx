@@ -31,7 +31,7 @@ const ShortConversationInfoForEmployer: FC<ShortConversationInfoForEmployerProps
             return;
         }
         setIsSelectedConversation(getInfoAboutSelectedConversation);
-    }, [jobId, conversationId, candidateId]);
+    }, [jobId, conversationId, candidateId, conversation]);
 
     useEffect(() => {
         if (conversationInfo.id != conversation?.id){
@@ -68,7 +68,6 @@ const ShortConversationInfoForEmployer: FC<ShortConversationInfoForEmployerProps
         navigate(`${EmployerPagesPaths.MESSAGES}?conversationId=${conversationInfo.id}`);
     }
     
-    console.log(conversation)
     
     return (
         <div className={isSelectedConversation ? "selected-conversation-short-info-box" : "conversation-short-info-box"}>
@@ -77,7 +76,9 @@ const ShortConversationInfoForEmployer: FC<ShortConversationInfoForEmployerProps
                 className="short-conv-info-container">
                 <div className={"conversation-topic-info"}>
                     <div className={"dark-default-text bold-text"}>
-                        {conversationInfo.jobSeeker.firstName} {conversationInfo.jobSeeker.lastName}
+                        {(conversationInfo.jobSeeker.firstName && conversationInfo.jobSeeker.lastName) ? 
+                            `${conversationInfo.jobSeeker.firstName} ${conversationInfo.jobSeeker.lastName}` : 
+                        "Not specified"}
                     </div>
                     <div className={"dark-small-text"}>
                         {conversationInfo.job.jobTitle}
@@ -87,7 +88,7 @@ const ShortConversationInfoForEmployer: FC<ShortConversationInfoForEmployerProps
                     </div>
                 </div>
                 <div className={"last-conversation-interaction"}>
-                    {conversation?.messages.length != 0 ? lastMessageTime : ""}
+                    {conversationInfo?.messages.length != 0 ? lastMessageTime : ""}
                 </div>
             </div>
             <div className={"content-separation-line"}/>

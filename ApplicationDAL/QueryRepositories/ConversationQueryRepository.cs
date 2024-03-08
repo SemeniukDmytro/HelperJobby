@@ -49,15 +49,21 @@ public class ConversationQueryRepository : IConversationQueryRepository
 
     public async Task<IEnumerable<Conversation>> GetConversationsByEmployerId(int employerId)
     {
-        var conversations = await _applicationContext.Conversations.Where(c => c.EmployerId == employerId)
-            .Select(ConversationProjections.ShortConversationInfo()).ToListAsync();
+        var conversations = await _applicationContext.Conversations
+            .Where(c => c.EmployerId == employerId)
+            .Select(ConversationProjections.ShortConversationInfo())
+            .OrderByDescending(c => c.LastModified)
+            .ToListAsync();
         return _mapper.Map<List<Conversation>>(conversations);    
     }
 
     public async Task<IEnumerable<Conversation>> GetConversationsByJobSeekerId(int jobSeekerId)
     {
-        var conversations = await _applicationContext.Conversations.Where(c => c.JobSeekerId == jobSeekerId)
-            .Select(ConversationProjections.ShortConversationInfo()).ToListAsync();
+        var conversations = await _applicationContext.Conversations
+            .Where(c => c.JobSeekerId == jobSeekerId)
+            .Select(ConversationProjections.ShortConversationInfo())
+            .OrderByDescending(c => c.LastModified)
+            .ToListAsync();
 
         return _mapper.Map<IEnumerable<Conversation>>(conversations);    }
 

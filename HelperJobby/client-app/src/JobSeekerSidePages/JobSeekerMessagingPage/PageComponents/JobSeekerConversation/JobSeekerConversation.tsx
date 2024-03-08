@@ -21,7 +21,7 @@ interface JobSeekerConversationProps {}
 
 const JobSeekerConversation: FC<JobSeekerConversationProps> = () => {
     const {jobSeeker} = useJobSeeker();
-    const chatHubService = useMemo(() => new ChatHubService(), []);
+    const chatHubService = ChatHubService.getInstance();
     const [searchParams] = useSearchParams();
     const conversationId = searchParams.get("conversationId");
     const [messageInput, setMessageInput] = useState("");

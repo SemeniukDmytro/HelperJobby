@@ -17,13 +17,14 @@ import {groupMessagesByDate} from "../../../../utils/groupMessagesByDate";
 import {
     getConversationMessagesGroupFormattedTime
 } from "../../../../utils/convertLogic/formatDate";
+import OutgoingMessage from "../../../../Components/OutgoingMessage/OutgoingMessage";
 
 interface EmployerJobChatComponentProps {
 }
 
 const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
     const {employer} = useEmployer();
-    const chatHubService = useMemo(() => new ChatHubService(), []);
+    const chatHubService = ChatHubService.getInstance();
     const [searchParams] = useSearchParams();
     const candidateId = searchParams.get("jobSeekerId");
     const jobId = searchParams.get("jobId");
@@ -54,7 +55,6 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
             navigate(EmployerPagesPaths.MESSAGES);
             return;
         }
-        chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
 
         chatHubService.registerMessageReceivedHandler((message, senderId, conversationId) => {
             if (senderId != employer?.id) {
@@ -104,8 +104,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
                 }
         })
     }
-    
-    
+
 
     async function sendMessage() {
         if (!messageInput.trim()) return;
@@ -116,8 +115,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
             await chatHubService.sendMessageToJobSeeker(conversation?.jobSeekerId || parseInt(candidateId!)
                 , messageInput, conversation?.jobId || parseInt(jobId!), conversationId);
             setSendingMessaged(prev => prev.slice(0, -1));
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
         }
     }
@@ -165,7 +163,8 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
                             <div key={date}>
                                 <div className={"messages-group-date-container"}>
                                     <div className="messages-group-date-line"/>
-                                    <span className={"messages-group-date"}>{getConversationMessagesGroupFormattedTime(date)}</span>
+                                    <span
+                                        className={"messages-group-date"}>{getConversationMessagesGroupFormattedTime(date)}</span>
                                     <div className={"messages-group-date-line"}/>
                                 </div>
                                 {messages.map((message, index) => (
@@ -181,7 +180,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
                         ))
                     }
                     {sendingMessages.map((msg, index) => (
-                        <div key={index}>{msg}</div>
+                        <OutgoingMessage content={msg} key={index}/>
                     ))}
                 </div>
                 <div className={"write-message-container"}>
