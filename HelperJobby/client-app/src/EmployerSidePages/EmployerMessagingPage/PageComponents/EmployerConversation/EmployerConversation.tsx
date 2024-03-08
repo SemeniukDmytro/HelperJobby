@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useEffect, useMemo, useRef, useState} from 'react';
+import React, {ChangeEvent, FC, useEffect, useRef, useState} from 'react';
 import './EmployerConversation.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBuilding} from "@fortawesome/free-solid-svg-icons";
@@ -33,7 +33,6 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
     const navigate = useNavigate();
     const conversationService = new ConversationService();
     const [loading, setLoading] = useState(true);
-    const lastMessageRef = useRef<HTMLDivElement>(null);
     const messagesWindowRef = useRef<HTMLDivElement>(null);
     const {conversation, setConversation} = useEmployerMessagingConversation();
     const [sendingMessages, setSendingMessaged] = useState<string[]>([]);
@@ -44,6 +43,8 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
     }, [[], conversation?.messages]);
+
+    
 
     useEffect(() => {
         if ((!jobId || !candidateId || isNanAfterIntParse(jobId) || isNanAfterIntParse(candidateId)) && (!conversationId || isNanAfterIntParse(conversationId))) {
@@ -56,7 +57,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
             return;
         }
 
-        chatHubService.registerMessageReceivedHandler((message, senderId, conversationId) => {
+        chatHubService.registerMessageReceivedHandler((message, senderId) => {
             if (senderId != employer?.id) {
                 onMessageSent(message)
             }
@@ -66,7 +67,17 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
         });
 
         loadConversationInfo();
+        
+        return () => {
+            unsubscribeFromConversationEvents();
+        }
     }, [conversationId, candidateId, jobId]);
+
+
+    function unsubscribeFromConversationEvents() {
+        chatHubService.unregisterMessageReceivedHandler()
+        chatHubService.unregisterMessageSentHandler();
+    }
 
     async function loadConversationInfo() {
         try {
@@ -172,8 +183,9 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
                                         message={message}
                                         senderName={employer!.fullName}
                                         isMyMessage={message.employerId == employer?.id}
+                                        conversation={conversation}
+                                        setConversation={setConversation}
                                         key={index}
-                                        messageRef={index === conversation!.messages.length - 1 ? lastMessageRef : null}
                                     />
                                 ))}
                             </div>

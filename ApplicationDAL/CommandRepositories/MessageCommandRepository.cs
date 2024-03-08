@@ -27,4 +27,11 @@ public class MessageCommandRepository : IMessageCommandRepository
         await _applicationContext.SaveChangesAsync();
         return message;
     }
+
+    public async Task<Message> UpdateMessage(Message message)
+    {
+        _applicationContext.Messages.Update(message);
+        await _applicationContext.SaveChangesAsync();
+        return message;
+    }
 }

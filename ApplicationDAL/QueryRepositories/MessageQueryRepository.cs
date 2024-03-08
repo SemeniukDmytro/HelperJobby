@@ -30,4 +30,14 @@ public class MessageQueryRepository : IMessageQueryRepository
         var messages = await _applicationContext.Messages.Where(m => m.ConversationId == conversationId).ToListAsync();
         return messages;
     }
+
+    public async Task<Message> GetMessageByIdWithConversationInfo(int messageId)
+    {
+        var message = await _applicationContext.Messages.Include(m => m.Conversation).FirstOrDefaultAsync(m => m.Id == messageId);
+        if (message == null)
+        {
+            throw new MessageNotFoundException();
+        }
+        return message;
+    }
 }

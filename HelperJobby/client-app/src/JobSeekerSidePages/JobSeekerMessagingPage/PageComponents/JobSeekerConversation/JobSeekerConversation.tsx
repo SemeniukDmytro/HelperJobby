@@ -1,12 +1,9 @@
-import React, {ChangeEvent, FC, useEffect, useMemo, useRef, useState} from 'react';
+import React, {ChangeEvent, FC, useEffect, useRef, useState} from 'react';
 import './JobSeekerConversation.scss';
-import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 import {ChatHubService} from "../../../../services/chatHubService";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {ConversationService} from "../../../../services/conversationService";
-import {useEmployerMessagingConversation} from "../../../../hooks/contextHooks/useEmployerMessagingConversation";
 import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValidators";
-import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {MessageDTO} from "../../../../DTOs/MessagingDTOs/MessageDTO";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
@@ -71,7 +68,7 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = () => {
         }
         chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
 
-        chatHubService.registerMessageReceivedHandler((message, senderId, conversationId) => {
+        chatHubService.registerMessageReceivedHandler((message, senderId) => {
             if (senderId != jobSeeker?.id){
                 onMessageSent(message)
             }
@@ -163,8 +160,9 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = () => {
                                     message={message}
                                     senderName={`${jobSeeker?.firstName} ${jobSeeker?.lastName}`}
                                     isMyMessage={message.employerId == jobSeeker?.id}
+                                    conversation={conversation}
+                                    setConversation={setConversation}
                                     key={index}
-                                    messageRef={index === conversation.messages.length - 1 ? lastMessageRef : null}
                                 />
                             ))
                         }

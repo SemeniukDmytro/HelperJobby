@@ -98,25 +98,6 @@ export function getConversationMessagesGroupFormattedTime(lastModifiedTime : str
     }
 }
 
-export function getMessageFormattedTime(sentAt : string){
-    const date = new Date(sentAt);
-    const currentDate = new Date();
-    if (date.getDay() == currentDate.getDay()){
-        return formatAMPM(date);
-    }
-
-    if (checkIfDateWithingSameWeek(date, currentDate)) {
-        return date.toLocaleDateString('en-US', { weekday: 'long' }) + ' ' + formatAMPM(date);
-    }
-
-    if (date.getFullYear() == currentDate.getFullYear()){
-        return getDateWithTime_MMM_DD(sentAt);
-    }
-    else {
-        return getFullDateWithTime_MMMM_DD_YYYY(sentAt);
-    }
-}
-
 function checkIfDateWithingSameWeek(date : Date, currentDate : Date){
     const oneDayMilliseconds = 24 * 60 * 60 * 1000;
     const diffDays = Math.round(Math.abs((date.getDate() - currentDate.getDate()) / oneDayMilliseconds));

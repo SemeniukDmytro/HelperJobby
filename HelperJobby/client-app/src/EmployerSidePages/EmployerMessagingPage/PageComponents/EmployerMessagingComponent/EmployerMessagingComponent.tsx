@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useMemo, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import './EmployerMessagingComponent.scss';
 import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
@@ -36,13 +36,10 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
     useEffect(() => {
         chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
 
-        chatHubService.registerMessageReceivedHandler((message, senderId, conversationId) => {
+        chatHubService.registerConversationsUpdateHandler((message) => {
             onConversationNewMessage(message)
         });
-        chatHubService.registerMessageSent((message) => {
-            onConversationNewMessage(message);
-        });
-
+        
     }, []);
 
 
@@ -75,7 +72,6 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
                 const [updatedConversation] = updatedConversations.splice(conversationIndex, 1);
                 updatedConversations.unshift(updatedConversation);
             }
-            console.log(updatedConversations)
             return updatedConversations;
         });
     }

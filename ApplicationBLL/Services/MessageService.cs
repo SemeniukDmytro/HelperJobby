@@ -1,4 +1,5 @@
-﻿using ApplicationDomain.Abstraction.IServices;
+﻿using ApplicationDomain.Abstraction.IQueryRepositories;
+using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.MessagingRelatedModels;
 
@@ -6,8 +7,10 @@ namespace ApplicationBLL.Services;
 
 public class MessageService : IMessageService
 {
-    public MessageService()
+    private readonly IMessageQueryRepository _messageQueryRepository;
+    public MessageService(IMessageQueryRepository messageQueryRepository)
     {
+        _messageQueryRepository = messageQueryRepository;
     }
 
     public async Task<Message> CreateMessageToEmployer(string message, int jobSeekerId, int conversationId)
@@ -27,6 +30,18 @@ public class MessageService : IMessageService
         createdMessage.EmployerId = employerId;
 
         return createdMessage;
+    }
+
+    public async Task<Message> ReadMessage(int messageId, int employerId, int jobSeekerId)
+    {
+        var message = await _messageQueryRepository.GetMessageByIdWithConversationInfo(messageId);
+        if (message.Conversation.EmployerId != employerId || message.Conversation.JobSeekerId != jobSeekerId)
+        {
+            throw new InvalidMessageException("Something went wrong");
+        }
+
+        message.IsRead = true;
+        return message;
     }
 
 
