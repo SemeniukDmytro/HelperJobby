@@ -1,4 +1,4 @@
-﻿import {MessageDTO} from "../DTOs/MessagingDTOs/MessageDTO";
+﻿import {MessageDTO} from "../../DTOs/MessagingDTOs/MessageDTO";
 
 export function groupMessagesByDate(messages: MessageDTO[]): Record<string, MessageDTO[]> {
     const grouped: Record<string, MessageDTO[]> = {};

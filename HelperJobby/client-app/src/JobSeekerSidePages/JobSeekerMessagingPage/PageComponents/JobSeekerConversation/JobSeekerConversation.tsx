@@ -1,11 +1,10 @@
-import React, {ChangeEvent, FC, useEffect, useRef, useState} from 'react';
+import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './JobSeekerConversation.scss';
 import {ChatHubService} from "../../../../services/chatHubService";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {ConversationService} from "../../../../services/conversationService";
 import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValidators";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import {MessageDTO} from "../../../../DTOs/MessagingDTOs/MessageDTO";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import Message from "../../../../Components/Message/Message";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -13,11 +12,22 @@ import {faBuilding} from "@fortawesome/free-solid-svg-icons";
 import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 import JobSeekerPagesPaths from "../../../../AppRoutes/Paths/JobSeekerPagesPaths";
 import {useJobSeekerMessagingConversation} from "../../../../hooks/contextHooks/useJobSeekerMessagingConversation";
+import {getConversationMessagesGroupFormattedTime} from "../../../../utils/convertLogic/formatDate";
+import OutgoingMessage from "../../../../Components/OutgoingMessage/OutgoingMessage";
+import {groupMessagesByDate} from "../../../../utils/messaging/groupMessagesByDate";
+import {onConversationsUpdate, onMessageSent} from "../../../../utils/messaging/messagingEventsHandlers";
+import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
 
-interface JobSeekerConversationProps {}
+interface JobSeekerConversationProps {
+    conversationsToShow : ConversationDTO[];
+    setConversationsToShow : Dispatch<SetStateAction<ConversationDTO[]>>
+}
 
-const JobSeekerConversation: FC<JobSeekerConversationProps> = () => {
-    const {jobSeeker} = useJobSeeker();
+const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
+    conversationsToShow,
+    setConversationsToShow
+                                                               }) => {
+    const {jobSeeker, fetchJobSeeker} = useJobSeeker();
     const chatHubService = ChatHubService.getInstance();
     const [searchParams] = useSearchParams();
     const conversationId = searchParams.get("conversationId");
@@ -25,39 +35,37 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = () => {
     const navigate = useNavigate();
     const conversationService = new ConversationService();
     const [loading, setLoading] = useState(true);
-    const lastMessageRef = useRef<HTMLDivElement>(null);
     const messagesWindowRef = useRef<HTMLDivElement>(null);
     const {conversation, setConversation} = useJobSeekerMessagingConversation();
+    const [sendingMessages, setSendingMessages] = useState<string[]>([]);
 
     useEffect(() => {
-        const messagesWindow = messagesWindowRef.current;
+        fetchJobSeeker();
 
-        if (messagesWindow) {
-            let scrollTimeout: ReturnType<typeof setTimeout>;
+        chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
 
-            const handleScroll = () => {
-                messagesWindow.classList.add('message-window-scroll');
+        chatHubService.registerConversationsUpdateHandler((message) => {
+            onConversationsUpdate(message, setConversationsToShow);
+        });
 
-                clearTimeout(scrollTimeout);
-
-                scrollTimeout = setTimeout(() => {
-                    messagesWindow.classList.remove('message-window-scroll');
-                }, 500);
-            };
-
-            messagesWindow.addEventListener('scroll', handleScroll);
-            return () => {
-                messagesWindow.removeEventListener('scroll', handleScroll);
-                clearTimeout(scrollTimeout);
-            };
-        }
+        chatHubService.registerMessageReceivedHandler((message, senderId) => {
+            if (senderId != jobSeeker?.id){
+                onMessageSent(message, setConversation)
+            }
+        });
+        chatHubService.registerMessageSent((message) => {
+            onMessageSent(message, setConversation);
+        });
+        
     }, []);
-
+    
+    
     useEffect(() => {
-        if (lastMessageRef.current) {
-            lastMessageRef.current.scrollIntoView({ block: "end" });
+        if (messagesWindowRef.current) {
+            const messagesContainer = messagesWindowRef.current;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
-    }, [conversation?.messages]);
+    }, [[], conversation?.messages]);
 
     useEffect(() => {
         if (!conversationId || isNanAfterIntParse(conversationId))
@@ -66,19 +74,18 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = () => {
             return;
 
         }
-        chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
-
-        chatHubService.registerMessageReceivedHandler((message, senderId) => {
-            if (senderId != jobSeeker?.id){
-                onMessageSent(message)
-            }
-        });
-        chatHubService.registerMessageSent((message) => {
-            onMessageSent(message);
-        });
 
         loadConversationInfo();
+
+        return () => {
+            unsubscribeFromConversationEvents();
+        }
     }, [conversationId]);
+
+    function unsubscribeFromConversationEvents() {
+        chatHubService.unregisterMessageReceivedHandler()
+        chatHubService.unregisterMessageSentHandler();
+    }
     
 
     async function loadConversationInfo() {
@@ -95,28 +102,19 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = () => {
             setLoading(false);
         }
     }
-    function onMessageSent(message: MessageDTO) {
-        setConversation(prev => {
-            return prev ?
-                {
-                    ...prev,
-                    messages: [...prev.messages, message],
-                    lastModified: message.sentAt
-                }
-                :
-                {
-                    ...message.conversation,
-                    messages: [message],
-                    lastModified: message.sentAt
-                }
-        })
-    }
+    
 
     async function sendMessage() {
         if (!messageInput.trim()) return;
         const conversationId = conversation?.id || null;
         setMessageInput("");
-        await chatHubService.sendMessageToEmployer(conversation!.employerId, messageInput, conversation!.jobId, conversationId);
+        setSendingMessages(prev => [...prev, messageInput]);
+        try {
+            await chatHubService.sendMessageToEmployer(conversation!.employerId, messageInput, conversation!.jobId, conversationId);
+            setSendingMessages(prev => prev.slice(0, -1));
+        } catch (err) {
+            logErrorInfo(err)
+        }
     }
 
     function onMessageChange(e: ChangeEvent<HTMLTextAreaElement>) {
@@ -155,17 +153,30 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = () => {
                         ref={messagesWindowRef}
                         className={"messages-window"}>
                         {loading ? <LoadingPage/> :
-                            conversation?.messages.map((message, index) => (
-                                <Message
-                                    message={message}
-                                    senderName={`${jobSeeker?.firstName} ${jobSeeker?.lastName}`}
-                                    isMyMessage={message.employerId == jobSeeker?.id}
-                                    conversation={conversation}
-                                    setConversation={setConversation}
-                                    key={index}
-                                />
+                            conversation?.messages &&
+                            Object.entries(groupMessagesByDate(conversation!.messages)).map(([date, messages]) => (
+                                <div key={date}>
+                                    <div className={"messages-group-date-container"}>
+                                        <div className="messages-group-date-line"/>
+                                        <span
+                                            className={"messages-group-date"}>{getConversationMessagesGroupFormattedTime(date)}</span>
+                                        <div className={"messages-group-date-line"}/>
+                                    </div>
+                                    {messages.map((message, index) => (
+                                        <Message
+                                            message={message}
+                                            isMyMessage={message.jobSeekerId == jobSeeker?.id}
+                                            conversation={conversation}
+                                            setConversation={setConversation}
+                                            key={index}
+                                        />
+                                    ))}
+                                </div>
                             ))
                         }
+                        {sendingMessages.map((msg, index) => (
+                            <OutgoingMessage content={msg} key={index}/>
+                        ))}
                     </div>
                     <div className={"write-message-container"}>
                     <textarea className={"message-input"}

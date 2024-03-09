@@ -16,18 +16,26 @@ const ShortConversationInfoForJobSeeker: FC<ShortConversationInfoForJobSeekerPro
                                                                                        }
 ) => {
     const [searchParams] = useSearchParams();
+    const {conversation} = useJobSeekerMessagingConversation();
     const conversationId = searchParams.get("conversationId");
     const navigate = useNavigate();
     const [isSelectedConversation, setIsSelectedConversation] = useState(getInfoAboutSelectedConversation);
     const [lastMessageTime, setLastMessageTime] = useState(getConversationLastMessageFormattedTime(conversationInfo.lastModified));
     const [lastMessage, setLastMessage] = useState(conversationInfo.messages[conversationInfo.messages.length-1] || null);
-    const {conversation} = useJobSeekerMessagingConversation();
+    
     
     useEffect(() => {
+        if (!conversation){
+            setIsSelectedConversation(false);
+            return;
+        }
         setIsSelectedConversation(getInfoAboutSelectedConversation);
-    }, [conversationId]);
+    }, [conversationId, conversation]);
 
     useEffect(() => {
+        if (conversationInfo.id != conversation?.id){
+            return;
+        }
         const newLastMessage = conversation?.messages[conversation.messages.length-1];
         if (!newLastMessage){
             return;
@@ -37,9 +45,12 @@ const ShortConversationInfoForJobSeeker: FC<ShortConversationInfoForJobSeekerPro
     }, [conversation]);
 
 
-    function getInfoAboutSelectedConversation() {
-        if (conversationId && !isNanAfterIntParse(conversationId)) {
-            if (conversationInfo.id == parseInt(conversationId)) {
+    function getInfoAboutSelectedConversation(){
+        if (!conversation){
+            return false;
+        }
+        if (conversationId && !isNanAfterIntParse(conversationId)){
+            if (conversationInfo.id == parseInt(conversationId)){
                 return true;
             }
         }
@@ -65,11 +76,11 @@ const ShortConversationInfoForJobSeeker: FC<ShortConversationInfoForJobSeekerPro
                         {conversationInfo.job.jobTitle}
                     </div>
                     <div className={"last-message-block"}>
-                        {lastMessage.content || ""}
+                        {lastMessage?.content || ""}
                     </div>
                 </div>
                 <div className={"last-conversation-interaction"}>
-                    {lastMessageTime}
+                    {conversationInfo?.messages.length != 0 ? lastMessageTime : ""}
                 </div>
             </div>
             <div className={"content-separation-line"}/>

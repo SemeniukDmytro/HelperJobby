@@ -41,12 +41,12 @@ public class ChatHub : Hub
         
         var createdMessage = await _messageService.CreateMessageToJobSeeker(message, employerId, conversationId.Value);
         createdMessage.Conversation = conversation;
-        await _messageCommandRepository.CreateMessage(createdMessage);
+        createdMessage = await _messageCommandRepository.CreateMessage(createdMessage);
         var messageDTO = _mapper.Map<MessageDTO>(createdMessage);
         
-        await Clients.User(jobSeekerId.ToString()).SendAsync("ReceiveMessage", messageDTO, employerId, conversationId.Value);
+        await Clients.User(jobSeekerId.ToString()).SendAsync("ReceiveMessage", messageDTO, employerId);
         await Clients.User(jobSeekerId.ToString()).SendAsync("UpdateConversations", messageDTO);
-        await Clients.Caller.SendAsync("MessageSent", messageDTO, conversationId);
+        await Clients.Caller.SendAsync("MessageSent", messageDTO);
         await Clients.Caller.SendAsync("UpdateConversations", messageDTO);
     }
     
@@ -67,11 +67,13 @@ public class ChatHub : Hub
         
         var createdMessage = await _messageService.CreateMessageToEmployer(message, jobSeekerId, conversationId.Value);
         createdMessage.Conversation = conversation;
-        await _messageCommandRepository.CreateMessage(createdMessage);
+        createdMessage = await _messageCommandRepository.CreateMessage(createdMessage);
+        var messageDTO = _mapper.Map<MessageDTO>(createdMessage);
         
-        await Clients.User(employerId.ToString()).SendAsync("ReceiveMessage", _mapper.Map<MessageDTO>(createdMessage), jobSeekerId, conversationId.Value );
-        await Clients.Caller.SendAsync("MessageSent", _mapper.Map<MessageDTO>(createdMessage), conversationId.Value);
-        
+        await Clients.User(employerId.ToString()).SendAsync("ReceiveMessage", messageDTO, jobSeekerId);
+        await Clients.User(employerId.ToString()).SendAsync("UpdateConversations", messageDTO);
+        await Clients.Caller.SendAsync("MessageSent", messageDTO);
+        await Clients.Caller.SendAsync("UpdateConversations", messageDTO);
     }
     
     public async Task ReadMessageFromJobSeeker(int messageId, int jobSeekerId)
@@ -82,7 +84,7 @@ public class ChatHub : Hub
             throw new UnauthorizedException();
         }
 
-        var readMessage = await _messageService.ReadMessage(messageId, jobSeekerId, employerId);
+        var readMessage = await _messageService.ReadMessage(messageId, employerId, jobSeekerId);
         readMessage = await _messageCommandRepository.UpdateMessage(readMessage);
 
         await Clients.User(jobSeekerId.ToString()).SendAsync("MessageRead", _mapper.Map<MessageDTO>(readMessage));

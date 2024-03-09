@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useEffect, useRef, useState} from 'react';
+import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './EmployerConversation.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBuilding} from "@fortawesome/free-solid-svg-icons";
@@ -8,21 +8,27 @@ import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {ConversationService} from "../../../../services/conversationService";
 import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValidators";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import {MessageDTO} from "../../../../DTOs/MessagingDTOs/MessageDTO";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import Message from "../../../../Components/Message/Message";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 import {useEmployerMessagingConversation} from "../../../../hooks/contextHooks/useEmployerMessagingConversation";
-import {groupMessagesByDate} from "../../../../utils/groupMessagesByDate";
 import {
     getConversationMessagesGroupFormattedTime
 } from "../../../../utils/convertLogic/formatDate";
 import OutgoingMessage from "../../../../Components/OutgoingMessage/OutgoingMessage";
+import {groupMessagesByDate} from "../../../../utils/messaging/groupMessagesByDate";
+import {onConversationsUpdate, onMessageSent} from "../../../../utils/messaging/messagingEventsHandlers";
+import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
 
 interface EmployerJobChatComponentProps {
+    conversationsToShow : ConversationDTO[];
+    setConversationsToShow : Dispatch<SetStateAction<ConversationDTO[]>>
 }
 
-const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
+const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
+    conversationsToShow,
+    setConversationsToShow
+                                                                 }) => {
     const {employer} = useEmployer();
     const chatHubService = ChatHubService.getInstance();
     const [searchParams] = useSearchParams();
@@ -35,7 +41,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
     const [loading, setLoading] = useState(true);
     const messagesWindowRef = useRef<HTMLDivElement>(null);
     const {conversation, setConversation} = useEmployerMessagingConversation();
-    const [sendingMessages, setSendingMessaged] = useState<string[]>([]);
+    const [sendingMessages, setSendingMessages] = useState<string[]>([]);
 
     useEffect(() => {
         if (messagesWindowRef.current) {
@@ -44,6 +50,25 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
         }
     }, [[], conversation?.messages]);
 
+    useEffect(() => {
+
+        chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
+
+        chatHubService.registerConversationsUpdateHandler((message) => {
+            onConversationsUpdate(message, setConversationsToShow);
+        });
+        
+        chatHubService.registerMessageSent((message) => {
+            onMessageSent(message, setConversation);
+        });
+
+        chatHubService.registerMessageReceivedHandler((message, senderId) => {
+            if (senderId != employer?.id) {
+                onMessageSent(message, setConversation)
+            }
+        });
+        
+    }, []);
     
 
     useEffect(() => {
@@ -56,28 +81,9 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
             navigate(EmployerPagesPaths.MESSAGES);
             return;
         }
-
-        chatHubService.registerMessageReceivedHandler((message, senderId) => {
-            if (senderId != employer?.id) {
-                onMessageSent(message)
-            }
-        });
-        chatHubService.registerMessageSent((message) => {
-            onMessageSent(message);
-        });
-
         loadConversationInfo();
         
-        return () => {
-            unsubscribeFromConversationEvents();
-        }
     }, [conversationId, candidateId, jobId]);
-
-
-    function unsubscribeFromConversationEvents() {
-        chatHubService.unregisterMessageReceivedHandler()
-        chatHubService.unregisterMessageSentHandler();
-    }
 
     async function loadConversationInfo() {
         try {
@@ -99,33 +105,16 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
         }
     }
 
-    function onMessageSent(message: MessageDTO) {
-        setConversation(prev => {
-            return prev ?
-                {
-                    ...prev,
-                    messages: [...prev.messages, message],
-                    lastModified: message.sentAt
-                }
-                :
-                {
-                    ...message.conversation,
-                    messages: [message],
-                    lastModified: message.sentAt
-                }
-        })
-    }
-
 
     async function sendMessage() {
         if (!messageInput.trim()) return;
         const conversationId = conversation?.id || null;
         setMessageInput("");
-        setSendingMessaged(prev => [...prev, messageInput]);
+        setSendingMessages(prev => [...prev, messageInput]);
         try {
             await chatHubService.sendMessageToJobSeeker(conversation?.jobSeekerId || parseInt(candidateId!)
                 , messageInput, conversation?.jobId || parseInt(jobId!), conversationId);
-            setSendingMessaged(prev => prev.slice(0, -1));
+            setSendingMessages(prev => prev.slice(0, -1));
         } catch (err) {
             logErrorInfo(err)
         }
@@ -181,7 +170,6 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = () => {
                                 {messages.map((message, index) => (
                                     <Message
                                         message={message}
-                                        senderName={employer!.fullName}
                                         isMyMessage={message.employerId == employer?.id}
                                         conversation={conversation}
                                         setConversation={setConversation}

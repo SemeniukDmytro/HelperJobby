@@ -1,13 +1,13 @@
-import React, {Dispatch, FC, SetStateAction, useEffect, useRef} from 'react';
+import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './Message.scss';
 import {MessageDTO} from "../../DTOs/MessagingDTOs/MessageDTO";
 import {formatAMPM} from "../../utils/convertLogic/formatDate";
 import {ChatHubService} from "../../services/chatHubService";
 import {ConversationDTO} from "../../DTOs/MessagingDTOs/ConversationDTO";
+import {getMessageSenderName} from "../../utils/messaging/getMessageSenderName";
 
 interface MessageProps {
     message: MessageDTO;
-    senderName: string;
     isMyMessage: boolean;
     conversation: ConversationDTO;
     setConversation: Dispatch<SetStateAction<ConversationDTO | null>>
@@ -15,13 +15,13 @@ interface MessageProps {
 
 const Message: FC<MessageProps> = ({
                                        message,
-                                       senderName,
                                        isMyMessage,
                                        conversation,
                                        setConversation
                                    }) => {
     const chatHubService = ChatHubService.getInstance();
     const messageRef = useRef<HTMLDivElement>(null);
+    const [isMessageRead, setIsMessageRead] = useState(message.isRead);
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries, observer) => {
@@ -39,19 +39,19 @@ const Message: FC<MessageProps> = ({
         if (messageRef.current){
             observer.observe(messageRef.current);
         }
+        chatHubService.registerMessageRead((message) => {
+            setIsMessageRead(true);
+        });
 
         return () => observer.disconnect();
     }, []);
 
     async function markMessageAsRead() {
-        console.log(message)
         try {
             if (message.jobSeekerId && !isMyMessage){
                 await chatHubService.readMessageFromJobSeeker(message.id, message.jobSeekerId);
             }
             else if (message.employerId && !isMyMessage){
-                console.log(message.employerId)
-                console.log("das")
                 await chatHubService.readMessageFromEmployer(message.id, message.employerId);
             }
             setConversation(prevState => (prevState && {
@@ -68,7 +68,7 @@ const Message: FC<MessageProps> = ({
         <div ref={messageRef} className={"message-box"}>
             <div className={"sender-info-and-time-box"}>
                 <div className={"dark-small-text bold-text"}>
-                    {isMyMessage ? "Me" : senderName}
+                    {isMyMessage ? "Me" : getMessageSenderName(message, conversation)}
                 </div>
                 <div className={"circle-separator"}>
                     •
@@ -82,7 +82,7 @@ const Message: FC<MessageProps> = ({
             </div>
             {isMyMessage &&
                 <div className={"message-status"}>
-                    {message.isRead ? "Read" : "Delivered"}
+                    {isMessageRead ? "Read" : "Delivered"}
                 </div>
             }
         </div>

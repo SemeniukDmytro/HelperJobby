@@ -87,12 +87,12 @@ export class ChatHubService {
         }
     };
 
-    public registerMessageReceivedHandler(onMessageReceived: (message: MessageDTO, senderId : number, conversationId : number) => void){
+    public registerMessageReceivedHandler(onMessageReceived: (message: MessageDTO, senderId : number) => void){
         this.messageReceivedHandler = onMessageReceived;
         this.hubConnection?.on('ReceiveMessage', onMessageReceived);
     };
     
-    public registerMessageSent(onMessageSent : (message : MessageDTO, conversationId : number) => void){
+    public registerMessageSent(onMessageSent : (message : MessageDTO) => void){
         this.messageSentHandler = onMessageSent;
         this.hubConnection?.on("MessageSent", onMessageSent);
     };

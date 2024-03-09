@@ -3,17 +3,15 @@ import './JobSeekerMessagingComponent.scss';
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import JobSeekerConversation from "../JobSeekerConversation/JobSeekerConversation";
 import {useNavigate} from "react-router-dom";
-import {JobService} from "../../../../services/jobService";
 import {ConversationService} from "../../../../services/conversationService";
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
-import ShortConversationInfoForEmployer
-    from "../../../../EmployerSidePages/EmployerMessagingPage/PageComponents/ShortConversationInfoForEmployer/ShortConversationInfoForEmployer";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import JobSeekerPagesPaths from "../../../../AppRoutes/Paths/JobSeekerPagesPaths";
 import ShortConversationInfoForJobSeeker from "../ShortConversationInfoForJobSeeker/ShortConversationInfoForJobSeeker";
+import {ChatHubService} from "../../../../services/chatHubService";
+import {onConversationsUpdate} from "../../../../utils/messaging/messagingEventsHandlers";
 
 interface JobSeekerMessagingComponentProps {
 }
@@ -24,7 +22,7 @@ const JobSeekerMessagingComponent: FC<JobSeekerMessagingComponentProps> = () => 
     const [loading, setLoading] = useState(true);
     const conversationService = new ConversationService();
     const [conversationsToShow, setConversationsToShow] = useState<ConversationDTO[]>([]);
-
+    
     useEffect(() => {
         loadJobSeekerAllConversations();
     }, []);
@@ -51,12 +49,10 @@ const JobSeekerMessagingComponent: FC<JobSeekerMessagingComponentProps> = () => 
         }
     }
 
-
     return (
 
         <div className={"js-msg-page-layout"}>
             <PageWrapWithHeader>
-
                 <div className={"js-msg-page-background"}>
                     <div className={"js-messaging-window-container"}>
                         <div className={"js-inbox-fb"}>
@@ -81,7 +77,10 @@ const JobSeekerMessagingComponent: FC<JobSeekerMessagingComponentProps> = () => 
                             }
 
                         </div>
-                        <JobSeekerConversation/></div>
+                        <JobSeekerConversation
+                            conversationsToShow={conversationsToShow}
+                            setConversationsToShow={setConversationsToShow}
+                        /></div>
                 </div>
             </PageWrapWithHeader>
         </div>

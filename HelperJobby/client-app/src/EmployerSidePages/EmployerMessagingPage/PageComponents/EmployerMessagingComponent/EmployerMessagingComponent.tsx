@@ -11,8 +11,6 @@ import {ConversationService} from "../../../../services/conversationService";
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
 import ShortConversationInfoForEmployer from "../ShortConversationInfoForEmployer/ShortConversationInfoForEmployer";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
-import {ChatHubService} from "../../../../services/chatHubService";
-import {MessageDTO} from "../../../../DTOs/MessagingDTOs/MessageDTO";
 
 interface EmployerMessagesComponentProps {
 }
@@ -26,22 +24,12 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
     const jobService = new JobService();
     const conversationService = new ConversationService();
     const [conversationsToShow, setConversationsToShow] = useState<ConversationDTO[]>([]);
-    const chatHubService = ChatHubService.getInstance();
-
+    
+    
     useEffect(() => {
         loadPageInitialData();
         loadEmployerAllConversations();
     }, []);
-
-    useEffect(() => {
-        chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
-
-        chatHubService.registerConversationsUpdateHandler((message) => {
-            onConversationNewMessage(message)
-        });
-        
-    }, []);
-
 
     async function loadPageInitialData() {
         try {
@@ -61,19 +49,6 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
         } finally {
             setLoading(false)
         }
-    }
-
-    function onConversationNewMessage(message: MessageDTO) {
-        setConversationsToShow(prevConversations => {
-            const updatedConversations = [...prevConversations];
-            const conversationIndex = updatedConversations.findIndex(conversation => conversation.id === message.conversationId);
-
-            if (conversationIndex > -1) {
-                const [updatedConversation] = updatedConversations.splice(conversationIndex, 1);
-                updatedConversations.unshift(updatedConversation);
-            }
-            return updatedConversations;
-        });
     }
 
     async function loadEmployerAllConversations() {
@@ -133,7 +108,7 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
                             </div>
                         }
                     </div>
-                    <EmployerJobChatComponent/>
+                    <EmployerJobChatComponent conversationsToShow={conversationsToShow} setConversationsToShow={setConversationsToShow}/>
                 </div>
             </div>
 

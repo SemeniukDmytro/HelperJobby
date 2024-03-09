@@ -17,7 +17,7 @@ public class MessageService : IMessageService
     {
         
         var createdMessage = PopulateMessageEntityWithCommonInitialData(message, conversationId);
-        createdMessage.EmployerId = jobSeekerId;
+        createdMessage.JobSeekerId = jobSeekerId;
 
         return createdMessage;
 
