@@ -41,18 +41,31 @@ const Message: FC<MessageProps> = ({
         if (messageRef.current && !message.isRead) {
             observer.observe(messageRef.current);
         }
-        chatHubService.registerMessageRead((message) => {
+        chatHubService.registerMessageRead((msg) => {
+            if (msg.id !== message.id){
+                return;
+            }
             setIsMessageRead(true);
-            if (message.conversationId == conversation.id){
-                const updatedShortConversation = {...conversation};
-                message.employerId ? updatedShortConversation.jobSeekersUnreadMessagesCount-- : updatedShortConversation.employersUnreadMessagesCount--;
+            if (isMyMessage){
+                return;
+            }
+            if (msg.conversationId === conversation.id){
+                setConversation(prev => {
+                    if (!prev) return null;
+                    const countKey = msg.employerId ? 'jobSeekersUnreadMessagesCount' : 'employersUnreadMessagesCount';
+                    const updatedCount = Math.max(prev[countKey] - 1, 0);
+                    return {...prev, [countKey]: updatedCount};
+                });
+
                 setConversationsToShow(prevConversations => {
-                    const conversationIndex = prevConversations.findIndex(conversation => conversation.id === updatedShortConversation.id);
-                    const updatedConversations = [...prevConversations];
-                    if (conversationIndex !== -1) {
-                        updatedConversations[conversationIndex] = {...updatedShortConversation};
-                    }
-                    return updatedConversations;
+                    return prevConversations.map(conversationItem => {
+                        if (conversationItem.id === msg.conversationId) {
+                            const countKey = msg.employerId ? 'jobSeekersUnreadMessagesCount' : 'employersUnreadMessagesCount';
+                            const updatedCount = Math.max(conversationItem[countKey] - 1, 0);
+                            return {...conversationItem, [countKey]: updatedCount};
+                        }
+                        return conversationItem;
+                    });
                 });
             }
         });

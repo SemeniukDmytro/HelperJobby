@@ -41,19 +41,16 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
     const {conversation, setConversation} = useEmployerMessagingConversation();
     const [sendingMessages, setSendingMessages] = useState<string[]>([]);
     
-    useEffect(() => {
+    /*useEffect(() => {
         if (messagesWindowRef.current) {
             const messagesContainer = messagesWindowRef.current;
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
-    }, [[], conversation?.messages]);
+    }, [[], conversation?.messages]);*/
 
     useEffect(() => {
 
         chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
-        return () => {
-            chatHubService.disconnect();
-        }
         
     }, []);
 
@@ -105,16 +102,14 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
             setLoading(false);
         }
     }
-
-
     async function sendMessage() {
         if (!messageInput.trim()) return;
         setMessageInput("");
         setSendingMessages(prev => [...prev, messageInput]);
         try {
             await chatHubService.sendMessageToJobSeeker(conversation?.jobSeekerId || parseInt(candidateId!)
-                , messageInput, conversation?.jobId || parseInt(jobId!), conversation);
-            setSendingMessages(prev => prev.slice(0, -1));
+                , messageInput, conversation?.jobId || parseInt(jobId!), conversation?.id || null);
+            setSendingMessages(prev => prev.slice(1));
         } catch (err) {
             logErrorInfo(err)
         }

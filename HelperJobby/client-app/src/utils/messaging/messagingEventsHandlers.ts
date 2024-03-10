@@ -2,7 +2,7 @@
 import {Dispatch, SetStateAction} from "react";
 import {ConversationDTO} from "../../DTOs/MessagingDTOs/ConversationDTO";
 
-export function onConversationsUpdate(message: MessageDTO, setConversationsToShow : Dispatch<SetStateAction<ConversationDTO[]>>){
+export function onConversationsUpdate(message: MessageDTO, setConversationsToShow: Dispatch<SetStateAction<ConversationDTO[]>>) {
     setConversationsToShow(prevConversations => {
         const updatedConversations = [...prevConversations];
         const conversationIndex = updatedConversations.findIndex(conversation => conversation.id === message.conversationId);
@@ -15,26 +15,27 @@ export function onConversationsUpdate(message: MessageDTO, setConversationsToSho
 }
 
 export function onMessageSent(message: MessageDTO,
-                              conversation : ConversationDTO | null,
-                              setConversation : Dispatch<SetStateAction<ConversationDTO | null>>,
-                              setConversationsToShow : Dispatch<SetStateAction<ConversationDTO[]>>) {
-    if (conversation?.id !== message.conversationId){
+                              conversation: ConversationDTO | null,
+                              setConversation: Dispatch<SetStateAction<ConversationDTO | null>>,
+                              setConversationsToShow: Dispatch<SetStateAction<ConversationDTO[]>>) {
+    if (conversation?.id !== message.conversationId) {
         return;
     }
-    setConversation(prev => {
-        return prev ?
-            {
-                ...prev,
-                messages: [...prev.messages, message],
-                lastModified: message.sentAt
-            }
-            :
-            {
-                ...message.conversation,
-                messages: [message],
-                lastModified: message.sentAt
-            }
-    })
+    let updatedConversation = {...conversation};
+    if (updatedConversation){
+        updatedConversation.lastModified = message.sentAt;
+        updatedConversation.messages = [...updatedConversation.messages, message];
+    }
+    else {
+        updatedConversation = {...message.conversation, messages : [message]};
+    }
+    if (message.employerId){
+        updatedConversation.jobSeekersUnreadMessagesCount = conversation.jobSeekersUnreadMessagesCount + 1;
+    }
+    else {
+        updatedConversation.employersUnreadMessagesCount = conversation.employersUnreadMessagesCount + 1;
+    }
+    setConversation(updatedConversation)
     setConversationsToShow(prevConversations => {
         const conversationIndex = prevConversations.findIndex(c => c.id === conversation.id);
         const updatedConversations = [...prevConversations];
@@ -48,12 +49,12 @@ export function onMessageSent(message: MessageDTO,
     });
 }
 
-export function onShortConversationMessagesUpdate(message : MessageDTO, conversationInfo : ConversationDTO,
-                                                  setConversationsToShow : Dispatch<SetStateAction<ConversationDTO[]>>,
-                                                  setLastMessage : Dispatch<SetStateAction<MessageDTO>>){
-    if (message.conversationId == conversationInfo.id){
+export function onShortConversationMessagesUpdate(message: MessageDTO, conversationInfo: ConversationDTO,
+                                                  setConversationsToShow: Dispatch<SetStateAction<ConversationDTO[]>>,
+                                                  setLastMessage: Dispatch<SetStateAction<MessageDTO>>) {
+    if (message.conversationId == conversationInfo.id) {
         conversationInfo.messages.push(message);
-        conversationInfo.lastModified = message.sentAt;
+        conversationInfo.lastModified = message.conversation.lastModified;
         message.employerId ? conversationInfo.jobSeekersUnreadMessagesCount++ : conversationInfo.employersUnreadMessagesCount++;
         setConversationsToShow(prevConversations => {
             const conversationIndex = prevConversations.findIndex(conversation => conversation.id === conversationInfo.id);

@@ -47,11 +47,6 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
     useEffect(() => {
         fetchJobSeeker();
         chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
-        
-        return () => {
-            chatHubService.disconnect();
-        }
-        
     }, []);
 
     useEffect(() => {
@@ -67,7 +62,7 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
 
             }
         });
-    }, [conversation]);
+    }, [conversation?.id]);
     
     
 
@@ -104,8 +99,8 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
         setMessageInput("");
         setSendingMessages(prev => [...prev, messageInput]);
         try {
-            await chatHubService.sendMessageToEmployer(conversation!.employerId, messageInput, conversation!.jobId, conversation);
-            setSendingMessages(prev => prev.slice(0, -1));
+            await chatHubService.sendMessageToEmployer(conversation!.employerId, messageInput, conversation!.jobId, conversation?.id || null);
+            setSendingMessages(prev => prev.slice(1));
         } catch (err) {
             logErrorInfo(err)
         }

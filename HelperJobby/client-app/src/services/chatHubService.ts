@@ -34,8 +34,6 @@ export class ChatHubService {
             .withAutomaticReconnect()
             .build();
 
-        this.hubConnection.onclose(error => console.error('SignalR Connection Closed', error));
-
         try {
             await this.hubConnection.start();
         } catch (err) {
@@ -43,10 +41,10 @@ export class ChatHubService {
         }
     };
     public async sendMessageToJobSeeker(jobSeekerId: number, message: string, jobId : number,
-                                        conversation : ConversationDTO | null): Promise<void>{
+                                        conversationId : number | null): Promise<void>{
         if (this.hubConnection) {
             try {
-                await this.hubConnection.invoke('SendMessageToJobSeeker', jobSeekerId, message, jobId, conversation);
+                await this.hubConnection.invoke('SendMessageToJobSeeker', jobSeekerId, message, jobId, conversationId);
             }
             catch (err){
                 throw err;
@@ -55,10 +53,10 @@ export class ChatHubService {
     };  
 
     public async sendMessageToEmployer(employerId: number, message: string, jobId : number,
-                                        conversation : ConversationDTO | null): Promise<void>{
+                                        conversationId : number | null): Promise<void>{
         if (this.hubConnection) {
             try {
-                await this.hubConnection.invoke('SendMessageToEmployer', employerId, message, jobId, conversation);
+                await this.hubConnection.invoke('SendMessageToEmployer', employerId, message, jobId, conversationId);
             }
             catch (err){
                 throw err;
@@ -95,6 +93,7 @@ export class ChatHubService {
     };
     
     public registerShortConversationUpdateOnMessageReceive(onMessageReceived : (message : MessageDTO, senderId : number) => void){
+        this.unregisterMessageReceivedHandler();
         this.hubConnection?.on('ReceiveMessage', onMessageReceived);
     }
     
@@ -103,11 +102,7 @@ export class ChatHubService {
         this.messageSentHandler = onMessageSent;
         this.hubConnection?.on("MessageSent", onMessageSent);
     };
-
-    public registerConversationsUpdateHandler(onConversationUpdate: (message: MessageDTO) => void){
-        this.conversationUpdateHandler = onConversationUpdate;
-        this.hubConnection?.on('UpdateConversations', onConversationUpdate);
-    };
+    
     
     public registerMessageRead(onMessageRead : (message : MessageDTO) => void){
         this.messageReadHandler = onMessageRead;
@@ -125,13 +120,6 @@ export class ChatHubService {
         if (this.hubConnection && this.messageSentHandler) {
             this.hubConnection.off("MessageSent", this.messageSentHandler);
             this.messageSentHandler = undefined;
-        }
-    }
-
-    public unregisterConversationsUpdateHandler() {
-        if (this.hubConnection && this.conversationUpdateHandler) {
-            this.hubConnection.off('UpdateConversations', this.conversationUpdateHandler);
-            this.conversationUpdateHandler = undefined;
         }
     }
 

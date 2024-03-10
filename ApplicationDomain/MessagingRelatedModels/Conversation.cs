@@ -10,10 +10,10 @@ public class Conversation
     [Required]
     public DateTime LastModified { get; set; }
     
-    [Required]
+    [NotMapped]
     public int EmployersUnreadMessagesCount { get; set; }
     
-    [Required]
+    [NotMapped]
     public int JobSeekersUnreadMessagesCount { get; set; }
     public List<Message> Messages { get; set; } 
     [Required]

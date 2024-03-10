@@ -15,4 +15,5 @@ public class MessageDTO
     public int? EmployerId { get; set; }
     public EmployerDTO? Employer { get; set; }
     public int ConversationId { get; set; }
+    public ConversationWithoutMessagesDTO Conversation { get; set; }
 }

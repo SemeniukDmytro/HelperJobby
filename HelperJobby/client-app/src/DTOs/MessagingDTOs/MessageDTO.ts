@@ -1,6 +1,6 @@
 ﻿import {JobSeekerDTO} from "../accountDTOs/JobSeekerDTO";
 import {EmployerDTO} from "../accountDTOs/EmployerDTO";
-import {ConversationDTO} from "./ConversationDTO";
+import {ConversationWithoutMessagesDTO} from "./ConversationWithoutMessagesDTO";
 
 export interface MessageDTO{
     id : number;
@@ -12,5 +12,5 @@ export interface MessageDTO{
     employerId? : number;
     employer? : EmployerDTO;
     conversationId : number;
-    conversation : ConversationDTO;
+    conversation : ConversationWithoutMessagesDTO;
 }

@@ -20,11 +20,19 @@ public class MessageCommandRepository : IMessageCommandRepository
         {
             try
             {
-                _applicationContext.Entry(message.Conversation).Property(c => c.LastModified).IsModified = true;
-                _applicationContext.Entry(message.Conversation).Property(c => c.JobSeekersUnreadMessagesCount).IsModified = true;
-                _applicationContext.Entry(message.Conversation).Property(c => c.EmployersUnreadMessagesCount).IsModified = true;
+                var conversationStub = message.Conversation;
+                if (conversationStub == null)
+                {
+                    conversationStub = new Conversation()
+                    {
+                        Id = message.ConversationId
+                    };
+                    _applicationContext.Conversations.Attach(conversationStub);
+                }
 
-            
+                conversationStub.LastModified = message.SentAt;
+                _applicationContext.Entry(conversationStub).Property(c => c.LastModified).IsModified = true;
+                
                 _applicationContext.Messages.Add(message);
                 await _applicationContext.SaveChangesAsync();
                 await transaction.CommitAsync();
@@ -41,8 +49,6 @@ public class MessageCommandRepository : IMessageCommandRepository
 
     public async Task<Message> UpdateMessage(Message message)
     {
-        _applicationContext.Conversations.Entry(message.Conversation).Property(c => c.JobSeekersUnreadMessagesCount).IsModified = true;
-        _applicationContext.Conversations.Entry(message.Conversation).Property(c => c.EmployersUnreadMessagesCount).IsModified = true;
         _applicationContext.Messages.Update(message);
         await _applicationContext.SaveChangesAsync();
         return message;

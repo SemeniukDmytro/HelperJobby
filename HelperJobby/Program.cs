@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using ApplicationDAL.Context;
 using HelperJobby.Extensions;
 using HelperJobby.Hubs;
@@ -25,10 +26,8 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
-builder.Services.AddControllersWithViews()
-    .AddNewtonsoftJson(options =>
-        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-    );
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddAuthentication().AddJwtBearer(options =>
 {

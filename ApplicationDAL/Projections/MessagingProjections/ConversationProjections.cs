@@ -12,8 +12,8 @@ public class ConversationProjections
         {
             Id = c.Id,
             LastModified = c.LastModified,
-            JobSeekersUnreadMessagesCount = c.JobSeekersUnreadMessagesCount,
-            EmployersUnreadMessagesCount = c.EmployersUnreadMessagesCount,
+            JobSeekersUnreadMessagesCount = c.Messages.Count(m => !m.IsRead && m.JobSeekerId == null),
+            EmployersUnreadMessagesCount = c.Messages.Count(m => !m.IsRead && m.EmployerId == null),
             EmployerId = c.EmployerId,
             Employer = new Employer()
             {
@@ -48,8 +48,8 @@ public class ConversationProjections
         {
             Id = c.Id,
             LastModified = c.LastModified,
-            JobSeekersUnreadMessagesCount = c.JobSeekersUnreadMessagesCount,
-            EmployersUnreadMessagesCount = c.EmployersUnreadMessagesCount,
+            JobSeekersUnreadMessagesCount = c.Messages.Count(m => !m.IsRead && m.JobSeekerId == null),
+            EmployersUnreadMessagesCount = c.Messages.Count(m => !m.IsRead && m.EmployerId == null),
             Messages = c.Messages,
             EmployerId = c.EmployerId,
             Employer = new Employer()
