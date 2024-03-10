@@ -47,3 +47,22 @@ export function onMessageSent(message: MessageDTO,
         return updatedConversations;
     });
 }
+
+export function onShortConversationMessagesUpdate(message : MessageDTO, conversationInfo : ConversationDTO,
+                                                  setConversationsToShow : Dispatch<SetStateAction<ConversationDTO[]>>,
+                                                  setLastMessage : Dispatch<SetStateAction<MessageDTO>>){
+    if (message.conversationId == conversationInfo.id){
+        conversationInfo.messages.push(message);
+        conversationInfo.lastModified = message.sentAt;
+        message.employerId ? conversationInfo.jobSeekersUnreadMessagesCount++ : conversationInfo.employersUnreadMessagesCount++;
+        setConversationsToShow(prevConversations => {
+            const conversationIndex = prevConversations.findIndex(conversation => conversation.id === conversationInfo.id);
+            const updatedConversations = [...prevConversations];
+            if (conversationIndex !== -1) {
+                updatedConversations[conversationIndex] = {...conversationInfo};
+            }
+            return updatedConversations;
+        });
+        setLastMessage(message);
+    }
+}

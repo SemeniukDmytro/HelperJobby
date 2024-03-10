@@ -28,7 +28,8 @@ import OrganizationUsersPage from "../../EmployerSidePages/OrganizationUsersPage
 import JobCreationPagesWrap from "../../EmployersSideComponents/JobCreationPagesWrap/JobCreationPagesWrap";
 import EmployerMessagingPage from "../../EmployerSidePages/EmployerMessagingPage/EmployerMessagingPage";
 import EditEmployerInfoPage from "../../EmployerSidePages/EditEmployerInfoPage/EditEmployerInfoPage";
-import EmployerMessagingWrap from "../../EmployersSideComponents/EmployerMessagingWrap/EmployerMessagingWrap";
+import EmployerMessagingWrap
+    from "../../EmployerSidePages/EmployerMessagingPage/PageComponents/EmployerMessagingWrap/EmployerMessagingWrap";
 
 interface EmployerSideRoutesProps {
 }

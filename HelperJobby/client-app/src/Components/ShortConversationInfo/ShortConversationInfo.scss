@@ -1,4 +1,4 @@
-@use "../../../../Assets/scssSharedStyles/global-variables";
+@use "../../Assets/scssSharedStyles/global-variables";
 
 .selected-conversation-short-info-box {
   background-color: global-variables.$light-blue;
@@ -36,7 +36,6 @@
 
 .last-conversation-interaction {
   display: flex;
-  flex-grow: 1;
   justify-content: end;
   color: global-variables.$neutral-color-700;
   font-size: 0.75rem;
@@ -58,4 +57,25 @@
   &:active {
     background-color: global-variables.$light-blue-active;
   }
+}
+
+.conversation-update-info-container {
+  display: flex;
+  flex-grow: 1;
+  align-items: end;
+  flex-direction: column;
+}
+
+.unread-messages-count-container {
+  background-color: global-variables.$dark-red; 
+  color: white; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem; 
+  min-width: 0.75rem; 
+  height: 0.75rem;
+  border-radius: 9999rem;
+  font-size: 0.75rem;
+  font-weight: 700;
 }

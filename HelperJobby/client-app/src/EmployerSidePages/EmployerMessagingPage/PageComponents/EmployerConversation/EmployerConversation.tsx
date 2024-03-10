@@ -21,12 +21,10 @@ import {onConversationsUpdate, onMessageSent} from "../../../../utils/messaging/
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
 
 interface EmployerJobChatComponentProps {
-    conversationsToShow : ConversationDTO[];
     setConversationsToShow : Dispatch<SetStateAction<ConversationDTO[]>>
 }
 
 const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
-    conversationsToShow,
     setConversationsToShow
                                                                  }) => {
     const {employer} = useEmployer();
@@ -175,6 +173,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
                                         isMyMessage={message.employerId == employer?.id}
                                         conversation={conversation}
                                         setConversation={setConversation}
+                                        setConversationsToShow={setConversationsToShow}
                                         key={index}
                                     />
                                 ))}

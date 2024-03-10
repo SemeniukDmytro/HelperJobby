@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import './EmployerMessagingWrap.scss';
-import {EmployerMessagingConversationProvider} from "../../contexts/EmployerMessagingConversationContext";
 import {Outlet} from "react-router-dom";
+import {EmployerMessagingConversationProvider} from "../../../../contexts/EmployerMessagingConversationContext";
 
 interface EmployerMessagingWrapProps {}
 

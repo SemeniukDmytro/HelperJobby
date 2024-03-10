@@ -9,19 +9,20 @@ import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import JobSeekerPagesPaths from "../../../../AppRoutes/Paths/JobSeekerPagesPaths";
-import ShortConversationInfoForJobSeeker from "../ShortConversationInfoForJobSeeker/ShortConversationInfoForJobSeeker";
-import {ChatHubService} from "../../../../services/chatHubService";
-import {onConversationsUpdate} from "../../../../utils/messaging/messagingEventsHandlers";
+import {useJobSeekerMessagingConversation} from "../../../../hooks/contextHooks/useJobSeekerMessagingConversation";
+import ShortConversationInfo from "../../../../Components/ShortConversationInfo/ShortConversationInfo";
+import {AccountTypes} from "../../../../enums/utilityEnums/AccountTypes";
 
 interface JobSeekerMessagingComponentProps {
 }
 
 const JobSeekerMessagingComponent: FC<JobSeekerMessagingComponentProps> = () => {
     const navigate = useNavigate();
-    const {jobSeeker, setJobSeeker} = useJobSeeker();
+    const {setJobSeeker} = useJobSeeker();
     const [loading, setLoading] = useState(true);
     const conversationService = new ConversationService();
     const [conversationsToShow, setConversationsToShow] = useState<ConversationDTO[]>([]);
+    const {conversation} = useJobSeekerMessagingConversation();
     
     useEffect(() => {
         loadJobSeekerAllConversations();
@@ -67,9 +68,14 @@ const JobSeekerMessagingComponent: FC<JobSeekerMessagingComponentProps> = () => 
                                     conversationsToShow.length != 0 &&
                                     <div className={"conversations-container"}>
                                         {
-                                            conversationsToShow.map((conversation, index) => (
-                                                <ShortConversationInfoForJobSeeker conversationInfo={conversation}
-                                                                                   key={index}/>
+                                            conversationsToShow.map((conv, index) => (
+                                                <ShortConversationInfo conversationInfo={conv}
+                                                                       conversation={conversation}
+                                                                       secondParticipantName={conv.employer.fullName || "Not specified"}
+                                                                       setConversationsToShow={setConversationsToShow}
+                                                                       navigateToFullConversationPath={`${JobSeekerPagesPaths.CONVERSATIONS}?conversationId=${conv.id}`}
+                                                                       shortConversationType={AccountTypes.jobSeeker}
+                                                                       key={index}/>
                                             ))
                                         }
                                     </div>
@@ -78,7 +84,6 @@ const JobSeekerMessagingComponent: FC<JobSeekerMessagingComponentProps> = () => 
 
                         </div>
                         <JobSeekerConversation
-                            conversationsToShow={conversationsToShow}
                             setConversationsToShow={setConversationsToShow}
                         /></div>
                 </div>

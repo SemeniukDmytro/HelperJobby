@@ -41,6 +41,8 @@ public class MessageCommandRepository : IMessageCommandRepository
 
     public async Task<Message> UpdateMessage(Message message)
     {
+        _applicationContext.Conversations.Entry(message.Conversation).Property(c => c.JobSeekersUnreadMessagesCount).IsModified = true;
+        _applicationContext.Conversations.Entry(message.Conversation).Property(c => c.EmployersUnreadMessagesCount).IsModified = true;
         _applicationContext.Messages.Update(message);
         await _applicationContext.SaveChangesAsync();
         return message;

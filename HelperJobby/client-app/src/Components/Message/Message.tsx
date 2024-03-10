@@ -10,14 +10,16 @@ interface MessageProps {
     message: MessageDTO;
     isMyMessage: boolean;
     conversation: ConversationDTO;
-    setConversation: Dispatch<SetStateAction<ConversationDTO | null>>
+    setConversation: Dispatch<SetStateAction<ConversationDTO | null>>;
+    setConversationsToShow: Dispatch<SetStateAction<ConversationDTO[]>>;
 }
 
 const Message: FC<MessageProps> = ({
                                        message,
                                        isMyMessage,
                                        conversation,
-                                       setConversation
+                                       setConversation,
+                                       setConversationsToShow
                                    }) => {
     const chatHubService = ChatHubService.getInstance();
     const messageRef = useRef<HTMLDivElement>(null);
@@ -36,11 +38,23 @@ const Message: FC<MessageProps> = ({
             rootMargin: '0px',
             threshold: 0.1
         });
-        if (messageRef.current && !message.isRead){
+        if (messageRef.current && !message.isRead) {
             observer.observe(messageRef.current);
         }
         chatHubService.registerMessageRead((message) => {
             setIsMessageRead(true);
+            if (message.conversationId == conversation.id){
+                const updatedShortConversation = {...conversation};
+                message.employerId ? updatedShortConversation.jobSeekersUnreadMessagesCount-- : updatedShortConversation.employersUnreadMessagesCount--;
+                setConversationsToShow(prevConversations => {
+                    const conversationIndex = prevConversations.findIndex(conversation => conversation.id === updatedShortConversation.id);
+                    const updatedConversations = [...prevConversations];
+                    if (conversationIndex !== -1) {
+                        updatedConversations[conversationIndex] = {...updatedShortConversation};
+                    }
+                    return updatedConversations;
+                });
+            }
         });
 
         return () => observer.disconnect();
@@ -48,13 +62,12 @@ const Message: FC<MessageProps> = ({
 
     async function markMessageAsRead() {
         try {
-            if (message.isRead){
+            if (message.isRead) {
                 return;
             }
-            if (message.jobSeekerId && !isMyMessage){
+            if (message.jobSeekerId && !isMyMessage) {
                 await chatHubService.readMessageFromJobSeeker(message.id, message.jobSeekerId);
-            }
-            else if (message.employerId && !isMyMessage){
+            } else if (message.employerId && !isMyMessage) {
                 await chatHubService.readMessageFromEmployer(message.id, message.employerId);
             }
             setConversation(prevState => (prevState && {

@@ -9,10 +9,10 @@ import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import EmployerJobChatComponent from "../EmployerConversation/EmployerConversation";
 import {ConversationService} from "../../../../services/conversationService";
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
-import ShortConversationInfoForEmployer from "../ShortConversationInfoForEmployer/ShortConversationInfoForEmployer";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
-import {onConversationsUpdate} from "../../../../utils/messaging/messagingEventsHandlers";
-import {ChatHubService} from "../../../../services/chatHubService";
+import {useEmployerMessagingConversation} from "../../../../hooks/contextHooks/useEmployerMessagingConversation";
+import ShortConversationInfo from "../../../../Components/ShortConversationInfo/ShortConversationInfo";
+import {AccountTypes} from "../../../../enums/utilityEnums/AccountTypes";
 
 interface EmployerMessagesComponentProps {
 }
@@ -26,12 +26,9 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
     const jobService = new JobService();
     const conversationService = new ConversationService();
     const [conversationsToShow, setConversationsToShow] = useState<ConversationDTO[]>([]);
-    const chatHubService = ChatHubService.getInstance();
+    const {conversation} = useEmployerMessagingConversation();
     
     useEffect(() => {
-        chatHubService.registerConversationsUpdateHandler((message) => {
-            onConversationsUpdate(message, setConversationsToShow);
-        });
         loadPageInitialData();
         loadEmployerAllConversations();
     }, []);
@@ -107,16 +104,24 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
                         {conversationsToShow.length != 0 &&
                             <div className={"conversations-container"}>
                                 {
-                                    conversationsToShow.map((conversation, index) => (
-                                        <ShortConversationInfoForEmployer conversationInfo={conversation}
-                                                                          setConversationsToShow={setConversationsToShow}
-                                                                          key={index}/>
+                                    conversationsToShow.map((conv, index) => (
+                                        <ShortConversationInfo conversationInfo={conv}
+                                                               conversation={conversation}
+                                                               secondParticipantName={(conv.jobSeeker.firstName && conv.jobSeeker.lastName) ?
+                                                                              `${conv.jobSeeker.firstName} ${conv.jobSeeker.lastName}` :
+                                                                              "Not specified"}
+                                                               setConversationsToShow={setConversationsToShow}
+                                                               navigateToFullConversationPath={`${EmployerPagesPaths.MESSAGES}?conversationId=${conv.id}`}
+                                                               shortConversationType={AccountTypes.employer}
+                                                               key={index}/>
                                     ))
                                 }
                             </div>
                         }
                     </div>
-                    <EmployerJobChatComponent conversationsToShow={conversationsToShow} setConversationsToShow={setConversationsToShow}/>
+                    <EmployerJobChatComponent
+                        setConversationsToShow={setConversationsToShow}
+                    />
                 </div>
             </div>
 

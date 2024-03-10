@@ -18,13 +18,11 @@ import {groupMessagesByDate} from "../../../../utils/messaging/groupMessagesByDa
 import {onConversationsUpdate, onMessageSent} from "../../../../utils/messaging/messagingEventsHandlers";
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
 
-interface JobSeekerConversationProps {
-    conversationsToShow : ConversationDTO[];
+interface JobSeekerConversationProps {  
     setConversationsToShow : Dispatch<SetStateAction<ConversationDTO[]>>
 }
 
 const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
-    conversationsToShow,
     setConversationsToShow
                                                                }) => {
     const {jobSeeker, fetchJobSeeker} = useJobSeeker();
@@ -40,8 +38,14 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
     const [sendingMessages, setSendingMessages] = useState<string[]>([]);
 
     useEffect(() => {
+        if (messagesWindowRef.current) {
+            const messagesContainer = messagesWindowRef.current;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    }, [[], conversation?.messages]);
+    
+    useEffect(() => {
         fetchJobSeeker();
-
         chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
         
         return () => {
@@ -51,9 +55,6 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
     }, []);
 
     useEffect(() => {
-        chatHubService.registerConversationsUpdateHandler((message) => {
-            onConversationsUpdate(message, setConversationsToShow);
-        });
 
         chatHubService.registerMessageSent((message) => {
             onMessageSent(message, conversation, setConversation, setConversationsToShow);
@@ -61,17 +62,14 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
 
         chatHubService.registerMessageReceivedHandler((message, senderId) => {
             if (senderId != jobSeeker?.id) {
-                onMessageSent(message, conversation, setConversation, setConversationsToShow)
+                onMessageSent(message, conversation, setConversation, setConversationsToShow);
+                onConversationsUpdate(message, setConversationsToShow);
+
             }
         });
     }, [conversation]);
     
-    useEffect(() => {
-        if (messagesWindowRef.current) {
-            const messagesContainer = messagesWindowRef.current;
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-    }, [[], conversation?.messages]);
+    
 
     useEffect(() => {
         if (!conversationId || isNanAfterIntParse(conversationId))
@@ -82,16 +80,7 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
         }
 
         loadConversationInfo();
-
-        return () => {
-            unsubscribeFromConversationEvents();
-        }
     }, [conversationId]);
-
-    function unsubscribeFromConversationEvents() {
-        chatHubService.unregisterMessageReceivedHandler()
-        chatHubService.unregisterMessageSentHandler();
-    }
     
 
     async function loadConversationInfo() {
@@ -112,7 +101,6 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
 
     async function sendMessage() {
         if (!messageInput.trim()) return;
-        const conversationId = conversation?.id || null;
         setMessageInput("");
         setSendingMessages(prev => [...prev, messageInput]);
         try {
@@ -174,6 +162,7 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
                                             isMyMessage={message.jobSeekerId == jobSeeker?.id}
                                             conversation={conversation}
                                             setConversation={setConversation}
+                                            setConversationsToShow={setConversationsToShow}
                                             key={index}
                                         />
                                     ))}
