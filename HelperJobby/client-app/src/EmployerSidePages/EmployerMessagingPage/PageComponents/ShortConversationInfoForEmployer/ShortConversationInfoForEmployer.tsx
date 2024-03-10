@@ -1,37 +1,54 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import './ShortConversationInfoForEmployer.scss';
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
-import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValidators";
 import {getConversationLastMessageFormattedTime
 } from "../../../../utils/convertLogic/formatDate";
 import {useEmployerMessagingConversation} from "../../../../hooks/contextHooks/useEmployerMessagingConversation";
+import {ChatHubService} from "../../../../services/chatHubService";
 
 interface ShortConversationInfoForEmployerProps {
-    conversationInfo : ConversationDTO
+    conversationInfo : ConversationDTO;
+    setConversationsToShow : Dispatch<SetStateAction<ConversationDTO[]>>;
 }
 
 const ShortConversationInfoForEmployer: FC<ShortConversationInfoForEmployerProps> = ({
-    conversationInfo
+    conversationInfo,
+    setConversationsToShow
                                                                }) => {
-    const [searchParams] = useSearchParams();
+    const chatHubService = ChatHubService.getInstance();
     const {conversation} = useEmployerMessagingConversation();
-    const candidateId = searchParams.get("jobSeekerId");
-    const jobId = searchParams.get("jobId");
-    const conversationId = searchParams.get("conversationId");
     const navigate = useNavigate();
-    const [isSelectedConversation, setIsSelectedConversation] = useState(getInfoAboutSelectedConversation);
     const [lastMessageTime, setLastMessageTime] = useState(getConversationLastMessageFormattedTime(conversationInfo.lastModified) || "");
     const [lastMessage, setLastMessage] = useState(conversationInfo.messages[conversationInfo.messages.length-1] || null);
 
     useEffect(() => {
-        if (!conversation){
-            setIsSelectedConversation(false);
-            return;
+        if (conversationInfo.id != conversation?.id){
+            chatHubService.registerShortConversationUpdateOnMessageReceive((message, senderId) => {
+                if (message.conversationId == conversationInfo.id){
+                    conversationInfo.messages.push(message);
+                    conversationInfo.lastModified = message.sentAt;
+                    setConversationsToShow(prevConversations => {
+                        const conversationIndex = prevConversations.findIndex(conversation => conversation.id === conversationInfo.id);
+                        const updatedConversations = [...prevConversations];
+                        if (conversationIndex !== -1) {
+                            updatedConversations[conversationIndex] = {...conversationInfo};
+                        }
+                        return updatedConversations;
+                    });
+                    console.log(`setLast 1 for ${conversationInfo}`)
+                    setLastMessage(message)
+                    setLastMessageTime(getConversationLastMessageFormattedTime(message.sentAt));
+                }
+            });
         }
-        setIsSelectedConversation(getInfoAboutSelectedConversation);
-    }, [jobId, conversationId, candidateId, conversation]);
+    }, []);
+    
+    useEffect(() => {
+        console.log(`setLast 2 for ${conversationInfo}`)
+        setLastMessage(conversationInfo.messages[conversationInfo.messages.length-1])
+    },[conversationInfo])
 
     useEffect(() => {
         if (conversationInfo.id != conversation?.id){
@@ -41,28 +58,10 @@ const ShortConversationInfoForEmployer: FC<ShortConversationInfoForEmployerProps
         if (!newLastMessage){
             return;
         }
+        console.log(`setLast 3 for ${conversationInfo}`)
         setLastMessage(newLastMessage);
         setLastMessageTime(getConversationLastMessageFormattedTime(newLastMessage.sentAt));
     }, [conversation]);
-    
-    
-    function getInfoAboutSelectedConversation(){
-        if (!conversation){
-            return false;
-        }
-        if (candidateId && jobId && !isNanAfterIntParse(candidateId) && !isNanAfterIntParse(jobId)){
-            if (conversationInfo.jobId == parseInt(jobId) && conversationInfo.jobSeekerId == parseInt(jobId)){
-                return true;
-            }
-        }
-        else if (conversationId && !isNanAfterIntParse(conversationId)){
-            if (conversationInfo.id == parseInt(conversationId)){
-                return true;
-            }
-        }
-        
-        return false;
-    }
     
     function navigateToFullConversation(){
         navigate(`${EmployerPagesPaths.MESSAGES}?conversationId=${conversationInfo.id}`);
@@ -70,7 +69,7 @@ const ShortConversationInfoForEmployer: FC<ShortConversationInfoForEmployerProps
     
     
     return (
-        <div className={isSelectedConversation ? "selected-conversation-short-info-box" : "conversation-short-info-box"}>
+        <div className={conversation?.id == conversationInfo.id ? "selected-conversation-short-info-box" : "conversation-short-info-box"}>
             <div
                 onClick={navigateToFullConversation}
                 className="short-conv-info-container">

@@ -1,7 +1,8 @@
-﻿import {HubConnection, HubConnectionBuilder, LogLevel} from '@microsoft/signalr';
+﻿import {HubConnection, HubConnectionBuilder} from '@microsoft/signalr';
 import {getAuthToken} from "../utils/authTokenInteraction";
 import {logErrorInfo} from "../utils/logErrorInfo";
 import {MessageDTO} from "../DTOs/MessagingDTOs/MessageDTO";
+import {ConversationDTO} from "../DTOs/MessagingDTOs/ConversationDTO";
 
 export class ChatHubService {
     private hubConnection: HubConnection | null = null;
@@ -42,10 +43,10 @@ export class ChatHubService {
         }
     };
     public async sendMessageToJobSeeker(jobSeekerId: number, message: string, jobId : number,
-                                        conversationId : number | null): Promise<void>{
+                                        conversation : ConversationDTO | null): Promise<void>{
         if (this.hubConnection) {
             try {
-                await this.hubConnection.invoke('SendMessageToJobSeeker', jobSeekerId, message, jobId, conversationId);
+                await this.hubConnection.invoke('SendMessageToJobSeeker', jobSeekerId, message, jobId, conversation);
             }
             catch (err){
                 throw err;
@@ -54,10 +55,10 @@ export class ChatHubService {
     };  
 
     public async sendMessageToEmployer(employerId: number, message: string, jobId : number,
-                                        conversationId : number | null): Promise<void>{
+                                        conversation : ConversationDTO | null): Promise<void>{
         if (this.hubConnection) {
             try {
-                await this.hubConnection.invoke('SendMessageToEmployer', employerId, message, jobId, conversationId);
+                await this.hubConnection.invoke('SendMessageToEmployer', employerId, message, jobId, conversation);
             }
             catch (err){
                 throw err;
@@ -88,11 +89,17 @@ export class ChatHubService {
     };
 
     public registerMessageReceivedHandler(onMessageReceived: (message: MessageDTO, senderId : number) => void){
+        this.unregisterMessageReceivedHandler();
         this.messageReceivedHandler = onMessageReceived;
         this.hubConnection?.on('ReceiveMessage', onMessageReceived);
     };
     
+    public registerShortConversationUpdateOnMessageReceive(onMessageReceived : (message : MessageDTO, senderId : number) => void){
+        this.hubConnection?.on('ReceiveMessage', onMessageReceived);
+    }
+    
     public registerMessageSent(onMessageSent : (message : MessageDTO) => void){
+        this.unregisterMessageSentHandler();
         this.messageSentHandler = onMessageSent;
         this.hubConnection?.on("MessageSent", onMessageSent);
     };

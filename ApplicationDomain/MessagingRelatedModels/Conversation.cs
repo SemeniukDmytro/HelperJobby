@@ -9,6 +9,12 @@ public class Conversation
     public int Id { get; set; }
     [Required]
     public DateTime LastModified { get; set; }
+    
+    [Required]
+    public int EmployersUnreadMessagesCount { get; set; }
+    
+    [Required]
+    public int JobSeekersUnreadMessagesCount { get; set; }
     public List<Message> Messages { get; set; } 
     [Required]
     [ForeignKey("JobSeekerId")]

@@ -8,6 +8,7 @@ public class MessageProfile : Profile
 {
     public MessageProfile()
     {
-        CreateMap<Message, MessageDTO>().ReverseMap();
+        CreateMap<Message, MessageDTO>();
+        CreateMap<MessageDTO, Message>();
     }
 }

@@ -7,6 +7,8 @@ public class ConversationDTO
 {
     public int Id { get; set; }
     public DateTime LastModified { get; set; }
+    public int EmployersUnreadMessagesCount { get; set; }
+    public int JobSeekersUnreadMessagesCount { get; set; }
     public List<MessageDTO> Messages { get; set; }
     public int JobSeekerId { get; set; }
     public JobSeekerDTO JobSeeker { get; set; }

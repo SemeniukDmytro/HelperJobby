@@ -11,6 +11,8 @@ import {ConversationService} from "../../../../services/conversationService";
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
 import ShortConversationInfoForEmployer from "../ShortConversationInfoForEmployer/ShortConversationInfoForEmployer";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
+import {onConversationsUpdate} from "../../../../utils/messaging/messagingEventsHandlers";
+import {ChatHubService} from "../../../../services/chatHubService";
 
 interface EmployerMessagesComponentProps {
 }
@@ -24,9 +26,12 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
     const jobService = new JobService();
     const conversationService = new ConversationService();
     const [conversationsToShow, setConversationsToShow] = useState<ConversationDTO[]>([]);
-    
+    const chatHubService = ChatHubService.getInstance();
     
     useEffect(() => {
+        chatHubService.registerConversationsUpdateHandler((message) => {
+            onConversationsUpdate(message, setConversationsToShow);
+        });
         loadPageInitialData();
         loadEmployerAllConversations();
     }, []);
@@ -68,6 +73,7 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
             setLoading(false);
         }
     }
+    
 
     function navigateToJobPostingPage() {
         navigate(EmployerPagesPaths.JOB_POSTING);
@@ -102,7 +108,9 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
                             <div className={"conversations-container"}>
                                 {
                                     conversationsToShow.map((conversation, index) => (
-                                        <ShortConversationInfoForEmployer conversationInfo={conversation} key={index}/>
+                                        <ShortConversationInfoForEmployer conversationInfo={conversation}
+                                                                          setConversationsToShow={setConversationsToShow}
+                                                                          key={index}/>
                                     ))
                                 }
                             </div>

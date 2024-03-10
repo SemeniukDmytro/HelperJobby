@@ -36,7 +36,7 @@ const Message: FC<MessageProps> = ({
             rootMargin: '0px',
             threshold: 0.1
         });
-        if (messageRef.current){
+        if (messageRef.current && !message.isRead){
             observer.observe(messageRef.current);
         }
         chatHubService.registerMessageRead((message) => {
@@ -48,6 +48,9 @@ const Message: FC<MessageProps> = ({
 
     async function markMessageAsRead() {
         try {
+            if (message.isRead){
+                return;
+            }
             if (message.jobSeekerId && !isMyMessage){
                 await chatHubService.readMessageFromJobSeeker(message.id, message.jobSeekerId);
             }

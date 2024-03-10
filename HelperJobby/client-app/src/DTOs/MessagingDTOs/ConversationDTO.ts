@@ -6,6 +6,8 @@ import {JobDTO} from "../jobRelatetedDTOs/JobDTO";
 export interface ConversationDTO{
     id : number;
     lastModified : string;
+    employersUnreadMessagesCount : number;
+    jobSeekersUnreadMessagesCount : number;
     messages : MessageDTO[];
     jobSeekerId : number;
     jobSeeker : JobSeekerDTO;

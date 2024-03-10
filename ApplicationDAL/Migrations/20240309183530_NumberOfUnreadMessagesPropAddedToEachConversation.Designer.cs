@@ -3,6 +3,7 @@ using System;
 using ApplicationDAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApplicationDAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240309183530_NumberOfUnreadMessagesPropAddedToEachConversation")]
+    partial class NumberOfUnreadMessagesPropAddedToEachConversation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,20 +151,17 @@ namespace ApplicationDAL.Migrations
                     b.Property<int>("EmployerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EmployersUnreadMessagesCount")
-                        .HasColumnType("int");
-
                     b.Property<int>("JobId")
                         .HasColumnType("int");
 
                     b.Property<int>("JobSeekerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("JobSeekersUnreadMessagesCount")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int>("NumberOfUnreadMessages")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

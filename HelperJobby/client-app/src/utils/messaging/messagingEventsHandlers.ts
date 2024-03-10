@@ -6,7 +6,6 @@ export function onConversationsUpdate(message: MessageDTO, setConversationsToSho
     setConversationsToShow(prevConversations => {
         const updatedConversations = [...prevConversations];
         const conversationIndex = updatedConversations.findIndex(conversation => conversation.id === message.conversationId);
-
         if (conversationIndex > -1) {
             const [updatedConversation] = updatedConversations.splice(conversationIndex, 1);
             updatedConversations.unshift(updatedConversation);
@@ -15,7 +14,13 @@ export function onConversationsUpdate(message: MessageDTO, setConversationsToSho
     });
 }
 
-export function onMessageSent(message: MessageDTO, setConversation : Dispatch<SetStateAction<ConversationDTO | null>>) {
+export function onMessageSent(message: MessageDTO,
+                              conversation : ConversationDTO | null,
+                              setConversation : Dispatch<SetStateAction<ConversationDTO | null>>,
+                              setConversationsToShow : Dispatch<SetStateAction<ConversationDTO[]>>) {
+    if (conversation?.id !== message.conversationId){
+        return;
+    }
     setConversation(prev => {
         return prev ?
             {
@@ -30,4 +35,15 @@ export function onMessageSent(message: MessageDTO, setConversation : Dispatch<Se
                 lastModified: message.sentAt
             }
     })
+    setConversationsToShow(prevConversations => {
+        const conversationIndex = prevConversations.findIndex(c => c.id === conversation.id);
+        const updatedConversations = [...prevConversations];
+        const conversationInfo = {...conversation};
+        conversationInfo.messages.push(message);
+        conversationInfo.lastModified = message.sentAt;
+        if (conversationIndex !== -1) {
+            updatedConversations[conversationIndex] = {...conversationInfo};
+        }
+        return updatedConversations;
+    });
 }

@@ -8,6 +8,7 @@ public class ConversationProfile : Profile
 {
     public ConversationProfile()
     {
-        CreateMap<Conversation, ConversationDTO>().ReverseMap();
+        CreateMap<Conversation, ConversationDTO>();
+        CreateMap<ConversationDTO, Conversation>();
     }
 }

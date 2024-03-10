@@ -13,21 +13,23 @@ public class MessageService : IMessageService
         _messageQueryRepository = messageQueryRepository;
     }
 
-    public async Task<Message> CreateMessageToEmployer(string message, int jobSeekerId, int conversationId)
+    public async Task<Message> CreateMessageToEmployer(string message, int jobSeekerId, Conversation conversation)
     {
         
-        var createdMessage = PopulateMessageEntityWithCommonInitialData(message, conversationId);
+        var createdMessage = PopulateMessageEntityWithCommonInitialData(message, conversation);
         createdMessage.JobSeekerId = jobSeekerId;
+        conversation.EmployersUnreadMessagesCount++;
 
         return createdMessage;
 
     }
 
-    public async Task<Message> CreateMessageToJobSeeker(string message, int employerId, int conversationId)
+    public async Task<Message> CreateMessageToJobSeeker(string message, int employerId, Conversation conversation)
     {
 
-        var createdMessage = PopulateMessageEntityWithCommonInitialData(message, conversationId);
+        var createdMessage = PopulateMessageEntityWithCommonInitialData(message, conversation);
         createdMessage.EmployerId = employerId;
+        conversation.JobSeekersUnreadMessagesCount++;
 
         return createdMessage;
     }
@@ -41,11 +43,19 @@ public class MessageService : IMessageService
         }
 
         message.IsRead = true;
+        if (message.EmployerId != null)
+        {
+            message.Conversation.JobSeekersUnreadMessagesCount--;
+        }
+        else
+        {
+            message.Conversation.EmployersUnreadMessagesCount--;
+        }
         return message;
     }
 
 
-    private Message PopulateMessageEntityWithCommonInitialData(string message, int conversationId)
+    private Message PopulateMessageEntityWithCommonInitialData(string message, Conversation conversation)
     {
         if (string.IsNullOrEmpty(message))
         {
@@ -55,10 +65,12 @@ public class MessageService : IMessageService
         var messageEntity = new Message()
         {
             Content = message,
-            ConversationId = conversationId,
+            ConversationId = conversation.Id,
+            Conversation = conversation,
             SentAt = DateTime.Now,
             IsRead = false
         };
+        conversation.LastModified = DateTime.Now;
 
         return messageEntity;
     }

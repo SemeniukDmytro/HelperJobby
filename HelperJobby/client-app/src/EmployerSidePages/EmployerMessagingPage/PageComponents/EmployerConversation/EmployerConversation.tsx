@@ -42,7 +42,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
     const messagesWindowRef = useRef<HTMLDivElement>(null);
     const {conversation, setConversation} = useEmployerMessagingConversation();
     const [sendingMessages, setSendingMessages] = useState<string[]>([]);
-
+    
     useEffect(() => {
         if (messagesWindowRef.current) {
             const messagesContainer = messagesWindowRef.current;
@@ -53,23 +53,26 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
     useEffect(() => {
 
         chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
-
-        chatHubService.registerConversationsUpdateHandler((message) => {
-            onConversationsUpdate(message, setConversationsToShow);
-        });
+        return () => {
+            chatHubService.disconnect();
+        }
         
+    }, []);
+
+    useEffect(() => {
+
         chatHubService.registerMessageSent((message) => {
-            onMessageSent(message, setConversation);
+            onMessageSent(message, conversation, setConversation, setConversationsToShow);
         });
 
         chatHubService.registerMessageReceivedHandler((message, senderId) => {
             if (senderId != employer?.id) {
-                onMessageSent(message, setConversation)
+                onMessageSent(message, conversation, setConversation, setConversationsToShow);
+                onConversationsUpdate(message, setConversationsToShow);
+
             }
         });
-        
-    }, []);
-    
+    }, [conversation]);
 
     useEffect(() => {
         if ((!jobId || !candidateId || isNanAfterIntParse(jobId) || isNanAfterIntParse(candidateId)) && (!conversationId || isNanAfterIntParse(conversationId))) {
@@ -108,12 +111,11 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
 
     async function sendMessage() {
         if (!messageInput.trim()) return;
-        const conversationId = conversation?.id || null;
         setMessageInput("");
         setSendingMessages(prev => [...prev, messageInput]);
         try {
             await chatHubService.sendMessageToJobSeeker(conversation?.jobSeekerId || parseInt(candidateId!)
-                , messageInput, conversation?.jobId || parseInt(jobId!), conversationId);
+                , messageInput, conversation?.jobId || parseInt(jobId!), conversation);
             setSendingMessages(prev => prev.slice(0, -1));
         } catch (err) {
             logErrorInfo(err)

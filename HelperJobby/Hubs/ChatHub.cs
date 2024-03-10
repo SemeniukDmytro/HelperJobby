@@ -24,7 +24,7 @@ public class ChatHub : Hub
         _mapper = mapper;
     }
 
-    public async Task SendMessageToJobSeeker(int jobSeekerId, string message, int jobId, int? conversationId)
+    public async Task SendMessageToJobSeeker(int jobSeekerId, string message, int jobId, ConversationDTO? conversationDTO)
     {
         var senderId = Context.User.Claims.FirstOrDefault(c => c.Type == "employerId")?.Value;
         if (string.IsNullOrEmpty(senderId) || !int.TryParse(senderId, out var employerId))
@@ -32,15 +32,13 @@ public class ChatHub : Hub
             throw new UnauthorizedException();
         }
 
-        Conversation conversation = null;
-        if (conversationId == null)
+        var conversation = _mapper.Map<Conversation>(conversationDTO);
+        if (conversation == null)
         {
-            conversation = await _conversationService.EnsureConversationExists(employerId, jobSeekerId, jobId);
-            conversationId = conversation.Id;
+            conversation = await _conversationService.EnsureConversationExists(jobSeekerId, employerId, jobId);
         }
         
-        var createdMessage = await _messageService.CreateMessageToJobSeeker(message, employerId, conversationId.Value);
-        createdMessage.Conversation = conversation;
+        var createdMessage = await _messageService.CreateMessageToJobSeeker(message, employerId, conversation);
         createdMessage = await _messageCommandRepository.CreateMessage(createdMessage);
         var messageDTO = _mapper.Map<MessageDTO>(createdMessage);
         
@@ -50,7 +48,7 @@ public class ChatHub : Hub
         await Clients.Caller.SendAsync("UpdateConversations", messageDTO);
     }
     
-    public async Task SendMessageToEmployer(int employerId, string message, int jobId, int? conversationId)
+    public async Task SendMessageToEmployer(int employerId, string message, int jobId, ConversationDTO? conversationDTO)
     {
         var senderId = Context.User.Claims.FirstOrDefault(c => c.Type == "jobSeekerId")?.Value;
         if (string.IsNullOrEmpty(senderId) || !int.TryParse(senderId, out var jobSeekerId))
@@ -58,15 +56,13 @@ public class ChatHub : Hub
             throw new UnauthorizedException();
         }
 
-        Conversation conversation = null;
-        if (conversationId == null)
+        var conversation = _mapper.Map<Conversation>(conversationDTO);
+        if (conversation == null)
         {
             conversation = await _conversationService.EnsureConversationExists(jobSeekerId, employerId, jobId);
-            conversationId = conversation.Id;
         }
         
-        var createdMessage = await _messageService.CreateMessageToEmployer(message, jobSeekerId, conversationId.Value);
-        createdMessage.Conversation = conversation;
+        var createdMessage = await _messageService.CreateMessageToEmployer(message, jobSeekerId, conversation);
         createdMessage = await _messageCommandRepository.CreateMessage(createdMessage);
         var messageDTO = _mapper.Map<MessageDTO>(createdMessage);
         

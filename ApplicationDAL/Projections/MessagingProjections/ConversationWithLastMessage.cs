@@ -7,6 +7,8 @@ public class ConversationWithLastMessage
 {
         public int Id { get; set; }
         public DateTime LastModified { get; set; }
+        public int EmployersUnreadMessagesCount { get; set; }
+        public int JobSeekersUnreadMessagesCount { get; set; }
         public Message? LastConversationMessage { get; set; }
         public int JobSeekerId { get; set; }
         public JobSeeker JobSeeker { get; set; }

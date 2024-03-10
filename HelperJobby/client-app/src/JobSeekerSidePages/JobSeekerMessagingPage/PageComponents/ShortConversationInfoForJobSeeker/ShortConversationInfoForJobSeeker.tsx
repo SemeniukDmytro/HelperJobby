@@ -61,6 +61,8 @@ const ShortConversationInfoForJobSeeker: FC<ShortConversationInfoForJobSeekerPro
     function navigateToFullConversation() {
         navigate(`${JobSeekerPagesPaths.CONVERSATIONS}?conversationId=${conversationInfo.id}`);
     }
+    
+    
 
     return (
         <div
