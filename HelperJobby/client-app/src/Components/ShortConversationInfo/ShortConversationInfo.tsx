@@ -1,15 +1,13 @@
-import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import './ShortConversationInfo.scss';
 import {ConversationDTO} from "../../DTOs/MessagingDTOs/ConversationDTO";
 import {ChatHubService} from "../../services/chatHubService";
 import {useNavigate} from "react-router-dom";
-import {onShortConversationMessagesUpdate} from "../../utils/messaging/messagingEventsHandlers";
 import {getConversationLastMessageFormattedTime} from "../../utils/convertLogic/formatDate";
 import {AccountTypes} from "../../enums/utilityEnums/AccountTypes";
 
 interface ShortConversationInfoForEmployerProps {
     conversationInfo: ConversationDTO;
-    setConversationsToShow: Dispatch<SetStateAction<ConversationDTO[]>>;
     conversation: ConversationDTO | null;
     secondParticipantName: string;
     navigateToFullConversationPath: string;
@@ -18,7 +16,6 @@ interface ShortConversationInfoForEmployerProps {
 
 const ShortConversationInfo: FC<ShortConversationInfoForEmployerProps> = ({
                                                                               conversationInfo,
-                                                                              setConversationsToShow,
                                                                               conversation,
                                                                               secondParticipantName,
                                                                               navigateToFullConversationPath,
@@ -26,25 +23,31 @@ const ShortConversationInfo: FC<ShortConversationInfoForEmployerProps> = ({
                                                                           }) => {
     const chatHubService = ChatHubService.getInstance();
     const navigate = useNavigate();
+    const [shortConversationInfo, setShortConversationInfo] = useState(conversationInfo);
     const [lastMessage, setLastMessage] = useState(conversationInfo.messages[conversationInfo.messages.length - 1] || null);
-    const [numberOfUnreadMessages, setNumberOfUnreadMessages] =
-        useState(shortConversationType == AccountTypes.employer ? conversationInfo.employersUnreadMessagesCount : conversationInfo.jobSeekersUnreadMessagesCount);
 
     useEffect(() => {
         if (conversationInfo.id != conversation?.id) {
             chatHubService.registerShortConversationUpdateOnMessageReceive((message) => {
-                onShortConversationMessagesUpdate(message, conversationInfo, setConversationsToShow, setLastMessage);
+                if (message.conversationId == conversationInfo.id) {
+                    setShortConversationInfo(prev => {
+                        const countKey = message.employerId ? 'jobSeekersUnreadMessagesCount' : 'employersUnreadMessagesCount';
+                        const updatedCount = prev[countKey] + 1;
+                        return {
+                            ...prev,
+                            [countKey]: updatedCount,
+                            messages: [...prev.messages, message],
+                            lastModified: message.sentAt
+                        }
+                    })
+                    setLastMessage(message)
+                }
             });
         }
     }, []);
 
     useEffect(() => {
-        setLastMessage(conversationInfo.messages[conversationInfo.messages.length - 1]);
-        if (shortConversationType == AccountTypes.employer) {
-            setNumberOfUnreadMessages(conversationInfo.employersUnreadMessagesCount)
-        } else {
-            setNumberOfUnreadMessages(conversationInfo.jobSeekersUnreadMessagesCount)
-        }
+        setShortConversationInfo(conversationInfo)
     }, [conversationInfo])
 
     useEffect(() => {
@@ -55,11 +58,7 @@ const ShortConversationInfo: FC<ShortConversationInfoForEmployerProps> = ({
         if (!newLastMessage) {
             return;
         }
-        if (shortConversationType == AccountTypes.employer) {
-            setNumberOfUnreadMessages(conversation.employersUnreadMessagesCount)
-        } else {
-            setNumberOfUnreadMessages(conversation.jobSeekersUnreadMessagesCount)
-        }
+        setShortConversationInfo(conversation)
         setLastMessage(newLastMessage);
     }, [conversation]);
 
@@ -79,21 +78,28 @@ const ShortConversationInfo: FC<ShortConversationInfoForEmployerProps> = ({
                         {secondParticipantName}
                     </div>
                     <div className={"dark-small-text"}>
-                        {conversationInfo.job.jobTitle}
+                        {shortConversationInfo.job.jobTitle}
                     </div>
                     <div className={"last-message-block"}>
                         {lastMessage?.content}
                     </div>
                 </div>
                 <div className="conversation-update-info-container">
-                    <div className={`last-conversation-interaction ${numberOfUnreadMessages > 0 ? "bold-text" : ""}`}>
+                    <div className={`last-conversation-interaction
+                     ${(shortConversationType === AccountTypes.jobSeeker && shortConversationInfo.jobSeekersUnreadMessagesCount > 0)
+                    || (shortConversationType === AccountTypes.employer && shortConversationInfo.employersUnreadMessagesCount > 0)
+                        ? "bold-text" : ""}`}>
                         {lastMessage?.sentAt ? getConversationLastMessageFormattedTime(lastMessage.sentAt) : ""}
                     </div>
-                    {numberOfUnreadMessages != 0 &&
+                    {((shortConversationType === AccountTypes.jobSeeker && shortConversationInfo.jobSeekersUnreadMessagesCount > 0)
+                            || (shortConversationType === AccountTypes.employer && shortConversationInfo.employersUnreadMessagesCount > 0)) &&
                         <div className={"unread-messages-count-container"}>
-                            {numberOfUnreadMessages}
+                            {shortConversationType === AccountTypes.jobSeeker ? shortConversationInfo.jobSeekersUnreadMessagesCount :
+                                shortConversationInfo.employersUnreadMessagesCount}
                         </div>
                     }
+
+
                 </div>
 
             </div>

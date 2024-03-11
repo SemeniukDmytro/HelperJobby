@@ -52,6 +52,7 @@ export function onMessageSent(message: MessageDTO,
 export function onShortConversationMessagesUpdate(message: MessageDTO, conversationInfo: ConversationDTO,
                                                   setConversationsToShow: Dispatch<SetStateAction<ConversationDTO[]>>,
                                                   setLastMessage: Dispatch<SetStateAction<MessageDTO>>) {
+    console.log(conversationInfo)
     if (message.conversationId == conversationInfo.id) {
         conversationInfo.messages.push(message);
         conversationInfo.lastModified = message.conversation.lastModified;
