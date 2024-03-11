@@ -5,6 +5,7 @@ import {formatAMPM} from "../../utils/convertLogic/formatDate";
 import {ChatHubService} from "../../services/chatHubService";
 import {ConversationDTO} from "../../DTOs/MessagingDTOs/ConversationDTO";
 import {getMessageSenderName} from "../../utils/messaging/getMessageSenderName";
+import {log} from "node:util";
 
 interface MessageProps {
     message: MessageDTO;
@@ -12,6 +13,8 @@ interface MessageProps {
     conversation: ConversationDTO;
     setConversation: Dispatch<SetStateAction<ConversationDTO | null>>;
     setConversationsToShow: Dispatch<SetStateAction<ConversationDTO[]>>;
+    lastMessageRef?: React.RefObject<HTMLDivElement>;
+    messagesWindowRef: React.RefObject<HTMLDivElement>;
 }
 
 const Message: FC<MessageProps> = ({
@@ -19,11 +22,23 @@ const Message: FC<MessageProps> = ({
                                        isMyMessage,
                                        conversation,
                                        setConversation,
-                                       setConversationsToShow
+                                       setConversationsToShow,
+                                       lastMessageRef,
+                                       messagesWindowRef
                                    }) => {
     const chatHubService = ChatHubService.getInstance();
     const messageRef = useRef<HTMLDivElement>(null);
     const [isMessageRead, setIsMessageRead] = useState(message.isRead);
+
+
+    useEffect(() => {
+        if (isMyMessage && message.id == conversation.messages[conversation.messages.length - 1].id) {
+            messagesWindowRef.current?.scrollTo({
+                top: messagesWindowRef.current.scrollHeight,
+                behavior: 'smooth',
+            });
+        }
+    }, [conversation.messages]);
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries, observer) => {
@@ -42,14 +57,14 @@ const Message: FC<MessageProps> = ({
             observer.observe(messageRef.current);
         }
         chatHubService.registerMessageRead((msg) => {
-            if (msg.id !== message.id){
+            if (msg.id !== message.id) {
                 return;
             }
             setIsMessageRead(true);
-            if (isMyMessage){
+            if (isMyMessage) {
                 return;
             }
-            if (msg.conversationId === conversation.id){
+            if (msg.conversationId === conversation.id) {
                 setConversation(prev => {
                     if (!prev) return null;
                     const countKey = msg.employerId ? 'jobSeekersUnreadMessagesCount' : 'employersUnreadMessagesCount';
@@ -94,26 +109,28 @@ const Message: FC<MessageProps> = ({
 
 
     return (
-        <div ref={messageRef} className={"message-box"}>
-            <div className={"sender-info-and-time-box"}>
-                <div className={"dark-small-text bold-text"}>
-                    {isMyMessage ? "Me" : getMessageSenderName(message, conversation)}
+        <div ref={lastMessageRef}>
+            <div ref={messageRef} className={"message-box"}>
+                <div className={"sender-info-and-time-box"}>
+                    <div className={"dark-small-text bold-text"}>
+                        {isMyMessage ? "Me" : getMessageSenderName(message, conversation)}
+                    </div>
+                    <div className={"circle-separator"}>
+                        •
+                    </div>
+                    <div className={"grey-small-text"}>
+                        {formatAMPM(new Date(message.sentAt))}
+                    </div>
                 </div>
-                <div className={"circle-separator"}>
-                    •
+                <div className={"light-dark-small-text"}>
+                    {message.content}
                 </div>
-                <div className={"grey-small-text"}>
-                    {formatAMPM(new Date(message.sentAt))}
-                </div>
+                {isMyMessage &&
+                    <div className={"message-status"}>
+                        {isMessageRead ? "Read" : "Delivered"}
+                    </div>
+                }
             </div>
-            <div className={"light-dark-small-text"}>
-                {message.content}
-            </div>
-            {isMyMessage &&
-                <div className={"message-status"}>
-                    {isMessageRead ? "Read" : "Delivered"}
-                </div>
-            }
         </div>
     )
 }

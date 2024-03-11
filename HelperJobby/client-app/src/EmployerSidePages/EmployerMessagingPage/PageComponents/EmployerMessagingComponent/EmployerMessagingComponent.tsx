@@ -110,7 +110,6 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
                                                                secondParticipantName={(conv.jobSeeker.firstName && conv.jobSeeker.lastName) ?
                                                                               `${conv.jobSeeker.firstName} ${conv.jobSeeker.lastName}` :
                                                                               "Not specified"}
-                                                               setConversationsToShow={setConversationsToShow}
                                                                navigateToFullConversationPath={`${EmployerPagesPaths.MESSAGES}?conversationId=${conv.id}`}
                                                                shortConversationType={AccountTypes.employer}
                                                                key={index}/>

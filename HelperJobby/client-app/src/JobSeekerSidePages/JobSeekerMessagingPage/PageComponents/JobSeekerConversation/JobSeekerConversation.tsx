@@ -17,6 +17,7 @@ import OutgoingMessage from "../../../../Components/OutgoingMessage/OutgoingMess
 import {groupMessagesByDate} from "../../../../utils/messaging/groupMessagesByDate";
 import {onConversationsUpdate, onMessageSent} from "../../../../utils/messaging/messagingEventsHandlers";
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
+import {getOldestMessageInteractedWith} from "../../../../utils/messaging/getOldestMessageInteractedWith";
 
 interface JobSeekerConversationProps {  
     setConversationsToShow : Dispatch<SetStateAction<ConversationDTO[]>>
@@ -36,13 +37,14 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
     const messagesWindowRef = useRef<HTMLDivElement>(null);
     const {conversation, setConversation} = useJobSeekerMessagingConversation();
     const [sendingMessages, setSendingMessages] = useState<string[]>([]);
+    const lastMessageRef = useRef<HTMLDivElement>(null);
+    const [oldestUnreadMessageId, setOldestUnreadMessageId] = useState<number | null>(null);
 
     useEffect(() => {
-        if (messagesWindowRef.current) {
-            const messagesContainer = messagesWindowRef.current;
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        if (!loading && lastMessageRef.current) {
+            lastMessageRef.current.scrollIntoView();
         }
-    }, [[], conversation?.messages]);
+    }, [loading]);
     
     useEffect(() => {
         fetchJobSeeker();
@@ -84,6 +86,7 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
             if (conversationId) {
                 const retrievedConversation = await conversationService.getConversationById(parseInt(conversationId));
                 setConversation(retrievedConversation);
+                setOldestUnreadMessageId(getOldestMessageInteractedWith(retrievedConversation));
             }
 
         } catch (err) {
@@ -118,6 +121,8 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
             }
         }
     }
+
+    
     
     return (
         <div className={"js-conversation-fb"}>
@@ -158,6 +163,8 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
                                             conversation={conversation}
                                             setConversation={setConversation}
                                             setConversationsToShow={setConversationsToShow}
+                                            messagesWindowRef={messagesWindowRef}
+                                            lastMessageRef={message.id === oldestUnreadMessageId ? lastMessageRef : undefined}
                                             key={index}
                                         />
                                     ))}

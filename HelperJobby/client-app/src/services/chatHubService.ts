@@ -2,7 +2,6 @@
 import {getAuthToken} from "../utils/authTokenInteraction";
 import {logErrorInfo} from "../utils/logErrorInfo";
 import {MessageDTO} from "../DTOs/MessagingDTOs/MessageDTO";
-import {ConversationDTO} from "../DTOs/MessagingDTOs/ConversationDTO";
 
 export class ChatHubService {
     private hubConnection: HubConnection | null = null;
@@ -98,6 +97,12 @@ export class ChatHubService {
     }
     
     public registerMessageSent(onMessageSent : (message : MessageDTO) => void){
+        this.unregisterMessageSentHandler();
+        this.messageSentHandler = onMessageSent;
+        this.hubConnection?.on("MessageSent", onMessageSent);
+    };
+
+    public registerMessageSentFocus(onMessageSent : (message : MessageDTO) => void){
         this.unregisterMessageSentHandler();
         this.messageSentHandler = onMessageSent;
         this.hubConnection?.on("MessageSent", onMessageSent);

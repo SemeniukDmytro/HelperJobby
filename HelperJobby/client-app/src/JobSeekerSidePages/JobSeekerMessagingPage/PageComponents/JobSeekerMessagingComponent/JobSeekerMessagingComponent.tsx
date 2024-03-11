@@ -72,7 +72,6 @@ const JobSeekerMessagingComponent: FC<JobSeekerMessagingComponentProps> = () => 
                                                 <ShortConversationInfo conversationInfo={conv}
                                                                        conversation={conversation}
                                                                        secondParticipantName={conv.employer.fullName || "Not specified"}
-                                                                       setConversationsToShow={setConversationsToShow}
                                                                        navigateToFullConversationPath={`${JobSeekerPagesPaths.CONVERSATIONS}?conversationId=${conv.id}`}
                                                                        shortConversationType={AccountTypes.jobSeeker}
                                                                        key={index}/>

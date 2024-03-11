@@ -12,20 +12,19 @@ import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import Message from "../../../../Components/Message/Message";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 import {useEmployerMessagingConversation} from "../../../../hooks/contextHooks/useEmployerMessagingConversation";
-import {
-    getConversationMessagesGroupFormattedTime
-} from "../../../../utils/convertLogic/formatDate";
+import {getConversationMessagesGroupFormattedTime} from "../../../../utils/convertLogic/formatDate";
 import OutgoingMessage from "../../../../Components/OutgoingMessage/OutgoingMessage";
 import {groupMessagesByDate} from "../../../../utils/messaging/groupMessagesByDate";
 import {onConversationsUpdate, onMessageSent} from "../../../../utils/messaging/messagingEventsHandlers";
 import {ConversationDTO} from "../../../../DTOs/MessagingDTOs/ConversationDTO";
+import {getOldestMessageInteractedWith} from "../../../../utils/messaging/getOldestMessageInteractedWith";
 
 interface EmployerJobChatComponentProps {
-    setConversationsToShow : Dispatch<SetStateAction<ConversationDTO[]>>
+    setConversationsToShow: Dispatch<SetStateAction<ConversationDTO[]>>
 }
 
 const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
-    setConversationsToShow
+                                                                     setConversationsToShow
                                                                  }) => {
     const {employer} = useEmployer();
     const chatHubService = ChatHubService.getInstance();
@@ -40,22 +39,22 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
     const messagesWindowRef = useRef<HTMLDivElement>(null);
     const {conversation, setConversation} = useEmployerMessagingConversation();
     const [sendingMessages, setSendingMessages] = useState<string[]>([]);
-    
-    /*useEffect(() => {
-        if (messagesWindowRef.current) {
-            const messagesContainer = messagesWindowRef.current;
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    const lastMessageRef = useRef<HTMLDivElement>(null);
+    const [oldestUnreadMessageId, setOldestUnreadMessageId] = useState<number | null>(null);
+
+    useEffect(() => {
+        if (!loading && lastMessageRef.current) {
+            lastMessageRef.current.scrollIntoView();
         }
-    }, [[], conversation?.messages]);*/
+    }, [loading]);
 
     useEffect(() => {
 
         chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
-        
+
     }, []);
 
     useEffect(() => {
-
         chatHubService.registerMessageSent((message) => {
             onMessageSent(message, conversation, setConversation, setConversationsToShow);
         });
@@ -80,7 +79,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
             return;
         }
         loadConversationInfo();
-        
+
     }, [conversationId, candidateId, jobId]);
 
     async function loadConversationInfo() {
@@ -93,6 +92,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
             } else if (conversationId) {
                 const retrievedConversation = await conversationService.getConversationById(parseInt(conversationId));
                 setConversation(retrievedConversation);
+                setOldestUnreadMessageId(getOldestMessageInteractedWith(retrievedConversation));
             }
 
         } catch (err) {
@@ -102,6 +102,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
             setLoading(false);
         }
     }
+
     async function sendMessage() {
         if (!messageInput.trim()) return;
         setMessageInput("");
@@ -169,6 +170,8 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
                                         conversation={conversation}
                                         setConversation={setConversation}
                                         setConversationsToShow={setConversationsToShow}
+                                        lastMessageRef={message.id === oldestUnreadMessageId ? lastMessageRef : undefined}
+                                        messagesWindowRef={messagesWindowRef}
                                         key={index}
                                     />
                                 ))}
