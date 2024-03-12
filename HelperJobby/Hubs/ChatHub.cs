@@ -35,14 +35,21 @@ public class ChatHub : Hub
         Conversation conversation = null;
         if (conversationId == null)
         {
-            conversation = await _conversationService.EnsureConversationExists(jobSeekerId, employerId, jobId);
+            conversation = await _conversationService.EnsureConversationExists(employerId, jobSeekerId, jobId);
             conversationId = conversation.Id;
         }
         
         var createdMessage = await _messageService.CreateMessageToJobSeeker(message, employerId, conversationId.Value);
+        if (conversation != null)
+        {
+            createdMessage.Conversation = conversation;
+        }
         createdMessage = await _messageCommandRepository.CreateMessage(createdMessage);
         var messageDTO = _mapper.Map<MessageDTO>(createdMessage);
-        
+        if (messageDTO.Conversation?.Job?.JobApplies[0]?.Job != null)
+        {
+            messageDTO.Conversation.Job.JobApplies[0].Job = null;
+        }
         await Clients.User(jobSeekerId.ToString()).SendAsync("ReceiveMessage", messageDTO, employerId);
         await Clients.Caller.SendAsync("MessageSent", messageDTO);
     }
@@ -58,14 +65,22 @@ public class ChatHub : Hub
         Conversation conversation = null;
         if (conversationId == null)
         {
-            conversation = await _conversationService.EnsureConversationExists(jobSeekerId, employerId, jobId);
+            conversation = await _conversationService.EnsureConversationExists(employerId, jobSeekerId, jobId);
             conversationId = conversation.Id;
         }
         
         var createdMessage = await _messageService.CreateMessageToEmployer(message, jobSeekerId, conversationId.Value);
+        if (conversation != null)
+        {
+            createdMessage.Conversation = conversation;
+        }
         createdMessage = await _messageCommandRepository.CreateMessage(createdMessage);
         var messageDTO = _mapper.Map<MessageDTO>(createdMessage);
-        
+        if (messageDTO.Conversation?.Job?.JobApplies[0]?.Job != null)
+        {
+            messageDTO.Conversation.Job.JobApplies[0].Job = null;
+        }
+
         await Clients.User(employerId.ToString()).SendAsync("ReceiveMessage", messageDTO, jobSeekerId);
         await Clients.Caller.SendAsync("MessageSent", messageDTO);
     }

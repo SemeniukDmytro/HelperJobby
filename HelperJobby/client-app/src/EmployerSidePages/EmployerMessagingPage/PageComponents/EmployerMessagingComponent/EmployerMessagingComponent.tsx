@@ -27,6 +27,18 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
     const conversationService = new ConversationService();
     const [conversationsToShow, setConversationsToShow] = useState<ConversationDTO[]>([]);
     const {conversation} = useEmployerMessagingConversation();
+
+    useEffect(() => {
+        if (!employer?.conversations){
+            return;
+        }
+        if (filterMessagesBy == "All jobs"){
+            setConversationsToShow(employer.conversations)
+        }
+        else {
+            setConversationsToShow(employer.conversations.filter(c => c.job.jobTitle == filterMessagesBy))
+        }
+    }, [filterMessagesBy]);
     
     useEffect(() => {
         loadPageInitialData();

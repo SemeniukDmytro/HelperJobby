@@ -13,7 +13,7 @@ const OutgoingMessage: FC<OutgoingMessageProps> = ({
     
     return (
         <div className={"message-box"}>
-            <div className={"message-additional-info-container"}>
+            <div className={"sender-info-and-time-container"}>
                 <div className={"dark-small-text bold-text"}>
                     Me
                 </div>

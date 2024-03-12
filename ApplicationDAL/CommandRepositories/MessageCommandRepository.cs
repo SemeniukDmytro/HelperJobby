@@ -39,10 +39,10 @@ public class MessageCommandRepository : IMessageCommandRepository
             
                 return message;
             }
-            catch
+            catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                throw new InvalidMessageException("Something went wrong during sending message");
+                throw ex;
             }
         }
     }

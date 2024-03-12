@@ -96,7 +96,6 @@ public class ConversationService : IConversationService
                 EmployerId = employerId,
                 JobSeekerId = jobSeekerId,
                 JobId = jobId,
-                Job = jobApply.Job,
                 LastModified = DateTime.UtcNow,
                 Messages = new List<Message>()
             };
