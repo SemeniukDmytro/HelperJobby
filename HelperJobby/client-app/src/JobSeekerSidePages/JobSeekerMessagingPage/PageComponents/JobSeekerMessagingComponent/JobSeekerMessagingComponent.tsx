@@ -23,7 +23,7 @@ const JobSeekerMessagingComponent: FC<JobSeekerMessagingComponentProps> = () => 
     const conversationService = new ConversationService();
     const [conversationsToShow, setConversationsToShow] = useState<ConversationDTO[]>([]);
     const {conversation} = useJobSeekerMessagingConversation();
-    
+
     useEffect(() => {
         loadJobSeekerAllConversations();
     }, []);
@@ -40,9 +40,6 @@ const JobSeekerMessagingComponent: FC<JobSeekerMessagingComponentProps> = () => 
                 }
             });
             setConversationsToShow(retrievedConversations);
-            if (retrievedConversations.length != 0) {
-                navigate(`${JobSeekerPagesPaths.CONVERSATIONS}?conversationId=${retrievedConversations[0].id}`);
-            }
         } catch (err) {
             logErrorInfo(err)
         } finally {
@@ -84,6 +81,7 @@ const JobSeekerMessagingComponent: FC<JobSeekerMessagingComponentProps> = () => 
                         </div>
                         <JobSeekerConversation
                             setConversationsToShow={setConversationsToShow}
+                            conversationsLoading={loading}
                         /></div>
                 </div>
             </PageWrapWithHeader>

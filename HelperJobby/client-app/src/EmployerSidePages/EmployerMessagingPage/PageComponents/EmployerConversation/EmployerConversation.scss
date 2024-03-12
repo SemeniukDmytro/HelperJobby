@@ -117,3 +117,18 @@
     text-decoration: underline;
   }
 }
+
+.messages-recommendation-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-recommendation-container-header {
+  font-weight: 700;
+  color: global-variables.$neutral-color-900;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}

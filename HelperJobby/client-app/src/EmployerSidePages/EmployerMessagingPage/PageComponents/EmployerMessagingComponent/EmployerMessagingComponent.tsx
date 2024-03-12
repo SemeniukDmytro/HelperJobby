@@ -132,6 +132,7 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
                     </div>
                     <EmployerJobChatComponent
                         setConversationsToShow={setConversationsToShow}
+                        conversationsLoading={loading}
                     />
                 </div>
             </div>
