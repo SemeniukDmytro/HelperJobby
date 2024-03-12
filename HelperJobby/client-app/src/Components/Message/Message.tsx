@@ -5,7 +5,8 @@ import {formatAMPM} from "../../utils/convertLogic/formatDate";
 import {ChatHubService} from "../../services/chatHubService";
 import {ConversationDTO} from "../../DTOs/MessagingDTOs/ConversationDTO";
 import {getMessageSenderName} from "../../utils/messaging/getMessageSenderName";
-import {log} from "node:util";
+import ReadTicks from "../Icons/ReadTicks";
+import SentTick from "../Icons/SentTick";
 
 interface MessageProps {
     message: MessageDTO;
@@ -111,25 +112,27 @@ const Message: FC<MessageProps> = ({
     return (
         <div ref={lastMessageRef}>
             <div ref={messageRef} className={"message-box"}>
-                <div className={"sender-info-and-time-box"}>
-                    <div className={"dark-small-text bold-text"}>
-                        {isMyMessage ? "Me" : getMessageSenderName(message, conversation)}
+                <div className={"message-additional-info-container"}>
+                    <div className="sender-info-and-time-container">
+                        <div className={"dark-small-text bold-text"}>
+                            {isMyMessage ? "Me" : getMessageSenderName(message, conversation)}
+                        </div>
+                        <div className={"circle-separator"}>
+                            •
+                        </div>
+                        <div className={"grey-small-text"}>
+                            {formatAMPM(new Date(message.sentAt))}
+                        </div>
                     </div>
-                    <div className={"circle-separator"}>
-                        •
-                    </div>
-                    <div className={"grey-small-text"}>
-                        {formatAMPM(new Date(message.sentAt))}
-                    </div>
+                    {isMyMessage &&
+                        <div className={"message-status"}>
+                            {isMessageRead ? <ReadTicks/> : <SentTick/>}
+                        </div>
+                    }
                 </div>
                 <div className={"light-dark-small-text"}>
                     {message.content}
                 </div>
-                {isMyMessage &&
-                    <div className={"message-status"}>
-                        {isMessageRead ? "Read" : "Delivered"}
-                    </div>
-                }
             </div>
         </div>
     )

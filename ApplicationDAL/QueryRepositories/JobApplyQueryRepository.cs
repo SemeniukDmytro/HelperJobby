@@ -107,4 +107,44 @@ public class JobApplyQueryRepository : IJobApplyQueryRepository
             }).ToListAsync();
         return jobApplies;
     }
+    
+    public async Task<JobApply> GetJobApplyForConversation(int jobSeekerId, int jobId)
+    {
+        var jobApply = await _applicationContext.JobApplies.Where(i => i.JobSeekerId == jobSeekerId && i.JobId == jobId)
+            .Select(ja => new JobApply
+            {
+                JobId = ja.JobId,
+                JobSeekerId = ja.JobSeekerId,
+                DateApplied = ja.DateApplied,
+                Job = new Job
+                {
+                    Id = ja.Job.Id,
+                    JobTitle = ja.Job.JobTitle,
+                    NumberOfOpenings = ja.Job.NumberOfOpenings,
+                    Location = ja.Job.Location,
+                    JobTypes = ja.Job.JobTypes,
+                    Salary = ja.Job.Salary,
+                    Schedule = ja.Job.Schedule,
+                    Benefits = ja.Job.Benefits,
+                    Description = ja.Job.Description,
+                    DatePosted = ja.Job.DatePosted,
+                    EmployerId = ja.Job.EmployerId,
+                    Employer = new Employer
+                    {
+                        Id = ja.Job.EmployerId,
+                        Organization = new Organization
+                        {
+                            Id = ja.Job.Employer.OrganizationId,
+                            Name = ja.Job.Employer.Organization.Name
+                        }
+                    }
+                },
+                JobSeeker = ja.JobSeeker
+            }).FirstOrDefaultAsync();
+        if (jobApply == null)
+        {
+            throw new JobApplyingException("Job apply was not found");
+        }
+        return jobApply;
+    }
 }

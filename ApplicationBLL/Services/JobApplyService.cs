@@ -23,6 +23,18 @@ public class JobApplyService : IJobApplyService
         _jobSeekerService = jobSeekerService;
     }
 
+    public async Task<JobApply> GetJobApplyForConversation(int jobSeekerId, int jobId)
+    {
+        var jobApply = await _jobApplyQueryRepository.GetJobApplyForConversation(jobSeekerId, jobId);
+        if (jobSeekerId != _jobSeekerService.GetCurrentJobSeekerId() &&
+            jobApply.Job.EmployerId != _employerService.GetCurrentEmployerId())
+        {
+            throw new ForbiddenException("Something went wrong you couldn't load this conversation");
+        }
+
+        return jobApply;
+    }
+
     public async Task<JobApply> GetJobApplyByJobSeekerAndJobIds(int jobSeekerId, int jobId)
     {
         var currentEmployerId = _employerService.GetCurrentEmployerId();

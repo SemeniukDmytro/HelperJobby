@@ -1,6 +1,7 @@
 using ApplicationDomain.Abstraction.IServices;
 using AutoMapper;
 using HelperJobby.DTOs.Messaging;
+using HelperJobby.DTOs.UserJobInteractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelperJobby.Controllers
@@ -10,10 +11,12 @@ namespace HelperJobby.Controllers
     public class ConversationController : ExtendedBaseController
     {
         private readonly IConversationService _conversationService;
+        private readonly IJobApplyService _jobApplyService;
         
-        public ConversationController(IMapper mapper, IConversationService conversationService) : base(mapper)
+        public ConversationController(IMapper mapper, IConversationService conversationService, IJobApplyService jobApplyService) : base(mapper)
         {
             _conversationService = conversationService;
+            _jobApplyService = jobApplyService;
         }
         
         
@@ -51,6 +54,13 @@ namespace HelperJobby.Controllers
             var conversation = await _conversationService.GetCandidatePotentialConversation(candidateId, jobId);
             Console.WriteLine(conversation);
             return _mapper.Map<ConversationDTO>(conversation);
+        }
+
+        [HttpGet("candidate/{jobSeekerId}/job/{jobId}")]
+        public async Task<JobApplyDTO> GetJobApplyForConversation(int jobSeekerId, int jobId)
+        {
+            var jobApply = await _jobApplyService.GetJobApplyForConversation(jobSeekerId, jobId);
+            return _mapper.Map<JobApplyDTO>(jobApply);
         }
         
     }

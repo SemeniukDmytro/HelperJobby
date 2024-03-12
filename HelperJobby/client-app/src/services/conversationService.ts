@@ -1,5 +1,6 @@
 ﻿import CustomFetchService from "./customFetchService";
 import {ConversationDTO} from "../DTOs/MessagingDTOs/ConversationDTO";
+import {JobApplyDTO} from "../DTOs/userJobInteractionsDTOs/JobApplyDTO";
 
 export class ConversationService{
     private readonly baseURI: string = "api/Conversation";
@@ -27,6 +28,10 @@ export class ConversationService{
 
     public async getCandidatePotentialConversation(candidateId : number, jobId : number): Promise<ConversationDTO> {
         return (await this.customFetchService.get<ConversationDTO>(`${this.baseURI}/candidate-conversation/${candidateId}/${jobId}`));
+    }
+
+    public async getJobApplyForConversation(candidateId : number, jobId : number): Promise<JobApplyDTO> {
+        return (await this.customFetchService.get<JobApplyDTO>(`${this.baseURI}/candidate/${candidateId}/job/${jobId}`));
     }
     
 }

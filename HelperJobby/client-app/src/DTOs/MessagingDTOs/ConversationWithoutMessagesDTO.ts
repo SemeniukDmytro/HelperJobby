@@ -1,5 +1,4 @@
-﻿import {MessageDTO} from "./MessageDTO";
-import {JobSeekerDTO} from "../accountDTOs/JobSeekerDTO";
+﻿import {JobSeekerDTO} from "../accountDTOs/JobSeekerDTO";
 import {EmployerDTO} from "../accountDTOs/EmployerDTO";
 import {JobDTO} from "../jobRelatetedDTOs/JobDTO";
 

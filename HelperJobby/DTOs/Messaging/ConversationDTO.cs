@@ -1,5 +1,7 @@
-﻿using HelperJobby.DTOs.Account;
+﻿using ApplicationDomain.Models;
+using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Job;
+using HelperJobby.DTOs.UserJobInteractions;
 
 namespace HelperJobby.DTOs.Messaging;
 

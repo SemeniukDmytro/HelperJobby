@@ -4,9 +4,11 @@
   padding-bottom: 1rem;
 }
 
-.sender-info-and-time-box {
+.message-additional-info-container {
   min-width: 0px;
   display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .circle-separator {
@@ -21,4 +23,8 @@
   justify-content: flex-end;
   font-size: 0.825rem;
   color: global-variables.$neutral-color-700;
+}
+
+.sender-info-and-time-container {
+  display: inline-flex;
 }

@@ -71,7 +71,31 @@ public class ConversationProjections
                 JobApplies = c.JobSeeker.JobApplies.Where(j => c.JobSeekerId == j.JobSeekerId && c.JobId == j.JobId).ToList()
             },
             JobId = c.JobId,
-            Job = c.Job
+            Job = new Job
+            {
+                Id = c.Job.Id,
+                JobTitle = c.Job.JobTitle,
+                NumberOfOpenings = c.Job.NumberOfOpenings,
+                Language = c.Job.Language,
+                Location = c.Job.Location,
+                JobTypes = c.Job.JobTypes,
+                Salary = c.Job.Salary,
+                Schedule = c.Job.Schedule,
+                Benefits = c.Job.Benefits,
+                ContactEmail = c.Job.ContactEmail,
+                ResumeRequired = c.Job.ResumeRequired,
+                Description = c.Job.Description,
+                DatePosted = c.Job.DatePosted,
+                EmployerId = c.Job.EmployerId,
+                Employer = new Employer
+                {
+                    Organization = new Organization
+                    {
+                        Id = c.Job.Employer.OrganizationId,
+                        Name = c.Job.Employer.Organization.Name
+                    }
+                }
+            }
         };
     }
 }
