@@ -103,9 +103,6 @@ const JobSeekerProfile: FC<JobSeekerProfileProps> = () => {
                             </div>
                             {!jobSeeker?.resume ?
                                 (<div className={"add-resume-buttons-box"}>
-                                    <button className={"add-resume-button"}>
-                                        Upload Resume
-                                    </button>
                                     <button
                                         className={"add-resume-button last-button-of-type"}
                                         onClick={navigateToResumeBuild}

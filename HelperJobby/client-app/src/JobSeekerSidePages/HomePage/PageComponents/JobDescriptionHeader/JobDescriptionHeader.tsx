@@ -91,6 +91,10 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({
     async function handleSaveJobClick() {
         await handleJobInteraction(saveJob, setShowRemoveFromSaved);
     }
+    
+    async function handleApplyClick(){
+        navigate(`/job-apply/${selectedJob?.id}/contact-info`)
+    }
 
     return (
         <div className={"job-header-container"}>
@@ -118,7 +122,10 @@ const JobDescriptionHeader: FC<JobDescriptionHeaderProps> = ({
                 </div>
             </div>
             <div className={"header-job-interactions-box"}>
-                <button className={"blue-button mr1rem"} disabled={isApplied}>
+                <button 
+                    className={"blue-button mr1rem"} 
+                    onClick={handleApplyClick}
+                    disabled={isApplied}>
                     {isApplied ? "Applied" : "Apply now"}
                 </button>
                 {!isJobSaved ? (

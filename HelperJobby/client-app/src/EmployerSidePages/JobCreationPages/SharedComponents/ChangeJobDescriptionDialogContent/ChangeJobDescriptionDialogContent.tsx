@@ -115,9 +115,6 @@ const ChangeJobDescriptionDialogContent: FC<ChangeJobDescriptionDialogContentPro
                     </div>
                     <div className={`description-focused ${isInvalidDescription ? "red-field-focus" : ""}`}></div>
                 </div>
-                <div className={"mt15rem mb1rem"}>
-                    <a className={"bold-navigation-link"}>Upload a PDF or DOCX</a>
-                </div>
                 {isInvalidDescription &&
                     <div className={"error-box"}>
                         <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>

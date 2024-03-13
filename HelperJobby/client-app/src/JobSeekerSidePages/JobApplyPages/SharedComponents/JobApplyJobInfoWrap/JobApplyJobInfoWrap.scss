@@ -1,0 +1,81 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.job-application-main {
+  height: 100%;
+}
+
+.job-application-left-side-container {
+  width: 60%;
+}
+
+.job-application-right-side-container {
+  display: flex;
+  box-sizing: border-box;
+  margin-block: 0px;
+  margin-inline: 0px;
+  min-inline-size: 0px;
+  width: 40%;
+  height: 100%;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  justify-content: center;
+  background-color: global-variables.$neutral-color-100;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  left: auto;
+  padding-top: 46px;
+}
+
+.job-window-container {
+  box-sizing: border-box;
+  max-width: 640px;
+  padding: 0.5rem 0.5rem 0px;
+  background-color: white;
+  margin: 4.5em 2.5em;
+  border: 1px solid global-variables.$neutral-color-400;
+  border-radius: 0.5rem;
+  max-height: 50%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.job-window-header {
+  padding-inline: 1rem;
+  padding-block: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.ja-job-description-container {
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.view-all-job-description-container {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expanded-job-window-container {
+  box-sizing: border-box;
+  max-width: 640px;
+  padding: 0.5rem 0.5rem 0px;
+  background-color: white;
+  margin: 4.5em 2.5em;
+  border: 1px solid global-variables.$neutral-color-400;
+  border-radius: 0.5rem;
+  max-height: calc(100% - 9rem);
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.ja-job-description-container-expanded {
+  padding: 1rem;
+  overflow-y: auto;
+}

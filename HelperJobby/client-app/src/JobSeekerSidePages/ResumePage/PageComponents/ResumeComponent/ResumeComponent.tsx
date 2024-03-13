@@ -129,15 +129,6 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
                             </button>
                             {showMoreOptions && <div className={"more-resume-options-bar"}>
                                 <div className={"resume-options-container"} ref={moreOptionsRef}>
-                                    <button className={"more-profile-option-button"}>
-                                        <FontAwesomeIcon
-                                            className={"icon-right-margin svg125rem ml05rem"}
-                                            icon={faUpload}
-                                        />
-                                        <span
-                                            className={"additional-text-margin-for-big-icon"}
-                                        >Upload to replace resume</span>
-                                    </button>
                                     <button
                                         className={"more-profile-option-button delete-button-color"}
                                         onClick={() => setShowDialogWindow(true)}

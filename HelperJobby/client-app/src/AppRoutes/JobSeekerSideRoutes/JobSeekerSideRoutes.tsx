@@ -47,6 +47,8 @@ import RequireAuth from "../../JobSeekerSidePages/RequireAuth/RequireAuth";
 import JobSeekerMessagingWrap
     from "../../JobSeekerSidePages/JobSeekerMessagingPage/PageComponents/JobSeekerMessagingWrap/JobSeekerMessagingWrap";
 import JobSeekerMessagingPage from "../../JobSeekerSidePages/JobSeekerMessagingPage/JobSeekerMessagingPage";
+import JobApplyContactInfoPage from "../../JobSeekerSidePages/JobApplyPages/JobApplyPage/JobApplyContactInfoPage";
+import JobApplyWrap from "../../JobSeekerSidePages/JobApplyPages/SharedComponents/JobApplyWrap/JobApplyWrap";
 
 interface JobSeekerSideRoutesProps {
 }
@@ -118,6 +120,11 @@ const JobSeekerSideRoutes: FC<JobSeekerSideRoutesProps> = () => (
             </Route>
 
             <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
+            
+            <Route path={"/job-apply/:jobId"} element={<JobApplyWrap/>}>
+                <Route path={"contact-info"} element={<JobApplyContactInfoPage/>}/>
+                
+            </Route>
             
         </Route>
         
