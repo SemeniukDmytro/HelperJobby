@@ -80,7 +80,7 @@ const JobApplyJobInfoWrap: FC<JobApplyJobInfoWrapProps> = ({children}) => {
                         </div>
                         <div className={"content-separation-line"}/>
                         <div className={`${showAllJobDescription ? "ja-job-description-container-expanded" : "ja-job-description-container"}`}>
-                            <span className={"light-dark-default-text flex-column"}>
+                            <span className={"semi-dark-small-text flex-column"}>
                                     <span className={"mb1rem"}>{job.description}</span>
                                 {(job?.jobType && job.jobType.length !== 0) &&
                                     <div className={"flex-row mb1rem"}>

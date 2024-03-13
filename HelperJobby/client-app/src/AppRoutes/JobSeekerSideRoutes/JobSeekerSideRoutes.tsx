@@ -49,6 +49,8 @@ import JobSeekerMessagingWrap
 import JobSeekerMessagingPage from "../../JobSeekerSidePages/JobSeekerMessagingPage/JobSeekerMessagingPage";
 import JobApplyContactInfoPage from "../../JobSeekerSidePages/JobApplyPages/JobApplyPage/JobApplyContactInfoPage";
 import JobApplyWrap from "../../JobSeekerSidePages/JobApplyPages/SharedComponents/JobApplyWrap/JobApplyWrap";
+import JobApplyResumeSelectPage
+    from "../../JobSeekerSidePages/JobApplyPages/JobApplyResumeSelectPage/JobApplyResumeSelectPage";
 
 interface JobSeekerSideRoutesProps {
 }
@@ -123,6 +125,7 @@ const JobSeekerSideRoutes: FC<JobSeekerSideRoutesProps> = () => (
             
             <Route path={"/job-apply/:jobId"} element={<JobApplyWrap/>}>
                 <Route path={"contact-info"} element={<JobApplyContactInfoPage/>}/>
+                <Route path={"resume"} element={<JobApplyResumeSelectPage/>}/>
                 
             </Route>
             
