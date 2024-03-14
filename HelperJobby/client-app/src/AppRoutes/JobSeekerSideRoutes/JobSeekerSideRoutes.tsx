@@ -51,6 +51,14 @@ import JobApplyContactInfoPage from "../../JobSeekerSidePages/JobApplyPages/JobA
 import JobApplyWrap from "../../JobSeekerSidePages/JobApplyPages/SharedComponents/JobApplyWrap/JobApplyWrap";
 import JobApplyResumeSelectPage
     from "../../JobSeekerSidePages/JobApplyPages/JobApplyResumeSelectPage/JobApplyResumeSelectPage";
+import ApplyResumeAddEducationPage
+    from "../../JobSeekerSidePages/ApplyResumePages/ApplyResumeAddEducationPage/ApplyResumeAddEducationPage";
+import ApplyResumeEducationPage
+    from "../../JobSeekerSidePages/ApplyResumePages/ApplyResumeEducationPage/ApplyResumeEducationPage";
+import JobApplyResumePagesWrap
+    from "../../JobSeekerSidePages/ApplyResumePages/SharedComponents/JobApplyResumePagesWrap/JobApplyResumePagesWrap";
+import ApplyResumeEditEducationPage
+    from "../../JobSeekerSidePages/ApplyResumePages/ApplyResumeEditEducationPage/ApplyResumeEditEducationPage";
 
 interface JobSeekerSideRoutesProps {
 }
@@ -122,12 +130,19 @@ const JobSeekerSideRoutes: FC<JobSeekerSideRoutesProps> = () => (
             </Route>
 
             <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
-            
-            <Route path={"/job-apply/:jobId"} element={<JobApplyWrap/>}>
-                <Route path={"contact-info"} element={<JobApplyContactInfoPage/>}/>
-                <Route path={"resume"} element={<JobApplyResumeSelectPage/>}/>
-                
-            </Route>
+
+            <>
+                <Route path={"/job-apply/:jobId"} element={<JobApplyWrap/>}>
+                    <Route path={"contact-info"} element={<JobApplyContactInfoPage/>}/>
+                    <Route path={"resume"} element={<JobApplyResumeSelectPage/>}/>
+                </Route>
+
+                <Route path={"/apply-resume"} element={<JobApplyResumePagesWrap/>}>
+                    <Route path={"education"} element={<ApplyResumeEducationPage/>}/>
+                    <Route path={"education/add"} element={<ApplyResumeAddEducationPage/>}/>
+                    <Route path={"experience/:id"} element={<ApplyResumeEditEducationPage/>}/>
+                </Route>
+            </>
             
         </Route>
         

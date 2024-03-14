@@ -68,6 +68,10 @@
         <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\ChangePasswordPage\PageComponents\"/>
         <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\ChangePhonePage\PageComponents\"/>
         <Folder Include="client-app\src\JobSeekerSidePages\AccountSettingsRelatedPages\SharedComponents\"/>
+        <Folder Include="client-app\src\JobSeekerSidePages\ApplyResumePages\ApplyResumeAddEducationPage\PageComponents\" />
+        <Folder Include="client-app\src\JobSeekerSidePages\ApplyResumePages\ApplyResumeEditEducationPage\PageComponents\" />
+        <Folder Include="client-app\src\JobSeekerSidePages\ApplyResumePages\ApplyResumeEducationPage\PageComponents\" />
+        <Folder Include="client-app\src\JobSeekerSidePages\ApplyResumePages\SharedComponents\" />
         <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\EditEducationPage\PageComponents\"/>
         <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\AddAddressPage\PageComponents\"/>
         <Folder Include="client-app\src\JobSeekerSidePages\BuildResumePages\EditWorkExperiencePage\PageComponents\"/>

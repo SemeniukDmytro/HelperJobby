@@ -1,1 +1,36 @@
-.JobApplyResumeSelectComponent {}
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+.job-apply-navigation-container {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ja-form {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.resume-select-container {
+  border-radius: 0.5rem;
+  padding: 1rem;
+  border: 1px solid global-variables.$neutral-color-400;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.resume-add-icon {
+  width: 2rem;
+  height: 2rem;
+  color: global-variables.$neutral-color-600;
+}
+
+.resume-option-selected {
+  transition: 0.1s;
+  border-color: global-variables.$dark-blue;
+}

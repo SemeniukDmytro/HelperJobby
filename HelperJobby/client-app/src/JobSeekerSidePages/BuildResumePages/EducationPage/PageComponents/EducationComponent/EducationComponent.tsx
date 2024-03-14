@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react';
 import './EducationComponent.scss';
 import {ProgressPercentPerPage} from "../../../SharedComponents/ProgressPercentPerPage";
 import EducationReview from "../EducationReview/EducationReview";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import "../../../../../Assets/scssSharedStyles/DefaultButtons.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
@@ -16,14 +16,16 @@ const EducationComponent: FC<ResumeEducationComponentProps> = () => {
     const {setProgressPercentage, setSaveFunc} = useResumeBuild();
     const {jobSeeker} = useJobSeeker();
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
-        if (jobSeeker?.resume == null) {
-            navigate("/build/education/add");
-            return;
-        }
-        if (jobSeeker!.resume!.educations.length == 0) {
-            navigate("/build/education/add");
+        if (jobSeeker?.resume == null || jobSeeker.resume.educations.length == 0) {
+            if (location.pathname.includes("/apply-resume")){
+                navigate("/apply-resume/education/add")
+            }
+            else {
+                navigate("/build/education/add");
+            }
             return;
         }
         setProgressPercentage(ProgressPercentPerPage * 4);

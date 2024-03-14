@@ -3,7 +3,7 @@ import {ResumeDTO} from "../DTOs/resumeRelatedDTOs/ResumeDTO";
 import {CreateResumeDTO} from "../DTOs/resumeRelatedDTOs/CreateResumeDTO";
 
 export class ResumeService {
-    private readonly baseURI: string = "api/Resume"; // Adjust the base URI as needed
+    private readonly baseURI: string = "api/Resume";
     private readonly customFetchService: CustomFetchService;
 
     constructor() {

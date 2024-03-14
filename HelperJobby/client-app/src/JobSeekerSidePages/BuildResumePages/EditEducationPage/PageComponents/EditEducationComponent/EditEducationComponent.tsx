@@ -23,6 +23,9 @@ const EditEducationComponent: FC<EditEducationComponentProps> = () => {
         if (parentPathFirstPart == "/build") {
             parentPathFirstPart = "/build/education"
         }
+        else if (parentPathFirstPart == "/apply-resume"){
+            parentPathFirstPart = "/apply-resume/education"
+        }
         setParentPagePath(parentPathFirstPart);
     }, []);
 

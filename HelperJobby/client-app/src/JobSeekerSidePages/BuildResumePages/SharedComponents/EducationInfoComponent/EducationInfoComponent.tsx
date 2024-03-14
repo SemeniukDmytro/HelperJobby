@@ -3,7 +3,7 @@ import './EducationInfoComponent.scss';
 import {EducationDTO} from "../../../../DTOs/resumeRelatedDTOs/EducationDTO";
 import {ResumeService} from "../../../../services/resumeService";
 import {EducationService} from "../../../../services/educationService";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {ProgressPercentPerPage} from "../ProgressPercentPerPage";
 import {CreateResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
@@ -21,6 +21,7 @@ import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/Autocomple
 import {MonthAndYearFromJSONToStringConverter} from "../../../../utils/convertLogic/formatDate";
 import useResumeBuild from "../../../../hooks/contextHooks/useResumeBuild";
 import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
+import useCurrentJobApplication from "../../../../hooks/contextHooks/useCurrentJobApplication";
 
 
 interface AddEducationComponentProps {
@@ -32,6 +33,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
         setProgressPercentage, setSaveFunc
         , setShowDialogWindow
     } = useResumeBuild();
+    const {job} = useCurrentJobApplication();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const navigate = useNavigate();
     const resumeService = new ResumeService();
@@ -55,12 +57,16 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
     const [invalidTimeProvided, setInvalidTimeProvided] = useState(false);
     const [executeInputsValidation, setExecuteInputValidations] = useState(false);
     const [parentPagePath, setParentPagePath] = useState("");
+    const location = useLocation();
 
     useEffect(() => {
-        const currentPath = window.location.pathname;
+        const currentPath = location.pathname;
         let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
         if (parentPathFirstPart == "/build") {
             parentPathFirstPart = "/build/education"
+        }
+        else if (parentPathFirstPart == "/apply-resume"){
+            parentPathFirstPart = "/apply-resume/education"
         }
         setParentPagePath(parentPathFirstPart);
     }, []);
@@ -76,8 +82,13 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
     }, [levelOfEducation, fieldOfStudy, schoolName,
         country, city, fromMonth, fromYear, toMonth, toYear]);
 
+    console.log(job)
     async function CustomSaveFunc() {
-        await handleEducationCreation("/my-profile", true)
+        let nextPagePath = "/my-profile";
+        if (parentPagePath.includes("/apply-resume") && job){
+            nextPagePath = `job-apply/${job.id}/resume`
+        }
+        await handleEducationCreation(nextPagePath, true)
     }
 
     async function addEducation(e: React.MouseEvent<HTMLButtonElement>) {
@@ -229,7 +240,10 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
             <form className={"build-resume-form"}>
                 {savingProcess && <div className={"request-in-process-surface"}></div>}
                 <div className={"build-page-header"}>
-                    {education ? <span>Edit education</span> : <span>Add Education</span>}
+                    {education ? <span>Edit education</span> : 
+                        <span>{parentPagePath.includes("/apply-resume") ? 
+                            "Do you want to add any education details?"
+                        : "Add Education"}</span>}
                 </div>
                 <CustomInputField
                     fieldLabel={"Level of education"}

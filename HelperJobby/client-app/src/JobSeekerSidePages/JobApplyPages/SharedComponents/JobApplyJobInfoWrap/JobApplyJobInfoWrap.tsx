@@ -61,7 +61,9 @@ const JobApplyJobInfoWrap: FC<JobApplyJobInfoWrapProps> = ({children}) => {
         loading || !job || !jobSeeker ? <LoadingPage/> :
             <div className={"job-application-main"}>
                 <div className={"job-application-left-side-container"}>
-                    {children}
+                    <div className={"ja-left-side-main"}>
+                        {children}
+                    </div>
                 </div>
                 <div className={"job-application-right-side-container"}>
                     <div className={`${!showAllJobDescription ? "job-window-container" : "expanded-job-window-container"}`}>

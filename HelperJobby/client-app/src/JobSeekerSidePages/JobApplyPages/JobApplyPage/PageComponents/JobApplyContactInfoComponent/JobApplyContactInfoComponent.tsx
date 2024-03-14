@@ -117,8 +117,7 @@ const JobApplyContactInfoComponent: FC<JobApplyContactInfoComponentProps> = () =
 
         } catch (error) {
             logErrorInfo(error)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
@@ -127,7 +126,7 @@ const JobApplyContactInfoComponent: FC<JobApplyContactInfoComponentProps> = () =
         <JobApplyJobInfoWrap>
             {showCityAutoComplete && <AutocompleteResultsWindow
                 inputFieldRef={cityInputRef}
-                windowMaxWidth={"calc(602px - 2rem)"}
+                windowMaxWidth={"478px"}
                 inputValue={city}
                 setInputValue={setCity}
                 country={jobSeeker?.address?.country || "Canada"}
@@ -135,109 +134,107 @@ const JobApplyContactInfoComponent: FC<JobApplyContactInfoComponentProps> = () =
                 setShowResult={setShowCityAutoComplete}
                 autocompleteWindowType={AutocompleteWindowTypes.city}
             />}
-            <div className={"ja-contact-info-main"}>
-                <div className={"progress-bar-and-exit-container mb15rem"}>
-                    <div className={"flex-row jc-end bold-navigation-link"}>
-                        Exit
+            <div className={"progress-bar-and-exit-container mb15rem"}>
+                <div className={"flex-row jc-end bold-navigation-link"}>
+                    Exit
+                </div>
+                <div className={"progress-bar-line mt05rem"}>
+                    <div
+                        style={{width: "33%"}}
+                        className={"progress-bar-filled"}/>
+                </div>
+            </div>
+            <form
+                onSubmit={saveUpdatedInfo}
+                className={"ja-form"}>
+                <div className={"ja-header"}>
+                    Add contact info
+                </div>
+                <CustomInputField
+                    fieldLabel={"First name"} isRequired={true} inputFieldValue={firstName}
+                    setInputFieldValue={setFirstName} inputRef={firstNameInputRef}
+                    executeValidation={executeFormValidation} setExecuteValidation={setExecuteFormValidation}
+                />
+                <CustomInputField
+                    fieldLabel={"Last name"} isRequired={true} inputFieldValue={lastName}
+                    setInputFieldValue={setLastName} inputRef={lastNameInputRef}
+                    executeValidation={executeFormValidation} setExecuteValidation={setExecuteFormValidation}
+                />
+                <div className={"field-label"}>
+                    Email
+                </div>
+                <div className={"add-info-email-container mb1rem"}>
+                    <div className={"dark-default-text"}>
+                        {authUser?.user.email}
                     </div>
-                    <div className={"progress-bar-line mt05rem"}>
+                    <div
+                        onMouseLeave={() => setShowEmailNotification(false)}
+                        onMouseEnter={() => setShowEmailNotification(true)}
+                        className={"dark-blue-color notification-hover-sign"}>
+                        <FontAwesomeIcon
+                            className={"svg125rem"}
+                            icon={faCircleInfo}/>
                         <div
-                            style={{width: "33%"}}
-                            className={"progress-bar-filled"}/>
+                            style={{opacity: `${showEmailNotification ? 1 : 0}`}}
+                            className={"small-notify"}>
+                            This is your account email address. To change it, go to account settings.
+                        </div>
                     </div>
                 </div>
-                <form
-                    onSubmit={saveUpdatedInfo}
-                    className={"ja-add-info-form"}>
-                    <div className={"ja-contact-info-header"}>
-                        Add contact info
-                    </div>
-                    <CustomInputField
-                        fieldLabel={"First name"} isRequired={true} inputFieldValue={firstName}
-                        setInputFieldValue={setFirstName} inputRef={firstNameInputRef}
-                        executeValidation={executeFormValidation} setExecuteValidation={setExecuteFormValidation}
-                    />
-                    <CustomInputField
-                        fieldLabel={"Last name"} isRequired={true} inputFieldValue={lastName}
-                        setInputFieldValue={setLastName} inputRef={lastNameInputRef}
-                        executeValidation={executeFormValidation} setExecuteValidation={setExecuteFormValidation}
-                    />
-                    <div className={"field-label"}>
-                        Email
-                    </div>
-                    <div className={"add-info-email-container mb1rem"}>
-                        <div className={"dark-default-text"}>
-                            {authUser?.user.email}
-                        </div>
-                        <div
-                            onMouseLeave={() => setShowEmailNotification(false)}
-                            onMouseEnter={() => setShowEmailNotification(true)}
-                            className={"dark-blue-color notification-hover-sign"}>
-                            <FontAwesomeIcon
-                                className={"svg125rem"}
-                                icon={faCircleInfo}/>
-                            <div
-                                style={{opacity: `${showEmailNotification ? 1 : 0}`}}
-                                className={"small-notify"}>
-                                This is your account email address. To change it, go to account settings.
-                            </div>
-                        </div>
-                    </div>
-                    <LocationCustomInputField
-                        fieldLabel={"City, Province / Territory"}
-                        inputValue={city}
-                        setInputValue={setCity}
-                        inputRef={cityInputRef}
+                <LocationCustomInputField
+                    fieldLabel={"City, Province / Territory"}
+                    inputValue={city}
+                    setInputValue={setCity}
+                    inputRef={cityInputRef}
+                    isRequired={true}
+                    setShowAutocompleteResults={setShowCityAutoComplete}
+                    executeValidation={executeFormValidation}
+                    setExecuteValidation={setExecuteFormValidation}
+                />
+
+                {showCountrySelector ? <CustomSelectField
+                        fieldLabel={"Country"}
+                        fieldValue={country}
+                        setFieldValue={setCountry}
+                        optionsArr={countries.map(c => c.name)}
                         isRequired={true}
-                        setShowAutocompleteResults={setShowCityAutoComplete}
                         executeValidation={executeFormValidation}
                         setExecuteValidation={setExecuteFormValidation}
+                        isInvalidSelect={!country}
                     />
-
-                    {showCountrySelector ? <CustomSelectField
-                            fieldLabel={"Country"}
-                            fieldValue={country}
-                            setFieldValue={setCountry}
-                            optionsArr={countries.map(c => c.name)}
-                            isRequired={true}
-                            executeValidation={executeFormValidation}
-                            setExecuteValidation={setExecuteFormValidation}
-                            isInvalidSelect={!country}
-                        />
-                        :
-                        <div className={"grey-tiny-text mb1rem"}>
-                            <span>Not in {jobSeeker?.address?.country || "Canada"}?</span>
-                            <span
-                                onClick={() => setShowCountrySelector(true)}
-                                className={"dark-blue-color bold-text bold-navigation-link"}>&nbsp;Change country</span>
-                        </div>
-                    }
-                    <CustomInputField
-                        fieldLabel={"Phone"}
-                        fieldSubtitle={"Include country code (start with +). Phone number must contain only numbers without spaces or dashes"}
-                        isRequired={false}
-                        inputFieldValue={phoneNumber}
-                        setInputFieldValue={setPhoneNumber}
-                        customErrorMessage={phoneNumberError}
-                        setCustomErrorMessage={setPhoneNumberError}
-                        inputRef={phoneNumberInputRef}
-                    />
-                    <div className={"change-resume-info-notify-container mb1rem"}>
-                        <FontAwesomeIcon
-                            className={"svg125rem icon-right-margin"}
-                            icon={faCircleInfo}/>
-                        <span className={"dark-small-text"}>
+                    :
+                    <div className={"grey-tiny-text mb1rem"}>
+                        <span>Not in {jobSeeker?.address?.country || "Canada"}?</span>
+                        <span
+                            onClick={() => setShowCountrySelector(true)}
+                            className={"dark-blue-color bold-text bold-navigation-link"}>&nbsp;Change country</span>
+                    </div>
+                }
+                <CustomInputField
+                    fieldLabel={"Phone"}
+                    fieldSubtitle={"Include country code (start with +). Phone number must contain only numbers without spaces or dashes"}
+                    isRequired={false}
+                    inputFieldValue={phoneNumber}
+                    setInputFieldValue={setPhoneNumber}
+                    customErrorMessage={phoneNumberError}
+                    setCustomErrorMessage={setPhoneNumberError}
+                    inputRef={phoneNumberInputRef}
+                />
+                <div className={"change-resume-info-notify-container mb1rem"}>
+                    <FontAwesomeIcon
+                        className={"svg125rem icon-right-margin"}
+                        icon={faCircleInfo}/>
+                    <span className={"dark-small-text"}>
                             Your HelperJobby Resume will also be updated with this contact information.
                         </span>
-                    </div>
-                    <button
-                        disabled={requestInProgress}
-                        className={"blue-button min-8chr-btn-width"}
-                        type={"submit"}>
-                        {requestInProgress ? <WhiteLoadingSpinner/> : <>Continue</>}
-                    </button>
-                </form>
-            </div>
+                </div>
+                <button
+                    disabled={requestInProgress}
+                    className={"blue-button min-8chr-btn-width"}
+                    type={"submit"}>
+                    {requestInProgress ? <WhiteLoadingSpinner/> : <>Continue</>}
+                </button>
+            </form>
         </JobApplyJobInfoWrap>
     )
 }
