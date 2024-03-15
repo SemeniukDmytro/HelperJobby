@@ -34,7 +34,7 @@ const CustomInputField: FC<EditFormFieldProps> = ({
 
     const [isInvalidValue, setIsInvalidValue] = useState(false);
     const [requiredMessage, setRequiredMessage] = useState("");
-    const [showEraseJobBtn, setShowEraseButton] = useState(inputFieldValue.length > 0);
+    const [showEraseJobBtn, setShowEraseButton] = useState(inputFieldValue ? inputFieldValue.length > 0 : false);
 
     useEffect(() => {
         if (customErrorMessage) {

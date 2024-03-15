@@ -20,14 +20,14 @@ interface SavedJobComponentProps {
 }
 
 const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) => {
-    const {setSavedJobs, jobApplies, setJobApplies} = useJobSeekerJobInteractions();
+    const {setSavedJobs, jobApplies} = useJobSeekerJobInteractions();
     const {setJobSeeker} = useJobSeeker();
     const jobSeekerService = new JobSeekerService();
     const [showRemoveFromSaved, setShowRemoveFromSaved] = useState(false);
     const [showUndoRemoveWindow, setShowUndoRemoveWindow] = useState(true);
     const {authUser} = useAuth();
     const navigate = useNavigate();
-    const {saveJob, removeSavedJob, applyForJob} = useJobActions(jobSeekerService, setJobSeeker, job);
+    const {saveJob, removeSavedJob} = useJobActions(jobSeekerService, setJobSeeker, job);
     const [isApplied, setIsApplied] = useState(false);
     const [requestInProgress, setRequestInProgress] = useState(false);
 
@@ -69,17 +69,7 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
     }
 
     async function handleJobApply() {
-        try {
-            setRequestInProgress(true)
-            await applyForJob(job.id, setJobApplies);
-            setIsApplied(true)
-        }
-        catch (err){
-            logErrorInfo(err)
-        }
-        finally {
-            setRequestInProgress(false)
-        }
+        navigate(`/job-apply/${job.id}/contact-info`);
     }
 
     return (

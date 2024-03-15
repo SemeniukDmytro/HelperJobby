@@ -1,7 +1,6 @@
 import {FC, useEffect} from 'react';
 import './JobApplyWrap.scss';
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
-import {CurrentJobApplicationProvider} from "../../../../contexts/CurrentJobApplicationContext";
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 
 interface JobApplyWrapProps {}

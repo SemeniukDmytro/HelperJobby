@@ -79,3 +79,11 @@
   overflow-wrap: break-word;
   word-break: break-word;
 }
+
+.dark-tiny-text{
+  color: global-variables.$neutral-color-1000;
+  line-height: 1.5;
+  font-size: 0.75rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}

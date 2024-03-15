@@ -189,8 +189,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             setSavingProcess(true);
             const retrievedWorkExperience = await workExperienceService.updateWorkExperience(workExperience!.id, fillWorkExperienceDTO());
             const updatedJobSeeker = jobSeeker;
-            const workExperienceIndex = updatedJobSeeker!.resume!.educations.findIndex(e => e.id === retrievedWorkExperience.id);
-
+            const workExperienceIndex = updatedJobSeeker!.resume!.workExperiences.findIndex(e => e.id === retrievedWorkExperience.id);
             if (workExperienceIndex !== -1) {
                 updatedJobSeeker!.resume!.workExperiences[workExperienceIndex] = retrievedWorkExperience;
                 setJobSeeker(updatedJobSeeker);

@@ -1,7 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import './JobApplyResumePagesWrap.scss';
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
-import {CurrentJobApplicationProvider} from "../../../../contexts/CurrentJobApplicationContext";
 import {ResumeContextProvider} from "../../../../contexts/ResumeContext";
 
 interface JobApplyResumePagesWrapProps {

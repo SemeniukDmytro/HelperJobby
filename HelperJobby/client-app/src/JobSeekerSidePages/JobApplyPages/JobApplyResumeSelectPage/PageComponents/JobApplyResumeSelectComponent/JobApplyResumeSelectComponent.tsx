@@ -17,6 +17,10 @@ import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {getFormattedTimeWithWeekdays} from "../../../../../utils/convertLogic/formatDate";
 import {useAuth} from "../../../../../hooks/contextHooks/useAuth";
+import resume from "../../../../../Components/Icons/Resume";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
+import {log} from "node:util";
 
 interface JobApplyResumeSelectComponentProps {
 }
@@ -69,13 +73,19 @@ const JobApplyResumeSelectComponent: FC<JobApplyResumeSelectComponentProps> = ()
         }
     }
 
-    function createJobApply(e: FormEvent) {
+    function proceedToJobApplyReviewPage(e: FormEvent) {
         e.preventDefault();
         if (!resumeChosen) {
             setInvalidContinueTry(true);
         }
         if (!jobSeeker?.resume) {
-            navigate("/apply-resume/education")
+            navigate("/apply-resume/education");
+        }
+        else if (job) {
+            navigate(`/job-apply/${job.id}/review-info`);
+        }
+        else {
+            navigate("/")
         }
     }
 
@@ -108,7 +118,7 @@ const JobApplyResumeSelectComponent: FC<JobApplyResumeSelectComponentProps> = ()
             </div>
             {loading ? <LoadingPage/> :
                 <form
-                    onSubmit={createJobApply}
+                    onSubmit={proceedToJobApplyReviewPage}
                     className={"ja-form"}>
                     <div className={"ja-header"}>
                         Add a resume for employer

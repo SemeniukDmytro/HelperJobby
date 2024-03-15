@@ -10,6 +10,7 @@ import {JobApplyService} from "../../../../../services/jobApplyService";
 import {UserJobInteractionsTypes} from "../../../../../enums/utilityEnums/UserJobInteractionsTypes";
 import {useJobSeekerJobInteractions} from "../../../../../hooks/contextHooks/useJobSeekerJobInteractions";
 import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
+import {useNavigate} from "react-router-dom";
 
 interface JobApplyComponentProps {
     job: JobDTO;
@@ -23,6 +24,7 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
     const [showApplyRemoved, setShowApplyRemoved] = useState(false);
     const [showUndoRemoveWindow, setShowUndoRemoveWindow] = useState(true);
     const [requestInProcess, setRequestInProcess] = useState(false);
+    const navigate = useNavigate();
 
     async function removeJobApply() {
         try {
@@ -46,26 +48,8 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
         }
     }
 
-    async function reApply() {
-        try {
-            if (requestInProcess) {
-                return;
-            }
-            setRequestInProcess(true);
-            const retrievedJobApply = await jobApplyService.postJobApply(job.id);
-            retrievedJobApply.job = job;
-            setJobSeeker(prevJobSeeker => {
-                return prevJobSeeker && {
-                    ...prevJobSeeker,
-                    jobApplies: [...prevJobSeeker.jobApplies, retrievedJobApply]
-                };
-            });
-            setShowApplyRemoved(false);
-        } catch (error) {
-            logErrorInfo(error);
-        } finally {
-            setRequestInProcess(false);
-        }
+    async function handleJobApply() {
+        navigate(`/job-apply/${job.id}/contact-info`);
     }
 
     function closeUndoActionWindow() {
@@ -101,7 +85,7 @@ const JobApplyComponent: FC<JobApplyComponentProps> = ({job, dateApplied}) => {
                             <div>
                                 <span className={"light-dark-default-text bold-text"}>{job.jobTitle}&nbsp;</span>
                                 <span className={"grey-default-text"}>apply was removed.&nbsp;</span>
-                                <a className={"bold-navigation-link"} onClick={reApply}>Undo</a>
+                                <a className={"bold-navigation-link"} onClick={handleJobApply}>Undo</a>
                             </div>
                             <div>
                                 <button className={"medium-tr-btn-with-icon"} onClick={closeUndoActionWindow}>
