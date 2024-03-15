@@ -81,8 +81,6 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
         setSaveFunc(() => CustomSaveFunc);
     }, [levelOfEducation, fieldOfStudy, schoolName,
         country, city, fromMonth, fromYear, toMonth, toYear]);
-
-    console.log(job)
     async function CustomSaveFunc() {
         let nextPagePath = "/my-profile";
         if (parentPagePath.includes("/apply-resume") && job){
@@ -181,7 +179,15 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
     }
 
     function navigateToWorkExperiencePage() {
-        navigate("/build/experience")
+        if (location.pathname.includes("/apply-resume") && job){
+            navigate("/apply-resume/experience");
+        }
+        else if(location.pathname.includes("/build/experience")){
+            navigate("/build/experience")
+        }
+        else {
+            navigate("/my-profile")
+        }
     }
 
     function fillCreateEducationDTO() {
@@ -299,14 +305,14 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     setInvalidValuesProvided={setInvalidTimeProvided}
                 />
                 <div className={"form-buttons-row-container"}>
-                    <button className={"submit-form-button"} onClick={addEducation}>
+                    <button className={"submit-form-button min-4chr-btn-width"} onClick={addEducation}>
                         {savingProcess ?
                             <WhiteLoadingSpinner/>
                             :
                             <span>Save</span>
                         }
                     </button>
-                    {parentPagePath == "/build/education" ?
+                    {parentPagePath == "/build/education" || parentPagePath == "/apply-resume/education" ?
                         <button className={"skip-form-button"} onClick={navigateToWorkExperiencePage}>
                             Skip
                         </button>

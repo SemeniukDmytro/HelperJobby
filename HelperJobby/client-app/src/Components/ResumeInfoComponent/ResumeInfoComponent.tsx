@@ -16,11 +16,13 @@ import EducationReview
 import useResumeBuild from "../../hooks/contextHooks/useResumeBuild";
 import {useJobSeeker} from "../../hooks/contextHooks/useJobSeeker";
 import {useAuth} from "../../hooks/contextHooks/useAuth";
+import {useApplyResume} from "../../hooks/contextHooks/useApplyResume";
 
 interface ResumeInfoComponentProps {
 }
 
 const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
+    const {jobId} = useApplyResume();
     const {setProgressPercentage, setSaveFunc} = useResumeBuild();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
@@ -30,15 +32,22 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
     const currentPath = window.location.pathname;
 
     useEffect(() => {
-        if (!jobSeeker?.resume){
+        if (!jobSeeker?.resume && !jobId){
             navigate("/build/name");
             return;
         }
+        else if (!jobSeeker?.resume && jobId){
+            navigate("/apply-resume/education")
+        }
         setProgressPercentage(ProgressPercentPerPage * 7);
-        setSaveFunc(() => navigateToProfilePage);
+        setSaveFunc(() => onContinueButtonClick);
     }, []);
 
-    async function navigateToProfilePage() {
+    async function onContinueButtonClick() {
+        if (jobId){
+            navigate(`/job-apply/${jobId}/resume`);
+            return;
+        }
         navigate("/my-profile")
     }
 
@@ -178,12 +187,12 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
                         </div>)))
                 }
             </div>
-            {currentPath != "/resume" &&
+            {(currentPath != "/resume" || jobId) &&
                 <>
                     <div style={{marginBottom: "1rem"}} className={"content-separation-line"}></div>
                     <div className={"form-and-buttons-divider"}>
-                        <button className={"blue-button min-8chr-btn-width"} onClick={navigateToProfilePage}>
-                            <span>Continue</span>
+                        <button className={"blue-button min-8chr-btn-width"} onClick={onContinueButtonClick}>
+                            <span>{jobId ? "Continue applying" : "Continue"}</span>
                         </button>
                     </div>
                 </>

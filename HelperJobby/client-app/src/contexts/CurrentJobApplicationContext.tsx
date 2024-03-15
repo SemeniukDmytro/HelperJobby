@@ -9,7 +9,6 @@ const CurrentJobApplicationContext = createContext<CurrentJobApplicationContextP
 
 export function CurrentJobApplicationProvider({children} : {children : ReactNode}){
     const [job, setJob] = useState<JobDTO | null>(null);
-    console.log(job)
     
     return (
         <CurrentJobApplicationContext.Provider value={{

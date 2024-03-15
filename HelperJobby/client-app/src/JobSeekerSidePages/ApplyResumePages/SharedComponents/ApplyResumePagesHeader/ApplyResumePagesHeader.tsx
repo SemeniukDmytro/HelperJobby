@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 import DialogWindow from "../../../../Components/DialogWindow/DialogWindow";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import useCurrentJobApplication from "../../../../hooks/contextHooks/useCurrentJobApplication";
+import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 
 interface ApplyResumePagesHeaderProps {
     children: ReactNode;
@@ -12,6 +13,7 @@ interface ApplyResumePagesHeaderProps {
 
 const ApplyResumePagesHeader: FC<ApplyResumePagesHeaderProps> = ({children}) => {
     const {job} = useCurrentJobApplication();
+    const {jobSeeker} = useJobSeeker();
     const [showDialogWindow, setShowDialogWindow] = useState(false);
     const navigate = useNavigate();
     const dialogTitle = "Are you sure you want to exit?";
@@ -21,12 +23,17 @@ const ApplyResumePagesHeader: FC<ApplyResumePagesHeaderProps> = ({children}) => 
     const isPositiveDialog = true;
 
     function onBackButtonClick() {
-        navigate(-1);
+        if ((!jobSeeker?.resume || jobSeeker.resume.educations.length === 0) && job){
+            navigate(`/job-apply/${job.id}/resume`)
+        }
+        else {
+            navigate(-1);
+        }
     }
 
     function goBackToJobApply() {
         if (job) {
-            navigate(`/job-apply/${job?.id}/resume`)
+            navigate(`/job-apply/${job.id}/resume`)
         } else {
             navigate("/my-profile");
         }
@@ -53,7 +60,9 @@ const ApplyResumePagesHeader: FC<ApplyResumePagesHeaderProps> = ({children}) => 
                     <FontAwesomeIcon className={"svg125rem"} icon={faXmark}/>
                 </button>
             </div>
-            {children}
+            <div className={"page-with-centered-content-layout"}>
+                {children}
+            </div>
         </>
     )
 }

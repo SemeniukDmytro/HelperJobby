@@ -20,11 +20,9 @@ const JobApplyWrap: FC<JobApplyWrapProps> = () => {
     }, [location.pathname]);
     
     return (
-        <CurrentJobApplicationProvider>
-            <PageWrapWithHeader>
-                <Outlet/>
-            </PageWrapWithHeader>
-        </CurrentJobApplicationProvider>
+        <PageWrapWithHeader>
+            <Outlet/>
+        </PageWrapWithHeader>
     )
     
 }

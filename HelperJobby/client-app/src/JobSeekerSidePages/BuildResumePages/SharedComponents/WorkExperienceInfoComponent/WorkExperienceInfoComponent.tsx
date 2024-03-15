@@ -14,7 +14,7 @@ import {CreateUpdateWorkExperienceDTO} from "../../../../DTOs/resumeRelatedDTOs/
 import {WorkExperienceService} from "../../../../services/workExperienceService";
 import {ResumeService} from "../../../../services/resumeService";
 import {JobSeekerDTO} from "../../../../DTOs/accountDTOs/JobSeekerDTO";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {months} from "../../../../AppConstData/Months";
 import {getResumeInfoPageParentPath} from "../../../../utils/getResumeInfoPageParentPath";
 import LocationCustomInputField from "../../../../Components/LocationCustomInputField/LocationCustomInputField";
@@ -22,6 +22,7 @@ import {AutocompleteWindowTypes} from "../../../../enums/utilityEnums/Autocomple
 import {MonthAndYearFromJSONToStringConverter} from "../../../../utils/convertLogic/formatDate";
 import useResumeBuild from "../../../../hooks/contextHooks/useResumeBuild";
 import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
+import useCurrentJobApplication from "../../../../hooks/contextHooks/useCurrentJobApplication";
 
 interface WorkExperienceInfoComponentProps {
     workExperience?: WorkExperienceDTO
@@ -30,6 +31,7 @@ interface WorkExperienceInfoComponentProps {
 const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({workExperience}) => {
     const {setProgressPercentage, setShowDialogWindow, setSaveFunc} = useResumeBuild();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
+    const {job} = useCurrentJobApplication();
     const workExperienceService = new WorkExperienceService();
     const resumeService = new ResumeService();
     const navigate = useNavigate();
@@ -53,6 +55,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     const [savingProcess, setSavingProcess] = useState(false);
     const [validateJobTitle, setExecuteValidation] = useState(false);
     const [parentPagePath, setParentPagePath] = useState("");
+    const location = useLocation();
 
 
     useEffect(() => {
@@ -64,10 +67,13 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             setPassedWorkExperienceValues();
         }
 
-        const currentPath = window.location.pathname;
+        const currentPath = location.pathname;
         let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
         if (parentPathFirstPart == "/build") {
             parentPathFirstPart = "/build/experience"
+        }
+        else if (parentPathFirstPart == "/apply-resume"){
+            parentPathFirstPart = "/apply-resume/experience"
         }
         setParentPagePath(parentPathFirstPart);
     }, []);
@@ -86,11 +92,19 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     }
 
     async function CustomSaveFunc() {
-        await handleWorkExperienceCreation("/my-profile", true)
+        let nextPagePath = "/my-profile";
+        if (parentPagePath.includes("/apply-resume") && job){
+            nextPagePath = `job-apply/${job.id}/resume`
+        }
+        await handleWorkExperienceCreation(nextPagePath, true)
     }
 
     function navigateToSkillsPage() {
-        navigate("/build/skills")
+        let nextPagePath = "/build/skills";
+        if (parentPagePath.includes("/apply-resume") && job){
+            nextPagePath = `/apply-resume/skills`;
+        }
+        navigate(nextPagePath); 
     }
 
     function cancelEditing() {
@@ -252,7 +266,10 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             <form className={"build-resume-form"}>
                 {savingProcess && <div className={"request-in-process-surface"}></div>}
                 <div className={"build-page-header"}>
-                    {workExperience ? <span>Edit work experience</span> : <span>Add work experience</span>}
+                    {workExperience ? <span>Edit work experience</span> :
+                        <span>{parentPagePath.includes("/apply-resume") ?
+                            "Do you want to add a recent job?"
+                            : "Add Experience"}</span>}
                 </div>
                 <CustomInputField
                     fieldLabel={"Job title"}
@@ -327,14 +344,14 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                 </div>
                 <div className={"between-lines-spacing"}></div>
                 <div className={"form-buttons-row-container"}>
-                    <button className={"blue-button"} onClick={addWorkExperience}>
+                    <button className={"blue-button min-4chr-btn-width"} onClick={addWorkExperience}>
                         {savingProcess ?
                             <WhiteLoadingSpinner/>
                             :
                             <span>Save</span>
                         }
                     </button>
-                    {parentPagePath == "/build/experience" ?
+                    {parentPagePath == "/build/experience" || parentPagePath == "/apply-resume/experience" ?
                         <button className={"skip-form-button"} onClick={navigateToSkillsPage}>
                             Skip
                         </button>

@@ -59,6 +59,19 @@ import JobApplyResumePagesWrap
     from "../../JobSeekerSidePages/ApplyResumePages/SharedComponents/JobApplyResumePagesWrap/JobApplyResumePagesWrap";
 import ApplyResumeEditEducationPage
     from "../../JobSeekerSidePages/ApplyResumePages/ApplyResumeEditEducationPage/ApplyResumeEditEducationPage";
+import JobApplyJobInfoProvider
+    from "../../JobSeekerSidePages/JobApplyPages/SharedComponents/JobApplyJobInfoProvider/JobApplyJobInfoProvider";
+import ApplyResumeExperiencePage
+    from "../../JobSeekerSidePages/ApplyResumePages/ApplyResumeExperiencePage/ApplyResumeExperiencePage";
+import ApplyResumeAddExperiencePage
+    from "../../JobSeekerSidePages/ApplyResumePages/ApplyResumeAddExperiencePage/ApplyResumeAddExperiencePage";
+import ApplyResumeEditExperiencePage
+    from "../../JobSeekerSidePages/ApplyResumePages/ApplyResumeEditExperiencePage/ApplyResumeEditExperiencePage";
+import ApplyResumeSkillsPage
+    from "../../JobSeekerSidePages/ApplyResumePages/ApplyResumeSkillsPage/ApplyResumeSkillsPage";
+import ApplyResumeSuccessPage
+    from "../../JobSeekerSidePages/ApplyResumePages/ApplyResumeSuccessPage/ApplyResumeSuccessPage";
+import ResumePagesWrap from "../../JobSeekerSidePages/ResumePage/PageComponents/ResumePagesWrap/ResumePagesWrap";
 
 interface JobSeekerSideRoutesProps {
 }
@@ -100,7 +113,7 @@ const JobSeekerSideRoutes: FC<JobSeekerSideRoutesProps> = () => (
                 </Route>
             </Route>
 
-            <Route path={"/resume"} element={<Outlet/>}>
+            <Route path={"/resume"} element={<ResumePagesWrap/>}>
                 <Route index element={<ResumePage/>}/>
                 <Route path={"contact"} element={<EditContactInfoPage/>}/>
                 <Route path={"education/add"} element={<ResumeAddEducationPage/>}/>
@@ -131,7 +144,7 @@ const JobSeekerSideRoutes: FC<JobSeekerSideRoutesProps> = () => (
 
             <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
 
-            <>
+            <Route element={<JobApplyJobInfoProvider/>}> 
                 <Route path={"/job-apply/:jobId"} element={<JobApplyWrap/>}>
                     <Route path={"contact-info"} element={<JobApplyContactInfoPage/>}/>
                     <Route path={"resume"} element={<JobApplyResumeSelectPage/>}/>
@@ -140,9 +153,18 @@ const JobSeekerSideRoutes: FC<JobSeekerSideRoutesProps> = () => (
                 <Route path={"/apply-resume"} element={<JobApplyResumePagesWrap/>}>
                     <Route path={"education"} element={<ApplyResumeEducationPage/>}/>
                     <Route path={"education/add"} element={<ApplyResumeAddEducationPage/>}/>
-                    <Route path={"experience/:id"} element={<ApplyResumeEditEducationPage/>}/>
+                    <Route path={"education/:id"} element={<ApplyResumeEditEducationPage/>}/>
+
+                    <Route path={"experience"} element={<ApplyResumeExperiencePage/>}/>
+                    <Route path={"experience/add"} element={<ApplyResumeAddExperiencePage/>}/>
+                    <Route path={"experience/:id"} element={<ApplyResumeEditExperiencePage/>}/>
+                    
+                    <Route path={"skills"} element={<ApplyResumeSkillsPage/>}/>
+                    
+                    <Route path={"success"} element={<ApplyResumeSuccessPage/>}/>
+                    
                 </Route>
-            </>
+            </Route>
             
         </Route>
         

@@ -8,6 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
 import useResumeBuild from "../../../../../hooks/contextHooks/useResumeBuild";
+import useCurrentJobApplication from "../../../../../hooks/contextHooks/useCurrentJobApplication";
 
 interface ResumeEducationComponentProps {
 }
@@ -17,15 +18,12 @@ const EducationComponent: FC<ResumeEducationComponentProps> = () => {
     const {jobSeeker} = useJobSeeker();
     const navigate = useNavigate();
     const location = useLocation();
-
+    const addEducationPath = location.pathname.includes("/apply-resume") ? "/apply-resume/education/add" : "/build/education/add";
+    const {job} = useCurrentJobApplication();
+    
     useEffect(() => {
-        if (jobSeeker?.resume == null || jobSeeker.resume.educations.length == 0) {
-            if (location.pathname.includes("/apply-resume")){
-                navigate("/apply-resume/education/add")
-            }
-            else {
-                navigate("/build/education/add");
-            }
+        if (!jobSeeker?.resume || jobSeeker.resume.educations.length == 0) {
+            navigate(addEducationPath);
             return;
         }
         setProgressPercentage(ProgressPercentPerPage * 4);
@@ -33,15 +31,24 @@ const EducationComponent: FC<ResumeEducationComponentProps> = () => {
     }, []);
 
     function addAnotherEducation() {
-        navigate("/build/education/add")
+        navigate(addEducationPath)
     }
 
     async function customSaveFunc() {
-        navigate("my-profile")
+        let nextPagePath = "/my-profile";
+        if (addEducationPath.includes("/apply-resume") && job){
+            nextPagePath = `job-apply/${job.id}/resume`
+        }
+        navigate(nextPagePath)
     }
 
     function navigateToWorkExperiencePage() {
-        navigate("/build/experience")
+        if (location.pathname.includes("/apply-resume")){
+            navigate("/apply-resume/experience")
+        }
+        else {
+            navigate("/build/experience")
+        }
     }
 
     return (

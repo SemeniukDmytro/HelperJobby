@@ -10,10 +10,11 @@ import {SkillService} from "../../../../../services/skillService";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {ResumeService} from "../../../../../services/resumeService";
 import {CreateResumeDTO} from "../../../../../DTOs/resumeRelatedDTOs/CreateResumeDTO";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {useJobSeeker} from "../../../../../hooks/contextHooks/useJobSeeker";
 import useResumeBuild from "../../../../../hooks/contextHooks/useResumeBuild";
+import useCurrentJobApplication from "../../../../../hooks/contextHooks/useCurrentJobApplication";
 
 interface SkillsComponentProps {
 }
@@ -24,6 +25,8 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
     const skillService = new SkillService();
     const resumeService = new ResumeService();
     const navigate = useNavigate();
+    const location = useLocation();
+    const {job} = useCurrentJobApplication();
 
     const [currentSkill, setCurrentSkill] = useState("");
     const [skills, setSkills] = useState<CreateSkillDTO[]>([]);
@@ -50,8 +53,6 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
         });
         setCurrentSkill("");
     }
-    
-    console.log(skills)
 
     function removeSkill(indexToRemove: number) {
         setSkills((prevState) => {
@@ -60,11 +61,19 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
     }
 
     async function customSaveFunc() {
-        await handleSkillsSaving("/my-profile")
+        let nextPagePath = "/my-profile";
+        if (location.pathname.includes("/apply-resume") && job){
+            nextPagePath = `job-apply/${job.id}/resume`
+        }
+        await handleSkillsSaving(nextPagePath)
     }
 
     async function saveSkills() {
-        await handleSkillsSaving("/build/preview");
+        let nextPagePath = "/build/preview";
+        if (location.pathname.includes("/apply-resume") && job){
+            nextPagePath = `/apply-resume/success`
+        }
+        await handleSkillsSaving(nextPagePath);
     }
 
     async function handleSkillsSaving(nextPageUrl: string) {
@@ -100,7 +109,6 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
 
     async function addNewSkillsResume() {
         try {
-            console.log(skills)
             const retrievedSkills = await skillService.addSkillsToResume(jobSeeker!.resume!.id, skills);
             const updatedJobSeeker = jobSeeker;
             if (updatedJobSeeker?.resume) {

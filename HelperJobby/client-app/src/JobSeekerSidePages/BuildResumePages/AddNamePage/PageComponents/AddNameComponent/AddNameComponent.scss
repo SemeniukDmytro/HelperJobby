@@ -6,7 +6,7 @@
 
 .request-in-process-surface {
   position: absolute;
-  width: 100%;
+  width: inherit;
   height: 100%;
   z-index: 5;
   background-color: rgba(255, 255, 255, 0.4);

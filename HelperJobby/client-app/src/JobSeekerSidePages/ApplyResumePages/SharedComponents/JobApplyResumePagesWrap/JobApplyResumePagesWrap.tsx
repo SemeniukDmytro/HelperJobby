@@ -19,11 +19,7 @@ const JobApplyResumePagesWrap: FC<JobApplyResumePagesWrapProps> = () => {
 
   return(
     <ResumeContextProvider>
-        <CurrentJobApplicationProvider>
-            <div className={"page-with-centered-content-layout"}>
-                <Outlet/>
-            </div>
-        </CurrentJobApplicationProvider>
+        <Outlet/>
     </ResumeContextProvider>
   )
 }

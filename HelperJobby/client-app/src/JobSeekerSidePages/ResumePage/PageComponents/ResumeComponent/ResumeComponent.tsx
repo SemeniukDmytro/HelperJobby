@@ -1,15 +1,16 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import './ResumeComponent.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowLeftLong, faEllipsisVertical, faTrashCan, faUpload} from "@fortawesome/free-solid-svg-icons";
+import {faArrowLeftLong, faEllipsisVertical, faTrashCan} from "@fortawesome/free-solid-svg-icons";
 import ResumeInfoComponent from "../../../../Components/ResumeInfoComponent/ResumeInfoComponent";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import DialogWindow from "../../../../Components/DialogWindow/DialogWindow";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {ResumeService} from "../../../../services/resumeService";
-import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
+import {useApplyResume} from "../../../../hooks/contextHooks/useApplyResume";
+import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValidators";
 
 interface ResumeComponentProps {
 }
@@ -30,10 +31,24 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
     const firstDialogButtonText = "Cancel";
     const secondDialogButtonText = "Delete";
     const isPositiveDialog = false;
+    const [searchParams] = useSearchParams();
+    const fromParam = searchParams.get("from");
+    const jobIdParam = searchParams.get("jobId");
+    const {jobId, setJobId} = useApplyResume();
+    
 
     useEffect(() => {
-        if (!jobSeeker?.resume) {
+        if (!jobId){
+            if (fromParam === "job-apply" && jobIdParam && !isNanAfterIntParse(jobIdParam)){
+                setJobId(parseInt(jobIdParam));
+            }
+        }
+        
+        if (!jobSeeker?.resume && ((!jobIdParam || isNanAfterIntParse(jobIdParam)) && !jobId)) {
             navigate("/my-profile");
+        }
+        else if (!jobSeeker?.resume && ((jobIdParam && !isNanAfterIntParse(jobIdParam)) || jobId)){
+            navigate(`/job-apply/${jobIdParam ? jobIdParam : jobId}/resume`);
         }
         const handleOutsideShowMoreOptionsClick = (event: MouseEvent) => {
             if (moreOptionsButtonRef.current && !moreOptionsButtonRef.current.contains(event.target as Node)) {
@@ -71,6 +86,10 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
     }, [showMoreOptions]);
 
     function onBackButtonClick() {
+        if (jobId){
+            navigate(`/job-apply/${jobId}/resume`);
+            return;
+        }
         navigate("/my-profile")
     }
 
@@ -90,13 +109,14 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
             logErrorInfo(err)
         } finally {
             setDeleteProcess(false);
-            navigate("/my-profile")
+            if (jobId){
+                navigate(`/job-apply/${jobId}/resume`);
+            }
+            else {
+                navigate("/my-profile")
+            }
         }
     }
-
-    function navigateToJobPostingPage() {
-        navigate(employerPagesPaths.JOB_POSTING);
-    }   
 
     return (
         <>

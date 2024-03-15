@@ -1,0 +1,22 @@
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+.success-resume-sub-header {
+  font-size: 1.25rem;
+  text-align: center;
+  color: global-variables.$neutral-color-800;
+  word-break: break-word;
+  margin-bottom: 2rem;
+}
+
+.success-resume-buttons-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.success-resume-button {
+  height: 3rem;
+  width: 49%;
+}
+
