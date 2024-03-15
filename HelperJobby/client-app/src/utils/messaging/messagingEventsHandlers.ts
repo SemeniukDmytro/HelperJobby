@@ -18,34 +18,37 @@ export function onMessageSent(message: MessageDTO,
                               conversation: ConversationDTO | null,
                               setConversation: Dispatch<SetStateAction<ConversationDTO | null>>,
                               setConversationsToShow: Dispatch<SetStateAction<ConversationDTO[]>>) {
-    if (conversation?.id !== message.conversationId) {
+    if (conversation && conversation?.id !== message.conversationId) {
         return;
     }
-    let updatedConversation = {...conversation};
-    if (updatedConversation){
-        updatedConversation.lastModified = message.sentAt;
-        updatedConversation.messages = [...updatedConversation.messages, message];
-    }
-    else {
-        updatedConversation = {...message.conversation, messages : [message]};
-    }
-    if (message.employerId){
-        updatedConversation.jobSeekersUnreadMessagesCount = conversation.jobSeekersUnreadMessagesCount + 1;
-    }
-    else {
-        updatedConversation.employersUnreadMessagesCount = conversation.employersUnreadMessagesCount + 1;
-    }
-    setConversation(updatedConversation)
+    let updatedConversation = conversation ? {
+        ...conversation,
+        lastModified : message.sentAt,
+        messages : [...conversation.messages, message],
+        jobSeekersUnreadMessagesCount : message.employerId ? conversation.jobSeekersUnreadMessagesCount + 1 : conversation.jobSeekersUnreadMessagesCount,
+        employersUnreadMessagesCount : message.jobSeekerId ? conversation.employersUnreadMessagesCount + 1 : conversation.employersUnreadMessagesCount
+    } : {
+        ...message.conversation,
+        messages : [message],
+        jobSeekersUnreadMessagesCount : message.employerId ?  1 : 0,
+        employersUnreadMessagesCount : message.jobSeekerId ? 1 : 0
+    };
+    setConversation(updatedConversation);
     setConversationsToShow(prevConversations => {
-        const conversationIndex = prevConversations.findIndex(c => c.id === conversation.id);
-        const updatedConversations = [...prevConversations];
-        const conversationInfo = {...conversation};
-        conversationInfo.messages.push(message);
-        conversationInfo.lastModified = message.sentAt;
-        if (conversationIndex !== -1) {
-            updatedConversations[conversationIndex] = {...conversationInfo};
+        if (conversation){
+            const conversationIndex = prevConversations.findIndex(c => c.id === conversation.id);
+            const updatedConversations = [...prevConversations];
+            const conversationInfo = {...conversation};
+            conversationInfo.messages.push(message);
+            conversationInfo.lastModified = message.sentAt;
+            if (conversationIndex !== -1) {
+                updatedConversations[conversationIndex] = {...conversationInfo};
+            }
+            return updatedConversations;
         }
-        return updatedConversations;
+        else {
+            return [...prevConversations, updatedConversation]
+        }
     });
 }
 

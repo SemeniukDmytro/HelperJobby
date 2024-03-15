@@ -132,6 +132,7 @@ public class JobApplyQueryRepository : IJobApplyQueryRepository
                     Employer = new Employer
                     {
                         Id = ja.Job.EmployerId,
+                        FullName = ja.Job.Employer.FullName,
                         Organization = new Organization
                         {
                             Id = ja.Job.Employer.OrganizationId,

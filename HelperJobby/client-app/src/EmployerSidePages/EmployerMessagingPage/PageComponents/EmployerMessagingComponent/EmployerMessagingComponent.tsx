@@ -119,7 +119,7 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
                                     conversationsToShow.map((conv, index) => (
                                         <ShortConversationInfo conversationInfo={conv}
                                                                conversation={conversation}
-                                                               secondParticipantName={(conv.jobSeeker.firstName && conv.jobSeeker.lastName) ?
+                                                               secondParticipantName={(conv.jobSeeker?.firstName && conv.jobSeeker?.lastName) ?
                                                                               `${conv.jobSeeker.firstName} ${conv.jobSeeker.lastName}` :
                                                                               "Not specified"}
                                                                navigateToFullConversationPath={`${EmployerPagesPaths.MESSAGES}?conversationId=${conv.id}`}

@@ -17,7 +17,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.ConfigureCustomServices();
 builder.Services.AddAutoMapperProfiles();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR().AddJsonProtocol(options =>
+{
+    options.PayloadSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+});
 
 
 var connectionString = builder.Configuration.GetConnectionString("Default");

@@ -84,7 +84,7 @@ public class ConversationService : IConversationService
 
         if (conversation == null)
         {
-            var jobApply = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, jobSeekerId);
+            var jobApply = await _jobApplyQueryRepository.GetJobApplyForConversation(jobSeekerId, jobId);
             
             if (jobApply.Job.EmployerId != employerId)
             {
@@ -101,6 +101,9 @@ public class ConversationService : IConversationService
             };
 
             conversation = await _conversationCommandRepository.CreateConversation(conversation);
+            conversation.Employer = jobApply.Job.Employer;
+            conversation.JobSeeker = jobApply.JobSeeker;
+            conversation.Job = jobApply.Job;
         }
 
         return conversation;

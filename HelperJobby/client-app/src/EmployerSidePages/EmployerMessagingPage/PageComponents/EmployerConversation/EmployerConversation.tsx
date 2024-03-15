@@ -286,12 +286,13 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
                                         Job type
                                     </div>
                                     <div className={"semi-dark-small-text"}>
-                                        {conversation?.job.jobType ?
-                                            conversation.job.jobType.map((jt, index) => (
-                                                `${jobTypesEnumToStringMap(jt)}${index !== conversation.job.jobType.length - 1 ? ", " : ""}`
-                                            ))
-                                            : jobApply?.job.jobType.map((jt, index) => (
+                                        {jobApply?.job.jobType ?
+                                            jobApply?.job.jobType.map((jt, index) => (
                                                 `${jobTypesEnumToStringMap(jt)}${index !== jobApply?.job.jobType.length - 1 ? ", " : ""}`
+                                            ))
+                                            :
+                                            conversation?.job.jobType.map((jt, index) => (
+                                                `${jobTypesEnumToStringMap(jt)}${index !== conversation.job.jobType.length - 1 ? ", " : ""}`
                                             ))
                                         }
                                     </div>
@@ -309,18 +310,19 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
                                         Job shift
                                     </div>
                                     <div className={"semi-dark-small-text mb05rem"}>
-                                        {conversation?.job.schedule ?
-                                            conversation.job.schedule.length > 0 ?
-                                                conversation?.job.schedule.map((sch, index) => (
-                                                    `${schedulesEnumToStringMap(sch)}${index !== conversation?.job.schedule.length - 1 ? ", " : ""}`))
-                                                :
-                                                <div>Info not provided</div>
-                                            :
+                                        {jobApply?.job.schedule ?
                                             jobApply?.job.schedule && jobApply.job.schedule.length > 0 ?
                                                 jobApply?.job.schedule.map((sch, index) => (
                                                     `${schedulesEnumToStringMap(sch)}${index !== jobApply?.job.schedule.length - 1 ? ", " : ""}`))
                                                 :
                                                 <div>Info not provided</div>
+                                            :
+                                            conversation?.job && conversation.job.schedule.length > 0 ?
+                                                conversation?.job.schedule.map((sch, index) => (
+                                                    `${schedulesEnumToStringMap(sch)}${index !== conversation?.job.schedule.length - 1 ? ", " : ""}`))
+                                                :
+                                                <div>Info not provided</div>
+                                            
                                         }
 
                                     </div>
