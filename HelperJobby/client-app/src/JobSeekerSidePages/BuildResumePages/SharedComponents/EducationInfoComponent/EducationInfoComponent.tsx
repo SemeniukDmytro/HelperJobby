@@ -132,9 +132,12 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                 skills: []
             }
             const retrievedResume = await resumeService.postResume(createdResume);
-            const updatedJobSeeker = jobSeeker;
-            updatedJobSeeker!.resume = retrievedResume;
-            setJobSeeker(updatedJobSeeker);
+            setJobSeeker(prev => {
+                return prev && {
+                    ...prev,
+                    resume : retrievedResume
+                }
+            });
         } catch (err) {
             logErrorInfo(err)
         } finally {

@@ -33,6 +33,7 @@ public class ResumeQueryRepository : IResumeQueryRepository
             .Select(r => new Resume
             {
                 Id = r.Id,
+                CreatedOn = r.CreatedOn,
                 Educations = r.Educations,
                 WorkExperiences = r.WorkExperiences,
                 Skills = r.Skills

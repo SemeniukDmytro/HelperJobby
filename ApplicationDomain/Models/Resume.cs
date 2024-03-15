@@ -10,6 +10,8 @@ public class Resume
     [Required]
     [ForeignKey("JobSeeker")]
     public int JobSeekerId { get; set; }
+    
+    public DateOnly CreatedOn { get; set; }
 
     public JobSeeker JobSeeker { get; set; }
 

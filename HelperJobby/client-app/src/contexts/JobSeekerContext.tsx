@@ -117,7 +117,6 @@ export function JobSeekerProvider({children}: { children: ReactNode }) {
                 if (!prev.resume) {
                     updatedResume = retrievedJobSeeker.resume;
                 }
-                console.log(retrievedJobSeeker)
                 return {
                     ...prev,
                     id: retrievedJobSeeker.id,

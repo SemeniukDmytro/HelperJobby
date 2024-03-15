@@ -7,6 +7,7 @@ public class ResumeDTO
     public int Id { get; set; }
 
     public int JobSeekerId { get; set; }
+    public DateOnly CreatedOn { get; set; }
 
     public JobSeekerDTO JobSeeker { get; set; }
 

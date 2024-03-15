@@ -78,7 +78,7 @@ export function getConversationLastMessageFormattedTime(lastModifiedTime : strin
     }
 }
 
-export function getConversationMessagesGroupFormattedTime(lastModifiedTime : string){
+export function getFormattedTimeWithWeekdays(lastModifiedTime : string){
     const date = new Date(lastModifiedTime);
     const currentDate = new Date();
 

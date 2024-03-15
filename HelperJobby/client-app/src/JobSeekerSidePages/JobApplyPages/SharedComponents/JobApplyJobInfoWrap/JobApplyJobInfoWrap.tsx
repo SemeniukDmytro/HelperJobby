@@ -89,11 +89,11 @@ const JobApplyJobInfoWrap: FC<JobApplyJobInfoWrapProps> = ({children}) => {
                                         <span>Job type:&nbsp;</span>
                                         {
                                             job.jobType.map((jt, index) => (
-                                                <>
+                                                <div key={index}>
                                                     <span key={index}>{jobTypesEnumToStringMap(jt)}</span>
                                                     {index != job.jobType!.length - 1 &&
                                                         <span>,&nbsp;</span>}
-                                                </>
+                                                </div>
                                             ))
                                         }
                                     </div>

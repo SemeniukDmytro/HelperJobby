@@ -54,12 +54,13 @@ const AddSkillComponent: FC<AddSkillComponentProps> = () => {
         navigateBack()
     }
 
+    console.log(jobSeeker)
     async function addSkillToExistingResume() {
         try {
             setSavingProcess(true);
             const createdSkill: CreateSkillDTO = {name: skill};
             const retrievedSkill = await skillService.addSkill(jobSeeker!.resume!.id, createdSkill);
-            const updatedResume = jobSeeker?.resume!;
+            const updatedResume = {...jobSeeker?.resume!};
             updatedResume.skills.push(retrievedSkill);
             setJobSeeker((prev) => {
                 if (prev) {

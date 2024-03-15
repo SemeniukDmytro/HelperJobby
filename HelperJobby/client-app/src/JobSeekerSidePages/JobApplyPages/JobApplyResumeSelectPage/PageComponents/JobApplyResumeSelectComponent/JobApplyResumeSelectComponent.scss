@@ -15,13 +15,8 @@
 
 .resume-select-container {
   border-radius: 0.5rem;
-  padding: 1rem;
   border: 1px solid global-variables.$neutral-color-400;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  
 }
 
 .resume-add-icon {
@@ -33,4 +28,22 @@
 .resume-option-selected {
   transition: 0.1s;
   border-color: global-variables.$dark-blue;
+}
+
+.resume-select-header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.selected-resume-info-container {
+  box-sizing: border-box;
+  padding: 1rem;
+  min-width: 0rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }

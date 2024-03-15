@@ -6,6 +6,7 @@ import {SkillDTO} from "./SkillDTO";
 export interface ResumeDTO {
     id: number;
     jobSeekerId: number;
+    createdOn : string;
     jobSeeker: JobSeekerDTO;
     educations: EducationDTO[];
     workExperiences: WorkExperienceDTO[];

@@ -30,6 +30,7 @@ public class ResumeService : IResumeService
         }
         if (resume != null) throw new ForbiddenException("Resume already exists");
         createdResume.JobSeekerId = currentJobSeekerId;
+        createdResume.CreatedOn = DateOnly.FromDateTime(DateTime.UtcNow);
         return createdResume;
     }
 

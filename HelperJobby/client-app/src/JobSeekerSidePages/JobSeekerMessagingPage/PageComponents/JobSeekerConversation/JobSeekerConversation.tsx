@@ -12,7 +12,7 @@ import {faBuilding} from "@fortawesome/free-solid-svg-icons";
 import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 import JobSeekerPagesPaths from "../../../../AppRoutes/Paths/JobSeekerPagesPaths";
 import {useJobSeekerMessagingConversation} from "../../../../hooks/contextHooks/useJobSeekerMessagingConversation";
-import {formatDate, getConversationMessagesGroupFormattedTime} from "../../../../utils/convertLogic/formatDate";
+import {formatDate, getFormattedTimeWithWeekdays} from "../../../../utils/convertLogic/formatDate";
 import OutgoingMessage from "../../../../Components/OutgoingMessage/OutgoingMessage";
 import {groupMessagesByDate} from "../../../../utils/messaging/groupMessagesByDate";
 import {onConversationsUpdate, onMessageSent} from "../../../../utils/messaging/messagingEventsHandlers";
@@ -194,7 +194,7 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
                                                     <div className={"messages-group-date-container"}>
                                                         <div className="messages-group-date-line"/>
                                                         <span
-                                                            className={"messages-group-date"}>{getConversationMessagesGroupFormattedTime(date)}</span>
+                                                            className={"messages-group-date"}>{getFormattedTimeWithWeekdays(date)}</span>
                                                         <div className={"messages-group-date-line"}/>
                                                     </div>
                                                     {messages.map((message, index) => (
