@@ -18,22 +18,23 @@ import {
 } from "../../../../utils/convertLogic/enumToStringConverter";
 import {formatJobSalaryDisplay} from "../../../../utils/convertLogic/formatJobSalaryDisplay";
 import {JobLocationTypes} from "../../../../enums/modelDataEnums/JobLocationTypes";
+import ExitJobApplicationProcessDialog from "../ExitJobApplicationProcessDialog/ExitJobApplicationProcessDialog";
 
 interface JobApplyJobInfoWrapProps {
     children: ReactNode
 }
 
 const JobApplyJobInfoWrap: FC<JobApplyJobInfoWrapProps> = ({children}) => {
-    const {job, setJob} = useCurrentJobApplication();
+    const {job, setJob, showExitDialog, setShowExitDialog} = useCurrentJobApplication();
     const {jobSeeker, fetchJobSeeker} = useJobSeeker();
     const [loading, setLoading] = useState(true);
     const {jobId} = useParams<{ jobId: string }>();
     const jobService = new JobService();
     const navigate = useNavigate();
     const [showAllJobDescription, setShowAllJobDescription] = useState(true);
-    
+
     useEffect(() => {
-        if (!jobId || isNanAfterIntParse(jobId)){
+        if (!jobId || isNanAfterIntParse(jobId)) {
             navigate("/");
             return;
         }
@@ -51,37 +52,40 @@ const JobApplyJobInfoWrap: FC<JobApplyJobInfoWrapProps> = ({children}) => {
         try {
             const retrievedJob = await jobService.getJobForJobSeekersById(parseInt(jobId!));
             setJob(retrievedJob);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
         }
     }
 
     return (
         loading || !job || !jobSeeker ? <LoadingPage/> :
-            <div className={"job-application-main"}>
-                <div className={"job-application-left-side-container"}>
-                    <div className={"ja-left-side-main"}>
-                        {children}
-                    </div>
-                </div>
-                <div className={"job-application-right-side-container"}>
-                    <div className={`${!showAllJobDescription ? "job-window-container" : "expanded-job-window-container"}`}>
-                        <div className={"job-window-header"}>
-                            <div className="grey-default-text mr1rem">
-                                <FontAwesomeIcon icon={faBuilding}/>
-                            </div>
-                            <div>
-                                <div className={"dark-small-text bold-text"}>
-                                    {job.jobTitle}
-                                </div>
-                                <div className={"grey-tiny-text"}>
-                                    {job.employer.organization.name}
-                                </div>
-                            </div>
+            <>
+                <ExitJobApplicationProcessDialog showDialog={showExitDialog} setShowDialog={setShowExitDialog}/>
+                <div className={"job-application-main"}>
+                    <div className={"job-application-left-side-container"}>
+                        <div className={"ja-left-side-main"}>
+                            {children}
                         </div>
-                        <div className={"content-separation-line"}/>
-                        <div className={`${showAllJobDescription ? "ja-job-description-container-expanded" : "ja-job-description-container"}`}>
+                    </div>
+                    <div className={"job-application-right-side-container"}>
+                        <div
+                            className={`${!showAllJobDescription ? "job-window-container" : "expanded-job-window-container"}`}>
+                            <div className={"job-window-header"}>
+                                <div className="grey-default-text mr1rem">
+                                    <FontAwesomeIcon icon={faBuilding}/>
+                                </div>
+                                <div>
+                                    <div className={"dark-small-text bold-text"}>
+                                        {job.jobTitle}
+                                    </div>
+                                    <div className={"grey-tiny-text"}>
+                                        {job.employer.organization.name}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={"content-separation-line"}/>
+                            <div
+                                className={`${showAllJobDescription ? "ja-job-description-container-expanded" : "ja-job-description-container"}`}>
                             <span className={"semi-dark-small-text flex-column"}>
                                     <span className={"mb1rem"}>{job.description}</span>
                                 {(job?.jobType && job.jobType.length !== 0) &&
@@ -132,25 +136,27 @@ const JobApplyJobInfoWrap: FC<JobApplyJobInfoWrapProps> = ({children}) => {
                                     className={"mb1rem"}>Work Location : {jobLocationTypesEnumToStringMap(job?.jobLocationType || JobLocationTypes.InPerson)}</span>
                                     
                                 </span>
-                        </div>
-                        <div className={"view-all-job-description-container"}>
-                            <div className={"bold-navigation-link"} onClick={() => setShowAllJobDescription(!showAllJobDescription)}>
-                                {showAllJobDescription ? 
-                                    <div className={"flex-row"}>
-                                        View less
-                                        <FontAwesomeIcon className={"svg1rem ml1rem"} icon={faChevronUp}/>
-                                    </div>
-                                    :
-                                    <div className={"flex-row"}>
-                                        View full job description
-                                        <FontAwesomeIcon className={"svg1rem ml1rem"} icon={faChevronDown}/>
-                                    </div>
-                                }
+                            </div>
+                            <div className={"view-all-job-description-container"}>
+                                <div className={"bold-navigation-link"}
+                                     onClick={() => setShowAllJobDescription(!showAllJobDescription)}>
+                                    {showAllJobDescription ?
+                                        <div className={"flex-row"}>
+                                            View less
+                                            <FontAwesomeIcon className={"svg1rem ml1rem"} icon={faChevronUp}/>
+                                        </div>
+                                        :
+                                        <div className={"flex-row"}>
+                                            View full job description
+                                            <FontAwesomeIcon className={"svg1rem ml1rem"} icon={faChevronDown}/>
+                                        </div>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </>
     )
 }
 

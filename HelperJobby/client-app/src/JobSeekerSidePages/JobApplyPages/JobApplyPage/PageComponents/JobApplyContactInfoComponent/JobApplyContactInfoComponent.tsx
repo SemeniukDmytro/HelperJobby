@@ -26,7 +26,7 @@ interface JobApplyContactInfoComponentProps {
 }
 
 const JobApplyContactInfoComponent: FC<JobApplyContactInfoComponentProps> = () => {
-    const {job} = useCurrentJobApplication();
+    const {job, setShowExitDialog} = useCurrentJobApplication();
     const {authUser} = useAuth();
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const [city, setCity] = useState(jobSeeker?.address?.city || "");
@@ -46,7 +46,7 @@ const JobApplyContactInfoComponent: FC<JobApplyContactInfoComponentProps> = () =
     const jobSeekerService = new JobSeekerService();
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
-
+    
     useEffect(() => {
         if (jobSeeker) {
             setJobSeekerValues(jobSeeker);
@@ -138,7 +138,9 @@ const JobApplyContactInfoComponent: FC<JobApplyContactInfoComponentProps> = () =
                         autocompleteWindowType={AutocompleteWindowTypes.city}
                     />}
                     <div className={"progress-bar-and-exit-container mb15rem"}>
-                        <div className={"flex-row jc-end bold-navigation-link"}>
+                        <div 
+                            onClick={() => setShowExitDialog(true)}
+                             className={"flex-row jc-end bold-navigation-link"}>
                             Exit
                         </div>
                         <div className={"progress-bar-line mt05rem"}>

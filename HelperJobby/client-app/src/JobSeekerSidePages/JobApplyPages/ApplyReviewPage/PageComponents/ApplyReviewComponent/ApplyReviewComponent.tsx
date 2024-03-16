@@ -22,7 +22,7 @@ interface ApplyReviewComponentProps {
 const ApplyReviewComponent: FC<ApplyReviewComponentProps> = () => {
     const {authUser} = useAuth();
     const {jobId} = useParams<{ jobId: string }>();
-    const {job, setJob} = useCurrentJobApplication();
+    const {job, setJob, setShowExitDialog} = useCurrentJobApplication();
     const {jobSeeker, setJobSeeker, fetchJobSeeker} = useJobSeeker();
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -41,7 +41,7 @@ const ApplyReviewComponent: FC<ApplyReviewComponentProps> = () => {
     }, []);
 
     useEffect(() => {
-        if (jobSeeker?.resume && job){
+        if (jobSeeker?.resume && job) {
             setLoading(false);
         }
     }, [jobSeeker?.resume, job]);
@@ -89,8 +89,8 @@ const ApplyReviewComponent: FC<ApplyReviewComponentProps> = () => {
             setLoading(false)
         }
     }
-    
-    async function createJobApply(){
+
+    async function createJobApply() {
         try {
             if (requestInProgress) {
                 return;
@@ -145,7 +145,9 @@ const ApplyReviewComponent: FC<ApplyReviewComponentProps> = () => {
                                 <button className={"back-button small-back-button"} onClick={onBackButtonClick}>
                                     <FontAwesomeIcon className={"svg1rem"} icon={faArrowLeftLong}/>
                                 </button>
-                                <div className={"small-bold-navigation-link"}>
+                                <div
+                                    onClick={() => setShowExitDialog(true)}
+                                    className={"small-bold-navigation-link"}>
                                     Exit
                                 </div>
                             </div>
@@ -256,7 +258,7 @@ const ApplyReviewComponent: FC<ApplyReviewComponentProps> = () => {
                         <button
                             onClick={createJobApply}
                             className={"blue-button mt1rem"}>
-                            {requestInProgress ? 
+                            {requestInProgress ?
                                 <WhiteLoadingSpinner/>
                                 :
                                 "Submit your application"

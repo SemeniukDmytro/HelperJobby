@@ -72,7 +72,7 @@ import ApplyResumeSkillsPage
 import ApplyResumeSuccessPage
     from "../../JobSeekerSidePages/ApplyResumePages/ApplyResumeSuccessPage/ApplyResumeSuccessPage";
 import ResumePagesWrap from "../../JobSeekerSidePages/ResumePage/PageComponents/ResumePagesWrap/ResumePagesWrap";
-import ApplyReviewPage from "../../JobSeekerSidePages/ApplyResumePages/ApplyReviewPage/ApplyReviewPage";
+import ApplyReviewPage from "../../JobSeekerSidePages/JobApplyPages/ApplyReviewPage/ApplyReviewPage";
 
 interface JobSeekerSideRoutesProps {
 }

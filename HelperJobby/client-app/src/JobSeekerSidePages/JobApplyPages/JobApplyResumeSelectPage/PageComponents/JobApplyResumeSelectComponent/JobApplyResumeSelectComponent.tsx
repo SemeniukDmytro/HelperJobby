@@ -17,10 +17,6 @@ import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {getFormattedTimeWithWeekdays} from "../../../../../utils/convertLogic/formatDate";
 import {useAuth} from "../../../../../hooks/contextHooks/useAuth";
-import resume from "../../../../../Components/Icons/Resume";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
-import {log} from "node:util";
 
 interface JobApplyResumeSelectComponentProps {
 }
@@ -29,13 +25,12 @@ const JobApplyResumeSelectComponent: FC<JobApplyResumeSelectComponentProps> = ()
 
     const {jobSeeker, setJobSeeker} = useJobSeeker();
     const {authUser} = useAuth();
-    const {job} = useCurrentJobApplication();
+    const {job, setShowExitDialog} = useCurrentJobApplication();
     const navigate = useNavigate();
     const [resumeChosen, setResumeChosen] = useState(false);
     const [invalidContinueTry, setInvalidContinueTry] = useState(false);
     const [loading, setLoading] = useState(true);
     const resumeService = new ResumeService();
-
 
     useEffect(() => {
         loadJobSeekerResume();
@@ -105,7 +100,9 @@ const JobApplyResumeSelectComponent: FC<JobApplyResumeSelectComponentProps> = ()
                     <button className={"back-button"} onClick={onBackButtonClick}>
                         <FontAwesomeIcon className={"svg125rem"} icon={faArrowLeftLong}/>
                     </button>
-                    <div className={"bold-navigation-link"}>
+                    <div
+                        onClick={() => setShowExitDialog(true)}    
+                        className={"bold-navigation-link"}>
                         Exit
                     </div>
                 </div>
@@ -162,7 +159,7 @@ const JobApplyResumeSelectComponent: FC<JobApplyResumeSelectComponentProps> = ()
                                         ))
                                         }
                                         {jobSeeker.resume.educations.map((e, index) => (
-                                            <div>{e.schoolName && `${e.schoolName}, `}
+                                            <div key={index}>{e.schoolName && `${e.schoolName}, `}
                                                 {e.levelOfEducation}{e.fieldOfStudy ? ` - ${e.fieldOfStudy}` : ""}</div>
                                         ))
                                         }

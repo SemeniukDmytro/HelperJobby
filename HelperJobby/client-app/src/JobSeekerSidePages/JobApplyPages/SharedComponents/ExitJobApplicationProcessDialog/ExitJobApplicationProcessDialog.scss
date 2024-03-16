@@ -1,0 +1,13 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.exit-dialog-container {
+    display: flex;
+    flex-direction: column;
+    max-inline-size: 25rem;
+    inline-size: 100%;
+    background-color: white;
+    border: 1px solid global-variables.$neutral-color-400;
+    border-radius: 0.5rem;
+    z-index: 10002;
+    animation: fadeIn 0.5s ease;
+}
