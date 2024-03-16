@@ -3,6 +3,7 @@ import {IncompleteJobDTO} from "../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
 import {CreateIncompleteJobDTO} from "../DTOs/jobRelatetedDTOs/CreateIncompleteJobDTO";
 import {UpdatedIncompleteJobDTO} from "../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {CreateUpdateSalaryDTO} from "../DTOs/jobRelatetedDTOs/CreateUpdateSalaryDTO";
+import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
 
 export class IncompleteJobService {
     private readonly baseURI: string = "api/IncompleteJob";
@@ -17,7 +18,11 @@ export class IncompleteJobService {
             `${this.baseURI}/${employerId}/incomplete-jobs`
         );
     }
-    
+
+    public async getEmployerIncompleteJobTitles(employerId: number): Promise<IncompleteJobDTO[]> {
+        return this.customFetchService.get<IncompleteJobDTO[]>(`${this.baseURI}/employer-incomplete-job-titles/${employerId}`);
+    }
+
     public async getIncompleteJobById(incompleteJobId : number) : Promise<IncompleteJobDTO>{
         return await this.customFetchService.get<IncompleteJobDTO>(
             `${this.baseURI}/${incompleteJobId}`

@@ -1,4 +1,12 @@
-.create-job-option-text {
-  display: flex;
-  flex-direction: column;
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.previous-drafts-container {
+  min-width: 0px;
+  border: 1px solid global-variables.$neutral-color-400;
+  border-radius: 0.5rem;
+}
+
+.previous-drafts-header {
+  box-sizing: border-box;
+  padding: 1rem;
 }

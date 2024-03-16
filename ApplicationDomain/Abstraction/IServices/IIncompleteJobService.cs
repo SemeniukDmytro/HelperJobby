@@ -6,6 +6,7 @@ public interface IIncompleteJobService
 {
     public Task<IncompleteJob> GetIncompleteJobById(int incompleteJobId);
     public Task<IEnumerable<IncompleteJob>> GetEmployerIncompleteJobs(int employerId);
+    public Task<IEnumerable<IncompleteJob>> GetEmployerIncompleteJobTitles(int employerId);
     public Task<IncompleteJob> StartIncompleteJobCreation(IncompleteJob incompleteJob);
 
     public Task<IncompleteJob> UpdateIncompleteJob(int incompleteJobId, IncompleteJob updatedIncompleteJob);

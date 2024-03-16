@@ -1,4 +1,4 @@
 export enum JobPostingMethods{
-    fromPreviousPost,
+    fromDrafts,
     newTemplate
 }

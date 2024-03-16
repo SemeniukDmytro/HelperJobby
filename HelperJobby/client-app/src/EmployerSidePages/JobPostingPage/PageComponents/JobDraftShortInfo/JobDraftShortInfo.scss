@@ -1,0 +1,19 @@
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.job-draft-short-info-container {
+  min-width: 0rem;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  &:hover{
+    background-color: global-variables.$light-blue;
+  }
+}
+
+.selected-job-draft {
+  background-color: global-variables.$neutral-color-200;
+}

@@ -29,6 +29,19 @@ public class IncompleteJobQueryRepository : IIncompleteJobQueryRepository
         return incompleteJobEntities;
     }
 
+    public async Task<IEnumerable<IncompleteJob>> GetEmployerIncompleteJobTitles(int employerId)
+    {
+        var incompleteJobTitles = await _applicationContext.IncompleteJobs.Where(ij => ij.EmployerId == employerId)
+            .Select(ij => new IncompleteJob()
+            {
+                Id = ij.Id,
+                JobTitle = ij.JobTitle,
+                Location = ij.Location
+            }).ToListAsync();
+
+        return incompleteJobTitles;
+    }
+
     public async Task<IncompleteJob> GetIncompleteJobWithEmployer(int incompleteJobId)
     {
         return await GetIncompleteJob(incompleteJobId, q => q

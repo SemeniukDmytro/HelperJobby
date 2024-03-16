@@ -119,6 +119,19 @@ public class IncompleteJobService : IIncompleteJobService
         return incompleteJobEntities;
     }
 
+    public async  Task<IEnumerable<IncompleteJob>> GetEmployerIncompleteJobTitles(int employerId)
+    {
+        var currentEmployerId = _employerService.GetCurrentEmployerId();
+        if (currentEmployerId != employerId)
+        {
+            throw new ForbiddenException();
+        }
+
+        var incompleteJobTitles = await _incompleteJobQueryRepository.GetEmployerIncompleteJobTitles(employerId);
+
+        return incompleteJobTitles;
+    }
+
     private void CheckIfValidSalaryProvided(IncompleteJobSalary? salary)
     {
         if (salary != null && !salary.MeetsMinSalaryRequirement)
