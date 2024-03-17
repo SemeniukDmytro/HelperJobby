@@ -16,15 +16,15 @@ const ResumeSearchInfoBlock: FC<ResumeSearchInfoBlockProps> = ({
 ) => {
     const [resumeTitle, setResumeTitle] = useState(getResumeTitle);
     const [searchParams] = useSearchParams();
-    
-    function getResumeTitle(){
-        if (resume.workExperiences.length != 0){
+
+    function getResumeTitle() {
+        if (resume.workExperiences.length != 0) {
             return resume.workExperiences[0].jobTitle;
         }
-        if (resume.educations.length != 0){
+        if (resume.educations.length != 0) {
             return `${resume.educations[0].levelOfEducation} in ${resume.educations[0].fieldOfStudy}`;
         }
-        if (resume.skills.length != 0){
+        if (resume.skills.length != 0) {
             return resume.skills[0].name;
         }
         return searchParams.get("q")!;
@@ -54,43 +54,39 @@ const ResumeSearchInfoBlock: FC<ResumeSearchInfoBlockProps> = ({
                     </div>
                 }
             </div>
-                {(resume.workExperiences && resume.workExperiences.length != 0) ?
-                    resume.workExperiences.map((workExperience, index) => (
-                        <div className={"candidate-qualifications-container"}>
-                            <span className={"dark-default-text"}>{workExperience.jobTitle}</span>
-                            <div className={"grey-small-text"}>
-                                <span>{workExperience.company} -&nbsp;</span>
-                                {workExperience.from && (workExperience.to || workExperience.currentlyWorkHere) &&
-                                    <span>From {formatDate(workExperience.from)} to&nbsp;
-                                        {workExperience.currentlyWorkHere ? "Present" : formatDate(workExperience.to!)}
+            {(resume.workExperiences && resume.workExperiences.length != 0) ?
+                <div className={"candidate-qualifications-container"}>
+                    <span className={"dark-default-text"}>{resume.workExperiences[0].jobTitle}</span>
+                    <div className={"grey-small-text"}>
+                        <span>{resume.workExperiences[0].company} -&nbsp;</span>
+                        {resume.workExperiences[0].from && (resume.workExperiences[0].to || resume.workExperiences[0].currentlyWorkHere) &&
+                            <span>From {formatDate(resume.workExperiences[0].from)} to&nbsp;
+                                {resume.workExperiences[0].currentlyWorkHere ? "Present" : formatDate(resume.workExperiences[0].to!)}
                                     </span>
-                                }
-                            </div>
-                        </div>
-                    ))
-                    :
-                    <div className={"candidate-qualifications-container"}>
-                        No work experience provided
+                        }
                     </div>
-                }
+                </div>
+                :
+                <div className={"candidate-qualifications-container"}>
+                    No work experience provided
+                </div>
+            }
 
-                {(resume.educations && resume.educations.length != 0) ?
-                    resume.educations.map((education, index) => (
-                        <div className={"candidate-qualifications-container"}>
-                            <div className={"dark-default-text"}>
-                                {education.levelOfEducation}
-                            </div>
-                            <div className={"grey-small-text"}>
-                                {education.fieldOfStudy}
-                            </div>
-                        </div>
-                    ))
-                    :
-                    <div className={"candidate-qualifications-container"}>
-                        No educations provided
+            {(resume.educations && resume.educations.length != 0) ?
+                <div className={"candidate-qualifications-container"}>
+                    <div className={"dark-default-text"}>
+                        {resume.educations[0].levelOfEducation}
                     </div>
-                }
-            </div>
+                    <div className={"grey-small-text"}>
+                        {resume.educations[0].fieldOfStudy}
+                    </div>
+                </div>
+                :
+                <div className={"candidate-qualifications-container"}>
+                    No educations provided
+                </div>
+            }
+        </div>
     )
 }
 

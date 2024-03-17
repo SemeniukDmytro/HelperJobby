@@ -8,6 +8,8 @@ import {SearchService} from "../../../../services/searchService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import ResumeSearchInfoBlock from "../ResumeSearchInfoBlock/ResumeSearchInfoBlock";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 
 interface ResumeSearchResultsProps {}
 
@@ -15,25 +17,33 @@ const ResumeSearchResults: FC<ResumeSearchResultsProps> = () => {
     const [matchingResumes, setMatchingResumes] = useState<ResumeDTO[]>([]);
     const [hasMoreResumes, setHasMoreResumes] = useState(false);
     const [searchParams] = useSearchParams();
-    const jobQuery = searchParams.get("q");
-    const start = searchParams.get("start");
+    const jobQueryParam = searchParams.get("q");
+    const startParam = searchParams.get("start");
+    const [jobQuery, setJobQuery] = useState(jobQueryParam || "")
+    const [start, setStart] = useState(0);
     const navigate = useNavigate();
     const [resumeLoadingProcess, setResumeLoadingProcess] = useState(true);
     const searchService = new SearchService();
 
     useEffect(() => {
-        if (!jobQuery || (start && isNanAfterIntParse(start))){
+        if (!jobQueryParam || (startParam && isNanAfterIntParse(startParam))){
             navigate(EmployerPagesPaths.RESUMES)
             setResumeLoadingProcess(false);
             return;
         }
+        setJobQuery(jobQueryParam);
+        setStart(startParam ? parseInt(startParam) : 0);
+        
+    }, []);
+
+    useEffect(() => {
         getMatchingResumes();
-    }, [jobQuery, start]);
+    }, [jobQueryParam, startParam]);
     
     async function getMatchingResumes(){
         try {
             setResumeLoadingProcess(true);
-            const retrievedResumes = await searchService.searchResumes(jobQuery!, start ? parseInt(start) : 0);
+            const retrievedResumes = await searchService.searchResumes(jobQuery!, start);
             setMatchingResumes(retrievedResumes.resumes);
             setHasMoreResumes(retrievedResumes.hasMore);
         }
@@ -44,33 +54,63 @@ const ResumeSearchResults: FC<ResumeSearchResultsProps> = () => {
             setResumeLoadingProcess(false);
         }
     }
+
+    function changeStart(changedStart: number) {
+        setStart(changedStart);
+        navigate(`${EmployerPagesPaths.RESUMES}?q=${jobQuery}&start=${changedStart}`);
+    }
+
+    function goToNextPageWithResults() {
+        changeStart(start + 10)
+    }
+
+    function goToPreviousPageWithResults() {
+        changeStart(start - 10)
+    }
     
     return (
         resumeLoadingProcess ? <LoadingPage/> :
-        matchingResumes.length == 0 ? <></>
-            :
-            <div className={"emp-main-info-container-with-pdng"}>
-                <div className={"job-candidate-table-titles-container"}>
-                    <div className={"candidate-credentials-container"}>
-                        <span className={"bold-text semi-dark-default-text"}>Name</span>
-                    </div>
-                    <div className={"review-status-box"}>
-                        <span className={"bold-text semi-dark-default-text"}>Job seeker email</span>
-                    </div>
-                    <div className="candidate-skills-container">
-                        <span className="bold-text semi-dark-default-text">Skills</span>
-                    </div>
-                    <div className="candidate-qualifications-container">
-                        <span className="bold-text semi-dark-default-text">Recent experience</span>
-                    </div>
-                    <div className="candidate-qualifications-container">
-                        <span className="bold-text semi-dark-default-text">Educations</span>
-                    </div>
+            <>
+                {
+                    matchingResumes.length == 0 ? <></>
+                        :
+                        <div className={"emp-main-info-container-with-pdng"}>
+                            <div className={"job-candidate-table-titles-container"}>
+                                <div className={"candidate-credentials-container"}>
+                                    <span className={"bold-text semi-dark-default-text"}>Name</span>
+                                </div>
+                                <div className={"review-status-box"}>
+                                    <span className={"bold-text semi-dark-default-text"}>Job seeker email</span>
+                                </div>
+                                <div className="candidate-skills-container">
+                                    <span className="bold-text semi-dark-default-text">Skills</span>
+                                </div>
+                                <div className="candidate-qualifications-container">
+                                    <span className="bold-text semi-dark-default-text">Recent experience</span>
+                                </div>
+                                <div className="candidate-qualifications-container">
+                                    <span className="bold-text semi-dark-default-text">Educations</span>
+                                </div>
+                            </div>
+                            {matchingResumes.map((resume, index) => (
+                                <ResumeSearchInfoBlock resume={resume} key={index}/>
+                            ))}
+                        </div>
+                }
+                <div className={"pages-navigation-container"}>
+                    {start !== 0 && <button
+                        className={"navigation-button previous-button"}
+                        onClick={goToPreviousPageWithResults}
+                    >
+                        <FontAwesomeIcon icon={faChevronLeft}/>
+                    </button>}
+                    {hasMoreResumes &&
+                        <button className={"navigation-button"} onClick={goToNextPageWithResults}>
+                            <FontAwesomeIcon icon={faChevronRight}/>
+                        </button>}
                 </div>
-                {matchingResumes.map((resume, index) => (
-                    <ResumeSearchInfoBlock resume={resume} key={index}/>
-                ))}
-            </div>
+            </>
+
 
     )
 }

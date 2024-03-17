@@ -21,10 +21,11 @@ public class SearchController : ExtendedBaseController
     private readonly ISearchService _searchService;
     private readonly IUserService _userService;
     private readonly IEmployerService _employerService;
+    private readonly IJobSeekerService _jobSeekerService;
 
     public SearchController(IMapper mapper, ISearchService searchService, IJobQueryRepository jobQueryRepository
         , IResumeQueryRepository resumeQueryRepository, IEnqueuingTaskHelper enqueuingTaskHelper,
-        IUserService userService, IEmployerService employerService) : base(mapper)
+        IUserService userService, IEmployerService employerService, IJobSeekerService jobSeekerService) : base(mapper)
     {
         _searchService = searchService;
         _jobQueryRepository = jobQueryRepository;
@@ -32,6 +33,7 @@ public class SearchController : ExtendedBaseController
         _enqueuingTaskHelper = enqueuingTaskHelper;
         _userService = userService;
         _employerService = employerService;
+        _jobSeekerService = jobSeekerService;
     }
 
     [HttpGet("jobs")]
@@ -45,9 +47,11 @@ public class SearchController : ExtendedBaseController
         [FromQuery] string language = "")
     {
         var userId = 0;
+        int? currentEmployerId = null;
         try
         {
             userId = _userService.GetCurrentUserId();
+            currentEmployerId = _employerService.GetCurrentEmployerId();
         }
         catch (Exception e)
         {
@@ -59,15 +63,6 @@ public class SearchController : ExtendedBaseController
             {
                 await recentUserSearchService.AddRecentSearch(q, location, userId);
             });
-        int? currentEmployerId = null;
-        try
-        {
-            currentEmployerId = _employerService.GetCurrentEmployerId();
-        }
-        catch (Exception e)
-        {
-            
-        }
 
         var searchResultDTO = new JobSearchResultDTO
         {
@@ -80,11 +75,12 @@ public class SearchController : ExtendedBaseController
     [HttpGet("resumes")]
     public async Task<ResumeSearchResultDTO> SearchResumes(string q, [FromQuery] int start)
     {
+        int currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();;
         var resumesToLoad = await _searchService.FindResumeIds(start, q);
         var resumeSearchResultDTO = new ResumeSearchResultDTO
         {
             Resumes = _mapper.Map<IEnumerable<ResumeDTO>>(
-                await _resumeQueryRepository.GetResumesByResumeIds(resumesToLoad.resumeIds)),
+                await _resumeQueryRepository.GetResumesByResumeIds(resumesToLoad.resumeIds, currentJobSeekerId)),
             HasMore = resumesToLoad.hasMoreResults
         };
         return resumeSearchResultDTO;

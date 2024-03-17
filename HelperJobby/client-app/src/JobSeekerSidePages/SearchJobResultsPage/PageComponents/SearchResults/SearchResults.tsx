@@ -110,7 +110,6 @@ const SearchResults: FC<SearchResultsProps> = () => {
 
 
     function remoteOptionHandler() {
-        console.log(!isRemote)
         const requestUri = getJobSearchRequestURI(queryParams.query, queryParams.location, queryParams.start, !isRemote, queryParams.pay
             , queryParams.jobType, queryParams.language);
         navigate(requestUri);
@@ -174,7 +173,6 @@ const SearchResults: FC<SearchResultsProps> = () => {
 
     function goToPreviousPageWithResults() {
         changeStart(start - 10)
-
     }
 
     return (

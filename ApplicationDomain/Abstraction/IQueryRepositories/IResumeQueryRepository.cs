@@ -6,5 +6,5 @@ public interface IResumeQueryRepository
 {
     public Task<Resume> GetResumeById(int resumeId);
     public Task<Resume> GetResumeByJobSeekerId(int jobSeekerId);
-    public Task<IEnumerable<Resume>> GetResumesByResumeIds(List<int> resumeIds);
+    public Task<IEnumerable<Resume>> GetResumesByResumeIds(List<int> resumeIds, int currentJobSeekerId);
 }

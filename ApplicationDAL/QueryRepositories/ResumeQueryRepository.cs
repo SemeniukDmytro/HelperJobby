@@ -44,10 +44,10 @@ public class ResumeQueryRepository : IResumeQueryRepository
         return resume;
     }
 
-    public async Task<IEnumerable<Resume>> GetResumesByResumeIds(List<int> resumeIds)
+    public async Task<IEnumerable<Resume>> GetResumesByResumeIds(List<int> resumeIds, int currentJobSeekerId)
     {
         var resumes = await _applicationContext.Resumes
-            .Where(r => resumeIds.Contains(r.Id))
+            .Where(r => resumeIds.Contains(r.Id) && r.JobSeekerId != currentJobSeekerId)
             .Select(r => new Resume
             {
                 Id = r.Id,
