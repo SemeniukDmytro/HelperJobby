@@ -77,7 +77,7 @@ export function HomePageContextProvider({children}: { children: ReactNode }) {
                 return;
             }
             setRecommendedJobsLoading(true);
-            const retrievedJobs = await recommendationService.getRandomJobs();
+            const retrievedJobs = await recommendationService.getRecommendedJobs();
             setSelectedJob(retrievedJobs[0]);
             setRecommendedJobs(retrievedJobs);
         } catch (err) {

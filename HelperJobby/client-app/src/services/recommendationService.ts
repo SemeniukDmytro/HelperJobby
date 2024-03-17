@@ -12,9 +12,4 @@ export class RecommendationService {
     public async getRecommendedJobs(): Promise<JobDTO[]> {
         return await this.customFetchService.get<JobDTO[]>(`${this.baseURI}/recommended-jobs`);
     }
-
-    public async getRandomJobs(): Promise<JobDTO[]> {
-        return await this.customFetchService.get<JobDTO[]>(`${this.baseURI}/random-jobs`);
-    }
-
 }

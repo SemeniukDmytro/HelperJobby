@@ -79,10 +79,11 @@ public class JobQueryRepository : IJobQueryRepository
         return jobs;
     }
 
-    public async Task<IEnumerable<Job>> GetJobsByJobIds(List<int> jobIds)
+    public async Task<IEnumerable<Job>> GetJobsByJobIds(List<int> jobIds, int? currentEmployerId)
     {
         var jobs = await _applicationContext
-            .Jobs.Where(j => jobIds.Contains(j.Id)).Select(JobProjections.JobForJobSeekers())
+            .Jobs.Where(j => jobIds.Contains(j.Id) && j.EmployerId != currentEmployerId)
+            .Select(JobProjections.JobForJobSeekers())
             .ToListAsync();
         return jobs;
     }
@@ -111,11 +112,13 @@ public class JobQueryRepository : IJobQueryRepository
         return jobEntity;
     }
 
-    public async Task<IEnumerable<Job>> GetRandomJobs()
+    public async Task<IEnumerable<Job>> GetRandomJobs(int? currentEmployerId)
     {
         var jobsCount = _applicationContext.Jobs.Count();
         var startingPoint = Math.Max(new Random().Next(jobsCount) - 10, 0);
-        return await _applicationContext.Jobs.Skip(startingPoint).Take(RandomJobsToTake)
+        return await _applicationContext.Jobs
+            .Where(j => j.EmployerId != currentEmployerId)
+            .Skip(startingPoint).Take(RandomJobsToTake)
             .Select(JobProjections.JobForJobSeekers())
             .ToListAsync();
     }

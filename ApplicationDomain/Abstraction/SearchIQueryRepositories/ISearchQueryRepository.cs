@@ -10,5 +10,6 @@ public interface ISearchQueryRepository
         bool isRemote, decimal payPerHour, decimal payPerDay, decimal payPerWeek,
         decimal payPerMonth, decimal payPerYear, JobTypes jobType, string? language);
 
-    public Task<IEnumerable<ProcessedResumeWord>> GetProcessedResumeWordsByWord(int numberOfResultsToSkip, string word);
+    public Task<IEnumerable<ProcessedResumeWord>> GetProcessedResumeWordsByWord(int numberOfResultsToSkip,
+        string word);
 }

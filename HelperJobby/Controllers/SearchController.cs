@@ -20,16 +20,18 @@ public class SearchController : ExtendedBaseController
     private readonly IResumeQueryRepository _resumeQueryRepository;
     private readonly ISearchService _searchService;
     private readonly IUserService _userService;
+    private readonly IEmployerService _employerService;
 
     public SearchController(IMapper mapper, ISearchService searchService, IJobQueryRepository jobQueryRepository
         , IResumeQueryRepository resumeQueryRepository, IEnqueuingTaskHelper enqueuingTaskHelper,
-        IUserService userService) : base(mapper)
+        IUserService userService, IEmployerService employerService) : base(mapper)
     {
         _searchService = searchService;
         _jobQueryRepository = jobQueryRepository;
         _resumeQueryRepository = resumeQueryRepository;
         _enqueuingTaskHelper = enqueuingTaskHelper;
         _userService = userService;
+        _employerService = employerService;
     }
 
     [HttpGet("jobs")]
@@ -57,10 +59,19 @@ public class SearchController : ExtendedBaseController
             {
                 await recentUserSearchService.AddRecentSearch(q, location, userId);
             });
+        int? currentEmployerId = null;
+        try
+        {
+            currentEmployerId = _employerService.GetCurrentEmployerId();
+        }
+        catch (Exception e)
+        {
+            
+        }
 
         var searchResultDTO = new JobSearchResultDTO
         {
-            jobs = _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByJobIds(jobIdsToLoad.jobIds)),
+            jobs = _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByJobIds(jobIdsToLoad.jobIds, currentEmployerId)),
             HasMore = jobIdsToLoad.hasMoreResults
         };
         return searchResultDTO;
