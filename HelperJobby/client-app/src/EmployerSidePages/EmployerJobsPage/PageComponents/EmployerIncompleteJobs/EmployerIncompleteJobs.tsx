@@ -11,6 +11,7 @@ import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
+import NoJobs from "../../../../Components/Icons/NoJobs";
 
 interface EmployerIncompleteJobsProps {
 }
@@ -52,11 +53,11 @@ const EmployerIncompleteJobs: FC<EmployerIncompleteJobsProps> = () => {
         setSelectedJobIds([]);
     }
 
-    function handleUpdateClick(){
+    function handleUpdateClick() {
         navigate(`${EmployerPagesPaths.REVIEW_JOB_PAGE}/${selectedJobIds[0]}`);
     }
 
-    function handleDeleteSingleIncompleteJobClick(job : IncompleteJobDTO){
+    function handleDeleteSingleIncompleteJobClick(job: IncompleteJobDTO) {
         setShowDeleteDialog(true);
         setDeleteDialogTitle("Delete your job draft?");
         setDeleteDialogMainText(`Are you sure you want to delete your ${job.jobTitle} in ${job.location} job post draft?`)
@@ -69,12 +70,12 @@ const EmployerIncompleteJobs: FC<EmployerIncompleteJobsProps> = () => {
         setDeleteDialogMainText(`Are you sure you want to delete your selected job post drafts?`)
     }
 
-    async function deleteSingleIncompleteJob(jobId : number) {
+    async function deleteSingleIncompleteJob(jobId: number) {
         try {
             setRequestInProgress(true);
             await incompleteJobService.deleteIncompleteJob(jobId);
             setEmployer(prev => {
-                return  prev && {
+                return prev && {
                     ...prev,
                     incompleteJobs: prev.incompleteJobs.filter(j => j.id != jobId)
                 }
@@ -86,23 +87,21 @@ const EmployerIncompleteJobs: FC<EmployerIncompleteJobsProps> = () => {
                 return prev.filter(j => j != jobId)
             })
             setShowDeleteDialog(false);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
 
-    async function deleteIncompleteJobRange(){
+    async function deleteIncompleteJobRange() {
         try {
             setRequestInProgress(true);
             await incompleteJobService.deleteIncompleteJobRange(selectedJobIds);
             setEmployer(prev => {
-                return  prev && {
+                return prev && {
                     ...prev,
-                    incompleteJobs : prev.incompleteJobs.filter(j => !selectedJobIds.includes(j.id))
+                    incompleteJobs: prev.incompleteJobs.filter(j => !selectedJobIds.includes(j.id))
                 }
             })
             setJobSearchResults(prev => {
@@ -110,11 +109,9 @@ const EmployerIncompleteJobs: FC<EmployerIncompleteJobsProps> = () => {
             })
             setSelectedJobIds([]);
             setShowDeleteRangeDialog(false);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
@@ -144,21 +141,21 @@ const EmployerIncompleteJobs: FC<EmployerIncompleteJobsProps> = () => {
             {selectedJobIds.length !== 0 ?
                 (
                     <div className={"emp-row-cont-1pad ai-center mb1rem"}>
-                            <div className={"flex-row"}>
-                                <div className={"checkbox-container"}>
-                                    <input className={"select-all-checkbox"} type={"checkbox"}
-                                           checked={employer?.incompleteJobs.length == selectedJobIds.length}
-                                           onChange={toggleSelectAllJobs}/>
-                                </div>
-                                <div className={"flex-row ai-center"}>
-                                    <div className={"dark-small-text bold-text"}>
-                                        {selectedJobIds.length} {selectedJobIds.length > 1 ? "jobs" : "job"} selected
-                                        -
-                                        <span onClick={deselectAllJobs}
-                                              className={"bold-navigation-link"}>&nbsp;deselect all</span>
-                                    </div>
+                        <div className={"flex-row"}>
+                            <div className={"checkbox-container"}>
+                                <input className={"select-all-checkbox"} type={"checkbox"}
+                                       checked={employer?.incompleteJobs.length == selectedJobIds.length}
+                                       onChange={toggleSelectAllJobs}/>
+                            </div>
+                            <div className={"flex-row ai-center"}>
+                                <div className={"dark-small-text bold-text"}>
+                                    {selectedJobIds.length} {selectedJobIds.length > 1 ? "jobs" : "job"} selected
+                                    -
+                                    <span onClick={deselectAllJobs}
+                                          className={"bold-navigation-link"}>&nbsp;deselect all</span>
                                 </div>
                             </div>
+                        </div>
                         {selectedJobIds.length == 1 ?
                             <div className={"flex-row"}>
                                 <button className={"blue-button mr1rem"} onClick={handleUpdateClick}>
@@ -188,15 +185,23 @@ const EmployerIncompleteJobs: FC<EmployerIncompleteJobsProps> = () => {
                 )
             }
             {!filteringInProcess ?
-                jobSearchResults.map((job, index) => (
-                    <ShortIncompleteJobInfoForEmployer job={job}
-                                                       selectedJobIds={selectedJobIds}
-                                                       setSelectedJobIds={setSelectedJobIds}
-                                                       isAllSelected={selectedJobIds.length === employer!.incompleteJobs.length}
-                                                       onDeleteClick={() => handleDeleteSingleIncompleteJobClick(job)}
-                                                       key={index}
-                    />
-                ))
+                jobSearchResults.length !== 0 ?
+                    jobSearchResults.map((job, index) => (
+                        <ShortIncompleteJobInfoForEmployer job={job}
+                                                           selectedJobIds={selectedJobIds}
+                                                           setSelectedJobIds={setSelectedJobIds}
+                                                           isAllSelected={selectedJobIds.length === employer!.incompleteJobs.length}
+                                                           onDeleteClick={() => handleDeleteSingleIncompleteJobClick(job)}
+                                                           key={index}
+                        />
+                    ))
+                    :
+                    (<div className={"no-search-results-container"}>
+                        <NoJobs/>
+                        <span className={"build-page-header"}>
+                            No job drafts 3found.
+                        </span>
+                    </div>)
                 :
                 <LoadingPage/>
             }

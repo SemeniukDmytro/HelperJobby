@@ -73,6 +73,7 @@ import ApplyResumeSuccessPage
     from "../../JobSeekerSidePages/ApplyResumePages/ApplyResumeSuccessPage/ApplyResumeSuccessPage";
 import ResumePagesWrap from "../../JobSeekerSidePages/ResumePage/PageComponents/ResumePagesWrap/ResumePagesWrap";
 import ApplyReviewPage from "../../JobSeekerSidePages/JobApplyPages/ApplyReviewPage/ApplyReviewPage";
+import NotFoundPage from "../../CommonPages/NotFoundPage/NotFoundPage";
 
 interface JobSeekerSideRoutesProps {
 }
@@ -175,6 +176,8 @@ const JobSeekerSideRoutes: FC<JobSeekerSideRoutesProps> = () => (
         <Route path={"/auth-page"} element={<AuthPage/>}/>
         <Route path={"/jobs"} element={<SearchJobResultsPage/>}/>
         <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
+        
+        <Route path={"*"} element={<NotFoundPage/>}/>
     </Routes>
 );
 

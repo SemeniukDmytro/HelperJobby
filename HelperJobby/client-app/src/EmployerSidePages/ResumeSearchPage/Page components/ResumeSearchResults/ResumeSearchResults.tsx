@@ -10,8 +10,11 @@ import ResumeSearchInfoBlock from "../ResumeSearchInfoBlock/ResumeSearchInfoBloc
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
+import NoSearchResults from "../../../../Components/Icons/NoSearchResults";
+import resume from "../../../../Components/Icons/Resume";
 
-interface ResumeSearchResultsProps {}
+interface ResumeSearchResultsProps {
+}
 
 const ResumeSearchResults: FC<ResumeSearchResultsProps> = () => {
     const [matchingResumes, setMatchingResumes] = useState<ResumeDTO[]>([]);
@@ -26,31 +29,29 @@ const ResumeSearchResults: FC<ResumeSearchResultsProps> = () => {
     const searchService = new SearchService();
 
     useEffect(() => {
-        if (!jobQueryParam || (startParam && isNanAfterIntParse(startParam))){
+        if (!jobQueryParam || (startParam && isNanAfterIntParse(startParam))) {
             navigate(EmployerPagesPaths.RESUMES)
             setResumeLoadingProcess(false);
             return;
         }
         setJobQuery(jobQueryParam);
         setStart(startParam ? parseInt(startParam) : 0);
-        
+
     }, []);
 
     useEffect(() => {
         getMatchingResumes();
     }, [jobQueryParam, startParam]);
-    
-    async function getMatchingResumes(){
+
+    async function getMatchingResumes() {
         try {
             setResumeLoadingProcess(true);
             const retrievedResumes = await searchService.searchResumes(jobQuery!, start);
             setMatchingResumes(retrievedResumes.resumes);
             setHasMoreResumes(retrievedResumes.hasMore);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setResumeLoadingProcess(false);
         }
     }
@@ -67,12 +68,38 @@ const ResumeSearchResults: FC<ResumeSearchResultsProps> = () => {
     function goToPreviousPageWithResults() {
         changeStart(start - 10)
     }
-    
+
+    console.log(matchingResumes)
+
     return (
         resumeLoadingProcess ? <LoadingPage/> :
             <>
                 {
-                    matchingResumes.length == 0 ? <></>
+                    matchingResumes.length === 0 ?
+                        jobQueryParam ?
+                            <div className={"no-search-results-container"}>
+                                <NoSearchResults/>
+                                <div className={"no-search-explanation-message flex-column"}>
+                                        <span className={"dark-default-text mb1rem"}>
+                                            The search <b>{searchParams.get("q")!} {searchParams.get("location") ?
+                                            `in ${searchParams.get("location")}` : ""}</b> did not match any resumes.
+                                        </span>
+                                    <b className={"dark-default-text"}>Search suggestions:</b>
+                                    <ul>
+                                        <li className={"dark-default-text"}>
+                                            Try more general keywords
+                                        </li>
+                                        <li className={"dark-default-text"}>
+                                            Check your spelling
+                                        </li>
+                                        <li className={"dark-default-text"}>
+                                            Replace abbreviations with the entire word
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            :
+                            <></>
                         :
                         <div className={"emp-main-info-container-with-pdng"}>
                             <div className={"job-candidate-table-titles-container"}>
@@ -92,9 +119,12 @@ const ResumeSearchResults: FC<ResumeSearchResultsProps> = () => {
                                     <span className="bold-text semi-dark-default-text">Educations</span>
                                 </div>
                             </div>
-                            {matchingResumes.map((resume, index) => (
-                                <ResumeSearchInfoBlock resume={resume} key={index}/>
-                            ))}
+                            {
+                                matchingResumes.map((resume, index) => (
+                                    <ResumeSearchInfoBlock resume={resume} key={index}/>
+                                ))
+
+                            }
                         </div>
                 }
                 <div className={"pages-navigation-container"}>

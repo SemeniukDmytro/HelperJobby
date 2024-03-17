@@ -1,1 +1,16 @@
-.JobInterviews {}
+@use "../../../../Assets/scssSharedStyles/global-variables";
+
+.no-interviews-title {
+  font-size: 1.5rem;
+  color: global-variables.$neutral-color-800;
+  font-weight: 700;
+}
+
+.no-interviews-results-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}

@@ -10,6 +10,10 @@ import DialogWindow from "../../../../Components/DialogWindow/DialogWindow";
 import {JobService} from "../../../../services/jobService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
+import NoInterviews from "../../../../Components/Icons/NoInterviews";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowRightLong} from "@fortawesome/free-solid-svg-icons";
+import NoJobs from "../../../../Components/Icons/NoJobs";
 
 interface EmployerCompleteJobsProps {
 }
@@ -46,36 +50,36 @@ const EmployerCompleteJobs: FC<EmployerCompleteJobsProps> = () => {
             }
         }
     }
-    
+
     function deselectAllJobs() {
         setSelectedJobIds([]);
     }
-    
-    function handleUpdateClick(){
+
+    function handleUpdateClick() {
         navigate(`${EmployerPagesPaths.EDIT_JOB}/${selectedJobIds[0]}`);
     }
-    
-    function handleDeleteSingleJobClick(job : JobDTO){
+
+    function handleDeleteSingleJobClick(job: JobDTO) {
         setShowDeleteDialog(true);
         setDeleteDialogTitle("Delete your job?");
         setDeleteDialogMainText(`Are you sure you want to delete your ${job.jobTitle} in ${job.location} job post?`)
         setJobInDialog(job);
     }
-    
+
     function handleDeleteJobRangeClick() {
         setShowDeleteRangeDialog(true);
         setDeleteDialogTitle("Delete selected jobs?");
         setDeleteDialogMainText(`Are you sure you want to delete your selected job posts?`)
     }
-    
-   async function deleteSingleJob(jobId : number) {
+
+    async function deleteSingleJob(jobId: number) {
         try {
             setRequestInProgress(true);
             await jobService.deleteJob(jobId);
             setEmployer(prev => {
-                return  prev && {
+                return prev && {
                     ...prev,
-                    jobs : prev.jobs.filter(j => j.id != jobId)
+                    jobs: prev.jobs.filter(j => j.id != jobId)
                 }
             })
             setJobSearchResults(prev => {
@@ -85,23 +89,21 @@ const EmployerCompleteJobs: FC<EmployerCompleteJobsProps> = () => {
                 return prev.filter(j => j != jobId)
             })
             setShowDeleteDialog(false);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
-    
-    async function deleteJobRange(){
+
+    async function deleteJobRange() {
         try {
             setRequestInProgress(true);
             await jobService.deleteJobRange(selectedJobIds);
             setEmployer(prev => {
-                return  prev && {
+                return prev && {
                     ...prev,
-                    jobs : prev.jobs.filter(j => !selectedJobIds.includes(j.id))
+                    jobs: prev.jobs.filter(j => !selectedJobIds.includes(j.id))
                 }
             })
             setJobSearchResults(prev => {
@@ -109,11 +111,9 @@ const EmployerCompleteJobs: FC<EmployerCompleteJobsProps> = () => {
             })
             setSelectedJobIds([]);
             setShowDeleteRangeDialog(false);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
@@ -140,7 +140,7 @@ const EmployerCompleteJobs: FC<EmployerCompleteJobsProps> = () => {
                           secondButtonOnClick={() => deleteJobRange()}
                           requestInProgress={requestInProgress}
             />
-            
+
             {selectedJobIds.length !== 0 ?
                 (
                     <div className={"emp-row-cont-1pad ai-center mb1rem"}>
@@ -164,13 +164,13 @@ const EmployerCompleteJobs: FC<EmployerCompleteJobsProps> = () => {
                                 <button className={"blue-button mr1rem"} onClick={handleUpdateClick}>
                                     Update
                                 </button>
-                                <button 
-                                    className={"red-button"} 
+                                <button
+                                    className={"red-button"}
                                     onClick={() => handleDeleteSingleJobClick(employer!.jobs.find(j => j.id == selectedJobIds[0])!)}>
                                     Delete
                                 </button>
                             </div>
-                        :
+                            :
                             <div>
                                 <button className={"red-button"} onClick={handleDeleteJobRangeClick}>
                                     Delete selected
@@ -188,15 +188,23 @@ const EmployerCompleteJobs: FC<EmployerCompleteJobsProps> = () => {
                 )
             }
             {!filteringInProcess ?
-                jobSearchResults.map((job) => (
-                    <ShortJobInfoForEmployer job={job}
-                                             selectedJobIds={selectedJobIds}
-                                             setSelectedJobIds={setSelectedJobIds}
-                                             isAllSelected={selectedJobIds.length === employer!.jobs.length}
-                                             onDeleteClick={() => handleDeleteSingleJobClick(job)}
-                                             key={job.id}
-                    />
-                ))
+                (jobSearchResults.length !== 0 ?
+                    jobSearchResults.map((job) => (
+                        <ShortJobInfoForEmployer job={job}
+                                                 selectedJobIds={selectedJobIds}
+                                                 setSelectedJobIds={setSelectedJobIds}
+                                                 isAllSelected={selectedJobIds.length === employer!.jobs.length}
+                                                 onDeleteClick={() => handleDeleteSingleJobClick(job)}
+                                                 key={job.id}
+                        />
+                    ))
+                    :
+                    <div className={"no-search-results-container"}>
+                        <NoJobs/>
+                        <span className={"build-page-header"}>
+                            No jobs found.
+                        </span>
+                    </div>)
                 :
                 <LoadingPage/>
             }

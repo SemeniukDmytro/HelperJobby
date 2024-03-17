@@ -8,45 +8,49 @@ import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValid
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import JobCandidateInfo from "../JobCandidateInfo/JobCandidateInfo";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
+import NoJobs from "../../../../Components/Icons/NoJobs";
+import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
+import NoCandidates from "../../../../Components/Icons/NoCandidates";
 
-interface JobCandidatesPageProps {}
+interface JobCandidatesPageProps {
+}
 
 const JobCandidatesPage: FC<JobCandidatesPageProps> = () => {
+    const {employer} = useEmployer();
     const [params] = useSearchParams();
     const [job, setJob] = useState<JobDTO>();
     const [jobAppliesLoading, setJobAppliesLoading] = useState(true);
     const jobApplyService = new JobApplyService();
     const navigate = useNavigate();
-    
+
     const jobId = params.get("jobId");
 
     useEffect(() => {
-        if (!jobId || isNanAfterIntParse(jobId)){
+        if (!jobId || isNanAfterIntParse(jobId)) {
             navigate(EmployerPagesPaths.CANDIDATES)
+            setJobAppliesLoading(false)
             return;
         }
         getJobWithJobApplies();
     }, [jobId]);
-    
-    async function getJobWithJobApplies(){
+
+    async function getJobWithJobApplies() {
         try {
             setJobAppliesLoading(true);
             const retrievedJob = await jobApplyService.getJobAppliesByJobId(parseInt(jobId!));
             setJob(retrievedJob);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setJobAppliesLoading(false);
         }
     }
-    
+
     return (
         jobAppliesLoading ? <LoadingPage/>
             :
 
-            job?.jobApplies.length != 0 ?
+            job?.jobApplies && job?.jobApplies.length != 0 ?
                 <div className={"emp-main-info-container-with-pdng"}>
                     <div className={"job-candidate-table-titles-container"}>
                         <div className={"candidate-credentials-container"}>
@@ -65,7 +69,7 @@ const JobCandidatesPage: FC<JobCandidatesPageProps> = () => {
                             <span className="bold-text semi-dark-default-text">Interested?</span>
                         </div>
                         <div className={"more-candidate-options-block"}>
-                            
+
                         </div>
                     </div>
                     {job!.jobApplies.map((jobApply, index) => (
@@ -73,10 +77,25 @@ const JobCandidatesPage: FC<JobCandidatesPageProps> = () => {
                     ))}
                 </div>
                 :
-                <div  className={"no-job-candidates-container"}>
-                    
-                </div>
-                
+                !employer?.hasPostedFirstJob ?
+                    <div className={"no-job-candidates-container"}>
+                        <div className={"no-search-results-container"}>
+                            <NoJobs/>
+                            <span className={"build-page-header"}>
+                            Your job isn't posted on Indeed
+                        </span>
+                        </div>
+                    </div>
+                    :
+                    <div className={"no-job-candidates-container"}>
+                        <div className={"no-search-results-container"}>
+                            <NoCandidates/>
+                            <span className={"build-page-header mt05rem"}>
+                            No candidates found
+                        </span>
+                        </div>
+                    </div>
+
     )
 }
 

@@ -8,6 +8,7 @@ import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import JobInterviewForEmployer from "../JobInterviewForEmployer/JobInterviewForEmployer";
+import NoInterviews from "../../../../Components/Icons/NoInterviews";
 
 interface JobInterviewsProps {
 }
@@ -22,6 +23,7 @@ const JobInterviews: FC<JobInterviewsProps> = () => {
 
     useEffect(() => {
         if (!jobId || isNanAfterIntParse(jobId)) {
+            setRequestInProgress(false);
             navigate(employerPagesPaths.EMPLOYER_INTERVIEWS);
             return;
         }
@@ -50,8 +52,14 @@ const JobInterviews: FC<JobInterviewsProps> = () => {
                             interview={interview} setJob={setJob}/>
                     )
                     :
-                    <div>
-
+                    <div className={"no-interviews-results-container"}>
+                        <div className={"no-interviews-title mb1rem"}>
+                            You don't have upcoming interviews
+                        </div>
+                        <span className={"grey-default-text mb1rem"}>
+                            All scheduled interviews will show up here.
+                        </span>
+                        <NoInterviews/>
                     </div>
                 }
             </>

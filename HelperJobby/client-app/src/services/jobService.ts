@@ -48,6 +48,6 @@ export class JobService {
     }
     
     public async deleteJobRange(jobIds : number[]) : Promise<void>{
-        return await this.customFetchService.delete<void>(`${this.baseURI}/delete-job-range}`, jobIds);
+        return await this.customFetchService.delete<void>(`${this.baseURI}/delete-job-range`, jobIds);
     }
 }

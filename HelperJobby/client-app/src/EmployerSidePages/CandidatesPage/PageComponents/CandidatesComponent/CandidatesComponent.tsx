@@ -111,39 +111,41 @@ const CandidatesComponent: FC<CandidatesComponentProps> = () => {
                         <span className={"small-title mb0"}>Candidates</span>
                         <button className={"blue-button"} onClick={navigateToJobPostingPage}>Post a job</button>
                     </div>
-                    <div className={"search-job-titles-container"}>
-                        <div className={`field-input-container`}>
-                            <div className={`border-lining`}>
+                    {employerJobTitles.length !== 0 &&
+                        <div className={"search-job-titles-container"}>
+                            <div className={`field-input-container`}>
+                                <div className={`border-lining`}>
+                                </div>
+                                <input
+                                    className={`field-input`}
+                                    value={jobTitleSearchQuery}
+                                    type={"text"}
+                                    onChange={changeJobTitleSearchQuery}
+                                />
+                                <div className={"input-button-box"} style={{cursor: "pointer"}}
+                                     onClick={showMatchingJobTitles}>
+                                    <FontAwesomeIcon className={"svg1rem semi-dark-default-text mr1rem"}
+                                                     icon={faChevronDown}/>
+                                </div>
                             </div>
-                            <input
-                                className={`field-input`}
-                                value={jobTitleSearchQuery}
-                                type={"text"}
-                                onChange={changeJobTitleSearchQuery}
-                            />
-                            <div className={"input-button-box"} style={{cursor: "pointer"}}
-                                 onClick={showMatchingJobTitles}>
-                                <FontAwesomeIcon className={"svg1rem semi-dark-default-text mr1rem"}
-                                                 icon={faChevronDown}/>
-                            </div>
-                        </div>
-                        {showSelectJobTitleWindow &&
-                            <div className={"select-window-relative-bar"}>
-                                {filteringInProcess ? <LoadingPage/> :
-                                    <div className={"select-window-container job-titles-select-window mt025rem"} ref={jobSearchSelectContainerRef}>
-                                        {employerJobTitles.length !== 0 &&
-                                            employerJobTitles.map((job, index) => (
-                                                <div className={"select-option"}
-                                                     key={index}
-                                                     onClick={(e) => goToJobAppliesPage(job, e)}
-                                                >
-                                                    {job.jobTitle}
-                                                </div>
-                                            ))}
-                                    </div>}
-                            </div>
-                        }
-                    </div>
+                            {showSelectJobTitleWindow &&
+                                <div className={"select-window-relative-bar"}>
+                                    {filteringInProcess ? <LoadingPage/> :
+                                        <div className={"select-window-container job-titles-select-window mt025rem"}
+                                             ref={jobSearchSelectContainerRef}>
+                                            {employerJobTitles.length !== 0 &&
+                                                employerJobTitles.map((job, index) => (
+                                                    <div className={"select-option"}
+                                                         key={index}
+                                                         onClick={(e) => goToJobAppliesPage(job, e)}
+                                                    >
+                                                        {job.jobTitle}
+                                                    </div>
+                                                ))}
+                                        </div>}
+                                </div>
+                            }
+                        </div>}
                     <JobCandidatesPage/>
                 </div>
             </div>

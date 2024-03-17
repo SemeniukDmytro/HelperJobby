@@ -30,6 +30,7 @@ import EmployerMessagingPage from "../../EmployerSidePages/EmployerMessagingPage
 import EditEmployerInfoPage from "../../EmployerSidePages/EditEmployerInfoPage/EditEmployerInfoPage";
 import EmployerMessagingWrap
     from "../../EmployerSidePages/EmployerMessagingPage/PageComponents/EmployerMessagingWrap/EmployerMessagingWrap";
+import NotFoundPage from "../../CommonPages/NotFoundPage/NotFoundPage";
 
 interface EmployerSideRoutesProps {
 }
@@ -41,7 +42,6 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
                 <Route path={"/setup-employer"} element={<EmployerSetupPage/>}/>
             </Route>
             <Route element={<EmployerPagesWithSidebarWrap/>}>
-                
             </Route>
             <Route element={<JobPostingPagesWrap/>}>
                 <Route path={"/posting"} element={<JobCreationPagesWrap/>}>
@@ -64,6 +64,7 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
                 <Route path={"/messages"} element={<EmployerMessagingWrap/>}>
                     <Route index element={<EmployerMessagingPage/>}/>
                 </Route>
+                <Route path={"*"} element={<NotFoundPage/>}/>
             </Route>
         </Route>
     </Routes>
