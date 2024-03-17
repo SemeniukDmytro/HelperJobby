@@ -87,7 +87,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             setInvalidNumberOfOpenings(false);
             setLoading(false);
         }
-    }, [currentJob, []]);
+    }, [currentJob]);
 
     async function fetchPageInitialData() {
         await fetchJobAndSetJobCreation();
@@ -110,7 +110,6 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
         setExecuteFormValidation(true);
         if (!jobTitle) {
             jobTitleInputRef.current?.focus();
-            console.log("dasdas")
             return;
         }
         if (isNanAfterIntParse(numberOfOpenings) || invalidNumberOfOpenings) {

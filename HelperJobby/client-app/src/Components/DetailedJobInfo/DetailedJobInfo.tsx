@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import './DetailedJobInfo.scss';
 import {JobDTO} from "../../DTOs/jobRelatetedDTOs/JobDTO";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -12,6 +12,7 @@ import {
 import JobDetailsFeatureBox
     from "../../JobSeekerSidePages/HomePage/PageComponents/JobDetailsFeatureBox/JobDetailsFeatureBox";
 import {formatJobSalaryDisplay} from "../../utils/convertLogic/formatJobSalaryDisplay";
+import DOMPurify from "dompurify";
 
 interface DetailedJobInfoProps {
     job: JobDTO
@@ -21,6 +22,20 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
     const [benefitsButtonText, setBenefitsButtonText] = useState("Show more");
     const [displayedBenefits, setDisplayedBenefits] = useState<string[]>([]);
     const [showAllBenefits, setShowAllBenefits] = useState(false);
+    const descriptionRef = useRef<HTMLDivElement>(null);
+    const cleanDescription = DOMPurify.sanitize(job.description || "", {
+        ALLOWED_TAGS: ['b', 'i', 'ul', 'li'],
+    });
+
+    useEffect(() => {
+        if (descriptionRef.current) {
+            const sanitizedDescription = DOMPurify.sanitize(job.description || "", {
+                ALLOWED_TAGS: ['b', 'i', 'br', 'p', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote'],
+            });
+            descriptionRef.current.innerHTML = sanitizedDescription;
+        }
+    }, [job.description]);
+
 
     useEffect(() => {
         if (job.benefits.length < 6) {
@@ -51,21 +66,22 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
                 <div className={"small-title"}>
                     <span>Job details</span>
                 </div>
-                <div className={"short-main-info"}>
-                    <div className={"job-details-icon-box"}>
-                        <FontAwesomeIcon className={"svg125rem"} icon={faMoneyBillAlt}/>
-                    </div>
-                    <div className={"job-details-header-info-box"}>
-                        <div className={"job-details-info"}>
-                            <span>Pay</span>
+                {job.salary &&
+                    <div className={"short-main-info"}>
+                        <div className={"job-details-icon-box"}>
+                            <FontAwesomeIcon className={"svg125rem"} icon={faMoneyBillAlt}/>
                         </div>
-                        <div className={"detailed-job-features"}>
-                            <JobDetailsFeatureBox
-                                featureText={formatJobSalaryDisplay(job)}
-                            />
+                        <div className={"job-details-header-info-box"}>
+                            <div className={"job-details-info"}>
+                                <span>Pay</span>
+                            </div>
+                            <div className={"detailed-job-features"}>
+                                <JobDetailsFeatureBox
+                                    featureText={formatJobSalaryDisplay(job)}
+                                />
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </div>}
                 {job.jobType.length > 0 && <div className={"short-main-info"}>
                     <div className={"job-details-icon-box"}>
                         <FontAwesomeIcon className={"svg125rem"} icon={faBriefcase}/>
@@ -130,8 +146,9 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
             <div className={"full-description-box"}>
                 <div
                     style={{whiteSpace: "pre-wrap"}}
-                    dangerouslySetInnerHTML={{__html: job.description}}
-                />
+                    dangerouslySetInnerHTML={{__html: cleanDescription}}
+                >
+                </div>
             </div>
         </div>
     )

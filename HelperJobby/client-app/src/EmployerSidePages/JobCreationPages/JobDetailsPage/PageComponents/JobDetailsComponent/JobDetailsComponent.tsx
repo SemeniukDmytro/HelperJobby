@@ -42,10 +42,8 @@ const JobDetailsComponent: FC<JobDetailsComponentProps> = () => {
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
     const incompleteJobService = new IncompleteJobService();
-    const location = useLocation();
 
     useEffect(() => {
-        console.log(location.pathname)
         fetchInitialPageData()
     }, []);
 

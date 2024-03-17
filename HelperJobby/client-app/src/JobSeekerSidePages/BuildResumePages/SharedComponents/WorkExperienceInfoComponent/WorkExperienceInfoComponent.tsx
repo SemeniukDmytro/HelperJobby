@@ -249,6 +249,21 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
         }
     }
 
+    function handlePaste(e: React.ClipboardEvent<HTMLDivElement>) {
+        e.preventDefault();
+        const text = e.clipboardData.getData('text/plain');
+
+        document.execCommand('insertText', false, text);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        const allowedShortcuts = ['x', 'c', 'v', 'a', 'z', 'y'];
+
+        if ((e.ctrlKey || e.metaKey) && !allowedShortcuts.includes(e.key.toLowerCase())) {
+            e.preventDefault();
+        }
+    };
+
     return (
         <>
             {showCityAutoComplete && <AutocompleteResultsWindow
@@ -336,6 +351,8 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                             className={"description-input"}
                             onInput={changeDescriptionValue}
                             ref={descriptionInputRef}
+                            onPaste={handlePaste}
+                            onKeyDown={handleKeyDown}
                         >
                         </div>
                         <div className={"description-focused"}></div>

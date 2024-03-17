@@ -9,12 +9,14 @@ import {JobCreationStates} from "../../../../../enums/utilityEnums/JobCreationSt
 import useCurrentEmployerJob from "../../../../../hooks/contextHooks/useCurrentEmployerJob";
 import {useNavigate, useParams} from "react-router-dom";
 import {useJobLoaderToSetCurrentJob} from "../../../../../hooks/comnonentSharedHooks/useJobLoaderToSetCurrentJob";
+import {useEmployer} from "../../../../../hooks/contextHooks/useEmployer";
 
 
 interface ReviewJobComponentProps { 
 }
 
 const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
+    const {setEmployer} = useEmployer();
     const {currentJob, setCurrentJob} = useCurrentEmployerJob();
     const {jobId} = useParams<{ jobId: string }>();
     const [loading, setLoading] = useState(true);
@@ -45,6 +47,12 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
         try {
             setRequestInProgress(true);
             await jobService.createJob(currentJob!.id);
+            setEmployer(prev => {
+                return prev && {
+                    ...prev,
+                    incompleteJobs : prev.incompleteJobs.filter(j => j.id !==  currentJob?.id)
+                }
+            })
             navigate(`${employerPagesPaths.JOB_POSTING}`)
         } catch (err) {
             logErrorInfo(err)

@@ -1,9 +1,7 @@
 import React, {FC, FormEvent, useEffect, useRef, useState} from 'react';
-import './JobDescriptionAndPreferencesComponnent.scss';
+import './JobDescriptionAndPreferencesComponent.scss';
 import PageTitleWithImage from "../../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import TeamAnalysis from "../../../../../Components/Icons/TeamAnalysis";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {resumeRequirementOptionsMapData} from "../../../../../AppConstData/ResumeRequirements";
 import JobCreateNavigationButtons
     from "../../../SharedComponents/JobCreateNavigationButtons/JobCreateNavigationButtons";
@@ -22,6 +20,8 @@ import {JobCreationStates} from "../../../../../enums/utilityEnums/JobCreationSt
 import {useEmployer} from "../../../../../hooks/contextHooks/useEmployer";
 import useCurrentEmployerJob from "../../../../../hooks/contextHooks/useCurrentEmployerJob";
 import {useJobLoaderToSetCurrentJob} from "../../../../../hooks/comnonentSharedHooks/useJobLoaderToSetCurrentJob";
+import DOMPurify from "dompurify";
+import DescriptionInputWindow from "../../../../../Components/DescriptionInputWindow/DescriptionInputWindow";
 
 interface JobDescriptionAndPreferencesComponentProps {}
 
@@ -56,8 +56,11 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
     useEffect(() => {
         if (currentJob){
             if (descriptionInputRef.current){
-                descriptionInputRef.current.innerText = currentJob.description || "";
-                setJobDescription(currentJob.description || "");
+                const sanitizedDescription = DOMPurify.sanitize(currentJob.description || "", {
+                    ALLOWED_TAGS: ['b', 'i', 'br', 'p', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote'],
+                });
+                descriptionInputRef.current.innerHTML = sanitizedDescription;
+                setJobDescription(sanitizedDescription);
             }
             if (currentJob.contactPhoneNumber){
                 setIsContactPhoneAvailable(true);
@@ -77,27 +80,22 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
     async function fetchInitialPageData(){
         await fetchJobAndSetJobCreation();
     }
-    
-    function changeDescriptionValue(event: React.FormEvent<HTMLDivElement>) {
-        isValidDescription(event.currentTarget.innerHTML, setDescriptionError, setIsInvalidDescription);
-        setJobDescription(event.currentTarget.innerHTML);
-    }
     async function handleDescriptionAndPreferencesSubmit(e : FormEvent) {
         e.preventDefault();
         setExecuteFormValidation(true);
-        if (!isValidDescription(jobDescription, setDescriptionError, setIsInvalidDescription)){
+        if (!isValidDescription(jobDescription, setDescriptionError, setIsInvalidDescription)) {
             descriptionInputRef.current?.focus();
             return;
-            
+
         }
-        if (!IsValidEmail(contactEmail)){
+        if (!IsValidEmail(contactEmail)) {
             setEmailError("Invalid email provided");
             emailInputRef.current?.focus();
             return;
         }
-        if (contactPhoneNumber){
+        if (contactPhoneNumber) {
             const isInValidPhoneNumber = validatePhoneNumber(contactPhoneNumber);
-            if (isInValidPhoneNumber){
+            if (isInValidPhoneNumber) {
                 setPhoneError(isInValidPhoneNumber);
                 phoneNumberInputRef.current?.focus();
                 return;
@@ -105,29 +103,20 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
         }
         try {
             setRequestInProgress(true);
-            const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
-                description : jobDescription,
-                contactEmail : contactEmail,
-                contactPhoneNumber : isContactPhoneAvailable ? contactPhoneNumber : "",
-                resumeRequired : resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)?.enumValue
+            const updatedIncompleteJob: UpdatedIncompleteJobDTO = {
+                description: jobDescription,
+                contactEmail: contactEmail,
+                contactPhoneNumber: isContactPhoneAvailable ? contactPhoneNumber : "",
+                resumeRequired: resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)?.enumValue
             }
-            const  retrievedIncompleteJob = await incompleteJobService.updateJobCreation(parseInt(jobId!), updatedIncompleteJob);
+            const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(parseInt(jobId!), updatedIncompleteJob);
             setCurrentJob(retrievedIncompleteJob);
             navigate(`${employerPagesPaths.REVIEW_JOB_PAGE}/${jobId}`)
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
-    }
-    function handlePaste(event: React.ClipboardEvent<HTMLDivElement>) {
-        event.preventDefault();
-
-        const text = event.clipboardData.getData('text/plain');
-
-        document.execCommand('insertText', false, text);
     }
 
     function navigateToPreviousPage() {
@@ -141,34 +130,15 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
                                 title={"Add description and set preferences"}/>
             <div className={"emp-form-fb"}>
                 <form className={"emp-form"}>
-                    <div className={"description-container"}>
-                        <div
-                            className={`small-title horizontal-title ${isInvalidDescription ? "error-text" : ""}`}
-                            style={{marginBottom: "0.25rem"}}
-                        >
-                            <span>Job description</span>
-                            <span className={"error-text"}>&nbsp;*</span>
-                        </div>
-                        <div style={{position: "relative", marginTop: "0.5rem"}}>
-                            <div
-                                role={"textbox"}
-                                contentEditable={true}
-                                ref={descriptionInputRef}
-                                className={`description-input ${isInvalidDescription ? "red-field-focus" : ""}`}
-                                onInput={changeDescriptionValue}
-                                onBlur={() => isValidDescription(jobDescription, setDescriptionError, setIsInvalidDescription)}
-                                onPaste={handlePaste}
-                            >
-                            </div>
-                            <div className={`description-focused ${isInvalidDescription ? "red-field-focus" : ""}`}></div>
-                        </div>
-                        {isInvalidDescription &&
-                            <div className={"error-box"}>
-                                <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
-                                <span className={"error-text"}>{descriptionError}</span>
-                            </div>
-                        }
-                    </div>
+                    <DescriptionInputWindow
+                        jobDescription={jobDescription}
+                        setJobDescription={setJobDescription}
+                        descriptionInputRef={descriptionInputRef}
+                        descriptionError={descriptionError}
+                        setDescriptionError={setDescriptionError}
+                        isInvalidDescription={isInvalidDescription}
+                        setIsInvalidDescription={setIsInvalidDescription}
+                    />
                     <div className={"content-separation-line mt2rem mb3rem"}></div>
                     <CommunicationPreferencesBlock 
                         contactEmail={contactEmail}

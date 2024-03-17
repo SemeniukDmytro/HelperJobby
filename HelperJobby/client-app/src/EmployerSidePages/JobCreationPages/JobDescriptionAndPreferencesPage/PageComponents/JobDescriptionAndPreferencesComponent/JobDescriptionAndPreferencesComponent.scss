@@ -1,0 +1,54 @@
+@use "../../../../../Assets/scssSharedStyles/global-variables";
+
+
+.horizontal-title {
+  display: flex;
+  flex-direction: row;
+}
+
+.format-panel-container {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  background-color: global-variables.$neutral-color-300;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+  border: 1px solid global-variables.$neutral-color-700;
+  border-bottom: none;
+}
+
+.description-input-with-format-panel {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  color: global-variables.$neutral-color-1000;
+}
+
+.text-styling-option-container {
+  background-color: global-variables.$neutral-color-300;
+  height: 100%;
+  border: none;
+  transition: 0.2s background-color;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  &:hover{
+    background-color: global-variables.$neutral-color-400;
+  }
+  &:active{
+    box-shadow: global-variables.$button-inner-shadow;
+    background-color: global-variables.$neutral-color-500;
+  }
+}
+
+.text-styling-option-selected{
+  background-color: global-variables.$neutral-color-700;
+  &:hover{
+    background-color: global-variables.$neutral-color-800;
+  }
+  .dark-default-text{
+    color: white;
+  }
+}
+
+.left-styling-option {
+  border-top-left-radius: 0.5rem;
+}

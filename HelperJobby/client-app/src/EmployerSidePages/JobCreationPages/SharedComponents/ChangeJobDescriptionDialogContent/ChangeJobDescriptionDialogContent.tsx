@@ -11,6 +11,8 @@ import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationState
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
 import useCurrentEmployerJob from "../../../../hooks/contextHooks/useCurrentEmployerJob";
+import DOMPurify from "dompurify";
+import DescriptionInputWindow from "../../../../Components/DescriptionInputWindow/DescriptionInputWindow";
 
 interface ChangeJobDescriptionDialogContentProps {
     showDialog : boolean;
@@ -39,23 +41,13 @@ const ChangeJobDescriptionDialogContent: FC<ChangeJobDescriptionDialogContentPro
     
     useEffect(() => {
         if (descriptionInputRef.current && currentJob){
-            descriptionInputRef.current.innerText = currentJob.description || "";
-            setJobDescription(currentJob.description || "");
+            const sanitizedDescription = DOMPurify.sanitize(currentJob.description || "", {
+                ALLOWED_TAGS: ['b', 'i', 'br', 'p', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote'],
+            });
+            descriptionInputRef.current.innerHTML = sanitizedDescription;
+            setJobDescription(sanitizedDescription);
         }
     }, [showDialog]);
-
-    function changeDescriptionValue(event: React.FormEvent<HTMLDivElement>) {
-        isValidDescription(event.currentTarget.innerHTML, setDescriptionError, setIsInvalidDescription);
-        setJobDescription(event.currentTarget.innerHTML);
-    }
-
-    function handlePaste(event: React.ClipboardEvent<HTMLDivElement>) {
-        event.preventDefault();
-
-        const text = event.clipboardData.getData('text/plain');
-
-        document.execCommand('insertText', false, text);
-    }
 
 
     async function editJobDescription(){
@@ -95,32 +87,15 @@ const ChangeJobDescriptionDialogContent: FC<ChangeJobDescriptionDialogContentPro
     return (
         <>
             <div className={"description-container"}>
-                <div
-                    className={`small-title horizontal-title ${isInvalidDescription ? "error-text" : ""}`}
-                    style={{marginBottom: "0.25rem"}}
-                >
-                    <span>Job description</span>
-                    <span className={"error-text"}>&nbsp;*</span>
-                </div>
-                <div style={{position: "relative", marginTop: "0.5rem"}}>
-                    <div
-                        role={"textbox"}
-                        contentEditable={true}
-                        ref={descriptionInputRef}
-                        className={`description-input ${isInvalidDescription ? "red-field-focus" : ""}`}
-                        onInput={changeDescriptionValue}
-                        onBlur={() => isValidDescription(jobDescription, setDescriptionError, setIsInvalidDescription)}
-                        onPaste={handlePaste}
-                    >
-                    </div>
-                    <div className={`description-focused ${isInvalidDescription ? "red-field-focus" : ""}`}></div>
-                </div>
-                {isInvalidDescription &&
-                    <div className={"error-box"}>
-                        <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
-                        <span className={"error-text"}>{descriptionError}</span>
-                    </div>
-                }
+                <DescriptionInputWindow
+                    jobDescription={jobDescription}
+                    setJobDescription={setJobDescription}
+                    descriptionInputRef={descriptionInputRef}
+                    descriptionError={descriptionError}
+                    setDescriptionError={setDescriptionError}
+                    isInvalidDescription={isInvalidDescription}
+                    setIsInvalidDescription={setIsInvalidDescription}
+                />    
             </div>
         </>
     )

@@ -1,8 +1,9 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './JobReviewJobInfoBlock.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronDown, faChevronUp, faCircleExclamation, faPen} from "@fortawesome/free-solid-svg-icons";
+import {faChevronDown, faChevronUp, faPen} from "@fortawesome/free-solid-svg-icons";
 import JobDataNotProvidedNotifier from "../JobDataNotProvidedNotifier/JobDataNotProvidedNotifier";
+import DOMPurify from "dompurify";
 
 interface JobReviewJobInfoBlockProps {
     jobInfoLabel: string;
@@ -25,8 +26,14 @@ const JobReviewJobInfoBlock: FC<JobReviewJobInfoBlockProps> = (
     const infoNotProvided = fieldValue.length === 0;
 
     useEffect(() => {
+        if (fieldValueRef.current){
+            const sanitizedDescription = DOMPurify.sanitize(fieldValue || "", {
+                ALLOWED_TAGS: ['b', 'i', 'br', 'p', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote'],
+            });
+            fieldValueRef.current.innerHTML = sanitizedDescription;
+        }
         setShowMoreButton(isValueSizeIsTooBig());
-    }, [fieldValueRef.current]);
+    }, [fieldValueRef.current, fieldValue]);
 
     function isValueSizeIsTooBig(): boolean {
         if (fieldValueRef.current?.getBoundingClientRect().height) {

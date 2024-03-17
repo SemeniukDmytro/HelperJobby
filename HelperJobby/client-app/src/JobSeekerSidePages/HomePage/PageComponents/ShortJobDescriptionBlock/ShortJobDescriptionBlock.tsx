@@ -14,6 +14,7 @@ import {jobTypesEnumToStringMap, schedulesEnumToStringMap} from "../../../../uti
 import {formatJobSalaryDisplay} from "../../../../utils/convertLogic/formatJobSalaryDisplay";
 import {useAuth} from "../../../../hooks/contextHooks/useAuth";
 import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
+import DOMPurify from "dompurify";
 
 interface ShortJobDescriptionBlockProps {
     job: JobDTO;
@@ -200,10 +201,11 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props: Shor
                     </div>
 
                     <div className={"job-features-info"}>
-                        <JobFeatureBox
-                            featureName={formatJobSalaryDisplay(job)}
-                            moreFeaturesAmount={0}
-                        />
+                        {job.salary &&
+                            <JobFeatureBox
+                                featureName={formatJobSalaryDisplay(job)}
+                                moreFeaturesAmount={0}
+                            />}
                         {job.jobType.length != 0 && <JobFeatureBox
                             featureName={`${jobTypesEnumToStringMap(job.jobType[0])}`}
                             moreFeaturesAmount={job.jobType.length - 1}
@@ -216,7 +218,7 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props: Shor
                     <div className={"short-description-content"}>
                         <ul className={"short-description-list"}>
                             {shortDescription.map((item, index) => (
-                                <li key={index}>{item}</li>
+                                <li key={index}>{DOMPurify.sanitize(item)}</li>
                             ))}
                         </ul>
                     </div>

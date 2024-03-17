@@ -45,7 +45,8 @@ const JobPostingComponent: FC<JobPostingComponentProps> = () => {
     async function loadPageInitialData() {
         try {
             setLoading(true);
-            if (employer?.incompleteJobs.length !== 0) {
+            if (employer?.incompleteJobs && employer?.incompleteJobs.length !== 0) {
+                setJobDrafts(employer.incompleteJobs)
                 return;
             }
             const employerIncompleteJobs = await incompleteJobService.getEmployerIncompleteJobTitles(employer!.id);

@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import JobDescriptionAndPreferencesComponent
-    from "./PageComponents/JobDescriptionAndPreferencesComponnent/JobDescriptionAndPreferencesComponent";
+    from "./PageComponents/JobDescriptionAndPreferencesComponent/JobDescriptionAndPreferencesComponent";
 
 interface JobDescriptionAndPreferencesPageProps {
 }

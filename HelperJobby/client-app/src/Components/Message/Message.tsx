@@ -130,7 +130,7 @@ const Message: FC<MessageProps> = ({
                         </div>
                     }
                 </div>
-                <div className={"light-dark-small-text"}>
+                <div style={{whiteSpace : "pre"}} className={"light-dark-small-text"}>
                     {message.content}
                 </div>
             </div>
