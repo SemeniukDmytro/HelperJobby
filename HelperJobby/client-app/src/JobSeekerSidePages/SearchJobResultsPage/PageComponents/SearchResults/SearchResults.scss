@@ -100,3 +100,21 @@
 .smaller-margin-before-navigation {
   margin-bottom: 1rem;
 }
+
+.no-search-results-container {
+  padding: 1.5rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.no-search-explanation-message {
+  min-width: 12.825rem;
+  box-sizing: border-box;
+  margin: 0;
+  width: 410px;
+  padding: 0 0 9px 0;
+  max-width: 40.5rem;
+}

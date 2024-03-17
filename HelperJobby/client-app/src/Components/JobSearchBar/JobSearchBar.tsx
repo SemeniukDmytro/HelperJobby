@@ -12,6 +12,7 @@ import useQueryParams from "../../hooks/contextHooks/useQueryParams";
 interface JobSearchBarProps {
     jobInitial: string;
     locationInitial: string;
+    jobQueryInputRef: React.RefObject<HTMLInputElement>;
 }
 
 const JobSearchBar: FC<JobSearchBarProps> = (props) => {
@@ -26,7 +27,6 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
     const [showEraseLocationBtn, setShowEraseLocationBtn] = useState(false);
     const [showEraseJobBtn, setShowEraseJobBtn] = useState(false);
     const locationRef = useRef<HTMLInputElement>(null);
-    const jobRef = useRef<HTMLInputElement>(null);
     const eraseLocationButtonRef = useRef<HTMLDivElement>(null);
     const eraseJobButtonRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +54,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
                 setShowAutoComplete(false);
                 setShowEraseLocationBtn(false);
             }
-            if (!jobRef.current?.contains(clickedElement)) {
+            if (!props.jobQueryInputRef.current?.contains(clickedElement)) {
                 setShowEraseJobBtn(false);
             }
         };
@@ -136,8 +136,8 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
         setJob("");
         setQuery("");
         setShowEraseJobBtn(false);
-        if (jobRef.current) {
-            jobRef.current.focus();
+        if (props.jobQueryInputRef.current) {
+            props.jobQueryInputRef.current.focus();
         }
     }
 
@@ -241,7 +241,7 @@ const JobSearchBar: FC<JobSearchBarProps> = (props) => {
                                 value={job}
                                 onChange={handleJobInput}
                                 placeholder={"Job title, keywords or company"}
-                                ref={jobRef}
+                                ref={props.jobQueryInputRef}
                                 onFocus={handleJobFocus}
                                 onBlur={handleJobInputBlur}
                                 onKeyDown={handleEnterKeyPress}

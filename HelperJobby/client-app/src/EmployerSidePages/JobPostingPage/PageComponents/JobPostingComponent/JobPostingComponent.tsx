@@ -5,10 +5,9 @@ import PageTitleWithImage from "../../../../EmployersSideComponents/PageTitleWit
 import PeopleInAnOffice from "../../../../Components/Icons/PeopleInAnOffice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
-    faArrowRightLong, faCircleExclamation,
+    faArrowRightLong, faBriefcase, faCircleExclamation,
     faLocationDot,
     faMagnifyingGlass,
-    faSuitcase,
     faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
@@ -208,7 +207,7 @@ const JobPostingComponent: FC<JobPostingComponentProps> = () => {
                                                     </div>}
                                             </div>
                                             <div className={"grey-small-text bold-text flex-row ai-center"}>
-                                                <FontAwesomeIcon className={"icon-right-margin"} icon={faSuitcase}/>
+                                                <FontAwesomeIcon className={"icon-right-margin"} icon={faBriefcase}/>
                                                 {jobDrafts.length} {jobDrafts.length === 1 ? "result" : "results"}
                                             </div>
                                         </div>

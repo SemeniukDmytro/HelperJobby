@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import './SearchResults.scss';
 import {useNavigate, useSearchParams} from "react-router-dom";
 import QueryParameter from "../QueryParameter/QueryParameter";
@@ -21,6 +21,7 @@ import HomePageMainContentWrap from "../../../HomePage/PageComponents/HomePageMa
 import JobTypes from "../../../../enums/modelDataEnums/JobTypes";
 import {JobQueryParams} from "../../../../enums/utilityEnums/JobQueryParams";
 import useQueryParams from "../../../../hooks/contextHooks/useQueryParams";
+import NoSearchResults from "../../../../Components/Icons/NoSearchResults";
 
 interface SearchResultsProps {
 }
@@ -58,6 +59,7 @@ const SearchResults: FC<SearchResultsProps> = () => {
     const [showPayOptions, setShowPayOptions] = useState(false);
     const [showJobTypeOptions, setShowJobTypeOptions] = useState(false);
     const [showLanguageOptions, setShowLanguageOptions] = useState(false);
+    const jobQueryInputRef = useRef<HTMLInputElement>(null);
 
     const queryParams = {
         query: searchParams.get("q") ?? "",
@@ -179,6 +181,7 @@ const SearchResults: FC<SearchResultsProps> = () => {
         <PageWrapWithHeader>
             <HomePageMainContentWrap>
                 <JobSearchBar
+                    jobQueryInputRef={jobQueryInputRef}
                     jobInitial={searchParams.get("q")!}
                     locationInitial={searchParams.get("location") || ""}
                 />
@@ -252,43 +255,65 @@ const SearchResults: FC<SearchResultsProps> = () => {
                 <div className={"filters-results-separator"}>
                 </div>
                 {loading ? <LoadingPage/> :
-                    (searchResults.length > 0 ? (<div className={"jobs-container"}>
-                        <div className={"job-descriptions"}>
-                            <div className={"short-job-descriptions-column smaller-margin-before-navigation"}>
-                                <div className={"title-container"}>
-                                    <span>{searchParams.get("q")} {searchParams.get("location") ? `in ${searchParams.get("location")}` : ""} jobs</span>
+                    searchResults.length > 0 ?
+                        <div className={"jobs-container"}>
+                            <div className={"job-descriptions"}>
+                                <div className={"short-job-descriptions-column smaller-margin-before-navigation"}>
+                                    <div className={"title-container"}>
+                                        <span>{searchParams.get("q")} {searchParams.get("location") ? `in ${searchParams.get("location")}` : ""} jobs</span>
+                                    </div>
+                                    {searchResults.map((job, index) => (
+                                        <ShortJobDescriptionBlock
+                                            key={index} job={job}
+                                            selectedJob={selectedJob}
+                                            setSelectedJob={setSelectedJob}
+                                        ></ShortJobDescriptionBlock>
+                                    ))}
                                 </div>
-                                {searchResults.map((job, index) => (
-                                    <ShortJobDescriptionBlock
-                                        key={index} job={job}
-                                        selectedJob={selectedJob}
-                                        setSelectedJob={setSelectedJob}
-                                    ></ShortJobDescriptionBlock>
-                                ))}
-                            </div>
-                            <div className={"pages-navigation-container"}>
-                                {start != 0 && <button
-                                    className={"navigation-button previous-button"}
-                                    onClick={goToPreviousPageWithResults}
-                                >
-                                    <FontAwesomeIcon icon={faChevronLeft}/>
-                                </button>}
-                                {hasMoreResults &&
-                                    <button className={"navigation-button"} onClick={goToNextPageWithResults}>
-                                        <FontAwesomeIcon icon={faChevronRight}/>
+                                <div className={"pages-navigation-container"}>
+                                    {start != 0 && <button
+                                        className={"navigation-button previous-button"}
+                                        onClick={goToPreviousPageWithResults}
+                                    >
+                                        <FontAwesomeIcon icon={faChevronLeft}/>
                                     </button>}
+                                    {hasMoreResults &&
+                                        <button className={"navigation-button"} onClick={goToNextPageWithResults}>
+                                            <FontAwesomeIcon icon={faChevronRight}/>
+                                        </button>}
+                                </div>
+                            </div>
+                            <DetailedDescriptionColumn
+                                selectedJob={selectedJob}
+                                isFullHeaderGridTemplate={isFullHeaderGridTemplate}
+                                setIsFullHeaderGridTemplate={setIsFullHeaderGridTemplate}
+                                isShortHeaderGridTemplate={isShortHeaderGridTemplate}
+                                setIsShortHeaderGridTemplate={setIsShortHeaderGridTemplate}
+                                mainContentReference={mainContentReferenceForSearch}
+                            />
+                        </div>
+                        :
+                        <div className={"no-search-results-container"}>
+                            <NoSearchResults/>
+                            <div className={"no-search-explanation-message flex-column"}>
+                                <span className={"dark-default-text mb1rem"}>
+                                    The search <b>{searchParams.get("q")!} {searchParams.get("location") ? 
+                                    `in ${searchParams.get("location")}` : ""}</b> did not match any jobs.
+                                </span>
+                                <b className={"dark-default-text"}>Search suggestions:</b>
+                                <ul >
+                                    <li className={"dark-default-text"}>
+                                        Try more general keywords
+                                    </li>
+                                    <li className={"dark-default-text"}>
+                                        Check your spelling 
+                                    </li>
+                                    <li className={"dark-default-text"}>
+                                        Replace abbreviations with the entire word
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-                        <DetailedDescriptionColumn
-                            selectedJob={selectedJob}
-                            isFullHeaderGridTemplate={isFullHeaderGridTemplate}
-                            setIsFullHeaderGridTemplate={setIsFullHeaderGridTemplate}
-                            isShortHeaderGridTemplate={isShortHeaderGridTemplate}
-                            setIsShortHeaderGridTemplate={setIsShortHeaderGridTemplate}
-                            mainContentReference={mainContentReferenceForSearch}
-                        />
-                    </div>) 
-                        : (<></>))
                 }
             </HomePageMainContentWrap>
         </PageWrapWithHeader>

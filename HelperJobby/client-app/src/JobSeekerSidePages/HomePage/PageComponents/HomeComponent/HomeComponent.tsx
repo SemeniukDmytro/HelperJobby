@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import "./HomeComponent.scss";
 import JobSearchPromoContainer from "../JobSearchPromoContainer/JobSearchPromoContainer";
 import RecommendedJobs from "../RecommendedJobs/RecommendedJobs";
@@ -17,6 +17,7 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     const [selectedTab, setSelectedTab] = useState<SelectedTabs>(1);
     const {fetchJobSeekerJobInteractions} = useJobSeeker();
     const [loading, setLoading] = useState(true);
+    const jobQueryInputRef = useRef<HTMLInputElement>(null);
 
 
     useEffect(() => {
@@ -39,7 +40,10 @@ const HomeComponent: FC<HomeComponentProps> = () => {
     return (
         <HomePageMainContentWrap>
             {loading ? <LoadingPage/> : <>
-                <JobSearchBar jobInitial={""} locationInitial={""}/>
+                <JobSearchBar
+                    jobQueryInputRef={jobQueryInputRef}
+                    jobInitial={""}
+                    locationInitial={""}/>
                 <JobSearchPromoContainer/>
                 <div className={"search-results-container"}>
                     <nav className={"search-results-navbar"}>
@@ -57,7 +61,8 @@ const HomeComponent: FC<HomeComponentProps> = () => {
                         </button>
                     </nav>
                     {selectedTab === 1 && <RecommendedJobs/>}
-                    {selectedTab === 2 && <RecentSearches/>}
+                    {selectedTab === 2 && <RecentSearches
+                    jobQueryInputRef={jobQueryInputRef}/>}
                 </div>
             </>}
         </HomePageMainContentWrap>
