@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import EditEmployerInfoComponent from "./PageComponents/EditEmployerInfoComponent/EditEmployerInfoComponent";
 
-interface EditEmployerInfoPageProps {}
+interface EditEmployerInfoPageProps {
+}
 
 const EditEmployerInfoPage: FC<EditEmployerInfoPageProps> = () => (
-  <EditEmployerInfoComponent/>
+    <EditEmployerInfoComponent/>
 );
 
 export default EditEmployerInfoPage;

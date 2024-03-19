@@ -7,7 +7,6 @@ using HelperJobby.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +25,7 @@ builder.Services.AddSignalR().AddJsonProtocol(options =>
 var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<ApplicationContext>(options =>
 {
-        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
 builder.Services.AddControllers().AddJsonOptions(x =>
@@ -41,17 +40,14 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
         ValidateIssuer = false,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtKey"]!))
     };
-    
+
     options.Events = new JwtBearerEvents
     {
         OnMessageReceived = context =>
         {
             var accessToken = context.Request.Query["access_token"];
             var path = context.HttpContext.Request.Path;
-            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/Chat"))
-            {
-                context.Token = accessToken;
-            }
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/Chat")) context.Token = accessToken;
             return Task.CompletedTask;
         }
     };

@@ -76,12 +76,10 @@ const AddJobMissingInfoDialog: FC<AddJobMissingInfoDialogProps> = ({
     async function proceedToNextForm() {
         try {
             editFunction();
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
-            if (currentStep == missingJobProperties.length - 1){
+        } finally {
+            if (currentStep == missingJobProperties.length - 1) {
                 setShowDialog(false);
             }
         }

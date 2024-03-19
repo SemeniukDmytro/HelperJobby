@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import EmployerJobsComponent from "./PageComponents/EmployerJobsComponent/EmployerJobsComponent";
 
-interface EmployerJobsPageProps {}
+interface EmployerJobsPageProps {
+}
 
 const EmployerJobsPage: FC<EmployerJobsPageProps> = () => (
     <EmployerJobsComponent/>

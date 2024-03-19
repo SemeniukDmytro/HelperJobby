@@ -23,7 +23,7 @@ public class IncompleteJobQueryRepository : IIncompleteJobQueryRepository
     public async Task<IEnumerable<IncompleteJob>> GetIncompleteJobsByEmployerId(int employerId)
     {
         var incompleteJobEntities =
-            await _applicationContext.IncompleteJobs.Include(j=> j.Salary)
+            await _applicationContext.IncompleteJobs.Include(j => j.Salary)
                 .Where(j => j.EmployerId == employerId).ToListAsync();
 
         return incompleteJobEntities;
@@ -32,7 +32,7 @@ public class IncompleteJobQueryRepository : IIncompleteJobQueryRepository
     public async Task<IEnumerable<IncompleteJob>> GetEmployerIncompleteJobTitles(int employerId)
     {
         var incompleteJobTitles = await _applicationContext.IncompleteJobs.Where(ij => ij.EmployerId == employerId)
-            .Select(ij => new IncompleteJob()
+            .Select(ij => new IncompleteJob
             {
                 Id = ij.Id,
                 JobTitle = ij.JobTitle,

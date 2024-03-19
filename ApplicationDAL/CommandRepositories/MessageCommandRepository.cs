@@ -23,7 +23,7 @@ public class MessageCommandRepository : IMessageCommandRepository
                 var conversationStub = message.Conversation;
                 if (conversationStub == null)
                 {
-                    conversationStub = new Conversation()
+                    conversationStub = new Conversation
                     {
                         Id = message.ConversationId
                     };
@@ -32,11 +32,11 @@ public class MessageCommandRepository : IMessageCommandRepository
 
                 conversationStub.LastModified = message.SentAt;
                 _applicationContext.Entry(conversationStub).Property(c => c.LastModified).IsModified = true;
-                
+
                 _applicationContext.Messages.Add(message);
                 await _applicationContext.SaveChangesAsync();
                 await transaction.CommitAsync();
-            
+
                 return message;
             }
             catch (Exception ex)
@@ -60,8 +60,10 @@ public class MessageCommandRepository : IMessageCommandRepository
         {
             try
             {
-                _applicationContext.Conversations.Entry(message.Conversation).Property(c => c.JobSeekersUnreadMessagesCount).IsModified = true;
-                _applicationContext.Conversations.Entry(message.Conversation).Property(c => c.EmployersUnreadMessagesCount).IsModified = true;
+                _applicationContext.Conversations.Entry(message.Conversation)
+                    .Property(c => c.JobSeekersUnreadMessagesCount).IsModified = true;
+                _applicationContext.Conversations.Entry(message.Conversation)
+                    .Property(c => c.EmployersUnreadMessagesCount).IsModified = true;
                 _applicationContext.Messages.Update(message);
                 await _applicationContext.SaveChangesAsync();
                 return message;
@@ -72,7 +74,5 @@ public class MessageCommandRepository : IMessageCommandRepository
                 throw new InvalidMessageException("Something went wrong during updating message message");
             }
         }
-
-       
     }
 }

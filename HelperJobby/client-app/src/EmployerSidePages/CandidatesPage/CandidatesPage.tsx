@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import CandidatesComponent from "./PageComponents/CandidatesComponent/CandidatesComponent";
 
-interface CandidatesPageProps {}
+interface CandidatesPageProps {
+}
 
 const CandidatesPage: FC<CandidatesPageProps> = () => (
-  <CandidatesComponent/>
+    <CandidatesComponent/>
 );
 
 export default CandidatesPage;

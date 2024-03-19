@@ -5,7 +5,8 @@ import LoadingPage from "../../Components/LoadingPage/LoadingPage";
 import {Outlet} from "react-router-dom";
 import EmployersSidebar from "../EmployersSidebar/EmployersSidebar";
 
-interface EmployerPagesWithSidebarWrapProps {}
+interface EmployerPagesWithSidebarWrapProps {
+}
 
 const EmployerPagesWithSidebarWrap: FC<EmployerPagesWithSidebarWrapProps> = () => {
     const [loading, setLoading] = useState(true);

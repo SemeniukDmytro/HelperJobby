@@ -22,7 +22,7 @@ public class NewEmployerFixtures
         ContactNumber = "+123456789",
         NumberOfEmployees = 10
     };
-    
+
     public static CreateEmployerDTO SecondEmployerCreationInCreatedOrganization = new()
     {
         FullName = "test name",

@@ -3,7 +3,6 @@ import {IncompleteJobDTO} from "../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
 import {CreateIncompleteJobDTO} from "../DTOs/jobRelatetedDTOs/CreateIncompleteJobDTO";
 import {UpdatedIncompleteJobDTO} from "../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {CreateUpdateSalaryDTO} from "../DTOs/jobRelatetedDTOs/CreateUpdateSalaryDTO";
-import {JobDTO} from "../DTOs/jobRelatetedDTOs/JobDTO";
 
 export class IncompleteJobService {
     private readonly baseURI: string = "api/IncompleteJob";
@@ -23,7 +22,7 @@ export class IncompleteJobService {
         return this.customFetchService.get<IncompleteJobDTO[]>(`${this.baseURI}/employer-incomplete-job-titles/${employerId}`);
     }
 
-    public async getIncompleteJobById(incompleteJobId : number) : Promise<IncompleteJobDTO>{
+    public async getIncompleteJobById(incompleteJobId: number): Promise<IncompleteJobDTO> {
         return await this.customFetchService.get<IncompleteJobDTO>(
             `${this.baseURI}/${incompleteJobId}`
         );
@@ -46,11 +45,12 @@ export class IncompleteJobService {
             updatedSalaryDTO
         );
     }
+
     public async deleteIncompleteJob(incompleteJobId: number): Promise<void> {
         await this.customFetchService.delete<void>(`${this.baseURI}/${incompleteJobId}`);
     }
 
-    public async deleteIncompleteJobRange(jobIds : number[]) : Promise<void>{
+    public async deleteIncompleteJobRange(jobIds: number[]): Promise<void> {
         return await this.customFetchService.delete<void>(`${this.baseURI}/delete-incomplete-job-range`, jobIds);
     }
 }

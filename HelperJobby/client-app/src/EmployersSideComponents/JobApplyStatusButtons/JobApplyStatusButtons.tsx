@@ -17,7 +17,7 @@ interface JobApplyStatusButtonsProps {
 const JobApplyStatusButtons: FC<JobApplyStatusButtonsProps> = ({
                                                                    jobApply,
                                                                    setJobApply,
-                                                               setRequestInProgress
+                                                                   setRequestInProgress
                                                                }) => {
     const jobApplyService = new JobApplyService();
 

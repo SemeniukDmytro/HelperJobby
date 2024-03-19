@@ -12,14 +12,14 @@ export interface IncompleteJobDTO {
     numberOfOpenings: number;
     language: string;
     location: string;
-    locationCountry : string;
-    jobLocationType : JobLocationTypes;
+    locationCountry: string;
+    jobLocationType: JobLocationTypes;
     jobType?: JobTypes[];
-    salary? : IncompleteJobSalaryDTO;
+    salary?: IncompleteJobSalaryDTO;
     schedule?: Schedules[];
     benefits?: EmployeeBenefits[];
     contactEmail?: string;
-    contactPhoneNumber? : string;
+    contactPhoneNumber?: string;
     resumeRequired?: ResumeRequirementOptions;
     description?: string;
     employerId: number;

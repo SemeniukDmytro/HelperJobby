@@ -64,8 +64,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
         let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
         if (parentPathFirstPart == "/build") {
             parentPathFirstPart = "/build/education"
-        }
-        else if (parentPathFirstPart == "/apply-resume"){
+        } else if (parentPathFirstPart == "/apply-resume") {
             parentPathFirstPart = "/apply-resume/education"
         }
         setParentPagePath(parentPathFirstPart);
@@ -81,9 +80,10 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
         setSaveFunc(() => CustomSaveFunc);
     }, [levelOfEducation, fieldOfStudy, schoolName,
         country, city, fromMonth, fromYear, toMonth, toYear]);
+
     async function CustomSaveFunc() {
         let nextPagePath = "/my-profile";
-        if (parentPagePath.includes("/apply-resume") && job){
+        if (parentPagePath.includes("/apply-resume") && job) {
             nextPagePath = `job-apply/${job.id}/resume`
         }
         await handleEducationCreation(nextPagePath, true)
@@ -97,7 +97,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
 
     async function handleEducationCreation(nextPageRoute: string, isSaveAndExitAction: boolean) {
         setExecuteInputValidations(true);
-        if (!levelOfEducation) {
+        if (!levelOfEducation || levelOfEducation.length > 30) {
             levelOfEducationInputRef.current?.scrollIntoView({block: "end", behavior: "smooth"});
             levelOfEducationInputRef.current?.focus();
             if (isSaveAndExitAction) {
@@ -111,8 +111,12 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
             }
             return;
         }
-        
-        
+
+        if (fieldOfStudy.length > 30 || schoolName.length > 70 || city.length > 30) {
+            return;
+        }
+
+
         if (education) {
             await updateEducation();
         } else if (jobSeeker?.resume) {
@@ -135,7 +139,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
             setJobSeeker(prev => {
                 return prev && {
                     ...prev,
-                    resume : retrievedResume
+                    resume: retrievedResume
                 }
             });
         } catch (err) {
@@ -182,13 +186,11 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
     }
 
     function navigateToWorkExperiencePage() {
-        if (location.pathname.includes("/apply-resume") && job){
+        if (location.pathname.includes("/apply-resume") && job) {
             navigate("/apply-resume/experience");
-        }
-        else if(location.pathname.includes("/build/experience")){
+        } else if (location.pathname.includes("/build/experience")) {
             navigate("/build/experience")
-        }
-        else {
+        } else {
             navigate("/my-profile")
         }
     }
@@ -245,14 +247,15 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                 showResult={showCityAutoComplete}
                 setShowResult={setShowCityAutoComplete}
                 autocompleteWindowType={AutocompleteWindowTypes.city}
+                fullLocationResult={false}
             />}
             <form className={"build-resume-form"}>
                 {savingProcess && <div className={"request-in-process-surface"}></div>}
                 <div className={"build-page-header"}>
-                    {education ? <span>Edit education</span> : 
-                        <span>{parentPagePath.includes("/apply-resume") ? 
+                    {education ? <span>Edit education</span> :
+                        <span>{parentPagePath.includes("/apply-resume") ?
                             "Do you want to add any education details?"
-                        : "Add Education"}</span>}
+                            : "Add Education"}</span>}
                 </div>
                 <CustomInputField
                     fieldLabel={"Level of education"}
@@ -262,6 +265,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     inputRef={levelOfEducationInputRef}
                     executeValidation={executeInputsValidation}
                     setExecuteValidation={setExecuteInputValidations}
+                    maxInputLength={30}
                 />
 
                 <CustomInputField
@@ -270,6 +274,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     inputFieldValue={fieldOfStudy}
                     setInputFieldValue={setFieldOfStudy}
                     inputRef={fieldOfStudyInputRef}
+                    maxInputLength={30}
                 />
 
                 <CustomInputField
@@ -278,6 +283,7 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     inputFieldValue={schoolName}
                     setInputFieldValue={setSchoolName}
                     inputRef={schoolNameInputRef}
+                    maxInputLength={70}
                 />
 
                 <CountrySelector
@@ -293,7 +299,9 @@ const EducationInfoComponent: FC<AddEducationComponentProps> = ({education}) => 
                     setInputValue={setCity}
                     inputRef={cityInputRef}
                     isRequired={false}
-                    setShowAutocompleteResults={setShowCityAutoComplete}/>
+                    setShowAutocompleteResults={setShowCityAutoComplete}
+                    locationMaxLength={30}
+                />
 
                 <TimePeriod
                     fromMonth={fromMonth}

@@ -37,7 +37,8 @@ const UserJobInteractionPagesHeader: FC<UserJobInteractionPagesHeaderProps> = ({
                 </div>
                 <div className={"job-interaction-types-tablist"}>
                     <button className={"job-interaction-tab"} onClick={navigateToSavedJobsPage}>
-                            <span className={`job-interaction-info ${userJobInteractionType == UserJobInteractionsTypes.saved ? "selected-job-interaction-tab" : ""}`}>
+                            <span
+                                className={`job-interaction-info ${userJobInteractionType == UserJobInteractionsTypes.saved ? "selected-job-interaction-tab" : ""}`}>
                                 <div className={"small-text"}>
                                     <span>{savedJobs?.length}</span>
                                 </div>

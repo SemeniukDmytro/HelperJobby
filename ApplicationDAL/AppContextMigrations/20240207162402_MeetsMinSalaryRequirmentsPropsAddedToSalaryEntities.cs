@@ -1,40 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#nullable disable
 
-#nullable disable
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ApplicationDAL.AppContextMigrations
+namespace ApplicationDAL.AppContextMigrations;
+
+/// <inheritdoc />
+public partial class MeetsMinSalaryRequirmentsPropsAddedToSalaryEntities : Migration
 {
     /// <inheritdoc />
-    public partial class MeetsMinSalaryRequirmentsPropsAddedToSalaryEntities : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<bool>(
-                name: "MeetsMinSalaryRequirement",
-                table: "JobSalaries",
-                type: "tinyint(1)",
-                nullable: false,
-                defaultValue: false);
+        migrationBuilder.AddColumn<bool>(
+            "MeetsMinSalaryRequirement",
+            "JobSalaries",
+            "tinyint(1)",
+            nullable: false,
+            defaultValue: false);
 
-            migrationBuilder.AddColumn<bool>(
-                name: "MeetsMinSalaryRequirement",
-                table: "IncompleteJobSalaries",
-                type: "tinyint(1)",
-                nullable: false,
-                defaultValue: false);
-        }
+        migrationBuilder.AddColumn<bool>(
+            "MeetsMinSalaryRequirement",
+            "IncompleteJobSalaries",
+            "tinyint(1)",
+            nullable: false,
+            defaultValue: false);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "MeetsMinSalaryRequirement",
-                table: "JobSalaries");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropColumn(
+            "MeetsMinSalaryRequirement",
+            "JobSalaries");
 
-            migrationBuilder.DropColumn(
-                name: "MeetsMinSalaryRequirement",
-                table: "IncompleteJobSalaries");
-        }
+        migrationBuilder.DropColumn(
+            "MeetsMinSalaryRequirement",
+            "IncompleteJobSalaries");
     }
 }

@@ -18,7 +18,7 @@ public class JobProfile : Profile
             dest.Schedule = FlagsEnumToArrayConverter.GetArrayWithEnumValues<Schedules>((int)src.Schedule);
             dest.JobType = FlagsEnumToArrayConverter.GetArrayWithEnumValues<JobTypes>((int)src.JobTypes);
         });
-        
+
         CreateMap<JobDTO, Job>()
             .ForMember(dest => dest.Benefits,
                 opt => opt.MapFrom(src => FlagsEnumToArrayConverter.GetSingleValue(src.Benefits)))

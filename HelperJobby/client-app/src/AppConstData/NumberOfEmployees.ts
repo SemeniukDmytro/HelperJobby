@@ -1,4 +1,4 @@
-export const numberOfEmployees : string[] = [
+export const numberOfEmployees: string[] = [
     "1 to 49",
     "50 to 149",
     "150 to 249",

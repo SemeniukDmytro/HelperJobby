@@ -1,7 +1,7 @@
-import React, {Dispatch, FC, ReactNode, SetStateAction, useEffect} from 'react';
+import React, {FC, ReactNode} from 'react';
 import './MultipleRowsReviewBlock.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronDown, faChevronUp, faPen} from "@fortawesome/free-solid-svg-icons";
+import {faPen} from "@fortawesome/free-solid-svg-icons";
 import JobDataNotProvidedNotifier from "../JobDataNotProvidedNotifier/JobDataNotProvidedNotifier";
 
 interface MultipleRowsReviewBlockProps {

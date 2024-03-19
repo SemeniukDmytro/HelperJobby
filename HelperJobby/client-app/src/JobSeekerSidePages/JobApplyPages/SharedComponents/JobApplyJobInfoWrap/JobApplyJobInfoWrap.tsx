@@ -4,7 +4,6 @@ import useCurrentJobApplication from "../../../../hooks/contextHooks/useCurrentJ
 import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 import {useNavigate, useParams} from "react-router-dom";
 import {Simulate} from "react-dom/test-utils";
-import load = Simulate.load;
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobService} from "../../../../services/jobService";
@@ -12,7 +11,8 @@ import {isNanAfterIntParse} from "../../../../utils/validationLogic/numbersValid
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBuilding, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import {
-    benefitsEnumToStringMap, jobLocationTypesEnumToStringMap,
+    benefitsEnumToStringMap,
+    jobLocationTypesEnumToStringMap,
     jobTypesEnumToStringMap,
     schedulesEnumToStringMap
 } from "../../../../utils/convertLogic/enumToStringConverter";

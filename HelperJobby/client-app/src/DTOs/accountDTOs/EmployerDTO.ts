@@ -9,12 +9,12 @@ export interface EmployerDTO {
     userId: number;
     email: string;
     contactNumber: string;
-    hasPostedFirstJob : boolean;
+    hasPostedFirstJob: boolean;
     fullName: string;
     user: UserDTO;
     organizationId: number;
     organization: OrganizationDTO;
     jobs: JobDTO[];
-    incompleteJobs : IncompleteJobDTO[];
-    conversations : ConversationDTO[];
+    incompleteJobs: IncompleteJobDTO[];
+    conversations: ConversationDTO[];
 }

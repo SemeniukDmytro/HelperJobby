@@ -10,7 +10,8 @@ import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/Whit
 import WomanWorking from "../../../../Components/Icons/WomanWorking";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 
-interface EditEmployerInfoComponentProps {}
+interface EditEmployerInfoComponentProps {
+}
 
 const EditEmployerInfoComponent: FC<EditEmployerInfoComponentProps> = () => {
     const {employer, setEmployer} = useEmployer();
@@ -23,45 +24,43 @@ const EditEmployerInfoComponent: FC<EditEmployerInfoComponentProps> = () => {
     const employerService = new EmployerService();
     const [requestInProgress, setRequestInProgress] = useState(false);
 
-     async  function saveUpdatedInfo( e : FormEvent) {
-         e.preventDefault()
-         if (!IsValidEmail(employerEmail)) {
-             setEmailError("Error: Invalid email address");
-             return;
-         } else {
-             setEmailError("");
-         }
-         if (contactNumber) {
-             const isValidPhoneNumber = validatePhoneNumber(contactNumber);
-             if (isValidPhoneNumber) {
-                 setPhoneNumberError(isValidPhoneNumber);
-                 phoneNumberInputRef.current?.focus();
-                 return;
-             }
-         }
-         try {
-             setRequestInProgress(true)
-             const updatedEmployer : UpdateEmployerDTO = {
-                 email : employerEmail,
-                 contactNumber
-             }
-             const updatedEmployerInfo = await employerService.updateEmployerAccount(employer!.id, updatedEmployer);
-             setEmployer(prev => {
-                 return prev && {
-                     ...prev,
-                     email : updatedEmployerInfo.email,
-                     contactNumber : updatedEmployerInfo.contactNumber
-                 }
-             })
-         }
-         catch (err){
-             logErrorInfo(err)
-         }
-         finally {
-             setRequestInProgress(false)
-         }
-         
-         
+    async function saveUpdatedInfo(e: FormEvent) {
+        e.preventDefault()
+        if (!IsValidEmail(employerEmail)) {
+            setEmailError("Error: Invalid email address");
+            return;
+        } else {
+            setEmailError("");
+        }
+        if (contactNumber) {
+            const isValidPhoneNumber = validatePhoneNumber(contactNumber);
+            if (isValidPhoneNumber) {
+                setPhoneNumberError(isValidPhoneNumber);
+                phoneNumberInputRef.current?.focus();
+                return;
+            }
+        }
+        try {
+            setRequestInProgress(true)
+            const updatedEmployer: UpdateEmployerDTO = {
+                email: employerEmail,
+                contactNumber
+            }
+            const updatedEmployerInfo = await employerService.updateEmployerAccount(employer!.id, updatedEmployer);
+            setEmployer(prev => {
+                return prev && {
+                    ...prev,
+                    email: updatedEmployerInfo.email,
+                    contactNumber: updatedEmployerInfo.contactNumber
+                }
+            })
+        } catch (err) {
+            logErrorInfo(err)
+        } finally {
+            setRequestInProgress(false)
+        }
+
+
     }
 
     return (
@@ -79,6 +78,7 @@ const EditEmployerInfoComponent: FC<EditEmployerInfoComponentProps> = () => {
                             customErrorMessage={phoneNumberError}
                             setCustomErrorMessage={setPhoneNumberError}
                             inputRef={phoneNumberInputRef}
+                            maxInputLength={15}
                         />
                         <CustomInputField
                             fieldLabel={"Email address"}
@@ -88,16 +88,17 @@ const EditEmployerInfoComponent: FC<EditEmployerInfoComponentProps> = () => {
                             customErrorMessage={emailError}
                             setCustomErrorMessage={setEmailError}
                             inputRef={emailRef}
+                            maxInputLength={50}
                         />
                         <button onClick={saveUpdatedInfo} className={"br-corner-button blue-button min-4chr-btn-width"}>
-                            {requestInProgress ? <WhiteLoadingSpinner/> : <span>Save</span>} 
+                            {requestInProgress ? <WhiteLoadingSpinner/> : <span>Save</span>}
                         </button>
                     </form>
                 </div>
             </div>
         </div>
     )
-    
+
 }
 
 export default EditEmployerInfoComponent;

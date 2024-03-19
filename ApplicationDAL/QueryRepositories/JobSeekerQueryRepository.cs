@@ -15,17 +15,10 @@ public class JobSeekerQueryRepository : IJobSeekerQueryRepository
         _applicationContext = applicationContext;
     }
 
-    
 
     public async Task<JobSeeker> GetJobSeekerById(int jobSeekerId)
     {
         return await GetJobSeeker(jobSeekerId);
-    }
-
-    public async Task<JobSeeker> GetJobSeekerByIdWithResume(int jobSeekerId)
-    {
-        return await GetJobSeeker(jobSeekerId, q => q
-            .Include(js => js.Resume));
     }
 
     public async Task<JobSeeker> GetJobSeekerByIdWithAddress(int jobSeekerId)
@@ -39,7 +32,7 @@ public class JobSeekerQueryRepository : IJobSeekerQueryRepository
         return await GetJobSeeker(jobSeekerId, q => q
             .Include(js => js.Address).Include(js => js.Resume));
     }
-    
+
     public async Task<JobSeeker> GetJobSeekerByIdWithJobInteractions(int jobSeekerId)
     {
         var retrievedJobSeeker = await _applicationContext.JobSeekers.Where(j => j.Id == jobSeekerId)
@@ -50,24 +43,24 @@ public class JobSeekerQueryRepository : IJobSeekerQueryRepository
                 JobApplies = js.JobApplies,
                 SavedJobs = js.SavedJobs
             }).FirstOrDefaultAsync();
-        if (retrievedJobSeeker == null)
-        {
-            throw new JobSeekerNotFoundException();
-        }
+        if (retrievedJobSeeker == null) throw new JobSeekerNotFoundException();
 
         return retrievedJobSeeker;
     }
-    
+
+    public async Task<JobSeeker> GetJobSeekerByIdWithResume(int jobSeekerId)
+    {
+        return await GetJobSeeker(jobSeekerId, q => q
+            .Include(js => js.Resume));
+    }
+
     private async Task<JobSeeker> GetJobSeeker(int jobSeekerId,
         Func<IQueryable<JobSeeker>, IQueryable<JobSeeker>> includeFunc = null)
     {
         var query = _applicationContext.JobSeekers.AsQueryable();
         if (includeFunc != null) query = includeFunc(query);
         var jobSeeker = await query.FirstOrDefaultAsync(js => js.Id == jobSeekerId);
-        if (jobSeeker == null)
-        {
-            throw new JobSeekerNotFoundException();
-        }
+        if (jobSeeker == null) throw new JobSeekerNotFoundException();
         return jobSeeker;
     }
 }

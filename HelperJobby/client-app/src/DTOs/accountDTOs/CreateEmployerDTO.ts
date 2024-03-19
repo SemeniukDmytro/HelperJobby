@@ -1,4 +1,3 @@
-
 export interface CreateEmployerDTO {
     email: string;
     fullName: string;

@@ -1,170 +1,169 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿#nullable disable
+
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
+namespace ApplicationDAL.AppContextMigrations;
 
-namespace ApplicationDAL.AppContextMigrations
+/// <inheritdoc />
+public partial class JobSalarySeparatedIntoDistinctEntity : Migration
 {
     /// <inheritdoc />
-    public partial class JobSalarySeparatedIntoDistinctEntity : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "Salary",
-                table: "Jobs");
+        migrationBuilder.DropColumn(
+            "Salary",
+            "Jobs");
 
-            migrationBuilder.DropColumn(
-                name: "SalaryRate",
-                table: "Jobs");
+        migrationBuilder.DropColumn(
+            "SalaryRate",
+            "Jobs");
 
-            migrationBuilder.DropColumn(
-                name: "ShowPayBy",
-                table: "Jobs");
+        migrationBuilder.DropColumn(
+            "ShowPayBy",
+            "Jobs");
 
-            migrationBuilder.DropColumn(
-                name: "Salary",
-                table: "CurrentJobCreations");
+        migrationBuilder.DropColumn(
+            "Salary",
+            "CurrentJobCreations");
 
-            migrationBuilder.DropColumn(
-                name: "SalaryRate",
-                table: "CurrentJobCreations");
+        migrationBuilder.DropColumn(
+            "SalaryRate",
+            "CurrentJobCreations");
 
-            migrationBuilder.DropColumn(
-                name: "ShowPayBy",
-                table: "CurrentJobCreations");
+        migrationBuilder.DropColumn(
+            "ShowPayBy",
+            "CurrentJobCreations");
 
-            migrationBuilder.AddColumn<bool>(
-                name: "HasPostedFirstJob",
-                table: "EmployerAccounts",
-                type: "tinyint(1)",
-                nullable: false,
-                defaultValue: false);
+        migrationBuilder.AddColumn<bool>(
+            "HasPostedFirstJob",
+            "EmployerAccounts",
+            "tinyint(1)",
+            nullable: false,
+            defaultValue: false);
 
-            migrationBuilder.CreateTable(
-                name: "CurrentJobSalaries",
-                columns: table => new
+        migrationBuilder.CreateTable(
+                "CurrentJobSalaries",
+                table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>("int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ShowPayByOption = table.Column<int>(type: "int", nullable: false),
-                    MinimalAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    MaximalAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    SalaryRate = table.Column<int>(type: "int", nullable: false),
-                    CurrentJobId = table.Column<int>(type: "int", nullable: false)
+                    ShowPayByOption = table.Column<int>("int", nullable: false),
+                    MinimalAmount = table.Column<decimal>("decimal(10,2)", nullable: false),
+                    MaximalAmount = table.Column<decimal>("decimal(10,2)", nullable: true),
+                    SalaryRate = table.Column<int>("int", nullable: false),
+                    CurrentJobId = table.Column<int>("int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CurrentJobSalaries", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CurrentJobSalaries_CurrentJobCreations_CurrentJobId",
-                        column: x => x.CurrentJobId,
-                        principalTable: "CurrentJobCreations",
-                        principalColumn: "Id",
+                        "FK_CurrentJobSalaries_CurrentJobCreations_CurrentJobId",
+                        x => x.CurrentJobId,
+                        "CurrentJobCreations",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
-                name: "JobSalaries",
-                columns: table => new
+        migrationBuilder.CreateTable(
+                "JobSalaries",
+                table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>("int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ShowPayByOption = table.Column<int>(type: "int", nullable: false),
-                    MinimalAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    MaximalAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    SalaryRate = table.Column<int>(type: "int", nullable: false),
-                    JobId = table.Column<int>(type: "int", nullable: false)
+                    ShowPayByOption = table.Column<int>("int", nullable: false),
+                    MinimalAmount = table.Column<decimal>("decimal(10,2)", nullable: false),
+                    MaximalAmount = table.Column<decimal>("decimal(10,2)", nullable: true),
+                    SalaryRate = table.Column<int>("int", nullable: false),
+                    JobId = table.Column<int>("int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_JobSalaries", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_JobSalaries_Jobs_JobId",
-                        column: x => x.JobId,
-                        principalTable: "Jobs",
-                        principalColumn: "Id",
+                        "FK_JobSalaries_Jobs_JobId",
+                        x => x.JobId,
+                        "Jobs",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_CurrentJobSalaries_CurrentJobId",
-                table: "CurrentJobSalaries",
-                column: "CurrentJobId",
-                unique: true);
+        migrationBuilder.CreateIndex(
+            "IX_CurrentJobSalaries_CurrentJobId",
+            "CurrentJobSalaries",
+            "CurrentJobId",
+            unique: true);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_JobSalaries_JobId",
-                table: "JobSalaries",
-                column: "JobId",
-                unique: true);
-        }
+        migrationBuilder.CreateIndex(
+            "IX_JobSalaries_JobId",
+            "JobSalaries",
+            "JobId",
+            unique: true);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "CurrentJobSalaries");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropTable(
+            "CurrentJobSalaries");
 
-            migrationBuilder.DropTable(
-                name: "JobSalaries");
+        migrationBuilder.DropTable(
+            "JobSalaries");
 
-            migrationBuilder.DropColumn(
-                name: "HasPostedFirstJob",
-                table: "EmployerAccounts");
+        migrationBuilder.DropColumn(
+            "HasPostedFirstJob",
+            "EmployerAccounts");
 
-            migrationBuilder.AddColumn<decimal>(
-                name: "Salary",
-                table: "Jobs",
-                type: "decimal(10,2)",
-                nullable: false,
-                defaultValue: 0m);
+        migrationBuilder.AddColumn<decimal>(
+            "Salary",
+            "Jobs",
+            "decimal(10,2)",
+            nullable: false,
+            defaultValue: 0m);
 
-            migrationBuilder.AddColumn<string>(
-                name: "SalaryRate",
-                table: "Jobs",
-                type: "varchar(9)",
+        migrationBuilder.AddColumn<string>(
+                "SalaryRate",
+                "Jobs",
+                "varchar(9)",
                 maxLength: 9,
                 nullable: false,
                 defaultValue: "")
-                .Annotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AddColumn<string>(
-                name: "ShowPayBy",
-                table: "Jobs",
-                type: "varchar(15)",
+        migrationBuilder.AddColumn<string>(
+                "ShowPayBy",
+                "Jobs",
+                "varchar(15)",
                 maxLength: 15,
                 nullable: false,
                 defaultValue: "")
-                .Annotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AddColumn<decimal>(
-                name: "Salary",
-                table: "CurrentJobCreations",
-                type: "decimal(10,2)",
-                nullable: false,
-                defaultValue: 0m);
+        migrationBuilder.AddColumn<decimal>(
+            "Salary",
+            "CurrentJobCreations",
+            "decimal(10,2)",
+            nullable: false,
+            defaultValue: 0m);
 
-            migrationBuilder.AddColumn<string>(
-                name: "SalaryRate",
-                table: "CurrentJobCreations",
-                type: "varchar(9)",
+        migrationBuilder.AddColumn<string>(
+                "SalaryRate",
+                "CurrentJobCreations",
+                "varchar(9)",
                 maxLength: 9,
                 nullable: false,
                 defaultValue: "")
-                .Annotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AddColumn<string>(
-                name: "ShowPayBy",
-                table: "CurrentJobCreations",
-                type: "varchar(15)",
+        migrationBuilder.AddColumn<string>(
+                "ShowPayBy",
+                "CurrentJobCreations",
+                "varchar(15)",
                 maxLength: 15,
                 nullable: false,
                 defaultValue: "")
-                .Annotation("MySql:CharSet", "utf8mb4");
-        }
+            .Annotation("MySql:CharSet", "utf8mb4");
     }
 }

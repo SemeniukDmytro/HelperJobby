@@ -18,10 +18,10 @@ import {useSalaryValidation} from "../../../../hooks/comnonentSharedHooks/useSal
 import {useShowPayByOption} from "../../../../hooks/comnonentSharedHooks/useShowPayByOption";
 
 interface ChangeJobSalaryDialogContentProps {
-    showDialog : boolean;
-    setShowDialog? : Dispatch<SetStateAction<boolean>>;
-    setRequestInProgress : Dispatch<SetStateAction<boolean>>;
-    setEditFunction : Dispatch<SetStateAction<() => void>>;
+    showDialog: boolean;
+    setShowDialog?: Dispatch<SetStateAction<boolean>>;
+    setRequestInProgress: Dispatch<SetStateAction<boolean>>;
+    setEditFunction: Dispatch<SetStateAction<() => void>>;
 }
 
 const ChangeJobSalaryDialogContent: FC<ChangeJobSalaryDialogContentProps> = ({
@@ -47,7 +47,7 @@ const ChangeJobSalaryDialogContent: FC<ChangeJobSalaryDialogContentProps> = ({
     const [showMissingSalaryWarning, setShowMissingSalaryWarning] = useState(false);
     const incompleteJobService = new IncompleteJobService();
     const jobService = new JobService();
-    
+
     const {isValidSalaryValueProvided, validateMaxSalaryInput} =
         useSalaryValidation(
             setIsInvalidMinSalary,
@@ -67,7 +67,7 @@ const ChangeJobSalaryDialogContent: FC<ChangeJobSalaryDialogContentProps> = ({
         maximumSalaryAmount, setMaximumSalaryAmount);
 
     useEffect(() => {
-        if (showDialog){
+        if (showDialog) {
             setExistingSalaryValues();
         }
     }, [showDialog]);
@@ -77,8 +77,8 @@ const ChangeJobSalaryDialogContent: FC<ChangeJobSalaryDialogContentProps> = ({
     }, [salaryRate, showPayBy, rangeMinSalaryAmount, rangeMaxSalaryAmount, maximumSalaryAmount, startingSalaryAmount, exactSalaryAmount]);
 
 
-    function setExistingSalaryValues(){
-        if (currentJob?.salary){
+    function setExistingSalaryValues() {
+        if (currentJob?.salary) {
             setSalaryRate(salaryRatesEnumToStringMap(currentJob.salary.salaryRate));
             setShowPayBy(showPayByOptionsEnumToStringMap(currentJob.salary.showPayByOption));
             setRangeMaxSalaryAmount(currentJob.salary.maximalAmount?.toString() || "");
@@ -88,64 +88,60 @@ const ChangeJobSalaryDialogContent: FC<ChangeJobSalaryDialogContentProps> = ({
         }
     }
 
-    async function editJobSalary(){
+    async function editJobSalary() {
         const currentSalaryValue = getSalaryInputProp(showPayBy).salaryInput;
-        if (currentSalaryValue){
+        if (currentSalaryValue) {
             isValidSalaryValueProvided(currentSalaryValue);
-            if (showPayBy == "Range"){
+            if (showPayBy == "Range") {
                 validateMaxSalaryInput(currentSalaryValue, rangeMaxSalaryAmount);
-                if (!rangeMaxSalaryAmount || !rangeMinSalaryAmount){
+                if (!rangeMaxSalaryAmount || !rangeMinSalaryAmount) {
                     return;
                 }
             }
-            if (isInvalidMaxSalary || isInvalidMinSalary){
+            if (isInvalidMaxSalary || isInvalidMinSalary) {
                 return;
             }
         }
         try {
             setRequestInProgress(true);
-            
-            if (jobCreationState == JobCreationStates.incompleteJob){
-                let updatedSalary : CreateUpdateSalaryDTO | null = null;
-                if (currentSalaryValue){
+
+            if (jobCreationState == JobCreationStates.incompleteJob) {
+                let updatedSalary: CreateUpdateSalaryDTO | null = null;
+                if (currentSalaryValue) {
                     updatedSalary = {
                         minimalAmount: getValidFloatNumberFromString(currentSalaryValue),
                         maximalAmount: showPayBy == "Range" ? getValidFloatNumberFromString(rangeMaxSalaryAmount) : undefined,
                         salaryRate: salaryRatesMapData.find(sr => sr.stringValue == salaryRate)!.enumValue,
                         showPayByOption: showPayByOptionsMapData.find(spo => spo.stringValue == showPayBy)!.enumValue,
-                        meetsMinSalaryRequirement : minSalaryMeetsRequirement
+                        meetsMinSalaryRequirement: minSalaryMeetsRequirement
                     }
                 }
                 const retrievedIncompleteJob = await incompleteJobService.updateIncompleteJobSalary(currentJob!.id, updatedSalary);
                 setCurrentJob(retrievedIncompleteJob);
-            }
-            else {
-                let updatedSalary : CreateUpdateSalaryDTO | null = null;
-                if (currentSalaryValue){
+            } else {
+                let updatedSalary: CreateUpdateSalaryDTO | null = null;
+                if (currentSalaryValue) {
                     updatedSalary = {
                         minimalAmount: getValidFloatNumberFromString(currentSalaryValue),
                         maximalAmount: showPayBy == "Range" ? getValidFloatNumberFromString(rangeMaxSalaryAmount) : undefined,
                         salaryRate: salaryRatesMapData.find(sr => sr.stringValue == salaryRate)!.enumValue,
                         showPayByOption: showPayByOptionsMapData.find(spo => spo.stringValue == showPayBy)!.enumValue,
-                        meetsMinSalaryRequirement : minSalaryMeetsRequirement
+                        meetsMinSalaryRequirement: minSalaryMeetsRequirement
                     }
                 }
                 const retrievedIncompleteJob = await jobService.putJobSalary(currentJob!.id, updatedSalary);
                 setCurrentJob(retrievedIncompleteJob);
             }
-            
-            
+
+
             setShowDialog && setShowDialog(false);
-        }
-        catch (err)
-        {
+        } catch (err) {
             logErrorInfo(err);
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
-    
+
     return (
         <JobSalaryBlock showPayBy={showPayBy}
                         setShowPayBy={setShowPayBy}

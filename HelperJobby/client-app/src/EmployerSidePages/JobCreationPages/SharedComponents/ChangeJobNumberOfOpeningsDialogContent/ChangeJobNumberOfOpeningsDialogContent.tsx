@@ -12,10 +12,10 @@ import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
 import useCurrentEmployerJob from "../../../../hooks/contextHooks/useCurrentEmployerJob";
 
 interface ChangeJobNumberOfOpeningsDialogContentProps {
-    showDialog : boolean;
-    setShowDialog? : Dispatch<SetStateAction<boolean>>;
-    setRequestInProgress : Dispatch<SetStateAction<boolean>>;
-    setEditFunction : Dispatch<SetStateAction<() => void>>;
+    showDialog: boolean;
+    setShowDialog?: Dispatch<SetStateAction<boolean>>;
+    setRequestInProgress: Dispatch<SetStateAction<boolean>>;
+    setEditFunction: Dispatch<SetStateAction<() => void>>;
 }
 
 const ChangeJobNumberOfOpeningsDialogContent: FC<ChangeJobNumberOfOpeningsDialogContentProps> = ({
@@ -32,7 +32,7 @@ const ChangeJobNumberOfOpeningsDialogContent: FC<ChangeJobNumberOfOpeningsDialog
     const jobService = new JobService();
 
     useEffect(() => {
-        if (showDialog){
+        if (showDialog) {
             setNumberOfOpenings(currentJob?.numberOfOpenings.toString() || "")
         }
     }, [showDialog]);
@@ -43,39 +43,36 @@ const ChangeJobNumberOfOpeningsDialogContent: FC<ChangeJobNumberOfOpeningsDialog
 
     async function editNumberOfOpenings() {
         setExecuteValidation(true);
-        if (!numberOfOpenings || isInvalidSelect){
+        if (!numberOfOpenings || isInvalidSelect) {
             return;
         }
 
         try {
             setRequestInProgress(true);
-            if (jobCreationState == JobCreationStates.incompleteJob){
-                const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
+            if (jobCreationState == JobCreationStates.incompleteJob) {
+                const updatedIncompleteJob: UpdatedIncompleteJobDTO = {
                     ...currentJob,
-                    numberOfOpenings : parseInt(numberOfOpenings)
+                    numberOfOpenings: parseInt(numberOfOpenings)
                 }
                 const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
                 setCurrentJob(retrievedIncompleteJob);
-            }
-            else {
+            } else {
                 const job = currentJob as JobDTO;
                 const updatedJob: UpdatedJobDTO = {
                     ...job,
-                    numberOfOpenings : parseInt(numberOfOpenings)
+                    numberOfOpenings: parseInt(numberOfOpenings)
                 };
                 const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
                 setCurrentJob(retrievedJob);
             }
             setShowDialog && setShowDialog(false);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
-    
+
     return (
         <CustomSelectField
             fieldLabel={"Number of people to hire for this job"}
@@ -89,7 +86,7 @@ const ChangeJobNumberOfOpeningsDialogContent: FC<ChangeJobNumberOfOpeningsDialog
             setExecuteValidation={setExecuteValidation}
         />
     )
-    
+
 }
 
 export default ChangeJobNumberOfOpeningsDialogContent;

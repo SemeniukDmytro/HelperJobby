@@ -10,8 +10,8 @@ public class EmployerService : IEmployerService
 {
     private readonly IEmployerQueryRepository _employerQueryRepository;
     private readonly IOrganizationQueryRepository _organizationQueryRepository;
-    private readonly IUserService _userService;
     private readonly IUserIdGetter _userIdGetter;
+    private readonly IUserService _userService;
 
     public EmployerService(IUserService userService,
         IEmployerQueryRepository employerQueryRepository,
@@ -43,11 +43,12 @@ public class EmployerService : IEmployerService
         if (currentEmployerId != 0) throw new ForbiddenException("Employer account has already been created");
 
         var organization = await _organizationQueryRepository.GetOrganizationByName(createdEmployer.Organization.Name);
-        
+
         if (organization != null)
         {
             var employeeEmail =
-                await _organizationQueryRepository.GetEmployeeEmailByOrganizationId(organization.Id, createdEmployer.Email);
+                await _organizationQueryRepository.GetEmployeeEmailByOrganizationId(organization.Id,
+                    createdEmployer.Email);
             if (employeeEmail == null) throw new ForbiddenException("Your email was not found in employees email list");
         }
 
@@ -74,7 +75,8 @@ public class EmployerService : IEmployerService
     public async Task<Employer> UpdateEmployer(int employerId, Employer updatedEmployer)
     {
         var currentEmployerId = GetCurrentEmployerId();
-        if (employerId != currentEmployerId) throw new ForbiddenException("You can not update account of another employer");
+        if (employerId != currentEmployerId)
+            throw new ForbiddenException("You can not update account of another employer");
         var employer = await _employerQueryRepository.GetEmployerById(employerId);
         if (!string.IsNullOrEmpty(updatedEmployer.Email))
             employer.Email = updatedEmployer.Email;

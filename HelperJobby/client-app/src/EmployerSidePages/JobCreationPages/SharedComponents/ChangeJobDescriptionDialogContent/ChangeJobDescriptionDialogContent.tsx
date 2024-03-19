@@ -4,8 +4,6 @@ import {IncompleteJobService} from "../../../../services/incompleteJobService";
 import {isValidDescription} from "../../../../utils/validationLogic/isValidDescription";
 import {UpdatedIncompleteJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {JobService} from "../../../../services/jobService";
 import {JobCreationStates} from "../../../../enums/utilityEnums/JobCreationStates";
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
@@ -15,10 +13,10 @@ import DOMPurify from "dompurify";
 import DescriptionInputWindow from "../../../../Components/DescriptionInputWindow/DescriptionInputWindow";
 
 interface ChangeJobDescriptionDialogContentProps {
-    showDialog : boolean;
-    setShowDialog? : Dispatch<SetStateAction<boolean>>;
-    setRequestInProgress : Dispatch<SetStateAction<boolean>>;
-    setEditFunction : Dispatch<SetStateAction<() => void>>;
+    showDialog: boolean;
+    setShowDialog?: Dispatch<SetStateAction<boolean>>;
+    setRequestInProgress: Dispatch<SetStateAction<boolean>>;
+    setEditFunction: Dispatch<SetStateAction<() => void>>;
 }
 
 const ChangeJobDescriptionDialogContent: FC<ChangeJobDescriptionDialogContentProps> = ({
@@ -38,9 +36,9 @@ const ChangeJobDescriptionDialogContent: FC<ChangeJobDescriptionDialogContentPro
     useEffect(() => {
         setEditFunction(() => editJobDescription)
     }, [jobDescription]);
-    
+
     useEffect(() => {
-        if (descriptionInputRef.current && currentJob){
+        if (descriptionInputRef.current && currentJob) {
             const sanitizedDescription = DOMPurify.sanitize(currentJob.description || "", {
                 ALLOWED_TAGS: ['b', 'i', 'br', 'p', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote'],
             });
@@ -50,40 +48,38 @@ const ChangeJobDescriptionDialogContent: FC<ChangeJobDescriptionDialogContentPro
     }, [showDialog]);
 
 
-    async function editJobDescription(){
-        if (!isValidDescription(jobDescription, setDescriptionError, setIsInvalidDescription)){
+    async function editJobDescription() {
+        if (!isValidDescription(jobDescription, setDescriptionError, setIsInvalidDescription)) {
             descriptionInputRef.current?.focus();
             return;
 
         }
         try {
             setRequestInProgress(true);
-            if (jobCreationState == JobCreationStates.incompleteJob){
-                const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
+            if (jobCreationState == JobCreationStates.incompleteJob) {
+                const updatedIncompleteJob: UpdatedIncompleteJobDTO = {
                     ...currentJob,
-                    description : jobDescription
+                    description: jobDescription
                 }
                 const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
                 setCurrentJob(retrievedIncompleteJob);
-            }
-            else {
+            } else {
                 const job = currentJob as JobDTO;
                 const updatedJob: UpdatedJobDTO = {
                     ...job,
-                    description : jobDescription
+                    description: jobDescription
                 };
                 const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
                 setCurrentJob(retrievedJob);
             }
             setShowDialog && setShowDialog(false);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err);
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
+
     return (
         <>
             <div className={"description-container"}>
@@ -95,7 +91,7 @@ const ChangeJobDescriptionDialogContent: FC<ChangeJobDescriptionDialogContentPro
                     setDescriptionError={setDescriptionError}
                     isInvalidDescription={isInvalidDescription}
                     setIsInvalidDescription={setIsInvalidDescription}
-                />    
+                />
             </div>
         </>
     )

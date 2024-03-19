@@ -40,14 +40,11 @@ public class AuthService : IAuthService
         {
             new(JwtRegisteredClaimNames.Email, userEmail),
             new(JwtRegisteredClaimNames.Sub, userId.ToString()),
-            new Claim("jobSeekerId", jobSeekerId.ToString()),
+            new("jobSeekerId", jobSeekerId.ToString()),
             identity.FindFirst("id")
         };
 
-        if (employerId.HasValue)
-        {
-            claims.Add(new Claim("employerId", employerId.ToString()));
-        }
+        if (employerId.HasValue) claims.Add(new Claim("employerId", employerId.ToString()));
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]!));
 

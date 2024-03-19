@@ -30,7 +30,7 @@ const JobDetailsScrollWindow: FC<JobDetailsScrollWindowProps> = ({
                 focusOnInnerContent()
             }
         };
-        
+
         if (jobDetailsScrollWindowRef.current) {
             jobDetailsScrollWindowRef.current.addEventListener('scroll', handleScroll);
         }

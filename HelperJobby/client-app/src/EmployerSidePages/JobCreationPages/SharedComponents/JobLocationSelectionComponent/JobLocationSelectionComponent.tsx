@@ -9,52 +9,52 @@ import LocationCustomInputField from "../../../../Components/LocationCustomInput
 import {useJobLocationType} from "../../../../hooks/comnonentSharedHooks/useJobLocationType";
 
 interface JobLocationSelectionComponentProps {
-    jobLocationTypeEnumValue : JobLocationTypes;
-    setJobLocationTypeEnumValue : Dispatch<SetStateAction<JobLocationTypes>>;
-    locationInputRef : React.RefObject<HTMLInputElement>;
-    inPersonJobLocation : string;
-    setInPersonJobLocation : Dispatch<SetStateAction<string>>;
-    generalJobLocation : string;
-    setGeneralJobLocation : Dispatch<SetStateAction<string>>;
-    remoteJobLocation : string;
-    setRemoteJobLocation : Dispatch<SetStateAction<string>>;
-    onRoadJobLocation : string;
-    setOnRoadJobLocation : Dispatch<SetStateAction<string>>;
-    setShowStreetsAutocomplete : Dispatch<SetStateAction<boolean>>;
-    setShowCitiesAutocomplete : Dispatch<SetStateAction<boolean>>;
-    executeFormValidation : boolean;
-    setExecuteFormValidation : Dispatch<SetStateAction<boolean>>;
-    locationSelectedFromSuggests : boolean;
-    setLocationSelectedFromSuggests : Dispatch<SetStateAction<boolean>>;
+    jobLocationTypeEnumValue: JobLocationTypes;
+    setJobLocationTypeEnumValue: Dispatch<SetStateAction<JobLocationTypes>>;
+    locationInputRef: React.RefObject<HTMLInputElement>;
+    inPersonJobLocation: string;
+    setInPersonJobLocation: Dispatch<SetStateAction<string>>;
+    generalJobLocation: string;
+    setGeneralJobLocation: Dispatch<SetStateAction<string>>;
+    remoteJobLocation: string;
+    setRemoteJobLocation: Dispatch<SetStateAction<string>>;
+    onRoadJobLocation: string;
+    setOnRoadJobLocation: Dispatch<SetStateAction<string>>;
+    setShowStreetsAutocomplete: Dispatch<SetStateAction<boolean>>;
+    setShowCitiesAutocomplete: Dispatch<SetStateAction<boolean>>;
+    executeFormValidation: boolean;
+    setExecuteFormValidation: Dispatch<SetStateAction<boolean>>;
+    locationSelectedFromSuggests: boolean;
+    setLocationSelectedFromSuggests: Dispatch<SetStateAction<boolean>>;
     locationError: string;
-    setLocationError : Dispatch<SetStateAction<string>>;
-    includeWindowScroll : boolean;
+    setLocationError: Dispatch<SetStateAction<string>>;
+    includeWindowScroll: boolean;
 }
 
 const JobLocationSelectionComponent: FC<JobLocationSelectionComponentProps> = ({
-    jobLocationTypeEnumValue,
-    setJobLocationTypeEnumValue,
-    locationInputRef,
-    inPersonJobLocation,
-    setInPersonJobLocation,
-    generalJobLocation,
-    setGeneralJobLocation,
-    remoteJobLocation,
-    setRemoteJobLocation,
-    onRoadJobLocation,
-    setOnRoadJobLocation,
-    setShowStreetsAutocomplete,
-    setShowCitiesAutocomplete,
-    locationSelectedFromSuggests,
-    setLocationSelectedFromSuggests,
-    locationError,
-    setLocationError,
-    executeFormValidation,
-    setExecuteFormValidation,
-    includeWindowScroll
-    
+                                                                                   jobLocationTypeEnumValue,
+                                                                                   setJobLocationTypeEnumValue,
+                                                                                   locationInputRef,
+                                                                                   inPersonJobLocation,
+                                                                                   setInPersonJobLocation,
+                                                                                   generalJobLocation,
+                                                                                   setGeneralJobLocation,
+                                                                                   remoteJobLocation,
+                                                                                   setRemoteJobLocation,
+                                                                                   onRoadJobLocation,
+                                                                                   setOnRoadJobLocation,
+                                                                                   setShowStreetsAutocomplete,
+                                                                                   setShowCitiesAutocomplete,
+                                                                                   locationSelectedFromSuggests,
+                                                                                   setLocationSelectedFromSuggests,
+                                                                                   locationError,
+                                                                                   setLocationError,
+                                                                                   executeFormValidation,
+                                                                                   setExecuteFormValidation,
+                                                                                   includeWindowScroll
+
                                                                                }) => {
-    const [jobLocationFieldLabel, setJobLocationFieldLabel] = 
+    const [jobLocationFieldLabel, setJobLocationFieldLabel] =
         useState("What is the street address for this location?");
     const {getCurrentJobLocationInputProp} = useJobLocationType(inPersonJobLocation, setInPersonJobLocation,
         generalJobLocation, setGeneralJobLocation,
@@ -64,7 +64,7 @@ const JobLocationSelectionComponent: FC<JobLocationSelectionComponentProps> = ({
     useEffect(() => {
         handleJobLocationTypeChange()
     }, [jobLocationTypeEnumValue]);
-    
+
     function handleJobLocationTypeChange() {
         switch (jobLocationTypeEnumValue) {
             case JobLocationTypes.InPerson:
@@ -97,36 +97,38 @@ const JobLocationSelectionComponent: FC<JobLocationSelectionComponentProps> = ({
                 </div>
                 :
                 (jobLocationTypeEnumValue === JobLocationTypes.InPerson ?
-                    <LocationCustomInputField
-                        fieldLabel={jobLocationFieldLabel}
-                        inputValue={inPersonJobLocation}
-                        setInputValue={setInPersonJobLocation}
-                        inputRef={locationInputRef}
-                        isRequired={true}
-                        setShowAutocompleteResults={setShowStreetsAutocomplete}
-                        selectedFromSuggests={locationSelectedFromSuggests}
-                        setSelectedFromSuggests={setLocationSelectedFromSuggests}
-                        executeValidation={executeFormValidation}
-                        setExecuteValidation={setExecuteFormValidation}
-                        customErrorMessage={locationError}
-                        setCustomErrorMessage={setLocationError}
-                    />
+                        <LocationCustomInputField
+                            fieldLabel={jobLocationFieldLabel}
+                            inputValue={inPersonJobLocation}
+                            setInputValue={setInPersonJobLocation}
+                            inputRef={locationInputRef}
+                            isRequired={true}
+                            setShowAutocompleteResults={setShowStreetsAutocomplete}
+                            selectedFromSuggests={locationSelectedFromSuggests}
+                            setSelectedFromSuggests={setLocationSelectedFromSuggests}
+                            executeValidation={executeFormValidation}
+                            setExecuteValidation={setExecuteFormValidation}
+                            customErrorMessage={locationError}
+                            setCustomErrorMessage={setLocationError}
+                            locationMaxLength={100}
+                        />
 
-                    :
-                    <LocationCustomInputField
-                        fieldLabel={jobLocationFieldLabel}
-                        inputValue={getCurrentJobLocationInputProp(jobLocationTypeEnumValue).inputValue}
-                        setInputValue={getCurrentJobLocationInputProp(jobLocationTypeEnumValue).setInputValue}
-                        inputRef={locationInputRef}
-                        isRequired={true}
-                        setShowAutocompleteResults={setShowCitiesAutocomplete}
-                        selectedFromSuggests={locationSelectedFromSuggests}
-                        setSelectedFromSuggests={setLocationSelectedFromSuggests}
-                        executeValidation={executeFormValidation}
-                        setExecuteValidation={setExecuteFormValidation}
-                        customErrorMessage={locationError}
-                        setCustomErrorMessage={setLocationError}
-                    />
+                        :
+                        <LocationCustomInputField
+                            fieldLabel={jobLocationFieldLabel}
+                            inputValue={getCurrentJobLocationInputProp(jobLocationTypeEnumValue).inputValue}
+                            setInputValue={getCurrentJobLocationInputProp(jobLocationTypeEnumValue).setInputValue}
+                            inputRef={locationInputRef}
+                            isRequired={true}
+                            setShowAutocompleteResults={setShowCitiesAutocomplete}
+                            selectedFromSuggests={locationSelectedFromSuggests}
+                            setSelectedFromSuggests={setLocationSelectedFromSuggests}
+                            executeValidation={executeFormValidation}
+                            setExecuteValidation={setExecuteFormValidation}
+                            customErrorMessage={locationError}
+                            setCustomErrorMessage={setLocationError}
+                            locationMaxLength={100}
+                        />
                 )
             }</>
     )

@@ -51,11 +51,11 @@ public class ResumeQueryRepository : IResumeQueryRepository
             .Select(r => new Resume
             {
                 Id = r.Id,
-                JobSeeker = new JobSeeker()
+                JobSeeker = new JobSeeker
                 {
                     Id = r.JobSeekerId,
                     Address = r.JobSeeker.Address,
-                    User = new User()
+                    User = new User
                     {
                         Email = r.JobSeeker.User.Email
                     }
@@ -71,7 +71,7 @@ public class ResumeQueryRepository : IResumeQueryRepository
                         Company = w.Company,
                         CurrentlyWorkHere = w.CurrentlyWorkHere,
                         From = w.From,
-                        To = w.To   
+                        To = w.To
                     })
                     .ToList(),
 

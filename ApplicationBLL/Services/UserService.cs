@@ -8,9 +8,9 @@ namespace ApplicationBLL.Services;
 
 public class UserService : IUserService
 {
-    private readonly IUserQueryRepository _userQueryRepository;
     private readonly IPasswordHandler _passwordHandler;
     private readonly IUserIdGetter _userIdGetter;
+    private readonly IUserQueryRepository _userQueryRepository;
 
     public UserService(IUserIdGetter userIdGetter, IUserQueryRepository userQueryRepository,
         IPasswordHandler passwordHandler)

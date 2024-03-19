@@ -10,9 +10,6 @@ import DialogWindow from "../../../../Components/DialogWindow/DialogWindow";
 import {JobService} from "../../../../services/jobService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
-import NoInterviews from "../../../../Components/Icons/NoInterviews";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowRightLong} from "@fortawesome/free-solid-svg-icons";
 import NoJobs from "../../../../Components/Icons/NoJobs";
 
 interface EmployerCompleteJobsProps {

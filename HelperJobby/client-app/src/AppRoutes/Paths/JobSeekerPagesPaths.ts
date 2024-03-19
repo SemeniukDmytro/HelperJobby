@@ -1,5 +1,5 @@
 ﻿const jobSeekerPagesPaths = {
-    CONVERSATIONS : "/conversations"
+    CONVERSATIONS: "/conversations"
 };
 
 export default jobSeekerPagesPaths;

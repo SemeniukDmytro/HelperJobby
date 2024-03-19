@@ -109,7 +109,8 @@ const InterviewComponent: FC<InterviewComponentProps> = ({interview}) => {
                                 <span className={"semi-dark-default-text"}>{interview.job.location}</span>
                                 <div>
                                     <span className={"semi-dark-default-text"}>Interview format:&nbsp;</span>
-                                    <span className={"semi-dark-default-text bold-text"}>{interview.interviewType}</span>
+                                    <span
+                                        className={"semi-dark-default-text bold-text"}>{interview.interviewType}</span>
                                 </div>
                                 <div>
                                     <span className={"grey-small-text"}>Interview scheduled for&nbsp;</span>
@@ -129,7 +130,8 @@ const InterviewComponent: FC<InterviewComponentProps> = ({interview}) => {
                                 <div>
                                     {interview.interviewType === "Video" &&
                                         <div className={"appointment-info-container"}>
-                                            <span className={"semi-dark-default-text"}>Video conference link:&nbsp;</span>
+                                            <span
+                                                className={"semi-dark-default-text"}>Video conference link:&nbsp;</span>
                                             <a
                                                 style={{maxWidth: "100%"}}
                                                 href={`${interview.appointmentInfo}`}
@@ -137,8 +139,10 @@ const InterviewComponent: FC<InterviewComponentProps> = ({interview}) => {
                                         </div>}
                                     {interview.interviewType === "Phone" &&
                                         <div className={"appointment-info-container"}>
-                                            <span className={"semi-dark-default-text"}>Contact phone number:&nbsp;</span>
-                                            <span className={"semi-dark-default-text bold-text"}>{interview.appointmentInfo}</span>
+                                            <span
+                                                className={"semi-dark-default-text"}>Contact phone number:&nbsp;</span>
+                                            <span
+                                                className={"semi-dark-default-text bold-text"}>{interview.appointmentInfo}</span>
                                         </div>}
                                     {interview.interviewType === "In-person" &&
                                         <div className={"appointment-info-container"}>

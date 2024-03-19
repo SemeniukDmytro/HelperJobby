@@ -79,6 +79,7 @@ const ChangePhoneComponent: FC<ChangePhoneComponentProps> = () => {
                         fieldSubtitle={"Include country code (start with +). Phone number must contain only numbers without spaces or dashes"}
                         customErrorMessage={phoneError}
                         setCustomErrorMessage={setPhoneError}
+                        maxInputLength={15}
                     />
                     <div className={"passpage-button-container"}>
                         <button className={"blue-button"} onClick={changePhoneNumber}>

@@ -17,7 +17,7 @@ interface SavedJobsComponentProps {
 const SavedJobsComponent: FC<SavedJobsComponentProps> = () => {
     const {savedJobs, fetchJobSeekerJobInteractions, requestInProgress} = useJobSeekerJobInteractions();
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         if (!savedJobs) {
             fetchJobSeekerJobInteractions();
@@ -31,31 +31,31 @@ const SavedJobsComponent: FC<SavedJobsComponentProps> = () => {
     return (
         requestInProgress ? <LoadingPage/> :
             (<UserJobInteractionPagesHeader userJobInteractionType={UserJobInteractionsTypes.saved}>
-                {savedJobs && savedJobs.length !== 0 ? 
-                savedJobs.map((savedJob, index) => (
-                    <SavedJobComponent job={savedJob.job} key={index} interactionTime={savedJob.dateSaved}/>))
-                
-                :
-                <div className={"no-search-results-container"}>
-                    <NoSavedJobs/>
-                    <b className={"dark-default-text mb05rem mt1rem"}>
-                        No jobs saved yet
-                    </b>
-                    <span className={"light-dark-small-text mb1rem"}>
+                {savedJobs && savedJobs.length !== 0 ?
+                    savedJobs.map((savedJob, index) => (
+                        <SavedJobComponent job={savedJob.job} key={index} interactionTime={savedJob.dateSaved}/>))
+
+                    :
+                    <div className={"no-search-results-container"}>
+                        <NoSavedJobs/>
+                        <b className={"dark-default-text mb05rem mt1rem"}>
+                            No jobs saved yet
+                        </b>
+                        <span className={"light-dark-small-text mb1rem"}>
                         Jobs you save appear here.
                     </span>
-                    <button 
-                        onClick={navigateToJobSearchPage}
-                        className={"blue-button"}>
-                        Find jobs
-                        <FontAwesomeIcon
-                            className={"svg1rem ml05rem"}
-                            icon={faArrowRightLong}/>
-                    </button>
-                </div>
+                        <button
+                            onClick={navigateToJobSearchPage}
+                            className={"blue-button"}>
+                            Find jobs
+                            <FontAwesomeIcon
+                                className={"svg1rem ml05rem"}
+                                icon={faArrowRightLong}/>
+                        </button>
+                    </div>
                 }
             </UserJobInteractionPagesHeader>)
     );
 }
-    
+
 export default SavedJobsComponent;

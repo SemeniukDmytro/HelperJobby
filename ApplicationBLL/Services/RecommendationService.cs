@@ -7,14 +7,15 @@ namespace ApplicationBLL.Services;
 
 public class RecommendationService : IRecommendationService
 {
+    private readonly IEmployerService _employerService;
+    private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IRecentUserSearchQueryRepository _recentUserSearchQueryRepository;
     private readonly ISearchService _searchService;
     private readonly IUserService _userService;
-    private readonly IJobQueryRepository _jobQueryRepository;
-    private readonly IEmployerService _employerService;
 
     public RecommendationService(IUserService userService,
-        IRecentUserSearchQueryRepository recentUserSearchQueryRepository, ISearchService searchService, IJobQueryRepository jobQueryRepository, IEmployerService employerService)
+        IRecentUserSearchQueryRepository recentUserSearchQueryRepository, ISearchService searchService,
+        IJobQueryRepository jobQueryRepository, IEmployerService employerService)
     {
         _userService = userService;
         _recentUserSearchQueryRepository = recentUserSearchQueryRepository;
@@ -25,21 +26,21 @@ public class RecommendationService : IRecommendationService
 
     public async Task<IEnumerable<Job>> GetJobsBasedOnPreviousUserSearches()
     {
-        var jobIds = await GetRecommendedJobIds();
         int? currentEmployerId = null;
+        int? currentUserId = null;
         try
         {
             currentEmployerId = _employerService.GetCurrentEmployerId();
+            currentUserId = _userService.GetCurrentUserId();
         }
         catch (Exception e)
         {
-            
         }
 
-        if (jobIds.Count == 0)
-        {
-            return await _jobQueryRepository.GetRandomJobs(currentEmployerId);
-        }
+        var jobIds = new List<int>();
+        if (currentUserId != null) jobIds = await GetRecommendedJobIds();
+
+        if (jobIds.Count == 0) return await _jobQueryRepository.GetRandomJobs(currentEmployerId);
 
         return await _jobQueryRepository.GetJobsByJobIds(jobIds, currentEmployerId);
     }
@@ -48,10 +49,7 @@ public class RecommendationService : IRecommendationService
     {
         var currentUserId = _userService.GetCurrentUserId();
         var recentSearches = (await _recentUserSearchQueryRepository.GetRecentUserSearches(currentUserId)).ToArray();
-        if (recentSearches.Length == 0)
-        {
-            return new List<int>();
-        }
+        if (recentSearches.Length == 0) return new List<int>();
         var query = "";
         var location = "";
         if (recentSearches.Length > 3)

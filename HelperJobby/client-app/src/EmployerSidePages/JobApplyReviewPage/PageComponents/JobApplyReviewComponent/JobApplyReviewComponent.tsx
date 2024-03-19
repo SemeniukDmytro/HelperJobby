@@ -65,12 +65,11 @@ const JobApplyReviewComponent: FC<JobApplyReviewComponentProps> = () => {
         try {
             const interviewStartDate = new Date(`${interviewDate} ${interviewStartTime}`);
             const interviewEndDate = new Date(`${interviewDate} ${interviewEndTime}`);
-            
-            if (!interviewStartTime || !interviewEndTime || isNaN(interviewStartDate.getDate())){
+
+            if (!interviewStartTime || !interviewEndTime || isNaN(interviewStartDate.getDate())) {
                 setIsInvalidTimeProvided(true);
-                    return;
-            }
-            else {
+                return;
+            } else {
                 setIsInvalidTimeProvided(false);
             }
 
@@ -80,16 +79,18 @@ const JobApplyReviewComponent: FC<JobApplyReviewComponentProps> = () => {
 
             const formattedStartDate: string = formatDate(interviewStartDate);
             const formattedEndTime: string = `${formatTime(interviewEndDate)}.0000000`;
-
-            const interviewDetails : CreateInterviewDTO = {
+            if (interviewMessage.length > 200) {
+                return;
+            }
+            const interviewDetails: CreateInterviewDTO = {
                 interviewStart: formattedStartDate,
                 interviewEnd: formattedEndTime,
                 interviewType: interviewType,
                 appointmentInfo: interviewMessage,
             };
 
-            const createdInterview = await interviewService.createInterview(jobApply!.jobId, jobApply!.jobSeekerId, interviewDetails);
-            console.log(createdInterview);  
+            await interviewService.createInterview(jobApply!.jobId, jobApply!.jobSeekerId, interviewDetails);
+            navigate(EmployerPagesPaths.EMPLOYER_INTERVIEWS);
 
         } catch (error) {
             logErrorInfo(error)
@@ -98,23 +99,11 @@ const JobApplyReviewComponent: FC<JobApplyReviewComponentProps> = () => {
         }
     }
 
-    function convertTo24HourFormat(timeString: string): string {
-        const [time, modifier] = timeString.split(' ');
-        let [hours, minutes] = time.split(':');
-        if (hours === '12') {
-            hours = '00';
-        }
-        if (modifier === 'PM' && hours !== '00') { 
-            hours = (parseInt(hours, 10) + 12).toString();
-        }
-        return `${hours.padStart(2, '0')}:${minutes}`;
-    }
-
-    function formatDate(date : Date) {
+    function formatDate(date: Date) {
         return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${formatTime(date)}`;
     }
 
-    function formatTime(date : Date) {
+    function formatTime(date: Date) {
         return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
     }
 
@@ -152,7 +141,7 @@ const JobApplyReviewComponent: FC<JobApplyReviewComponentProps> = () => {
                                         />
                                     </div>
                                     <div className={'br-corner-button'}>
-                                        <button 
+                                        <button
                                             onClick={navigateToConversationWithCandidate}
                                             className={"blue-button"}>
                                             <FontAwesomeIcon className={"svg1rem icon-right-margin"}
@@ -173,6 +162,7 @@ const JobApplyReviewComponent: FC<JobApplyReviewComponentProps> = () => {
                                                           isRequired={false}
                                                           inputFieldValue={interviewDate}
                                                           setInputFieldValue={setInterviewDate}
+                                                          maxInputLength={10}
                                         />
                                         <CustomSelectWindow
                                             fieldLabel={"Start time"}
@@ -192,14 +182,15 @@ const JobApplyReviewComponent: FC<JobApplyReviewComponentProps> = () => {
                                     </div>
                                     {isInvalidTimeProvided &&
                                         <div className={"error-box mb1rem"}>
-                                            <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
+                                            <FontAwesomeIcon className={`error-text error-svg`}
+                                                             icon={faCircleExclamation}/>
                                             <span className={"error-text"}>Invalid interview time provided</span>
                                         </div>}
                                     <div className={"bold-text mb1rem"}>
                                         Interview type
                                     </div>
                                     <div className={"flex-row mb1rem"}>
-                                        <button 
+                                        <button
                                             onClick={() => setInterviewType(InterviewTypes.Video)}
                                             className={`transparent-button ${interviewType == InterviewTypes.Video ? "selected-light-button" : ""}`}>
                                             Video
@@ -220,13 +211,14 @@ const JobApplyReviewComponent: FC<JobApplyReviewComponentProps> = () => {
                                         isRequired={false}
                                         inputFieldValue={interviewMessage}
                                         setInputFieldValue={setInterviewMessage}
+                                        maxInputLength={200}
                                     />
                                     <div className={"flex-row"}>
                                         <button
                                             className={"blue-button mr1rem"} disabled={requestInProgress}
                                             onClick={handleInterviewCreation}
                                         >
-                                            Send Invitation   
+                                            Send Invitation
                                         </button>
                                         <button className={"transparent-button"}
                                                 onClick={goBackToCandidates}

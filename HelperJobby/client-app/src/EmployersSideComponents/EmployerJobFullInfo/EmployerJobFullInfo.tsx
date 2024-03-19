@@ -36,7 +36,8 @@ import PageTitleWithImage from "../PageTitleWithImage/PageTitleWithImage";
 import SvgReview from "../../Components/Icons/Review";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
-    faArrowLeftLong, faArrowRightLong,
+    faArrowLeftLong,
+    faArrowRightLong,
     faCircleExclamation,
     faEye,
     faPlus,

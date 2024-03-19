@@ -1,6 +1,6 @@
 ﻿import {JobApplyStatuses} from "../../enums/modelDataEnums/JobApplyStatuses";
 
-export interface UpdateJobApplyDTO{
-    jobApplyStatus : JobApplyStatuses;
-    isReviewed : boolean;
+export interface UpdateJobApplyDTO {
+    jobApplyStatus: JobApplyStatuses;
+    isReviewed: boolean;
 }

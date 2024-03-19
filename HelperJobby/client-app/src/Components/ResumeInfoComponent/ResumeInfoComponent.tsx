@@ -32,11 +32,10 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
     const currentPath = window.location.pathname;
 
     useEffect(() => {
-        if (!jobSeeker?.resume && !jobId){
+        if (!jobSeeker?.resume && !jobId) {
             navigate("/build/name");
             return;
-        }
-        else if (!jobSeeker?.resume && jobId){
+        } else if (!jobSeeker?.resume && jobId) {
             navigate("/apply-resume/education")
         }
         setProgressPercentage(ProgressPercentPerPage * 7);
@@ -44,7 +43,7 @@ const ResumeInfoComponent: FC<ResumeInfoComponentProps> = () => {
     }, []);
 
     async function onContinueButtonClick() {
-        if (jobId){
+        if (jobId) {
             navigate(`/job-apply/${jobId}/resume`);
             return;
         }

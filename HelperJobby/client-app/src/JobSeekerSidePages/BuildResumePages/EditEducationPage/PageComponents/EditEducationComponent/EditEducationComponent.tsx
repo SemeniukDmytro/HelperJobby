@@ -22,8 +22,7 @@ const EditEducationComponent: FC<EditEducationComponentProps> = () => {
         let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
         if (parentPathFirstPart == "/build") {
             parentPathFirstPart = "/build/education"
-        }
-        else if (parentPathFirstPart == "/apply-resume"){
+        } else if (parentPathFirstPart == "/apply-resume") {
             parentPathFirstPart = "/apply-resume/education"
         }
         setParentPagePath(parentPathFirstPart);

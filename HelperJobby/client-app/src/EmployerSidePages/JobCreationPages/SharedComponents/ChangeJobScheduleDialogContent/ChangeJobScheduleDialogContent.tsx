@@ -17,10 +17,10 @@ import {JobService} from "../../../../services/jobService";
 import useCurrentEmployerJob from "../../../../hooks/contextHooks/useCurrentEmployerJob";
 
 interface ChangeJobScheduleDialogContentProps {
-    showDialog : boolean;
-    setShowDialog? : Dispatch<SetStateAction<boolean>>;
-    setRequestInProgress : Dispatch<SetStateAction<boolean>>;
-    setEditFunction : Dispatch<SetStateAction<() => void>>;
+    showDialog: boolean;
+    setShowDialog?: Dispatch<SetStateAction<boolean>>;
+    setRequestInProgress: Dispatch<SetStateAction<boolean>>;
+    setEditFunction: Dispatch<SetStateAction<() => void>>;
 }
 
 const ChangeJobScheduleDialogContent: FC<ChangeJobScheduleDialogContentProps> = ({
@@ -39,7 +39,7 @@ const ChangeJobScheduleDialogContent: FC<ChangeJobScheduleDialogContentProps> = 
     const jobService = new JobService();
 
     useEffect(() => {
-        if (showDialog){
+        if (showDialog) {
             setSelectedSchedule(currentJob?.schedule || []);
             setShowFullScheduleList(false);
             setScheduleBoxHeight("78px");
@@ -54,33 +54,30 @@ const ChangeJobScheduleDialogContent: FC<ChangeJobScheduleDialogContentProps> = 
         try {
             setRequestInProgress(true)
 
-            if (jobCreationState == JobCreationStates.incompleteJob){
-                const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
+            if (jobCreationState == JobCreationStates.incompleteJob) {
+                const updatedIncompleteJob: UpdatedIncompleteJobDTO = {
                     ...currentJob,
-                    schedule : selectedSchedule
+                    schedule: selectedSchedule
                 }
                 const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
                 setCurrentJob(retrievedIncompleteJob);
-            }
-            else {
+            } else {
                 const job = currentJob as JobDTO;
                 const updatedJob: UpdatedJobDTO = {
                     ...job,
-                    schedule : selectedSchedule
+                    schedule: selectedSchedule
                 };
                 const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
                 setCurrentJob(retrievedJob);
             }
             setShowDialog && setShowDialog(false);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
-    
+
     return (
         <>
             <div className={"mb025rem"}>

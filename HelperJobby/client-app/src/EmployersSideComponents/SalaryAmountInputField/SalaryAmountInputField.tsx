@@ -2,26 +2,26 @@ import React, {ChangeEvent, Dispatch, FC, SetStateAction} from 'react';
 import './SalaryAmountInputField.scss';
 
 interface SalaryAmountInputFieldProps {
-    fieldLabel : string;
-    inputValue : string;
-    setInputValue : Dispatch<SetStateAction<string>>;
-    currency : string;
-    isInvalidValue : boolean;
-    onInputChange : (e: ChangeEvent<HTMLInputElement>) => void;
-    onBlur : () => void;
+    fieldLabel: string;
+    inputValue: string;
+    setInputValue: Dispatch<SetStateAction<string>>;
+    currency: string;
+    isInvalidValue: boolean;
+    onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onBlur: () => void;
 }
 
 const SalaryAmountInputField: FC<SalaryAmountInputFieldProps> = ({
-    fieldLabel,
-    inputValue,
-    currency,
-    isInvalidValue,
-    onInputChange,
-    onBlur
+                                                                     fieldLabel,
+                                                                     inputValue,
+                                                                     currency,
+                                                                     isInvalidValue,
+                                                                     onInputChange,
+                                                                     onBlur
                                                                  }) => {
 
     const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key == 'Enter'){
+        if (e.key == 'Enter') {
             e.preventDefault();
         }
     };

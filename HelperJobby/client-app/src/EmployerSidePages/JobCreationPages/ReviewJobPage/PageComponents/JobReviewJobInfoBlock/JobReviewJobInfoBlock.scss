@@ -19,14 +19,16 @@
   padding: 0.5625rem 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$neutral-color-200 !important;
   }
-  &:active{
+
+  &:active {
     background-color: global-variables.$light-blue-active;
     box-shadow: global-variables.$button-inner-shadow;
   }
-  
+
 }
 
 .ji-value-info-layout {
@@ -46,24 +48,26 @@
   z-index: 1;
 }
 
-.error-red-bc{
-  &:hover{
+.error-red-bc {
+  &:hover {
     background-color: global-variables.$light-red !important;
     color: global-variables.$dark-red-hover;
   }
-  &:active{
+
+  &:active {
     box-shadow: global-variables.$button-inner-shadow;
     color: global-variables.$dark-red-active;
     background-color: global-variables.$light-red-active !important;
   }
 }
 
-.add-blue-bc{
-  &:hover{
+.add-blue-bc {
+  &:hover {
     background-color: global-variables.$light-blue !important;
-    color : global-variables.$dark-blue-hover
+    color: global-variables.$dark-blue-hover
   }
-  &:active{
+
+  &:active {
     background-color: global-variables.$light-blue-active !important;
     color: global-variables.$light-blue-active;
     box-shadow: global-variables.$button-inner-shadow;

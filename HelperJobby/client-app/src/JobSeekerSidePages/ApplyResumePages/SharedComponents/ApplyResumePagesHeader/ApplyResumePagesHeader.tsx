@@ -23,10 +23,9 @@ const ApplyResumePagesHeader: FC<ApplyResumePagesHeaderProps> = ({children}) => 
     const isPositiveDialog = true;
 
     function onBackButtonClick() {
-        if ((!jobSeeker?.resume || jobSeeker.resume.educations.length === 0) && job){
+        if ((!jobSeeker?.resume || jobSeeker.resume.educations.length === 0) && job) {
             navigate(`/job-apply/${job.id}/resume`)
-        }
-        else {
+        } else {
             navigate(-1);
         }
     }

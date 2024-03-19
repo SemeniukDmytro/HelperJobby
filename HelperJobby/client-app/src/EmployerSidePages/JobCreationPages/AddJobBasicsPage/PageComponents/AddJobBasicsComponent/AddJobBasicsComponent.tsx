@@ -56,7 +56,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
         generalJobLocation, setGeneralJobLocation,
         remoteJobLocation, setRemoteJobLocation,
         onRoadJobLocation, setOnRoadJobLocation);
-    
+
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
     const incompleteJobService = new IncompleteJobService();
@@ -108,7 +108,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
     async function handleJobBasicsSubmit(e: FormEvent) {
         e.preventDefault();
         setExecuteFormValidation(true);
-        if (!jobTitle) {
+        if (!jobTitle || jobTitle.length > 100) {
             jobTitleInputRef.current?.focus();
             return;
         }
@@ -121,6 +121,9 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
         }
         if (!locationSelectedFromSuggests && jobLocationTypeEnumValue != JobLocationTypes.Remote) {
             setLocationError("We don't recognize this address. Please select address from suggestions window")
+            return;
+        }
+        if (getCurrentJobLocationInputProp(jobLocationTypeEnumValue).inputValue.length > 100) {
             return;
         }
         if (currentJob && jobId) {
@@ -172,7 +175,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
             setRequestInProgress(false);
         }
     }
-    
+
 
     return (
         loading ? <LoadingPage/> :
@@ -188,6 +191,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                     autocompleteWindowType={AutocompleteWindowTypes.streetAddress}
                     locationSelected={locationSelectedFromSuggests}
                     setLocationSelected={setLocationSelectedFromSuggests}
+                    fullLocationResult={true}
                 />}
                 {showCityAutoComplete && <AutocompleteResultsWindow
                     inputFieldRef={locationInputRef}
@@ -200,6 +204,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                     autocompleteWindowType={AutocompleteWindowTypes.city}
                     locationSelected={locationSelectedFromSuggests}
                     setLocationSelected={setLocationSelectedFromSuggests}
+                    fullLocationResult={true}
                 />}
 
                 <SelectLanguageDialog
@@ -236,6 +241,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                                 inputRef={jobTitleInputRef}
                                 executeValidation={executeFormValidation}
                                 setExecuteValidation={setExecuteFormValidation}
+                                maxInputLength={100}
                             />
                             <CustomSelectField
                                 fieldLabel={"Number of people to hire for this job"}
@@ -248,7 +254,7 @@ const AddJobBasicsComponent: FC<AddJobBasicsComponentProps> = () => {
                                 executeValidation={executeFormValidation}
                                 setExecuteValidation={setExecuteFormValidation}
                             />
-                            <JobLocationSelectionComponent 
+                            <JobLocationSelectionComponent
                                 jobLocationTypeEnumValue={jobLocationTypeEnumValue}
                                 setJobLocationTypeEnumValue={setJobLocationTypeEnumValue}
                                 locationInputRef={locationInputRef}

@@ -1,4 +1,4 @@
-﻿export enum AccountTypes{
+﻿export enum AccountTypes {
     employer,
     jobSeeker
 }

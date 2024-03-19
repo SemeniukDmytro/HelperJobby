@@ -30,7 +30,7 @@ const EditContactPhoneDialog: FC<EditContactPhoneDialogProps> = ({
     const incompleteJobService = new IncompleteJobService();
 
     useEffect(() => {
-        if (showDialog){
+        if (showDialog) {
             setContactPhoneNumber(currentJob?.contactPhoneNumber || employer!.contactNumber);
             setPhoneError("");
         }
@@ -38,10 +38,10 @@ const EditContactPhoneDialog: FC<EditContactPhoneDialogProps> = ({
 
     async function editApplicationMethod() {
         setExecuteFormValidation(true);
-        
-        if (contactPhoneNumber){
+
+        if (contactPhoneNumber) {
             const isInValidPhoneNumber = validatePhoneNumber(contactPhoneNumber);
-            if (isInValidPhoneNumber){
+            if (isInValidPhoneNumber) {
                 setPhoneError(isInValidPhoneNumber);
                 phoneNumberInputRef.current?.focus();
                 return;
@@ -49,17 +49,15 @@ const EditContactPhoneDialog: FC<EditContactPhoneDialogProps> = ({
         }
         try {
             setRequestInProgress(true);
-            const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
-                contactPhoneNumber : contactPhoneNumber,
+            const updatedIncompleteJob: UpdatedIncompleteJobDTO = {
+                contactPhoneNumber: contactPhoneNumber,
             }
-            const  retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
+            const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
             setCurrentJob(retrievedIncompleteJob);
             setShowDialog(false)
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
@@ -82,6 +80,7 @@ const EditContactPhoneDialog: FC<EditContactPhoneDialogProps> = ({
                 setCustomErrorMessage={setPhoneError}
                 executeValidation={executeFormValidation}
                 setExecuteValidation={setExecuteFormValidation}
+                maxInputLength={15}
             />
         </EditJobPostDialog>
     )

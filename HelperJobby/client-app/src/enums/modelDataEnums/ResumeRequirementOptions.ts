@@ -1,4 +1,4 @@
-export enum ResumeRequirementOptions{
+export enum ResumeRequirementOptions {
     Optional,
     Required,
     NotNeeded

@@ -52,7 +52,7 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
                     return;
                 }
             }
-            
+
             setSavingInfo(true);
             const updatedJobSeeker = updateJobSeekerDTO(jobSeeker!.firstName,
                 jobSeeker!.lastName, phoneNumber, jobSeeker!.address);
@@ -72,8 +72,7 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
 
         } catch (error) {
             logErrorInfo(error)
-        } 
-        finally {
+        } finally {
             setSavingInfo(false);
         }
     }
@@ -96,6 +95,7 @@ const AddPhoneComponent: FC<ResumePhoneComponentProps> = () => {
                 inputRef={phoneNumberInputRef}
                 customErrorMessage={phoneNumberError}
                 setCustomErrorMessage={setPhoneNumberError}
+                maxInputLength={15}
             />
             <div className={"phone-page-disclaimer"}>
                 By submitting the form with this box checked, you confirm that you are the primary user and subscriber

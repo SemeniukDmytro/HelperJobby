@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import ApplyResumeSuccessComponent from "./PageComponents/ApplyResumeSuccessComponent/ApplyResumeSuccessComponent";
 
-interface ApplyResumeSuccessPageProps {}
+interface ApplyResumeSuccessPageProps {
+}
 
 const ApplyResumeSuccessPage: FC<ApplyResumeSuccessPageProps> = () => (
-  <ApplyResumeSuccessComponent/>
+    <ApplyResumeSuccessComponent/>
 );
 
 export default ApplyResumeSuccessPage;

@@ -10,7 +10,7 @@ export class JobSeekerService {
     constructor() {
         this.customFetchService = new CustomFetchService();
     }
-    
+
     public async getCurrentJobSeeker(): Promise<JobSeekerDTO> {
         return await this.customFetchService.get<JobSeekerDTO>(`${this.baseURI}/current-job-seeker`);
     }

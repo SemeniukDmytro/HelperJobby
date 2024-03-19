@@ -9,7 +9,7 @@ using HelperJobby.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HelperJobby.Controllers; 
+namespace HelperJobby.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

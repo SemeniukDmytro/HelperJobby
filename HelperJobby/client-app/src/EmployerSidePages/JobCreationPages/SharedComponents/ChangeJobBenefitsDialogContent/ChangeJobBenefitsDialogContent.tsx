@@ -54,15 +54,14 @@ const ChangeJobBenefitsDialogContent: FC<ChangeJobBenefitsDialogContentProps> = 
         try {
             setRequestInProgress(true);
 
-            if (jobCreationState == JobCreationStates.incompleteJob){
-                const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
+            if (jobCreationState == JobCreationStates.incompleteJob) {
+                const updatedIncompleteJob: UpdatedIncompleteJobDTO = {
                     ...currentJob,
                     benefits: selectedBenefits
                 }
                 const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
                 setCurrentJob(retrievedIncompleteJob);
-            }
-            else {
+            } else {
                 const job = currentJob as JobDTO;
                 const updatedJob: UpdatedJobDTO = {
                     ...job,
@@ -78,6 +77,7 @@ const ChangeJobBenefitsDialogContent: FC<ChangeJobBenefitsDialogContentProps> = 
             setRequestInProgress(false);
         }
     }
+
     return (
         <>
             <div className={"small-title"}>

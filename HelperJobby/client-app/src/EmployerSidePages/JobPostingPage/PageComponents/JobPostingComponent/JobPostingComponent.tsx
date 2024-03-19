@@ -5,7 +5,9 @@ import PageTitleWithImage from "../../../../EmployersSideComponents/PageTitleWit
 import PeopleInAnOffice from "../../../../Components/Icons/PeopleInAnOffice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
-    faArrowRightLong, faBriefcase, faCircleExclamation,
+    faArrowRightLong,
+    faBriefcase,
+    faCircleExclamation,
     faLocationDot,
     faMagnifyingGlass,
     faXmark
@@ -106,7 +108,7 @@ const JobPostingComponent: FC<JobPostingComponentProps> = () => {
     }
 
     function onJobDraftSelect(id: number) {
-        if (id === selectedJobDraftId){
+        if (id === selectedJobDraftId) {
             setSelectedJobDraftId(null);
             setInvalidDraftSelected(true);
             return;

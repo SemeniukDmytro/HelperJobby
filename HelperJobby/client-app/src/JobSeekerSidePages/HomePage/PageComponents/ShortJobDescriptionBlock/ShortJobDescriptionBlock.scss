@@ -85,6 +85,12 @@
   margin-bottom: 0.25rem;
 }
 
+.short-description-list b,
+.short-description-list i {
+  font-weight: normal;
+  font-style: normal;
+}
+
 .date-posted {
   display: flex;
   font-size: 0.825rem;

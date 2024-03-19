@@ -8,19 +8,19 @@ interface RecentSearchesProps {
 }
 
 const RecentSearches: FC<RecentSearchesProps> = ({
-    jobQueryInputRef
+                                                     jobQueryInputRef
                                                  }) => {
     const {recentUserSearches} = useHomePage();
-    
-    
+
+
     return (
         <div className={"recent-searches-frame"}>
             <div className={"recent-searches-container"}>
                 {recentUserSearches.length !== 0 ?
                     recentUserSearches.map((search, index) => (
-                    <RecentSearch key={index} recentUserSearch={search}/>
-                ))
-                :
+                        <RecentSearch key={index} recentUserSearch={search}/>
+                    ))
+                    :
                     <div className={"no-search-results-container"}>
                         <b className={"small-title mb05rem"}>
                             No recent searches yet
@@ -30,7 +30,7 @@ const RecentSearches: FC<RecentSearchesProps> = ({
                         </span>
                         <button
                             onClick={() => jobQueryInputRef.current?.focus()}
-                            className={"light-button-with-margin"}> 
+                            className={"light-button-with-margin"}>
                             Start a search
                         </button>
                     </div>

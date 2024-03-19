@@ -1,29 +1,28 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import './ApplyResumeSuccessComponent.scss';
 import Resume from "../../../../../Components/Icons/Resume";
 import useCurrentJobApplication from "../../../../../hooks/contextHooks/useCurrentJobApplication";
 import {useNavigate} from "react-router-dom";
 
-interface ApplyResumeSuccessComponentProps {}
+interface ApplyResumeSuccessComponentProps {
+}
 
 const ApplyResumeSuccessComponent: FC<ApplyResumeSuccessComponentProps> = () => {
     const {job} = useCurrentJobApplication();
     const navigate = useNavigate();
 
     function navigateToResumeApplyPage() {
-        if (!job){
+        if (!job) {
             navigate("/my-profile");
-        }
-        else {
+        } else {
             navigate(`/job-apply/${job?.id}/resume`);
         }
     }
 
     function navigateToResumePage() {
-        if (!job){
+        if (!job) {
             navigate("/resume")
-        }
-        else {
+        } else {
             navigate(`/resume?from=job-apply&jobId=${job?.id}`);
         }
     }
@@ -43,7 +42,7 @@ const ApplyResumeSuccessComponent: FC<ApplyResumeSuccessComponentProps> = () => 
                 <button onClick={navigateToResumePage} className={"blue-button success-resume-button"}>
                     Continue adding details
                 </button>
-                <button 
+                <button
                     onClick={navigateToResumeApplyPage}
                     className={"light-button-with-margin success-resume-button mr0"}>
                     Apply with this resume

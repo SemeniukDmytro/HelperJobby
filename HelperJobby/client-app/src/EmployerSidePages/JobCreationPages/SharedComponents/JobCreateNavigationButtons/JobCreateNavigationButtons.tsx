@@ -21,7 +21,7 @@ const JobCreateNavigationButtons: FC<JobCreateNavigationButtonsProps> = ({
             <span>Back</span>
         </button>
         <button
-            className={"blue-button min-8chr-arrow-btn-width"} 
+            className={"blue-button min-8chr-arrow-btn-width"}
             type={"submit"}
             disabled={requestInProgress}
             onClick={nextPageButtonClick}>

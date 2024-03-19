@@ -5,7 +5,8 @@ import {
     faArrowRightFromBracket,
     faArrowUpRightFromSquare,
     faChevronDown,
-    faGear, faMagnifyingGlass,
+    faGear,
+    faMagnifyingGlass,
     faMessage,
     faUser
 } from "@fortawesome/free-solid-svg-icons";
@@ -58,16 +59,16 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
         setShowMoreOptions(false);
         navigate("/settings")
     }
-    
-    function navigateToEditEmployerPage(){
+
+    function navigateToEditEmployerPage() {
         navigate(employerPagesPaths.EDIT_EMPLOYER)
     }
-    
-    function navigateToOrganizationUserPage(){
+
+    function navigateToOrganizationUserPage() {
         navigate(employerPagesPaths.USERS)
     }
-    
-    function navigateToMessagesPage(){
+
+    function navigateToMessagesPage() {
         navigate(employerPagesPaths.MESSAGES);
     }
 
@@ -133,7 +134,7 @@ const EmployersPagesHeader: FC<EmployersPagesHeaderProps> = ({loading, setLoadin
                                             <div className={"emh-option-children-fb"}>
                                                 <FontAwesomeIcon
                                                     className={"icon-right-margin svg1rem"}
-                                                    icon={faMagnifyingGlass} />
+                                                    icon={faMagnifyingGlass}/>
                                                 <span>HelperJobby for job seekers</span>
                                             </div>
                                             <div className={"emh-option-children-fb"}>

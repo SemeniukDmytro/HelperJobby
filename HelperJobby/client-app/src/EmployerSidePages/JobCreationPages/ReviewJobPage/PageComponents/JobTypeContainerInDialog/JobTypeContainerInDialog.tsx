@@ -1,34 +1,34 @@
-import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useState} from 'react';
 import './JobTypeContainerInDialog.scss';
 import JobTypes from "../../../../../enums/modelDataEnums/JobTypes";
 import {jobTypeStringToEnumMap} from "../../../../../utils/convertLogic/enumToStringConverter";
 import {addJobType} from "../../../../../utils/manageJobFeatureSelect";
 
 interface JobTypeContainerInDialogProps {
-    selectedJobTypes : JobTypes[];
-    setSelectedJobTypes : Dispatch<SetStateAction<JobTypes[]>>;
-    jobTypeValue : string;
-    setIsValidForm : Dispatch<SetStateAction<boolean>>
+    selectedJobTypes: JobTypes[];
+    setSelectedJobTypes: Dispatch<SetStateAction<JobTypes[]>>;
+    jobTypeValue: string;
+    setIsValidForm: Dispatch<SetStateAction<boolean>>
 }
 
 const JobTypeContainerInDialog: FC<JobTypeContainerInDialogProps> = ({
-    selectedJobTypes,
-    setSelectedJobTypes,
-    jobTypeValue,
-    setIsValidForm
+                                                                         selectedJobTypes,
+                                                                         setSelectedJobTypes,
+                                                                         jobTypeValue,
+                                                                         setIsValidForm
                                                                      }) => {
     const [isSelected, setIsSelected] = useState(isJobTypeSelected);
-    
-        
-    function isJobTypeSelected(){
-       return  selectedJobTypes?.includes(jobTypeStringToEnumMap(jobTypeValue)!)
+
+
+    function isJobTypeSelected() {
+        return selectedJobTypes?.includes(jobTypeStringToEnumMap(jobTypeValue)!)
     }
 
     function manageJobTypeClick() {
         addJobType(jobTypeValue, selectedJobTypes, setSelectedJobTypes, setIsValidForm);
         setIsSelected(!isSelected);
     }
-    
+
     return (
         <div className={"jt-container-in-dialog"}>
             <button
@@ -37,8 +37,8 @@ const JobTypeContainerInDialog: FC<JobTypeContainerInDialogProps> = ({
                 onClick={manageJobTypeClick}
             >
                 <div className={"checkbox-container mt0"}>
-                    <input 
-                        className={"checkbox"} 
+                    <input
+                        className={"checkbox"}
                         type={"checkbox"}
                         checked={isSelected}
                         onChange={manageJobTypeClick}/>

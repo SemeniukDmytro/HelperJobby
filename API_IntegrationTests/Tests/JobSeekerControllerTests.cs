@@ -2,7 +2,6 @@ using System.Net;
 using API_IntegrationTests.TestHelpers;
 using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Address;
-using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.UserJobInteractions;
 using Xunit.Abstractions;
 

@@ -7,20 +7,21 @@ import EmployersSidebar from "../../../../EmployersSideComponents/EmployersSideb
 import EmployersPagesHeader from "../../../../EmployersSideComponents/EmployersPagesHeader/EmployersPagesHeader";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 
-interface JobPostingPagesWrapProps {}
+interface JobPostingPagesWrapProps {
+}
 
 const JobPostingPagesWrap: FC<JobPostingPagesWrapProps> = () => {
     const {employer} = useEmployer();
     const [loading, setLoading] = useState(true);
-    
+
     return (
         <div className={"emp-with-sidebar-layout"}>
             {loading ? <></> :
-                (employer!.hasPostedFirstJob ? <EmployersSidebar/> : <></> )
+                (employer!.hasPostedFirstJob ? <EmployersSidebar/> : <></>)
             }
             <div className={"emp-main-content-layout"}>
                 <EmployersPagesHeader loading={loading} setLoading={setLoading}/>
-                {loading ? <LoadingPage/> : 
+                {loading ? <LoadingPage/> :
                     <CurrentEmployerJobProvider>
                         <Outlet/>
                     </CurrentEmployerJobProvider>

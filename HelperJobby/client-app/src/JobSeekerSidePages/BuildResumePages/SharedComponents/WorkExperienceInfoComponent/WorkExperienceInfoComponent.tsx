@@ -23,6 +23,8 @@ import {MonthAndYearFromJSONToStringConverter} from "../../../../utils/convertLo
 import useResumeBuild from "../../../../hooks/contextHooks/useResumeBuild";
 import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 import useCurrentJobApplication from "../../../../hooks/contextHooks/useCurrentJobApplication";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 
 interface WorkExperienceInfoComponentProps {
     workExperience?: WorkExperienceDTO
@@ -71,8 +73,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
         let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
         if (parentPathFirstPart == "/build") {
             parentPathFirstPart = "/build/experience"
-        }
-        else if (parentPathFirstPart == "/apply-resume"){
+        } else if (parentPathFirstPart == "/apply-resume") {
             parentPathFirstPart = "/apply-resume/experience"
         }
         setParentPagePath(parentPathFirstPart);
@@ -93,7 +94,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
 
     async function CustomSaveFunc() {
         let nextPagePath = "/my-profile";
-        if (parentPagePath.includes("/apply-resume") && job){
+        if (parentPagePath.includes("/apply-resume") && job) {
             nextPagePath = `job-apply/${job.id}/resume`
         }
         await handleWorkExperienceCreation(nextPagePath, true)
@@ -101,10 +102,10 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
 
     function navigateToSkillsPage() {
         let nextPagePath = "/build/skills";
-        if (parentPagePath.includes("/apply-resume") && job){
+        if (parentPagePath.includes("/apply-resume") && job) {
             nextPagePath = `/apply-resume/skills`;
         }
-        navigate(nextPagePath); 
+        navigate(nextPagePath);
     }
 
     function cancelEditing() {
@@ -117,7 +118,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
     }
 
     async function handleWorkExperienceCreation(nextPageRoute: string, isSaveAndExitAction: boolean) {
-        if (!jobTitle) {
+        if (!jobTitle || jobTitle.length > 100) {
             setExecuteValidation(true);
             jobTitleInputRef.current?.focus();
             jobTitleInputRef.current?.scrollIntoView({block: "end", behavior: "smooth"});
@@ -132,7 +133,11 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
             }
             return;
         }
-        
+
+        if (company.length > 100 || city.length > 45 || description.length > 2000) {
+            return;
+        }
+
         if (workExperience) {
             await updateWorkExperience();
         } else if (jobSeeker?.resume) {
@@ -254,7 +259,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
         const text = e.clipboardData.getData('text/plain');
 
         document.execCommand('insertText', false, text);
-    };
+    }
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         const allowedShortcuts = ['x', 'c', 'v', 'a', 'z', 'y'];
@@ -275,6 +280,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                 showResult={showCityAutoComplete}
                 setShowResult={setShowCityAutoComplete}
                 autocompleteWindowType={AutocompleteWindowTypes.city}
+                fullLocationResult={false}
             />}
 
             <form className={"build-resume-form"}>
@@ -293,6 +299,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                     inputRef={jobTitleInputRef}
                     executeValidation={validateJobTitle}
                     setExecuteValidation={setExecuteValidation}
+                    maxInputLength={100}
                 />
 
                 <CustomInputField
@@ -300,6 +307,7 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                     isRequired={false}
                     inputFieldValue={company}
                     setInputFieldValue={setCompany}
+                    maxInputLength={100}
                 />
 
                 <CountrySelector
@@ -314,13 +322,14 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                     setInputValue={setCity}
                     inputRef={cityInputRef}
                     isRequired={false}
+                    locationMaxLength={30}
                     setShowAutocompleteResults={setShowCityAutoComplete}/>
 
                 <div className={"is-current"}>
                     <div className={"field-label"}>
                         Time period
                     </div>
-                <div className={"checkbox-container mt05rem"}>
+                    <div className={"checkbox-container mt05rem"}>
                         <input className={"checkbox"} type={"checkbox"} onChange={toggleCurrentlyWorkHere}/>
                         <span>I currently work here</span>
                     </div>
@@ -357,6 +366,11 @@ const WorkExperienceInfoComponent: FC<WorkExperienceInfoComponentProps> = ({work
                         </div>
                         <div className={"description-focused"}></div>
                     </div>
+                    {description.length > 2000 &&
+                        <div className={"error-box"}>
+                            <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
+                            <span className={"error-text"}>Max description length exceeded</span>
+                        </div>}
                 </div>
                 <div className={"between-lines-spacing"}></div>
                 <div className={"form-buttons-row-container"}>

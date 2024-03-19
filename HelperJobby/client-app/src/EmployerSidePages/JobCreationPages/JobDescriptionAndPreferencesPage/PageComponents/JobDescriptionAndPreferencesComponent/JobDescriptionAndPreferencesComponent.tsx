@@ -23,7 +23,8 @@ import {useJobLoaderToSetCurrentJob} from "../../../../../hooks/comnonentSharedH
 import DOMPurify from "dompurify";
 import DescriptionInputWindow from "../../../../../Components/DescriptionInputWindow/DescriptionInputWindow";
 
-interface JobDescriptionAndPreferencesComponentProps {}
+interface JobDescriptionAndPreferencesComponentProps {
+}
 
 const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComponentProps> = () => {
     const {employer} = useEmployer();
@@ -42,7 +43,7 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
     const [isResumeRequired, setIsResumeRequired] = useState(resumeRequirementOptionsMapData[0].stringValue);
 
     const {currentJob, setCurrentJob} = useCurrentEmployerJob();
-    const {jobId} = useParams<{jobId : string}>();
+    const {jobId} = useParams<{ jobId: string }>();
     const [loading, setLoading] = useState(false);
     const {fetchJobAndSetJobCreation} = useJobLoaderToSetCurrentJob(jobId ? parseInt(jobId) : 0, currentJob, setCurrentJob, JobCreationStates.incompleteJob);
     const navigate = useNavigate();
@@ -54,33 +55,34 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
     }, []);
 
     useEffect(() => {
-        if (currentJob){
-            if (descriptionInputRef.current){
+        if (currentJob) {
+            if (descriptionInputRef.current) {
                 const sanitizedDescription = DOMPurify.sanitize(currentJob.description || "", {
                     ALLOWED_TAGS: ['b', 'i', 'br', 'p', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote'],
                 });
                 descriptionInputRef.current.innerHTML = sanitizedDescription;
                 setJobDescription(sanitizedDescription);
             }
-            if (currentJob.contactPhoneNumber){
+            if (currentJob.contactPhoneNumber) {
                 setIsContactPhoneAvailable(true);
                 setContactPhoneNumber(currentJob.contactPhoneNumber);
             }
-            if (currentJob.contactEmail){
+            if (currentJob.contactEmail) {
                 setContactEmail(currentJob.contactEmail);
             }
-            if (currentJob.resumeRequired){
+            if (currentJob.resumeRequired) {
                 setIsResumeRequired(resumeRequirementOptionsEnumToStringMap(currentJob.resumeRequired));
             }
-            
+
             setLoading(false);
         }
     }, [currentJob]);
 
-    async function fetchInitialPageData(){
+    async function fetchInitialPageData() {
         await fetchJobAndSetJobCreation();
     }
-    async function handleDescriptionAndPreferencesSubmit(e : FormEvent) {
+
+    async function handleDescriptionAndPreferencesSubmit(e: FormEvent) {
         e.preventDefault();
         setExecuteFormValidation(true);
         if (!isValidDescription(jobDescription, setDescriptionError, setIsInvalidDescription)) {
@@ -125,47 +127,47 @@ const JobDescriptionAndPreferencesComponent: FC<JobDescriptionAndPreferencesComp
 
     return (
         loading ? <LoadingPage/> :
-        <div className={"employers-centralized-page-layout"}>
-            <PageTitleWithImage imageElement={<TeamAnalysis/>}
-                                title={"Add description and set preferences"}/>
-            <div className={"emp-form-fb"}>
-                <form className={"emp-form"}>
-                    <DescriptionInputWindow
-                        jobDescription={jobDescription}
-                        setJobDescription={setJobDescription}
-                        descriptionInputRef={descriptionInputRef}
-                        descriptionError={descriptionError}
-                        setDescriptionError={setDescriptionError}
-                        isInvalidDescription={isInvalidDescription}
-                        setIsInvalidDescription={setIsInvalidDescription}
-                    />
-                    <div className={"content-separation-line mt2rem mb3rem"}></div>
-                    <CommunicationPreferencesBlock 
-                        contactEmail={contactEmail}
-                        setContactEmail={setContactEmail}
-                        emailInputRef={emailInputRef}
-                        emailError={emailError}
-                        setEmailError={setEmailError}
-                        executeFormValidation={executeFormValidation}
-                        setExecuteFormValidation={setExecuteFormValidation}
-                        isContactPhoneAvailable={isContactPhoneAvailable}
-                        setIsContactPhoneAvailable={setIsContactPhoneAvailable}
-                        contactPhoneNumber={contactPhoneNumber}
-                        setContactPhoneNumber={setContactPhoneNumber}
-                        phoneNumberInputRef={phoneNumberInputRef}
-                        phoneError={phoneError}
-                        setPhoneError={setPhoneError}
-                        isResumeRequired={isResumeRequired}
-                        setIsResumeRequired={setIsResumeRequired}
-                        includeWindowScrollForSelect={true}/>
-                    <JobCreateNavigationButtons
-                        requestInProgress={requestInProgress}
-                        backButtonOnClick={navigateToPreviousPage}
-                        nextPageButtonClick={handleDescriptionAndPreferencesSubmit}
-                    />
-                </form>
+            <div className={"employers-centralized-page-layout"}>
+                <PageTitleWithImage imageElement={<TeamAnalysis/>}
+                                    title={"Add description and set preferences"}/>
+                <div className={"emp-form-fb"}>
+                    <form className={"emp-form"}>
+                        <DescriptionInputWindow
+                            jobDescription={jobDescription}
+                            setJobDescription={setJobDescription}
+                            descriptionInputRef={descriptionInputRef}
+                            descriptionError={descriptionError}
+                            setDescriptionError={setDescriptionError}
+                            isInvalidDescription={isInvalidDescription}
+                            setIsInvalidDescription={setIsInvalidDescription}
+                        />
+                        <div className={"content-separation-line mt2rem mb3rem"}></div>
+                        <CommunicationPreferencesBlock
+                            contactEmail={contactEmail}
+                            setContactEmail={setContactEmail}
+                            emailInputRef={emailInputRef}
+                            emailError={emailError}
+                            setEmailError={setEmailError}
+                            executeFormValidation={executeFormValidation}
+                            setExecuteFormValidation={setExecuteFormValidation}
+                            isContactPhoneAvailable={isContactPhoneAvailable}
+                            setIsContactPhoneAvailable={setIsContactPhoneAvailable}
+                            contactPhoneNumber={contactPhoneNumber}
+                            setContactPhoneNumber={setContactPhoneNumber}
+                            phoneNumberInputRef={phoneNumberInputRef}
+                            phoneError={phoneError}
+                            setPhoneError={setPhoneError}
+                            isResumeRequired={isResumeRequired}
+                            setIsResumeRequired={setIsResumeRequired}
+                            includeWindowScrollForSelect={true}/>
+                        <JobCreateNavigationButtons
+                            requestInProgress={requestInProgress}
+                            backButtonOnClick={navigateToPreviousPage}
+                            nextPageButtonClick={handleDescriptionAndPreferencesSubmit}
+                        />
+                    </form>
+                </div>
             </div>
-        </div>
     )
 }
 

@@ -158,7 +158,8 @@ const JobSeekerConversation: FC<JobSeekerConversationProps> = ({
                                             Find Jobs
                                         </button>
                                         {!jobSeeker?.resume?.id &&
-                                            <button className={"light-button-with-margin mt1rem"} onClick={navigateToResumeBuild}>
+                                            <button className={"light-button-with-margin mt1rem"}
+                                                    onClick={navigateToResumeBuild}>
                                                 Upload resume
                                             </button>}
                                     </>

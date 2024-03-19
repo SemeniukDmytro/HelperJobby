@@ -87,6 +87,7 @@ const EmailForm: FC<AuthComponentProps> = () => {
                                     setInputFieldValue={setEmail}
                                     customErrorMessage={error}
                                     setCustomErrorMessage={setError}
+                                    maxInputLength={50}
                                 />
                                 <button className="blue-button" type={"submit"} disabled={isFormInvalid}>
                                     <span>Continue</span>

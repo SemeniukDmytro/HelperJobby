@@ -62,7 +62,7 @@ const HomeComponent: FC<HomeComponentProps> = () => {
                     </nav>
                     {selectedTab === 1 && <RecommendedJobs/>}
                     {selectedTab === 2 && <RecentSearches
-                    jobQueryInputRef={jobQueryInputRef}/>}
+                        jobQueryInputRef={jobQueryInputRef}/>}
                 </div>
             </>}
         </HomePageMainContentWrap>

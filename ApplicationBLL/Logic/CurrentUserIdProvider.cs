@@ -4,9 +4,9 @@ namespace ApplicationBLL.Logic;
 
 public class CurrentUserIdProvider : IUserIdSetter, IUserIdGetter
 {
+    private int _employerId;
     private int _id;
     private int _jobSeekerId;
-    private int _employerId;
 
     public int CurrentId
     {

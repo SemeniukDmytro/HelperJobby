@@ -23,7 +23,7 @@ public class JobQueryRepository : IJobQueryRepository
 
         return job;
     }
-    
+
     public async Task<Job> GetJobByIdForJobSeekers(int jobId)
     {
         var job = await _applicationContext
@@ -45,7 +45,7 @@ public class JobQueryRepository : IJobQueryRepository
     public async Task<IEnumerable<Job>> GetEmployerJobTitles(int employerId)
     {
         var jobs = await _applicationContext.Jobs
-            .Where(j => j.EmployerId == employerId).Select(j => new Job()
+            .Where(j => j.EmployerId == employerId).Select(j => new Job
             {
                 Id = j.Id,
                 JobTitle = j.JobTitle
@@ -92,10 +92,7 @@ public class JobQueryRepository : IJobQueryRepository
     {
         var jobEntity = await _applicationContext.Jobs.Where(j => j.Id == jobId)
             .Select(JobProjections.JobWithJobApplies()).FirstOrDefaultAsync();
-        if (jobEntity == null)
-        {
-            throw new JobNotFoundException();
-        }
+        if (jobEntity == null) throw new JobNotFoundException();
 
         return jobEntity;
     }
@@ -104,10 +101,7 @@ public class JobQueryRepository : IJobQueryRepository
     {
         var jobEntity = await _applicationContext.Jobs.Where(j => j.Id == jobId)
             .Select(JobProjections.JobWithInterviews()).FirstOrDefaultAsync();
-        if (jobEntity == null)
-        {
-            throw new JobNotFoundException();
-        }
+        if (jobEntity == null) throw new JobNotFoundException();
 
         return jobEntity;
     }
@@ -122,6 +116,4 @@ public class JobQueryRepository : IJobQueryRepository
             .Select(JobProjections.JobForJobSeekers())
             .ToListAsync();
     }
-
-    
 }

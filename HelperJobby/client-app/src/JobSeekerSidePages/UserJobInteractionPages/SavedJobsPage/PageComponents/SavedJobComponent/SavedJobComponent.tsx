@@ -32,11 +32,12 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
     const [requestInProgress, setRequestInProgress] = useState(false);
 
     useEffect(() => {
-        if (jobApplies){
+        if (jobApplies) {
             setIsApplied(jobApplies?.some(application => application.jobId === job.id) || false);
         }
     }, [jobApplies]);
-    async function handleJobInteraction(actionFunction: (jobId : number) => void, setShowRemoveFromSavedValue: Dispatch<SetStateAction<boolean>>) {
+
+    async function handleJobInteraction(actionFunction: (jobId: number) => void, setShowRemoveFromSavedValue: Dispatch<SetStateAction<boolean>>) {
         try {
             setRequestInProgress(true)
             if (!authUser) {
@@ -48,8 +49,7 @@ const SavedJobComponent: FC<SavedJobComponentProps> = ({job, interactionTime}) =
             setShowRemoveFromSavedValue(actionFunction === removeSavedJob);
         } catch (err) {
             logErrorInfo(err);
-        }
-        finally {
+        } finally {
             setRequestInProgress(false)
         }
     }

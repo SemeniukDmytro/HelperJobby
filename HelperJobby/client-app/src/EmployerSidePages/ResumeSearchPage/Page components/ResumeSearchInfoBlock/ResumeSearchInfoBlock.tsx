@@ -1,9 +1,7 @@
 import React, {FC, useState} from 'react';
 import './ResumeSearchInfoBlock.scss';
 import {ResumeDTO} from "../../../../DTOs/resumeRelatedDTOs/ResumeDTO";
-import {
-    formatDate
-} from "../../../../utils/convertLogic/formatDate";
+import {formatDate} from "../../../../utils/convertLogic/formatDate";
 import {useSearchParams} from "react-router-dom";
 
 interface ResumeSearchInfoBlockProps {

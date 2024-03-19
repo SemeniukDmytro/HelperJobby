@@ -7,25 +7,24 @@ namespace ApplicationDomain.MessagingRelatedModels;
 public class Conversation
 {
     public int Id { get; set; }
-    [Required]
-    public DateTime LastModified { get; set; }
-    
-    [NotMapped]
-    public int EmployersUnreadMessagesCount { get; set; }
-    
-    [NotMapped]
-    public int JobSeekersUnreadMessagesCount { get; set; }
-    public List<Message> Messages { get; set; } 
-    [Required]
-    [ForeignKey("JobSeekerId")]
-    public int JobSeekerId { get; set; }
+
+    [Required] public DateTime LastModified { get; set; }
+
+    [NotMapped] public int EmployersUnreadMessagesCount { get; set; }
+
+    [NotMapped] public int JobSeekersUnreadMessagesCount { get; set; }
+
+    public List<Message> Messages { get; set; }
+
+    [Required] [ForeignKey("JobSeekerId")] public int JobSeekerId { get; set; }
+
     public JobSeeker JobSeeker { get; set; }
-    [Required]
-    [ForeignKey("EmployerId")]
-    public int EmployerId { get; set; }
+
+    [Required] [ForeignKey("EmployerId")] public int EmployerId { get; set; }
+
     public Employer Employer { get; set; }
-    [Required]
-    [ForeignKey("JobId")]
-    public int JobId { get; set; }
+
+    [Required] [ForeignKey("JobId")] public int JobId { get; set; }
+
     public Job Job { get; set; }
 }

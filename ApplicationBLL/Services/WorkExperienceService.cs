@@ -9,8 +9,8 @@ namespace ApplicationBLL.Services;
 public class WorkExperienceService : IWorkExperienceService
 {
     private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
-    private readonly IResumeQueryRepository _resumeQueryRepository;
     private readonly IJobSeekerService _jobSeekerService;
+    private readonly IResumeQueryRepository _resumeQueryRepository;
 
     public WorkExperienceService(IEnqueuingTaskHelper enqueuingTaskHelper,
         IResumeQueryRepository resumeQueryRepository, IJobSeekerService jobSeekerService)
@@ -40,7 +40,7 @@ public class WorkExperienceService : IWorkExperienceService
 
         var oldWorkExperienceJobTitle = workExperienceEntity.JobTitle;
         workExperienceEntity = UpdateWorkExperience(workExperienceEntity, updatedWorkExperience);
-        
+
         await _enqueuingTaskHelper.EnqueueResumeIndexingTaskAsync(async indexingService =>
         {
             await indexingService.UpdateIndexedResumeRelatedContent(oldWorkExperienceJobTitle,
@@ -61,10 +61,8 @@ public class WorkExperienceService : IWorkExperienceService
 
         if (resume.Educations.Count == 0 && resume.WorkExperiences.Count <= 1
                                          && resume.Skills.Count == 0)
-        {
             isInvalidResume = true;
-        }
-        
+
         workExperience.Resume = resume;
         return (workExperience, isInvalidResume);
     }

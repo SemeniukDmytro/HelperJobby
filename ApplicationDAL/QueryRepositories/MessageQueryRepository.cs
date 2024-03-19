@@ -18,10 +18,7 @@ public class MessageQueryRepository : IMessageQueryRepository
     public async Task<Message> GetMessageById(int messageId)
     {
         var message = await _applicationContext.Messages.FirstOrDefaultAsync(m => m.Id == messageId);
-        if (message == null)
-        {
-            throw new MessageNotFoundException();
-        }
+        if (message == null) throw new MessageNotFoundException();
         return message;
     }
 
@@ -33,11 +30,9 @@ public class MessageQueryRepository : IMessageQueryRepository
 
     public async Task<Message> GetMessageByIdWithConversationInfo(int messageId)
     {
-        var message = await _applicationContext.Messages.Include(m => m.Conversation).FirstOrDefaultAsync(m => m.Id == messageId);
-        if (message == null)
-        {
-            throw new MessageNotFoundException();
-        }
+        var message = await _applicationContext.Messages.Include(m => m.Conversation)
+            .FirstOrDefaultAsync(m => m.Id == messageId);
+        if (message == null) throw new MessageNotFoundException();
         return message;
     }
 }

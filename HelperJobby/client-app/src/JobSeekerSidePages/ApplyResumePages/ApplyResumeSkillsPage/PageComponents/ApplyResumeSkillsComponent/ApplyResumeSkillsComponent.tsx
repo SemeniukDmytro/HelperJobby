@@ -1,11 +1,10 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import './ApplyResumeSkillsComponent.scss';
-import WorkExperienceInfoComponent
-    from "../../../../BuildResumePages/SharedComponents/WorkExperienceInfoComponent/WorkExperienceInfoComponent";
 import ApplyResumePagesHeader from "../../../SharedComponents/ApplyResumePagesHeader/ApplyResumePagesHeader";
 import SkillsComponent from "../../../../BuildResumePages/SkillsPage/PageComponents/SkillsComponent/SkillsComponent";
 
-interface ApplyResumeSkillsComponentProps {}
+interface ApplyResumeSkillsComponentProps {
+}
 
 const ApplyResumeSkillsComponent: FC<ApplyResumeSkillsComponentProps> = () => (
     <ApplyResumePagesHeader>

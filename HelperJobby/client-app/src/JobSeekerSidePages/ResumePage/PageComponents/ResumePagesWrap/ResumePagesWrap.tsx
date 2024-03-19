@@ -1,14 +1,15 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import './ResumePagesWrap.scss';
 import {ApplyResumeProvider} from "../../../../contexts/ApplyResumeContext";
 import {Outlet} from "react-router-dom";
 
-interface ResumePagesWrapProps {}
+interface ResumePagesWrapProps {
+}
 
 const ResumePagesWrap: FC<ResumePagesWrapProps> = () => (
-  <ApplyResumeProvider>
-      <Outlet/>
-  </ApplyResumeProvider>
+    <ApplyResumeProvider>
+        <Outlet/>
+    </ApplyResumeProvider>
 );
 
 export default ResumePagesWrap;

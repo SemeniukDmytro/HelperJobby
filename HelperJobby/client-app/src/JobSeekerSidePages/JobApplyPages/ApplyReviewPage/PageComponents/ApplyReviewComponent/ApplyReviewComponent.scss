@@ -14,7 +14,7 @@
   width: max-content;
 }
 
-.apply-review-fb{
+.apply-review-fb {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -35,7 +35,7 @@
   height: 2rem;
 }
 
-.apply-review-job-info{
+.apply-review-job-info {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -58,7 +58,8 @@
   color: global-variables.$dark-blue;
   cursor: pointer;
   transition: 0.2s color;
-  &:hover{
+
+  &:hover {
     color: global-variables.$dark-blue-hover;
   }
 }
@@ -82,7 +83,7 @@
   background: #fff;
   border: 1px solid global-variables.$neutral-color-300;
   box-sizing: border-box;
-  box-shadow: 0 2px 4px rgba(0,0,0,.08);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .08);
   border-radius: 8px;
 }
 

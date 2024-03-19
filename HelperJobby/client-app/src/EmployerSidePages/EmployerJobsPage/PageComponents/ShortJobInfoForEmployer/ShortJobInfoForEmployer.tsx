@@ -6,19 +6,19 @@ import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {formatDate} from "../../../../utils/convertLogic/formatDate";
 
 interface ShortJobInfoForEmployerProps {
-    job : JobDTO;
-    selectedJobIds : number[];
-    setSelectedJobIds : Dispatch<SetStateAction<number[]>>;
+    job: JobDTO;
+    selectedJobIds: number[];
+    setSelectedJobIds: Dispatch<SetStateAction<number[]>>;
     isAllSelected?: boolean;
-    onDeleteClick : () => void;
+    onDeleteClick: () => void;
 }
 
 const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
-    job,
-    selectedJobIds,
-    setSelectedJobIds,
-    isAllSelected = false,
-    onDeleteClick
+                                                                       job,
+                                                                       selectedJobIds,
+                                                                       setSelectedJobIds,
+                                                                       isAllSelected = false,
+                                                                       onDeleteClick
                                                                    }) => {
     const [isSelected, setIsSelected] = useState(false);
     const navigate = useNavigate();
@@ -26,10 +26,10 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
     useEffect(() => {
         setIsSelected(isAllSelected || selectedJobIds.includes(job.id));
     }, [isAllSelected, selectedJobIds, job.id]);
-    
+
     function toggleIsSelected() {
         setIsSelected(!isSelected)
-        if (!isSelected){
+        if (!isSelected) {
             setSelectedJobIds(prev => [...prev, job.id]);
         } else {
             setSelectedJobIds(prev => {
@@ -37,8 +37,8 @@ const ShortJobInfoForEmployer: FC<ShortJobInfoForEmployerProps> = ({
             });
         }
     }
-    
-    function navigateToEditJobPage(){
+
+    function navigateToEditJobPage() {
         navigate(`${EmployerPagesPaths.EDIT_JOB}/${job.id}`);
     }
 

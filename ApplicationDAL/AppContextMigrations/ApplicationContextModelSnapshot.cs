@@ -354,8 +354,8 @@ namespace ApplicationDAL.Migrations
 
                     b.Property<string>("JobTitle")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<int?>("JobTypes")
                         .HasColumnType("int");
@@ -367,8 +367,8 @@ namespace ApplicationDAL.Migrations
 
                     b.Property<string>("Location")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("LocationCountry")
                         .IsRequired()
@@ -487,8 +487,8 @@ namespace ApplicationDAL.Migrations
 
                     b.Property<string>("JobTitle")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<int>("JobTypes")
                         .HasColumnType("int");
@@ -500,8 +500,8 @@ namespace ApplicationDAL.Migrations
 
                     b.Property<string>("Location")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("LocationCountry")
                         .IsRequired()
@@ -753,8 +753,8 @@ namespace ApplicationDAL.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<int>("ResumeId")
                         .HasColumnType("int");

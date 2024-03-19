@@ -47,7 +47,7 @@ const JobInterviews: FC<JobInterviewsProps> = () => {
             <>
                 {job?.interviews && job.interviews.length > 0 ?
                     job.interviews.map((interview, index) =>
-                        <JobInterviewForEmployer 
+                        <JobInterviewForEmployer
                             key={index}
                             interview={interview} setJob={setJob}/>
                     )

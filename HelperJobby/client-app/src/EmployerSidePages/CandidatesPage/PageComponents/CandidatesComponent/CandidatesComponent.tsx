@@ -7,9 +7,9 @@ import {JobService} from "../../../../services/jobService";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {useNavigate} from "react-router-dom";
 import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
+import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import JobCandidatesPage from "../JobCandidatesPage/JobCandidatesPage";
-import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 
 interface CandidatesComponentProps {

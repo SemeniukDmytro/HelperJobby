@@ -2,7 +2,6 @@ import React, {Dispatch, FC, SetStateAction, useEffect} from 'react';
 import './ExitJobApplicationProcessDialog.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
-import WhiteLoadingSpinner from "../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 import {useNavigate} from "react-router-dom";
 
 interface ExitJobApplicationProcessDialogProps {

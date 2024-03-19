@@ -4,42 +4,42 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronDown, faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 
 interface CustomSelectFieldProps {
-    fieldLabel : string;
-    fieldValue : string;
-    setFieldValue : Dispatch<SetStateAction<string>>;
-    optionsArr : string[];
-    isRequired : boolean;
-    executeValidation? : boolean;
-    setExecuteValidation? : Dispatch<SetStateAction<boolean>>;
-    isInvalidSelect? : boolean;
-    setIsInvalidSelect? : Dispatch<SetStateAction<boolean>>;
+    fieldLabel: string;
+    fieldValue: string;
+    setFieldValue: Dispatch<SetStateAction<string>>;
+    optionsArr: string[];
+    isRequired: boolean;
+    executeValidation?: boolean;
+    setExecuteValidation?: Dispatch<SetStateAction<boolean>>;
+    isInvalidSelect?: boolean;
+    setIsInvalidSelect?: Dispatch<SetStateAction<boolean>>;
 }
 
 const CustomSelectField: FC<CustomSelectFieldProps> = ({
-    fieldLabel,
-    fieldValue,
-    setFieldValue,
-    optionsArr,
-    isRequired,
-    executeValidation,
-    setExecuteValidation,
-    isInvalidSelect,
-    setIsInvalidSelect
+                                                           fieldLabel,
+                                                           fieldValue,
+                                                           setFieldValue,
+                                                           optionsArr,
+                                                           isRequired,
+                                                           executeValidation,
+                                                           setExecuteValidation,
+                                                           isInvalidSelect,
+                                                           setIsInvalidSelect
                                                        }) => {
     const [isInvalidValue, setIsInvalidValue] = useState(false);
     const [selectionError, setSelectionError] = useState("");
 
     useEffect(() => {
-        if (executeValidation && setExecuteValidation){
+        if (executeValidation && setExecuteValidation) {
             isValidValueProvided();
         }
     }, [executeValidation]);
-    
+
     function selectAnotherValue(e: ChangeEvent<HTMLSelectElement>) {
         setFieldValue(e.target.value);
-        if (e.target.value){
+        if (e.target.value) {
             setIsInvalidValue(false);
-            if (setIsInvalidSelect){
+            if (setIsInvalidSelect) {
                 setIsInvalidSelect(false);
             }
         }
@@ -48,18 +48,17 @@ const CustomSelectField: FC<CustomSelectFieldProps> = ({
     function checkSelection() {
         isValidValueProvided();
     }
-    
-    function isValidValueProvided(){
-        if (isRequired){
-            if (!optionsArr.includes(fieldValue)){
+
+    function isValidValueProvided() {
+        if (isRequired) {
+            if (!optionsArr.includes(fieldValue)) {
                 setIsInvalidValue(true);
                 setSelectionError("Make a selection.")
-                if (setIsInvalidSelect){
+                if (setIsInvalidSelect) {
                     setIsInvalidSelect(true);
                 }
-            }
-            else {
-                if (setIsInvalidSelect){
+            } else {
+                if (setIsInvalidSelect) {
                     setIsInvalidSelect(false);
                 }
                 setIsInvalidValue(false);
@@ -67,7 +66,7 @@ const CustomSelectField: FC<CustomSelectFieldProps> = ({
         }
     }
 
-    return(
+    return (
         <div className={"edit-form-field"}>
             <div className={`field-label`}>
                 <span>{fieldLabel}</span>

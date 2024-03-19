@@ -8,15 +8,15 @@ import {JobLocationTypes} from "../../../../../enums/modelDataEnums/JobLocationT
 import useSelectWindowPosition from "../../../../../hooks/comnonentSharedHooks/useSelectWindowPosition";
 
 interface JobLocationTypeSelectorProps {
-    jobLocationTypeEnumValue : JobLocationTypes;
-    setJobLocationTypeEnumValue : Dispatch<SetStateAction<JobLocationTypes>>;
-    includeWindowScroll : boolean;
+    jobLocationTypeEnumValue: JobLocationTypes;
+    setJobLocationTypeEnumValue: Dispatch<SetStateAction<JobLocationTypes>>;
+    includeWindowScroll: boolean;
 }
 
 const JobLocationTypeSelector: FC<JobLocationTypeSelectorProps> = ({
-    jobLocationTypeEnumValue,
-    setJobLocationTypeEnumValue,
-    includeWindowScroll
+                                                                       jobLocationTypeEnumValue,
+                                                                       setJobLocationTypeEnumValue,
+                                                                       includeWindowScroll
                                                                    }) => {
     const [showOptions, setShowOptions] = useState(false);
     const selectWindowRef = useRef<HTMLDivElement>(null);
@@ -24,27 +24,28 @@ const JobLocationTypeSelector: FC<JobLocationTypeSelectorProps> = ({
     const getSelectWindowPosition = useSelectWindowPosition(locationTypeButtonRef, selectWindowRef, setShowOptions, includeWindowScroll);
     const [currentJobLocationType, setCurrentJobLocationType] =
         useState(jobLocationTypesArr.find(jlt => jlt.enumValue == jobLocationTypeEnumValue)?.type || "In person precise location");
-    
+
     useEffect(() => {
         getSelectWindowPosition();
     }, [showOptions]);
+
     function handleLocationTypesClick() {
         setShowOptions(!showOptions);
     }
 
-    
+
     function selectJobLocationTypeHandler(jobLocationType: JobLocationType) {
         setJobLocationTypeEnumValue(jobLocationType.enumValue);
         setCurrentJobLocationType(jobLocationType.type);
     }
-    
+
 
     return (
         <>
             {showOptions && <div
                 className={"select-window-container"}
                 ref={selectWindowRef}
-                style={{width : `${locationTypeButtonRef.current?.getBoundingClientRect().width}px`}}
+                style={{width: `${locationTypeButtonRef.current?.getBoundingClientRect().width}px`}}
             >
                 {jobLocationTypesArr.map((jobLocationType, index) => (
                     <div
@@ -52,12 +53,12 @@ const JobLocationTypeSelector: FC<JobLocationTypeSelectorProps> = ({
                         className={"select-option"}
                         onClick={() => selectJobLocationTypeHandler(jobLocationType)}
                     >
-                       
-                            <div className={"mr075rem ml05rem"}>
-                                <FontAwesomeIcon className={"svg075rem"}
-                                                 style={{opacity : `${jobLocationTypeEnumValue === jobLocationType.enumValue ? "1" : "0"}`}}
-                                                 icon={faCheck}/>
-                            </div>
+
+                        <div className={"mr075rem ml05rem"}>
+                            <FontAwesomeIcon className={"svg075rem"}
+                                             style={{opacity: `${jobLocationTypeEnumValue === jobLocationType.enumValue ? "1" : "0"}`}}
+                                             icon={faCheck}/>
+                        </div>
                         <span className={"multi-row-opt"}>
                                 <span className="semi-dark-default-text unset-line-height mb025rem">
                                     {jobLocationType.type}

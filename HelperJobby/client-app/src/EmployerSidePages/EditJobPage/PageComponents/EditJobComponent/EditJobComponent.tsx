@@ -12,7 +12,8 @@ import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
 import useCurrentEmployerJob from "../../../../hooks/contextHooks/useCurrentEmployerJob";
 import {useJobLoaderToSetCurrentJob} from "../../../../hooks/comnonentSharedHooks/useJobLoaderToSetCurrentJob";
 
-interface EditJobComponentProps {}
+interface EditJobComponentProps {
+}
 
 const EditJobComponent: FC<EditJobComponentProps> = () => {
     const {currentJob, setCurrentJob} = useCurrentEmployerJob();
@@ -29,7 +30,7 @@ const EditJobComponent: FC<EditJobComponentProps> = () => {
     }, []);
 
     useEffect(() => {
-        if (currentJob){
+        if (currentJob) {
             setLoading(false);
         }
     }, [currentJob]);
@@ -45,8 +46,8 @@ const EditJobComponent: FC<EditJobComponentProps> = () => {
     async function confirmJobUpdate() {
         try {
             setRequestInProgress(true);
-            if (currentJob){
-                const updatedJob : UpdatedJobDTO = {
+            if (currentJob) {
+                const updatedJob: UpdatedJobDTO = {
                     ...currentJob as JobDTO
                 }
                 await jobService.putJob(currentJob!.id, updatedJob);
@@ -58,7 +59,6 @@ const EditJobComponent: FC<EditJobComponentProps> = () => {
             setRequestInProgress(false);
         }
     }
-
 
 
     return (

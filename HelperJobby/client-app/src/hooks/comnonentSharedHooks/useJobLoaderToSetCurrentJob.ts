@@ -9,9 +9,9 @@ import {JobService} from "../../services/jobService";
 import {useNavigate} from "react-router-dom";
 
 export function useJobLoaderToSetCurrentJob(jobId: number,
-                                            currentJob : IncompleteJobDTO | JobDTO | null,
-                                            setCurrentJob : Dispatch<SetStateAction<IncompleteJobDTO | JobDTO | null>>,
-                                            jobCreationState : JobCreationStates) {
+                                            currentJob: IncompleteJobDTO | JobDTO | null,
+                                            setCurrentJob: Dispatch<SetStateAction<IncompleteJobDTO | JobDTO | null>>,
+                                            jobCreationState: JobCreationStates) {
     const incompleteJobService = new IncompleteJobService();
     const jobService = new JobService();
     const navigate = useNavigate();
@@ -20,19 +20,18 @@ export function useJobLoaderToSetCurrentJob(jobId: number,
             navigate(EmployerPagesPaths.JOB_POSTING);
             return;
         }
-        if (currentJob?.id === jobId){
+        if (currentJob?.id === jobId) {
             return;
         }
         try {
-            if (jobCreationState == JobCreationStates.completeJob){
+            if (jobCreationState == JobCreationStates.completeJob) {
                 const retrievedJob = await jobService.getJobForEmployerById(jobId);
                 setCurrentJob(retrievedJob);
-            }
-            else if (jobCreationState == JobCreationStates.incompleteJob) {
+            } else if (jobCreationState == JobCreationStates.incompleteJob) {
                 const retrievedJob = await incompleteJobService.getIncompleteJobById(jobId);
                 setCurrentJob(retrievedJob);
             }
-            
+
         } catch (err) {
             logErrorInfo(err);
             navigate(EmployerPagesPaths.JOB_POSTING);

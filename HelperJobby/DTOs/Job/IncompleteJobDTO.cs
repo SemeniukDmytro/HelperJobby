@@ -1,5 +1,4 @@
 using ApplicationDomain.Enums;
-using ApplicationDomain.Models;
 using HelperJobby.DTOs.Account;
 
 namespace HelperJobby.DTOs.Job;
@@ -14,11 +13,11 @@ public class IncompleteJobDTO
     public string LocationCountry { get; set; }
     public JobLocationTypes JobLocationType { get; set; }
     public List<JobTypes>? JobType { get; set; }
-    public IncompleteJobSalaryDTO? Salary { get; set; } 
+    public IncompleteJobSalaryDTO? Salary { get; set; }
     public List<Schedules>? Schedule { get; set; }
     public List<EmployeeBenefits>? Benefits { get; set; }
     public string? ContactEmail { get; set; }
-    public string? ContactPhoneNumber { get; set; } 
+    public string? ContactPhoneNumber { get; set; }
     public ResumeRequirementOptions? ResumeRequired { get; set; }
     public string? Description { get; set; }
     public int EmployerId { get; set; }

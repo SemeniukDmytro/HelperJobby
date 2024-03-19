@@ -46,7 +46,7 @@ const JobApplyContactInfoComponent: FC<JobApplyContactInfoComponentProps> = () =
     const jobSeekerService = new JobSeekerService();
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
-    
+
     useEffect(() => {
         if (jobSeeker) {
             setJobSeekerValues(jobSeeker);
@@ -64,11 +64,11 @@ const JobApplyContactInfoComponent: FC<JobApplyContactInfoComponentProps> = () =
     async function saveUpdatedInfo(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setExecuteFormValidation(true);
-        if (!firstName) {
+        if (!firstName || firstName.length > 30) {
             firstNameInputRef.current?.focus();
             return;
         }
-        if (!lastName) {
+        if (!lastName || lastName.length > 30) {
             lastNameInputRef.current?.focus();
             return;
         }
@@ -80,7 +80,7 @@ const JobApplyContactInfoComponent: FC<JobApplyContactInfoComponentProps> = () =
                 return;
             }
         }
-        if (!city) {
+        if (!city || city.length > 30) {
             cityInputRef.current?.focus();
             return;
         }
@@ -136,11 +136,12 @@ const JobApplyContactInfoComponent: FC<JobApplyContactInfoComponentProps> = () =
                         showResult={showCityAutoComplete}
                         setShowResult={setShowCityAutoComplete}
                         autocompleteWindowType={AutocompleteWindowTypes.city}
+                        fullLocationResult={false}
                     />}
                     <div className={"progress-bar-and-exit-container mb15rem"}>
-                        <div 
+                        <div
                             onClick={() => setShowExitDialog(true)}
-                             className={"flex-row jc-end bold-navigation-link"}>
+                            className={"flex-row jc-end bold-navigation-link"}>
                             Exit
                         </div>
                         <div className={"progress-bar-line mt05rem"}>
@@ -159,11 +160,13 @@ const JobApplyContactInfoComponent: FC<JobApplyContactInfoComponentProps> = () =
                             fieldLabel={"First name"} isRequired={true} inputFieldValue={firstName}
                             setInputFieldValue={setFirstName} inputRef={firstNameInputRef}
                             executeValidation={executeFormValidation} setExecuteValidation={setExecuteFormValidation}
+                            maxInputLength={30}
                         />
                         <CustomInputField
                             fieldLabel={"Last name"} isRequired={true} inputFieldValue={lastName}
                             setInputFieldValue={setLastName} inputRef={lastNameInputRef}
                             executeValidation={executeFormValidation} setExecuteValidation={setExecuteFormValidation}
+                            maxInputLength={30}
                         />
                         <div className={"field-label"}>
                             Email
@@ -195,6 +198,7 @@ const JobApplyContactInfoComponent: FC<JobApplyContactInfoComponentProps> = () =
                             setShowAutocompleteResults={setShowCityAutoComplete}
                             executeValidation={executeFormValidation}
                             setExecuteValidation={setExecuteFormValidation}
+                            locationMaxLength={30}
                         />
 
                         {showCountrySelector ? <CustomSelectField
@@ -224,6 +228,7 @@ const JobApplyContactInfoComponent: FC<JobApplyContactInfoComponentProps> = () =
                             customErrorMessage={phoneNumberError}
                             setCustomErrorMessage={setPhoneNumberError}
                             inputRef={phoneNumberInputRef}
+                            maxInputLength={15}
                         />
                         <div className={"change-resume-info-notify-container mb1rem"}>
                             <FontAwesomeIcon

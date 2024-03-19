@@ -14,7 +14,7 @@ public class SearchQueryRepository : ISearchQueryRepository
 
     private readonly ApplicationContext _applicationContext;
     private readonly IFilteringService _filteringService;
-    
+
     public SearchQueryRepository(ApplicationContext applicationContext, IFilteringService filteringService)
     {
         _applicationContext = applicationContext;

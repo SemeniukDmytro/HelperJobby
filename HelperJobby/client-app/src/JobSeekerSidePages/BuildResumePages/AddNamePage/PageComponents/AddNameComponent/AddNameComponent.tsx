@@ -29,7 +29,7 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
     const firstNameInputRef = useRef<HTMLInputElement>(null);
     const lastNameInputRef = useRef<HTMLInputElement>(null);
     const [executeFormValidation, setExecuteFormValidation] = useState(false);
-    
+
     useEffect(() => {
         if (!firstName) {
             firstNameInputRef.current?.focus();
@@ -55,7 +55,7 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
     async function updateJobSeekerCredentials(resultPageURI: string, isSaveAndExitAction: boolean) {
         setExecuteFormValidation(true);
 
-        if (!lastName) {
+        if (!lastName || lastName.length > 30) {
             if (lastNameInputRef.current) {
                 lastNameInputRef.current.focus();
                 if (isSaveAndExitAction) {
@@ -64,8 +64,8 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
                 return;
             }
         }
-        
-        if (!firstName) {
+
+        if (!firstName || lastName.length > 30) {
             if (firstNameInputRef.current) {
                 firstNameInputRef.current.focus();
                 if (isSaveAndExitAction) {
@@ -74,7 +74,7 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
                 return;
             }
         }
-        
+
         try {
             setSavingInfo(true);
             const updatedJobSeeker = updateJobSeekerDTO(firstName, lastName, jobSeeker!.phoneNumber,
@@ -115,6 +115,7 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
                 inputRef={firstNameInputRef}
                 executeValidation={executeFormValidation}
                 setExecuteValidation={setExecuteFormValidation}
+                maxInputLength={30}
             />
             <CustomInputField
                 fieldLabel={"Last name"}
@@ -124,6 +125,7 @@ const AddNameComponent: FC<ResumeNameComponentProps> = () => {
                 inputRef={lastNameInputRef}
                 executeValidation={executeFormValidation}
                 setExecuteValidation={setExecuteFormValidation}
+                maxInputLength={30}
             />
             <button className={"submit-form-button"} onClick={moveToPhonePage} disabled={savingInfo}>
                 {savingInfo ?

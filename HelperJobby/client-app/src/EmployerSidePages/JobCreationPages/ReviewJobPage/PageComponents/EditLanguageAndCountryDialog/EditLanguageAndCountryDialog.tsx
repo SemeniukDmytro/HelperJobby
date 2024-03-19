@@ -18,15 +18,15 @@ import {IncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/IncompleteJ
 import useCurrentEmployerJob from "../../../../../hooks/contextHooks/useCurrentEmployerJob";
 
 interface EditLanguageAndCountryDialogProps {
-    showDialog : boolean;
-    setShowDialog : Dispatch<SetStateAction<boolean>>;
+    showDialog: boolean;
+    setShowDialog: Dispatch<SetStateAction<boolean>>;
 }
 
 const EditLanguageAndCountryDialog: FC<EditLanguageAndCountryDialogProps> = ({
-    showDialog,
-    setShowDialog
+                                                                                 showDialog,
+                                                                                 setShowDialog
                                                                              }) => {
-    
+
     const [requestInProgress, setRequestInProgress] = useState(false);
     const {currentJob, setCurrentJob, jobCreationState} = useCurrentEmployerJob();
     const [language, setLanguage] = useState(currentJob?.language || "English");
@@ -43,47 +43,44 @@ const EditLanguageAndCountryDialog: FC<EditLanguageAndCountryDialogProps> = ({
     }
 
     async function changeCurrentLanguageAndCountry() {
-        if (!language){
+        if (!language) {
             return;
         }
-        if (!country){
+        if (!country) {
             countrySelectorRef.current?.focus();
             return;
         }
-        
+
         try {
             setRequestInProgress(true);
-            if (jobCreationState == JobCreationStates.completeJob){
-                const job =  currentJob as JobDTO;
-                const updatedJob : UpdatedJobDTO = {
+            if (jobCreationState == JobCreationStates.completeJob) {
+                const job = currentJob as JobDTO;
+                const updatedJob: UpdatedJobDTO = {
                     ...job,
-                    language : language,
-                    locationCountry : country
+                    language: language,
+                    locationCountry: country
                 }
                 const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
                 setCurrentJob(retrievedJob);
-            }
-            else if (jobCreationState == JobCreationStates.incompleteJob){
+            } else if (jobCreationState == JobCreationStates.incompleteJob) {
                 const job = currentJob as IncompleteJobDTO;
-                const updatedJob : UpdatedIncompleteJobDTO = {
+                const updatedJob: UpdatedIncompleteJobDTO = {
                     ...job,
-                    language : language,
-                    locationCountry : country
+                    language: language,
+                    locationCountry: country
                 }
                 const retrievedJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedJob);
                 setCurrentJob(retrievedJob);
             }
-            
+
             closeDialog();
-            
-        }
-        catch (err){
+
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
-        
+
     }
 
     return !showDialog ? null :
@@ -137,11 +134,11 @@ const EditLanguageAndCountryDialog: FC<EditLanguageAndCountryDialogProps> = ({
                         onClick={changeCurrentLanguageAndCountry}
                         disabled={requestInProgress}
                     >
-                        {requestInProgress ? 
+                        {requestInProgress ?
                             <WhiteLoadingSpinner/>
                             :
                             <>
-                            <span>Done</span>
+                                <span>Done</span>
                             </>
                         }
                     </button>

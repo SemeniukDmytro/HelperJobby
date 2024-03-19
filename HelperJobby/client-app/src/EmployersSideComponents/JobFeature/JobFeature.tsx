@@ -6,7 +6,7 @@ import {faCheck, faPlus} from "@fortawesome/free-solid-svg-icons";
 interface JobFeatureProps {
     featureName: string;
     isSelected: boolean;
-    onClick: (jobType : string) => void;
+    onClick: (jobType: string) => void;
 }
 
 const JobFeature: FC<JobFeatureProps> = ({
@@ -15,7 +15,7 @@ const JobFeature: FC<JobFeatureProps> = ({
                                              onClick
                                          }) => (
     <>
-        <button className={`${isSelected ? "emps-job-feature-button-selected": "emps-job-feature-button"}`}
+        <button className={`${isSelected ? "emps-job-feature-button-selected" : "emps-job-feature-button"}`}
                 onClick={() => onClick(featureName)}
                 type={"button"}
         >

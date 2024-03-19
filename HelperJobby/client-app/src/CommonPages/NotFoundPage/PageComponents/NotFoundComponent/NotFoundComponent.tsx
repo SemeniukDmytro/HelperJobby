@@ -14,11 +14,11 @@ const NotFoundComponent: FC<NotFoundComponentProps> = () => {
 
     const navigate = useNavigate();
     const {employer} = useEmployer()
+
     function navigateToHomePage() {
-        if (employer){
+        if (employer) {
             navigate(EmployerPagesPaths.JOB_POSTING);
-        }
-        else {
+        } else {
             navigate("/");
         }
     }
@@ -26,7 +26,7 @@ const NotFoundComponent: FC<NotFoundComponentProps> = () => {
     return (
         <div className={"not-found-page-container"}>
             <NoResults/>
-            <div style={{maxWidth : "480px"}}>
+            <div style={{maxWidth: "480px"}}>
                 <div className="form-title mb05rem">
                     Lost? Let’s get you back on track.
                 </div>

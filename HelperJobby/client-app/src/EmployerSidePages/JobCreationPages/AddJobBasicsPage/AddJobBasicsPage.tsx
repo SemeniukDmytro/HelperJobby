@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import AddJobBasicsComponent from "./PageComponents/AddJobBasicsComponent/AddJobBasicsComponent";
 
-interface AddJobBasicsPageProps {}
+interface AddJobBasicsPageProps {
+}
 
 const AddJobBasicsPage: FC<AddJobBasicsPageProps> = () => (
-  <AddJobBasicsComponent/>
+    <AddJobBasicsComponent/>
 );
 
 export default AddJobBasicsPage;

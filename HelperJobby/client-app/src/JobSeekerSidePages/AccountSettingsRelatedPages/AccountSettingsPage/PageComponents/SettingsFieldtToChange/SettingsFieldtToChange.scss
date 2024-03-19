@@ -28,7 +28,7 @@
   font-size: 1rem;
   line-height: 1.5;
   overflow-wrap: break-word;
-  word-break: break-word; 
+  word-break: break-word;
 }
 
 .grey-default-text {
@@ -72,7 +72,7 @@
   word-break: break-word;
 }
 
-.grey-tiny-text{
+.grey-tiny-text {
   color: global-variables.$neutral-color-700;
   line-height: 1.5;
   font-size: 0.75rem;
@@ -80,7 +80,7 @@
   word-break: break-word;
 }
 
-.dark-tiny-text{
+.dark-tiny-text {
   color: global-variables.$neutral-color-1000;
   line-height: 1.5;
   font-size: 0.75rem;

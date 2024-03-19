@@ -12,9 +12,9 @@ public class UserServiceTests
 {
     private readonly ITestOutputHelper _outputHelper;
     private readonly Mock<IPasswordHandler> _passwordHandler = new();
+    private readonly Mock<IUserIdGetter> _userIdGetter = new();
     private readonly Mock<IUserQueryRepository> _userQueryRepository = new();
     private readonly UserService _userService;
-    private readonly Mock<IUserIdGetter> _userIdGetter = new();
 
     public UserServiceTests(ITestOutputHelper outputHelper)
     {
@@ -68,7 +68,8 @@ public class UserServiceTests
         _userQueryRepository.Setup(r => r.IsEmailAvailable(It.IsAny<string>())).ReturnsAsync(true);
         _passwordHandler.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
         //Act
-        var userToUpdate = await _userService.UpdateUserVulnerableInfo(It.IsAny<int>(), updatedUser, It.IsAny<string>());
+        var userToUpdate =
+            await _userService.UpdateUserVulnerableInfo(It.IsAny<int>(), updatedUser, It.IsAny<string>());
         //Assert
         Assert.Equal(updatedUser.Email, userToUpdate.Email);
     }

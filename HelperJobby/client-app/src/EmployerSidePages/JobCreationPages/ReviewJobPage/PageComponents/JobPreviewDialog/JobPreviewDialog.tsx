@@ -6,7 +6,8 @@ import {faHeart} from "@fortawesome/free-regular-svg-icons";
 import {
     benefitsEnumToStringMap,
     jobLocationTypesEnumToStringMap,
-    jobTypesEnumToStringMap, schedulesEnumToStringMap
+    jobTypesEnumToStringMap,
+    schedulesEnumToStringMap
 } from "../../../../../utils/convertLogic/enumToStringConverter";
 import {JobLocationTypes} from "../../../../../enums/modelDataEnums/JobLocationTypes";
 import {formatJobSalaryDisplay} from "../../../../../utils/convertLogic/formatJobSalaryDisplay";

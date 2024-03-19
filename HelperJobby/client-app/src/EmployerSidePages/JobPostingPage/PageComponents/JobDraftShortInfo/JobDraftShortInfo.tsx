@@ -20,11 +20,11 @@ const JobDraftShortInfo: FC<JobDraftShortInfoProps> = ({
         <div onClick={() => onJobDraftSelect(incompleteJob.id)}
              className={`job-draft-short-info-container ${isSelected ? "selected-job-draft" : ""}`}>
             {isSelected ? <FontAwesomeIcon className={"svg125rem mr075rem semi-dark-small-text"} icon={faCheck}/>
-            :
-            <div className={"mr2rem"}>
-                
-            </div>}
-            
+                :
+                <div className={"mr2rem"}>
+
+                </div>}
+
 
             <div className={"flex-column"}>
                 <span className={"semi-dark-default-text"}>{incompleteJob.jobTitle}</span>

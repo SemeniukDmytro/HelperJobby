@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import './JobReviewJobInfoBlock.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronDown, faChevronUp, faPen} from "@fortawesome/free-solid-svg-icons";
@@ -26,11 +26,10 @@ const JobReviewJobInfoBlock: FC<JobReviewJobInfoBlockProps> = (
     const infoNotProvided = fieldValue.length === 0;
 
     useEffect(() => {
-        if (fieldValueRef.current){
-            const sanitizedDescription = DOMPurify.sanitize(fieldValue || "", {
+        if (fieldValueRef.current) {
+            fieldValueRef.current.innerHTML = DOMPurify.sanitize(fieldValue || "", {
                 ALLOWED_TAGS: ['b', 'i', 'br', 'p', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote'],
             });
-            fieldValueRef.current.innerHTML = sanitizedDescription;
         }
         setShowMoreButton(isValueSizeIsTooBig());
     }, [fieldValueRef.current, fieldValue]);
@@ -59,7 +58,7 @@ const JobReviewJobInfoBlock: FC<JobReviewJobInfoBlockProps> = (
                 {jobInfoLabel}
             </div>
             <div>
-                <a 
+                <a
                     className={`ji-field-value-manage-block ${infoNotProvided ? (isFieldRequired ? "error-red-bc" : "add-blue-bc") : ""}`}
                     onClick={onEditClick}>
                     {fieldValue.length == 0 ?

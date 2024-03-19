@@ -9,8 +9,8 @@ namespace ApplicationBLL.Services;
 
 public class JobService : IJobService
 {
-    private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IEmployerService _employerService;
+    private readonly IJobQueryRepository _jobQueryRepository;
 
     public JobService(IJobQueryRepository jobQueryRepository, IEmployerService employerService)
     {
@@ -28,10 +28,7 @@ public class JobService : IJobService
     public async Task<IEnumerable<Job>> GetEmployerJobsByEmployerId(int employerId)
     {
         var currentEmployerId = _employerService.GetCurrentEmployerId();
-        if (employerId != currentEmployerId)
-        {
-            throw new ForbiddenException("You can retrieve only your jobs");
-        }
+        if (employerId != currentEmployerId) throw new ForbiddenException("You can retrieve only your jobs");
 
         var jobs = await _jobQueryRepository.GetJobsByEmployerId(employerId);
         return jobs;
@@ -40,10 +37,7 @@ public class JobService : IJobService
     public async Task<IEnumerable<Job>> GetEmployerJobTitles(int employerId)
     {
         var currentEmployerId = _employerService.GetCurrentEmployerId();
-        if (employerId != currentEmployerId)
-        {
-            throw new ForbiddenException("You can not retrieve this job information");
-        }
+        if (employerId != currentEmployerId) throw new ForbiddenException("You can not retrieve this job information");
 
         var jobs = await _jobQueryRepository.GetEmployerJobTitles(employerId);
         return jobs;
@@ -52,12 +46,10 @@ public class JobService : IJobService
     public async Task<Job> CreateJob(Job job)
     {
         if (!Validator.TryValidateObject(job, new ValidationContext(job), null, true)) throw new InvalidJobException();
-        
+
         if (job.Salary != null && !job.Salary.MeetsMinSalaryRequirement)
-        {
             if (!SalaryRateHelper.CheckMinimalSalary(job.Salary.MinimalAmount, job.Salary.SalaryRate))
                 throw new InvalidJobException("Salary wage appears to be below the minimum wage for this location");
-        }
 
         job.Employer.HasPostedFirstJob = true;
         job.DatePosted = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -67,21 +59,20 @@ public class JobService : IJobService
     public async Task<Job> UpdateJob(int jobId, Job updatedJob)
     {
         CheckIfValidSalaryProvided(updatedJob.Salary);
-        
+
         var jobEntity = await _jobQueryRepository.GetJobByIdWithEmployer(jobId);
         CheckIfUserHasAccessToPerformAnAction(jobEntity);
 
 
         var locationChangeNeeded = false;
-        
-        if (!string.IsNullOrEmpty(updatedJob.LocationCountry) && jobEntity.LocationCountry != updatedJob.LocationCountry &&
+
+        if (!string.IsNullOrEmpty(updatedJob.LocationCountry) &&
+            jobEntity.LocationCountry != updatedJob.LocationCountry &&
             (jobEntity.Location == updatedJob.Location || string.IsNullOrEmpty(updatedJob.Location)))
-        {
             locationChangeNeeded = true;
-        }
 
         var updatedEntity = EntitiesUpdateManager<IncompleteJob>.UpdateEntityProperties(jobEntity, updatedJob);
-        
+
         if (jobEntity.Salary == null)
         {
             updatedEntity.Salary = updatedJob.Salary;
@@ -92,8 +83,8 @@ public class JobService : IJobService
                 updatedJob.Salary);
             updatedEntity.Salary = updatedSalary;
         }
-        
-        
+
+
         updatedEntity.Location = locationChangeNeeded ? "" : updatedEntity.Location;
         return updatedEntity;
     }
@@ -119,10 +110,7 @@ public class JobService : IJobService
     {
         var currentEmployerId = _employerService.GetCurrentEmployerId();
         var jobEntities = await _jobQueryRepository.GetJobsByIdsForEmployer(jobIds);
-        if (jobEntities.Any(ij => ij.EmployerId != currentEmployerId))
-        {
-            throw new ForbiddenException();
-        }
+        if (jobEntities.Any(ij => ij.EmployerId != currentEmployerId)) throw new ForbiddenException();
 
         return jobEntities;
     }
@@ -130,10 +118,8 @@ public class JobService : IJobService
     private void CheckIfValidSalaryProvided(JobSalary? salary)
     {
         if (salary != null && !salary.MeetsMinSalaryRequirement)
-        {
             if (!SalaryRateHelper.CheckMinimalSalary(salary.MinimalAmount, salary.SalaryRate))
                 throw new InvalidJobException("This wage appears to be below the minimum wage for this location");
-        }
     }
 
     private void CheckIfUserHasAccessToPerformAnAction(Job job)

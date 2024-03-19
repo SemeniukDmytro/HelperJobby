@@ -11,13 +11,14 @@ namespace BLLUnitTests.ServicesTests;
 
 public class IncompleteJobServiceTests
 {
-    private readonly IncompleteJobService _incompleteJobService;
-    private readonly Mock<IIncompleteJobQueryRepository> _incompleteJobQueryRepository = new();
     private readonly Mock<IEmployerService> _employerServiceMock = new();
+    private readonly Mock<IIncompleteJobQueryRepository> _incompleteJobQueryRepository = new();
+    private readonly IncompleteJobService _incompleteJobService;
 
     public IncompleteJobServiceTests()
     {
-        _incompleteJobService = new IncompleteJobService(_incompleteJobQueryRepository.Object, _employerServiceMock.Object);
+        _incompleteJobService =
+            new IncompleteJobService(_incompleteJobQueryRepository.Object, _employerServiceMock.Object);
     }
 
 
@@ -40,7 +41,7 @@ public class IncompleteJobServiceTests
         Assert.Equal(newJob.NumberOfOpenings, job.NumberOfOpenings);
         Assert.Equal(employerId, job.EmployerId);
     }
-    
+
 
     [Fact]
     public async Task UpdateJobCreationShouldReturnUpdatedCurrentJob()
@@ -48,8 +49,8 @@ public class IncompleteJobServiceTests
         //Arrange
         var newJob = new IncompleteJob
         {
-            JobTypes = default, 
-            Salary = new IncompleteJobSalary()
+            JobTypes = default,
+            Salary = new IncompleteJobSalary
             {
                 MinimalAmount = 256,
                 SalaryRate = SalaryRates.PerDay

@@ -88,11 +88,11 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
     async function saveUpdatedInfo(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setExecuteFormValidation(true);
-        if (!firstName) {
+        if (!firstName || firstName.length > 30) {
             firstNameInputRef.current?.focus();
             return;
         }
-        if (!lastName) {
+        if (!lastName || firstName.length > 30) {
             lastNameInputRef.current?.focus();
             return;
         }
@@ -104,16 +104,20 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                 return;
             }
         }
-        
-        if (!country) {
+
+        if (!country || country.length > 45) {
             countryInputRef.current?.focus();
             return;
         }
-        if (!city) {
+        if (!city || city.length > 30) {
             cityInputRef.current?.focus();
             return;
         }
-        
+
+        if (postalCode.length > 10) {
+            return;
+        }
+
         const updateJobSeekerInfo: UpdateJobSeekerDTO = {
             firstName: firstName,
             lastName: lastName,
@@ -166,6 +170,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                         showResult={showStreetsAutocomplete}
                         setShowResult={setShowStreetsAutocomplete}
                         autocompleteWindowType={AutocompleteWindowTypes.streetAddress}
+                        fullLocationResult={false}
                     />}
 
                     {showCityAutoComplete && <AutocompleteResultsWindow
@@ -177,6 +182,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                         showResult={showCityAutoComplete}
                         setShowResult={setShowCityAutoComplete}
                         autocompleteWindowType={AutocompleteWindowTypes.city}
+                        fullLocationResult={false}
                     />}
                     <div className={"page-with-centered-content-layout"}>
 
@@ -189,12 +195,16 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                 <CustomInputField
                                     fieldLabel={"First name"} isRequired={true} inputFieldValue={firstName}
                                     setInputFieldValue={setFirstName} inputRef={firstNameInputRef}
-                                    executeValidation={executeFormValidation} setExecuteValidation={setExecuteFormValidation}
+                                    executeValidation={executeFormValidation}
+                                    setExecuteValidation={setExecuteFormValidation}
+                                    maxInputLength={30}
                                 />
                                 <CustomInputField
                                     fieldLabel={"Last name"} isRequired={true} inputFieldValue={lastName}
                                     setInputFieldValue={setLastName} inputRef={lastNameInputRef}
-                                    executeValidation={executeFormValidation} setExecuteValidation={setExecuteFormValidation}
+                                    executeValidation={executeFormValidation}
+                                    setExecuteValidation={setExecuteFormValidation}
+                                    maxInputLength={30}
                                 />
                                 <CustomInputField
                                     fieldLabel={"Phone"}
@@ -205,6 +215,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                     customErrorMessage={phoneNumberError}
                                     setCustomErrorMessage={setPhoneNumberError}
                                     inputRef={phoneNumberInputRef}
+                                    maxInputLength={15}
                                 />
                                 <EditEmail/>
                                 <div className={"edit-location-layout"}>
@@ -219,7 +230,7 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                         setCountry={setCountry}
                                         selectRef={countryInputRef}
                                     ></CountrySelector>
-                                    
+
                                     <LocationCustomInputField
                                         fieldLabel={"Street address"}
                                         fieldSubtitle={"Visible only to you"}
@@ -228,8 +239,9 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                         inputRef={streetAddressInputRef}
                                         isRequired={false}
                                         setShowAutocompleteResults={setShowStreetsAutocomplete}
+                                        locationMaxLength={30}
                                     />
-                                    
+
                                     <LocationCustomInputField
                                         fieldLabel={"City, Province / Territory"}
                                         inputValue={city}
@@ -239,10 +251,12 @@ const EditContactInfoForm: FC<EditContactInfoFormProps> = () => {
                                         setShowAutocompleteResults={setShowCityAutoComplete}
                                         executeValidation={executeFormValidation}
                                         setExecuteValidation={setExecuteFormValidation}
+                                        locationMaxLength={30}
                                     />
                                     <CustomInputField
                                         fieldLabel={"Postal code"} isRequired={false} inputFieldValue={postalCode}
                                         setInputFieldValue={setPostalCode}
+                                        maxInputLength={10}
                                     />
                                 </div>
                                 <div className={"edit-form-submit-button-container"}>

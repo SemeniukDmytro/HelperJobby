@@ -5,20 +5,20 @@ import {faXmark} from "@fortawesome/free-solid-svg-icons";
 import WhiteLoadingSpinner from "../../../../../Components/WhiteLoadingSpinner/WhiteLoadingSpinner";
 
 interface EditJobPostDialogProps {
-    showDialog : boolean;
-    setShowDialog : Dispatch<SetStateAction<boolean>>;
-    requestInProgress : boolean;
-    executeJobEditing : () => void;
-    children : ReactNode
+    showDialog: boolean;
+    setShowDialog: Dispatch<SetStateAction<boolean>>;
+    requestInProgress: boolean;
+    executeJobEditing: () => void;
+    children: ReactNode
 }
 
 const EditJobPostDialog: FC<EditJobPostDialogProps> = ({
-    showDialog,
-    setShowDialog,
-    executeJobEditing,
-    requestInProgress,
-    children
-                                                             }) => {
+                                                           showDialog,
+                                                           setShowDialog,
+                                                           executeJobEditing,
+                                                           requestInProgress,
+                                                           children
+                                                       }) => {
 
 
     useEffect(() => {
@@ -73,7 +73,7 @@ const EditJobPostDialog: FC<EditJobPostDialogProps> = ({
                     </div>
                 </div>
                 <div className={"background-overlay"} onClick={closeDialog}>
-                        
+
                 </div>
             </div>
     )

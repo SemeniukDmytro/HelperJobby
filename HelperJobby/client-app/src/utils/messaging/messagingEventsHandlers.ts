@@ -23,19 +23,19 @@ export function onMessageSent(message: MessageDTO,
     }
     let updatedConversation = conversation ? {
         ...conversation,
-        lastModified : message.sentAt,
-        messages : [...conversation.messages, message],
-        jobSeekersUnreadMessagesCount : message.employerId ? conversation.jobSeekersUnreadMessagesCount + 1 : conversation.jobSeekersUnreadMessagesCount,
-        employersUnreadMessagesCount : message.jobSeekerId ? conversation.employersUnreadMessagesCount + 1 : conversation.employersUnreadMessagesCount
+        lastModified: message.sentAt,
+        messages: [...conversation.messages, message],
+        jobSeekersUnreadMessagesCount: message.employerId ? conversation.jobSeekersUnreadMessagesCount + 1 : conversation.jobSeekersUnreadMessagesCount,
+        employersUnreadMessagesCount: message.jobSeekerId ? conversation.employersUnreadMessagesCount + 1 : conversation.employersUnreadMessagesCount
     } : {
         ...message.conversation,
-        messages : [message],
-        jobSeekersUnreadMessagesCount : message.employerId ?  1 : 0,
-        employersUnreadMessagesCount : message.jobSeekerId ? 1 : 0
+        messages: [message],
+        jobSeekersUnreadMessagesCount: message.employerId ? 1 : 0,
+        employersUnreadMessagesCount: message.jobSeekerId ? 1 : 0
     };
     setConversation(updatedConversation);
     setConversationsToShow(prevConversations => {
-        if (conversation){
+        if (conversation) {
             const conversationIndex = prevConversations.findIndex(c => c.id === conversation.id);
             const updatedConversations = [...prevConversations];
             const conversationInfo = {...conversation};
@@ -45,8 +45,7 @@ export function onMessageSent(message: MessageDTO,
                 updatedConversations[conversationIndex] = {...conversationInfo};
             }
             return updatedConversations;
-        }
-        else {
+        } else {
             return [...prevConversations, updatedConversation]
         }
     });

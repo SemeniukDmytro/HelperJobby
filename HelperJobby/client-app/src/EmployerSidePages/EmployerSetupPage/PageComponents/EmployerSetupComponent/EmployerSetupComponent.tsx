@@ -15,6 +15,7 @@ import {UpdateEmployerDTO} from "../../../../DTOs/accountDTOs/UpdateEmployerDTO"
 import {EmployerDTO} from "../../../../DTOs/accountDTOs/EmployerDTO";
 import {useNavigate} from "react-router-dom";
 import employerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
+import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 import Company from "../../../../Components/Icons/Company";
 import PageTitleWithImage from "../../../../EmployersSideComponents/PageTitleWithImage/PageTitleWithImage";
 import {ServerError} from "../../../../DTOs/errorDTOs/ServerErrorDTO";
@@ -22,7 +23,6 @@ import AuthService from "../../../../services/authService";
 import {setAuthToken} from "../../../../utils/authTokenInteraction";
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 import {useAuth} from "../../../../hooks/contextHooks/useAuth";
-import EmployerPagesPaths from "../../../../AppRoutes/Paths/EmployerPagesPaths";
 
 interface EmployerSetupComponentProps {
 }
@@ -45,13 +45,13 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
     const [requestInProgress, setRequestInProgress] = useState(false);
     const [requestError, setRequestError] = useState("");
     const [showPopupWindow, setShowPopupWindow] = useState(false);
-    
+
     const employerService = new EmployerService();
     const {authUser, setAuthUser} = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (employer){
+        if (employer) {
             navigate(EmployerPagesPaths.JOB_POSTING)
         }
     }, [employer]);
@@ -60,16 +60,16 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
         e.preventDefault();
         setExecuteFormValidation(true);
         let invalidDataProvided = false;
-        if (!companyName) {
+        if (!companyName || companyName.length > 100) {
             companyInputRef.current?.focus();
             invalidDataProvided = true;
         }
-        if (!employerCredentials) {
+        if (!employerCredentials || employerCredentials.length > 60) {
             credentialsInputRef.current?.focus();
             invalidDataProvided = true;
         }
-        
-        if (!IsValidEmail(employerEmail)){
+
+        if (!IsValidEmail(employerEmail)) {
             setEmployerEmailError("Error: Invalid email address");
             employerEmailInputRef.current?.focus();
             invalidDataProvided = true;
@@ -83,37 +83,36 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                 invalidDataProvided = true;
             }
         }
-        
-        if (invalidDataProvided){
+
+        if (invalidDataProvided) {
             return;
         }
 
         try {
             setRequestInProgress(true);
 
-            let retrievedEmployer : EmployerDTO;
-            
-            if (employer){
-                const updateEmployerDTO : UpdateEmployerDTO = {
-                    email : employerEmail,
-                    contactNumber : contactPhone
+            let retrievedEmployer: EmployerDTO;
+
+            if (employer) {
+                const updateEmployerDTO: UpdateEmployerDTO = {
+                    email: employerEmail,
+                    contactNumber: contactPhone
                 }
                 retrievedEmployer = await employerService.updateEmployerAccount(authUser!.user.id, updateEmployerDTO);
                 setEmployer(prev => {
-                    return  prev ? {
+                    return prev ? {
                         ...prev,
-                        contactNumber : retrievedEmployer.contactNumber,
-                        email : retrievedEmployer.email
+                        contactNumber: retrievedEmployer.contactNumber,
+                        email: retrievedEmployer.email
                     } : retrievedEmployer;
                 })
-            }
-            else {
-                const createEmployerDTO : CreateEmployerDTO = {
-                    organizationName : companyName,
-                    fullName : employerCredentials,
-                    email : employerEmail,
-                    contactNumber : contactPhone,
-                    numberOfEmployees : convertNumberOfEmployeesRange()
+            } else {
+                const createEmployerDTO: CreateEmployerDTO = {
+                    organizationName: companyName,
+                    fullName: employerCredentials,
+                    email: employerEmail,
+                    contactNumber: contactPhone,
+                    numberOfEmployees: convertNumberOfEmployeesRange()
                 }
                 retrievedEmployer = await employerService.createEmployerAccount(createEmployerDTO);
                 setEmployer(retrievedEmployer);
@@ -125,7 +124,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
 
         } catch (err) {
             logErrorInfo(err);
-            if (err instanceof ServerError){
+            if (err instanceof ServerError) {
                 setRequestError(err.ServerErrorDTO.detail);
                 setShowPopupWindow(true);
             }
@@ -133,20 +132,20 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
             setRequestInProgress(false);
         }
     }
-    
-    function convertNumberOfEmployeesRange() : number | null{
-        if (!numberOfEmployeesRange){
+
+    function convertNumberOfEmployeesRange(): number | null {
+        if (!numberOfEmployeesRange) {
             return null;
         }
         const splitNumberRangeValues = numberOfEmployeesRange.match(/\d+/);
         return Number.parseInt(splitNumberRangeValues![0]);
-        
+
     }
 
     return (
         <div className={"employers-centralized-page-layout"}>
             <NotifyPopupWindow
-                isSuccessful={false} 
+                isSuccessful={false}
                 text={requestError}
                 showNotify={showPopupWindow}
                 setShowNotify={setShowPopupWindow}
@@ -168,6 +167,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                         inputRef={companyInputRef}
                         executeValidation={executeFormValidation}
                         setExecuteValidation={setExecuteFormValidation}
+                        maxInputLength={100}
                     />
                     <CustomSelectField
                         fieldLabel={"Your company's number of employees"}
@@ -187,6 +187,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                         setCustomErrorMessage={setEmployerEmailError}
                         executeValidation={executeFormValidation}
                         setExecuteValidation={setExecuteFormValidation}
+                        maxInputLength={50}
                     />
                     <CustomInputField
                         fieldLabel={"Your first and last name"}
@@ -196,6 +197,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                         inputRef={credentialsInputRef}
                         executeValidation={executeFormValidation}
                         setExecuteValidation={setExecuteFormValidation}
+                        maxInputLength={60}
                     />
                     <CustomInputField
                         fieldLabel={"Your phone number"}
@@ -208,6 +210,7 @@ const EmployerSetupComponent: FC<EmployerSetupComponentProps> = () => {
                         inputRef={phoneInputRef}
                         executeValidation={executeFormValidation}
                         setExecuteValidation={setExecuteFormValidation}
+                        maxInputLength={15}
                     />
                     <div className="mb2rem"></div>
                     <button

@@ -23,6 +23,7 @@
   border-radius: 0.25rem;
   transition: background-color 0.2s;
   cursor: pointer;
+
   &:hover {
     background-color: global-variables.$light-blue;
     border-color: global-variables.$dark-blue;
@@ -37,6 +38,7 @@
     inline-size: 1.5rem;
     background-position: center;
     background-size: 1rem;
+
     &:hover {
       background-color: global-variables.$dark-blue-hover;
     }

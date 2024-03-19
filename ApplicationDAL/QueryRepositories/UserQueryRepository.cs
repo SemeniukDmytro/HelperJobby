@@ -53,7 +53,7 @@ public class UserQueryRepository : IUserQueryRepository
         if (userEntity == null) throw new UserNotFoundException("User with provided email is not found");
         return userEntity;
     }
-    
+
     public async Task<User> GetUserByIdWithRefreshToken(int userId)
     {
         var userEntity = await _applicationContext.Users.Where(u => u.Id == userId)
@@ -69,7 +69,7 @@ public class UserQueryRepository : IUserQueryRepository
 
         return token;
     }
-    
+
     private async Task<User> GetUser(int userId, Func<IQueryable<User>, IQueryable<User>> includeQuery = null)
     {
         var query = _applicationContext.Users.AsQueryable();

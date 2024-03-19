@@ -84,8 +84,8 @@ const EmployerJobsComponent: FC<EmployerJobsComponentProps> = () => {
         }
         navigate(`${EmployerPagesPaths.JOBS}`)
     }
-    
-    async function handleIncompleteJobPageType(){
+
+    async function handleIncompleteJobPageType() {
         setJobPageType(JobCreationStates.incompleteJob)
         if (!incompleteJobsWereLoaded) {
             await fetchInitialEmployerIncompleteJobsData();
@@ -107,13 +107,15 @@ const EmployerJobsComponent: FC<EmployerJobsComponentProps> = () => {
                         <button className={"blue-button"} onClick={navigateToJobPostingPage}>Post a job</button>
                     </div>
                     <div className={"flex-row mb1rem"}>
-                        <button className={`${jobPageType == JobCreationStates.completeJob ? "blue-button" : "light-button-with-margin mr0"} left-connected-button`}
-                                onClick={handleJobPageType}
+                        <button
+                            className={`${jobPageType == JobCreationStates.completeJob ? "blue-button" : "light-button-with-margin mr0"} left-connected-button`}
+                            onClick={handleJobPageType}
                         >
                             Open jobs
                         </button>
-                        <button className={`${jobPageType == JobCreationStates.incompleteJob ? "blue-button" : "light-button-with-margin mr0"} right-connected-button`}
-                                onClick={handleIncompleteJobPageType}
+                        <button
+                            className={`${jobPageType == JobCreationStates.incompleteJob ? "blue-button" : "light-button-with-margin mr0"} right-connected-button`}
+                            onClick={handleIncompleteJobPageType}
                         >
                             Incomplete Jobs
                         </button>

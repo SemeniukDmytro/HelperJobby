@@ -139,14 +139,14 @@ const JobSeekerSideRoutes: FC<JobSeekerSideRoutesProps> = () => (
                 <Route path={"applied"} element={<JobAppliesPage/>}/>
                 <Route path={"interviews"} element={<InterviewsPage/>}/>
             </Route>
-            
+
             <Route element={<JobSeekerMessagingWrap/>} path={"/conversations"}>
                 <Route index element={<JobSeekerMessagingPage/>}/>
             </Route>
 
             <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
 
-            <Route element={<JobApplyJobInfoProvider/>}> 
+            <Route element={<JobApplyJobInfoProvider/>}>
                 <Route path={"/job-apply/:jobId"} element={<JobApplyWrap/>}>
                     <Route path={"contact-info"} element={<JobApplyContactInfoPage/>}/>
                     <Route path={"resume"} element={<JobApplyResumeSelectPage/>}/>
@@ -161,22 +161,22 @@ const JobSeekerSideRoutes: FC<JobSeekerSideRoutesProps> = () => (
                     <Route path={"experience"} element={<ApplyResumeExperiencePage/>}/>
                     <Route path={"experience/add"} element={<ApplyResumeAddExperiencePage/>}/>
                     <Route path={"experience/:id"} element={<ApplyResumeEditExperiencePage/>}/>
-                    
+
                     <Route path={"skills"} element={<ApplyResumeSkillsPage/>}/>
-                    
+
                     <Route path={"success"} element={<ApplyResumeSuccessPage/>}/>
-                    
+
                 </Route>
             </Route>
-            
+
         </Route>
-        
+
         {/*Public routes*/}
         <Route path="/home" element={<HomePage/>}/>
         <Route path={"/auth-page"} element={<AuthPage/>}/>
         <Route path={"/jobs"} element={<SearchJobResultsPage/>}/>
         <Route path={"/viewjob/:jid"} element={<JobPage/>}/>
-        
+
         <Route path={"*"} element={<NotFoundPage/>}/>
     </Routes>
 );

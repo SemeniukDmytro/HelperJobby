@@ -1,7 +1,7 @@
 export function IsValidEmail(email: string): boolean {
     const atSignIndex: number = email.lastIndexOf('@');
     if (!(atSignIndex > 0 && atSignIndex < email.lastIndexOf('.') && atSignIndex === email.indexOf('@')
-        && email.length - atSignIndex > 2)) {
+        && email.length - atSignIndex > 2) || email.length > 50) {
         return false;
     }
 

@@ -9,7 +9,8 @@
   flex-grow: 1;
   transition: background-color 0.2s;
   cursor: pointer;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$light-blue;
   }
 }

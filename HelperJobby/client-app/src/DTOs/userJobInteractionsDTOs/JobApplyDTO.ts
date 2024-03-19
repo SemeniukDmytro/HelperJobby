@@ -8,8 +8,8 @@ export interface JobApplyDTO {
     jobSeekerId: number;
     job: JobDTO;
     jobSeeker: JobSeekerDTO;
-    resume : ResumeDTO;
+    resume: ResumeDTO;
     dateApplied: string;
-    jobApplyStatus : JobApplyStatuses;
-    isReviewed : boolean;
+    jobApplyStatus: JobApplyStatuses;
+    isReviewed: boolean;
 }

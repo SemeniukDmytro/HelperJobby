@@ -16,8 +16,8 @@ namespace HelperJobby.Controllers;
 public class EmployerController : ExtendedBaseController
 {
     private readonly IEmployerCommandRepository _commandRepository;
-    private readonly IEmployerQueryRepository _queryRepository;
     private readonly IEmployerService _employerService;
+    private readonly IEmployerQueryRepository _queryRepository;
 
     public EmployerController(IMapper mapper, IEmployerCommandRepository commandRepository,
         IEmployerService employerService, IEmployerQueryRepository queryRepository) : base(mapper)

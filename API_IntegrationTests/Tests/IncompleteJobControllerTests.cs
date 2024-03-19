@@ -64,12 +64,12 @@ public class IncompleteJobControllerTests : IntegrationTest
             Language = "",
             Location = "",
             JobType = new List<JobTypes>(),
-            Salary = new CreateUpdateSalaryDTO()
+            Salary = new CreateUpdateSalaryDTO
             {
                 MinimalAmount = 0,
                 SalaryRate = SalaryRates.PerYear,
                 ShowPayByOption = ShowPayByOptions.StartingAmount,
-                MeetsMinSalaryRequirement = true,
+                MeetsMinSalaryRequirement = true
             },
             Schedule = new List<Schedules>(),
             Benefits = new List<EmployeeBenefits>(),

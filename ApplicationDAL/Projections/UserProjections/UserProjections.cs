@@ -8,22 +8,23 @@ public static class UserProjections
     public static Expression<Func<User, User>> UserWithRefreshTokenAndAccountIds()
     {
         return u =>
-            new User()
+            new User
             {
                 Id = u.Id,
                 AccountType = u.AccountType,
                 PasswordHash = u.PasswordHash,
                 Email = u.Email,
-                JobSeeker = new JobSeeker()
+                JobSeeker = new JobSeeker
                 {
                     Id = u.JobSeeker.Id
                 },
-                Employer = u.Employer != null ? new Employer()
-                {
-                    Id = u.Employer.Id
-                } : null,
+                Employer = u.Employer != null
+                    ? new Employer
+                    {
+                        Id = u.Employer.Id
+                    }
+                    : null,
                 RefreshToken = u.RefreshToken
-                
             };
     }
 }

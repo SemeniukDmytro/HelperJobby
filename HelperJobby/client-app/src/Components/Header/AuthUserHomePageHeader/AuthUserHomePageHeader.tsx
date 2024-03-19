@@ -48,7 +48,7 @@ const AuthUserHomePageHeader: FC<AuthUserHomePageHeaderProps> = () => {
     function navigateToSavedJobsPage() {
         navigate("/saved")
     }
-    
+
     function navigateToConversations() {
         navigate(JobSeekerPagesPaths.CONVERSATIONS)
     }

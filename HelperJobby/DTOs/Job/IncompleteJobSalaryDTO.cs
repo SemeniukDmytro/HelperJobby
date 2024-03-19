@@ -12,5 +12,4 @@ public class IncompleteJobSalaryDTO
     public int IncompleteJobId { get; set; }
     public bool MeetsMinSalaryRequirement { get; set; }
     public IncompleteJobDTO IncompleteJob { get; set; }
-
 }

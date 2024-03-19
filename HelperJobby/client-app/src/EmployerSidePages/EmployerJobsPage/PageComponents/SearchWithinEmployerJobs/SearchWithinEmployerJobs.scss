@@ -40,12 +40,13 @@
   border: 1px solid white;
   transition: border 0.2s;
   cursor: pointer;
-  &:hover{
+
+  &:hover {
     border: 1px solid global-variables.$dark-blue;
   }
 }
 
-.filters-dropdown-with-filters{
+.filters-dropdown-with-filters {
   grid-template-columns: 2rem 1fr 2rem 2rem;
 }
 
@@ -55,7 +56,7 @@
   flex-basis: 40%;
 }
 
-.emp-job-search-filters-form{
+.emp-job-search-filters-form {
   position: absolute;
   z-index: 2;
   flex-grow: 1;

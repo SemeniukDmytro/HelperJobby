@@ -31,5 +31,4 @@ public class JobSeeker
 
     public List<SavedJob> SavedJobs { get; set; }
     public List<Conversation> Conversations { get; set; }
-
 }

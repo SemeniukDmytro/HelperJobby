@@ -218,7 +218,11 @@ const ShortJobDescriptionBlock: FC<ShortJobDescriptionBlockProps> = (props: Shor
                     <div className={"short-description-content"}>
                         <ul className={"short-description-list"}>
                             {shortDescription.map((item, index) => (
-                                <li key={index}>{DOMPurify.sanitize(item)}</li>
+                                <li key={index} dangerouslySetInnerHTML={{
+                                    __html: DOMPurify.sanitize(item || "", {
+                                        ALLOWED_TAGS: ['b', 'i', 'ul', 'li'],
+                                    })
+                                }}></li>
                             ))}
                         </ul>
                     </div>

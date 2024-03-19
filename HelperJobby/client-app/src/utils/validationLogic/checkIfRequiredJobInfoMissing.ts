@@ -3,8 +3,8 @@ import {JobDTO} from "../../DTOs/jobRelatetedDTOs/JobDTO";
 import {IncompleteJobDTO} from "../../DTOs/jobRelatetedDTOs/IncompleteJobDTO";
 import {Dispatch, SetStateAction} from "react";
 
-export function checkIfRequiredJobInfoMissing(incompleteJob : JobDTO | IncompleteJobDTO,
-                                       setMissingJobProperties : Dispatch<SetStateAction<JobProperties[]>>) {
+export function checkIfRequiredJobInfoMissing(incompleteJob: JobDTO | IncompleteJobDTO,
+                                              setMissingJobProperties: Dispatch<SetStateAction<JobProperties[]>>) {
     let tempMissingProperties: JobProperties[] = [];
     let requiredInfoIsMissing = false;
     if (!incompleteJob?.jobTitle) {

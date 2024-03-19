@@ -1,4 +1,4 @@
-    import {createContext, ReactNode, useState} from "react";
+import {createContext, ReactNode, useState} from "react";
 import {AccountTypeContextProps} from "../contextTypes/AccountTypeContextProps";
 
 const AccountTypeContext = createContext<AccountTypeContextProps>({

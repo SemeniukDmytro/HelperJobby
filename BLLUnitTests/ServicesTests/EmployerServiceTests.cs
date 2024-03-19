@@ -13,8 +13,8 @@ public class EmployerServiceTests
     private readonly Mock<IEmployerQueryRepository> _employerQueryRepositoryMock = new();
     private readonly EmployerService _employerService;
     private readonly Mock<IOrganizationQueryRepository> _organizationQueryRepositoryMock = new();
-    private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<IUserIdGetter> _userIdGetter = new();
+    private readonly Mock<IUserService> _userServiceMock = new();
 
     public EmployerServiceTests()
     {

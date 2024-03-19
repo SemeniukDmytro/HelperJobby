@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import './ApplyResumeExperienceComponent.scss';
 import ApplyResumePagesHeader from "../../../SharedComponents/ApplyResumePagesHeader/ApplyResumePagesHeader";
 import WorkExperienceComponent
     from "../../../../BuildResumePages/WorkExperiencePage/PageComponents/WorkExperienceComponent/WorkExperienceComponent";
 
-interface ApplyResumeExperienceComponentProps {}
+interface ApplyResumeExperienceComponentProps {
+}
 
 const ApplyResumeExperienceComponent: FC<ApplyResumeExperienceComponentProps> = () => (
     <ApplyResumePagesHeader>

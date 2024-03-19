@@ -5,13 +5,13 @@ import ChangeJobSalaryDialogContent
     from "../../../SharedComponents/ChangeJobSalaryDialogContent/ChangeJobSalaryDialogContent";
 
 interface EditJobSalaryDialogProps {
-    showDialog : boolean;
-    setShowDialog : Dispatch<SetStateAction<boolean>>;
+    showDialog: boolean;
+    setShowDialog: Dispatch<SetStateAction<boolean>>;
 }
 
 const EditJobSalaryDialog: FC<EditJobSalaryDialogProps> = ({
-    showDialog,
-    setShowDialog
+                                                               showDialog,
+                                                               setShowDialog
                                                            }) => {
     const [requestInProgress, setRequestInProgress] = useState(false);
     const [editFunction, setEditFunction] = useState<() => void>(async () => {
@@ -25,9 +25,9 @@ const EditJobSalaryDialog: FC<EditJobSalaryDialogProps> = ({
             requestInProgress={requestInProgress}
             executeJobEditing={() => editFunction()}>
             <ChangeJobSalaryDialogContent showDialog={showDialog}
-                                            setShowDialog={setShowDialog}
-                                            setRequestInProgress={setRequestInProgress}
-                                            setEditFunction={setEditFunction}/>
+                                          setShowDialog={setShowDialog}
+                                          setRequestInProgress={setRequestInProgress}
+                                          setEditFunction={setEditFunction}/>
         </EditJobPostDialog>
     )
 }

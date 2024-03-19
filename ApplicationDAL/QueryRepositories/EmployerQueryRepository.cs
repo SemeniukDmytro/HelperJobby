@@ -14,10 +14,11 @@ public class EmployerQueryRepository : IEmployerQueryRepository
     {
         _applicationContext = applicationContext;
     }
-    
+
     public async Task<Employer> GetEmployerById(int employerId)
     {
-        return  await GetEmployerAccount(employerId);;
+        return await GetEmployerAccount(employerId);
+        ;
     }
 
     public async Task<Employer> GetEmployerByIdWithOrganization(int employerId)

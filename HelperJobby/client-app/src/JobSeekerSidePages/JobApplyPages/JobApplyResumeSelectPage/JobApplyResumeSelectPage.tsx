@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import JobApplyResumeSelectComponent
     from "./PageComponents/JobApplyResumeSelectComponent/JobApplyResumeSelectComponent";
 
-interface JobApplyResumeSelectPageProps {}
+interface JobApplyResumeSelectPageProps {
+}
 
 const JobApplyResumeSelectPage: FC<JobApplyResumeSelectPageProps> = () => (
-  <JobApplyResumeSelectComponent/>
+    <JobApplyResumeSelectComponent/>
 );
 
 export default JobApplyResumeSelectPage;

@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import ReviewJobComponent from "./PageComponents/ReviewJobComponent/ReviewJobComponent";
 
-interface ReviewJobPageProps {}
+interface ReviewJobPageProps {
+}
 
 const ReviewJobPage: FC<ReviewJobPageProps> = () => (
-  <ReviewJobComponent/>
+    <ReviewJobComponent/>
 );
 
 export default ReviewJobPage;

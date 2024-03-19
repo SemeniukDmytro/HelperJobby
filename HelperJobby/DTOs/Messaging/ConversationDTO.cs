@@ -1,7 +1,5 @@
-﻿using ApplicationDomain.Models;
-using HelperJobby.DTOs.Account;
+﻿using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Job;
-using HelperJobby.DTOs.UserJobInteractions;
 
 namespace HelperJobby.DTOs.Messaging;
 
@@ -18,5 +16,4 @@ public class ConversationDTO
     public EmployerDTO Employer { get; set; }
     public int JobId { get; set; }
     public JobDTO Job { get; set; }
-   
 }

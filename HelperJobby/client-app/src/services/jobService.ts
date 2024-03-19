@@ -21,7 +21,7 @@ export class JobService {
 
     public async getEmployerJobTitles(employerId: number): Promise<JobDTO[]> {
         return this.customFetchService.get<JobDTO[]>(`${this.baseURI}/employer-job-titles/${employerId}`);
-    } 
+    }
 
     public async getJobsByOrganizationId(organizationId: number): Promise<JobDTO[]> {
         return this.customFetchService.get<JobDTO[]>(`${this.baseURI}/organization-jobs/${organizationId}`);
@@ -38,16 +38,16 @@ export class JobService {
     public async putJob(jobId: number, updatedJob: UpdatedJobDTO): Promise<JobDTO> {
         return await this.customFetchService.put<JobDTO>(`${this.baseURI}/${jobId}`, updatedJob);
     }
-    
-    public async putJobSalary(jobId : number, updatedSalary : CreateUpdateSalaryDTO | null) : Promise<JobDTO>{
+
+    public async putJobSalary(jobId: number, updatedSalary: CreateUpdateSalaryDTO | null): Promise<JobDTO> {
         return await this.customFetchService.put<JobDTO>(`${this.baseURI}/${jobId}/salary-update`, updatedSalary);
     }
 
     public async deleteJob(jobId: number): Promise<void> {
         return await this.customFetchService.delete<void>(`${this.baseURI}/${jobId}`);
     }
-    
-    public async deleteJobRange(jobIds : number[]) : Promise<void>{
+
+    public async deleteJobRange(jobIds: number[]): Promise<void> {
         return await this.customFetchService.delete<void>(`${this.baseURI}/delete-job-range`, jobIds);
     }
 }

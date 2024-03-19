@@ -10,15 +10,16 @@ namespace BLLUnitTests.ServicesTests;
 
 public class WorkExperienceServiceTests
 {
-    private readonly IWorkExperienceService _workExperienceService;
     private readonly Mock<IEnqueuingTaskHelper> _enqueuingTaskHelperMock = new();
     private readonly Mock<IJobSeekerService> _jobSeekerServiceMock = new();
     private readonly Mock<IResumeQueryRepository> _resumeQueryRepositoryMock = new();
+    private readonly IWorkExperienceService _workExperienceService;
 
 
     public WorkExperienceServiceTests()
     {
-        _workExperienceService = new WorkExperienceService(_enqueuingTaskHelperMock.Object, _resumeQueryRepositoryMock.Object,
+        _workExperienceService = new WorkExperienceService(_enqueuingTaskHelperMock.Object,
+            _resumeQueryRepositoryMock.Object,
             _jobSeekerServiceMock.Object);
     }
 
@@ -124,6 +125,7 @@ public class WorkExperienceServiceTests
         _resumeQueryRepositoryMock.Setup(r => r.GetResumeByJobSeekerId(jobSeekerId))
             .ReturnsAsync(resume);
         //Act % Assert
-        await Assert.ThrowsAsync<WorkExperienceNotFoundException>(async () => await _workExperienceService.DeleteWorkExperience(workExperienceId));
+        await Assert.ThrowsAsync<WorkExperienceNotFoundException>(async () =>
+            await _workExperienceService.DeleteWorkExperience(workExperienceId));
     }
 }

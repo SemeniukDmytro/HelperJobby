@@ -4,12 +4,12 @@ import {WorkExperienceDTO} from "../../../../../DTOs/resumeRelatedDTOs/WorkExper
 import {convertNumericMonthToStringValue} from "../../../../../utils/convertLogic/convertNumericMonthToStringValue";
 
 interface ReviewWorkExperienceProps {
-    workExperience : WorkExperienceDTO;
+    workExperience: WorkExperienceDTO;
 }
 
 const ReviewResumeWorkExperience: FC<ReviewWorkExperienceProps> = ({
-    workExperience 
-                                                             }) => {
+                                                                       workExperience
+                                                                   }) => {
     const [fromMonth, setFromMonth] = useState("");
     const [fromYear, setFromYear] = useState("");
     const [toMonth, setToMonth] = useState("");
@@ -28,8 +28,8 @@ const ReviewResumeWorkExperience: FC<ReviewWorkExperienceProps> = ({
             setToYear(convertedTo[0]);
         }
     }, []);
-    
-    
+
+
     return (
         <div className={"mt1rem"}>
             <div className={"field-label"}>

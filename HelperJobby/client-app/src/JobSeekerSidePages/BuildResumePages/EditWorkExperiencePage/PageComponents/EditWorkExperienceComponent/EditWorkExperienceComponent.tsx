@@ -23,8 +23,7 @@ const EditWorkExperienceComponent: FC<EditWorkExperienceComponentProps> = () => 
         let parentPathFirstPart = getResumeInfoPageParentPath(currentPath);
         if (parentPathFirstPart == "/build") {
             parentPathFirstPart = "/build/experience"
-        }
-        else if (parentPathFirstPart == "/apply-resume"){
+        } else if (parentPathFirstPart == "/apply-resume") {
             parentPathFirstPart = "/apply-resume/experience"
         }
         setParentPagePath(parentPathFirstPart);

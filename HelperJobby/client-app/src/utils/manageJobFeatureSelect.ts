@@ -8,11 +8,11 @@ import {Dispatch, SetStateAction} from "react";
 import Schedules from "../enums/modelDataEnums/Schedules";
 import EmployeeBenefits from "../enums/modelDataEnums/EmployeeBenefits";
 
-export function addJobType(jobTypeString: string, selectedJobTypes : JobTypes[], setSelectedJobTypes : Dispatch<SetStateAction<JobTypes[]>>,
-                    setIsInvalidForm : Dispatch<SetStateAction<boolean>>) {
+export function addJobType(jobTypeString: string, selectedJobTypes: JobTypes[], setSelectedJobTypes: Dispatch<SetStateAction<JobTypes[]>>,
+                           setIsInvalidForm: Dispatch<SetStateAction<boolean>>) {
     const jobType = jobTypeStringToEnumMap(jobTypeString);
     if (jobType && !selectedJobTypes.includes(jobType)) {
-        setSelectedJobTypes(prevSelectedJobType  => [...prevSelectedJobType, jobType]);
+        setSelectedJobTypes(prevSelectedJobType => [...prevSelectedJobType, jobType]);
         setIsInvalidForm(false)
     } else if (jobType) {
         setSelectedJobTypes(prevSelectedJobType =>
@@ -21,7 +21,7 @@ export function addJobType(jobTypeString: string, selectedJobTypes : JobTypes[],
     }
 }
 
-export function addSchedule(scheduleString: string, selectedSchedule : Schedules[], setSelectedSchedule : Dispatch<SetStateAction<Schedules[]>>) {
+export function addSchedule(scheduleString: string, selectedSchedule: Schedules[], setSelectedSchedule: Dispatch<SetStateAction<Schedules[]>>) {
     const schedule = scheduleStringToEnumMap(scheduleString);
     if (schedule && !selectedSchedule.includes(schedule)) {
         setSelectedSchedule(prevSelectedSchedule => [...prevSelectedSchedule, schedule]);
@@ -32,7 +32,7 @@ export function addSchedule(scheduleString: string, selectedSchedule : Schedules
     }
 }
 
-export function addBenefit(benefitString: string, selectedBenefits : EmployeeBenefits[], setSelectedBenefits : Dispatch<SetStateAction<EmployeeBenefits[]>>) {
+export function addBenefit(benefitString: string, selectedBenefits: EmployeeBenefits[], setSelectedBenefits: Dispatch<SetStateAction<EmployeeBenefits[]>>) {
     const benefit = benefitStringToEnumMap(benefitString);
     if (benefit && !selectedBenefits.includes(benefit)) {
         setSelectedBenefits(prevSelectedBenefits => [...prevSelectedBenefits, benefit]);

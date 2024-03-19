@@ -54,7 +54,7 @@ const ChangeJobTypeDialogContent: FC<ChangeJobTypeDialogContentProps> = ({
         }
         try {
             setRequestInProgress(true);
-            if (jobCreationState == JobCreationStates.incompleteJob){
+            if (jobCreationState == JobCreationStates.incompleteJob) {
                 const job = currentJob as IncompleteJobDTO;
                 const updatedIncompleteJobDTO: UpdatedIncompleteJobDTO = {
                     ...job,
@@ -62,17 +62,16 @@ const ChangeJobTypeDialogContent: FC<ChangeJobTypeDialogContentProps> = ({
                 }
                 const retrievedJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJobDTO);
                 setCurrentJob(retrievedJob);
-            }
-            else {
+            } else {
                 const job = currentJob as JobDTO;
                 const updatedJob: UpdatedJobDTO = {
                     ...job,
-                    jobType : selectedJobTypes
+                    jobType: selectedJobTypes
                 };
                 const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
                 setCurrentJob(retrievedJob);
             }
-            
+
             setShowDialog && setShowDialog(false);
         } catch (err) {
             logErrorInfo(err)

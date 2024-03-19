@@ -2,10 +2,7 @@ import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from '
 import './JobCandidateInfo.scss';
 import {JobDTO} from "../../../../DTOs/jobRelatetedDTOs/JobDTO";
 import {JobApplyDTO} from "../../../../DTOs/userJobInteractionsDTOs/JobApplyDTO";
-import {
-    getDate_MMM_DD,
-    formatDate
-} from "../../../../utils/convertLogic/formatDate";
+import {formatDate, getDate_MMM_DD} from "../../../../utils/convertLogic/formatDate";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faEllipsisVertical, faQuestion, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {JobApplyStatuses} from "../../../../enums/modelDataEnums/JobApplyStatuses";
@@ -115,7 +112,7 @@ const JobCandidateInfo: FC<JobCandidateInfoProps> = ({job, jobApply, setJob}) =>
                     {(jobApply.jobSeeker.resume?.skills && jobApply.jobSeeker.resume?.skills.length != 0) ?
                         jobApply.jobSeeker.resume.skills.map((skill, index) => (
                             <div
-                                key={index}    
+                                key={index}
                                 className={"candidate-skill-container light-dark-small-text bold-text"}>
                                 {skill.name}
                             </div>

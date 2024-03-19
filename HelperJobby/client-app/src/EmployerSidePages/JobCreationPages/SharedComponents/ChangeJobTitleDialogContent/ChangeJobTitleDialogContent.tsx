@@ -12,10 +12,10 @@ import {UpdatedJobDTO} from "../../../../DTOs/jobRelatetedDTOs/UpdatedJobDTO";
 import useCurrentEmployerJob from "../../../../hooks/contextHooks/useCurrentEmployerJob";
 
 interface ChangeJobTitleDialogContentProps {
-    showDialog : boolean;
-    setShowDialog? : Dispatch<SetStateAction<boolean>>;
-    setRequestInProgress : Dispatch<SetStateAction<boolean>>;
-    setEditFunction : Dispatch<SetStateAction<() => void>>;
+    showDialog: boolean;
+    setShowDialog?: Dispatch<SetStateAction<boolean>>;
+    setRequestInProgress: Dispatch<SetStateAction<boolean>>;
+    setEditFunction: Dispatch<SetStateAction<() => void>>;
 }
 
 const ChangeJobTitleDialogContent: FC<ChangeJobTitleDialogContentProps> = ({
@@ -24,7 +24,7 @@ const ChangeJobTitleDialogContent: FC<ChangeJobTitleDialogContentProps> = ({
                                                                                setEditFunction,
                                                                                setShowDialog
                                                                            }) => {
-    
+
     const {currentJob, setCurrentJob, jobCreationState} = useCurrentEmployerJob();
 
     const [currentJobTitle, setCurrentJobTitle] = useState(currentJob?.jobTitle || "");
@@ -34,7 +34,7 @@ const ChangeJobTitleDialogContent: FC<ChangeJobTitleDialogContentProps> = ({
     const jobService = new JobService();
 
     useEffect(() => {
-        if (showDialog){
+        if (showDialog) {
             setCurrentJobTitle(currentJob?.jobTitle || "")
         }
     }, [showDialog]);
@@ -46,15 +46,15 @@ const ChangeJobTitleDialogContent: FC<ChangeJobTitleDialogContentProps> = ({
 
     async function editJobTitle() {
         setExecuteValidation(true);
-        if (!currentJobTitle) {
+        if (!currentJobTitle || currentJobTitle.length > 100) {
             currentJobTitleRef.current?.focus();
             return;
         }
 
         try {
             setRequestInProgress(true);
-            
-            if (jobCreationState == JobCreationStates.incompleteJob){
+
+            if (jobCreationState == JobCreationStates.incompleteJob) {
                 const job = currentJob as IncompleteJobDTO;
                 const updatedJob: UpdatedIncompleteJobDTO = {
                     ...job,
@@ -62,8 +62,7 @@ const ChangeJobTitleDialogContent: FC<ChangeJobTitleDialogContentProps> = ({
                 };
                 const retrievedJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedJob);
                 setCurrentJob(retrievedJob);
-            }
-            else {
+            } else {
                 const job = currentJob as JobDTO;
                 const updatedJob: UpdatedJobDTO = {
                     ...job,
@@ -72,7 +71,7 @@ const ChangeJobTitleDialogContent: FC<ChangeJobTitleDialogContentProps> = ({
                 const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
                 setCurrentJob(retrievedJob);
             }
-            
+
             setShowDialog && setShowDialog(false);
         } catch (err) {
             logErrorInfo(err)
@@ -80,7 +79,7 @@ const ChangeJobTitleDialogContent: FC<ChangeJobTitleDialogContentProps> = ({
             setRequestInProgress(false);
         }
     }
-    
+
     return (
         <CustomInputField
             fieldLabel={"Job title"}
@@ -90,6 +89,7 @@ const ChangeJobTitleDialogContent: FC<ChangeJobTitleDialogContentProps> = ({
             inputRef={currentJobTitleRef}
             executeValidation={executeValidation}
             setExecuteValidation={setExecuteValidation}
+            maxInputLength={100}
         />
     )
 }

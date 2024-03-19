@@ -11,7 +11,6 @@ import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import NoSearchResults from "../../../../Components/Icons/NoSearchResults";
-import resume from "../../../../Components/Icons/Resume";
 
 interface ResumeSearchResultsProps {
 }

@@ -3,7 +3,8 @@ import './JobApplyWrap.scss';
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 
-interface JobApplyWrapProps {}
+interface JobApplyWrapProps {
+}
 
 const JobApplyWrap: FC<JobApplyWrapProps> = () => {
     const location = useLocation();
@@ -13,17 +14,17 @@ const JobApplyWrap: FC<JobApplyWrapProps> = () => {
         const segments = location.pathname.split('/').filter(Boolean);
         if (segments.length == 2) {
             navigate(`${location.pathname}/contact-info`);
-        } else if (segments.length < 2) {   
+        } else if (segments.length < 2) {
             navigate("/");
         }
     }, [location.pathname]);
-    
+
     return (
         <PageWrapWithHeader>
             <Outlet/>
         </PageWrapWithHeader>
     )
-    
+
 }
 
 export default JobApplyWrap;

@@ -7,20 +7,20 @@ interface JobApplyResumePagesWrapProps {
 }
 
 const JobApplyResumePagesWrap: FC<JobApplyResumePagesWrapProps> = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+    const navigate = useNavigate();
+    const location = useLocation();
 
-  useEffect(() => {
-    if (location.pathname == "/apply-resume"){
-      navigate("/apply-resume/education")
-    }
-  }, []);
+    useEffect(() => {
+        if (location.pathname == "/apply-resume") {
+            navigate("/apply-resume/education")
+        }
+    }, []);
 
-  return(
-    <ResumeContextProvider>
-        <Outlet/>
-    </ResumeContextProvider>
-  )
+    return (
+        <ResumeContextProvider>
+            <Outlet/>
+        </ResumeContextProvider>
+    )
 }
 
 export default JobApplyResumePagesWrap;

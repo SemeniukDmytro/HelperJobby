@@ -10,7 +10,7 @@ public class ConversationProfile : Profile
     {
         CreateMap<ConversationWithLastMessage, Conversation>().AfterMap((src, dest, context) =>
         {
-            dest.Messages = new List<Message>() { src.LastConversationMessage };
+            dest.Messages = new List<Message> { src.LastConversationMessage };
         });
     }
 }

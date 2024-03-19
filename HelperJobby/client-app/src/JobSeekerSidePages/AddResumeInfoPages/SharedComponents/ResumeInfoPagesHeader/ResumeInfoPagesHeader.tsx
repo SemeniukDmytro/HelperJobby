@@ -1,6 +1,5 @@
 import React, {FC, ReactNode, useEffect, useState} from 'react';
 import './ResumeInfoPagesHeader.scss';
-import PageWrapWithHeader from "../../../../Components/Header/PageWrapWithHeader/PageWrapWithHeader";
 import NavigateBackHeader from "../../../../Components/NavigateBackHeader/NavigateBackHeader";
 import {useNavigate} from "react-router-dom";
 

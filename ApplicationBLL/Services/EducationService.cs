@@ -58,9 +58,7 @@ public class EducationService : IEducationService
 
         if (resume.Educations.Count <= 1 && resume.WorkExperiences.Count == 0
                                          && resume.Skills.Count == 0)
-        {
             isInvalidResume = true;
-        }
 
         educationEntity.Resume = resume;
 

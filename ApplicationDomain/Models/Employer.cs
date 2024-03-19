@@ -17,9 +17,8 @@ public class Employer
 
     [DefaultValue(false)] public bool HasPostedFirstJob { get; set; }
 
-    [Required]
-    [DefaultValue(false)]
-    public bool IsOrganizationOwner { get; set; }
+    [Required] [DefaultValue(false)] public bool IsOrganizationOwner { get; set; }
+
     [ForeignKey("User")] public int UserId { get; set; }
 
     [Required] public User User { get; set; }
@@ -33,6 +32,6 @@ public class Employer
     public List<Job> Jobs { get; set; }
 
     public List<IncompleteJob> IncompleteJobs { get; set; }
-    
+
     public List<Conversation> Conversations { get; set; }
 }

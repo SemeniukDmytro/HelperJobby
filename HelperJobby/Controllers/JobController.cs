@@ -15,8 +15,8 @@ namespace HelperJobby.Controllers;
 [Authorize]
 public class JobController : ExtendedBaseController
 {
-    private readonly IIncompleteJobQueryRepository _incompleteJobQueryRepository;
     private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
+    private readonly IIncompleteJobQueryRepository _incompleteJobQueryRepository;
     private readonly IJobCommandRepository _jobCommandRepository;
     private readonly IJobQueryRepository _jobQueryRepository;
     private readonly IJobService _jobService;
@@ -32,21 +32,21 @@ public class JobController : ExtendedBaseController
         _incompleteJobQueryRepository = incompleteJobQueryRepository;
         _enqueuingTaskHelper = enqueuingTaskHelper;
     }
-    
+
     [HttpGet("{jobId}")]
     [AllowAnonymous]
     public async Task<JobDTO> GetJobForJobSeekersById(int jobId)
     {
         return _mapper.Map<JobDTO>(await _jobQueryRepository.GetJobByIdForJobSeekers(jobId));
     }
-    
+
     [HttpGet("employer-job/{jobId}")]
     public async Task<JobDTO> GetJobForJobEmployerById(int jobId)
     {
         var job = await _jobService.GetJobForEmployerById(jobId);
         return _mapper.Map<JobDTO>(job);
     }
-    
+
     [HttpGet("employer-jobs/{employerId}")]
     public async Task<IEnumerable<JobDTO>> GetJobsByEmployerId(int employerId)
     {
@@ -95,7 +95,7 @@ public class JobController : ExtendedBaseController
 
         return _mapper.Map<JobDTO>(job);
     }
-    
+
     [HttpPut("{jobId}/salary-update")]
     public async Task<JobDTO> PutJobSalary(int jobId,
         [FromBody] CreateUpdateSalaryDTO? updateSalaryDTO = null)
@@ -114,7 +114,7 @@ public class JobController : ExtendedBaseController
         var job = await _jobService.DeleteJob(jobId);
         await _jobCommandRepository.DeleteJob(job);
     }
-    
+
     [HttpDelete("delete-job-range")]
     public async Task DeleteJobByIds([FromBody] List<int> jobIds)
     {

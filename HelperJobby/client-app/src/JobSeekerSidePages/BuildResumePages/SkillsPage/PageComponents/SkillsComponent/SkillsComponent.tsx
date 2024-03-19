@@ -44,6 +44,9 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
     }, [skills]);
 
     function addSkill() {
+        if (currentSkill.length > 100) {
+            return;
+        }
         const skillToAdd: CreateSkillDTO = {
             name: currentSkill
         }
@@ -62,7 +65,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
 
     async function customSaveFunc() {
         let nextPagePath = "/my-profile";
-        if (location.pathname.includes("/apply-resume") && job){
+        if (location.pathname.includes("/apply-resume") && job) {
             nextPagePath = `job-apply/${job.id}/resume`
         }
         await handleSkillsSaving(nextPagePath)
@@ -70,7 +73,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
 
     async function saveSkills() {
         let nextPagePath = "/build/preview";
-        if (location.pathname.includes("/apply-resume") && job){
+        if (location.pathname.includes("/apply-resume") && job) {
             nextPagePath = `/apply-resume/success`
         }
         await handleSkillsSaving(nextPagePath);
@@ -155,6 +158,7 @@ const SkillsComponent: FC<SkillsComponentProps> = () => {
                     isRequired={false}
                     inputFieldValue={currentSkill}
                     setInputFieldValue={setCurrentSkill}
+                    maxInputLength={100}
                 />
                 <button className={"add-skill-button"} disabled={!currentSkill} onClick={addSkill}>
                     <FontAwesomeIcon className={"svg125rem"} icon={faPlus}/>

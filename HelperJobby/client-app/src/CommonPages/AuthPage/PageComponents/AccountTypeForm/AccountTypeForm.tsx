@@ -35,7 +35,8 @@ const AccountTypeForm: FC<AccountTypeFormProps> = () => {
                                 <span className="form-title type-form-title">Ready for the next step?</span>
                             </div>
                             <div className="passpage-form-subtitle-box type-form-subtitle-subtitle-box">
-                                <span className="form-subtitle type-form-subtitle">Create an account for tools to help you</span>
+                                <span
+                                    className="form-subtitle type-form-subtitle">Create an account for tools to help you</span>
                             </div>
                             <div className={"employer-button-box"}>
                                 <button className={"account-type-button"} onClick={HandleEmployerTypeSelection}>

@@ -10,14 +10,14 @@ public class IncompleteJob
 {
     [ExcludeFromUpdate] public int Id { get; set; }
 
-    [Required] [MaxLength(50)] public string JobTitle { get; set; }
+    [Required] [MaxLength(100)] public string JobTitle { get; set; }
 
     [Required] public int NumberOfOpenings { get; set; }
 
     [Required] [MaxLength(20)] public string Language { get; set; }
     [Required] [MaxLength(50)] public string LocationCountry { get; set; }
     [Required] public JobLocationTypes JobLocationType { get; set; }
-    [Required] [MaxLength(50)] public string Location { get; set; }
+    [Required] [MaxLength(100)] public string Location { get; set; }
 
     public JobTypes? JobTypes { get; set; }
     [ExcludeFromUpdate] public IncompleteJobSalary? Salary { get; set; }

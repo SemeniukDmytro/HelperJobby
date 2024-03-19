@@ -63,7 +63,7 @@ public class JobApplyController : ExtendedBaseController
         jobApply = await _jobApplyCommandRepository.CreateJobApply(jobApply);
         return _mapper.Map<JobApplyDTO>(jobApply);
     }
-    
+
     // PUT api/JobApply/job-seeker/3/job/4
     [HttpPut("job-seeker/{jobSeekerId}/job-apply/{jobId}")]
     public async Task<JobApplyDTO> UpdateJobApply(int jobSeekerId, int jobId, UpdateJobApplyDTO updateJobApplyDTO)

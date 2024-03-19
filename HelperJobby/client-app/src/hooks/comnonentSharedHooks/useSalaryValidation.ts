@@ -4,49 +4,46 @@ import {checkMinimalSalary} from "../../utils/validationLogic/checkMinimalSalary
 
 export const invalidNumberError: string = "This number doesn't look right. Use a valid format (e.g. 50,000.00).";
 export const minimalSalaryIsTooLowError: string = "This wage appears to be below the minimum wage for this location. Update the minimum pay or check the box to confirm that your job is exempt from local minimum wage requirements.";
-export const maximumSalaryIsLowerThanMinimumError: string ="Use a range (low to high), or make another selection for pay.";
+export const maximumSalaryIsLowerThanMinimumError: string = "Use a range (low to high), or make another selection for pay.";
 
 export function useSalaryValidation(
-    setIsInvalidMinSalary : Dispatch<SetStateAction<boolean>>,
+    setIsInvalidMinSalary: Dispatch<SetStateAction<boolean>>,
     setIsInvalidMaxSalary: Dispatch<SetStateAction<boolean>>,
-    setShowMissingSalaryWarning : Dispatch<SetStateAction<boolean>>,
-    setMaxSalaryInputError : Dispatch<SetStateAction<string>>,
-    setMinSalaryInputError : Dispatch<SetStateAction<string>>,
-    minSalaryMeetsLaw : boolean,
-    salaryRate : string,
-    showPayOption : string
-    
-){
-    function validateMinSalaryInput(minSalaryAmountString: string, maxSalaryAmountString : string) {
-        
-        if (!minSalaryAmountString && !maxSalaryAmountString){
+    setShowMissingSalaryWarning: Dispatch<SetStateAction<boolean>>,
+    setMaxSalaryInputError: Dispatch<SetStateAction<string>>,
+    setMinSalaryInputError: Dispatch<SetStateAction<string>>,
+    minSalaryMeetsLaw: boolean,
+    salaryRate: string,
+    showPayOption: string
+) {
+    function validateMinSalaryInput(minSalaryAmountString: string, maxSalaryAmountString: string) {
+
+        if (!minSalaryAmountString && !maxSalaryAmountString) {
             setMinSalaryInputError("");
             setIsInvalidMinSalary(false);
             setMaxSalaryInputError("");
             setIsInvalidMaxSalary(false);
             setShowMissingSalaryWarning(true);
             return;
-        }
-        else {
+        } else {
             setShowMissingSalaryWarning(false);
         }
 
         isValidSalaryValueProvided(minSalaryAmountString);
-        if (showPayOption == "Range"){
+        if (showPayOption == "Range") {
             isValidSalaryRangeProvided(minSalaryAmountString, maxSalaryAmountString)
         }
     }
 
     function validateMaxSalaryInput(minSalaryAmountValue: string, maxSalaryAmountValue: string) {
-        if (!minSalaryAmountValue && !maxSalaryAmountValue){
+        if (!minSalaryAmountValue && !maxSalaryAmountValue) {
             setMinSalaryInputError("");
             setIsInvalidMinSalary(false);
             setMaxSalaryInputError("");
             setIsInvalidMaxSalary(false);
             setShowMissingSalaryWarning(true);
             return;
-        }
-        else {
+        } else {
             setShowMissingSalaryWarning(false);
         }
 
@@ -58,7 +55,7 @@ export function useSalaryValidation(
         isValidSalaryRangeProvided(minSalaryAmountValue, maxSalaryAmountValue)
     }
 
-    function isValidSalaryRangeProvided(minSalaryAmount: string, maxSalaryAmount: string){
+    function isValidSalaryRangeProvided(minSalaryAmount: string, maxSalaryAmount: string) {
         const minSalaryAmountNumber = getValidFloatNumberFromString(minSalaryAmount);
         const maxSalaryAmountNumber = getValidFloatNumberFromString(maxSalaryAmount);
 
@@ -71,7 +68,7 @@ export function useSalaryValidation(
         }
     }
 
-    function isValidSalaryValueProvided(salaryInput : string){
+    function isValidSalaryValueProvided(salaryInput: string) {
         if (!isValidNumber(salaryInput)) {
             setIsInvalidMinSalary(true);
             setMinSalaryInputError(invalidNumberError)
@@ -82,10 +79,9 @@ export function useSalaryValidation(
 
         if (!checkMinimalSalary(minSalaryAmountNumber, salaryRate)) {
             setMinSalaryInputError(minimalSalaryIsTooLowError)
-            if (minSalaryMeetsLaw){
+            if (minSalaryMeetsLaw) {
                 setIsInvalidMinSalary(false);
-            }
-            else {
+            } else {
                 setIsInvalidMinSalary(true);
             }
         } else {
@@ -93,6 +89,6 @@ export function useSalaryValidation(
             setIsInvalidMinSalary(false);
         }
     }
-    
+
     return {validateMinSalaryInput, validateMaxSalaryInput, isValidSalaryValueProvided}
 }

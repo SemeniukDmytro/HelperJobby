@@ -38,8 +38,8 @@ public class ApplicationContext : DbContext
     public DbSet<IncompleteJobSalary> IncompleteJobSalaries { get; set; }
     public DbSet<Conversation> Conversations { get; set; }
     public DbSet<Message> Messages { get; set; }
-    
-    
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
@@ -102,13 +102,13 @@ public class ApplicationContext : DbContext
             .HasOne(s => s.Job)
             .WithOne(j => j.Salary)
             .HasForeignKey<JobSalary>(s => s.JobId);
-            
+
         modelBuilder.Entity<IncompleteJobSalary>()
             .HasOne(s => s.IncompleteJob)
             .WithOne(j => j.Salary)
             .HasForeignKey<IncompleteJobSalary>(s => s.IncompleteJobId);
 
-        
+
         modelBuilder.Entity<Resume>()
             .HasMany(r => r.Educations)
             .WithOne(ed => ed.Resume)
@@ -200,8 +200,8 @@ public class ApplicationContext : DbContext
             .HasOne(rs => rs.User)
             .WithMany(u => u.RecentUserSearches)
             .HasForeignKey(rs => rs.UserId);
-        
-        
+
+
         modelBuilder.Entity<Message>()
             .HasOne(m => m.Conversation)
             .WithMany(c => c.Messages)
@@ -244,6 +244,5 @@ public class ApplicationContext : DbContext
         modelBuilder.Entity<Conversation>()
             .HasIndex(c => new { c.EmployerId, c.JobSeekerId, c.JobId })
             .IsUnique();
-
     }
 }

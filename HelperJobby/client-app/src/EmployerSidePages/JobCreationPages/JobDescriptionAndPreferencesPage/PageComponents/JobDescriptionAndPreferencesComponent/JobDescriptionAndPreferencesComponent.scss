@@ -30,21 +30,25 @@
   transition: 0.2s background-color;
   padding: 0.75rem 1rem;
   cursor: pointer;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$neutral-color-400;
   }
-  &:active{
+
+  &:active {
     box-shadow: global-variables.$button-inner-shadow;
     background-color: global-variables.$neutral-color-500;
   }
 }
 
-.text-styling-option-selected{
+.text-styling-option-selected {
   background-color: global-variables.$neutral-color-700;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$neutral-color-800;
   }
-  .dark-default-text{
+
+  .dark-default-text {
     color: white;
   }
 }

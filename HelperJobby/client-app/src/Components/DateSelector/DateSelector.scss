@@ -5,15 +5,17 @@
   position: relative;
   border-radius: 0.5rem;
   border: 1px solid global-variables.$neutral-color-800;
-  width: 49%; 
+  width: 49%;
   transition: border 0.2s;
-  &:hover{
+
+  &:hover {
     border-color: global-variables.$dark-blue;
   }
 
   &:focus-within {
     border-color: global-variables.$dark-blue;
-    .border-lining{
+
+    .border-lining {
       border-radius: 0.5rem;
       border-bottom: 4px solid global-variables.$dark-blue;
     }

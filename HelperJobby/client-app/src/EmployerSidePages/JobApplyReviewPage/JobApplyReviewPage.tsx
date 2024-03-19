@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import JobApplyReviewComponent from "./PageComponents/JobApplyReviewComponent/JobApplyReviewComponent";
 
-interface JobApplyReviewPageProps {}
+interface JobApplyReviewPageProps {
+}
 
 const JobApplyReviewPage: FC<JobApplyReviewPageProps> = () => (
     <JobApplyReviewComponent/>

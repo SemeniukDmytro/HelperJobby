@@ -6,7 +6,6 @@ import JobApplyComponent from "../JobApplyComponent/JobApplyComponent";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {UserJobInteractionsTypes} from "../../../../../enums/utilityEnums/UserJobInteractionsTypes";
 import {useJobSeekerJobInteractions} from "../../../../../hooks/contextHooks/useJobSeekerJobInteractions";
-import NoSavedJobs from "../../../../../Components/Icons/NoSavedJobs";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";

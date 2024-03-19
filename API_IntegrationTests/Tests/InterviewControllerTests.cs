@@ -1,7 +1,6 @@
 using System.Net;
 using API_IntegrationTests.Fixtures;
 using API_IntegrationTests.TestHelpers;
-using ApplicationDomain.Enums;
 using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.UserJobInteractions;
@@ -37,7 +36,7 @@ public class InterviewControllerTests : IntegrationTest
         //Assert
         Assert.Equal(HttpStatusCode.OK, getJobSeekerInterviewsResponse.StatusCode);
         var jobDTO =
-            (await getJobSeekerInterviewsResponse.Content.ReadAsAsync<JobDTO>());
+            await getJobSeekerInterviewsResponse.Content.ReadAsAsync<JobDTO>();
         Assert.Equal(jobSeekersAmount, jobDTO.Interviews.Count);
         Assert.Equal(createdJob.JobTitle, jobDTO.JobTitle);
         Assert.Equal(firstInterview.JobSeekerId, jobDTO.Interviews[0].JobSeekerId);

@@ -43,7 +43,7 @@ public class ConversationQueryRepository : IConversationQueryRepository
         var conversations = await _applicationContext.Conversations
             .Where(c => c.JobId == jobId && c.EmployerId == employerId)
             .Select(ConversationProjections.ShortConversationInfo()).ToListAsync();
-        
+
         return _mapper.Map<IEnumerable<Conversation>>(conversations);
     }
 
@@ -54,7 +54,7 @@ public class ConversationQueryRepository : IConversationQueryRepository
             .Select(ConversationProjections.ShortConversationInfo())
             .OrderByDescending(c => c.LastModified)
             .ToListAsync();
-        return _mapper.Map<List<Conversation>>(conversations);    
+        return _mapper.Map<List<Conversation>>(conversations);
     }
 
     public async Task<IEnumerable<Conversation>> GetConversationsByJobSeekerId(int jobSeekerId)
@@ -65,7 +65,8 @@ public class ConversationQueryRepository : IConversationQueryRepository
             .OrderByDescending(c => c.LastModified)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<Conversation>>(conversations);    }
+        return _mapper.Map<IEnumerable<Conversation>>(conversations);
+    }
 
     public async Task<Conversation?> GetConversationWithAllInfo(int conversationId)
     {

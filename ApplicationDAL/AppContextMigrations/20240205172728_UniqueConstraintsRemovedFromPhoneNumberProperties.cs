@@ -1,28 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#nullable disable
 
-#nullable disable
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ApplicationDAL.AppContextMigrations
+namespace ApplicationDAL.AppContextMigrations;
+
+/// <inheritdoc />
+public partial class UniqueConstraintsRemovedFromPhoneNumberProperties : Migration
 {
     /// <inheritdoc />
-    public partial class UniqueConstraintsRemovedFromPhoneNumberProperties : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropIndex(
-                name: "IX_JobSeekers_PhoneNumber",
-                table: "JobSeekers");
-        }
+        migrationBuilder.DropIndex(
+            "IX_JobSeekers_PhoneNumber",
+            "JobSeekers");
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.CreateIndex(
-                name: "IX_JobSeekers_PhoneNumber",
-                table: "JobSeekers",
-                column: "PhoneNumber",
-                unique: true);
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.CreateIndex(
+            "IX_JobSeekers_PhoneNumber",
+            "JobSeekers",
+            "PhoneNumber",
+            unique: true);
     }
 }

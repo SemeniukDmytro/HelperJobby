@@ -41,14 +41,14 @@ export const scheduleStringToEnumMap = (scheduleStringValue: string): Schedules 
     }
 };
 
-export const benefitsEnumToStringMap = (benefitsEnumValue: EmployeeBenefits) : string => {
+export const benefitsEnumToStringMap = (benefitsEnumValue: EmployeeBenefits): string => {
     const benefitsStringMapObj = EmployeeBenefitsMapData.find((bs) => bs.enumValue == benefitsEnumValue)
     if (benefitsStringMapObj) {
         return benefitsStringMapObj.stringValue;
     } else return EmployeeBenefits[benefitsEnumValue];
 };
 
-export const benefitStringToEnumMap = (benefitsValue: string) : EmployeeBenefits | undefined => {
+export const benefitStringToEnumMap = (benefitsValue: string): EmployeeBenefits | undefined => {
     const benefitsStringMapObj = EmployeeBenefitsMapData.find((bs) => bs.stringValue == benefitsValue)
     if (benefitsStringMapObj) {
         return benefitsStringMapObj.enumValue;

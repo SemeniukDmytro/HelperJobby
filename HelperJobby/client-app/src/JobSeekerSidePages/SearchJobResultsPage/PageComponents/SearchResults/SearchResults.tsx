@@ -297,16 +297,16 @@ const SearchResults: FC<SearchResultsProps> = () => {
                             <NoSearchResults/>
                             <div className={"no-search-explanation-message flex-column"}>
                                 <span className={"dark-default-text mb1rem"}>
-                                    The search <b>{searchParams.get("q")!} {searchParams.get("location") ? 
+                                    The search <b>{searchParams.get("q")!} {searchParams.get("location") ?
                                     `in ${searchParams.get("location")}` : ""}</b> did not match any jobs.
                                 </span>
                                 <b className={"dark-default-text"}>Search suggestions:</b>
-                                <ul >
+                                <ul>
                                     <li className={"dark-default-text"}>
                                         Try more general keywords
                                     </li>
                                     <li className={"dark-default-text"}>
-                                        Check your spelling 
+                                        Check your spelling
                                     </li>
                                     <li className={"dark-default-text"}>
                                         Replace abbreviations with the entire word

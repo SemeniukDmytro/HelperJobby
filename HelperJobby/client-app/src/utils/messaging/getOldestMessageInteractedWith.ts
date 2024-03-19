@@ -1,6 +1,6 @@
 ﻿import {ConversationDTO} from "../../DTOs/MessagingDTOs/ConversationDTO";
 
-export function getOldestMessageInteractedWith(conversation : ConversationDTO ) {
+export function getOldestMessageInteractedWith(conversation: ConversationDTO) {
     if (!conversation?.messages) {
         return 0;
     }

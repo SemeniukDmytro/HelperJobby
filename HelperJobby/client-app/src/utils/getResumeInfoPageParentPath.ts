@@ -5,8 +5,7 @@ export function getResumeInfoPageParentPath(currentPath: string): string {
         return "/apply-resume";
     } else if (currentPath.includes("/resume")) {
         return "/resume";
-    }
-    else {
+    } else {
         return "/build;"
     }
 }

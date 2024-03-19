@@ -1,13 +1,14 @@
 import React, {FC, ReactElement} from 'react';
 import './PageTitleWithImage.scss';
+
 interface PageTitleWithImageProps {
-    imageElement : ReactElement;
-    title : string;
+    imageElement: ReactElement;
+    title: string;
 }
 
 const PageTitleWithImage: FC<PageTitleWithImageProps> = ({
-    imageElement,
-    title
+                                                             imageElement,
+                                                             title
                                                          }) => (
     <div className={"ems-title-with-img-fb mb2rem"}>
         <div className={"ems-title-fb"}>

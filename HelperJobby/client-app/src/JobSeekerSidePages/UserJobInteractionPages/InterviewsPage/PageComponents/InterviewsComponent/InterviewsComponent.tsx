@@ -6,7 +6,6 @@ import InterviewComponent from "../InterviewComponent/InterviewComponent";
 import LoadingPage from "../../../../../Components/LoadingPage/LoadingPage";
 import {UserJobInteractionsTypes} from "../../../../../enums/utilityEnums/UserJobInteractionsTypes";
 import {useJobSeekerJobInteractions} from "../../../../../hooks/contextHooks/useJobSeekerJobInteractions";
-import NoApplications from "../../../../../Components/Icons/NoApplications";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightLong} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";

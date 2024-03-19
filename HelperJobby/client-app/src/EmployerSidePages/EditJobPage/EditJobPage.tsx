@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import EditJobComponent from "./PageComponents/EditJobComponent/EditJobComponent";
 
-interface EditJobPageProps {}
+interface EditJobPageProps {
+}
 
 const EditJobPage: FC<EditJobPageProps> = () => (
-  <EditJobComponent/>
+    <EditJobComponent/>
 );
 
 export default EditJobPage;

@@ -84,7 +84,8 @@ public class AuthController : ExtendedBaseController
         return new AuthUserDTO
         {
             User = _mapper.Map<UserDTO>(userEntity),
-            Token = _authService.CreateAuthToken(userEntity.Id, userEntity.Email, userEntity.JobSeeker.Id, userEntity.Employer?.Id)
+            Token = _authService.CreateAuthToken(userEntity.Id, userEntity.Email, userEntity.JobSeeker.Id,
+                userEntity.Employer?.Id)
         };
     }
 

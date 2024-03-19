@@ -1,6 +1,6 @@
 export function thousandsDisplayHelper(number: number): string {
-    if (!number){
-        return  "";
+    if (!number) {
+        return "";
     }
     const numberAsString: string = number.toString();
     if (numberAsString.includes(",") || numberAsString.includes(".")) {

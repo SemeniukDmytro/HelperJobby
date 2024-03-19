@@ -1,4 +1,4 @@
-export enum JobPostingMethods{
+export enum JobPostingMethods {
     fromDrafts,
     newTemplate
 }

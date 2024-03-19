@@ -1,7 +1,7 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import './EditContactEmailDialog.scss';
 import EditJobPostDialog from "../EditJobPostDialog/EditJobPostDialog";
-import {IsValidEmail, validatePhoneNumber} from "../../../../../utils/validationLogic/authFormValidators";
+import {IsValidEmail} from "../../../../../utils/validationLogic/authFormValidators";
 import {UpdatedIncompleteJobDTO} from "../../../../../DTOs/jobRelatetedDTOs/UpdatedIncompleteJobDTO";
 import {logErrorInfo} from "../../../../../utils/logErrorInfo";
 import {IncompleteJobService} from "../../../../../services/incompleteJobService";
@@ -28,7 +28,7 @@ const EditContactEmailDialog: FC<EditContactEmailDialogProps> = ({
     const incompleteJobService = new IncompleteJobService();
 
     useEffect(() => {
-        if (showDialog){
+        if (showDialog) {
             setContactEmail(currentJob?.contactEmail || employer!.email);
             setEmailError("");
         }
@@ -37,31 +37,29 @@ const EditContactEmailDialog: FC<EditContactEmailDialogProps> = ({
     async function editContactEmail() {
         setExecuteFormValidation(true);
 
-        if (!IsValidEmail(contactEmail)){
+        if (!IsValidEmail(contactEmail)) {
             setEmailError("Invalid email provided");
             emailInputRef.current?.focus();
             return;
         }
-        
+
         try {
             setRequestInProgress(true);
-            const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
-                contactEmail : contactEmail,
+            const updatedIncompleteJob: UpdatedIncompleteJobDTO = {
+                contactEmail: contactEmail,
             }
-            const  retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
+            const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
             setCurrentJob(retrievedIncompleteJob);
             setShowDialog(false)
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
-    
+
     return (
-        <EditJobPostDialog 
+        <EditJobPostDialog
             showDialog={showDialog}
             setShowDialog={setShowDialog}
             requestInProgress={requestInProgress}
@@ -76,6 +74,7 @@ const EditContactEmailDialog: FC<EditContactEmailDialogProps> = ({
                 setCustomErrorMessage={setEmailError}
                 executeValidation={executeFormValidation}
                 setExecuteValidation={setExecuteFormValidation}
+                maxInputLength={50}
             />
         </EditJobPostDialog>
     )

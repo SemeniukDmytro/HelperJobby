@@ -18,7 +18,8 @@
       border-color: global-variables.$dark-blue;
     }
   }
-  &:active{
+
+  &:active {
     .custom-radio-input {
       background-color: global-variables.$light-blue-active;
       border-color: global-variables.$dark-blue-active;
@@ -43,8 +44,8 @@
     background-color: global-variables.$light-blue;
     border-color: global-variables.$dark-blue;
   }
-  
-  &:active{
+
+  &:active {
     background-color: global-variables.$light-blue-active;
     border-color: global-variables.$dark-blue;
   }

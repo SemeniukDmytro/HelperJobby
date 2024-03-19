@@ -15,17 +15,17 @@ import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 import useCurrentEmployerJob from "../../../../hooks/contextHooks/useCurrentEmployerJob";
 
 interface ChangeJobApplicationMethodDialogContentProps {
-    showDialog : boolean;
-    setShowDialog? : Dispatch<SetStateAction<boolean>>;
-    setRequestInProgress : Dispatch<SetStateAction<boolean>>;
-    setEditFunction : Dispatch<SetStateAction<() => void>>;
+    showDialog: boolean;
+    setShowDialog?: Dispatch<SetStateAction<boolean>>;
+    setRequestInProgress: Dispatch<SetStateAction<boolean>>;
+    setEditFunction: Dispatch<SetStateAction<() => void>>;
 }
 
 const ChangeJobApplicationMethodDialogContent: FC<ChangeJobApplicationMethodDialogContentProps> = ({
-    showDialog,
-    setRequestInProgress,
-    setEditFunction,
-    setShowDialog
+                                                                                                       showDialog,
+                                                                                                       setRequestInProgress,
+                                                                                                       setEditFunction,
+                                                                                                       setShowDialog
                                                                                                    }) => {
     const {employer} = useEmployer();
     const {currentJob, setCurrentJob, jobCreationState} = useCurrentEmployerJob();
@@ -40,19 +40,19 @@ const ChangeJobApplicationMethodDialogContent: FC<ChangeJobApplicationMethodDial
     const [isContactPhoneAvailable, setIsContactPhoneAvailable] =
         useState(currentJob?.contactPhoneNumber !== undefined);
     const [isResumeRequired, setIsResumeRequired] =
-        useState(currentJob?.resumeRequired ?  resumeRequirementOptionsEnumToStringMap(currentJob?.resumeRequired)
+        useState(currentJob?.resumeRequired ? resumeRequirementOptionsEnumToStringMap(currentJob?.resumeRequired)
             : resumeRequirementOptionsMapData[0].stringValue);
-    
+
     const incompleteJobService = new IncompleteJobService();
     const jobService = new JobService();
 
     useEffect(() => {
-        if (showDialog){
+        if (showDialog) {
             setContactEmail(currentJob?.contactEmail || employer!.email);
             setEmailError("");
             setContactPhoneNumber(currentJob?.contactPhoneNumber || employer!.contactNumber);
             setPhoneError("");
-            setIsResumeRequired(currentJob?.resumeRequired ?  resumeRequirementOptionsEnumToStringMap(currentJob?.resumeRequired)
+            setIsResumeRequired(currentJob?.resumeRequired ? resumeRequirementOptionsEnumToStringMap(currentJob?.resumeRequired)
                 : resumeRequirementOptionsMapData[0].stringValue);
             setIsContactPhoneAvailable(currentJob?.contactPhoneNumber !== undefined);
         }
@@ -61,19 +61,19 @@ const ChangeJobApplicationMethodDialogContent: FC<ChangeJobApplicationMethodDial
     useEffect(() => {
         setEditFunction(() => editApplicationMethod);
     }, [contactEmail, contactPhoneNumber, isResumeRequired]);
-    
+
 
     async function editApplicationMethod() {
         setExecuteFormValidation(true);
 
-        if (!IsValidEmail(contactEmail)){
+        if (!IsValidEmail(contactEmail)) {
             setEmailError("Invalid email provided");
             emailInputRef.current?.focus();
             return;
         }
-        if (contactPhoneNumber){
+        if (contactPhoneNumber) {
             const isInValidPhoneNumber = validatePhoneNumber(contactPhoneNumber);
-            if (isInValidPhoneNumber){
+            if (isInValidPhoneNumber) {
                 setPhoneError(isInValidPhoneNumber);
                 phoneNumberInputRef.current?.focus();
                 return;
@@ -81,37 +81,34 @@ const ChangeJobApplicationMethodDialogContent: FC<ChangeJobApplicationMethodDial
         }
         try {
             setRequestInProgress(true);
-            if (jobCreationState == JobCreationStates.incompleteJob){
-                const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
+            if (jobCreationState == JobCreationStates.incompleteJob) {
+                const updatedIncompleteJob: UpdatedIncompleteJobDTO = {
                     ...currentJob,
-                    contactEmail : contactEmail,
-                    contactPhoneNumber : isContactPhoneAvailable ? contactPhoneNumber : "",
-                    resumeRequired : resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)?.enumValue
+                    contactEmail: contactEmail,
+                    contactPhoneNumber: isContactPhoneAvailable ? contactPhoneNumber : "",
+                    resumeRequired: resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)?.enumValue
                 }
                 const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
                 setCurrentJob(retrievedIncompleteJob);
-            }
-            else {
+            } else {
                 const job = currentJob as JobDTO;
                 const updatedJob: UpdatedJobDTO = {
                     ...job,
-                    contactEmail : contactEmail,
-                    contactPhoneNumber : isContactPhoneAvailable ? contactPhoneNumber : "",
-                    resumeRequired : resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)!.enumValue
+                    contactEmail: contactEmail,
+                    contactPhoneNumber: isContactPhoneAvailable ? contactPhoneNumber : "",
+                    resumeRequired: resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)!.enumValue
                 };
                 const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
                 setCurrentJob(retrievedJob);
             }
             setShowDialog && setShowDialog(false);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err);
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
-    
+
     return (
         <CommunicationPreferencesBlock
             contactEmail={contactEmail}

@@ -27,7 +27,7 @@ public class JobSeekerService : IJobSeekerService
 
     public async Task<JobSeeker> UpdateJobSeeker(int jobSeekerId, JobSeeker updatedJobSeeker)
     {
-        var currentJobSeekerId =  GetCurrentJobSeekerId();
+        var currentJobSeekerId = GetCurrentJobSeekerId();
         if (jobSeekerId != currentJobSeekerId) throw new ForbiddenException();
         var jobSeeker = await _jobSeekerQueryRepository.GetJobSeekerByIdWithAddress(jobSeekerId);
 

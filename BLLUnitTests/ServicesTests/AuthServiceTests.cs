@@ -16,9 +16,9 @@ public class AuthServiceTests
 {
     private readonly IAuthService _authService;
     private readonly Mock<IConfiguration> _configurationMock = new();
-    private ITestOutputHelper _outputHelper;
     private readonly Mock<IPasswordHandler> _passwordHandlerMock = new();
     private readonly Mock<IUserQueryRepository> _userQueryRepostitoryMock = new();
+    private ITestOutputHelper _outputHelper;
 
     public AuthServiceTests(ITestOutputHelper outputHelper)
     {
@@ -46,7 +46,6 @@ public class AuthServiceTests
         Assert.Equal(jwtToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value, email);
         Assert.Equal(jwtToken.Claims.FirstOrDefault(c => c.Type == "jobSeekerId")?.Value, jobSeekerId.ToString());
         Assert.Equal(jwtToken.Claims.FirstOrDefault(c => c.Type == "employerId")?.Value, employerId.ToString());
-
     }
 
 

@@ -19,5 +19,5 @@ export interface JobSeekerDTO {
     interviews: InterviewDTO[];
     jobApplies: JobApplyDTO[];
     savedJobs: SavedJobDTO[];
-    conversations : ConversationDTO[];
+    conversations: ConversationDTO[];
 }

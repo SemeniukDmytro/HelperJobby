@@ -7,8 +7,9 @@ namespace ApplicationBLL.Services;
 
 public class SkillService : ISkillService
 {
-    private readonly IResumeQueryRepository _resumeQueryRepository;
     private readonly IJobSeekerService _jobSeekerService;
+    private readonly IResumeQueryRepository _resumeQueryRepository;
+
     public SkillService(IResumeQueryRepository resumeQueryRepository, IJobSeekerService jobSeekerService)
     {
         _resumeQueryRepository = resumeQueryRepository;
@@ -18,7 +19,7 @@ public class SkillService : ISkillService
     public async Task<Skill> AddSkill(int resumeId, Skill skill)
     {
         if (string.IsNullOrEmpty(skill.Name)) throw new InvalidSkillException("Provide valid name");
-        
+
         var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
         var resume = await _resumeQueryRepository.GetResumeByJobSeekerId(currentJobSeekerId);
         if (resume.Id != resumeId)
@@ -33,15 +34,13 @@ public class SkillService : ISkillService
         var isInvalidResume = false;
         var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
         var resume = await _resumeQueryRepository.GetResumeByJobSeekerId(currentJobSeekerId);
-        
+
         var skillEntity = resume.Skills.FirstOrDefault(s => s.Id == skillId);
         if (skillEntity == null) throw new SkillNotFoundException();
         if (resume.Educations.Count == 0 && resume.WorkExperiences.Count == 0
                                          && resume.Skills.Count <= 1)
-        {
             isInvalidResume = true;
-        }
-        
+
         skillEntity.Resume = resume;
 
         return (skillEntity, isInvalidResume);

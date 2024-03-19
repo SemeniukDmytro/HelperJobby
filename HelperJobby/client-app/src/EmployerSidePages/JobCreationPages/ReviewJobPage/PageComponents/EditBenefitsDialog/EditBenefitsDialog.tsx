@@ -16,8 +16,8 @@ const EditBenefitsDialog: FC<EditBenefitsDialogProps> = ({
     const [requestInProgress, setRequestInProgress] = useState(false);
     const [editFunction, setEditFunction] = useState<() => void>(async () => {
     });
-    
-    
+
+
     return (
         <EditJobPostDialog
             showDialog={showDialog}

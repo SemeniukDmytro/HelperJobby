@@ -114,7 +114,7 @@ public class JobControllerTests : IntegrationTest
             Location = "New York",
             LocationCountry = "USA",
             JobType = new List<JobTypes> { JobTypes.FullTime },
-            Salary = new CreateUpdateSalaryDTO()
+            Salary = new CreateUpdateSalaryDTO
             {
                 MinimalAmount = 90000.00m,
                 SalaryRate = SalaryRates.PerYear,

@@ -10,23 +10,23 @@ import {IsValidEmail} from "../../../../utils/validationLogic/authFormValidators
 import {useEmployer} from "../../../../hooks/contextHooks/useEmployer";
 
 interface AddOrganizationUserDialogProps {
-    showDialog : boolean;
-    setShowDialog : Dispatch<SetStateAction<boolean>>
+    showDialog: boolean;
+    setShowDialog: Dispatch<SetStateAction<boolean>>
 }
 
 const AddOrganizationUserDialog: FC<AddOrganizationUserDialogProps> = ({
-    showDialog,
-    setShowDialog
+                                                                           showDialog,
+                                                                           setShowDialog
                                                                        }) => {
     const [requestInProgress, setRequestInProgress] = useState(false);
     const {employer, setEmployer} = useEmployer();
     const organizationService = new OrganizationService();
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState("");
-    
-    
-    async function addNewEmployee(){
-        if (!IsValidEmail(email)){
+
+
+    async function addNewEmployee() {
+        if (!IsValidEmail(email)) {
             setEmailError("Invalid email address provided")
             return;
         }
@@ -36,22 +36,20 @@ const AddOrganizationUserDialog: FC<AddOrganizationUserDialogProps> = ({
             setEmployer(prev => {
                 return prev && {
                     ...prev,
-                    organization : {
+                    organization: {
                         ...prev.organization,
-                        employeeEmails : [...prev.organization.employeeEmails, retrievedEmail]
+                        employeeEmails: [...prev.organization.employeeEmails, retrievedEmail]
                     }
                 }
             });
             setShowDialog(false);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
-    
+
     useEffect(() => {
         if (showDialog) {
             const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -86,6 +84,7 @@ const AddOrganizationUserDialog: FC<AddOrganizationUserDialogProps> = ({
                             setInputFieldValue={setEmail}
                             customErrorMessage={emailError}
                             setCustomErrorMessage={setEmailError}
+                            maxInputLength={50}
                         />
                     </div>
                     <div className={"dialog-separation-line"}></div>
@@ -100,7 +99,7 @@ const AddOrganizationUserDialog: FC<AddOrganizationUserDialogProps> = ({
                             className={"blue-button"}
                             onClick={addNewEmployee}
                         >
-                            {requestInProgress ? <WhiteLoadingSpinner/> : 
+                            {requestInProgress ? <WhiteLoadingSpinner/> :
                                 <span>Save</span>
                             }
                         </button>

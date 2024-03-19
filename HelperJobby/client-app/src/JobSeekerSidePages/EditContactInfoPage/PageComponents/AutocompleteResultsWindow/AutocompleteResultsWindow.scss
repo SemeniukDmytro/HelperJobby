@@ -8,6 +8,7 @@
   cursor: pointer;
   display: flex;
   user-select: none;
+
   &:hover {
     background-color: global-variables.$light-blue;
   }

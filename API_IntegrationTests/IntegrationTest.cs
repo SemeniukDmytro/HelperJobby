@@ -2,7 +2,6 @@ using System.Net.Http.Headers;
 using API_IntegrationTests.Fixtures;
 using API_IntegrationTests.TestHelpers;
 using ApplicationDAL.Context;
-using ApplicationDomain.Enums;
 using HelperJobby.DTOs.Account;
 using HelperJobby.DTOs.Job;
 using HelperJobby.DTOs.Resume;
@@ -72,7 +71,7 @@ public class IntegrationTest
         };
         var response = await TestClient.PostAsJsonAsync(requestUri, createdEmployer);
         var employerWithCreatedOrganization = await response.Content.ReadAsAsync<EmployerDTO>();
-        var loginUserDTO = new LoginUserDTO()
+        var loginUserDTO = new LoginUserDTO
         {
             Email = createdUser.Email,
             Password = "randomPwd"
@@ -104,7 +103,8 @@ public class IntegrationTest
 
     protected async Task<IncompleteJobDTO> CreateNewCurrentJob(CreateIncompleteJobDTO createdIncompleteJobDto)
     {
-        var currentJobCreationResponse = await TestClient.PostAsJsonAsync("/api/IncompleteJob", createdIncompleteJobDto);
+        var currentJobCreationResponse =
+            await TestClient.PostAsJsonAsync("/api/IncompleteJob", createdIncompleteJobDto);
         return await currentJobCreationResponse.Content.ReadAsAsync<IncompleteJobDTO>();
     }
 
@@ -166,7 +166,8 @@ public class IntegrationTest
     {
         var secondInterviewCreateRequestUri = $"/api/Interview/{jobId}/job-seeker/{jobSeekerId}";
         var createInterviewDTO = InterviewFixtures.createInterviewDTO;
-        var interviewCreateResponse = await TestClient.PostAsJsonAsync(secondInterviewCreateRequestUri, createInterviewDTO);
+        var interviewCreateResponse =
+            await TestClient.PostAsJsonAsync(secondInterviewCreateRequestUri, createInterviewDTO);
         return await interviewCreateResponse.Content.ReadAsAsync<InterviewDTO>();
     }
 

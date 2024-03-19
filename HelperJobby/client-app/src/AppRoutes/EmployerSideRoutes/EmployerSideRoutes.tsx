@@ -50,7 +50,8 @@ const EmployerSideRoutes: FC<EmployerSideRoutesProps> = () => (
                     <Route path={"getting-started/:jobId"} element={<AddJobBasicsPage/>}/>
                     <Route path={"job-details/:jobId"} element={<JobDetailsPage/>}/>
                     <Route path={"compensation-details/:jobId"} element={<AddJobPayAndBenefitsPage/>}/>
-                    <Route path={"description-and-application-settings/:jobId"} element={<JobDescriptionAndPreferencesPage/>}/>
+                    <Route path={"description-and-application-settings/:jobId"}
+                           element={<JobDescriptionAndPreferencesPage/>}/>
                     <Route path={"review-job/:jobId"} element={<ReviewJobPage/>}/>
                 </Route>
                 <Route path={"/jobs"} element={<EmployerJobsPage/>}/>

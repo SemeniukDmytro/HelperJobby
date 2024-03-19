@@ -10,11 +10,11 @@ interface SettingsFieldToChangeProps {
 }
 
 const SettingsFieldToChange: FC<SettingsFieldToChangeProps> = ({
-                                                               fieldLabel,
-                                                               fieldValue,
-                                                               fieldButtonText,
-                                                               changeFieldPagePath
-                                                           }) => {
+                                                                   fieldLabel,
+                                                                   fieldValue,
+                                                                   fieldButtonText,
+                                                                   changeFieldPagePath
+                                                               }) => {
     const navigate = useNavigate();
 
     function navigateToChangeAccountInfoPage() {

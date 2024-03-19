@@ -1,14 +1,15 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import './EmployerMessagingWrap.scss';
 import {Outlet} from "react-router-dom";
 import {EmployerMessagingConversationProvider} from "../../../../contexts/EmployerMessagingConversationContext";
 
-interface EmployerMessagingWrapProps {}
+interface EmployerMessagingWrapProps {
+}
 
 const EmployerMessagingWrap: FC<EmployerMessagingWrapProps> = () => (
-  <EmployerMessagingConversationProvider>
-      <Outlet/>
-  </EmployerMessagingConversationProvider>
+    <EmployerMessagingConversationProvider>
+        <Outlet/>
+    </EmployerMessagingConversationProvider>
 );
 
 export default EmployerMessagingWrap;

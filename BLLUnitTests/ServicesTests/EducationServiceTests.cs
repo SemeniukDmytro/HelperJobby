@@ -99,7 +99,8 @@ public class EducationServiceTests
         //Arrange
         var jobSeekerId = 1;
         var educationId = 1;
-        var educationEntity = EducationFixtures.FirstEducationEntity;var resume = ResumeFixtures.ResumeEntity;
+        var educationEntity = EducationFixtures.FirstEducationEntity;
+        var resume = ResumeFixtures.ResumeEntity;
         _jobSeekerServiceMock.Setup(us => us.GetCurrentJobSeekerId()).Returns(jobSeekerId);
         _resumeQueryRepositoryMock.Setup(r => r.GetResumeByJobSeekerId(jobSeekerId))
             .ReturnsAsync(resume);

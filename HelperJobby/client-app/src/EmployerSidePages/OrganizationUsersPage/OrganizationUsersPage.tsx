@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import OrganizationUsersComponent from "./PageComponents/OrganizationUsersComponent/OrganizationUsersComponent";
 
-interface OrganizationUsersPageProps {}
+interface OrganizationUsersPageProps {
+}
 
 const OrganizationUsersPage: FC<OrganizationUsersPageProps> = () => (
-  <OrganizationUsersComponent/>
+    <OrganizationUsersComponent/>
 );
 
 export default OrganizationUsersPage;

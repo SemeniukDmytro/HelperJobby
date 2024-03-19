@@ -9,10 +9,10 @@ namespace BLLUnitTests.ServicesTests;
 
 public class JobServiceTests
 {
+    private readonly Mock<IEmployerService> _employerServiceMock = new();
     private readonly Mock<IJobQueryRepository> _jobQueryRepository = new();
     private readonly IJobService _jobService;
-    private readonly Mock<IEmployerService> _employerServiceMock = new();
-    
+
 
     public JobServiceTests()
     {

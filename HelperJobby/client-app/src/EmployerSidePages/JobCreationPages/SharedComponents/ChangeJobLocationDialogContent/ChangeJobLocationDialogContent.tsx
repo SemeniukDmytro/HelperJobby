@@ -46,10 +46,10 @@ const ChangeJobLocationDialogContent: FC<ChangeJobLocationDialogContentProps> = 
         onRoadJobLocation, setOnRoadJobLocation);
     const incompleteJobService = new IncompleteJobService();
     const jobService = new JobService();
-    
+
     useEffect(() => {
-        if (showDialog){
-            if (currentJob?.location){
+        if (showDialog) {
+            if (currentJob?.location) {
                 setLocationSelectedFromSuggests(true);
                 getCurrentJobLocationInputProp(jobLocationType).setInputValue(currentJob?.location || "");
             }
@@ -72,31 +72,28 @@ const ChangeJobLocationDialogContent: FC<ChangeJobLocationDialogContentProps> = 
         }
         try {
             setRequestInProgress(true);
-            if (jobCreationState == JobCreationStates.incompleteJob){
-                const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
+            if (jobCreationState == JobCreationStates.incompleteJob) {
+                const updatedIncompleteJob: UpdatedIncompleteJobDTO = {
                     ...currentJob,
-                    jobLocationType : jobLocationType,
-                    location : getCurrentJobLocationInputProp(jobLocationType).inputValue
+                    jobLocationType: jobLocationType,
+                    location: getCurrentJobLocationInputProp(jobLocationType).inputValue
                 }
                 const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
                 setCurrentJob(retrievedIncompleteJob);
-            }
-            else {
+            } else {
                 const job = currentJob as JobDTO;
                 const updatedJob: UpdatedJobDTO = {
                     ...job,
-                    jobLocationType : jobLocationType,
-                    location : getCurrentJobLocationInputProp(jobLocationType).inputValue
+                    jobLocationType: jobLocationType,
+                    location: getCurrentJobLocationInputProp(jobLocationType).inputValue
                 };
                 const retrievedJob = await jobService.putJob(currentJob!.id, updatedJob);
                 setCurrentJob(retrievedJob);
             }
             setShowDialog && setShowDialog(false);
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err);
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
@@ -116,6 +113,7 @@ const ChangeJobLocationDialogContent: FC<ChangeJobLocationDialogContentProps> = 
                 setLocationSelected={setLocationSelectedFromSuggests}
                 windowZIndex={10100}
                 includeWindowScroll={false}
+                fullLocationResult={true}
             />}
             {showCityAutoComplete && <AutocompleteResultsWindow
                 inputFieldRef={locationInputRef}
@@ -130,6 +128,7 @@ const ChangeJobLocationDialogContent: FC<ChangeJobLocationDialogContentProps> = 
                 setLocationSelected={setLocationSelectedFromSuggests}
                 windowZIndex={10100}
                 includeWindowScroll={false}
+                fullLocationResult={true}
             />}
             <JobLocationSelectionComponent
                 jobLocationTypeEnumValue={jobLocationType}

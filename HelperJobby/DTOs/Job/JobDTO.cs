@@ -18,7 +18,7 @@ public class JobDTO
     public List<Schedules> Schedule { get; set; }
     public List<EmployeeBenefits> Benefits { get; set; }
     public string ContactEmail { get; set; }
-    public string? ContactPhoneNumber { get; set; } 
+    public string? ContactPhoneNumber { get; set; }
     public ResumeRequirementOptions ResumeRequired { get; set; }
     public string Description { get; set; }
     public DateOnly DatePosted { get; set; }

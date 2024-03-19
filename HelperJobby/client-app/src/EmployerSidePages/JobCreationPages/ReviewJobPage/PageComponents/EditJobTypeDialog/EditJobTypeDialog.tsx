@@ -25,9 +25,9 @@ const EditJobTypeDialog: FC<EditJobTypeDialogProps> = ({
             requestInProgress={requestInProgress}
             executeJobEditing={() => editFunction()}>
             <ChangeJobTypeDialogContent showDialog={showDialog}
-                                         setShowDialog={setShowDialog}
-                                         setRequestInProgress={setRequestInProgress}
-                                         setEditFunction={setEditFunction}/>
+                                        setShowDialog={setShowDialog}
+                                        setRequestInProgress={setRequestInProgress}
+                                        setEditFunction={setEditFunction}/>
         </EditJobPostDialog>
     )
 }

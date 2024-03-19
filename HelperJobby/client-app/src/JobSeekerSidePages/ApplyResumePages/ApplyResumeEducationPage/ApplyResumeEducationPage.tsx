@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import ApplyResumeEducationComponent
     from "./PageComponents/ApplyResumeEducationComponent/ApplyResumeEducationComponent";
 
-interface ApplyResumeEducationPageProps {}
+interface ApplyResumeEducationPageProps {
+}
 
 const ApplyResumeEducationPage: FC<ApplyResumeEducationPageProps> = () => (
-  <ApplyResumeEducationComponent/>
+    <ApplyResumeEducationComponent/>
 );
 
 export default ApplyResumeEducationPage;

@@ -5,8 +5,7 @@ namespace ApplicationDomain.Models;
 
 public class WorkExperience
 {
-    [Key]
-    public int Id { get; set; }
+    [Key] public int Id { get; set; }
 
     [Required] [MaxLength(100)] public string JobTitle { get; set; }
 

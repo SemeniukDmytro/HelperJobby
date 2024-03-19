@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import ApplyResumeAddExperienceComponent
     from "./PageComponents/ApplyResumeAddExperienceComponent/ApplyResumeAddExperienceComponent";
 
-interface ApplyResumeAddExperiencePageProps {}
+interface ApplyResumeAddExperiencePageProps {
+}
 
 const ApplyResumeAddExperiencePage: FC<ApplyResumeAddExperiencePageProps> = () => (
-  <ApplyResumeAddExperienceComponent/>
+    <ApplyResumeAddExperienceComponent/>
 );
 
 export default ApplyResumeAddExperiencePage;

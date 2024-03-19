@@ -29,7 +29,7 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
     const {authUser} = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-        
+
     useEffect(() => {
         fetchPageInitialData();
     }, []);
@@ -38,7 +38,7 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
         isApplicationCreated();
         isJobSaved();
     }, [jobSeeker?.savedJobs, jobSeeker?.jobApplies]);
-    
+
     async function fetchPageInitialData() {
         await fetchJobSeekerJobInteractions()
         setLoading(false);
@@ -66,7 +66,7 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
         }
     }
 
-    async function handleJobInteraction(actionFunction: (jobId : number) => void, setIsSaved: Dispatch<SetStateAction<boolean>>) {
+    async function handleJobInteraction(actionFunction: (jobId: number) => void, setIsSaved: Dispatch<SetStateAction<boolean>>) {
         try {
             if (!authUser) {
                 navigate("/auth-page");
@@ -119,7 +119,8 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
                                                 onClick={handleRemoveSavedJobClick}
                                             >
                                                 <FontAwesomeIcon className={"svg125rem"} icon={faBookmark}/>
-                                                <span className={"semi-dark-default-text bold-text ml05rem"}>Saved</span>
+                                                <span
+                                                    className={"semi-dark-default-text bold-text ml05rem"}>Saved</span>
                                             </button>)
                                     ) :
                                     (<button
@@ -127,7 +128,8 @@ const JobFullInfoComponent: FC<JobFullInfoComponentProps> = ({job}) => {
                                         onClick={handleSaveJobClick}
                                     >
                                         <FontAwesomeIcon className={"svg125rem mr05rem"} icon={faBookmark}/>
-                                        {isApplied && <span className={"semi-dark-default-text bold-text"}>Applied</span>}
+                                        {isApplied &&
+                                            <span className={"semi-dark-default-text bold-text"}>Applied</span>}
                                     </button>)
                                 }
 

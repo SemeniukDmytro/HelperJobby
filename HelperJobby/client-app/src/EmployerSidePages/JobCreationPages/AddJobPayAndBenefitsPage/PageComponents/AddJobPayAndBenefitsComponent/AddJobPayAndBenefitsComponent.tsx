@@ -5,10 +5,7 @@ import Wages from "../../../../../Components/Icons/Wages";
 import {salaryRatesMapData, showPayByOptionsMapData} from "../../../../../AppConstData/PayRelatedData";
 import {countriesWithCurrencies} from "../../../../../AppConstData/CountriesWithCurrencies";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-    faChevronDown,
-    faChevronUp,
-} from "@fortawesome/free-solid-svg-icons";
+import {faChevronDown, faChevronUp,} from "@fortawesome/free-solid-svg-icons";
 import {benefitsStringValues} from "../../../../../AppConstData/JobEnumsToStringsArrays";
 import JobFeature from "../../../../../EmployersSideComponents/JobFeature/JobFeature";
 import {
@@ -64,14 +61,14 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     const [showFullBenefitsList, setShowFullBenefitsList] = useState(false);
 
     const {currentJob, setCurrentJob} = useCurrentEmployerJob();
-    const {jobId} = useParams<{jobId : string}>();
+    const {jobId} = useParams<{ jobId: string }>();
     const [loading, setLoading] = useState(false);
     const {fetchJobAndSetJobCreation} = useJobLoaderToSetCurrentJob(jobId ? parseInt(jobId) : 0, currentJob, setCurrentJob, JobCreationStates.incompleteJob);
     const navigate = useNavigate();
     const [requestInProgress, setRequestInProgress] = useState(false);
     const incompleteJobService = new IncompleteJobService();
-    
-    const {isValidSalaryValueProvided, validateMaxSalaryInput} = 
+
+    const {isValidSalaryValueProvided, validateMaxSalaryInput} =
         useSalaryValidation(
             setIsInvalidMinSalary,
             setIsInvalidMaxSalary,
@@ -82,7 +79,7 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
             salaryRate,
             showPayBy
         );
-    
+
     const {getSalaryInputProp} = useShowPayByOption(
         rangeMinSalaryAmount, setRangeMinSalaryAmount,
         exactSalaryAmount, setExactSalaryAmount,
@@ -94,140 +91,138 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
     }, []);
 
     useEffect(() => {
-        if (currentJob){
-            if (currentJob.salary){
+        if (currentJob) {
+            if (currentJob.salary) {
                 const incompleteJobShowPayOption = showPayByOptionsMapData.find(spo => spo.enumValue == currentJob.salary?.showPayByOption)?.stringValue || "Range";
                 setShowPayBy(incompleteJobShowPayOption);
                 setSalaryRate(salaryRatesEnumToStringMap(currentJob.salary.salaryRate));
                 getSalaryInputProp(incompleteJobShowPayOption).setSalaryInput(currentJob.salary.minimalAmount.toString());
-                if (currentJob.salary.showPayByOption == ShowPayByOptions.Range){
+                if (currentJob.salary.showPayByOption == ShowPayByOptions.Range) {
                     setRangeMaxSalaryAmount(currentJob.salary.maximalAmount?.toString() || "")
                 }
                 if (currentJob.salary.meetsMinSalaryRequirement && !checkMinimalSalary(currentJob.salary.minimalAmount,
-                    salaryRatesEnumToStringMap(currentJob.salary.salaryRate)))
-                {
+                    salaryRatesEnumToStringMap(currentJob.salary.salaryRate))) {
                     setMinSalaryMeetsRequirement(true);
                     setMinSalaryInputError(minimalSalaryIsTooLowError);
                 }
             }
-            
+
             setSelectedBenefits(currentJob.benefits || []);
             setCurrency(countriesWithCurrencies.find(c => c.country === currentJob.locationCountry)?.currency || "");
             setLoading(false);
         }
     }, [currentJob]);
 
-    async function fetchInitialPageData(){
+    async function fetchInitialPageData() {
         await fetchJobAndSetJobCreation();
     }
-    
+
 
     function goToPreviousPage() {
         navigate(`${EmployerPagesPaths.JOB_DETAILS}/${jobId}`)
     }
 
-   async function handlePayAndBenefitSubmit(e : FormEvent) {
+    async function handlePayAndBenefitSubmit(e: FormEvent) {
         e.preventDefault();
         const currentSalaryValue = getSalaryInputProp(showPayBy).salaryInput;
-        if (currentSalaryValue){
+        if (currentSalaryValue) {
             isValidSalaryValueProvided(currentSalaryValue);
-            if (showPayBy == "Range"){
+            if (showPayBy == "Range") {
                 validateMaxSalaryInput(currentSalaryValue, rangeMaxSalaryAmount);
             }
-            if (isInvalidMaxSalary || isInvalidMinSalary){
+            if (isInvalidMaxSalary || isInvalidMinSalary) {
                 return;
             }
         }
         try {
             setRequestInProgress(true);
-            const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
-                benefits : selectedBenefits
+            const updatedIncompleteJob: UpdatedIncompleteJobDTO = {
+                benefits: selectedBenefits
             }
-            if (currentSalaryValue){
+            if (currentSalaryValue) {
                 updatedIncompleteJob.salary = {
                     minimalAmount: getValidFloatNumberFromString(currentSalaryValue),
                     maximalAmount: showPayBy == "Range" ? getValidFloatNumberFromString(rangeMaxSalaryAmount) : undefined,
                     salaryRate: salaryRatesMapData.find(sr => sr.stringValue == salaryRate)!.enumValue,
                     showPayByOption: showPayByOptionsMapData.find(spo => spo.stringValue == showPayBy)!.enumValue,
-                    meetsMinSalaryRequirement : minSalaryMeetsRequirement
+                    meetsMinSalaryRequirement: minSalaryMeetsRequirement
                 }
             }
             const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(parseInt(jobId!), updatedIncompleteJob);
             setCurrentJob(retrievedIncompleteJob);
             navigate(`${EmployerPagesPaths.DESCRIPTION_AND_APPLICATION_DETAILS}/${jobId}`)
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false)
         }
     }
-    
-    
+
+
     return (
-        loading ? <LoadingPage/> : 
-        <div className={"employers-centralized-page-layout"}>
-            <PageTitleWithImage imageElement={<Wages/>} title={"Add job pay and benefits"}/>
-            <div className={"emp-form-fb"}>
-                <form className={"emp-form"}>
-                    <span className={"small-title"}>Pay</span>
-                    <JobSalaryBlock showPayBy={showPayBy}
-                                    setShowPayBy={setShowPayBy}
-                                    salaryRate={salaryRate}
-                                    setSalaryRate={setSalaryRate}
-                                    rangeMinSalaryAmount={rangeMinSalaryAmount}
-                                    setRangeMinSalaryAmount={setRangeMinSalaryAmount}
-                                    rangeMaxSalaryAmount={rangeMaxSalaryAmount}
-                                    setRangeMaxSalaryAmount={setRangeMaxSalaryAmount}
-                                    exactSalaryAmount={exactSalaryAmount}
-                                    setExactSalaryAmount={setExactSalaryAmount}
-                                    startingSalaryAmount={startingSalaryAmount}
-                                    setStartingSalaryAmount={setStartingSalaryAmount}
-                                    maximumSalaryAmount={maximumSalaryAmount}
-                                    setMaximumSalaryAmount={setMaximumSalaryAmount}
-                                    isInvalidMinSalary={isInvalidMinSalary}
-                                    setIsInvalidMinSalary={setIsInvalidMinSalary}
-                                    isInvalidMaxSalary={isInvalidMaxSalary}
-                                    setIsInvalidMaxSalary={setIsInvalidMaxSalary}
-                                    currency={currency}
-                                    minSalaryInputError={minSalaryInputError}
-                                    setMinSalaryInputError={setMinSalaryInputError}
-                                    maxSalaryInputError={maxSalaryInputError}
-                                    setMaxSalaryInputError={setMaxSalaryInputError}
-                                    minSalaryMeetsRequirement={minSalaryMeetsRequirement}
-                                    setMinSalaryMeetsRequirement={setMinSalaryMeetsRequirement}
-                                    showMissingSalaryWarning={showMissingSalaryWarning}
-                                    setShowMissingSalaryWarning={setShowMissingSalaryWarning}
-                                    includeWindowScroll={true}
-                    />
-                    <div className={"content-separation-line mt3rem mb3rem"}></div>
-                    <div className={"small-title"}>
-                        Benefits
-                    </div>
-                    <div
-                        className={"job-features-fb"}
-                        style={{
-                            height: benefitsBoxHeight
-                        }}
-                    >
-                        <ul
-                            className={"job-features-list"}
-                            ref={benefitsListRef}
+        loading ? <LoadingPage/> :
+            <div className={"employers-centralized-page-layout"}>
+                <PageTitleWithImage imageElement={<Wages/>} title={"Add job pay and benefits"}/>
+                <div className={"emp-form-fb"}>
+                    <form className={"emp-form"}>
+                        <span className={"small-title"}>Pay</span>
+                        <JobSalaryBlock showPayBy={showPayBy}
+                                        setShowPayBy={setShowPayBy}
+                                        salaryRate={salaryRate}
+                                        setSalaryRate={setSalaryRate}
+                                        rangeMinSalaryAmount={rangeMinSalaryAmount}
+                                        setRangeMinSalaryAmount={setRangeMinSalaryAmount}
+                                        rangeMaxSalaryAmount={rangeMaxSalaryAmount}
+                                        setRangeMaxSalaryAmount={setRangeMaxSalaryAmount}
+                                        exactSalaryAmount={exactSalaryAmount}
+                                        setExactSalaryAmount={setExactSalaryAmount}
+                                        startingSalaryAmount={startingSalaryAmount}
+                                        setStartingSalaryAmount={setStartingSalaryAmount}
+                                        maximumSalaryAmount={maximumSalaryAmount}
+                                        setMaximumSalaryAmount={setMaximumSalaryAmount}
+                                        isInvalidMinSalary={isInvalidMinSalary}
+                                        setIsInvalidMinSalary={setIsInvalidMinSalary}
+                                        isInvalidMaxSalary={isInvalidMaxSalary}
+                                        setIsInvalidMaxSalary={setIsInvalidMaxSalary}
+                                        currency={currency}
+                                        minSalaryInputError={minSalaryInputError}
+                                        setMinSalaryInputError={setMinSalaryInputError}
+                                        maxSalaryInputError={maxSalaryInputError}
+                                        setMaxSalaryInputError={setMaxSalaryInputError}
+                                        minSalaryMeetsRequirement={minSalaryMeetsRequirement}
+                                        setMinSalaryMeetsRequirement={setMinSalaryMeetsRequirement}
+                                        showMissingSalaryWarning={showMissingSalaryWarning}
+                                        setShowMissingSalaryWarning={setShowMissingSalaryWarning}
+                                        includeWindowScroll={true}
+                        />
+                        <div className={"content-separation-line mt3rem mb3rem"}></div>
+                        <div className={"small-title"}>
+                            Benefits
+                        </div>
+                        <div
+                            className={"job-features-fb"}
+                            style={{
+                                height: benefitsBoxHeight
+                            }}
                         >
-                            {benefitsStringValues.map((benefits, index) => (
-                                <JobFeature
-                                    key={index}
-                                    featureName={benefits}
-                                    isSelected={selectedBenefits.includes(benefitStringToEnumMap(benefits)!)}
-                                    onClick={() => addBenefit(benefits, selectedBenefits, setSelectedBenefits)}
-                                />
-                            ))}
-                        </ul>
-                    </div>
-                    <div className={"mt05rem"}>
-                   <span className={"bold-navigation-link"} onClick={() => handleJobFeaturesListAppearance(showFullBenefitsList,
-                       setShowFullBenefitsList, setBenefitsBoxHeight, benefitsListRef)}>
+                            <ul
+                                className={"job-features-list"}
+                                ref={benefitsListRef}
+                            >
+                                {benefitsStringValues.map((benefits, index) => (
+                                    <JobFeature
+                                        key={index}
+                                        featureName={benefits}
+                                        isSelected={selectedBenefits.includes(benefitStringToEnumMap(benefits)!)}
+                                        onClick={() => addBenefit(benefits, selectedBenefits, setSelectedBenefits)}
+                                    />
+                                ))}
+                            </ul>
+                        </div>
+                        <div className={"mt05rem"}>
+                   <span className={"bold-navigation-link"}
+                         onClick={() => handleJobFeaturesListAppearance(showFullBenefitsList,
+                             setShowFullBenefitsList, setBenefitsBoxHeight, benefitsListRef)}>
                         <span>{`${showFullBenefitsList ? "Show less" : "Show more"}`}</span>
                        {showFullBenefitsList ?
                            <FontAwesomeIcon className={'svg1rem ml1rem'} icon={faChevronUp}/>
@@ -235,15 +230,15 @@ const AddJobPayAndBenefitsComponent: FC<AddJobPayAndBenefitsComponentProps> = ()
                            <FontAwesomeIcon className={'svg1rem ml1rem'} icon={faChevronDown}/>
                        }
                     </span>
-                    </div>
-                    <JobCreateNavigationButtons
-                        requestInProgress={requestInProgress}
-                        backButtonOnClick={goToPreviousPage}
-                        nextPageButtonClick={handlePayAndBenefitSubmit}
-                    />
-                </form>
+                        </div>
+                        <JobCreateNavigationButtons
+                            requestInProgress={requestInProgress}
+                            backButtonOnClick={goToPreviousPage}
+                            nextPageButtonClick={handlePayAndBenefitSubmit}
+                        />
+                    </form>
+                </div>
             </div>
-        </div>
     )
 };
 

@@ -20,7 +20,7 @@ const EducationComponent: FC<ResumeEducationComponentProps> = () => {
     const location = useLocation();
     const addEducationPath = location.pathname.includes("/apply-resume") ? "/apply-resume/education/add" : "/build/education/add";
     const {job} = useCurrentJobApplication();
-    
+
     useEffect(() => {
         if (!jobSeeker?.resume || jobSeeker.resume.educations.length == 0) {
             navigate(addEducationPath);
@@ -36,17 +36,16 @@ const EducationComponent: FC<ResumeEducationComponentProps> = () => {
 
     async function customSaveFunc() {
         let nextPagePath = "/my-profile";
-        if (addEducationPath.includes("/apply-resume") && job){
+        if (addEducationPath.includes("/apply-resume") && job) {
             nextPagePath = `job-apply/${job.id}/resume`
         }
         navigate(nextPagePath)
     }
 
     function navigateToWorkExperiencePage() {
-        if (location.pathname.includes("/apply-resume")){
+        if (location.pathname.includes("/apply-resume")) {
             navigate("/apply-resume/experience")
-        }
-        else {
+        } else {
             navigate("/build/experience")
         }
     }

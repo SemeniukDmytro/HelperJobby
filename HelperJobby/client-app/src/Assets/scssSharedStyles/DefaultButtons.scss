@@ -27,7 +27,8 @@
     background-color: global-variables.$light-blue-active;
     border-color: global-variables.$dark-blue-active;
   }
-  &:disabled{
+
+  &:disabled {
     opacity: 0.7;
     pointer-events: none;
   }
@@ -48,6 +49,7 @@
   font-size: 1rem;
   line-height: 1.5;
   transition: 0.2s;
+
   &:hover {
     background-color: global-variables.$dark-blue-hover;
   }
@@ -268,11 +270,11 @@
   }
 }
 
-.full-width-button{
+.full-width-button {
   width: 100%;
 }
 
-.min-4chr-btn-width{
+.min-4chr-btn-width {
   min-width: 4.5rem;
 }
 
@@ -281,11 +283,11 @@
   min-height: 40px;
 }
 
-.min-8chr-arrow-btn-width{
+.min-8chr-arrow-btn-width {
   min-width: 125px;
 }
 
-.min-7chr-arrow-btn-width{
+.min-7chr-arrow-btn-width {
   min-width: 117px;
 }
 

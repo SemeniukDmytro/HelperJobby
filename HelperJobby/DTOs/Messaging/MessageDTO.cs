@@ -1,6 +1,4 @@
-﻿using ApplicationDomain.MessagingRelatedModels;
-using ApplicationDomain.Models;
-using HelperJobby.DTOs.Account;
+﻿using HelperJobby.DTOs.Account;
 
 namespace HelperJobby.DTOs.Messaging;
 

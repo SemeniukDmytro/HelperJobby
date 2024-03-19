@@ -16,6 +16,7 @@ interface EditFormFieldProps {
     customErrorMessage?: string;
     setCustomErrorMessage?: Dispatch<SetStateAction<string>>;
     placeholderText?: string;
+    maxInputLength: number | null;
 }
 
 const CustomInputField: FC<EditFormFieldProps> = ({
@@ -29,7 +30,8 @@ const CustomInputField: FC<EditFormFieldProps> = ({
                                                       setExecuteValidation,
                                                       customErrorMessage,
                                                       setCustomErrorMessage,
-                                                      placeholderText
+                                                      placeholderText,
+                                                      maxInputLength
                                                   }) => {
 
     const [isInvalidValue, setIsInvalidValue] = useState(false);
@@ -59,6 +61,9 @@ const CustomInputField: FC<EditFormFieldProps> = ({
             setRequiredMessage(`${fieldLabel} is required`);
         } else if (customErrorMessage) {
             setIsInvalidValue(true);
+        } else if (maxInputLength && inputValue.length > maxInputLength) {
+            setIsInvalidValue(true);
+            setRequiredMessage(`${fieldLabel} exceeded max available length`)
         } else {
             setIsInvalidValue(false);
         }

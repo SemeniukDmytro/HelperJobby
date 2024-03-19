@@ -13,7 +13,7 @@ public static class JobFixtures
         Location = "Random Address",
         LocationCountry = "Random Country",
         JobTypes = JobTypes.Freelance,
-        Salary = new JobSalary()
+        Salary = new JobSalary
         {
             MinimalAmount = 100.90m,
             SalaryRate = SalaryRates.PerHour,
@@ -34,7 +34,7 @@ public static class JobFixtures
         Language = "English",
         Location = "Random Address",
         JobTypes = JobTypes.Freelance,
-        Salary = new JobSalary()
+        Salary = new JobSalary
         {
             MinimalAmount = 100.90m,
             SalaryRate = SalaryRates.PerHour,
@@ -55,7 +55,7 @@ public static class JobFixtures
         Language = "English",
         Location = "Random Address",
         JobTypes = JobTypes.Freelance,
-        Salary = new JobSalary()
+        Salary = new JobSalary
         {
             MinimalAmount = 100.90m,
             SalaryRate = SalaryRates.PerHour,
@@ -77,7 +77,7 @@ public static class JobFixtures
         Language = "English",
         Location = "Random Address",
         JobTypes = JobTypes.Freelance,
-        Salary = new JobSalary()
+        Salary = new JobSalary
         {
             MinimalAmount = 100.90m,
             SalaryRate = SalaryRates.PerHour,
@@ -98,7 +98,7 @@ public static class JobFixtures
         Language = "English",
         Location = "Random Address",
         JobTypes = JobTypes.Freelance,
-        Salary = new JobSalary()
+        Salary = new JobSalary
         {
             MinimalAmount = 100.90m,
             SalaryRate = SalaryRates.PerHour,

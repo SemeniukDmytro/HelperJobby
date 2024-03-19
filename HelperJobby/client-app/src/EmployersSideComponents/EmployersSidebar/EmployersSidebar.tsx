@@ -5,7 +5,8 @@ import {
     faBars,
     faBriefcase,
     faChevronRight,
-    faPlus, faUser,
+    faPlus,
+    faUser,
     faUserGroup,
     faUserPlus,
     faXmark
@@ -23,9 +24,10 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
     const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [showCreateOptions, setShowCreateOptions] = useState(false);
     const navigate = useNavigate();
+
     function handleNavBarSizeButtonClick() {
         setIsExpanded(!isExpanded);
-        if (isExpanded){
+        if (isExpanded) {
             setIsHovered(false);
         }
     }
@@ -37,7 +39,7 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
     }
 
     function handleNavMouseLeave() {
-        if (hoverTimeoutRef.current){
+        if (hoverTimeoutRef.current) {
             clearTimeout(hoverTimeoutRef.current);
         }
         hoverTimeoutRef.current = setTimeout(() => {
@@ -46,57 +48,57 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
     }
 
     function handleShowCreateOptionsMouseEnter() {
-        if (isHovered || isExpanded){
+        if (isHovered || isExpanded) {
             setShowCreateOptions(true);
             return;
         }
         hoverTimeoutRef.current = setTimeout(() => {
             setShowCreateOptions(true);
         }, 500);
-        
+
     }
-    
-    function handelShowCreateOptionsMouseLeave(){
+
+    function handelShowCreateOptionsMouseLeave() {
         setShowCreateOptions(false);
     }
 
     function navigateToJobPostingPage() {
         navigate(employerPagesPaths.JOB_POSTING);
     }
-    
-    function navigateToJobsPage(){
+
+    function navigateToJobsPage() {
         navigate(employerPagesPaths.JOBS);
     }
 
     function navigateToCandidatesPage() {
         navigate(employerPagesPaths.CANDIDATES);
     }
-    
-    function navigateToResumeSearchPage(){
+
+    function navigateToResumeSearchPage() {
         navigate(employerPagesPaths.RESUMES)
     }
-    
-    function navigateToInterviewsPage(){
+
+    function navigateToInterviewsPage() {
         navigate(employerPagesPaths.EMPLOYER_INTERVIEWS)
     }
-    
-    function navigateToCreateUsersPage(){
+
+    function navigateToCreateUsersPage() {
         navigate(employerPagesPaths.USERS)
     }
 
     return (
         <>
-            <nav 
+            <nav
                 className={"employer-pages-navigation"}
                 onMouseEnter={handleNavBarHover}
                 onMouseLeave={handleNavMouseLeave}
             >
-                <div 
+                <div
                     className="nav-bar-layout"
-                    style={{width : `${isExpanded ? "12.25rem" : " 3.5rem"}`}}
+                    style={{width: `${isExpanded ? "12.25rem" : " 3.5rem"}`}}
                 >
                     <div className={"nav-bar-container"}
-                         style={{width : `${(isExpanded || isHovered) ? "12.25rem" : " 3.5rem"}`}}
+                         style={{width: `${(isExpanded || isHovered) ? "12.25rem" : " 3.5rem"}`}}
                     >
                         <div className="nav-bar-button-container">
                             <button className={"nav-bar-size-button"} onClick={handleNavBarSizeButtonClick}>
@@ -104,7 +106,7 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                                     <div className="nav-icon-container">
                                         <FontAwesomeIcon className={"svg125rem"} icon={faXmark}/>
                                     </div>
-                                     :
+                                    :
                                     <div className="nav-icon-container">
                                         <FontAwesomeIcon className={"svg1rem"} icon={faBars}/>
                                     </div>
@@ -119,14 +121,15 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                         <ul className="nav-buttons-list">
                             <li className={"nav-list-component"}
                                 onMouseEnter={handleShowCreateOptionsMouseEnter}
-                                onMouseLeave={handelShowCreateOptionsMouseLeave}  >
+                                onMouseLeave={handelShowCreateOptionsMouseLeave}>
                                 <div className={"nav-bar-button-container"}>
-                                    <div 
-                                        className={"white-nav-link-container"} 
+                                    <div
+                                        className={"white-nav-link-container"}
                                     >
                                         <a className={"nav-link"}>
                                             <div className="nav-icon-container">
-                                                <FontAwesomeIcon className={"svg1rem semi-dark-small-text"} icon={faPlus}/>
+                                                <FontAwesomeIcon className={"svg1rem semi-dark-small-text"}
+                                                                 icon={faPlus}/>
                                             </div>
                                             {(isHovered || isExpanded) &&
                                                 <div className="nav-link-text dark-nav-link-text">
@@ -134,9 +137,10 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                                                 </div>
                                             }
                                         </a>
-                                        {(isHovered || isExpanded) && 
+                                        {(isHovered || isExpanded) &&
                                             <div className={"nav-icon-container"}>
-                                                <FontAwesomeIcon className={"svg075rem mr05rem semi-dark-default-text"} icon={faChevronRight}/>
+                                                <FontAwesomeIcon className={"svg075rem mr05rem semi-dark-default-text"}
+                                                                 icon={faChevronRight}/>
                                             </div>
                                         }
                                     </div>
@@ -149,8 +153,10 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                                                     <div className={"nav-bar-button-container"}>
                                                         <div className={"nav-link-container"}>
                                                             <a className={"nav-link"}>
-                                                                <div className="nav-icon-container green-icon-container">
-                                                                    <FontAwesomeIcon className={"svg1rem"} icon={faBriefcase}/>
+                                                                <div
+                                                                    className="nav-icon-container green-icon-container">
+                                                                    <FontAwesomeIcon className={"svg1rem"}
+                                                                                     icon={faBriefcase}/>
                                                                 </div>
                                                                 <div className="nav-link-text">
                                                                     Job
@@ -159,12 +165,14 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li className={"nav-list-component"} onClick={navigateToCreateUsersPage}>
+                                                <li className={"nav-list-component"}
+                                                    onClick={navigateToCreateUsersPage}>
                                                     <div className={"nav-bar-button-container"}>
                                                         <div className={"nav-link-container"}>
                                                             <a className={"nav-link"}>
                                                                 <div className="nav-icon-container pink-icon-container">
-                                                                    <FontAwesomeIcon className={"svg1rem"} icon={faUser}/>
+                                                                    <FontAwesomeIcon className={"svg1rem"}
+                                                                                     icon={faUser}/>
                                                                 </div>
                                                                 <div className="nav-link-text">
                                                                     User
@@ -196,7 +204,7 @@ const EmployersSidebar: FC<EmployersSidebarProps> = () => {
                                     </div>
                                 </div>
                             </li>
-                            <li className={"nav-list-component"} 
+                            <li className={"nav-list-component"}
                                 onClick={navigateToCandidatesPage}>
                                 <div className={"nav-bar-button-container"}>
                                     <div className={"nav-link-container"}>

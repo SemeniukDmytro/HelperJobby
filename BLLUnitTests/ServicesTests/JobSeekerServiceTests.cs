@@ -1,7 +1,6 @@
 using ApplicationBLL.Interfaces;
 using ApplicationBLL.Services;
 using ApplicationDomain.Abstraction.IQueryRepositories;
-using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
 using ApplicationDomain.Models;
 using BLLUnitTests.Fixture;
@@ -11,8 +10,8 @@ namespace BLLUnitTests.ServicesTests;
 
 public class JobSeekerServiceTests
 {
-    private readonly JobSeekerService _jobSeekerService;
     private readonly Mock<IJobSeekerQueryRepository> _jobSeekerQueryRepositoryMock = new();
+    private readonly JobSeekerService _jobSeekerService;
     private readonly Mock<ISavedJobQueryRepository> _savedJobQueryRepository = new();
     private readonly Mock<IUserIdGetter> _userIdGetter = new();
 

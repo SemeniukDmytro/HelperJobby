@@ -8,25 +8,24 @@ namespace ApplicationDomain.Models;
 
 public class IncompleteJobSalary
 {
-    [ExcludeFromUpdate]
-    [Key]
-    public int Id { get; set; }
-    [Required]
-    public ShowPayByOptions ShowPayByOption { get; set; }
+    [ExcludeFromUpdate] [Key] public int Id { get; set; }
+
+    [Required] public ShowPayByOptions ShowPayByOption { get; set; }
+
     [Required]
     [Column(TypeName = "decimal(10,2)")]
     public decimal MinimalAmount { get; set; }
-    [Column(TypeName = "decimal(10,2)")]
-    public decimal? MaximalAmount { get; set; }
-    [Required]
-    public SalaryRates SalaryRate { get; set; }
-    [Required]
-    [DefaultValue(true)]
-    public bool MeetsMinSalaryRequirement { get; set; }
+
+    [Column(TypeName = "decimal(10,2)")] public decimal? MaximalAmount { get; set; }
+
+    [Required] public SalaryRates SalaryRate { get; set; }
+
+    [Required] [DefaultValue(true)] public bool MeetsMinSalaryRequirement { get; set; }
+
     [ExcludeFromUpdate]
     [Required]
     [ForeignKey("IncompleteJob")]
     public int IncompleteJobId { get; set; }
-    [ExcludeFromUpdate]
-    public IncompleteJob IncompleteJob { get; set; }
+
+    [ExcludeFromUpdate] public IncompleteJob IncompleteJob { get; set; }
 }

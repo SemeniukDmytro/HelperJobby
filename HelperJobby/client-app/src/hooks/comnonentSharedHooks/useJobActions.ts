@@ -51,9 +51,7 @@ export const useJobActions = (
             setRequestInProcess(false);
         }
     }, [requestInProcess, jobSeekerService, job, setJobSeeker]);
-    
-    
-    
+
 
     return {removeSavedJob, saveJob};
 };

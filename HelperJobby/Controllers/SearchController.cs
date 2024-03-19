@@ -15,13 +15,13 @@ namespace HelperJobby.Controllers;
 [ApiController]
 public class SearchController : ExtendedBaseController
 {
+    private readonly IEmployerService _employerService;
     private readonly IEnqueuingTaskHelper _enqueuingTaskHelper;
     private readonly IJobQueryRepository _jobQueryRepository;
+    private readonly IJobSeekerService _jobSeekerService;
     private readonly IResumeQueryRepository _resumeQueryRepository;
     private readonly ISearchService _searchService;
     private readonly IUserService _userService;
-    private readonly IEmployerService _employerService;
-    private readonly IJobSeekerService _jobSeekerService;
 
     public SearchController(IMapper mapper, ISearchService searchService, IJobQueryRepository jobQueryRepository
         , IResumeQueryRepository resumeQueryRepository, IEnqueuingTaskHelper enqueuingTaskHelper,
@@ -66,7 +66,8 @@ public class SearchController : ExtendedBaseController
 
         var searchResultDTO = new JobSearchResultDTO
         {
-            jobs = _mapper.Map<IEnumerable<JobDTO>>(await _jobQueryRepository.GetJobsByJobIds(jobIdsToLoad.jobIds, currentEmployerId)),
+            jobs = _mapper.Map<IEnumerable<JobDTO>>(
+                await _jobQueryRepository.GetJobsByJobIds(jobIdsToLoad.jobIds, currentEmployerId)),
             HasMore = jobIdsToLoad.hasMoreResults
         };
         return searchResultDTO;
@@ -75,7 +76,8 @@ public class SearchController : ExtendedBaseController
     [HttpGet("resumes")]
     public async Task<ResumeSearchResultDTO> SearchResumes(string q, [FromQuery] int start)
     {
-        int currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();;
+        var currentJobSeekerId = _jobSeekerService.GetCurrentJobSeekerId();
+        ;
         var resumesToLoad = await _searchService.FindResumeIds(start, q);
         var resumeSearchResultDTO = new ResumeSearchResultDTO
         {

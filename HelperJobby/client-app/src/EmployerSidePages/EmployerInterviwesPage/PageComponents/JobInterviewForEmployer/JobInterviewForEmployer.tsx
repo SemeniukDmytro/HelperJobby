@@ -10,13 +10,13 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBuilding, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 
 interface JobInterviewForEmployerProps {
-    interview : InterviewDTO;
-    setJob : Dispatch<SetStateAction<JobDTO | undefined>>;
+    interview: InterviewDTO;
+    setJob: Dispatch<SetStateAction<JobDTO | undefined>>;
 }
 
 const JobInterviewForEmployer: FC<JobInterviewForEmployerProps> = ({
-    interview,
-    setJob
+                                                                       interview,
+                                                                       setJob
                                                                    }) => {
 
     const [appointmentInfoText, setAppointmentInfoText] = useState("Show appointment info");
@@ -77,7 +77,7 @@ const JobInterviewForEmployer: FC<JobInterviewForEmployerProps> = ({
             setJob(prev => {
                 return prev && {
                     ...prev,
-                    interviews : prev.interviews.filter(i => i.jobId != interview.jobId && interview.jobSeekerId != i.jobSeekerId)
+                    interviews: prev.interviews.filter(i => i.jobId != interview.jobId && interview.jobSeekerId != i.jobSeekerId)
                 }
             })
         } catch (error) {
@@ -110,14 +110,17 @@ const JobInterviewForEmployer: FC<JobInterviewForEmployerProps> = ({
 
                         <div className={"ji-interview-info-fb"}>
                             <div className={"ji-job-info-box"} onClick={navigateToJobPage}>
-                                <span className={"ji-job-title"}>{interview.jobSeeker.firstName} {interview.jobSeeker.lastName}</span>
+                                <span
+                                    className={"ji-job-title"}>{interview.jobSeeker.firstName} {interview.jobSeeker.lastName}</span>
                                 <span className={"semi-dark-default-text"}>{interview.jobSeeker.phoneNumber}</span>
                                 <div>
                                     <span className={"semi-dark-default-text"}>Interview format:&nbsp;</span>
-                                    <span className={"semi-dark-default-text bold-text"}>{interview.interviewType}</span>
+                                    <span
+                                        className={"semi-dark-default-text bold-text"}>{interview.interviewType}</span>
                                 </div>
                                 <div>
-                                    <span className={"grey-small-text"}>{new Date(interview.interviewStart) < new Date() ? "Interview was on" : "Interview scheduled for"}&nbsp;
+                                    <span
+                                        className={"grey-small-text"}>{new Date(interview.interviewStart) < new Date() ? "Interview was on" : "Interview scheduled for"}&nbsp;
                                     </span>
                                     <span
                                         className={"grey-small-text bold-text"}
@@ -135,7 +138,8 @@ const JobInterviewForEmployer: FC<JobInterviewForEmployerProps> = ({
                                 <div>
                                     {interview.interviewType === "Video" &&
                                         <div className={"appointment-info-container"}>
-                                            <span className={"semi-dark-default-text"}>Video conference link:&nbsp;</span>
+                                            <span
+                                                className={"semi-dark-default-text"}>Video conference link:&nbsp;</span>
                                             <a
                                                 style={{maxWidth: "100%"}}
                                                 href={`${interview.appointmentInfo}`}
@@ -143,8 +147,10 @@ const JobInterviewForEmployer: FC<JobInterviewForEmployerProps> = ({
                                         </div>}
                                     {interview.interviewType === "Phone" &&
                                         <div className={"appointment-info-container"}>
-                                            <span className={"semi-dark-default-text"}>Contact phone number:&nbsp;</span>
-                                            <span className={"semi-dark-default-text bold-text"}>{interview.appointmentInfo}</span>
+                                            <span
+                                                className={"semi-dark-default-text"}>Contact phone number:&nbsp;</span>
+                                            <span
+                                                className={"semi-dark-default-text bold-text"}>{interview.appointmentInfo}</span>
                                         </div>}
                                     {interview.interviewType === "In-person" &&
                                         <div className={"appointment-info-container"}>
@@ -177,7 +183,7 @@ const JobInterviewForEmployer: FC<JobInterviewForEmployerProps> = ({
             <div className={"content-separation-line"}/>
         </>
     )
-    
+
 }
 
 export default JobInterviewForEmployer;

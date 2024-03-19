@@ -10,10 +10,10 @@ namespace BLLUnitTests.ServicesTests;
 
 public class InterviewServiceTests
 {
-    private readonly IInterviewService _interviewService;
-    private readonly Mock<IInterviewQueryRepository> _interviewQueryRepositoryMock = new();
-    private readonly Mock<IJobQueryRepository> _jobQueryRepositoryMock = new();
     private readonly Mock<IEmployerService> _employerServiceMock = new();
+    private readonly Mock<IInterviewQueryRepository> _interviewQueryRepositoryMock = new();
+    private readonly IInterviewService _interviewService;
+    private readonly Mock<IJobQueryRepository> _jobQueryRepositoryMock = new();
     private readonly Mock<IJobSeekerService> _jobSeekerServiceMock = new();
 
     public InterviewServiceTests()
@@ -33,7 +33,7 @@ public class InterviewServiceTests
         var job = JobFixtures.FirstJobEntity;
         var employerId = 1;
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
-        
+
         _jobQueryRepositoryMock.Setup(r => r.GetJobWithInterviews(jobId)).ReturnsAsync(job);
 
         //Act
@@ -70,7 +70,8 @@ public class InterviewServiceTests
         var createdInterviewInfo = new Interview
         {
             InterviewStart = DateTime.UtcNow,
-            InterviewEnd = TimeOnly.FromDateTime(DateTime.UtcNow).Add(TimeOnly.FromTimeSpan(TimeSpan.FromHours(1)).ToTimeSpan())
+            InterviewEnd = TimeOnly.FromDateTime(DateTime.UtcNow)
+                .Add(TimeOnly.FromTimeSpan(TimeSpan.FromHours(1)).ToTimeSpan())
         };
         _interviewQueryRepositoryMock.Setup(r => r.GetInterviewByJobIdAndJobSeekerIdPlain(jobId, jobSeekerId))
             .ThrowsAsync(new InterviewOperatingException("Interview not found"));

@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import ApplyResumeSkillsComponent from "./PageComponents/ApplyResumeSkillsComponent/ApplyResumeSkillsComponent";
 
-interface ApplyResumeSkillsPageProps {}
+interface ApplyResumeSkillsPageProps {
+}
 
 const ApplyResumeSkillsPage: FC<ApplyResumeSkillsPageProps> = () => (
-  <ApplyResumeSkillsComponent/>
+    <ApplyResumeSkillsComponent/>
 );
 
 export default ApplyResumeSkillsPage;

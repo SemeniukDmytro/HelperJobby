@@ -35,19 +35,18 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
     const fromParam = searchParams.get("from");
     const jobIdParam = searchParams.get("jobId");
     const {jobId, setJobId} = useApplyResume();
-    
+
 
     useEffect(() => {
-        if (!jobId){
-            if (fromParam === "job-apply" && jobIdParam && !isNanAfterIntParse(jobIdParam)){
+        if (!jobId) {
+            if (fromParam === "job-apply" && jobIdParam && !isNanAfterIntParse(jobIdParam)) {
                 setJobId(parseInt(jobIdParam));
             }
         }
-        
+
         if (!jobSeeker?.resume && ((!jobIdParam || isNanAfterIntParse(jobIdParam)) && !jobId)) {
             navigate("/my-profile");
-        }
-        else if (!jobSeeker?.resume && ((jobIdParam && !isNanAfterIntParse(jobIdParam)) || jobId)){
+        } else if (!jobSeeker?.resume && ((jobIdParam && !isNanAfterIntParse(jobIdParam)) || jobId)) {
             navigate(`/job-apply/${jobIdParam ? jobIdParam : jobId}/resume`);
         }
         const handleOutsideShowMoreOptionsClick = (event: MouseEvent) => {
@@ -86,7 +85,7 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
     }, [showMoreOptions]);
 
     function onBackButtonClick() {
-        if (jobId){
+        if (jobId) {
             navigate(`/job-apply/${jobId}/resume`);
             return;
         }
@@ -109,10 +108,9 @@ const ResumeComponent: FC<ResumeComponentProps> = () => {
             logErrorInfo(err)
         } finally {
             setDeleteProcess(false);
-            if (jobId){
+            if (jobId) {
                 navigate(`/job-apply/${jobId}/resume`);
-            }
-            else {
+            } else {
                 navigate("/my-profile")
             }
         }

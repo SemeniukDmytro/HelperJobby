@@ -41,7 +41,7 @@ const AddSkillComponent: FC<AddSkillComponentProps> = () => {
 
     async function addSkill(event: React.MouseEvent<HTMLButtonElement>) {
         event.preventDefault();
-        if (!skill) {
+        if (!skill || skill.length > 100) {
             setValidateSkill(true);
             skillInputRef.current?.focus();
             return;
@@ -54,7 +54,6 @@ const AddSkillComponent: FC<AddSkillComponentProps> = () => {
         navigateBack()
     }
 
-    console.log(jobSeeker)
     async function addSkillToExistingResume() {
         try {
             setSavingProcess(true);
@@ -109,38 +108,39 @@ const AddSkillComponent: FC<AddSkillComponentProps> = () => {
     }
 
     return (
-            <div className={"page-with-centered-content-layout"}>
-                <NavigateBackHeader onBackButtonClick={navigateBack}></NavigateBackHeader>
-                <form className={"form-layout"}>
-                    {savingProcess && <div className={"request-in-process-surface"}></div>}
-                    <div className={"edit-contact-form-header"}>
-                        <span>Add skill</span>
-                    </div>
-                    <CustomInputField
-                        fieldLabel={"Skill name"}
-                        isRequired={true}
-                        inputFieldValue={skill}
-                        setInputFieldValue={setSkill}
-                        executeValidation={validateSkill}
-                        setExecuteValidation={setValidateSkill}
-                        inputRef={skillInputRef}
-                    />
-                    <div>
-                        <button
-                            className={"blue-button min-save-button-size"}
-                            onClick={addSkill}
-                            disabled={savingProcess}
-                        >
-                            {savingProcess ?
-                                <WhiteLoadingSpinner/>
-                                :
-                                <span>Save</span>
-                            }
-                        </button>
-                    </div>
-                </form>
+        <div className={"page-with-centered-content-layout"}>
+            <NavigateBackHeader onBackButtonClick={navigateBack}></NavigateBackHeader>
+            <form className={"form-layout"}>
+                {savingProcess && <div className={"request-in-process-surface"}></div>}
+                <div className={"edit-contact-form-header"}>
+                    <span>Add skill</span>
+                </div>
+                <CustomInputField
+                    fieldLabel={"Skill name"}
+                    isRequired={true}
+                    inputFieldValue={skill}
+                    setInputFieldValue={setSkill}
+                    executeValidation={validateSkill}
+                    setExecuteValidation={setValidateSkill}
+                    inputRef={skillInputRef}
+                    maxInputLength={100}
+                />
+                <div>
+                    <button
+                        className={"blue-button min-save-button-size"}
+                        onClick={addSkill}
+                        disabled={savingProcess}
+                    >
+                        {savingProcess ?
+                            <WhiteLoadingSpinner/>
+                            :
+                            <span>Save</span>
+                        }
+                    </button>
+                </div>
+            </form>
 
-            </div>
+        </div>
     )
 }
 

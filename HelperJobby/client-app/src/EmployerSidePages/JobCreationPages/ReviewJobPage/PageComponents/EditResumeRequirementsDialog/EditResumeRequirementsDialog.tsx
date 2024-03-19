@@ -20,14 +20,14 @@ const EditResumeRequirementsDialog: FC<EditResumeRequirementsDialogProps> = ({
                                                                              }) => {
     const {currentJob, setCurrentJob} = useCurrentEmployerJob();
     const [isResumeRequired, setIsResumeRequired] =
-        useState(currentJob?.resumeRequired ?  resumeRequirementOptionsEnumToStringMap(currentJob?.resumeRequired)
+        useState(currentJob?.resumeRequired ? resumeRequirementOptionsEnumToStringMap(currentJob?.resumeRequired)
             : resumeRequirementOptionsMapData[0].stringValue);
     const [requestInProgress, setRequestInProgress] = useState(false);
     const incompleteJobService = new IncompleteJobService();
 
     useEffect(() => {
-        if (showDialog){
-            setIsResumeRequired(currentJob?.resumeRequired ?  resumeRequirementOptionsEnumToStringMap(currentJob?.resumeRequired)
+        if (showDialog) {
+            setIsResumeRequired(currentJob?.resumeRequired ? resumeRequirementOptionsEnumToStringMap(currentJob?.resumeRequired)
                 : resumeRequirementOptionsMapData[0].stringValue);
         }
     }, [showDialog]);
@@ -35,21 +35,19 @@ const EditResumeRequirementsDialog: FC<EditResumeRequirementsDialogProps> = ({
     async function editResumeRequirements() {
         try {
             setRequestInProgress(true);
-            const updatedIncompleteJob : UpdatedIncompleteJobDTO = {
-                resumeRequired : resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)?.enumValue
+            const updatedIncompleteJob: UpdatedIncompleteJobDTO = {
+                resumeRequired: resumeRequirementOptionsMapData.find(rro => rro.stringValue == isResumeRequired)?.enumValue
             }
-            const  retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
+            const retrievedIncompleteJob = await incompleteJobService.updateJobCreation(currentJob!.id, updatedIncompleteJob);
             setCurrentJob(retrievedIncompleteJob);
             setShowDialog(false)
-        }
-        catch (err){
+        } catch (err) {
             logErrorInfo(err)
-        }
-        finally {
+        } finally {
             setRequestInProgress(false);
         }
     }
-    
+
     return (
         <EditJobPostDialog showDialog={showDialog}
                            setShowDialog={setShowDialog}

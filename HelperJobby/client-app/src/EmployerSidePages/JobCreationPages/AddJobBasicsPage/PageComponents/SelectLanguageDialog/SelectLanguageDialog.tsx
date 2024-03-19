@@ -12,17 +12,17 @@ interface SelectLanguageDialogProps {
     setShowDialog: Dispatch<SetStateAction<boolean>>;
     currentLanguage: string;
     setCurrentLanguage: Dispatch<SetStateAction<string>>;
-    currentCountry : string;
-    setCurrentCountry : Dispatch<SetStateAction<string>>;
+    currentCountry: string;
+    setCurrentCountry: Dispatch<SetStateAction<string>>;
 }
 
 const SelectLanguageDialog: FC<SelectLanguageDialogProps> = ({
-    showDialog,
-    setShowDialog,
-    currentLanguage,
-    setCurrentLanguage,
-    currentCountry,
-    setCurrentCountry
+                                                                 showDialog,
+                                                                 setShowDialog,
+                                                                 currentLanguage,
+                                                                 setCurrentLanguage,
+                                                                 currentCountry,
+                                                                 setCurrentCountry
                                                              }) => {
     const [language, setLanguage] = useState(currentLanguage);
     const [country, setCountry] = useState(currentCountry);
@@ -34,10 +34,10 @@ const SelectLanguageDialog: FC<SelectLanguageDialogProps> = ({
     function closeDialog() {
         setShowDialog(false);
     }
-    
-    function changeCurrentLanguage(){
+
+    function changeCurrentLanguage() {
         setValidateData(true);
-        if (isInvalidLanguage){
+        if (isInvalidLanguage) {
             return;
         }
         setCurrentCountry(country);
@@ -65,7 +65,7 @@ const SelectLanguageDialog: FC<SelectLanguageDialogProps> = ({
                         executeValidation={validateData}
                         setExecuteValidation={setValidateData}
                         isInvalidSelect={isInvalidLanguage}
-                     />
+                    />
                     <CountrySelector
                         country={country}
                         setCountry={setCountry}

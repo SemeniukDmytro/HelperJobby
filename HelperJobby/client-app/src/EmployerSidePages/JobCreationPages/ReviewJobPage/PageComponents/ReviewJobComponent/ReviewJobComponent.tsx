@@ -12,7 +12,7 @@ import {useJobLoaderToSetCurrentJob} from "../../../../../hooks/comnonentSharedH
 import {useEmployer} from "../../../../../hooks/contextHooks/useEmployer";
 
 
-interface ReviewJobComponentProps { 
+interface ReviewJobComponentProps {
 }
 
 const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
@@ -30,7 +30,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
     }, []);
 
     useEffect(() => {
-        if (currentJob){
+        if (currentJob) {
             setLoading(false);
         }
     }, [currentJob]);
@@ -50,7 +50,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
             setEmployer(prev => {
                 return prev && {
                     ...prev,
-                    incompleteJobs : prev.incompleteJobs.filter(j => j.id !==  currentJob?.id)
+                    incompleteJobs: prev.incompleteJobs.filter(j => j.id !== currentJob?.id)
                 }
             })
             navigate(`${employerPagesPaths.JOB_POSTING}`)
@@ -61,8 +61,7 @@ const ReviewJobComponent: FC<ReviewJobComponentProps> = () => {
         }
     }
 
-    
-    
+
     return (
         loading ? <LoadingPage/>
             :

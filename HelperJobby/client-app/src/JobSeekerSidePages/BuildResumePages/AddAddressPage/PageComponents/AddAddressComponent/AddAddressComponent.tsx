@@ -62,22 +62,26 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
 
     async function updateJobSeekerAddress(resultPageURI: string, isSaveAndExitAction: boolean) {
         setExecuteFormValidation(true);
-        
-        if (!country) {
+
+        if (!country || country.length > 45) {
             countryRef.current?.focus();
             if (isSaveAndExitAction) {
                 setShowDialogWindow(true);
             }
             return;
         }
-        if (!city) {
+        if (!city || city.length > 30) {
             cityInputRef.current?.focus();
             if (isSaveAndExitAction) {
                 setShowDialogWindow(true);
             }
             return;
         }
-        
+
+        if (streetAddress.length > 30 || postalCode.length > 10) {
+            return;
+        }
+
 
         try {
             setSavingInfo(true);
@@ -124,6 +128,7 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
                 showResult={showStreetsAutocomplete}
                 setShowResult={setShowStreetsAutocomplete}
                 autocompleteWindowType={AutocompleteWindowTypes.streetAddress}
+                fullLocationResult={false}
             />}
 
             {showCityAutoComplete && <AutocompleteResultsWindow
@@ -135,6 +140,7 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
                 showResult={showCityAutoComplete}
                 setShowResult={setShowCityAutoComplete}
                 autocompleteWindowType={AutocompleteWindowTypes.city}
+                fullLocationResult={false}
             />}
             <div className={"build-resume-form"}>
                 {savingInfo && <div className={"request-in-process-surface"}></div>}
@@ -149,14 +155,15 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
                     setCountry={setCountry}
                     selectRef={countryRef}
                 />
-                
-                
+
+
                 <LocationCustomInputField
                     fieldLabel={"Street address"}
                     inputValue={streetAddress}
                     setInputValue={setStreetAddress}
                     inputRef={streetAddressInputRef}
                     isRequired={false}
+                    locationMaxLength={30}
                     setShowAutocompleteResults={setShowStreetsAutocomplete}/>
 
                 <LocationCustomInputField
@@ -168,6 +175,7 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
                     setShowAutocompleteResults={setShowCityAutoComplete}
                     executeValidation={executeFormValidation}
                     setExecuteValidation={setExecuteFormValidation}
+                    locationMaxLength={30}
                 />
 
                 <CustomInputField
@@ -176,6 +184,7 @@ const AddAddressComponent: FC<ResumeAddressComponentProps> = () => {
                     inputFieldValue={postalCode}
                     setInputFieldValue={setPostalCode}
                     inputRef={postalCodeRef}
+                    maxInputLength={10}
                 />
                 <button className={"submit-form-button"} onClick={updateAddress}>
                     {savingInfo ?

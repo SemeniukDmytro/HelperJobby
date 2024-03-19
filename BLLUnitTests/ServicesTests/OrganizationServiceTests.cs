@@ -10,14 +10,15 @@ namespace BLLUnitTests.ServicesTests;
 
 public class OrganizationServiceTests
 {
-    private readonly OrganizationService _organizationService;
     private readonly Mock<IEmployerQueryRepository> _employerQueryRepositoryMock = new();
-    private readonly Mock<IOrganizationQueryRepository> _organizationQueryRepositoryMock = new();
     private readonly Mock<IEmployerService> _employerServiceMock = new();
+    private readonly Mock<IOrganizationQueryRepository> _organizationQueryRepositoryMock = new();
+    private readonly OrganizationService _organizationService;
 
     public OrganizationServiceTests()
     {
-        _organizationService = new OrganizationService(_organizationQueryRepositoryMock.Object, _employerQueryRepositoryMock.Object,
+        _organizationService = new OrganizationService(_organizationQueryRepositoryMock.Object,
+            _employerQueryRepositoryMock.Object,
             _employerServiceMock.Object);
     }
 
@@ -71,9 +72,7 @@ public class OrganizationServiceTests
             Email = "test@gmail.com"
         };
         var employerId = 1;
-        var organization = new Organization
-        {
-        };
+        var organization = new Organization();
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
         _employerQueryRepositoryMock.Setup(eq => eq.GetEmployerById(employerId))
             .ReturnsAsync(EmployerFixtures.EmployerEntity);
@@ -137,7 +136,7 @@ public class OrganizationServiceTests
             Email = "testToRemove@gmail.com",
             OrganizationId = 1
         };
-        
+
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
         _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmail(emailId))
             .ReturnsAsync(employeeEmail);
@@ -161,11 +160,9 @@ public class OrganizationServiceTests
         {
             Email = "test@gmail.com",
             OrganizationId = 2,
-            Organization = new Organization
-            {
-            }
+            Organization = new Organization()
         };
-        
+
         _employerServiceMock.Setup(us => us.GetCurrentEmployerId()).Returns(employerId);
         _organizationQueryRepositoryMock.Setup(r => r.GetEmployeeEmail(employeeEmailId))
             .ReturnsAsync(employeeEmail);
@@ -182,9 +179,7 @@ public class OrganizationServiceTests
         //Arrange
         var emailId = 1;
         var employerId = 1;
-        var organization = new Organization
-        {
-        };
+        var organization = new Organization();
         var employeeEmail = new OrganizationEmployeeEmail
         {
             Id = emailId,

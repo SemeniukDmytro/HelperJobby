@@ -1,4 +1,4 @@
-﻿export const dayTimes : string[] = [
+﻿export const dayTimes: string[] = [
     "12:00 AM", "12:30 AM",
     "01:00 AM", "01:30 AM",
     "02:00 AM", "02:30 AM",

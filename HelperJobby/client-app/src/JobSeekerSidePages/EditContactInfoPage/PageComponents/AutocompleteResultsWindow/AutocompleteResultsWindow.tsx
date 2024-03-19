@@ -19,8 +19,9 @@ interface AutocompleteResultsWindowProps {
     autocompleteWindowType: AutocompleteWindowTypes;
     locationSelected?: boolean;
     setLocationSelected?: Dispatch<SetStateAction<boolean>>;
-    windowZIndex? : number;
-    includeWindowScroll? : boolean;
+    windowZIndex?: number;
+    includeWindowScroll?: boolean;
+    fullLocationResult: boolean;
 }
 
 const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) => {
@@ -32,7 +33,7 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
     const [delayedInputValue, setDelayedInputValue] = useState("");
     const [autocompleteResults, setAutocompleteResults] = useState<string[][]>([]);
     const [loading, setLoading] = useState(true);
-    const getAutocompleteWindowPosition = useSelectWindowPosition(props.inputFieldRef, autoCompleteRef, props.setShowResult, 
+    const getAutocompleteWindowPosition = useSelectWindowPosition(props.inputFieldRef, autoCompleteRef, props.setShowResult,
         props.includeWindowScroll !== undefined ? props.includeWindowScroll : true);
 
     useEffect(() => {
@@ -88,6 +89,12 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
 
 
     function handleStreetSelect(locationResult: string[]) {
+        if (props.fullLocationResult) {
+            props.setLocationSelected && props.setLocationSelected(true);
+            props.setInputValue(locationResult.join(", "));
+            setAutoCompleteSelected(true);
+            return;
+        }
         const cityStreetSeparationIndex = Math.max(1, locationResult.length - 2);
         const streetAddressSeparated = locationResult.slice(0, cityStreetSeparationIndex);
         const citySeparated = locationResult.slice(cityStreetSeparationIndex, locationResult.length);
@@ -123,7 +130,7 @@ const AutocompleteResultsWindow: FC<AutocompleteResultsWindowProps> = (props) =>
                         style={{
                             maxWidth: props.windowMaxWidth,
                             width: "100%",
-                            zIndex : props.windowZIndex
+                            zIndex: props.windowZIndex
                         }}
                         ref={autoCompleteRef}
                     >

@@ -23,7 +23,7 @@ const WorkExperienceComponent: FC<WorkExperienceComponentProps> = () => {
 
     useEffect(() => {
         setProgressPercentage(ProgressPercentPerPage * 5);
-        if (!jobSeeker?.resume || jobSeeker?.resume.workExperiences.length == 0){
+        if (!jobSeeker?.resume || jobSeeker?.resume.workExperiences.length == 0) {
             navigate(addExperiencePath);
             return;
         }
@@ -32,17 +32,16 @@ const WorkExperienceComponent: FC<WorkExperienceComponentProps> = () => {
 
     async function customSaveFunc() {
         let nextPagePath = "/my-profile";
-        if (addExperiencePath.includes("/apply-resume") && job){
+        if (addExperiencePath.includes("/apply-resume") && job) {
             nextPagePath = `job-apply/${job.id}/resume`
         }
         navigate(nextPagePath)
     }
 
     function navigateSkillsPage() {
-        if (location.pathname.includes("/apply-resume")){
+        if (location.pathname.includes("/apply-resume")) {
             navigate("/apply-resume/skills")
-        }
-        else {
+        } else {
             navigate("/build/skills")
         }
 

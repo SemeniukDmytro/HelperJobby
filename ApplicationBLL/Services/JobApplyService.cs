@@ -8,9 +8,9 @@ namespace ApplicationBLL.Services;
 
 public class JobApplyService : IJobApplyService
 {
+    private readonly IEmployerService _employerService;
     private readonly IJobApplyQueryRepository _jobApplyQueryRepository;
     private readonly IJobQueryRepository _jobQueryRepository;
-    private readonly IEmployerService _employerService;
     private readonly IJobSeekerService _jobSeekerService;
 
     public JobApplyService(IJobApplyQueryRepository jobApplyQueryRepository, IJobQueryRepository jobQueryRepository,
@@ -28,9 +28,7 @@ public class JobApplyService : IJobApplyService
         var jobApply = await _jobApplyQueryRepository.GetJobApplyForConversation(jobSeekerId, jobId);
         if (jobSeekerId != _jobSeekerService.GetCurrentJobSeekerId() &&
             jobApply.Job.EmployerId != _employerService.GetCurrentEmployerId())
-        {
             throw new ForbiddenException("Something went wrong you couldn't load this conversation");
-        }
 
         return jobApply;
     }
@@ -39,10 +37,7 @@ public class JobApplyService : IJobApplyService
     {
         var currentEmployerId = _employerService.GetCurrentEmployerId();
         var jobApply = await _jobApplyQueryRepository.GetJobApplyForReview(jobSeekerId, jobId);
-        if (jobApply.Job.EmployerId != currentEmployerId)
-        {
-            throw new ForbiddenException();
-        }
+        if (jobApply.Job.EmployerId != currentEmployerId) throw new ForbiddenException();
 
         return jobApply;
     }
@@ -88,9 +83,7 @@ public class JobApplyService : IJobApplyService
         var currentEmployerId = _employerService.GetCurrentEmployerId();
         var jobApplyEntity = await _jobApplyQueryRepository.GetJobApplyByJobIdAndJobSeekerId(jobId, jobSeekerId);
         if (jobApplyEntity.Job.EmployerId != currentEmployerId)
-        {
             throw new ForbiddenException("You can not update this job apply");
-        }
 
         jobApplyEntity.IsReviewed = updatedJobApply.IsReviewed;
 
@@ -108,7 +101,7 @@ public class JobApplyService : IJobApplyService
                 throw new JobApplyingException(
                     "You have already hired this candidate you can not change job apply status");
         }
-        
+
         switch (updatedJobApply.JobApplyStatus)
         {
             case JobApplyStatuses.Rejected:

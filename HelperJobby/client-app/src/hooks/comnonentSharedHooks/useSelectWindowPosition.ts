@@ -1,12 +1,12 @@
-import {useEffect, useCallback, RefObject, Dispatch, SetStateAction} from 'react';
+import {Dispatch, RefObject, SetStateAction, useCallback, useEffect} from 'react';
 
 const useSelectWindowPosition = (
     inputFieldRef: RefObject<HTMLElement>,
     selectWindowRef: RefObject<HTMLElement>,
-    setShowResults : Dispatch<SetStateAction<boolean>>,
-    includeWindowScroll : boolean
+    setShowResults: Dispatch<SetStateAction<boolean>>,
+    includeWindowScroll: boolean
 ) => {
-    
+
     const getSelectWindowPosition = useCallback(() => {
         if (!inputFieldRef.current || !selectWindowRef.current) {
             return;
@@ -53,7 +53,7 @@ const useSelectWindowPosition = (
             window.removeEventListener('resize', handleResize);
         };
     }, [getSelectWindowPosition]);
-    
+
     return getSelectWindowPosition;
 };
 

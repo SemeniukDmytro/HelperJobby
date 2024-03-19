@@ -19,28 +19,28 @@ public class JobApplyQueryRepository : IJobApplyQueryRepository
     {
         var jobApply = await _applicationContext.JobApplies
             .Where(ja => ja.JobId == jobId && ja.JobSeekerId == jobSeekerId)
-            .Select(ja => new JobApply()
+            .Select(ja => new JobApply
             {
                 JobId = ja.JobId,
                 JobSeekerId = ja.JobSeekerId,
                 DateApplied = ja.DateApplied,
                 JobApplyStatus = ja.JobApplyStatus,
                 IsReviewed = ja.IsReviewed,
-                Job = new Job()
+                Job = new Job
                 {
                     EmployerId = ja.Job.EmployerId,
                     JobTitle = ja.Job.JobTitle,
                     Location = ja.Job.Location
                 },
-                JobSeeker = new JobSeeker()
+                JobSeeker = new JobSeeker
                 {
                     Id = ja.JobSeeker.Id,
                     FirstName = ja.JobSeeker.FirstName,
                     LastName = ja.JobSeeker.LastName,
                     Resume = ja.JobSeeker.Resume != null
-                        ? new Resume()
+                        ? new Resume
                         {
-                            WorkExperiences = ja.JobSeeker.Resume.WorkExperiences.Select(we => new WorkExperience()
+                            WorkExperiences = ja.JobSeeker.Resume.WorkExperiences.Select(we => new WorkExperience
                             {
                                 JobTitle = we.JobTitle,
                                 Company = we.Company,
@@ -48,7 +48,7 @@ public class JobApplyQueryRepository : IJobApplyQueryRepository
                                 To = we.To,
                                 CurrentlyWorkHere = we.CurrentlyWorkHere
                             }).ToList(),
-                            Educations = ja.JobSeeker.Resume.Educations.Select(e => new Education()
+                            Educations = ja.JobSeeker.Resume.Educations.Select(e => new Education
                             {
                                 LevelOfEducation = e.LevelOfEducation,
                                 FieldOfStudy = e.FieldOfStudy
@@ -56,16 +56,13 @@ public class JobApplyQueryRepository : IJobApplyQueryRepository
                             Skills = ja.JobSeeker.Resume.Skills
                         }
                         : null,
-                    User = new User()
+                    User = new User
                     {
                         Email = ja.JobSeeker.User.Email
                     }
                 }
             }).FirstOrDefaultAsync();
-        if (jobApply == null)
-        {
-            throw new JobApplyingException("Job apply not found");
-        }
+        if (jobApply == null) throw new JobApplyingException("Job apply not found");
 
         return jobApply;
     }
@@ -75,7 +72,7 @@ public class JobApplyQueryRepository : IJobApplyQueryRepository
         var jobApply =
             await _applicationContext.JobApplies.Include(ja => ja.Job).FirstOrDefaultAsync(j =>
                 j.JobId == jobId && j.JobSeekerId == jobSeekerId);
-        
+
         if (jobApply == null) throw new JobApplyingException("Job apply wasn't found");
 
         return jobApply;
@@ -107,7 +104,7 @@ public class JobApplyQueryRepository : IJobApplyQueryRepository
             }).ToListAsync();
         return jobApplies;
     }
-    
+
     public async Task<JobApply> GetJobApplyForConversation(int jobSeekerId, int jobId)
     {
         var jobApply = await _applicationContext.JobApplies.Where(i => i.JobSeekerId == jobSeekerId && i.JobId == jobId)
@@ -142,10 +139,7 @@ public class JobApplyQueryRepository : IJobApplyQueryRepository
                 },
                 JobSeeker = ja.JobSeeker
             }).FirstOrDefaultAsync();
-        if (jobApply == null)
-        {
-            throw new JobApplyingException("Job apply was not found");
-        }
+        if (jobApply == null) throw new JobApplyingException("Job apply was not found");
         return jobApply;
     }
 }

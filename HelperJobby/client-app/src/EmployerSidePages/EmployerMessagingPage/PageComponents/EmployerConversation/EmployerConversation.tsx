@@ -322,7 +322,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
                                                     `${schedulesEnumToStringMap(sch)}${index !== conversation?.job.schedule.length - 1 ? ", " : ""}`))
                                                 :
                                                 <div>Info not provided</div>
-                                            
+
                                         }
 
                                     </div>

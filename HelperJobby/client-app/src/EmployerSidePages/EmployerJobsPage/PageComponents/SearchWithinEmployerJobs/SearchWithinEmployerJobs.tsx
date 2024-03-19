@@ -33,7 +33,7 @@ const SearchWithinEmployerJobs: FC<SearchWithinEmployerJobsProps> = ({
     }, [sortBySelectedOption, orderSelectedOption]);
 
     useEffect(() => {
-        if(filteringInProgress){
+        if (filteringInProgress) {
             setFilteringInProcess(false);
         }
     }, [filteringInProgress]);
@@ -75,6 +75,9 @@ const SearchWithinEmployerJobs: FC<SearchWithinEmployerJobsProps> = ({
     }
 
     function handleViewResultsClick() {
+        if (jobTitleSearch.length > 100 || jobLocationSearch.length > 100) {
+            return;
+        }
         let filteredJobs = filterJobs(employer!.jobs, jobTitleSearch, jobLocationSearch);
         let sortedAndOrderedJobs = sortJobs(filteredJobs, sortBySelectedOption, orderSelectedOption);
         setJobSearchResults(sortedAndOrderedJobs);
@@ -114,12 +117,15 @@ const SearchWithinEmployerJobs: FC<SearchWithinEmployerJobsProps> = ({
                                 inputFieldValue={jobTitleSearch}
                                 setInputFieldValue={setJobTitleSearch}
                                 placeholderText={"E.g. nurse, manager, nights, part-time"}
+                                maxInputLength={100}
+
                             />
                             <CustomInputField fieldLabel={"Location"}
                                               isRequired={false}
                                               inputFieldValue={jobLocationSearch}
                                               setInputFieldValue={setJobLocationSearch}
                                               placeholderText={"Type to search"}
+                                              maxInputLength={100}
                             />
                             <div className={"mb1rem"}></div>
                             <button className={"br-corner-button blue-button"} onClick={handleViewResultsClick}>

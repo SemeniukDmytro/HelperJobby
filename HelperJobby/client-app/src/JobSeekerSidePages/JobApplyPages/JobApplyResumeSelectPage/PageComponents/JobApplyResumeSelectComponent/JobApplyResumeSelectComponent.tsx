@@ -75,20 +75,17 @@ const JobApplyResumeSelectComponent: FC<JobApplyResumeSelectComponentProps> = ()
         }
         if (!jobSeeker?.resume) {
             navigate("/apply-resume/education");
-        }
-        else if (job) {
+        } else if (job) {
             navigate(`/job-apply/${job.id}/review-info`);
-        }
-        else {
+        } else {
             navigate("/")
         }
     }
 
     function navigateToEditResumePage() {
-        if (!job){
+        if (!job) {
             navigate("/resume")
-        }
-        else {
+        } else {
             navigate(`/resume?from=job-apply&jobId=${job?.id}`);
         }
     }
@@ -101,7 +98,7 @@ const JobApplyResumeSelectComponent: FC<JobApplyResumeSelectComponentProps> = ()
                         <FontAwesomeIcon className={"svg125rem"} icon={faArrowLeftLong}/>
                     </button>
                     <div
-                        onClick={() => setShowExitDialog(true)}    
+                        onClick={() => setShowExitDialog(true)}
                         className={"bold-navigation-link"}>
                         Exit
                     </div>

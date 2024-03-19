@@ -9,9 +9,9 @@ namespace BLLUnitTests.ServicesTests;
 
 public class ResumeServiceTests
 {
-    private readonly IResumeService _resumeService;
     private readonly Mock<IJobSeekerService> _jobSeekerServiceMock = new();
     private readonly Mock<IResumeQueryRepository> _resumeQueryRepositoryMock = new();
+    private readonly IResumeService _resumeService;
 
     public ResumeServiceTests()
     {

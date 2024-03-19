@@ -89,7 +89,7 @@ public static class CustomServicesConfigurer
         serviceProvider.AddScoped<IMessageQueryRepository, MessageQueryRepository>();
         serviceProvider.AddScoped<IMessageCommandRepository, MessageCommandRepository>();
         serviceProvider.AddScoped<IMessageService, MessageService>();
-        
+
 
         //background related
         serviceProvider.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();

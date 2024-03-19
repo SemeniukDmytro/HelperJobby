@@ -1,6 +1,6 @@
-﻿export enum JobProperties{
+﻿export enum JobProperties {
     jobTitle,
-    jobType ,
+    jobType,
     jobDescription,
     contactEmail,
     numberOfOpenings,

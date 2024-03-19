@@ -7,9 +7,9 @@ namespace ApplicationBLL.Services;
 
 public class InterviewService : IInterviewService
 {
+    private readonly IEmployerService _employerService;
     private readonly IInterviewQueryRepository _interviewQueryRepository;
     private readonly IJobQueryRepository _jobQueryRepository;
-    private readonly IEmployerService _employerService;
     private readonly IJobSeekerService _jobSeekerService;
 
     public InterviewService(IJobQueryRepository jobQueryRepository,
@@ -27,9 +27,7 @@ public class InterviewService : IInterviewService
         var currentEmployerId = _employerService.GetCurrentEmployerId();
         var job = await _jobQueryRepository.GetJobWithInterviews(jobId);
         if (job.EmployerId != currentEmployerId)
-        {
             throw new ForbiddenException("You do not have access to this information");
-        }
 
         return job;
     }

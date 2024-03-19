@@ -19,6 +19,7 @@ interface LocationCustomInputFieldProps {
     setCustomErrorMessage?: Dispatch<SetStateAction<string>>;
     selectedFromSuggests?: boolean;
     setSelectedFromSuggests?: Dispatch<SetStateAction<boolean>>;
+    locationMaxLength: number | null;
 }
 
 
@@ -35,12 +36,14 @@ const LocationCustomInputField: FC<LocationCustomInputFieldProps> = ({
                                                                          customErrorMessage,
                                                                          setCustomErrorMessage,
                                                                          selectedFromSuggests,
-                                                                         setSelectedFromSuggests
+                                                                         setSelectedFromSuggests,
+                                                                         locationMaxLength
                                                                      }) => {
 
     const [isInvalidValue, setIsInvalidValue] = useState(false);
     const [showEraseButton, setShowEraseButton] = useState(!!inputValue);
-    
+    const [isInvalidLength, setIsInvalidLength] = useState(false);
+
     useEffect(() => {
         if (customErrorMessage) {
             setIsInvalidValue(true);
@@ -63,15 +66,18 @@ const LocationCustomInputField: FC<LocationCustomInputFieldProps> = ({
     }, [executeValidation]);
 
 
-    function validateInputValue(value : string) {
+    function validateInputValue(value: string) {
         if ((!value && isRequired) || customErrorMessage) {
             setIsInvalidValue(true);
+        } else if (locationMaxLength && value.length > locationMaxLength) {
+            setIsInvalidLength(true);
         } else {
             setIsInvalidValue(false);
+            setIsInvalidLength(false);
         }
     }
-    
-    function checkIfSelectedFromSuggestions(){
+
+    function checkIfSelectedFromSuggestions() {
         if (!setCustomErrorMessage || !inputValue) {
             return;
         }
@@ -87,7 +93,7 @@ const LocationCustomInputField: FC<LocationCustomInputFieldProps> = ({
     function changeInputFieldValue(e: ChangeEvent<HTMLInputElement>) {
         setIsInvalidValue(false);
         validateInputValue(e.target.value);
-        if (customErrorMessage == "Add an address"){
+        if (customErrorMessage == "Add an address") {
             setCustomErrorMessage && setCustomErrorMessage("");
         }
         setShowAutocompleteResults(true);
@@ -138,13 +144,20 @@ const LocationCustomInputField: FC<LocationCustomInputFieldProps> = ({
                 {(isInvalidValue && isRequired && !customErrorMessage) &&
                     <div className={"error-box"}>
                         <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
-                        <span className={"error-text"}>{customErrorMessage !== undefined ? "Add an address" : `${fieldLabel} is required`}</span>
+                        <span
+                            className={"error-text"}>{customErrorMessage !== undefined ? "Add an address" : `${fieldLabel} is required`}</span>
                     </div>}
                 {customErrorMessage &&
                     <div className={"error-box"}>
                         <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
                         <span className={"error-text"}>{customErrorMessage}</span>
                     </div>}
+                {(isInvalidLength && !customErrorMessage && !isInvalidValue) &&
+                    <div className={"error-box"}>
+                        <FontAwesomeIcon className={`error-text error-svg`} icon={faCircleExclamation}/>
+                        <span className={"error-text"}>{fieldLabel} exceeded max available length</span>
+                    </div>}
+
             </div>
         </div>
     )

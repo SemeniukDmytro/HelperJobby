@@ -7,8 +7,8 @@ namespace ApplicationBLL.Services;
 
 public class ResumeService : IResumeService
 {
-    private readonly IResumeQueryRepository _resumeQueryRepository;
     private readonly IJobSeekerService _jobSeekerService;
+    private readonly IResumeQueryRepository _resumeQueryRepository;
 
     public ResumeService(IResumeQueryRepository resumeQueryRepository, IJobSeekerService jobSeekerService)
     {
@@ -26,8 +26,8 @@ public class ResumeService : IResumeService
         }
         catch (Exception e)
         {
-            
         }
+
         if (resume != null) throw new ForbiddenException("Resume already exists");
         createdResume.JobSeekerId = currentJobSeekerId;
         createdResume.CreatedOn = DateOnly.FromDateTime(DateTime.UtcNow);

@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import ResumeSearchComponent from "./Page components/ResumeSearchComponent/ResumeSearchComponent";
 
-interface ResumeSearchPageProps {}
+interface ResumeSearchPageProps {
+}
 
 const ResumeSearchPage: FC<ResumeSearchPageProps> = () => (
-  <ResumeSearchComponent/>
+    <ResumeSearchComponent/>
 );
 
 export default ResumeSearchPage;

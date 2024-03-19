@@ -1,4 +1,3 @@
-using API_IntegrationTests.TestHelpers;
 using ApplicationDomain.Enums;
 using HelperJobby.DTOs.Job;
 
@@ -14,7 +13,7 @@ public class IncompleteJobFixtures
         Location = "New York",
         LocationCountry = "USA",
         JobType = new List<JobTypes> { JobTypes.FullTime, JobTypes.Apprenticeship },
-        Salary = new CreateUpdateSalaryDTO()
+        Salary = new CreateUpdateSalaryDTO
         {
             MinimalAmount = 80000.00m,
             SalaryRate = SalaryRates.PerYear,
@@ -35,7 +34,7 @@ public class IncompleteJobFixtures
         Location = "New York",
         LocationCountry = "USA",
         JobType = new List<JobTypes> { JobTypes.FullTime, JobTypes.Apprenticeship },
-        Salary = new IncompleteJobSalaryDTO()
+        Salary = new IncompleteJobSalaryDTO
         {
             MinimalAmount = 80000.00m,
             SalaryRate = SalaryRates.PerYear,

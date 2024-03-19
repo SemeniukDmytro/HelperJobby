@@ -8,8 +8,8 @@ namespace ApplicationBLL.Services;
 
 public class IncompleteJobService : IIncompleteJobService
 {
-    private readonly IIncompleteJobQueryRepository _incompleteJobQueryRepository;
     private readonly IEmployerService _employerService;
+    private readonly IIncompleteJobQueryRepository _incompleteJobQueryRepository;
 
     public IncompleteJobService(IIncompleteJobQueryRepository incompleteJobQueryRepository,
         IEmployerService employerService)
@@ -29,9 +29,7 @@ public class IncompleteJobService : IIncompleteJobService
     {
         var currentEmployerId = _employerService.GetCurrentEmployerId();
         if (employerId != currentEmployerId)
-        {
             throw new ForbiddenException("You can not retrieve incomplete jobs of another person");
-        }
 
         var incompleteJobs = (await _incompleteJobQueryRepository.GetIncompleteJobsByEmployerId(employerId)).ToList();
         return incompleteJobs;
@@ -41,11 +39,9 @@ public class IncompleteJobService : IIncompleteJobService
     {
         var currentEmployerId = _employerService.GetCurrentEmployerId();
         if (incompleteJob.Salary != null && !incompleteJob.Salary.MeetsMinSalaryRequirement)
-        {
             if (!SalaryRateHelper.CheckMinimalSalary(incompleteJob.Salary.MinimalAmount,
                     incompleteJob.Salary.SalaryRate))
                 throw new InvalidJobException("Salary wage appears to be below the minimum wage for this location");
-        }
 
         incompleteJob.EmployerId = currentEmployerId;
         return incompleteJob;
@@ -64,9 +60,7 @@ public class IncompleteJobService : IIncompleteJobService
             incompleteJobEntity.LocationCountry != updatedIncompleteJob.LocationCountry &&
             (incompleteJobEntity.Location == updatedIncompleteJob.Location ||
              string.IsNullOrEmpty(updatedIncompleteJob.Location)))
-        {
             locationChangeNeeded = true;
-        }
 
         var updatedEntity = EntitiesUpdateManager<IncompleteJob>
             .UpdateEntityProperties(incompleteJobEntity, updatedIncompleteJob);
@@ -111,21 +105,15 @@ public class IncompleteJobService : IIncompleteJobService
     {
         var currentEmployerId = _employerService.GetCurrentEmployerId();
         var incompleteJobEntities = await _incompleteJobQueryRepository.GetIncompleteJobByIds(incompleteJobIds);
-        if (incompleteJobEntities.Any(ij => ij.EmployerId != currentEmployerId))
-        {
-            throw new ForbiddenException();
-        }
+        if (incompleteJobEntities.Any(ij => ij.EmployerId != currentEmployerId)) throw new ForbiddenException();
 
         return incompleteJobEntities;
     }
 
-    public async  Task<IEnumerable<IncompleteJob>> GetEmployerIncompleteJobTitles(int employerId)
+    public async Task<IEnumerable<IncompleteJob>> GetEmployerIncompleteJobTitles(int employerId)
     {
         var currentEmployerId = _employerService.GetCurrentEmployerId();
-        if (currentEmployerId != employerId)
-        {
-            throw new ForbiddenException();
-        }
+        if (currentEmployerId != employerId) throw new ForbiddenException();
 
         var incompleteJobTitles = await _incompleteJobQueryRepository.GetEmployerIncompleteJobTitles(employerId);
 
@@ -135,10 +123,8 @@ public class IncompleteJobService : IIncompleteJobService
     private void CheckIfValidSalaryProvided(IncompleteJobSalary? salary)
     {
         if (salary != null && !salary.MeetsMinSalaryRequirement)
-        {
             if (!SalaryRateHelper.CheckMinimalSalary(salary.MinimalAmount, salary.SalaryRate))
                 throw new InvalidJobException("This wage appears to be below the minimum wage for this location");
-        }
     }
 
     private void CheckIfEmployerHasAccessToPerformAnAction(IncompleteJob incompleteJob)

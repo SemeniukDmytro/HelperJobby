@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import JobApplyContactInfoComponent from "./PageComponents/JobApplyContactInfoComponent/JobApplyContactInfoComponent";
 
-interface JobApplyPageProps {}
+interface JobApplyPageProps {
+}
 
 const JobApplyContactInfoPage: FC<JobApplyPageProps> = () => (
-  <JobApplyContactInfoComponent/>
+    <JobApplyContactInfoComponent/>
 );
 
 export default JobApplyContactInfoPage;

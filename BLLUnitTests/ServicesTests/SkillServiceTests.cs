@@ -2,7 +2,6 @@ using ApplicationBLL.Services;
 using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Exceptions;
-using ApplicationDomain.Models;
 using BLLUnitTests.Fixture;
 using Moq;
 
@@ -10,9 +9,9 @@ namespace BLLUnitTests.ServicesTests;
 
 public class SkillServiceTests
 {
-    private readonly ISkillService _skillService;
     private readonly Mock<IJobSeekerService> _jobSeekerServiceMock = new();
     private readonly Mock<IResumeQueryRepository> _resumeQueryRepositoryMock = new();
+    private readonly ISkillService _skillService;
 
     public SkillServiceTests()
     {

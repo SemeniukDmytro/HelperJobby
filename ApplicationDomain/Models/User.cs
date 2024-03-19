@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using ApplicationDomain.AuthRelatedModels;
-using ApplicationDomain.MessagingRelatedModels;
 
 namespace ApplicationDomain.Models;
 

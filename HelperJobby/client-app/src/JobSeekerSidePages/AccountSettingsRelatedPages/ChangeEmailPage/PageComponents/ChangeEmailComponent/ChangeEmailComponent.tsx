@@ -90,7 +90,8 @@ const ChangeEmailComponent: FC<ChangeEmailComponentProps> = () => {
                     <span>New email address</span>
                 </div>
                 <div className={`field-input-container ${isInvalidEmail ? "red-field-focus" : ""}`}>
-                    <div className={`border-lining ${emailFieldFocus ? "field-focus" : ""} ${isInvalidEmail ? "red-field-focus" : ""}`}>
+                    <div
+                        className={`border-lining ${emailFieldFocus ? "field-focus" : ""} ${isInvalidEmail ? "red-field-focus" : ""}`}>
 
                     </div>
                     <input

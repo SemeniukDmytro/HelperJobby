@@ -29,17 +29,16 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
     const {conversation} = useEmployerMessagingConversation();
 
     useEffect(() => {
-        if (!employer?.conversations){
+        if (!employer?.conversations) {
             return;
         }
-        if (filterMessagesBy == "All jobs"){
+        if (filterMessagesBy == "All jobs") {
             setConversationsToShow(employer.conversations)
-        }
-        else {
+        } else {
             setConversationsToShow(employer.conversations.filter(c => c.job.jobTitle == filterMessagesBy))
         }
     }, [filterMessagesBy]);
-    
+
     useEffect(() => {
         loadPageInitialData();
         loadEmployerAllConversations();
@@ -82,7 +81,7 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
             setLoading(false);
         }
     }
-    
+
 
     function navigateToJobPostingPage() {
         navigate(EmployerPagesPaths.JOB_POSTING);
@@ -120,8 +119,8 @@ const EmployerMessagingComponent: FC<EmployerMessagesComponentProps> = () => {
                                         <ShortConversationInfo conversationInfo={conv}
                                                                conversation={conversation}
                                                                secondParticipantName={(conv.jobSeeker?.firstName && conv.jobSeeker?.lastName) ?
-                                                                              `${conv.jobSeeker.firstName} ${conv.jobSeeker.lastName}` :
-                                                                              "Not specified"}
+                                                                   `${conv.jobSeeker.firstName} ${conv.jobSeeker.lastName}` :
+                                                                   "Not specified"}
                                                                navigateToFullConversationPath={`${EmployerPagesPaths.MESSAGES}?conversationId=${conv.id}`}
                                                                shortConversationType={AccountTypes.employer}
                                                                key={index}/>

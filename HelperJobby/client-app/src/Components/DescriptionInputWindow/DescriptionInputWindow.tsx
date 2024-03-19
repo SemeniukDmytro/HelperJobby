@@ -6,23 +6,23 @@ import {faItalic} from "@fortawesome/free-solid-svg-icons/faItalic";
 import {isValidDescription} from "../../utils/validationLogic/isValidDescription";
 
 interface DescriptionInputWindowProps {
-    jobDescription : string,
+    jobDescription: string,
     setJobDescription: Dispatch<SetStateAction<string>>;
     descriptionInputRef: React.RefObject<HTMLInputElement>;
-    descriptionError : string;
-    setDescriptionError : Dispatch<SetStateAction<string>>;
-    isInvalidDescription : boolean;
-    setIsInvalidDescription : Dispatch<SetStateAction<boolean>>;
+    descriptionError: string;
+    setDescriptionError: Dispatch<SetStateAction<string>>;
+    isInvalidDescription: boolean;
+    setIsInvalidDescription: Dispatch<SetStateAction<boolean>>;
 }
 
 const DescriptionInputWindow: FC<DescriptionInputWindowProps> = ({
-    jobDescription,
-    setJobDescription,
-    descriptionInputRef,
-    setDescriptionError,
-    descriptionError,
-    isInvalidDescription,
-    setIsInvalidDescription
+                                                                     jobDescription,
+                                                                     setJobDescription,
+                                                                     descriptionInputRef,
+                                                                     setDescriptionError,
+                                                                     descriptionError,
+                                                                     isInvalidDescription,
+                                                                     setIsInvalidDescription
                                                                  }
 ) => {
     const [isBoldText, setIsBoldText] = useState(false);
@@ -61,7 +61,7 @@ const DescriptionInputWindow: FC<DescriptionInputWindowProps> = ({
     }
 
     function applyFormat(command: string) {
-        switch (command){
+        switch (command) {
             case "bold":
                 setIsBoldText(!isBoldText);
                 break;
@@ -71,7 +71,7 @@ const DescriptionInputWindow: FC<DescriptionInputWindowProps> = ({
             case "insertUnorderedList" :
                 setIsUnorderedList(!isUnorderedList);
                 break;
-                
+
         }
         document.execCommand(command, false);
     }

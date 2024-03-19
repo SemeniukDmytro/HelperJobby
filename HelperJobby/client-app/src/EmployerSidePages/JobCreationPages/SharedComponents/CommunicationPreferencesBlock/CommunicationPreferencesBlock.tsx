@@ -61,6 +61,7 @@ const CommunicationPreferencesBlock: FC<CommunicationPreferencesBlockProps> = ({
                 setCustomErrorMessage={setEmailError}
                 executeValidation={executeFormValidation}
                 setExecuteValidation={setExecuteFormValidation}
+                maxInputLength={50}
             />
             <div className={"checkbox-container mb15rem"} onClick={addAbilityToProvidePhone}>
                 <input className={"checkbox"} onChange={addAbilityToProvidePhone} checked={isContactPhoneAvailable}
@@ -79,6 +80,7 @@ const CommunicationPreferencesBlock: FC<CommunicationPreferencesBlockProps> = ({
                     setCustomErrorMessage={setPhoneError}
                     executeValidation={executeFormValidation}
                     setExecuteValidation={setExecuteFormValidation}
+                    maxInputLength={15}
                 />
             }
             <div className={"content-separation-line mt2rem mb3rem"}></div>

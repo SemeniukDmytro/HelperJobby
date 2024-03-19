@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import ApplyResumeAddEducationComponent
     from "./PageComponents/ApplyResumeAddEducationComponent/ApplyResumeAddEducationComponent";
 
-interface ApplyResumeAddEducationPageProps {}
+interface ApplyResumeAddEducationPageProps {
+}
 
 const ApplyResumeAddEducationPage: FC<ApplyResumeAddEducationPageProps> = () => {
 

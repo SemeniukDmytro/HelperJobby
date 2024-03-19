@@ -1,76 +1,75 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#nullable disable
 
-#nullable disable
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ApplicationDAL.AppContextMigrations
+namespace ApplicationDAL.AppContextMigrations;
+
+/// <inheritdoc />
+public partial class NotRequiredPhoneNumberFieldAddedChangeTypeOfResumeRequirment : Migration
 {
     /// <inheritdoc />
-    public partial class NotRequiredPhoneNumberFieldAddedChangeTypeOfResumeRequirment : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AlterColumn<int>(
-                name: "ResumeRequired",
-                table: "Jobs",
-                type: "int",
-                nullable: false,
-                oldClrType: typeof(bool),
-                oldType: "tinyint(1)");
+        migrationBuilder.AlterColumn<int>(
+            "ResumeRequired",
+            "Jobs",
+            "int",
+            nullable: false,
+            oldClrType: typeof(bool),
+            oldType: "tinyint(1)");
 
-            migrationBuilder.AddColumn<string>(
-                name: "ContactPhoneNumber",
-                table: "Jobs",
-                type: "varchar(15)",
+        migrationBuilder.AddColumn<string>(
+                "ContactPhoneNumber",
+                "Jobs",
+                "varchar(15)",
                 maxLength: 15,
                 nullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AlterColumn<int>(
-                name: "ResumeRequired",
-                table: "IncompleteJobs",
-                type: "int",
-                nullable: true,
-                oldClrType: typeof(bool),
-                oldType: "tinyint(1)",
-                oldNullable: true);
+        migrationBuilder.AlterColumn<int>(
+            "ResumeRequired",
+            "IncompleteJobs",
+            "int",
+            nullable: true,
+            oldClrType: typeof(bool),
+            oldType: "tinyint(1)",
+            oldNullable: true);
 
-            migrationBuilder.AddColumn<string>(
-                name: "ContactPhoneNumber",
-                table: "IncompleteJobs",
-                type: "varchar(15)",
+        migrationBuilder.AddColumn<string>(
+                "ContactPhoneNumber",
+                "IncompleteJobs",
+                "varchar(15)",
                 maxLength: 15,
                 nullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4");
-        }
+            .Annotation("MySql:CharSet", "utf8mb4");
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "ContactPhoneNumber",
-                table: "Jobs");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropColumn(
+            "ContactPhoneNumber",
+            "Jobs");
 
-            migrationBuilder.DropColumn(
-                name: "ContactPhoneNumber",
-                table: "IncompleteJobs");
+        migrationBuilder.DropColumn(
+            "ContactPhoneNumber",
+            "IncompleteJobs");
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "ResumeRequired",
-                table: "Jobs",
-                type: "tinyint(1)",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "int");
+        migrationBuilder.AlterColumn<bool>(
+            "ResumeRequired",
+            "Jobs",
+            "tinyint(1)",
+            nullable: false,
+            oldClrType: typeof(int),
+            oldType: "int");
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "ResumeRequired",
-                table: "IncompleteJobs",
-                type: "tinyint(1)",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "int",
-                oldNullable: true);
-        }
+        migrationBuilder.AlterColumn<bool>(
+            "ResumeRequired",
+            "IncompleteJobs",
+            "tinyint(1)",
+            nullable: true,
+            oldClrType: typeof(int),
+            oldType: "int",
+            oldNullable: true);
     }
 }

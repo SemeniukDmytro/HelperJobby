@@ -1,4 +1,4 @@
-export interface CountryWithCurrency{
-    country : string;
-    currency : string;
+export interface CountryWithCurrency {
+    country: string;
+    currency: string;
 }

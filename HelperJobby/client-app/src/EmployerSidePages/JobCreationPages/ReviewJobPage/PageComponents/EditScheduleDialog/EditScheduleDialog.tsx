@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useState} from 'react';
 import './EditScheduleDialog.scss';
 import EditJobPostDialog from "../EditJobPostDialog/EditJobPostDialog";
 import ChangeJobScheduleDialogContent

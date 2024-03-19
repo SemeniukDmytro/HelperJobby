@@ -1,4 +1,3 @@
-using ApplicationBLL.Logic;
 using ApplicationDomain.Models;
 using AutoMapper;
 using HelperJobby.DTOs.Job;

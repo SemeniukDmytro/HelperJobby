@@ -14,11 +14,13 @@
   padding: 0.185rem 1rem;
   color: global-variables.$neutral-color-900;
   cursor: pointer;
-  &:hover{
+
+  &:hover {
     border-color: global-variables.$dark-blue;
     background-color: global-variables.$light-blue;
   }
-  &:active{
+
+  &:active {
     box-shadow: global-variables.$button-inner-shadow;
     border-color: global-variables.$dark-blue-active;
     background-color: global-variables.$light-blue-active;
@@ -41,10 +43,12 @@
   color: white;
   cursor: pointer;
   transition: 0.2s;
-  &:hover{
+
+  &:hover {
     background-color: global-variables.$neutral-color-800;
   }
-  &:active{
+
+  &:active {
     background-color: global-variables.$neutral-color-900;
   }
 }

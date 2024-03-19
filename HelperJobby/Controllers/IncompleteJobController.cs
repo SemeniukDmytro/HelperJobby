@@ -1,5 +1,4 @@
 using ApplicationDomain.Abstraction.ICommandRepositories;
-using ApplicationDomain.Abstraction.IQueryRepositories;
 using ApplicationDomain.Abstraction.IServices;
 using ApplicationDomain.Models;
 using AutoMapper;
@@ -39,7 +38,7 @@ public class IncompleteJobController : ExtendedBaseController
         var incompleteJob = await _incompleteJobService.GetIncompleteJobById(incompleteJobId);
         return _mapper.Map<IncompleteJobDTO>(incompleteJob);
     }
-    
+
     [HttpGet("employer-incomplete-job-titles/{employerId}")]
     public async Task<IEnumerable<IncompleteJobDTO>> GetEmployerIncompleteJobTitles(int employerId)
     {
@@ -62,7 +61,8 @@ public class IncompleteJobController : ExtendedBaseController
 
     // PUT: api/IncompleteJob/5
     [HttpPut("{incompleteJobId}")]
-    public async Task<IncompleteJobDTO> Put(int incompleteJobId, [FromBody] UpdatedIncompleteJobDTO updatedIncompleteJobCreationDto)
+    public async Task<IncompleteJobDTO> Put(int incompleteJobId,
+        [FromBody] UpdatedIncompleteJobDTO updatedIncompleteJobCreationDto)
     {
         var incompleteJob =
             await _incompleteJobService.UpdateIncompleteJob(incompleteJobId,
@@ -92,7 +92,7 @@ public class IncompleteJobController : ExtendedBaseController
         var jobCreation = await _incompleteJobService.DeleteIncompleteJob(incompleteJobId);
         await _incompleteJobCommandRepository.DeleteIncompleteJob(jobCreation);
     }
-    
+
     [HttpDelete("delete-incomplete-job-range")]
     public async Task DeleteJobByIds([FromBody] List<int> jobIds)
     {

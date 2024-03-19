@@ -2,7 +2,7 @@
 import {ConversationDTO} from "../DTOs/MessagingDTOs/ConversationDTO";
 import {JobApplyDTO} from "../DTOs/userJobInteractionsDTOs/JobApplyDTO";
 
-export class ConversationService{
+export class ConversationService {
     private readonly baseURI: string = "api/Conversation";
     private readonly customFetchService: CustomFetchService;
 
@@ -22,16 +22,16 @@ export class ConversationService{
         return (await this.customFetchService.get<ConversationDTO[]>(`${this.baseURI}/jobSeeker/my-conversations`));
     }
 
-    public async getConversationById(conversationId : number): Promise<ConversationDTO> {
+    public async getConversationById(conversationId: number): Promise<ConversationDTO> {
         return (await this.customFetchService.get<ConversationDTO>(`${this.baseURI}/${conversationId}`));
     }
 
-    public async getCandidatePotentialConversation(candidateId : number, jobId : number): Promise<ConversationDTO> {
+    public async getCandidatePotentialConversation(candidateId: number, jobId: number): Promise<ConversationDTO> {
         return (await this.customFetchService.get<ConversationDTO>(`${this.baseURI}/candidate-conversation/${candidateId}/${jobId}`));
     }
 
-    public async getJobApplyForConversation(candidateId : number, jobId : number): Promise<JobApplyDTO> {
+    public async getJobApplyForConversation(candidateId: number, jobId: number): Promise<JobApplyDTO> {
         return (await this.customFetchService.get<JobApplyDTO>(`${this.baseURI}/candidate/${candidateId}/job/${jobId}`));
     }
-    
+
 }

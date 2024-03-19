@@ -11,22 +11,22 @@ export function useShowPayByOption(rangeMinSalaryAmount: string,
                                    maximumSalaryAmount: string,
                                    setMaximumSalaryAmount: Dispatch<SetStateAction<string>>
 ) {
-    const getSalaryInputProp = useCallback((showPayByOption : string) => {
-        const showPayEnumValue : ShowPayByOptions = showPayByOptionsMapData
+    const getSalaryInputProp = useCallback((showPayByOption: string) => {
+        const showPayEnumValue: ShowPayByOptions = showPayByOptionsMapData
             .find(spo => spo.stringValue == showPayByOption)!.enumValue;
-        switch (showPayEnumValue){
+        switch (showPayEnumValue) {
             case ShowPayByOptions.Range:
-                return {salaryInput : rangeMinSalaryAmount, setSalaryInput : setRangeMinSalaryAmount};
+                return {salaryInput: rangeMinSalaryAmount, setSalaryInput: setRangeMinSalaryAmount};
             case ShowPayByOptions.StartingAmount:
-                return {salaryInput : startingSalaryAmount, setSalaryInput : setStartingSalaryAmount};
+                return {salaryInput: startingSalaryAmount, setSalaryInput: setStartingSalaryAmount};
             case ShowPayByOptions.MaximumAmount:
-                return {salaryInput : maximumSalaryAmount, setSalaryInput : setMaximumSalaryAmount};
+                return {salaryInput: maximumSalaryAmount, setSalaryInput: setMaximumSalaryAmount};
             case ShowPayByOptions.ExactAmount:
-                return {salaryInput : exactSalaryAmount, setSalaryInput : setExactSalaryAmount};
+                return {salaryInput: exactSalaryAmount, setSalaryInput: setExactSalaryAmount};
 
         }
-    }, [rangeMinSalaryAmount, exactSalaryAmount, maximumSalaryAmount, startingSalaryAmount] );
-    
+    }, [rangeMinSalaryAmount, exactSalaryAmount, maximumSalaryAmount, startingSalaryAmount]);
+
     return {getSalaryInputProp};
 
 }

@@ -35,7 +35,7 @@ public static class ResumeFixtures
         {
             EducationFixtures.FirstEducationEntity
         },
-        WorkExperiences = new List<WorkExperience>()
+        WorkExperiences = new List<WorkExperience>
         {
             WorkExperienceFixtures.FirstWorkExperienceEntity
         },
