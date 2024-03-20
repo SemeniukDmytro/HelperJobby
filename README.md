@@ -18,6 +18,7 @@ to hiring managers and organizations of interest.
 - Bookmark Jobs: Easily save job listings to revisit and apply at your convenience.
 - Interview Preparation: Stay informed about upcoming interviews and prepare effectively
 with our resources and support.
+- Reply with Insight: You have the ability to respond to messages from potential employers, allowing you to engage in conversations about your qualifications, and the next steps in the application process.
 
 **For employers**
 
@@ -29,3 +30,10 @@ with our resources and support.
 - Manage Applicants Effectively: Keep track of job applicants and potential candidates on a specific page. Provide feedback or impressions on applications to streamline your decision-making process.
 - Hire with Confidence: Select and hire the ideal candidates for your organization.
 - Coordinate Interviews: Schedule interviews seamlessly, taking the next step towards building your team.
+- Initiate Conversations: Contact candidates directly to ask for more details, clarify information on their resumes, or simply to express your interest in their profile.
+
+## How to Use HelperJobby: A Step-by-Step Guide
+- Access the application at [HelperJobby](https://helperjobby.azurewebsites.net/)
+- If you're a new user, sign up for an account by providing your email and filling the registration form.
+- Existing users can log in by providing password for an existing account after signing in with existing email.
+
