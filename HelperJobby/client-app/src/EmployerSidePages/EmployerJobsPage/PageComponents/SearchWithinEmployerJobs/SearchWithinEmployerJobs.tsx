@@ -151,7 +151,7 @@ const SearchWithinEmployerJobs: FC<SearchWithinEmployerJobsProps> = ({
                                         setSelectedValue={setOrderSelectedOption}
                                         optionsArr={orderOptions}
                                         includeWindowScroll={true}
-                                        innerLabel={"Oder: "}
+                                        innerLabel={"Order: "}
                     />
                 </div>
             </div>

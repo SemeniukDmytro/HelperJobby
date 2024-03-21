@@ -38,3 +38,9 @@
   flex-direction: column;
   padding: 2rem 2rem 0rem 2rem;
 }
+
+.job-apply-header-candidate-info {
+  flex-basis: 60%;
+  overflow-wrap: break-word;
+  flex-wrap: wrap;
+}

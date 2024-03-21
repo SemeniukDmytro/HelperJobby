@@ -30,7 +30,7 @@ const DetailedJobInfo: FC<DetailedJobInfoProps> = ({job}) => {
     useEffect(() => {
         if (descriptionRef.current) {
             const sanitizedDescription = DOMPurify.sanitize(job.description || "", {
-                ALLOWED_TAGS: ['b', 'i', 'br', 'p', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote'],
+                ALLOWED_TAGS: ['b', 'i', 'br', 'p', 'ul'],
             });
             descriptionRef.current.innerHTML = sanitizedDescription;
         }

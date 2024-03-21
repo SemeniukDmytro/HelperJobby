@@ -56,9 +56,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
     }, [loading]);
 
     useEffect(() => {
-
         chatHubService.startConnection().catch(err => console.error('Connection failed:', err));
-
     }, []);
 
     useEffect(() => {
@@ -73,7 +71,7 @@ const EmployerConversation: FC<EmployerJobChatComponentProps> = ({
 
             }
         });
-    }, [conversation]);
+    }, [conversation?.id]);
 
     useEffect(() => {
         if ((!jobId || !candidateId || isNanAfterIntParse(jobId) || isNanAfterIntParse(candidateId)) && (!conversationId || isNanAfterIntParse(conversationId))) {

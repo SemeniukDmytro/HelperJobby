@@ -84,7 +84,11 @@ const DescriptionInputWindow: FC<DescriptionInputWindowProps> = ({
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         const allowedShortcuts = ['x', 'c', 'v', 'a', 'z', 'y', 'i', 'b'];
-
+        if (e.key === 'Enter') {
+            document.execCommand('insertHTML', false, '<br>');
+            e.preventDefault();
+            return;
+        }
         if ((e.ctrlKey || e.metaKey) && !allowedShortcuts.includes(e.key.toLowerCase())) {
             e.preventDefault();
         }

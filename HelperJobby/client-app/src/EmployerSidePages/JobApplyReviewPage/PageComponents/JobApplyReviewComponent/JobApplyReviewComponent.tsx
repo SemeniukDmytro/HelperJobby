@@ -124,7 +124,7 @@ const JobApplyReviewComponent: FC<JobApplyReviewComponentProps> = () => {
                             <div className={"emp-main-info-container-with-pdng"}>
                                 <div className={'job-apply-review-header-container'}>
                                     <div className={"job-review-page-header"}>
-                                        <div className={"flex-column"}>
+                                        <div className={"flex-column job-apply-header-candidate-info"}>
                                             <div className={"job-review-candidate-name"}>
                                                 {jobApply?.jobSeeker.firstName} {jobApply?.jobSeeker.lastName}
                                             </div>

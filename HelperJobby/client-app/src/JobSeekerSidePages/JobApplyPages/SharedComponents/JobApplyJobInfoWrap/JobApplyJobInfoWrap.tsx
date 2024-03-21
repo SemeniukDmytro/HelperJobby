@@ -1,9 +1,8 @@
-import React, {FC, ReactNode, useEffect, useState} from 'react';
+import React, {FC, ReactNode, useEffect, useRef, useState} from 'react';
 import './JobApplyJobInfoWrap.scss';
 import useCurrentJobApplication from "../../../../hooks/contextHooks/useCurrentJobApplication";
 import {useJobSeeker} from "../../../../hooks/contextHooks/useJobSeeker";
 import {useNavigate, useParams} from "react-router-dom";
-import {Simulate} from "react-dom/test-utils";
 import LoadingPage from "../../../../Components/LoadingPage/LoadingPage";
 import {logErrorInfo} from "../../../../utils/logErrorInfo";
 import {JobService} from "../../../../services/jobService";
@@ -19,6 +18,7 @@ import {
 import {formatJobSalaryDisplay} from "../../../../utils/convertLogic/formatJobSalaryDisplay";
 import {JobLocationTypes} from "../../../../enums/modelDataEnums/JobLocationTypes";
 import ExitJobApplicationProcessDialog from "../ExitJobApplicationProcessDialog/ExitJobApplicationProcessDialog";
+import DOMPurify from "dompurify";
 
 interface JobApplyJobInfoWrapProps {
     children: ReactNode
@@ -32,7 +32,8 @@ const JobApplyJobInfoWrap: FC<JobApplyJobInfoWrapProps> = ({children}) => {
     const jobService = new JobService();
     const navigate = useNavigate();
     const [showAllJobDescription, setShowAllJobDescription] = useState(true);
-
+    const descriptionRef = useRef<HTMLDivElement>(null);
+    
     useEffect(() => {
         if (!jobId || isNanAfterIntParse(jobId)) {
             navigate("/");
@@ -41,6 +42,15 @@ const JobApplyJobInfoWrap: FC<JobApplyJobInfoWrapProps> = ({children}) => {
         fetchJobSeeker();
         loadJobInfo();
     }, []);
+
+    useEffect(() => {
+        if (descriptionRef.current) {
+            const sanitizedDescription = DOMPurify.sanitize(job?.description || "", {
+                ALLOWED_TAGS: ['b', 'i', 'br', 'p', 'ul'],
+            });
+            descriptionRef.current.innerHTML = sanitizedDescription;
+        }
+    }, [job?.description]);
 
     useEffect(() => {
         if (job && jobSeeker) {
@@ -87,7 +97,7 @@ const JobApplyJobInfoWrap: FC<JobApplyJobInfoWrapProps> = ({children}) => {
                             <div
                                 className={`${showAllJobDescription ? "ja-job-description-container-expanded" : "ja-job-description-container"}`}>
                             <span className={"semi-dark-small-text flex-column"}>
-                                    <span className={"mb1rem"}>{job.description}</span>
+                                    <span className={"mb1rem"} ref={descriptionRef}>{job.description}</span>
                                 {(job?.jobType && job.jobType.length !== 0) &&
                                     <div className={"flex-row mb1rem"}>
                                         <span>Job type:&nbsp;</span>

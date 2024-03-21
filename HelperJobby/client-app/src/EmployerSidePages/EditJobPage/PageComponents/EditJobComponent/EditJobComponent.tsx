@@ -16,7 +16,7 @@ interface EditJobComponentProps {
 }
 
 const EditJobComponent: FC<EditJobComponentProps> = () => {
-    const {currentJob, setCurrentJob} = useCurrentEmployerJob();
+    const {currentJob, setCurrentJob, setJobCreationState} = useCurrentEmployerJob();
     const {employerJobId} = useParams<{ employerJobId: string }>();
     const [loading, setLoading] = useState(true);
     const {fetchJobAndSetJobCreation} = useJobLoaderToSetCurrentJob(employerJobId ? parseInt(employerJobId) : 0, currentJob, setCurrentJob,
@@ -27,6 +27,7 @@ const EditJobComponent: FC<EditJobComponentProps> = () => {
 
     useEffect(() => {
         fetchInitialPageData()
+        setJobCreationState(JobCreationStates.completeJob);
     }, []);
 
     useEffect(() => {
