@@ -76,7 +76,7 @@ export function getConversationLastMessageFormattedTime(lastModifiedTime: string
     } else {
         return formatDate(lastModifiedTime);
     }
-}
+}   
 
 export function getFormattedTimeWithWeekdays(lastModifiedTime: string) {
     const date = new Date(lastModifiedTime);

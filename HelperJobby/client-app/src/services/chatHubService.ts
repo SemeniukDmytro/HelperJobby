@@ -97,12 +97,6 @@ export class ChatHubService {
         this.hubConnection?.on("MessageSent", onMessageSent);
     };
 
-    public registerMessageSentFocus(onMessageSent: (message: MessageDTO) => void) {
-        this.unregisterMessageSentHandler();
-        this.messageSentHandler = onMessageSent;
-        this.hubConnection?.on("MessageSent", onMessageSent);
-    };
-
 
     public registerMessageRead(onMessageRead: (message: MessageDTO) => void) {
         this.messageReadHandler = onMessageRead;

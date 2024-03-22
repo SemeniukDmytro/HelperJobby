@@ -42,7 +42,7 @@ public class ChatHub : Hub
         if (conversation != null) createdMessage.Conversation = conversation;
         var messageDTO = _mapper.Map<MessageDTO>(createdMessage);
 
-        await Clients.User(jobSeekerId.ToString()).SendAsync("ReceiveMessage", messageDTO, employerId);
+        await Clients.All.SendAsync("ReceiveMessage", messageDTO, employerId);
         await Clients.Caller.SendAsync("MessageSent", messageDTO);
     }
 
@@ -64,7 +64,7 @@ public class ChatHub : Hub
         if (conversation != null) createdMessage.Conversation = conversation;
         var messageDTO = _mapper.Map<MessageDTO>(createdMessage);
 
-        await Clients.User(employerId.ToString()).SendAsync("ReceiveMessage", messageDTO, jobSeekerId);
+        await Clients.All.SendAsync("ReceiveMessage", messageDTO, jobSeekerId);
         await Clients.Caller.SendAsync("MessageSent", messageDTO);
     }
 
@@ -77,7 +77,7 @@ public class ChatHub : Hub
         var readMessage = await _messageService.ReadMessage(messageId, employerId, jobSeekerId);
         readMessage = await _messageCommandRepository.UpdateMessage(readMessage);
 
-        await Clients.User(jobSeekerId.ToString()).SendAsync("MessageRead", _mapper.Map<MessageDTO>(readMessage));
+        await Clients.All.SendAsync("MessageRead", _mapper.Map<MessageDTO>(readMessage));
         await Clients.Caller.SendAsync("MessageRead", _mapper.Map<MessageDTO>(readMessage));
     }
 
@@ -90,7 +90,7 @@ public class ChatHub : Hub
         var readMessage = await _messageService.ReadMessage(messageId, employerId, jobSeekerId);
         readMessage = await _messageCommandRepository.UpdateMessage(readMessage);
 
-        await Clients.User(employerId.ToString()).SendAsync("MessageRead", _mapper.Map<MessageDTO>(readMessage));
+        await Clients.All.SendAsync("MessageRead", _mapper.Map<MessageDTO>(readMessage));
         await Clients.Caller.SendAsync("MessageRead", _mapper.Map<MessageDTO>(readMessage));
     }
 }
