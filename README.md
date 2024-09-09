@@ -93,7 +93,7 @@ Get in Touch
 
 Whether you have questions, need support, or want to offer feedback, we're here to help. Your experience on HelperJobby is our top priority, and we're committed to ensuring it's as smooth and beneficial as possible. 
 
-Gmail : dmytrosemeniuk@gmail.com
+Gmail : dmytrosemeniuk31@gmail.com
 
 [Linkedin](https://www.linkedin.com/in/dmytrosemeniuk/)
 
